@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computational Statistics (M.Sc.) - 3&nbsp; An Introduction to the Bootstrap</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Ch1_Random_Variable_Generation.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">An Introduction to the Bootstrap</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./" class="sidebar-logo-link">
+      <img src="./images/Uni_Bonn_Logo.jpeg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Computational Statistics (M.Sc.)</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Organization of the Course</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch1_Random_Variable_Generation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Random Variable Generation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch_Bootstrap.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">An Introduction to the Bootstrap</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-empirical-distribution-function" id="toc-the-empirical-distribution-function" class="nav-link active" data-scroll-target="#the-empirical-distribution-function"><span class="toc-section-number">3.1</span>  The empirical distribution function</a></li>
+  <li><a href="#the-bootstrap-basic-idea" id="toc-the-bootstrap-basic-idea" class="nav-link" data-scroll-target="#the-bootstrap-basic-idea"><span class="toc-section-number">3.2</span>  The bootstrap: Basic idea</a>
+  <ul class="collapse">
+  <li><a href="#estimating-a-population-mean" id="toc-estimating-a-population-mean" class="nav-link" data-scroll-target="#estimating-a-population-mean"><span class="toc-section-number">3.2.1</span>  Estimating a population mean</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">An Introduction to the Bootstrap</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Some literature:</p>
+<ul>
+<li>Hall, P. (1992): The Bootstrap and Edgeworth Expansion; Springer Verlag</li>
+<li>Shao, J. and Tu, D. (1995): The Jacknife and Bootstrap; Springer Verlag</li>
+<li>Horowitz, J.L. (2001): The Bootstrap. In: Handbook of Econometrics, Volume 5; Elsevier Science B.V.</li>
+<li>Davison, A.C. and Hinkley, D.V. (2005): Bootstrap Methods and their Applications; Cambridge University Press</li>
+</ul>
+<section id="the-empirical-distribution-function" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="the-empirical-distribution-function"><span class="header-section-number">3.1</span> The empirical distribution function</h2>
+<p>The distribution of a real-valued random variable <span class="math inline">\(X\)</span> can be completely described by its distribution function <span class="math display">\[F(x)=P(X\leq x)\quad \text{for all } x\in\mathbb{R}.\]</span></p>
+<p><strong>Data:</strong> i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span></p>
+<p>For given data, the sample analogue of <span class="math inline">\(F\)</span> is the so-called <em>empirical distribution function</em>, which is an important tool of statistical inference.</p>
+<p>Let <span class="math inline">\(I(\cdot)\)</span> denote the indicator function, i.e., <span class="math inline">\(I(x\leq t)=1\)</span> if <span class="math inline">\(x\leq t\)</span>, and <span class="math inline">\(I(x\leq t)=0\)</span> if <span class="math inline">\(x&gt;t.\)</span></p>
+<div id="def-ecdf" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3.1 (Empirical distribution function) </strong></span><span class="math display">\[
+F_n(x)=\frac{1}{n} \sum_{i=1}^n I(X_i\leq x)
+\]</span> i.e <span class="math inline">\(F_n(x)\)</span> is the proportion of observations with <span class="math inline">\(X_i\le x,\)</span> <span class="math inline">\(i=1,\dots,n.\)</span></p>
+</div>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><span class="math inline">\(0\le F_n(x)\le 1\)</span></li>
+<li><span class="math inline">\(F_n(x)=0\)</span>, if <span class="math inline">\(x&lt;X_{(1)}\)</span>, where <span class="math inline">\(X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}\)</span> denotes the <strong>order-statistic</strong>; i.e.&nbsp;<span class="math inline">\(X_{(1)}\)</span> is the smallest observation</li>
+<li><span class="math inline">\(F(x)=1\)</span>, if <span class="math inline">\(x\ge X_{(n)}\)</span>, where <span class="math inline">\(X_{(n)}\)</span> is largest observation</li>
+<li><span class="math inline">\(F_n\)</span> monotonically increasing step function</li>
+<li>Structurally, <span class="math inline">\(F_n\)</span> itself is a distribution function; it is equivalent to the distribution function of a <strong>discrete random variable</strong> <span class="math inline">\(X^*\)</span> with possible values <span class="math inline">\(X^*\in\{X_1,\dots,X_n\}\)</span> and with <span class="math inline">\(P(X^*=X_i)=\frac{1}{n}\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></li>
+</ul>
+<div id="exm-ecdfexample" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.1 (Empirical distribution function) </strong></span><br></p>
+<p>Some data:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(i\)</span></th>
+<th><span class="math inline">\(X_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>5.20</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>4.80</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>5.40</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>4.60</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>6.10</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>5.40</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>5.80</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>5.50</td>
+</tr>
+</tbody>
+</table>
+<p>Corresponding empirical distribution function using <code>R</code>:</p>
+<div class="cell" data-hash="Ch_Bootstrap_cache/html/ecdfPlot_72744affc3e67c50ab44622a61730619">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.20</span>, <span class="fl">4.80</span>, <span class="fl">5.40</span>, <span class="fl">4.60</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">6.10</span>, <span class="fl">5.40</span>, <span class="fl">5.80</span>, <span class="fl">5.50</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>myecdf_fun     <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(observedSample)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(myecdf_fun, <span class="at">main=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch_Bootstrap_files/figure-html/ecdfPlot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<p><span class="math inline">\(F_n(x)\)</span> depends on the observed sample and thus is <strong>random</strong>. We obtain</p>
+<ul>
+<li><p>For every <span class="math inline">\(x\in\mathbb{R}\)</span> <span class="math display">\[
+nF_n(x)\sim B(n, p=F(x))
+\]</span> I.e., <span class="math inline">\(nF_n(x)\)</span> has a binomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p=F(x)\)</span>.</p></li>
+<li><p><span class="math inline">\(E(F_n(x))=F(x)\)</span></p></li>
+<li><p><span class="math inline">\(Var(F_n(x))=\frac{F(x)(1-F(x))}{n}\)</span></p></li>
+</ul>
+<div id="thm-Clivenk-Cantelli" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 3.1 (Theorem of Glivenko-Cantelli) </strong></span><span class="math display">\[
+P\left(\lim_{n\rightarrow\infty} \sup_{x\in\mathbb{R}} |F_n(x)-F(x)|=0\right)=1
+\]</span></p>
+</div>
+</section>
+<section id="the-bootstrap-basic-idea" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="the-bootstrap-basic-idea"><span class="header-section-number">3.2</span> The bootstrap: Basic idea</h2>
+<p>The bootstrap is an important tool of modern statistical analysis. It establishes a general framework for simulation-based statistical inference. In simple situations the uncertainty of an estimate may be gauged by analytical calculations leading, for example, to the construction of confidence intervals based on an assumed probability model for the available data. The bootstrap replaces complicated and often inaccurate approximations to biases, variances and other measures of uncertainty by computer simulations.</p>
+<p><strong>The idea of the bootstrap:</strong></p>
+<ul>
+<li>The random sample <span class="math inline">\(X_1,\dots,X_n\)</span> is generated by drawing observations independently and with replacement from the underlying population with distribution function <span class="math inline">\(F\)</span>.
+<ul>
+<li>That is, for each interval <span class="math inline">\([a,b]\)</span> the probability of drawing an observation in <span class="math inline">\([a,b]\)</span> is given by <span class="math inline">\(P(X\in [a,b])=F(b)-F(a)\)</span>.</li>
+</ul></li>
+<li><span class="math inline">\(n\)</span> large: The empirical distribution of the sample values is “close” to the distribution of <span class="math inline">\(X\)</span> in the underlying population.
+<ul>
+<li>That is, the relative frequency <span class="math inline">\(F_n(b)-F_n(a)\)</span> of observations in <span class="math inline">\([a,b]\)</span> converges to <span class="math inline">\(P(X\in [a,b])=F(b)-F(a)\)</span> as <span class="math inline">\(n\rightarrow\infty\)</span>.</li>
+</ul></li>
+<li>The idea of the bootstrap consists in mimicking the data generating process:
+<ul>
+<li>Random sampling from the true population is replaced by random sampling from the <strong>observed data</strong>. This is justified by the insight that the empirical distribution of the observed data is “similar” to the true distribution; i.e.&nbsp;<span class="math inline">\(F_n\rightarrow F\)</span> for <span class="math inline">\(n\rightarrow\infty\)</span>.</li>
+</ul></li>
+</ul>
+<section id="estimating-a-population-mean" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="estimating-a-population-mean"><span class="header-section-number">3.2.1</span> Estimating a population mean</h3>
+<p><strong>Setup:</strong></p>
+<ul>
+<li><strong>Population Model:</strong> Continuous random variable <span class="math inline">\(X\)</span> with <em>unknown</em> mean <span class="math inline">\(\mu\)</span></li>
+<li>Data: i.i.d. sample <span class="math inline">\(X_1,\dots,X_n\)</span> from <span class="math inline">\(X\)</span></li>
+<li><strong>Problem:</strong> What is the distribution of <span class="math inline">\(\bar{X} -\mu\)</span>?</li>
+</ul>
+<p>Now assume that <span class="math inline">\(n=8\)</span> and that the <strong>observed sample</strong> is</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(i\)</span></th>
+<th><span class="math inline">\(X_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>-0.6</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1.4</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>-0.8</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1.6</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1.9</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>-0.1</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>0.7</td>
+</tr>
+</tbody>
+</table>
+<div class="cell" data-hash="Ch_Bootstrap_cache/html/unnamed-chunk-1_9e5722c4aef3fb4c552c65af5b6a3cce">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">1.0</span>, <span class="fl">1.4</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="fl">1.6</span>, <span class="fl">1.9</span>, <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+So the sample mean is
+<center>
+<span class="math inline">\(\bar X =\)</span> <code>mean(observedSample)</code> <span class="math inline">\(=\)</span> 0.6375
+</center>
+<p><br></p>
+<p><strong>Bootstrap:</strong></p>
+<p>The observed sample <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}\)</span> is taken as underlying empirical “population” in order to generate “Bootstrap data” <span class="math inline">\(X_1^*,\dots,X_n^*\)</span>.</p>
+<ul>
+<li>i.i.d. samples <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> are generated by drawing observations independently and with replacement from <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}\)</span>.</li>
+</ul>
+<div class="cell" data-hash="Ch_Bootstrap_cache/html/unnamed-chunk-2_bda34624075ea32c744382564a71c23f">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generating a bootstrap sample</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bootSample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">size    =</span> <span class="fu">length</span>(observedSample), </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>The distribution of <span class="math inline">\(\bar X -\mu\)</span> is approximated by the conditional distribution of <span class="math inline">\(\bar X^* -\bar X\)</span> given the original sample <span class="math inline">\({\cal S}_n\)</span> <span class="math display">\[
+\underbrace{P\left(\bar{X}-\mu&lt;\delta\right)}_{\text{unknown}}\approx
+\underbrace{P\left(\bar{X}^*-\bar{X}&lt;\delta|\mathcal{S}_n\right)}_{\text{approximable}}
+\]</span></li>
+</ul>
+<p>For the given data with <span class="math inline">\(n=8\)</span> observations, there are <span class="math inline">\(n^n=8^8=16,777,216\)</span> possible bootstrap samples which are all equally probable.</p>
+<p>The conditional distribution function of <span class="math inline">\(\bar{X}^*-\bar{X}\)</span> given <span class="math inline">\(\mathcal{S}_n\)</span> <span class="math display">\[
+P\left(\bar{X}^*-\bar{X}&lt;\delta|\mathcal{S}_n\right)
+\]</span> can be approximated using Monte-Carlo simulations.</p>
+<p>For example, <span class="math inline">\(m=5\)</span> simulation runs may lead to the following results:</p>
+<table class="table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Simul.</th>
+<th style="text-align: right;"><span class="math inline">\(X_1^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_2^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_3^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_4^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_5^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_6^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_7^*\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_8^*\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\bar X^*-\bar{X}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">-0.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: center;">-0.15</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: center;">-0.4125</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">-0.6</td>
+<td style="text-align: center;">0.0375</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: center;">0.325</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: center;">0.05</td>
+</tr>
+</tbody>
+</table>
+<p>Of course, <span class="math inline">\(m=5\)</span> simulations will not be enough. But using <span class="math inline">\(m=1000\)</span> or <span class="math inline">\(m=2000\)</span> then <span class="math display">\[
+P\left(\bar X^*-\bar X\leq \delta |{\cal S}_n\right) \approx \frac{\sum_{k=1}^m
+I( \bar X^*_k-\bar X\leq \delta)}{m}
+\]</span> will provide a fairly accurate approximation.</p>
+<div class="cell" data-hash="Ch_Bootstrap_cache/html/unnamed-chunk-3_4490e3424c17b1e25162782c2440c0cd">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>bootRealizations <span class="ot">&lt;-</span> <span class="fu">numeric</span>(m)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a> bootXbar            <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a> bootRealizations[l] <span class="ot">&lt;-</span> bootXbar <span class="sc">-</span> Xbar</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(bootRealizations), <span class="at">main=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch_Bootstrap_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<!-- Bootstrap focuses on the {\bf conditional} distribution of $X_1^*,\dots,X_n^*$ given
+  the observed sample ${\cal S}_n=\{X_1,\dots,X_n\}$ and the resulting conditional distribution of
+ $\bar X^* -\bar X$. Often these conditional distributions are called ``bootstrap distributions''.
+ In the bootstrap literature one also frequently finds the notation $E^*(\cdot)$, $Var^*(\cdot)$, or
+ $P^*(\cdot)$ to denote {\bf conditional} expectations, variances, or probabilities given the
+ sample ${\cal S}_n$
+
+ In order to analyze the bootstrap distribution of $\bar X^* -\bar X$, let us first study properties of
+the random variables $X_i^*$.
+  Some basic properties of the bootstrap distribution of  $X_i^*$ are easily
+ verified.
+ \begin{itemize}
+\item For each $i=1,\dots,n$ the possible values of $X_i^*$ are $X_1,\dots,X_n$, and
+$$\frac{1}{n}= P(X_i^*=X_1|{\cal S}_n)= P(X_i^*=X_2|{\cal S}_n)=\dots=P(X_i^*=X_n|{\cal S}_n)$$
+\item The conditional mean of $X_i^*$ is
+$$E^*(X_i^*):=E(X_i^*|{\cal S}_n)=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_2=\bar X$$
+\item The conditional variance of $X_i^*$ is
+$$Var^*(X_i^*):=Var(X_i^*|{\cal S}_n)=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2:=\hat\sigma^2$$
+\end{itemize}
+
+
+ Now consider the bootstrap distribution of $\bar X^* -\bar X$.
+
+ Conditional on ${\cal S}_n$, $X_1^*,\dots,X_n^*$ are i.i.d. random variables with mean $E^*(X_i)=\bar X$ and
+ variance $\hat\sigma^2$. This obviously implies that
+ $$E^*(\bar X^*)=\bar X\quad \text{and } Var^*( \bar X^*)=\frac{\hat\sigma^2}{n}$$
+
+ As $n\rightarrow\infty$ the central limit theorem implies that
+ \begin{align*}
+ \text{The law of } (\frac{\sqrt{n}(\bar X^* -\bar X)}{ \hat\sigma}|{\cal S}_n) & \text{ converges stochastically} \\
+& \qquad \text{ to a }  N(0,1)\text{-distribution}\end{align*}
+
+
+
+ Moreover, $\hat\sigma^2$ is a
+consistent estimator of $\sigma^2$, and thus asymptotically $\hat\sigma^2$ may be replaced by $\sigma$. Therefore,
+
+\begin{align*}
+ \text{The law of } (\frac{\sqrt{n}(\bar X^* -\bar X)}{ \sigma}|{\cal S}_n) & \text{ converges stochastically} \\
+& \qquad \text{ to a }  N(0,1)\text{-distribution}\end{align*}
+
+But generally (central limit theorem) we have
+\begin{align*}
+ \text{The law of } (\frac{\sqrt{n}(\bar X -\mu )}{ \sigma}) & \text{ converges in distribution} \\
+& \qquad \text{ to a }  N(0,1)\text{-distribution}\end{align*}
+
+This means that the bootstrap is {\bf consistent}: The bootstrap distribution
+of $\sqrt{n}(\bar X^* -\bar X)$ asymptotically coincides with the distribution of $\sqrt{n}(\bar X-\mu)$ as $n\rightarrow
+\infty$. In other words,  for large $n$,
+$$\text{distribution}(\bar X^* -\bar X|{\cal S}_n)\approx \text{distribution}(\bar X-\mu)$$
+\vskip 1cm
+
+
+\newpage
+
+\begin{center}
+{\bf Example 2:  Estimating a proportion }
+\end{center}
+
+\begin{itemize}
+\item Data: i.i.d. random sample $X_1,\dots,X_n$; $X_i\in\{0,1\}$ is dichotomous, $P(X_i=1)=p$,
+$P(X_i=0)=1-p$. \\ The problem is to estimate $p$.
+\item Let $S$ denote the number of $X_i$ which are equal to 1. The maximum likelihood estimate of
+$p$ is $\hat p=S/n$.
+\item Recall: $n\hat p=S\sim B(n,p)$
+\item As $n\rightarrow\infty$ the central limit theorem implies that
+$$\frac{\sqrt{n}(\hat p -p)}{\sqrt{p(1-p)}}\mathbb{R}\rightarrow_L N(0,1)$$
+\item $n$ large: the distributions of $\sqrt{n}(\hat p -p)$ and $\hat p -p$ can be approximated by
+$N(0,p(1-p))$ and $N(0,p(1-p)/n)$, respectively.
+\end{itemize}
+
+Bootstrap:
+\begin{itemize}
+\item Random sample
+$X_1^*,\dots,X_n^*$  generated by drawing  observations
+independently and with replacement from
+${\cal S}_n:=\{X_1,\dots,X_n\}$. Let $S^*$ denote the number of $X_i^*$ which are equal to 1.
+\item Bootstrap estimate of $p$: $\hat p^*=S^*/n$
+\end{itemize}
+
+The distribution of $\hat p^*$ depends on the observed sample ${\cal S}_n:=\{X_1,\dots,X_n\}$.
+A different sample will lead to a different distribution. The bootstrap now tries to approximate the
+true distribution of $\hat p - p$ by the {\bf conditional} distribution of $\hat p^*-\hat p$ given
+the observed sample ${\cal S}_n$. The bootstrap is called {\bf consistent} if asymptotically ($n\rightarrow \infty$)
+the conditional distribution of $\hat p^*-\hat p$  coincides with the true distribution of
+$\hat p - p$ (note: a proper scaling is required!)
+\begin{itemize}
+\item We obtain
+\begin{align*}
+& P^*(X_i^*=1)=P(X_i^*=1|\ {\cal S}_n)=\hat p, \\  & P^*(X_i^*=0)=P(X_i^*=0|\ {\cal S}_n)=1-\hat p
+\end{align*}
+and
+\begin{align*}
+&E^*(\hat p^*)= E(\hat p^*|\ {\cal S}_n)=\hat p, \\ & Var^*(\hat p^*)=E[(\hat p^*-\hat p)^2|\ {\cal S}_n]=\frac{\hat p(1-\hat p)}{n}
+\end{align*}
+\item The bootstrap distribution of $n\hat p^*=S^*$ given ${\cal S}_n$ is equal to $B(n,\hat p)$.  For large $n$ this means that the bootstrap distribution of $\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}$ is approximately standard normal. In other words,
+    \begin{align*}
+ \text{The law of } (\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}|{\cal S}_n) & \text{ converges stochastically} \\
+& \qquad \text{ to a }  N(0,1)\text{-distribution}\end{align*}
+\item  Moreover, $\hat p$ is a
+consistent estimator of $p$ and therefore $\hat p(1-\hat p)\mathbb{R}\rightarrow_P p(1-p)$ as $n\rightarrow\infty$. This implies
+that asymptotically $\hat p(1-\hat p)$ may be replaced by $p(1-p)$, and
+\begin{align*}
+ \text{The law of } (\frac{\sqrt{n}(\hat p^* -\hat p)}{ \sqrt{p(1-p)}}|{\cal S}_n) & \text{ converges stochastically} \\
+& \qquad \text{ to a }  N(0,1)\text{-distribution}\end{align*}
+More precisely, as $n\rightarrow\infty$
+$$\sup_\delta |P\left(\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{p(1-p)}}\le \delta|{\cal S}_n\right)-\Phi(\delta)|\mathbb{R}\rightarrow_P 0,$$
+where $\Phi$ denotes the distribution function of the standard normal distribution.
+
+\item This means that the bootstrap is consistent: For large $n$
+{\small
+$$\text{distribution}(\sqrt{n}(\hat p^* -\hat p)|{\cal S}_n)\approx \text{distribution}(\sqrt{n}(\hat p -p))\approx N(0,p(1-p))$$}
+as well as
+$$\text{distribution}(\hat p^* -\hat p|{\cal S}_n)\approx \text{distribution}(\hat p -p)\approx N(0,p(1-p)/n)$$
+\end{itemize}
+
+
+
+\section{General setup: The nonparametric (standard) bootstrap}
+
+\bigbreak
+
+\noindent {\bf Setup:}
+\begin{itemize}
+\item  Original data: i.i.d. random sample $X_1,\dots,X_n$; the
+distribution of $X_i$ depends on an unknown parameter (vector) $\theta$
+\item The data $X_1,\dots,X_n$ is used to estimate $\theta$ $\rightarrow$
+estimator $\hat\theta\equiv \hat\theta(X_1,\dots,X_n)$
+\item We are interested in evaluating the distribution of  $\hat\theta-\theta$
+in order to provide standard errors, to construct confidence intervals, or to perform tests of hypothesis.
+\end{itemize}
+
+%Deine IKEA Ordernummer: 800387422
+\noindent
+{\bf The bootstrap approach:}
+\begin{itemize}
+\item[1)] {\em Bootstrap samples}: Random samples
+$X_1^*,\dots,X_n^*$ are generated by drawing   observations
+independently and with replacement from the available sample
+$X_1,\dots,X_n$.
+\item[2)] {\em Bootstrap estimates}:  $\hat\theta^*\equiv \hat\theta(X_1^*,\dots,X_n^*)$
+\item[3)] {\em In practice:} Steps 1) and 2) are repeated $m$ times (e.g. $m=2000$) $\rightarrow$
+$m$ values $\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*$
+\item[4)] The bootstrap
+  distribution of $\hat\theta^*-\hat\theta$ is used to approximate the distribution of $\hat\theta-\theta$.
+\end{itemize}
+
+
+The theoretical justification of the bootstrap is based on asymptotic arguments. In many important
+applications the bootstrap is able to provide   confidence intervals or tests which are
+ more accurate than those based on standard asymptotic approximations.
+
+It must, however, be emphasized that the bootstrap does not always work.
+A necessary condition for the use of the bootstrap is consistency of the bootstrap approximation.
+
+
+{\bf Consistent Bootstrap:} For large $n$, the bootstrap distribution of $\thth^* -\thth$ is
+a good approximation of the underlying distribution of $\thth-\tht$,
+$$\text{distribution}(\thth^* -\thth\ |{\cal S}_n)\approx \text{distribution}(\thth-\tht).$$
+More precisely, if for some $\alpha>0$ (usually: $\alpha=1/2$) we have $n^\alpha(\thth-\tht)\mathbb{R}\rightarrow_D Z$ for
+some r.v. $Z$ with a non-degenerate distribution, then the bootstrap is {\bf consistent} if and only if
+$$\sup_\delta \bigl|P\left(n^\alpha(\hat\theta^*-\hat\theta)\le \delta|{\cal S}_n\right)-P\left(n^\alpha (\hat\theta-\theta)\le \delta\right)\bigr|\mathbb{R}\rightarrow_P 0,$$
+\bigbreak
+
+The standard bootstrap ''works'' for a large number of statistical and econometrical problems. However,
+ there are some crucial requirements:
+\begin{itemize}
+\item[1)]  Generation of the bootstrap sample ``reflects'' appropriately the way in which the original sample
+has been generated (i.i.d. sampling!).
+\item[2)]
+The distribution of the estimator $\hat\theta$ is asymptotically normal
+\end{itemize}
+ The standard  {\bf bootstrap will usually fail} if one of the above conditions
+1) or 2) is violated. Examples are
+\begin{itemize}
+\item The  bootstrap will not work if the i.i.d re-sample $X_1^*,\dots,X_n^*$ from $X_1,\dots,X_n$  does not
+properly reflect the way how the $X_1,\dots,X_n$ are generated from the underlying population (e.g. dependent data; $X_1,\dots,
+X_n$ {\bf not} i.i.d.).
+\item The distribution of the estimator $\hat\theta$ is not asymptotically normal (e.g. extreme value problems)
+\end{itemize}
+Note: In order to deal with more complex situations alternative
+ bootstrap procedures have been proposed in the literature.
+
+
+\section{Basic bootstrap confidence intervals}
+\begin{itemize}
+\item Standard approaches to construct confidence intervals and tests are usually based on asymptotic normal approximations.
+For example, if $\tht\in\mathbb{R}$ and $\sqrt{n}(\hat\theta-\tht)\rightarrow N(0,v^2)$ one usually tries to determine an approximation
+$\hat v$ of $v$ from the data. An approximate $1-\alpha$ confidence interval is then given by
+$$[\thth-z_{1-\alphad}\frac{\hat v}{\sqrt{n}},
+\thth+z_{1-\alphad}\frac{\hat v}{\sqrt{n}}]$$
+\item In some cases it is very difficult to obtain approximations $\hat v$ of $v$. Statistical inference is then
+usually based on the bootstrap
+\item In contemporary statistical analysis the bootstrap is frequently used even for
+ standard problems, where estimates $\hat v$ of $v$ are easily constructed. The reason is
+that in many situations  it can be shown that bootstrap confidence intervals or tests are {\bf
+ more precise}
+ than those determined analytically based on asymptotic formulas (this particularly applies to the
+ bootstrap t-method discussed in the next section).
+\end{itemize}
+\bigbreak
+{\bf General approach: Basic bootstrap $1-\alpha$ confidence interval}
+
+Random sample ${\cal S}_n:=\{X_1,\dots,X_n\}$;  unknown parameter (vector) $\theta$
+
+We will assume that the bootstrap is consistent:
+$$\text{distribution}(\sqrt{n}(\thth^* -\thth)|{\cal S}_n)\approx \text{distribution}(\sqrt{n}(\thth-\tht))$$
+  if $n$ is sufficiently large.
+
+\begin{itemize}
+\item Determine $\alphad$ and $1-\alphad$ quantiles $\hat t_\alphad$ and $\hat t_{1-\alphad}$  of the conditional distribution
+of  $\thth^*$ given ${\cal S}_n:=\{X_1,\dots,X_n\}$ (the ``bootstrap distribution''). This implies
+\begin{align*}
+&P^*\left(\hat t_\alphad \leq \thth^* \leq \hat t_{1-\alphad}\right)
+\approx 1-\alpha\\
+\rightarrow & P^*\left(\hat t_\alphad-\thth\leq\thth^*-\thth \leq \hat t_{1-\alphad}-\thth\right)
+\approx 1-\alpha\\
+\rightarrow & P^*\left(
+\sqrt{n}(\hat t_\alphad-\thth)\leq\sqrt{n}(\thth^*-\thth) \leq \sqrt{n}(\hat t_{1-\alphad}-\thth)\right)
+\approx 1-\alpha\\
+\end{align*}
+Here, $P^*$  denotes probabilities with respect to the   conditional distribution of  $\thth^*$ given ${\cal S}_n:=\{X_1,\dots,X_n\}$.
+\item Consistency of the bootstrap therefore  implies that for large $n$
+\begin{align*}
+&P\left(
+\sqrt{n}(\hat t_\alphad-\thth)\leq\sqrt{n}(\thth-\tht) \leq \sqrt{n}(\hat t_{1-\alphad}-\thth)\right)\approx 1-\alpha\\
+\rightarrow &P\left(\hat t_\alphad-\thth\leq\thth-\tht \leq \hat t_{1-\alphad}-\thth\right)
+\approx 1-\alpha\\
+\rightarrow &P\left(\thth-(\hat t_{1-\alphad}-\thth)\le \tht\le \thth-
+ (\hat t_\alphad-\thth)\right)\approx 1-\alpha.
+\end{align*}
+\item $\rightarrow$ Approximate $1-\alpha$ (symmetric) confidence interval:
+$$[2\thth-\hat t_{1-\alphad}, 2\thth-\hat t_\alphad]$$
+\end{itemize}
+
+
+\bigskip
+
+{\bf Example:
+Estimating a population mean}
+
+\begin{itemize}
+\item  Let $X_1,\dots,X_n$ denote an i.i.d. random sample with mean $\mu$ and variance $\sigma^2$.
+In the following $F$ will denote the corresponding distribution function.
+\item $\bar X=\frac{1}{n} \sum_{i=1}^n X_i$ is an unbiased estimator of $\mu$
+\item {\bf Problem: } Construct a confidence interval
+\end{itemize}
+\bigbreak
+
+Traditional approach for constructing a $1-\alpha$ confidence interval:
+\begin{itemize}
+\item  $\bar X\sim N(\mu,\frac{\sigma^2}{n})$
+\item Estimation of $\sigma^2$: $S^2=\frac{1}{n-1}\sum_{i=1}^n (X_i-\bar X)^2$
+\item This implies: $\sqrt{n}\frac{\bar X -\mu}{S}\sim t_{n-1}$, and hence
+$$P(-t_{n-1,1-\alphad}\frac{S}{\sqrt{n}}\le \bar X -\mu\le t_{n-1,1-\alphad}\frac{S}{\sqrt{n}})=1-\alpha$$
+\item 95\% confidence interval: $[\bar X-t_{n-1,1-\alphad}\frac{S}{\sqrt{n}},
+\bar X+t_{n-1,1-\alphad}\frac{S}{\sqrt{n}}]$
+\end{itemize}
+{\bf Remark:} The construction relies on the assumption that $\bar X\sim N(\mu,\frac{\sigma^2}{n})$. This
+is necessarily true if $X$ is normally distributed.
+If the underlying distribution is {\em not} normal, then this condition is
+{\em approximately} fulfilled if the sample size $n$ is sufficiently large (central limit
+theorem). In this case the constructed confidence interval must also be seen as an
+{\em approximation}
+\bigbreak\noindent
+The bootstrap offers an alternative method for constructing such confidence intervals. We already know
+that the bootstrap is consistent in this situation.
+
+Construction of a bootstrap confidence interval:
+\begin{itemize}
+\item Draw $m$ bootstrap samples (e.g. $m=2000$) and calculate the corresponding estimates $\bar X^*_1,\bar X^*_2,\dots,\bar X^*_m$.
+\item Order the resulting estimates $\rightarrow$ $\bar X^*_{(1)}\le \bar X^*_{(2)}\le \dots \le \bar X^*_{(m)}$.
+\item Set $\hat t_\alpha:=\bar X^*_{([(m+1)\alphad]}$ and $\hat t_{1-\alpha}:=\bar X^*_{([(m+1)(1-\alphad)])}$.
+\end{itemize}
+\begin{itemize}
+\item $\rightarrow$ Approximate $1-\alpha$ (symmetric) confidence interval:
+$$[2\bar X-\hat t_{1-\alphad}, 2\bar X-\hat t_\alphad]$$
+\end{itemize}
+
+\section{ Pivot statistics and the ''bootstrap-t method''}
+\par\noindent
+In many situations it is possible to get more accurate  bootstrap confidence intervals
+by using the bootstrap-t method (one also speaks of ``studentized bootstrap confidence intervals'').
+The construction relies
+ on so-called pivotal statistics.
+\par\noindent
+Let $X_1,\dots,X_n$ be an i.i.d. random sample and assume that the distribution of $X$
+depends on an unknown parameter (or parameter vector) $\tht$.
+\begin{itemize}
+\item A statistics $T_n\equiv T(X_1,\dots,X_n)$ is called ''pivotal'', if the distribution
+of $T_n$ does {\bf not depend on any unknown population parameter}.
+\item A statistics $T_n\equiv T(X_1,\dots,X_n)$ is called ''asymptotically pivotal'', if its
+asymptotic distribution does not depend on any unknown population parameter.
+\end{itemize}
+
+Exact pivotal statistics are rare and not available in most econometric applications. It is, however, often possible to construct an asymptotically pivotal statistic. Assume that an estimator
+$\thth$ satisfies
+$$\sqrt{n}(\thth-\tht)\mathbb{R}\rightarrow_D N(0,v^2),$$
+where $v^2$ denotes the asymptotic variance. Additionally assume that it is possible to
+ use the data in order to construct  a consistent estimator\\
+$\hat v_n^2\equiv \hat v_n(X_1,\dots,X_n)^2$ of $v$:
+$$\hat v_n^2\mathbb{R}\rightarrow_p v^2$$
+Then of course also $\hat v_n\mathbb{R}\rightarrow_P v$, and
+$$T_n:= \sqrt{n}\frac{(\thth-\tht)}{\hat v_n}\mathbb{R}\rightarrow_D N(0,1).$$
+This means that $T_n= \sqrt{n}\frac{(\thth-\tht)}{\hat v_n}$ is asymptotically pivotal.
+\bigbreak
+
+\newpage
+
+{\bf Example:  Population mean:}
+ $X_1,\dots,X_n$ with mean
+ $\mu$, variance $\sigma^2>0$, and
+ $E|X|^3=\beta<\infty$. If $X$ is normally distributed we obtain
+ $$T_n:=\frac{\sqrt{n}(\bar X-\mu)}{S}\sim t_{n-1}$$
+ with $S^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X)^2$, where  $t_{n-1}$ denotes
+ Student's $t$-distribution with $n-1$ degrees of freedom. We can conclude that $T_n$ is pivotal.
+ \par\noindent
+ If $X$ is {\em not} normally distributed, the central limit theorem implies that
+ $$T_n:=\frac{\sqrt{n}(\bar X-\mu)}{S}\mathbb{R}\rightarrow_D N(0,1)$$
+ In this case $T_n$ is an asymptotically pivotal statistics.
+ \bigbreak
+
+The general idea of
+bootstrap-t confidence intervals (as well as many bootstrap based tests) now relies on approximating
+the distribution of $T_n= \sqrt{n}\frac{(\thth-\tht)}{\hat v_n}$ by the conditional distribution of
+$T_n^*=\sqrt{n}\frac{(\thth^*-\thth)}{\hat v_n^*}$, where $\hat v_n^*=v_n(X_1^*,\dots,X_n^*)$.
+If the bootstrap is consistent, i.e. if the conditional distribution of $\sqrt{n}(\thth^*-\thth)$ yields
+a consistent estimate of $N(0,v^2)$, then also the conditional distribution of $T_n^*$ provides
+a consistent estimate of the asymptotic distribution of $T_n$: $T_n\mathbb{R}\rightarrow_D N(0,1)$ and
+$$\sup_\delta |P\left(\sqrt{n} \frac{(\thth^*-\thth)}{\hat v_n^*}\le \delta|{\cal S}_n\right)-\Phi(\delta)|\mathbb{R}\rightarrow_P 0.$$
+Usually, there is even a gain in accuracy.
+As is easily seen when considering the above examples and expansions, the approximation of the law of
+$T_n$ by the bootstrap law of $T_n^*$ is even more direct (and hence more accurate) than the approximation
+of the law of $\sqrt{n}(\thth-\tht)$ by the bootstrap law of  $\sqrt{n}(\thth^*-\thth)$.
+
+\bigbreak
+{\bf General construction of a $1-\alpha$ bootstrap-t confidence interval }:
+
+Random sample ${\cal S}_n:=\{X_1,\dots,X_n\}$;  unknown parameter (vector) $\theta$. Assume that
+bootstrap is consistent and that
+the estimator $\thth$ of $\tht$ is asymptotically normal. Furthermore, suppose
+ that a {\bf consistent} estimator $\hat v\equiv \hat v(X_1,\dots,X_n)$ of the
+asymptotic standard deviation $v$ is available.
+
+\begin{itemize}
+\item  Based on an i.i.d. re-sample
+ $X_1^*,\dots,X_n^*$ from
+ $\{X_1,\dots,X_n\}$, calculate bootstrap estimates $\thth^*$ and $\hat v^*$.
+ \item Determine $\alphad$ and $1-\alphad$ quantiles $\hat \tau_\alphad$ and $\hat \tau_{1-\alphad}$  of the bootstrap distribution
+of  $\frac{\thth^*-\thth}{\hat v^*}$.
+\item Then
+\begin{align*}
+&P^*\left(\hat \tau_\alphad\leq \frac{\thth^*-\thth}{\hat v^*} \leq \hat \tau_{1-\alphad}\right)
+\approx 1-\alpha\\
+\rightarrow & P\left(\hat \tau_\alphad\leq \frac{\thth-\tht}{\hat v} \leq \hat \tau_{1-\alphad}\right)
+\approx 1-\alpha\\
+\rightarrow & P\left(-\hat v \hat \tau_{1-\alphad}\leq \tht-\thth \leq -\hat v\hat\tau_\alphad\right)
+\approx 1-\alpha\\
+\rightarrow & P\left(\thth-\hat v \hat \tau_{1-\alphad}\leq \tht \leq \thth -\hat v\hat\tau_\alphad\right)
+\approx 1-\alpha
+\end{align*}
+\item Bootstrap-t interval
+$$[\thth-\hat \tau_{1-\alphad}\hat v,
+\thth-\hat \tau_{\alphad}\hat v]$$
+\end{itemize}
+
+
+\newpage
+
+{\bf Example:  Population mean}
+
+Construction of a bootstrap-t interval:
+
+\begin{itemize}
+\item Draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
+$\bar X^*$ as well as $S^{*2}=\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2$.
+\item Determine $\alphad$ and $1-\alphad$ quantiles $\hat \tau_\alphad$ and $\hat \tau_{1-\alphad}$  of the bootstrap distribution
+of  $\frac{\bar X^*-\bar X}{S^*}$
+\item This yields the $1-\alpha$ confidence interval
+$$[\bar X-\hat \tau_{1-\alphad}S,
+\bar X-\hat \tau_{\alphad}S]$$
+\end{itemize}
+
+\bigbreak
+
+The use of pivotal statistics and the corresponding construction of bootstrap-t intervals
+ is motivated by theoretical results which show that under mild conditions it is second order accurate.
+
+Consider generally $1-\alpha$ confidence intervals of the form $[t_{low},t_{up}]$ of $\theta$.
+Upper and lower bounds of such intervals are determined from the data, $t_{low}\equiv t_{low}(X_1,\dots,X_n)$,
+$t_{up}\equiv t_{up}(X_1,\dots,X_n)$, and their accuracy depends on the particular procedure applied.
+
+\begin{itemize}
+\item (Symmetric) confidence intervals are said to be {\bf first-order accurate} if there exist some constants $d_1,d_2<\infty$ such that
+for sufficiently large $n$
+$$|P(\tht<t_{low})-\alphad|\le \frac{d_1}{\sqrt{n}}, \quad |P(\tht>t_{up})-\alphad|\le \frac{d_2}{\sqrt{n}}.$$
+ \item (Symmetric) confidence intervals are said to be {\bf second-order accurate} if there exist some constants $d_3,d_4<\infty$ such that
+for sufficiently large $n$
+$$|P(\tht<t_{low})-\alphad|\le \frac{d_3}{n}, \quad |P(\tht>t_{up})-\alphad|\le \frac{d_4}{n}.$$
+\end{itemize}
+
+If the distribution of $\hat\theta$ is asymptotically normal and the bootstrap is consistent, then under some additional regularity conditions it can usually be shown that
+\begin{itemize}
+\item Standard confidence intervals based on asymptotic approximations are first-order accurate. The same holds for
+the basic bootstrap intervals $[2\thth-\hat t_{1-\alphad}, 2\thth-\hat t_\alphad]$.
+ \item Bootstrap-t intervals  are second-order accurate.
+\end{itemize}
+The difference between first and second-order accuracy is not just a theoretical nicety. In many practically important situations second-order
+accurate intervals lead to much better approximations. If possible, bootstrap confidence intervals
+as well as tests should thus be based on pivotal statistics.
+
+
+\section{Regression Analysis: Bootstrapping pairs}
+
+{\bf Problem:} Analyze the influence of a vector    $X:=(X_1,X_2,\ldots,X_p)^T\in\mathbb{R}^p$ of explanatory
+variables on a response
+variable  (or ``dependent'' variable) $Y$.
+
+Bootstrapping regression estimates is straightforward under {\em random design}.
+
+\begin{itemize}
+    \item {\bf Random design:}\\ Data consists of an i.i.d sample
+        $(Y_1,X_1),\ldots,(Y_n,X_n)$
+   \item  {\bf Model}
+        \begin{align*}
+           Y_i=X_i^T\beta+ \ep_i, i=1,\dots,n,
+        \end{align*}
+        where $E(\epsilon_i|X_i)=0$ and either
+        \begin{itemize}
+        \item[a)] $E(\epsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a fixed
+        $\sigma^2<\infty$ (homoscedastic errors), or
+        \item[b)] $E(\epsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n$ (heteroscedastic errors).
+        \end{itemize}
+        \item Additional assumptions required for asymptotic theory
+        \begin{itemize}
+        \item[i)] There exists a positive definite matrix $M$ such that
+        $E(X_iX_i^T)=M$.
+        \item[ii)] There exists a positive semi-definite matrix $Q$ such that
+        $$E(\epsilon_i^2X_iX_i^T)=E(\sigma^2(X_i)X_iX_i^T)=Q$$
+        {\em Note: For homoscedastic errors we have $Q=\sigma^2 M$.}
+        \end{itemize}
+\end{itemize}
+
+The least squares estimator $\hat\beta$ is given by
+\begin{align*}
+\hat\beta&=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i
+=\beta+(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\ep_i\\
+&=\beta+M^{-1}\frac{1}{n}\sum_{i=1}^n X_i\ep_i+o_p(n^{-1/2}),
+\end{align*}
+and the central limit theorem implies that
+$$\sqrt{n}(\hat\beta-\beta)\mathbb{R}\rightarrow_D N(0,M^{-1}QM^{-1})$$
+
+Since $(Y_i,X_i)$ are i.i.d. one may apply the nonparametric bootstrap in order to approximate
+the distribution of $\hat\beta-\beta$. In the literature this procedure is usually called ``bootstrapping
+pairs''.
+
+
+\begin{itemize}
+\item Original data: i.i.d. sample $(Y_1,X_1),\dots,(Y_n,X_n)$
+\item  Random samples
+$(Y_1^*,X_1^*),\dots,(Y_n^*,X_n^*)$ are generated by drawing  observations independently and with replacement
+from the available sample ${\cal S}_n:=\{(Y_1,X_1),\dots,(Y_n,X_n)\}$.
+\item $(Y_1^*,X_1^*),\dots,(Y_n^*,X_n^*)$ $\rightarrow$ least squares estimator
+ $$\hat\beta^*=(\frac{1}{n}\sum_{i=1}^n X_i^*X_i^{*T})^{-1}\frac{1}{n}\sum_{i=1}^n X_i^*Y_i^*$$
+    \end{itemize}
+
+It can easily be shown that the {\bf bootstrap is consistent} and for large $n$
+$$\text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta) |{\cal S}_n)\approx N(0,M^{-1}QM^{-1})$$
+
+This allows to construct basic bootstrap confidence intervals for the regression coefficients
+$\beta_j$, $j=1,\dots,p$:
+
+\begin{itemize}
+\item Determine $\alphad$ and $1-\alphad$ quantiles $\hat t_{\alphad,j}$ and $\hat t_{1-\alphad,j}$  of the conditional distribution
+of  $\hat\beta_j^*$ given ${\cal S}_n:=\{(Y_1,X_1),\dots,(Y_n,X_n)\}$.
+\item $\rightarrow$ Approximate $1-\alpha$ (symmetric) confidence interval:
+$$[2\hat\beta_j-\hat t_{1-\alphad,j}, 2\hat\beta_j-\hat t_{\alphad,j}]$$
+\end{itemize}
+
+{\bf Remark:}
+The basic bootstrap confidence interval provides an asymptotically (first order) accurate confidence interval,
+even if the errors are heteroscedastic (unequal variances)! This is not true for the standard $t$-intervals provided by standard software packages.
+
+
+\section{Regression Analysis: Residual bootstrap}
+
+Bootstrapping pairs is not necessarily applicable for fixed design or if the $X_i$-variables are correlated. In this
+case $(Y_1,X_1),\dots,(Y_n,X_n)$ is {\bf not} an i.i.d. sample, and the procedure proposed above will generally not be consistent. However, if error terms are homoscedastic, then it is possible to rely on
+the residual bootstrap.
+
+In the following we will formally assume a regression model
+\begin{align*}
+           Y_i=X_i^T\beta+ \ep_i, \quad i=1,\dots,n,
+        \end{align*}
+under fixed design,         where $\ep_1,\dots,\ep_n$ are i.i.d. zero mean error terms with
+$E(\epsilon_i^2)=\sigma^2$ (homoscedastic errors).
+
+{\em Remark: Though we will formally rely on a fixed design assumption, the residual bootstrap is also
+applicable for random design or stochastic, but correlated $X$-variables. In these cases all arguments are meant conditionally on the given $X_i$. The  above assumptions on the error terms then of course have to
+be satisfied conditionally on $X_i$.}
+
+
+The idea of the residual bootstrap is very simple: The model implies that $\epsilon_1,\dots,\ep_n$ are i.i.d which suggests a bootstrap based on resampling the error terms. These errors are unobserved, but they can be
+approximated by the  corresponding residuals
+$$\hat \ep_i:=Y_i-X_i^T\hat\beta, \quad i=1,\dots,n,$$
+where again $\hat\beta=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i$ denotes
+the least squares estimator. It is well known that
+$\hat\sigma^2:= \frac{1}{n-p}\sum_{i=1}^n \hat\ep_i^2\mathbb{R}\rightarrow_P \sigma^2$ provides an unbiased, consistent estimator of the error variance $\sigma^2$:
+$$E(\hat\sigma^2)=\sigma^2 \quad \text{and } \hat\sigma^2\mathbb{R}\rightarrow_P \sigma^2$$
+
+
+
+{\bf  Residual bootstrap}
+
+\begin{itemize}
+\item Based on the original data and a least squares estimate $\hat\beta$
+ calculate the residuals $\hat \ep_1,\dots,\hat \ep_n$.
+\item Generate random samples $\hat\ep_1^*,\dots,\hat\ep_n^*$ of residuals
+ by drawing  observations independently and with replacement
+from ${\cal S}_n:=\{\hat \ep_1,\dots,\hat \ep_n\}$.
+\item Calculate
+$$Y_i^*=X_i^T\hat\beta+\hat\ep_i^*,\quad i=1,\dots,n$$
+\item Bootstrap estimators $\hat\beta^*$ are determined by least squares estimation from the data
+$(Y_1^*,X_1),\dots,(Y_n^*,X_n)$:
+$$\hat\beta^*=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i^*$$
+\end{itemize}
+
+
+It is not difficult to understand why the residual bootstrap generally works (for homoscedastic errors !).
+We have
+$$\hat\beta-\beta=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\epsilon_i$$
+and for large $n$ the distribution of $\sqrt{n}(\hat\beta-\beta)$ is approximately normal with mean 0 and
+covariance matrix $\sigma^2 (\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$.
+
+By construction
+$$\hat\beta^*-\hat\beta=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\hat\epsilon_i^*$$
+But conditional on ${\cal S}_n$ the bootstrap error terms are i.i.d with
+$$E(\hat\epsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \epsilon_i =0$$
+and
+$$Var(\hat\epsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \epsilon_i^2$$
+By central limit arguments limit arguments one will thus obtain that for large $n$ the bootstrap
+distribution of $\sqrt{n}(\hat\beta^*-\hat\beta)$ is approximately normal with mean zero and
+covariance matrix  $\frac{1}{n} \sum_{i=1}^n \hat \epsilon_i^2 (\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$.
+Since  $\frac{1}{n} \sum_{i=1}^n \hat \epsilon_i^2 \mathbb{R}\rightarrow_P \sigma^2$ as $n\rightarrow\infty$,
+the bootstrap is consistent. For large $n$ we have approximately
+\begin{align*}
+\text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta) |{\cal S}_n)&\approx
+\text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta))\\
+&\approx  N(0,\sigma^2 (\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1})
+\end{align*}
+
+
+Basic bootstrap confidence intervals for the regression coefficients
+$\beta_j$, $j=1,\dots,p$:
+\begin{itemize}
+\item Determine $\alphad$ and $1-\alphad$ quantiles $\hat t_{\alphad,j}$ and $\hat t_{1-\alphad,j}$  of the conditional distribution
+of  $\hat\beta_j^*$.
+\item $\rightarrow$ Approximate $1-\alpha$ (symmetric) confidence interval:
+$$[2\hat\beta_j-\hat t_{1-\alphad,j}, 2\hat\beta_j-\hat t_{\alphad,j}]$$
+\end{itemize}
+
+In the given situation one will of course prefer to use bootstrap-t intervals. If $\gamma_{jj}$ denotes
+the $j$-th diagonal element of the matrix $(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$, then
+$\frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}$ is a pivotal statistics, since
+$$\frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}\mathbb{R}\rightarrow_D N(0,1).$$
+
+A bootstrap-t interval for $\beta_j$, $j=1,\dots,p$, can thus be constructed as follows:
+
+\begin{itemize}
+\item Additionally compute $\hat\sigma^{*2}:=\frac{1}{n-p}\sum_{i=1}^n \hat\ep_i^{*2}$, and
+ determine $\alphad$ and $1-\alphad$ quantiles $\hat \tau_{\alphad,j}$ and $\hat \tau_{1-\alphad,j}$  of the bootstrap distribution
+of
+$$\frac{\hat\beta_j^*-\hat\beta_j}{\hat\sigma^* \sqrt{\gamma_{jj}}}$$
+\item This yields the $1-\alpha$ confidence interval
+$$[\hat\beta_j-\hat \tau_{1-\alphad,j}\hat\sigma \sqrt{\gamma_{jj}},
+\hat\beta_j-\hat \tau_{\alphad,j}\hat\sigma \sqrt{\gamma_{jj}}]$$
+\end{itemize} 
+
+ -->
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Ch1_Random_Variable_Generation.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Random Variable Generation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
