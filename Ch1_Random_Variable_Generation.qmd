@@ -165,17 +165,18 @@ Average heads ratios
 $$
 \bar{C}_n=\frac{1}{n}\sum_{i=1}^nC_i
 $$ 
-for $n$ simulated independent tosses of a fair coin  
+for $n=1,2,\dots$ simulated independent tosses of a fair coin $C_i$ with  
 $$
-C_{i}=\left\{\begin{matrix}
+C_{i}=\left\{\begin{array}{ll}
 1&\text{if Head}\\
-0&\text{ if Tail}
-\end{matrix}\right.
+0&\text{if Tail}
+\end{array}\right.
 $$ 
+and
 $$
-P(C_i=0)=P(C_i=1)=0.5,
+P(C_i=0)=P(C_i=1)=0.5.
 $$ 
-with $n=1,2,\dots$. By the strong (or weak) law of large numbers this average should converge **stochastically** (i.e., almost surely or in probability) to $0.5$ as $n$ becomes large $(n\to\infty).$
+By the strong (or weak) law of large numbers this average should converge **stochastically** (i.e., almost surely or in probability) to $0.5$ as $n$ becomes large $(n\to\infty).$
 
 ```{r, fig.width=7, fig.height=4, fig.align='center'}
 #| label: fig-goodvsbad
@@ -789,10 +790,10 @@ f_{X_1X_2}(x_1,x_2)
 &=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\left|\operatorname{det}\left(J_{g^{-1}}(x_1,x_2)\right)\right|\\
 &=f_{RQ}\Big(\underbrace{\sqrt{x_1^2+x_2^2}}_{=r},\underbrace{\operatorname{atan2}(x_1,x_2)}_{=q}\Big)\frac{1}{r}\\
 &=\exp\left(\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
-&=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi}
+&=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
 \end{align*}
 $$
-where the last set uses that $r=\sqrt{x_1^2+x_2^2}.$ 
+where the last step uses that $r=\sqrt{x_1^2+x_2^2}.$ 
 
 This shows the result of @thm-NormalVariableGeneration, since 
 $$
@@ -849,54 +850,97 @@ For many distributions it is difficult (or impossible) to apply the Inverse or T
  
 Accept-Reject Methods methods can provide a solution here, since they only require the knowledge of the functional form of the density $f$ of interest---actually, $f$ needs to be known only up to a multiplicative constant. No deep analytic study of $f$ is necessary.
 
+::: {#thm-FundamentalThmSimulation}
+
+## Fundamental Theorem of Simulation
+
+Let $X\in\mathbb{R}^d$ be a random variable with density function $f_X.$ Then simulating $X$ is equivalent to simulating from a  
+$$
+(X,U)\sim\mathcal{U}(\mathcal{A}),
+$$
+where $\mathcal{U}(\mathcal{A})$ denotes the uniform distribution over the area
+$$
+\mathcal{A}=\left\{(x,u)\text{ such that } x\in\mathbb{R}^d, 0<u<f_X(x)\right\}.
+$$
+:::
+
+![](images/FTSim.png)
+
+
+It turns out that sampling $(X, U)$ uniformly over the set $\mathcal{A}$ is often challenging. 
+
+However, once can consider some superset \mathcal{S} such that $\mathcal{A}\subseteq \mathcal{S},$ such that simulating
+a random variable uniformly distributed over $\mathcal{S}$ is easy. 
+
+A uniform distribution on $\mathcal{A}$ can then be obtained by drawing from a uniform distribution on $\mathcal{S},$ and rejecting samples in $\mathcal{S}$ that are not in $\mathcal{A}.$
 
 
 
-**General Idea** and theoretical justification through the **Fundamental Theorem of Simulation**: Done in the lecture.
+#### The case of densities with compact support {-}
 
+The general principle of the accept-reject method is easily explained using a *bounded* density function $f$ with *compact support*. 
 
+::: {.callout-tip}
 
-\
-
-
-**The case of pdfs with compact support:**
-
-The key-idea is easily explained using a *bounded* pdf $f$ with *compact support*. 
-
-Notions:
-
-* **Bounded** means that there exists a value $m$ with $0<m<\infty$ s.t. $f(x)\in[0,m]$ for all $x$. \
-  Note that only degenerated pdfs are not bounded.
-* An interval $[a,b]$ is called "**compact**" if it is closed and the boundaries are finite. \
-  For instance, the Gaussian has not a compact support, since $\mathrm{supp}(\phi)=]-\infty,\infty[$.
+* **Bounded** means that there exists a constant $m$ with $0<m<\infty$ such that 
+$$
+\sup_xf(x)\leq m
+$$ 
+Note that only degenerated density functions are not bounded.
+* An interval $[a,b]$ is called **compact** if it is closed and the boundaries are finite. For instance, the Gaussian density $\phi$ has *not* a compact support, but $\mathrm{supp}(\phi)=(-\infty,\infty)$.
   
 
-For instance, let's say we want to simulate random numbers $X\sim f$ with 
+Example:
 $$
 f(x)=\frac{3}{4}\left(1-\left(x-1\right)^2\right)\,1_{(|x-1|\leq 1)},
 $$
 where the (compact) support of $f$ is $[a,b]=[-1,1]$ and its range is $[0,m]=[0,3/4]$, i.e., $f$ is bounded from above by $3/4$. \
 <!-- (Yes, it's a stupid example as we do not necessarily need the Accept-Reject Method here.) -->
+:::
 
-The idea is then to simulate the random pair $(Y,U)\sim\mathrm{Unif}([a,b]\times[0,m])$ by simulating   
+To simulate 
+$$
+X\sim f_X
+$$
+with a bounded and compactly supported density function $f_X,$ simulate the random pair 
+$$
+(Y,U)\sim\mathcal{U}([a,b]\times[0,m])
+$$ 
+by simulating   
 <!-- $$Y\sim \mathrm{Unif}[a,b]\quad\text{and}\quad U\sim \mathrm{Unif}[0,m],$$ -->
-$$Y\sim\mathrm{Unif}[a,b]\quad\text{and}\quad U|Y=y \sim \mathrm{Unif}[0,m], $$
-but to **accept** the pair $(Y,U)$ only if $U\leq f(Y)$ and to **reject** all others. 
-
-This results in the correct distribution of the accepted value of $Y$, call it $X$, because
 $$
-\mathbb{P}(X\leq x)=\mathbb{P}(Y\leq x|U\leq f(Y))
-=\frac{\int_a^{\color{red}x} \int_0^{f(y)}\,1\,du\,dy}{\int_a^{\color{red}b}\int_0^{f(y)}\,1\,du\,dy}
-=\frac{\int_a^x f(y)\,dy}{\int_a^b f(y)\,dy}
-=\int_a^x f(y)dy,
+Y\sim\mathcal{U}[a,b]\quad\text{and}\quad U|Y=y \sim \mathcal{U}[0,m]. 
 $$
+<!-- but with **accepting** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejecting** all others.  -->
+Then **accept** a simulated $Y$ as a simulation for $X$, i.e. 
+$$
+X=Y, 
+$$
+**only if** 
+$$
+U\leq f_X(Y),
+$$ 
+and **reject** all other $Y$'s. 
 
-where we used that $f(y)=\int_{0}^{f(y)}du$.
+
+::: {.callout-note}
+Simulating 
+$$
+U|Y=y \sim \mathcal{U}[0,m]
+$$ 
+is particularly simple, since the distribution of $U|Y=y$ is here equal to the distribution of the unconditional random variable 
+$$
+U\sim \mathcal{U}[0,m]
+$$
+for any possible realization $Y=y.$
+:::
 
 
-The Accept-Reject Algorithm (Simple Version):
+**The Accept-Reject Algorithm (for compact densities):**
 
-```
+```{r}
+#| echo: true
+#| eval: false
 # Accept-Reject Algorithm:
 Y <- runif(n, min = a, max = b) 
 U <- runif(n, min = 0, max = m) 
@@ -904,6 +948,39 @@ U <- runif(n, min = 0, max = m)
 accept <- U <= f(Y)
 X      <- Y[accept]
 ```
+
+
+The following derivation shows that the simulated random variable $X$ has the correct distribution $F_X(x)=\int_a^xf_X(x)dx.$
+$$
+\begin{align*}
+\mathbb{P}(X\leq x)
+&=\mathbb{P}(Y\leq x|U\leq f_X(Y))\\[2ex]
+&= \frac{\mathbb{P}(Y\leq x, U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}\\[2ex]
+&= \frac{\mathbb{P}(a\leq Y\leq x, \; 0\leq U\leq f_X(Y))}{\mathbb{P}(0\leq U\leq f_X(Y))}\\[2ex]
+& =\frac{\int_a^{x} \int_0^{f_X(y)}\,c\;du\,dy}{\int_a^{b}\int_0^{f_X(y)}\,c\;du\,dy},
+\end{align*}
+$$
+where the constant $c$ is the normalizing constant, i.e., the height of the uniform density function uniquely determined by the equation 
+$$
+\int_a^{b} \int_0^{m}\,c\,du\,dy = 1,
+$$
+but which is irrelevant here since 
+$$
+\begin{align*}
+\mathbb{P}(X\leq x)
+& =\frac{c\;\int_a^{x} \int_0^{f_X(y)}\,1\;du\,dy}{c\;\int_a^{b}\int_0^{f_X(y)}\,1\;du\,dy}\\[2ex]
+& =\frac{\int_a^{x} \int_0^{f_X(y)}\,1\;du\,dy}{\int_a^{b}\int_0^{f_X(y)}\,1\;du\,dy}.\\
+\end{align*}
+$$
+Now, using that $\int_{0}^{f_X(y)}1du=\big[x\big]^{f_X(y)}_0=f_X(y)$ yields
+$$
+\begin{align*}
+\mathbb{P}(X\leq x)
+& =\frac{\int_a^x f_X(y)\,dy}{\int_a^b f_X(y)\,dy}\\[2ex]
+& =\int_a^x f_X(y)dy = F_X(x).
+\end{align*}
+$$
+
 
 In the following you see a graphical illustration of this procedure:
 
@@ -931,7 +1008,7 @@ xx <- seq(-1.2, 1.2, len=500)
 
 par(mfrow=c(1,3))
 # 1. plot #
-plot(y = target_pdf(x=xx), x = xx, type="l", main="pdf f(x)", 
+plot(y = target_pdf(x=xx), x = xx, type="l", main=expression(f[X](x)), 
      xlab = "X", ylab = "Density", ylim=c(0,.85))
 # 2. plot #
 plot(y=target_pdf(x=xx), x=xx, type="l", 
@@ -956,15 +1033,12 @@ box()
 par(mfrow=c(1,1))
 ```
 
-\
-
-The good thing is that we only need to evaluate the pdf $f(.)$; nothing more. 
+The good thing is that we only need to evaluate the density function $f_X,$ nothing more.  
 
 
-\
 
 
-**Generalization: pdfs with non-compact support.**
+#### The case of densities with non-compact support {-}
 
 The larger set does not necessarily need to be a surrounding closed box as used above. In fact, it can be any "larger set", enclosing the pdf $f$, as long as simulating uniformly over this larger set is feasible. This generalization allows for cases where the support of $f$ is unbounded. 
 

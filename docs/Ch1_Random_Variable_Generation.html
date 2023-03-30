@@ -404,15 +404,15 @@ Devroye (1986) is very comprehensive book on non-uniform random variate generati
 <div id="exm-GoodVsBadRNG" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2.1 (Good vs.&nbsp;Bad RNGs) </strong></span>Average heads ratios <span class="math display">\[
 \bar{C}_n=\frac{1}{n}\sum_{i=1}^nC_i
-\]</span> for <span class="math inline">\(n\)</span> simulated independent tosses of a fair coin<br>
+\]</span> for <span class="math inline">\(n=1,2,\dots\)</span> simulated independent tosses of a fair coin <span class="math inline">\(C_i\)</span> with<br>
 <span class="math display">\[
-C_{i}=\left\{\begin{matrix}
+C_{i}=\left\{\begin{array}{ll}
 1&amp;\text{if Head}\\
-0&amp;\text{ if Tail}
-\end{matrix}\right.
-\]</span> <span class="math display">\[
-P(C_i=0)=P(C_i=1)=0.5,
-\]</span> with <span class="math inline">\(n=1,2,\dots\)</span>. By the strong (or weak) law of large numbers this average should converge <strong>stochastically</strong> (i.e., almost surely or in probability) to <span class="math inline">\(0.5\)</span> as <span class="math inline">\(n\)</span> becomes large <span class="math inline">\((n\to\infty).\)</span></p>
+0&amp;\text{if Tail}
+\end{array}\right.
+\]</span> and <span class="math display">\[
+P(C_i=0)=P(C_i=1)=0.5.
+\]</span> By the strong (or weak) law of large numbers this average should converge <strong>stochastically</strong> (i.e., almost surely or in probability) to <span class="math inline">\(0.5\)</span> as <span class="math inline">\(n\)</span> becomes large <span class="math inline">\((n\to\infty).\)</span></p>
 <div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-goodvsbad_958bdcb1072aef018e98ca723334ed2c">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using the above bad RNG:</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>bar_x_bad  <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(my_bad_runif_vec <span class="sc">&gt;</span> <span class="fl">0.5</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span>n)</span>
@@ -935,9 +935,9 @@ f_{X_1X_2}(x_1,x_2)
 &amp;=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\left|\operatorname{det}\left(J_{g^{-1}}(x_1,x_2)\right)\right|\\
 &amp;=f_{RQ}\Big(\underbrace{\sqrt{x_1^2+x_2^2}}_{=r},\underbrace{\operatorname{atan2}(x_1,x_2)}_{=q}\Big)\frac{1}{r}\\
 &amp;=\exp\left(\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
-&amp;=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi}
+&amp;=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
 \end{align*}
-\]</span> where the last set uses that <span class="math inline">\(r=\sqrt{x_1^2+x_2^2}.\)</span></p>
+\]</span> where the last step uses that <span class="math inline">\(r=\sqrt{x_1^2+x_2^2}.\)</span></p>
 <p>This shows the result of <a href="#thm-NormalVariableGeneration">Theorem&nbsp;<span>2.2</span></a>, since <span class="math display">\[
 f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(\frac{x_1^2+x_2^2}{2}\right)
 \]</span> is <a href="https://online.stat.psu.edu/stat505/lesson/4/4.2">known to be</a> the bivariate standard normal density for two uncorrelated (thus independent) standard normal random variables with marginal distributions <span class="math inline">\(X_1\sim\mathcal{N}(0,1)\)</span> and <span class="math inline">\(X_2\sim\mathcal{N}(0,1).\)</span></p>
@@ -997,57 +997,121 @@ W = 0.99882, p-value = 0.7667</code></pre>
 <h3 data-number="2.3.3" class="anchored" data-anchor-id="accept-reject-methods"><span class="header-section-number">2.3.3</span> Accept-Reject Methods</h3>
 <p>For many distributions it is difficult (or impossible) to apply the Inverse or Transformation Methods, since the distribution function <span class="math inline">\(F\)</span> is somehow unusable. For instance, surprisingly often there is no explicit form of <span class="math inline">\(F\)</span> available or its inverse does not exists.</p>
 <p>Accept-Reject Methods methods can provide a solution here, since they only require the knowledge of the functional form of the density <span class="math inline">\(f\)</span> of interest—actually, <span class="math inline">\(f\)</span> needs to be known only up to a multiplicative constant. No deep analytic study of <span class="math inline">\(f\)</span> is necessary.</p>
-<p><strong>General Idea</strong> and theoretical justification through the <strong>Fundamental Theorem of Simulation</strong>: Done in the lecture.</p>
-<p><br>
-</p>
-<p><strong>The case of pdfs with compact support:</strong></p>
-<p>The key-idea is easily explained using a <em>bounded</em> pdf <span class="math inline">\(f\)</span> with <em>compact support</em>.</p>
-<p>Notions:</p>
+<div id="thm-FundamentalThmSimulation" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2.3 (Fundamental Theorem of Simulation) </strong></span>Let <span class="math inline">\(X\in\mathbb{R}^d\)</span> be a random variable with density function <span class="math inline">\(f_X.\)</span> Then simulating <span class="math inline">\(X\)</span> is equivalent to simulating from a<br>
+<span class="math display">\[
+(X,U)\sim\mathcal{U}(\mathcal{A}),
+\]</span> where <span class="math inline">\(\mathcal{U}(\mathcal{A})\)</span> denotes the uniform distribution over the area <span class="math display">\[
+\mathcal{A}=\left\{(x,u)\text{ such that } x\in\mathbb{R}^d, 0&lt;u&lt;f_X(x)\right\}.
+\]</span></p>
+</div>
+<p><img src="images/FTSim.png" class="img-fluid"></p>
+<p>It turns out that sampling <span class="math inline">\((X, U)\)</span> uniformly over the set <span class="math inline">\(\mathcal{A}\)</span> is often challenging.</p>
+<p>However, once can consider some superset such that <span class="math inline">\(\mathcal{A}\subseteq \mathcal{S},\)</span> such that simulating a random variable uniformly distributed over <span class="math inline">\(\mathcal{S}\)</span> is easy.</p>
+<p>A uniform distribution on <span class="math inline">\(\mathcal{A}\)</span> can then be obtained by drawing from a uniform distribution on <span class="math inline">\(\mathcal{S},\)</span> and rejecting samples in <span class="math inline">\(\mathcal{S}\)</span> that are not in <span class="math inline">\(\mathcal{A}.\)</span></p>
+<section id="the-case-of-densities-with-compact-support" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="the-case-of-densities-with-compact-support">The case of densities with compact support</h4>
+<p>The general principle of the accept-reject method is easily explained using a <em>bounded</em> density function <span class="math inline">\(f\)</span> with <em>compact support</em>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li><strong>Bounded</strong> means that there exists a value <span class="math inline">\(m\)</span> with <span class="math inline">\(0&lt;m&lt;\infty\)</span> s.t. <span class="math inline">\(f(x)\in[0,m]\)</span> for all <span class="math inline">\(x\)</span>.<br>
-Note that only degenerated pdfs are not bounded.</li>
-<li>An interval <span class="math inline">\([a,b]\)</span> is called “<strong>compact</strong>” if it is closed and the boundaries are finite.<br>
-For instance, the Gaussian has not a compact support, since <span class="math inline">\(\mathrm{supp}(\phi)=]-\infty,\infty[\)</span>.</li>
+<li><strong>Bounded</strong> means that there exists a constant <span class="math inline">\(m\)</span> with <span class="math inline">\(0&lt;m&lt;\infty\)</span> such that <span class="math display">\[
+\sup_xf(x)\leq m
+\]</span> Note that only degenerated density functions are not bounded.</li>
+<li>An interval <span class="math inline">\([a,b]\)</span> is called <strong>compact</strong> if it is closed and the boundaries are finite. For instance, the Gaussian density <span class="math inline">\(\phi\)</span> has <em>not</em> a compact support, but <span class="math inline">\(\mathrm{supp}(\phi)=(-\infty,\infty)\)</span>.</li>
 </ul>
-<p>For instance, let’s say we want to simulate random numbers <span class="math inline">\(X\sim f\)</span> with <span class="math display">\[
+<p>Example: <span class="math display">\[
 f(x)=\frac{3}{4}\left(1-\left(x-1\right)^2\right)\,1_{(|x-1|\leq 1)},
 \]</span> where the (compact) support of <span class="math inline">\(f\)</span> is <span class="math inline">\([a,b]=[-1,1]\)</span> and its range is <span class="math inline">\([0,m]=[0,3/4]\)</span>, i.e., <span class="math inline">\(f\)</span> is bounded from above by <span class="math inline">\(3/4\)</span>.<br>
 <!-- (Yes, it's a stupid example as we do not necessarily need the Accept-Reject Method here.) --></p>
-<p>The idea is then to simulate the random pair <span class="math inline">\((Y,U)\sim\mathrm{Unif}([a,b]\times[0,m])\)</span> by simulating<br>
-<!-- $$Y\sim \mathrm{Unif}[a,b]\quad\text{and}\quad U\sim \mathrm{Unif}[0,m],$$ --> <span class="math display">\[Y\sim\mathrm{Unif}[a,b]\quad\text{and}\quad U|Y=y \sim \mathrm{Unif}[0,m], \]</span> but to <strong>accept</strong> the pair <span class="math inline">\((Y,U)\)</span> only if <span class="math inline">\(U\leq f(Y)\)</span> and to <strong>reject</strong> all others.</p>
-<p>This results in the correct distribution of the accepted value of <span class="math inline">\(Y\)</span>, call it <span class="math inline">\(X\)</span>, because <span class="math display">\[
-\mathbb{P}(X\leq x)=\mathbb{P}(Y\leq x|U\leq f(Y))
-=\frac{\int_a^{\color{red}x} \int_0^{f(y)}\,1\,du\,dy}{\int_a^{\color{red}b}\int_0^{f(y)}\,1\,du\,dy}
-=\frac{\int_a^x f(y)\,dy}{\int_a^b f(y)\,dy}
-=\int_a^x f(y)dy,
+</div>
+</div>
+<p>To simulate <span class="math display">\[
+X\sim f_X
+\]</span> with a bounded and compactly supported density function <span class="math inline">\(f_X,\)</span> simulate the random pair <span class="math display">\[
+(Y,U)\sim\mathcal{U}([a,b]\times[0,m])
+\]</span> by simulating<br>
+<!-- $$Y\sim \mathrm{Unif}[a,b]\quad\text{and}\quad U\sim \mathrm{Unif}[0,m],$$ --> <span class="math display">\[
+Y\sim\mathcal{U}[a,b]\quad\text{and}\quad U|Y=y \sim \mathcal{U}[0,m].
+\]</span> <!-- but with **accepting** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejecting** all others.  --> Then <strong>accept</strong> a simulated <span class="math inline">\(Y\)</span> as a simulation for <span class="math inline">\(X\)</span>, i.e.&nbsp; <span class="math display">\[
+X=Y,
+\]</span> <strong>only if</strong> <span class="math display">\[
+U\leq f_X(Y),
+\]</span> and <strong>reject</strong> all other <span class="math inline">\(Y\)</span>’s.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Simulating <span class="math display">\[
+U|Y=y \sim \mathcal{U}[0,m]
+\]</span> is particularly simple, since the distribution of <span class="math inline">\(U|Y=y\)</span> is here equal to the distribution of the unconditional random variable <span class="math display">\[
+U\sim \mathcal{U}[0,m]
+\]</span> for any possible realization <span class="math inline">\(Y=y.\)</span></p>
+</div>
+</div>
+<p><strong>The Accept-Reject Algorithm (for compact densities):</strong></p>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-11_140ba381bb6598e13098b2a53882eaac">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept-Reject Algorithm:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> a, <span class="at">max =</span> b) </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> m) </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A-R Step:</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">f</span>(Y)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following derivation shows that the simulated random variable <span class="math inline">\(X\)</span> has the correct distribution <span class="math inline">\(F_X(x)=\int_a^xf_X(x)dx.\)</span> <span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\leq x)
+&amp;=\mathbb{P}(Y\leq x|U\leq f_X(Y))\\[2ex]
+&amp;= \frac{\mathbb{P}(Y\leq x, U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}\\[2ex]
+&amp;= \frac{\mathbb{P}(a\leq Y\leq x, \; 0\leq U\leq f_X(Y))}{\mathbb{P}(0\leq U\leq f_X(Y))}\\[2ex]
+&amp; =\frac{\int_a^{x} \int_0^{f_X(y)}\,c\;du\,dy}{\int_a^{b}\int_0^{f_X(y)}\,c\;du\,dy},
+\end{align*}
+\]</span> where the constant <span class="math inline">\(c\)</span> is the normalizing constant, i.e., the height of the uniform density function uniquely determined by the equation <span class="math display">\[
+\int_a^{b} \int_0^{m}\,c\,du\,dy = 1,
+\]</span> but which is irrelevant here since <span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\leq x)
+&amp; =\frac{c\;\int_a^{x} \int_0^{f_X(y)}\,1\;du\,dy}{c\;\int_a^{b}\int_0^{f_X(y)}\,1\;du\,dy}\\[2ex]
+&amp; =\frac{\int_a^{x} \int_0^{f_X(y)}\,1\;du\,dy}{\int_a^{b}\int_0^{f_X(y)}\,1\;du\,dy}.\\
+\end{align*}
+\]</span> Now, using that <span class="math inline">\(\int_{0}^{f_X(y)}1du=\big[x\big]^{f_X(y)}_0=f_X(y)\)</span> yields <span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\leq x)
+&amp; =\frac{\int_a^x f_X(y)\,dy}{\int_a^b f_X(y)\,dy}\\[2ex]
+&amp; =\int_a^x f_X(y)dy = F_X(x).
+\end{align*}
 \]</span></p>
-<p>where we used that <span class="math inline">\(f(y)=\int_{0}^{f(y)}du\)</span>.</p>
-<p>The Accept-Reject Algorithm (Simple Version):</p>
-<pre><code># Accept-Reject Algorithm:
-Y &lt;- runif(n, min = a, max = b) 
-U &lt;- runif(n, min = 0, max = m) 
-# A-R Step:
-accept &lt;- U &lt;= f(Y)
-X      &lt;- Y[accept]</code></pre>
 <p>In the following you see a graphical illustration of this procedure:</p>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-11_d557181274ee5dd1fa086bbe25516bea">
+<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-12_56ec6b0e031ded40dc135349a383577c">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img"></p>
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-12_a538643aa9c79b379398d54e73869178">
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-13_5c84cabcc2e89a349222da0d0dbc8185">
 
 </div>
-<p><br>
-</p>
-<p>The good thing is that we only need to evaluate the pdf <span class="math inline">\(f(.)\)</span>; nothing more.</p>
-<p><br>
-</p>
-<p><strong>Generalization: pdfs with non-compact support.</strong></p>
+<p>The good thing is that we only need to evaluate the density function <span class="math inline">\(f_X,\)</span> nothing more.</p>
+</section>
+<section id="the-case-of-densities-with-non-compact-support" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="the-case-of-densities-with-non-compact-support">The case of densities with non-compact support</h4>
 <p>The larger set does not necessarily need to be a surrounding closed box as used above. In fact, it can be any “larger set”, enclosing the pdf <span class="math inline">\(f\)</span>, as long as simulating uniformly over this larger set is feasible. This generalization allows for cases where the support of <span class="math inline">\(f\)</span> is unbounded.</p>
 <p>Let the larger set denote by <span class="math display">\[
 \mathscr{L}=\{(y,u):\, 0&lt;u&lt;m(y)\},
@@ -1110,16 +1174,16 @@ X      &lt;- Y[accept]</code></pre>
 <p>Let the target “density” be <span class="math display">\[f(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)\]</span> with upper bound (or, rather, dominating density) the standard normal density <span class="math display">\[g(x)=\exp(-x^2/2)/\sqrt{2\pi},\]</span> which is obviously straightforward to generate.</p>
 <p>In this example we can set <span class="math inline">\(m(x)=M\,g(x)\)</span> with <span class="math inline">\(M=1\)</span>, since we can simply scale the target “density” <span class="math inline">\(f\)</span> such that <span class="math inline">\(f(x)\leq g(x)\)</span> for all <span class="math inline">\(x\)</span>. Specifically, we set <span class="math inline">\(f(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)\)</span>.</p>
 <p>In the following you see the graphical illustration of this example:</p>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-13_68f5afad88f750d215d40522b48945b4">
+<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-14_ad9306a4cd438be310349f05ca40f079">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img"></p>
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-14_1b182821e01dc2f6d52d2d82a24d27bb">
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-15_3522c318e4068fba61b96d2c3c5447ab">
 
 </div>
 <p><strong>Efficiency of the Accept-Reject algorithm:</strong></p>
@@ -1151,6 +1215,7 @@ Remember: Using the Cauchy as instrumental pdf $g$ does not harm the integrabili
 <p>The probability of acceptance is then <span class="math inline">\(\sqrt{\pi/(2e)}=0.76\)</span>. I.e., to produce one normal random variable, this Accept-Reject algorithm requires on the average <span class="math inline">\(1/0.76\approx 1.3\)</span> uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is 1.</p>
 <p><br>
 </p>
+</section>
 </section>
 </section>
 <section id="monte-carlo-method" class="level1" data-number="3">
@@ -1243,16 +1308,16 @@ $$
 \left[\bar{h}_n - 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}, \bar{h}_n + 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}\right],
 \]</span> where <span class="math inline">\(\mathtt{std.error}_n^2=n^{-1}\sum_{i=1}^n(h(u_i)-\bar{h}_n)^2\)</span>.</p>
 <p>The right plot below shows one realization of the stochastic sequence <span class="math inline">\(\{\bar{h}_1,\dots,\bar{h}_n\}\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_n\)</span> is <span class="math inline">\(0.966\)</span>. This compares favorably with the with the exact value of <span class="math inline">\(0.965\)</span>.</p>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-15_aba7bdb4416756a0cbeb15baf88dc645">
+<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-16_9c7f16ff63fa5cc3b8fb8d1291abb457">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img"></p>
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-16_5bed6dd3b951b654b9193528441a7851">
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-17_d90bd8ce02906b45c38eeedeb7235515">
 
 </div>
 <p><br>
@@ -1419,11 +1484,11 @@ p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\u
 <li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
 <li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f\)</span>.</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-17_1615930dd9eecf78ba716a19caa184b1">
+<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-18_049eca9af5ef8db21bca684acf33f0e4">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1564,7 +1629,7 @@ see, e.g., the classical book "Approximation Theorems of Mathematical Statistics
 To run the 
 
 
-::: {.cell hash='Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-18_311a77b67e7ec13ada1ab60a232a3969'}
+::: {.cell hash='Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-19_bc9bdf1c72671ac0dc29f6d95082c82f'}
 
 ```{.r .cell-code}
 set.seed(123)
@@ -1605,7 +1670,7 @@ where $\varepsilon_{t}\sim N(0,\sigma_\varepsilon^2)$ with $0<\varepsilon^2<\inf
 
 
 
-::: {.cell hash='Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-19_9b6e6e2186f8234638c87911ae5583ea'}
+::: {.cell hash='Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-20_949b003c3333ca8cb4b2d501c938c68c'}
 
 ```{.r .cell-code}
 LL_fun <- function(beta0, beta1, sigma) {
