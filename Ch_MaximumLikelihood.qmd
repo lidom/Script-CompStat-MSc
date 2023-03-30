@@ -1,0 +1,1262 @@
+# Maximum Likelihood
+
+## Likelihood Principle
+
+The basic idea behind maximum likelihood estimation is very simple:  find the distribution parameters
+for which it is most likely that the distribution has generated the data we actually observed. We must therefore be very specific about the process that generated the data.  This is a trade off -- by imposing a fair amount of structure on the data, we get in return a very desirable estimator.  The question always remains, however, whether we have made the right decision about the specific distribution/density function.
+
+### Properties of Maximum Likelihood Estimators
+
+Why do we like maximum likelihood as an estimation method? The answer is that: A maximum likelihood estimator $\hat\theta$ of some parameter $\theta\in\mathbb{R}$ is
+
+* **Consistent:**  $\hat\theta_n\rightarrow_p\theta$ as $n\to\infty$
+* **Asymptotically normal:** $\sqrt{n}(\hat\theta_n-\theta) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)$
+* **Asymptotically efficient:** For any other consistent estimator $\tilde\theta_n$, $\tilde\sigma^2\ge \sigma^2$.
+
+Thus, maximum likelihood estimators can be very appealing.
+
+
+#### Example: Coin Flipping (Bernoulli Trial) {-}
+
+To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment. Let $\theta$ denote the probability that we get a head $H$ 
+$$
+\theta=P(\text{Coin}=H)
+$$ 
+which implies that the probability that we get a tail $T$ is 
+$$
+1-\theta=P(\text{Coin}=T).
+$$ 
+
+We don't know the probability $\theta$ and our goal is to estimate $\theta$ using an i.i.d. sample of size $n$
+$$
+\{X_1,\dots,X_n\}%\in\{0,1\}^n
+$$ 
+with 
+$$
+X_i=\left\{
+    \begin{matrix}
+    0 & \text{if Coin}=T\\
+    1 & \text{if Coin}=H 
+    \end{matrix}
+    \right.
+$$ 
+such that 
+$$
+X_i\sim\mathcal{B}(\theta),\quad i=1,\dots,n,
+$$
+where $\mathcal{B}(\theta)$ denotes the Bernoulli distribution with unknown parameter $\theta.$ 
+
+A given realization of the random sample 
+$$
+\{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
+$$ 
+consists of 
+$$
+0\leq h\leq n
+$$ 
+many heads $H$ and 
+$$
+0\leq n-h\leq n
+$$ many tails $T.$
+
+
+### The (Log-)Likelihood Function
+
+How do we combine the information from the $n$ observations to estimate $\theta$?
+
+If the observations are realizations of an i.i.d. sample, then the joint probability of observing $h$ heads $H$ and $n-h$ tails $T$ in  $n$ coin flips is:
+$$
+\begin{align*}
+\mathcal{L}(\theta)
+&= \left(P(\text{Coin}=H)\right)^h\left(P(\text{Coin}=T)\right)^{n-h}\\
+&= \theta^h(1-\theta)^{n-h}  \\
+&= \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i} 
+\end{align*} 
+$$
+where $x_i=1$ stands for $\text{Coin}=H$ in $i$th coin flip and $x_i=0$ for $\text{Coin}=T$ in $i$th coin flip. The function $\mathcal{L}$ is called the **likelihood function**. 
+
+In general, when the observations $\{x_1,\dots,n\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
+$$
+\mathcal{L}(\theta)=\prod_{i=1}^n f(x_i|\theta),
+$$
+where $f(x_i | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_i=x_i$, and where $\theta$ denotes the (unknown) parameter (vector) of the density function. 
+
+::: {.callout-important}
+## ML-estimation requires to fix the family of distributions $f(\cdot|\theta)$
+
+Classic ML-estimation requires us to fix the general family of density functions $f$ of the i.i.d. sample variables $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to the parameter (vector) $\theta.$  
+
+Examples: 
+
+* $f$ being the probability mass function of $\mathcal{B}(\theta)$ with $f(x_i|\theta)=\theta$ if $x_i=1$ and $f(x_i|\theta)=1-\theta$ if $x_i=0,$ but unknown propability parameter $\theta.$
+* $f$ is the normal density $f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)$ with unknown parameter vector $\theta=(\mu,\sigma^2)^T.$
+
+This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To adress this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified.   
+:::
+
+
+**Estimation idea:** We estimate the unknown $\theta$ by maximizing the likelihood of the observed data $\{x_1,\dots,x_n\}.$ The value $\hat\theta$ at which the likelihood function $\mathcal{L}(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+$$
+\begin{align*}
+\hat\theta
+&=\arg\max_\theta \mathcal{L}(\theta)\\
+&=\arg\max_\theta \prod_{i=1}^n f(x_i|\theta)
+\end{align*}
+$$
+
+
+In our coin flip example this means to estimate the unknown $\theta$ by the value $\hat\theta$ at which the likelihood of the observed $0$ and $1$ outcomes $\{x_1,\dots,x_n\}$ is maximal 
+$$
+\hat\theta_{ML} = \arg\max_\theta \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i}.
+$$
+
+
+Usually it's easier to work with sums rather than products, so we can apply a monotonic transformation by taking the logarithm of the likelihood which yields to the **log-likelihood function**:
+$$
+\ell(\theta)=\ln\mathcal{L}(\theta)=\sum_{i=1}^n \ln f(x_i|\theta).
+$$
+Since this is only a monotonic transformation we have that
+$$
+\begin{align*}
+\hat\theta_{ML}
+&=\arg\max_\theta \mathcal{L}(\theta)\\
+&=\arg\max_\theta \ell(\theta),
+\end{align*}
+$$
+but $\ell(\theta)$ gives a more simple structure simplifying the maximization problem. 
+
+In our coin flipping example:
+$$
+\ell(\theta)=\sum_{i=1}^n\left( x_i \ln(\theta) + (1-x_i)\ln(1-\theta)\right)
+$$
+
+In the coin flip example, $\ell(\theta)$ is so simple that we can maximize $\ell(\theta)$ analytically:
+$$
+\begin{align*}
+\dfrac{d \ell(\theta)}{d \theta}&=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\
+                        &=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\
+\end{align*}
+$$
+Setting the above expression to zero and solving gives us our ML estimator (MLE):
+$$
+\begin{array}{rrcl}
+&\dfrac{d \ell(\hat\theta_{ML})}{d \theta}&\overset{!}{=}&0\\
+\Leftrightarrow&\dfrac{h}{\hat\theta_{ML}} &=& \dfrac{n-h}{1-\hat\theta_{ML}} \\
+\Leftrightarrow&h-h\hat\theta_{ML}  &=& n\hat\theta_{ML}-h\hat\theta_{ML}\\
+\Leftrightarrow&\hat\theta_{ML}&=&\dfrac{h}{n}
+\end{array}
+$$
+
+Often, however, the log-likelihood function is so complicated that there is no analytic solution and one needs to apply numeric optimization algorithms. 
+
+
+## Optimization: Non-Analytical Solutions
+
+Usually we are not so fortunate as to have a closed-form analytical solution for the MLE and must rely on the computer to find the maximizing arguments of the (log-)likelihood function. Various methods exist for finding the maximum (or minimum) of a function. 
+
+**General idea:** 
+
+1. Start at some value for parameters in the parameter space (i.e., in the space of all possible parameter-values)
+2. Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or arbitrarily close to zero).
+
+
+### Newton-Raphson Optimization
+
+One of the most-used methods for optimization is the Newton-Raphson method (or a variant of it). The Newton-Raphson method relies on Taylor-series approximations of the log-likelihood function. 
+
+Let $f$ be a two times differentiable function to be optimized (maximized). The first- and second-order Taylor-series approximations of $f$ around the point $\theta$ are:
+$$
+\begin{align*}
+\text{First-order:}\quad &f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial (Order 1)}} \\
+\text{Second-order:}\quad& f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial (Order 2)}},
+\end{align*}
+$$
+Locally at $\theta,$ the Taylor polynomials are good approximations of $f$ provided that $h$ is relatively small (see @fig-taylorApprox).
+
+```{r, echo = FALSE}
+#| label: fig-taylorApprox
+#| fig-cap: First- and second-order Taylor approximations of a function $f$ around $\theta_0=1.$
+
+## #######################
+## Taylor Approximation
+## #######################
+# install.packages("pracma")
+library("pracma")
+
+myFun <- function(x){
+  1*exp((-1/2)*(x-1.25)^2)/10 + 
+  1*exp((-1/3)*(x-3)^2)/5
+}
+
+## Taylor approximation of myFun around x0
+x0              <- 1
+taylor_poly_1   <- taylor(f = myFun, x0 = x0, n = 1)
+taylor_poly_2   <- taylor(f = myFun, x0 = x0, n = 2)
+
+## Plot
+x_seq           <- seq(from = x0 -2, to = x0 + 5, length.out=100)
+y_myFun         <- myFun(x_seq)
+y_taylor_poly_1 <- polyval(taylor_poly_1, x_seq)
+y_taylor_poly_2 <- polyval(taylor_poly_2, x_seq)
+
+
+plot(x  = x_seq, y = y_myFun,  type = "l", col = "black", lwd = 1, ylab="", xlab="", main = "Taylor Approximation", ylim = range(y_myFun,y_taylor_poly_1,y_taylor_poly_2))
+axis(1, at=1, line=2, labels = expression(theta[0]), tick=FALSE)
+axis(1, at=x_seq[which.max(y_taylor_poly_2)], line=2, labels = expression(theta[1]), tick=FALSE)
+lines(x = x_seq, y = y_taylor_poly_1, col = "red", lty=1)
+lines(x = x_seq, y = y_taylor_poly_2, col = "blue", lty=1)
+points(x=1, y=myFun(1), col="black", pch=19)
+points(x=x_seq[which.max(y_taylor_poly_2)], y=max(y_taylor_poly_2), 
+col="blue", pch=19)
+lines(x=rep(x0, 2), y=c(0,myFun(1)), lty=2)
+lines(x=rep(x_seq[which.max(y_taylor_poly_2)],2), 
+      y=c(0,max(y_taylor_poly_2)), lty=2)
+legend(x="topleft", legend=c("Function f", "Taylor Polynomial (Order 1)", "Taylor Polynomial (Order 2)"), col=c("black", "red", "blue"), lty=c(1,1,1), box.lwd=0)
+box()
+```
+
+
+**Idea:** A step-wise ($h$ steps) optimization approach. <br>
+Instead of a (possibly infeasible) direct optimization of $f,$ we select some starting value $\theta_0$ and optimize the second-order Taylor polynomial of $f$ around $\theta_0$ with respect to $h.$ In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta_$, for  the previous Taylor polynomial was maximal. 
+
+
+**Implementation-Idea:** The second-order Taylor-series approximation gives then
+$$
+\begin{align*}
+f(\theta+h) & \approx f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2\\
+\Leftrightarrow \frac{f(\theta+h)-f(\theta)}{h}&\approx f'(\theta) + \frac{1}{2} f''(\theta)h
+\end{align*}
+$$
+which implies
+$$
+\dfrac{\partial f(\theta+h)}{\partial h} \approx f'(\theta) + f''(\theta)h.
+$$
+
+
+Therefore, the first-order condition for the value of $h$ that maximizes the Taylor-series expansion $f(\theta)+f'(\theta)h + (1/2) f''(\theta)h^2$ is
+$$
+0=f'(\theta)+f''(\theta)\hat h,
+$$
+giving
+$$
+\hat h = -\frac{f'(\theta)}{f''(\theta)}. 
+$$  
+That is, in order to increase the value of $f(\theta)$ one shall substitute $\theta$ by 
+$$
+\theta + \hat h = \theta- \dfrac{f'(\theta)}{f''(\theta)}
+$$
+
+
+The Newton Raphson optimization algorithm uses this insight as following. We first must provide a starting value, $s$, for $\theta_0=s$ and, second, decide on some (small) convergence criterion, $t$, e.g. $t=10^{-10}$, for the first derivative. Then the Newton Raphson optimization algorithm is given by:
+$$
+\begin{array}{ll}
+\texttt{\textbf{let }} \theta_0=s  &  \\
+\texttt{\textbf{let }} i=0                &  \\
+\texttt{\textbf{while }}  | f'(\theta_i) | >t & \texttt{\textbf{do}}\\
+&\left[
+                                    \begin{array}{l}\texttt{\textbf{let }} i = i+1 \\
+                                    \texttt{\textbf{let }} \theta_i = \theta_{i-1} - \frac{f'(\theta_{i-1})}{f''(\theta_{i-1})} \\
+                                    \end{array} \right.\\
+\texttt{\textbf{let }}\hat\theta=\theta_i & \\
+\texttt{\textbf{return }} \hat\theta &  \\
+\end{array}
+$$
+
+
+**Note:** For problems that are globally concave, the starting value $s$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to try multiple starting values.
+
+
+
+**Newton-Raphson Algorithm: Example:** Let's return to our earlier coin-flipping example, with only one head $h=1$ for a sample size of $n=5$.  We already know that $\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2$, but let's apply the Newton-Raphson Algorithm.  Recall that
+$$
+\begin{align*}
+\dfrac{d \ell}{d \theta}&=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\
+\dfrac{d^2 \ell}{d \theta^2} &= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}
+\end{align*}
+$$
+We have $h=1$ and $n=5$. Choosing $t=10^{-10}$ as our convergence criterion and $\theta_0=0.4$ as the starting value, allows us to run the algorithm which gives us the results shown in Table @tbl-NR.
+
+
+|Repetition $i$ 	|	$\hat\theta_i$	|	$\ell'(\hat\theta_i)$	 |  $\ell'(\hat\theta_i)/\ell''(\hat\theta_i)$ |
+|-------------------|-------------------|----------------------------|---------------------------------------------|
+|$0$| $0.40$| $-4.16$                        |$\phantom{-}2.40\cdot 10^{-1}$|
+|$1$| $0.16$| $\phantom{-}1.48$              |$-3.32\cdot 10^{-2}$|
+|$2$| $0.19$| $\phantom{-}2.15\cdot 10^{-1}$ |$-6.55\cdot 10^{-3}$|
+|$3$| $0.19$| $\phantom{-}5.43\cdot 10^{-3}$ |$-1.73\cdot 10^{-4}$|
+|$4$| $0.19$| $\phantom{-}3.53\cdot 10^{-6}$ |$-1.13\cdot 10^{-7}$|
+|$5$| $0.20$| $\phantom{-}1.50\cdot 10^{-12}$|$-4.81\cdot 10^{-14}$|
+
+: Result of applying the Newton Raphson optimaization algorithm to our coin flipping example for given data $h=1$ with sample size $n=5$. {#tbl-NR}
+
+
+
+
+
+## OLS-Estimation as ML-Estimation
+
+Now let's return to the linear regression model 
+$$
+Y_i=X_i^T\beta+ \varepsilon_i,\quad  i=1,\dots,n,
+$${#eq-LinMod}
+where $Y_i\in\mathbb{R}$ denotes the response (or "dependent") variable, 
+$$
+\beta=(\beta_1,\dots,\beta_p)^T\in\mathbb{R}^p
+$$ 
+denotes the vector of unknown parameter values, and 
+$$
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p
+$$
+denotes the vector of predictor variables, where the i.i.d. sample 
+$$
+(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
+$$
+follows a **random design** (@def-RandomFixedDesign). 
+
+
+
+For the following, it is convenient to write @eq-LinMod using matrix notation
+$$
+\begin{eqnarray*}
+  \underset{(n\times 1)}{Y}&=&\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta} + \underset{(n\times 1)}{\varepsilon},
+\end{eqnarray*}
+$$
+where 
+$$
+\begin{equation*}
+Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{matrix}X_{11}&\dots&X_{1K}\\\vdots&\ddots&\vdots\\ X_{n1}&\dots&X_{nK}\\\end{matrix}\right),\quad\text{and}\quad \varepsilon=\left(\begin{matrix}\varepsilon_1\\ \vdots\\ \varepsilon_n\end{matrix}\right).
+\end{equation*}
+$$
+
+
+
+To apply ML-estimation, we must make a distributional assumption about $\varepsilon_i$ such as, for instance,
+$$
+\begin{equation*}
+\varepsilon \sim \mathcal{N}\left(0, \sigma^2I_n\right).
+\end{equation*}
+$$
+We could also choose another distributional assumption for $\varepsilon,$ but the classic ML estimation theory requires us to assumed the correct error distribution.  This requirement is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, this kind of distributional assumptions allow us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
+
+
+<!-- \begin{itemize} -->
+<!-- \item The $\varepsilon$'s are jointly normally distributed. -->
+<!-- \item The $\varepsilon$'s are independent of one another. -->
+<!-- \item The $\varepsilon$'s are identically distributed, i.e. homoskedastic. -->
+<!-- \end{itemize} -->
+
+
+The multivariate density for $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'$ is then
+$$
+\begin{equation*}
+f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} e^{-\left(\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)}.
+\end{equation*}
+$$
+Noting that $\varepsilon=Y-X\beta$, we get the log likelihood
+$$
+\begin{align*}
+\ell(\beta,\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
+\end{align*}
+$$
+with $K$ unknown parameters $\beta=(\beta_1,\dots,\beta_K)'$ and $\sigma^2$ (scalar).
+
+Taking derivatives gives
+$$
+\begin{align*}
+\dfrac{\partial \ell}{\partial \beta}    &= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta) \\
+\dfrac{\partial \ell}{\partial \sigma^2} 
+%&= -\dfrac{n}{2\sigma^2}+ \dfrac{1}{2\sigma^4}(Y-X\beta)'(Y-X\beta)
+&=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}} \\
+%&=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)'(Y-X\beta)-n\right]
+\end{align*}
+$$
+So, we have $K+1$ equations and $K+1$ unknowns. Setting equal to zero and solving gives
+$$
+\begin{align*}
+\hat\beta_{ML}&=(X'X)^{-1}X'Y\\
+s_{ML}^2&=\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2
+\end{align*}
+$$
+Thus, the MLE of the linear model, $\hat\beta_{ML}$, is the same as the OLS estimator, $\hat\beta$. Moreover, since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
+
+
+As it is needed for the next chapter, we also give here the second derivatives of the log-likelihood function $\ell$ as well as the expressions of minus one times the mean of the second derivatives of the log-likelihood function $\ell$:
+
+1. First and second derivative with respect to $\beta:$
+$$
+\begin{align*}
+\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}&= - \dfrac{1}{\sigma^2}(X'X)\\
+\Rightarrow\quad (-1)\cdot E\left(\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}\right)&= \dfrac{1}{\sigma^2}E(X'X)\\
+\end{align*}
+$$
+2. First and second derivative with respect to $\sigma^2:$
+$$
+\begin{align*}
+\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2} 
+&=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{\left[(Y-X\beta)'(Y-X\beta)\right]}{\left(\sigma^{2}\right)^{3}} \\
+&=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\
+\quad\Rightarrow\quad (-1)\cdot  E\left(\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2} \right)
+&=-\frac{n}{2\sigma^{4}}+\frac{E\left[\sum_{i=1}^n\varepsilon_i^2\right]}{\sigma^{6}} \\
+&=-\frac{n}{2\sigma^{4}}+\frac{n\sigma^2}{\sigma^{6}} 
+ =\frac{n}{2\sigma^{4}}\\
+\end{align*}
+$$
+3. First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
+$$
+\begin{align*}
+\dfrac{\partial^2 \ell}{\partial \beta \partial \sigma^2}=\dfrac{\partial^2 L}{\partial \sigma^2 \partial \beta}
+&= -\frac{X'(Y-X\beta)}{\sigma^4}\\
+& =\frac{X'\varepsilon}{\sigma^4}\\
+\quad\Rightarrow\quad (-1)\cdot  E\left(\dfrac{\partial^2 L}{\partial \sigma^2 \partial \beta}\right)
+&=\frac{E(X'\varepsilon)}{\sigma^4}\\
+&=\frac{E[E(X'\varepsilon|X)]}{\sigma^4}\\ 
+&=\frac{E[X'E(\varepsilon|X)]}{\sigma^4}=0
+\end{align*}
+$$
+
+## Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$
+
+
+The variance of an MLE is given by the inverse of the Fisher information matrix. The Fisher information matrix is defined as minus one times the expected value matrix of second derivatives of the log-likelihood function. For the OLS case, the Fisher information matrix is
+$$
+\begin{align*}
+\mathcal{I}\left(\begin{array}{cc}\beta \\ \sigma^2\end{array}\right)
+&=
+\left[\begin{array}{cc}
+\frac{1}{\sigma^2}E(X'X) & 0 \\
+0 & \frac{n}{2\sigma^4}
+\end{array}\right]\\
+&=
+\left[\begin{array}{cc}
+\frac{n}{\sigma^2}\Sigma_{X'X} & 0 \\
+0 & \ \frac{n}{2\sigma^4}
+\end{array}\right],
+\end{align*}
+$$
+where we used that 
+$$
+E\left(X'X\right)=E\left(\sum_{i=1}^nX_iX_i'\right)=n\underbrace{E\left(X_iX_i'\right)}_{=:\Sigma_{X'X}}.
+$$ 
+<!-- While the upper left element of the Fisher information matrix is easily seen, the derivation of the lower right element is rather tedious and thus omitted.
+[^1]: See [https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood) for more details. -->
+
+Taking the inverse of the Fisher information matrix gives the variance-covariance matrix of the estimators $\hat\beta_{ML}$ and $s_{ML}^2$
+
+
+
+$$
+\begin{equation*}
+Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)=
+\left[\begin{array}{cc}
+\frac{\sigma^2}{n}\Sigma_{X'X}^{-1} & 0 \\
+0 & \ \frac{2\sigma^4}{n}
+\end{array}\right],
+\end{equation*}
+$$
+Given this result, it is easy to see that 
+$$
+Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
+$$ 
+as $n\to\infty$.
+
+
+## Consistency of $\hat\beta_{ML}$ and $s_{ML}^2$
+
+If $E[\varepsilon|X]=0$ (strict exogeneity, follows from the random design (@def-RandomFixedDesign) assumption), then the bias of $\hat\beta$ is zero since $E[\hat\beta_{ML}]=\beta$
+$$
+\begin{align*}
+E[\hat\beta_{ML}]&=E[(X'X)^{-1}X'(X\beta + \varepsilon)] \\
+                 &=E[E[(X'X)^{-1}X'(X\beta + \varepsilon)|X]] \\
+                 &=E[E[(X'X)^{-1}X'X\beta|X]] + E[E[(X'X)^{-1}X'\varepsilon|X]] \\
+                 &=E[E[\beta|X]] + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
+                 &=        \beta + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
+                 &=        \beta  \\
+\Leftrightarrow E[\hat\beta_{ML}]-\beta&=\operatorname{Bias}(\hat\beta_{ML})=0
+\end{align*}
+$$
+Of course, from this it also follows that the squared bias is equal to zero 
+$$
+\text{Bias}^2(\hat\beta_{ML})=0.
+$$  
+This implies that the mean square error (MSE) of the ML estimator $\hat\beta_{ML}$ equals the variance of the ML estimator $\hat\beta_{ML}$: 
+$$
+\operatorname{MSE}(\hat\beta_{ML})=\underbrace{E[(\hat\beta_{ML}-\beta)^2]=Var(\hat\beta_{ML})}_{\text{MSE}(\hat\beta_{ML})=Var(\hat\beta_{ML})\text{ since }\hat\beta_{ML}\text{ is unbiased.}}\to 0\quad\text{as}\quad n\to\infty.
+$$
+Since convergence in mean square implies convergence in probability, we have established that the ML-estimator $\hat\beta_{ML}$ is a (weakly) consistent estimator of $\beta$
+$$
+\hat\beta_{ML}\to_p \beta\quad\text{as}\quad n\to\infty.
+$$
+
+Moreover, one can also show that $s_{ML}^2$ is a biased but *asymptotically unbiased* estimator, that is 
+$$
+\left(\operatorname{Bias}(s^2_{ML})\right)^2\to 0
+$$ 
+as $n\to\infty$. Together with the result that $Var(s^2_{ML})\to 0$ as $n\to\infty$ we have that
+$$
+\begin{align*}
+\operatorname{MSE}(s^2_{ML})&=E[(s^2_{ML}-\sigma^2)^2]\\
+&=\operatorname{Bias}^2(s^2_{ML})+Var(s^2_{ML})\to 0\quad\text{as}\quad n\to\infty.
+\end{align*}
+$$
+Again, since convergence in mean square implies convergence in probability, we have established that the ML-estimator $s^2_{ML}$ is a (weakly) consistent estimator of $\sigma^2$
+$$
+s^2_{ML}\to_p \sigma^2\quad\text{as}\quad n\to\infty.
+$$
+
+
+<!-- In practice, however, one usually works with the unbiased (and consistent) alternative $s_{UB}^2=\dfrac{1}{n-K}\sum_{i=1}^n \hat{\varepsilon}_i^2$ even though one can show that $\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(\hat\sigma^2_{UB})$ for sufficiently large $n$. -->
+
+
+
+## Asymptotic Theory of Maximum-Likelihood Estimators 
+
+So far, we only considered consistency of the ML-estimators. In the following, we consider the asymptotic distribution of ML-estimators. 
+
+
+We only consider the simplest situation: Assume an i.i.d. sample $X_1,\dots,X_n$ with $X_i\in\mathbb{R}$ for all $i=1,\dots,$, and suppose that the distribution of $X_i$ possesses a density $f(x|\theta),$ where the true (unknown) parameter $\theta\in\mathbb{R}$ is an interior point of a compact parameter interval $\Theta=[\theta_l,\theta_u]\subset\mathbb{R}.$ ("Interior point" means that $\theta_l<\theta<\theta_u.$)
+
+Moreover let
+
+* Likelihood function:
+$$
+\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_i|\theta)
+$$
+* Log-likelihood function:
+$$
+\ell_n(\theta)=\ln\mathcal{L}(\theta)=\sum_{i=1}^n \ln f(X_i|\theta)
+$$
+* The maximum-likelihood estimator $\hat{\theta}_n$ maximizes $\ell_n(\theta)$ uniquely such that 
+$$
+\left.\ell_n'(\theta)\right|_{\theta=\hat\theta_n}=0\quad\text{and}\quad\left.\ell_n''(\theta)\right|_{\theta=\hat\theta_n}<0,
+$$
+* It is assumed that the partial derivatives 
+$$
+\frac{\partial}{\partial\theta}f(x|\theta)\quad\text{and}\quad \frac{\partial^2}{\partial\theta^2}f(x|\theta)
+$$
+exist and that these partial derivatives can be passed under the integral such that
+$$
+\begin{align*}
+\frac{\partial}{\partial\theta}\int f(x|\theta)dx 
+&=\int\frac{\partial}{\partial\theta} f(x|\theta)dx\\
+\frac{\partial^2}{\partial\theta^2}\int f(x|\theta)dx 
+&=\int\frac{\partial^2}{\partial\theta^2} f(x|\theta)dx
+\end{align*}
+$$
+
+
+::: {.callout-note}
+
+A possible **example** that fits into the above setup is the density of the exponential distribution 
+$$
+f(x|\theta)=\left\{
+    \begin{matrix}
+    \theta\exp(- \theta x)& \text{for }x\geq 0\\
+    0                     & \text{for }x < 0\\
+    \end{matrix}\right.
+$$
+with unknown "rate" parameter $\theta>0.$ 
+
+
+Or, more generally, the densities of the one-parameter, $\theta\in\Theta\subset\mathbb{R},$ exponential family  
+$$
+f(x|\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
+$$
+where $h:$ $\mathbb{R}\to\mathbb{R},$ $T:$ $\mathbb{R}\to\mathbb{R},$ $\eta:$ $\Theta\to\mathbb{R},$ and $B:$ $\Theta\to\mathbb{R}.$
+:::
+
+
+
+The derivation of the asymptotic distribution of $\hat\theta_n$ relies on a Taylor expansion (around $\theta$) of the derivative of the log-likelihood function 
+$$
+\ell_n'(\cdot).
+$$ 
+
+
+::: {#thm-MVT}
+
+## Mean Value Theorem 
+
+*Let $f$ be continuous over the closed interval $[a,b]$ and differentiable over the open interval $(a,b).$ Then, there exists at least one point $c\in(a,b)$ such that*
+$$
+f'(c) = \frac{f(b)-f(a)}{b-a}
+$$
+*or equivalently*
+$$
+f(b)=f(a) + f'(c)(b-a). 
+$$
+
+:::
+
+
+By the Mean Value Theorem (@thm-MVT), we know that 
+$$
+\ell_n'(\hat{\theta}_n)=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
+$${#eq-MVT}
+for some $\psi_n\in(\theta,\hat{\theta}_n).$
+
+
+Since $\hat{\theta}_n$ maximizes the log-Likelihood function it follows that 
+$$
+\ell_n'(\hat{\theta}_n)=0.
+$$ 
+Together with @eq-MVT, this implies that 
+$$
+\ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta).
+$${#eq-ml2}
+Now, note that necessarily
+$$
+\int_{-\infty}^{\infty} f(x|\theta)dx=1
+$$ 
+for *all possible values* of $\theta$. Therefore,
+$$
+\begin{align*}
+\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x|\theta)dx&=\frac{\partial}{\partial \theta}1\\
+\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x|\theta)dx&=0.
+\end{align*}
+$$
+Using that we can here pass the partial derivative under the integral sign
+$$
+\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x|\theta)dx=0.
+$${#eq-zero1} 
+And similarly, 
+$$
+\begin{align*}
+\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x|\theta)dx&=\frac{\partial^2}{\partial \theta^2}1\\
+\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x|\theta)dx&=0.
+\end{align*}
+$$ 
+Using again that we can here pass the partial derivative under the integral sign
+$$
+\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x|\theta)dx=0.
+$${#eq-zero2} 
+
+
+Using @eq-zero1 and @eq-zero2, we can now show that the average 
+$$
+\frac{1}{n}\ell_n'(\theta)=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)
+$$ 
+is asymptotically normal. 
+
+
+Firstly, for the mean one gets:
+$$
+\begin{align*}
+E\left(\frac{1}{n}\ell_n'(\theta)\right)
+&=E\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\
+&=\frac{n}{n}E\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\quad[\text{i.i.d.}]\\
+&=E\left(\frac{\frac{\partial}{\partial \theta}f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\
+&=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x|\theta)}
+{f(x|\theta)}f(x|\theta)dx\\ 
+&=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x|\theta)dx\\ 
+&=0,
+\end{align*}
+$$
+where the last step follows from @eq-zero1. 
+
+Secondly, for the variance one gets:
+$$
+\begin{align*}
+Var\left(\frac{1}{n}\ell_n'(\theta)\right)
+&=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\
+&=\frac{n}{n^2}Var\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\quad[\text{i.i.d.}]\\
+&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\
+&=\frac{1}{n}\underbrace{E\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}{f(X_i|\theta)}\right)^2\right)}_{=:\mathcal{J}(\theta)}\\
+&=\frac{1}{n}\mathcal{J}(\theta)
+\end{align*}
+$$
+
+Moreover, the average 
+$$
+\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)
+$$ 
+is taken over i.i.d. random variables 
+$$
+\frac{\partial}{\partial \theta} \ln f(X_i|\theta),\quad i=1,\dots,n.
+$$ 
+Thus, we can apply the Lindeberg-L\'evy central limit theorem from which it follows that
+$$
+\frac{\frac{1}{n}\ell_n'(\hat{\theta}_n)-E(\frac{\partial}{\partial \theta} \ln f(X_i|\theta))}{\sqrt{\frac{1}{n}\mathcal{J}(\theta)} }=\frac{\ell_n'(\hat{\theta}_n)}{\sqrt{n\mathcal{J}(\theta)} } \to_d \mathcal{N}(0,1)
+$$
+Thus using our mean value expression (@eq-ml2), we also have
+$$
+\frac{-\ell_n''(\psi_n)}{\sqrt{n \cdot \mathcal{J}(\theta)}}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1),
+$$
+which is equivalent to 
+$$
+\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\sqrt{n}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1).
+$${#eq-MLNorm}
+
+Further analysis requires us to study the statistic $\frac{1}{n}\ell_n''(\psi_n)$. 
+
+::: {.callout-important}
+However, before we consider $\frac{1}{n}\ell_n''(\psi_n),$ with $\psi_n\in(\theta,\hat\theta_n),$ we begin this with studying the mean and the variance of the simpler statistic 
+$$
+\frac{1}{n}\ell_n''(\theta).
+$$
+::: 
+
+The mean of $\frac{1}{n}\ell_n''(\theta):$
+$$
+\begin{align*}
+\frac{1}{n}\ell_n''(\theta)
+&=\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i|\theta)\\
+&=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\partial}{\partial\theta}\ln f(X_i|\theta)\right)\\
+&=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\frac{\partial}{\partial \theta}f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]
+\end{align*}
+$$
+Applying the quotient rule yields
+$$
+\begin{align*}
+\frac{1}{n}\ell_n''(\theta)
+&=\frac{1}{n}\sum_{i=1}^n
+\left(
+\frac{\left(\frac{\partial^2}{\partial \theta\partial \theta}f(X_i|\theta)\right) f(X_i|\theta)-\frac{\partial}{\partial\theta}f(X_i|\theta)\frac{\partial}{\partial\theta} f(X_i|\theta)}{\left(f(X_i|\theta)\right)^2}\right).
+\end{align*}
+$$
+Taking the mean of $\frac{1}{n}\ell_n''(\theta)$ yields:
+$$
+\begin{align*}
+E\left(\frac{1}{n}\ell_n''(\theta)\right)
+&=\frac{n}{n}E\left( \frac{\frac{\partial^2}{\partial \theta^2}  f(X_i|\theta)}
+{f(X_i|\theta)}-\left( \frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}
+{f(X_i|\theta)}\right)^2\right)\quad[\text{i.i.d.}]\\
+&=0 - E\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}
+{f(X_i|\theta)}\right)^2\right)\\
+&=-\mathcal{J}(\theta)
+\end{align*}
+$$
+which implies that $\frac{1}{n}\ell_n''(\theta)$ is an **unbiased estimator** of $-\mathcal{J}(\theta)$, i.e.
+$$
+\begin{align*}
+\operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)
+&=E\left(\frac{1}{n}\ell_n''(\theta)\right)-\mathcal{J}(\theta)\\
+&=0. 
+\end{align*}
+$$
+
+The variance of variance of $\frac{1}{n}\ell_n''(\theta):$
+$$
+\begin{align*}
+Var\left(\frac{1}{n}\ell_n''(\theta)\right)
+&=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i|\theta)\right)\\
+&=\frac{n}{n^2}
+\underbrace{Var\left(\frac{\partial^2}{\partial \theta \partial \theta}  \ln f(X_i|\theta)\right)}_{=\text{some fixed, deterministic number}}\\
+&=\frac{1}{n}\texttt{constant}
+\end{align*}
+$$
+which implies that
+$$
+Var\left(\frac{1}{n}\ell_n''(\theta)\right)\to 0\quad\text{as}\quad n\to\infty.
+$$
+
+With these mean and variance results we can write down the Mean Squared Error (MSE) of the estimator $\frac{1}{n}\ell_n''(\theta)$ of $-\mathcal{J}(\theta):$
+$$
+\begin{align*}
+&\operatorname{MSE}\left(\frac{1}{n}\ell_n''(\theta), -\mathcal{J}(\theta)\right)\\
+&=
+E\left(\left(\frac{1}{n}\ell_n''(\theta) -\left(-\mathcal{J}(\theta)\right)\right)^2\right)\\
+&=\left(\operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)\right)^2+Var\left(\frac{1}{n}\ell_n''(\theta)\right)\\
+&=Var\left(\frac{1}{n}\ell_n''(\theta)\right)\to 0\quad\text{as}\quad n\to\infty
+\end{align*}
+$$
+
+That is, the estimator $\frac{1}{n}\ell_n''(\theta)$ is a **mean square consistent** estimator
+$$
+\frac{1}{n}\ell_n''(\theta)\to_{m.s.} -\mathcal{J}(\theta)\quad \hbox{as}\quad n\to\infty
+$$
+which implies that $\frac{1}{n}\ell_n''(\theta)$ is also a **(weakly) consistent** estimator
+$$
+\frac{1}{n}\ell_n''(\theta)\to_p -\mathcal{J}(\theta)\quad \hbox{as}\quad n\to\infty
+$$
+since mean square convergence implies convergence in probability.
+
+
+::: {.callout-important}
+🤔 We wanted to study $\frac{1}{n}\ell_n''(\psi_n)$ in @eq-MLNorm **not** $\frac{1}{n}\ell_n''(\theta)$! Luckily, we are actually close now. 
+:::
+
+We know that the ML estimator $\hat\theta_n$ is (weakly) consistent, i.e., 
+$$
+\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
+$$
+
+
+Since $\psi_n\in(\theta,\hat{\theta}_n)$ is a value between $\theta$ and $\hat{\theta}_n$ (@eq-MVT), the consistency of $\hat{\theta}_n$ implies that also
+$$
+\psi_n\to_p\theta\quad\text{as}\quad n\to\infty.
+$$
+
+Therefore, we have (by the continuos mapping theorem) that also
+$$
+\begin{align}
+\frac{1}{n}\ell_n''(\psi_n)&\to_p -\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty\\
+-\frac{1}{n}\ell_n''(\psi_n)&\to_p \mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty.
+\end{align}
+$$
+<!-- Multiplying by $(-\sqrt{ \mathcal{J}(\theta)})^{-1}$ yields
+$$
+\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{ \mathcal{J}(\theta)}}
+%=n^{-1/2}\frac{-\ell_n''(\psi_n)}{\sqrt{n \cdot \mathcal{J}(\theta)}}
+\to_p \frac{-\mathcal{J}}{-\sqrt{ \mathcal{J}(\theta)}} 
+=\sqrt{ \mathcal{J}(\theta)}
+$$ -->
+
+Now, using Slutsky's theorem, we can connect the above consistency result with the asymptotic normality result in @eq-MLNorm such that 
+$$
+\begin{align*}
+\underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\right)}_{\to_p \sqrt{\mathcal{J}(\theta)} }\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d\mathcal{N}(0,1)
+\end{align*}
+$$
+or equivalently
+$$
+\begin{align*}
+\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d N\left(0,\frac{1}{\mathcal{J}(\theta)}\right)
+\end{align*}
+$$
+which is the asymptotic normality result we aimed for. 
+Note that 
+$$
+\begin{align*}
+\mathcal{J}(\theta)
+&=-E\left(\frac{1}{n}\ell_n''(\theta)\right)
+&=-E\left(\left(\frac{\partial}{\partial\theta^2}\ln f(X_i|\theta)\right)^2\right)
+=\mathcal{I}(\theta)
+\end{align*}
+$$ 
+, where $\mathcal{I}(\theta)$ is called the "Fisher information". 
+
+
+::: {.callout-note} 
+The above arguments can easily be generalized to multidimensional parameter vectors $\theta\in\mathbb{R}^p$. In this case, $\mathcal{J}(\theta)$ becomes a $p\times p$ matrix, and
+$$
+\hat{\theta}_n-\theta\to_d \mathcal{N}_p\left(0,\frac{1}{n} \mathcal{J}(\theta)^{-1}\right),
+$$
+where $n\mathcal{J}(\theta)=-E(\ell_n''(\theta))=\mathcal{I}(\theta)$ is then called "Fisher information *matrix*". 
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- **Example::** Assume an i.i.d. sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by $f(x|\theta)=\theta\exp(-\theta x)$. We then have $\mu:=E(X_i)=\frac{1}{\theta}$ as well as $\sigma^2_X:=\textrm{var}(X_i)=\frac{1}{\theta^2}$. The -->
+<!-- log-likelihood functions is given by  -->
+<!-- $$l(\theta)=\sum_{i=1}^n \ln (\theta\exp(-\theta X_i)))=n \ln \theta -\sum_{i=1}^n \theta X_i$$ -->
+<!-- $$\Rightarrow \quad \ell_n'(\theta)=n\frac{1}{\theta} + \sum_{i=1}^n X_i.$$ -->
+<!-- As already mentioned above, the maximum-likelihood estimator of $\theta$ then is $\hat\theta_n=\frac{1}{\bar X}$. -->
+<!-- Inference may then be based on likelihood-theory. We have -->
+<!-- $$\mathcal{J}(\theta)=-\frac{1}{n}E(\ell''(\theta))=\frac{1}{\theta^2},$$ -->
+<!-- and by the above theorem -->
+<!-- $$\frac{1}{\bar X}-\theta\sim AN(0,\frac{1}{n \mathcal{J}(\theta)})\overset{a}{\sim}AN(0,\frac{\theta^2}{n}).$$ -->
+<!-- This obviously coincides with the result obtained by the delta-method. -->
+
+
+
+
+
+<!-- ## Discussion of Assumptions and Results {-} -->
+<!-- \begin{itemize} -->
+<!-- \item **Strict exogeneity**:  Needed to assume $\E[\varepsilon | X]=0$ to show consistency of $\hat\beta_{ML}$.  -->
+<!-- \item **Homoskedasticity and non-autocorrelation**:  We used the assumption that $\E[\varepsilon eps']\sim(0, \sigma^2 I)$ to derive estimator of $\sigma^2$.   -->
+<!-- \item **Normality**:  The normality assumption is used **only** to derive small-sample properties of the estimators. By using asymptotic arguments one can show that both $\hat\beta_{ML}$ and $s_{ML}^2$ will be distributed -->
+<!-- asymptotically normally also without the normality assumption. -->
+<!-- \end{itemize} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Best Linear Unbiased Estimator} -->
+<!-- Given our assumptions, then by the Gauss-Markov theorem, it is possible to show that  -->
+<!-- \begin{itemize}  -->
+<!-- \item<1->$\hat\beta$ is the Best Linear Unbiased (BLUE) estimator of $\beta$ -->
+<!-- \item<2-> The best linear unbiased estimator of any linear combination of the $\beta$'s is the same linear combination -->
+<!-- of the $\hat\beta$'s. -->
+<!-- \item<3-> The Best Linear Unbiased Predictor (BLUP) of $Y$ based on the vector $X_s$ is $\hat y_s=X'_s\hat\beta$ -->
+<!-- \end{itemize} -->
+
+<!-- \end{frame} -->
+
+
+<!-- ## Hypothesis Testing -->
+<!-- ### Testing Hypotheses about One Parameter -->
+
+<!-- \noindent**Definition of the Score** -->
+
+<!-- Define the **score of the log likelihood** (also known as the **gradient vector** -->
+<!-- for observation $i$ -->
+<!-- \begin{equation*} -->
+<!-- s_i(\beta)\equiv \left(\dfrac{\partial L_i}{\partial \beta_0}(\beta), \dfrac{\partial L_i}{\partial \beta_1}(\beta), \dots, \dfrac{\partial L_i}{\partial \beta_k}(\beta)\right)' -->
+<!-- \end{equation*} -->
+
+
+
+<!-- %In the logit and probit cases, this can be shown to be -->
+<!-- %\begin{equation*} -->
+<!-- %s_i(\beta)\equiv\dfrac{g(x_i\beta)[y_i-G(x_i\beta)]} -->
+<!-- %{G(x_i\beta)[1-G(x_i\beta)]}x_i' -->
+<!-- %\end{equation*} -->
+<!-- %Since $x_i$ is $1 \times (k+1)$, the score is a $(k+1) \times 1$ vector.  Recalling that in the probit %case -->
+<!-- %\begin{center} -->
+<!-- %$g(z)=\phi(z)$ and $G(z)=\Phi(z)$ -->
+<!-- %\end{center} -->
+<!-- %while with logit -->
+<!-- %\begin{center} -->
+<!-- %$g(z)=\exp(z)/[1+\exp(z)]^2$ and $G(z)=\exp(z)/[1+\exp(z)]$. -->
+<!-- %\end{center} -->
+
+
+<!-- #### Variance-Covariance Matrix {-} -->
+
+<!-- Using the standard maximum likelihood theory it can be -->
+<!-- show that the asymptotic-variance covariance matrix of the MLE $\hat\beta_{ML}$ is given by -->
+<!-- \begin{equation*} -->
+<!-- \text{Asy.~Var}(\hat\beta_{ML})=\left[\sum_{i=1}^N s_i(\hat\beta)s_i(\hat\beta)'\right]^{-1} -->
+<!-- \end{equation*} -->
+<!-- %and therefore in our case we have -->
+<!-- %\begin{equation*} -->
+<!-- %\text{Asy. Var-Cov}(\hat\beta)=\left[\sum_{i=1}^N\dfrac{[g(x_i\hat\beta)]^2 x_i' x_i}{G(x_i\hat\beta) -->
+<!-- %[1-G(x_i\hat\beta)]}\right]^{-1} -->
+<!-- %\end{equation*} -->
+<!-- %with $g(\cdot)$ and $G(\cdot)$ defined as above. -->
+<!-- %\vskip .1in -->
+<!-- The square roots of the diagonals of this matrix will give us the -->
+<!-- **standard errors** of the estimates. -->
+
+<!-- \frametitle{Cramer-Rao Lower Bound} -->
+
+<!-- Fisher, Cramer, and Rao showed that for any unbiased estimator $\hat\theta$, its variance-covariance -->
+<!-- matrix cannot be smaller than $I^{-1}(\theta)$ where $I(\theta)$ is the **information matrix** -->
+<!-- of the estimator, given by  -->
+<!-- $$I(\theta) \equiv E[s(y,\theta)s(y,\theta)']$$ -->
+<!-- where $s(\cdot)$ is the gradient or score.  Thus, the MLE attains the Cramer-Rao lower bound and will therefore be asymptotically efficient. -->
+<!-- \end{frame} -->
+
+
+
+
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Asymptotic Distribution} -->
+
+<!-- Now, by the usual asymptotic theory, we have -->
+<!-- \begin{equation*} -->
+<!-- \dfrac{\hat\beta_j - \beta_j^0}{\text{std. err.}(\hat\beta_j)}\stackrel{a}{\sim} \mathcal{N}(0,1) -->
+<!-- \end{equation*} -->
+<!-- where $\beta_j^0$ is the value of the parameter under the null hypothesis. -->
+<!-- So, we can do our usual "$t$-tests" although because we rely on asymptotics, -->
+<!-- they should probably be more properly called $z$-tests. -->
+
+<!-- \end{frame} -->
+
+
+<!-- \subsection{Testing Hypotheses about Multiple Parameters} -->
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Testing Joint Hypotheses} -->
+
+<!-- We may also want to test hypotheses about multiple parameters.  Here it will -->
+<!-- be useful to think about the regressions implied by imposing the restrictions. -->
+<!-- So, for example,  -->
+<!-- \begin{equation*} -->
+<!-- \begin{array}{ll} -->
+<!-- H_0: & R\beta - r = 0\\ -->
+<!-- H_A: & H_0 \text{ is not true} \\ -->
+<!-- \end{array} -->
+<!-- \end{equation*} -->
+<!-- where $R$ is a $q \times (k+1)$ matrix that defines the $q$ restrictions placed on the parameters -->
+<!-- under the null hypothesis and $r$ is a $q \times 1$ vector of constants. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Restricted and Unrestricted Regressions} -->
+
+<!-- We will define the **restricted regression** as one in which we force -->
+<!-- the $R\hat\beta$ to be equal to  -->
+<!-- $r$ (i.e. under the null hypothesis), and the -->
+<!-- **unrestricted regression** to be one in which we allow the data to tell -->
+<!-- us what the values of $\beta$ should be. -->
+<!-- \vskip .2in -->
+<!-- Define $L_r$ as the log-likelihood corresponding to the restricted regeression -->
+<!-- and $L_u$ as the log-likelihood corresponding to the unrestricted regression. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Three Asymptotically Equivalent Tests} -->
+
+<!-- We will discuss three asymptotically equivalent tests: -->
+<!-- \begin{itemize} -->
+<!-- \item **Wald test**: based on the unrestricted regression -->
+<!-- \item **Likelihood ratio test**: based on both the restricted and unrestrcited regressions -->
+<!-- \item **Lagrange multiplier test**: based on the restricted regression. -->
+<!-- \end{itemize} -->
+
+<!-- All three tests will give us the same answer asymptotically, but will differ -->
+<!-- in their values in finite samples. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Wald Test (1)} -->
+
+<!-- From maximum likelihood theory, we know that  -->
+<!-- \begin{equation*} -->
+<!-- \hat\beta \adist \mathcal{N}(\beta,V) -->
+<!-- \end{equation*} -->
+<!-- and therefore that $R\hat\beta$ also has an asymptotically normal distribution -->
+<!-- (since it is just a linear combination of asymptotically normal variables): -->
+<!-- \begin{equation*} -->
+<!-- (R\hat\beta - R\beta) \adist \mathcal{N}(0, RVR') -->
+<!-- \end{equation*} -->
+<!-- This suggests a quadratic form which we can use to test hypotheses -->
+<!-- \begin{equation*} -->
+<!-- W\equiv(R\hat\beta - r)'[R \hat V_u R']^{-1}(R\hat\beta - r) \adist \chi_q^2 -->
+<!-- \end{equation*} -->
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Wald Test (2)} -->
+
+<!-- Thus, with the **Wald test**, we need only estimate the *unrestricted* regression. -->
+
+<!-- \vskip .25in -->
+
+<!-- It measures how far apart the estimated parameters are from the values of  -->
+<!-- the parameters under the null hypothesis. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Likelihood Ratio Test} -->
+
+<!-- More conceptually simple, perhaps, is the **Likelihood Ratio Test**. -->
+<!-- \vskip .15in -->
+<!-- If the null hypothesis holds, imposing restrictions on the data should lead -->
+<!-- to values of $L_r$ and $L_u$ that are ``close''.  The question then, is what -->
+<!-- metric to use to judget how ``close '' they are. -->
+<!-- \vskip .15in -->
+<!-- It can be shown that -->
+<!-- \begin{equation*} -->
+<!-- LR\equiv -2 [L_r - L_u] \adist \chi^2_q -->
+<!-- \end{equation*} -->
+<!-- Therefore the $\chi^2_q$ distribution is the proper metric for judging how close -->
+<!-- the likelihoods are. -->
+<!-- \vskip .15in -->
+<!-- We must fit both models to calculate the differences between the restricted -->
+<!-- and restricted likelihoods. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Lagrange Multiplier Test: Motivation} -->
+
+<!-- The **Lagrange Multiplier Test** (also called the **Score Test**) is based -->
+<!-- on the score, or gradient, vector (as defined earlier).  The idea is to measure -->
+<!-- how far away from the peak of the *unrestricted* likelihood imposing the -->
+<!-- restrctions forces us, which is some akin to the notion of the likelihood ratio -->
+<!-- test.  -->
+<!-- \vskip.15in -->
+<!-- At the peak of the unrestricted log likelihood, the score would be a vector of -->
+<!-- zeros.  Intuitively, then, the Lagrante Multiplier Test will measure how ``close'' -->
+<!-- the score vector when we estimate the *restricted* regression is to  -->
+<!-- the vector of zeroes. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Lagrange Multiplier Test: Derivation (1)} -->
+
+<!-- We can think about finding the maximum of the log likelihood subject to -->
+<!-- the constraints imposed by the null hypothesis.  To simplify things, suppose we have only two -->
+<!-- parameters, $\beta_1$ and $\beta_2$ with $H_0: \beta_2=c$. -->
+<!-- Then: -->
+<!-- \begin{equation*} -->
+<!-- H(\beta, \lambda)=\sum_{i=1}^N  L_i(\beta) - \lambda'(\beta_2-c) -->
+<!-- \end{equation*} -->
+<!-- where $\lambda$ is the Lagrange multiplier.  Then the first order conditions -->
+<!-- are -->
+<!-- \begin{align*} -->
+<!-- \sum_{i=1}^N  \dfrac{\partial L_i (\beta)}{\partial \beta_1} \big\vert_{\tilde\beta} -->
+<!-- &=\sum_{i=1}^N s_{i1}(\tilde\beta)=0\\ -->
+<!-- \tilde\lambda=\sum_{i=1}^N \dfrac{\partial L_i (\beta)}{\partial \beta_1} \big\vert_{\tilde\beta} &=\sum_{i=1}^N s_{i2}(\tilde\beta)\\ -->
+<!-- \end{align*} -->
+<!-- \end{frame} -->
+
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Lagrange Multiplier Test: Derivation (2)} -->
+
+<!-- Define $s_{i1}$ and $s_{i2}$ are the subvectors of $s_i(\beta)$ corresponding to  -->
+<!-- $\beta_1$ and $\beta_2$, respectively. -->
+
+<!-- \vskip .15in -->
+
+<!-- So we are in some sense testing whether $\tilde\lambda$ is ``close'' to zero or -->
+<!-- not, evaluated at the restricted values of the parameters. -->
+
+<!-- \vskip .15in -->
+
+<!-- It's possible to show, then, that -->
+
+<!-- \begin{equation*} -->
+<!-- LM\equiv  s'(\tilde\beta) \tilde V_r^{-1} s(\tilde\beta) \adist \chi^2_q -->
+<!-- \end{equation*} -->
+<!-- where $s(\tilde\beta)$ is the score evaluated at the *restricted* estimates of -->
+<!-- the parameters, and $\tilde V_r$ is the estimated variance-covariance matrix from the *restricted* regression. -->
+<!-- \end{frame} -->
+
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Relationshiop between W, LR, and LM tests} -->
+
+<!-- \includegraphics[angle=90, scale=.60]{wald-lm-lr.ps} -->
+<!-- \end{frame} -->
+
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Relationship between W, LR, and LM} -->
+
+<!-- While all three tests are asymptotically equivalent, it can be shown that in finite -->
+<!-- samples -->
+<!-- \begin{center} -->
+<!-- $LM < LR < W$ -->
+<!-- \end{center} -->
+<!-- meaning that LM tests will favor not rejecting the null and W tests will favor rejecting -->
+<!-- the null. -->
+
+<!-- \end{frame} -->
+
+
+<!-- \end{document} -->
+
+<!-- \section{Goodness of Fit Measures} -->
+<!-- \subsection{Goodness of Fit Measures} -->
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Goodness of Fit in Probit and Logit} -->
+
+<!-- As in the linear regression model, we would like to have some measure -->
+<!-- of how well our model fits the data.  Unlike linear models, however, where -->
+<!-- $R^2$ serves as the primary goodness-of-fit measure, there is no -->
+<!-- standard metric that is used. -->
+<!-- \vskip .15in -->
+<!-- Now, define $L_0$ as the log likelihood of a model in which we constrain -->
+<!-- all of the coefficients (except the constant) to be equal to zero. -->
+
+<!-- \end{frame} -->
+
+
+
+
+<!-- %------------------------------------------------- -->
+<!-- %------------------------------------------------- -->
+<!-- %\begin{frame} -->
+<!-- %\frametitle{A Note on $L_0$} -->
+<!-- %Note that we do not actually need to run a  regression to estimate $L_0$. -->
+<!-- %\vskip .15in -->
+<!-- %With just a constant term in the model, the likelihood function is given by -->
+<!-- %\begin{align*} -->
+<!-- %L_0&=\sum y_i \ln(N_1/N) + \sum (1-y_i) \ln(1-N_1/N)\\ -->
+<!--  %    &=N_1 \ln(N_1/N) + N_0\ln(N_0/N)\\ -->
+<!-- %\end{align*} -->
+<!-- %where $N_1$ indicates the number of success and $N_0$ is the number of failures. -->
+<!-- %\end{frame} -->
+
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{Pseudo-$R^2$} -->
+
+<!-- The first goodness-of-fit measure is meant as an analog to the $R^2$ from -->
+<!-- linear regression, called the pseudo-$R^2$.  It is defined as -->
+<!-- \begin{equation*} -->
+<!-- \text{pseudo}-R^2=1-\dfrac{1}{1+2(L_u - L_0)/N} -->
+<!-- \end{equation*} -->
+<!-- Intuitively, the greater the distance between the restricted and -->
+<!-- unrestricted log likelihoods, the more the model explains the variation -->
+<!-- in $y$, and the greater the pseudo-$R^2$ will be. -->
+
+<!-- \end{frame} -->
+
+<!-- %------------------------------------------------- -->
+<!-- \begin{frame} -->
+<!-- \frametitle{McFadden's $R^2$} -->
+
+<!-- McFadden suggested an alternative goodness of fit-measures: -->
+
+<!-- \begin{equation*} -->
+<!-- \text{McFadden}-R^2= 1- L_u/L_0 -->
+<!-- \end{equation*} -->
+<!-- since the log likelihood is just the sum of log probabilities, it must be that -->
+<!-- $L_0 < L_u < 0$. -->
+
+<!-- \end{frame} -->
+
+
+<!-- %------------------------------------------------- -->
+<!-- %\begin{frame} -->
+<!-- %\frametitle{Proportion of Correct Predictions} -->
+
+<!-- %An additional measure of the fit of the model is the number of observations for -->
+<!-- %which the model correctly predicts the outcome. -->
+
+<!-- %\end{frame} -->
