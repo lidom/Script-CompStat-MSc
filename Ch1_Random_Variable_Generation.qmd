@@ -2,13 +2,15 @@
 
 ### Literature {-}
 
-* Main: 
-  * [Monte Carlo Statistical Methods](http://www.springer.com/us/book/9780387212395), Robert, C., and Casella, G., Ch. 2 
+In principle, it is sufficient to read this script, but I can recommend the following books for further self-studies:
 
-* Further:
+* [Monte Carlo Statistical Methods](http://www.springer.com/us/book/9780387212395), Ch. 2, @RobertCasella1999 
+* [Introducing Monte Carlo Methods with R](https://link.springer.com/book/10.1007/978-1-4419-1576-4), Ch. 2, @RobertCasella2010
+
+<!-- * Further:
   * [Non-Uniform Random Variate Generation](http://luc.devroye.org/rnbookindex.html), Devroye, L. 
   * [Nonparametric Density Estimation: The L1 View](http://luc.devroye.org/L1bookBW.pdf), Devroye, L., Ch. 8
-  * [Monte Carlo and Quasi-Monte Carlo Sampling](http://www.springer.com/us/book/9780387781648), Lemieux, C., Ch. 2 and 3
+  * [Monte Carlo and Quasi-Monte Carlo Sampling](http://www.springer.com/us/book/9780387781648), Lemieux, C., Ch. 2 and 3 -->
 
 
 
@@ -448,7 +450,7 @@ $$
 $$
 which shows the result of @thm-InverseMethod. The last (and important) equality follows since the distribution function of $U\sim\mathcal{U}[0,1]$ is 
 $$
-F_U(u) = \mathbb{P}(U\leq u) = u, \quad 0\leq u \leq 1
+\mathbb{P}(U\leq u) = F_U(u) = u, \quad 0\leq u \leq 1
 $$
 since the distribution function $F_U$ of $U\sim\mathcal{U}[0,1]$ is
 $$
@@ -864,19 +866,49 @@ $$
 $$
 :::
 
-![](images/FTSim.png)
+@fig-FundThmSim visualizes the statement of @thm-FundamentalThmSimulation.
 
 
-It turns out that sampling $(X, U)$ uniformly over the set $\mathcal{A}$ is often challenging. 
+```{r}
+#| echo: false
+#| eval: true
+#| label: fig-FundThmSim
+#| fig-cap: To simulate a random variable $X,$ one can simulate $(X,U)$ uniformely over $\mathcal{A}$ and take those $X$'s as simulation results (see tick-marks at $x$-axis). 
 
-However, once can consider some superset \mathcal{S} such that $\mathcal{A}\subseteq \mathcal{S},$ such that simulating
-a random variable uniformly distributed over $\mathcal{S}$ is easy. 
+set.seed(123)
+# Accept-Reject Algorithm:
+Y <- runif(500, min = -4.5, max = 4.5) 
+U <- runif(500, min =    0, max = 0.4) 
+# A-R Step:
+accept <- U <  dnorm(Y) - 0.025
+X      <- Y[accept]
+U      <- U[accept]
+par(mfrow=c(1,1))
+# curve(dnorm, col="blue", lwd=1.3, xlim=c(-4.5,4.5), ylab="", xlab="x")
+# legend("topright", legen=expression(f[X](x)), bty="n")
+curve(dnorm, col="blue", lwd=1.3, 
+xlim=c(-4.5,4.5), ylim=c(0,0.45), ylab="u", xlab="x")
+legend("topright", 
+lty=c(1, NA), pch=c(NA, 19), col=c("blue", "orange"), 
+legend=c(expression(f[X](x)), "Points (X,U) uniformly over A"), bty="n")
+points(y=U, x=X, col="orange", pch=19)
+axis(side=1, at = X, 
+     tick = TRUE, labels = FALSE, col.ticks = alpha("darkorange", 0.5))
+par(mfrow=c(1,1))
+```
 
-A uniform distribution on $\mathcal{A}$ can then be obtained by drawing from a uniform distribution on $\mathcal{S},$ and rejecting samples in $\mathcal{S}$ that are not in $\mathcal{A}.$
+
+It turns out that sampling $(X, U)$ uniformly over the set $\mathcal{A}$ is often challenging. However, one can consider some superset $\mathcal{S},$
+$$
+\mathcal{A}\subseteq \mathcal{S},
+$$ 
+such that simulating a random variable uniformly distributed over $\mathcal{S}$ is easy. 
+
+A uniform distribution on $\mathcal{A}$ can then be obtained by drawing from a uniform distribution on $\mathcal{S},$ and rejecting samples that are in $\mathcal{S},$ but not in $\mathcal{A}.$
 
 
 
-#### The case of densities with compact support {-}
+#### The case of densities with compact support 
 
 The general principle of the accept-reject method is easily explained using a *bounded* density function $f$ with *compact support*. 
 
