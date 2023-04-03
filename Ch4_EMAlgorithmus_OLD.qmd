@@ -1,0 +1,830 @@
+# The Expectation Maximization (EM) Algorithm
+
+/home/dom/github/Computational_Statistics_Script/ARCHIV_DO_NOT_RM/
+
+Der EM Algorithmus wird häufig verwendet, um komplizierte Maximum Likelihood Schätzprobleme zu vereinfachen bzw. überhaupt erst möglich zu machen.  In diesem Kapitel stellen wir den EM Algorithmus zur Schätzung von Gaußschen Mischverteilungen vor, da der EM Algorithmus hier wohl seine bekannteste Anwendung hat. Bereits die originale Arbeit zum EM Algorithmus [@Dempster_1977] beschäftigt sich mit der Schätzung von Gaußschen Mischverteilungen.
+
+
+**Mögliche Anwendungen von Gaußschen Mischverteilungen:**
+
++ Generell: Auffinden von Gruppierungen (zwei oder mehr) in den Daten (**Clusteranalyse**). Zum Beispiel:
+
+    + Automatisierte Videobearbeitungen (z.B. Bildeinteilungen in Vorder- und Hintergrund) 
+    + Automatisierte Erkennung von Laufstilen 
+    + etc.
+
+
+
+<!-- [@Liebl2014] -->
+
+<!-- **Zur Info:** Gaußsche Mischverteilungen werden häufig in der Clusteranalyse verwendet. Da einem GMM ein Wahrscheinlichkeitsmodell zu Grunde liegt, gehören GMM-basierte Clustermethoden zu den *modellbasierten Clusterverfahren*. Das wohl beste und bekannteste R-Paket zur Schätzung und Verwendung von Gaußschen Mischungsmodellen ist das `r ttcode("mclust")` package [@mclust]. -->
+
+
+### Lernziele für dieses Kapitel {-}
+
+Sie können ...
+
++ ein **Anwendungsfeld** des EM Algorithmuses **benennen**.
+<br>
++ die **Probleme** der klassischen Maximum Likelihood Methode zur Schätzung von Gaußschen Mischverteilungen **benennen und erläutern**.
+<br>
++ die **Grundidee** des EM Algorithmuses **erläutern**. 
+<br>
++ den **EM Algorithmus** zur Schätzung von Gaußschen Mischverteilungen **anwenden**.
+<br>
++ die **Grundidee** der Vervollständigung der Daten durch latente Variablen **erläutern**.
+<br>
+
+
+
+
+### Begleitlektüre(n) {-}
+
+Zur Vorbereitung der Klausur ist es grundsätzlich aussreichend dieses Kapitel durchzuarbeiten - aber Lesen hat ja noch nie geschadet. Dieses Kapitel basiert hauptsächlich auf: 
+
++ Kapitel 9 in [**Pattern Recognition and Machine Learning**](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) [@book_Bishop2006].<br> 
+Die pdf-Version des Buches ist frei erhältlichen: [**pdf-Version**](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
+
+Weiteren guten Lesestoff zum EM Algoithmus gibt es z.B. hier:
+
++ Kapitel 8.5 in [**Elements of Statistical Learning: Data Mining, Inference and Prediction**](https://web.stanford.edu/~hastie/ElemStatLearn/) [@Elements].<br> 
+Die pdf-Version des Buches ist frei erhältlichen: [**pdf-Version**](https://web.stanford.edu/~hastie/ElemStatLearn/)
+
+
+### R-Pakete für diese Kapitel {-}
+
+Folgende R-Pakete werden für dieses Kapitel benötigt:
+```{r, eval=FALSE, echo=TRUE}
+pkgs <- c("tidyverse",      # Die tidyverse-Pakete
+          "palmerpenguins", # Pinguin-Daten
+          "scales",         # Transparente Farben: alpha()
+          "RColorBrewer",   # Hübsche Farben
+          "mclust",         # Schätzung/Verwendung 
+                            # Gaußschen Mischverteilungen
+          "MASS")           # Erzeugung von Zufallszahlen aus 
+                            # einer multiv. Normalverteilung
+install.packages(pkgs)
+```
+
+<!-- ## Aufbau -->
+<!-- 1. Motivation: Clusteranalyse <span style="color:#34495E">Ein Anwendungsfeld des EM Algorithmuses</span> -->
+<!-- <br><br><br> -->
+<!-- 2. Gaußsche Mischmodelle <span style="color:#34495E">EM Algorithmus zur Maximum-Likelihood Schätzung</span> -->
+<!-- <br><br><br> -->
+<!-- 3. Vervollständigung der Daten durch Latente Variablen <span style="color:#34495E">Der wahre Blick auf den EM Algorithmus</span> -->
+<!-- <br><br><br> -->
+<!-- 4. Zum Schluss Abstrakt<span style="color:#34495E">Die Essenz des EM Algorithmuses</span> -->
+
+
+## Motivation: Clusteranalyse mit Hilfe Gaußscher Mischverteilungen
+
+Als Datenbeispiel verwendent wir die [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/articles/intro.html) Daten [@palmerpenguins]. 
+
+
+Diese Daten stammen aus Vermessungen von Pinguinpopulationen auf dem Palmer-Archipel (Antarktische Halbinsel). Pinguine sind oft schwer von einander zu unterscheiden`r if(knitr::is_html_output())' (Abbildung \\@ref(fig:pinguine))'`.  Wir werden versuchen, mit Hilfe einer Gaußschen Mischverteilung Gruppierungen in den Pinguindaten (Flossenlänge) zu finden. Um solche Mischverteilungen schätzen zu können, führen wir den EM Algorithmus ein.
+
+<!-- <center> -->
+<!-- <div class="centered"> -->
+<!-- <img src="images/penguins.gif" width="550" height="450"/> -->
+<!-- </div> -->
+<!-- </center> -->
+
+```{r pinguine, include=knitr::is_html_output(), echo=FALSE, out.width='70%', fig.cap="Frecher Pinguin bei der Tat."}
+knitr::include_graphics("images/penguins.gif")
+```
+
+
+Der folgende Code-Chunck bereitet die Daten auf. 
+
+> **Achtung:** Wir haben zwar die Information zu den verschiedenen Pinguin-Arten (`Penguine_Art`) tun aber im Folgenden so, also ob wir diese Information nicht kennen würden.  Wir wollen alleine auf Basis der Flossenlängen (`Penguine_Flosse`) die Gruppenzugehörigkeiten per Clusteranalyse bestimmen. (Im Nachhinein können wir dann mit Hilfe der Daten in `Penguine_Art` prüfen, wie gut unsere Clusteranalyse ist.)  
+
+```{r, fig.align='center', out.width="100%", echo=TRUE, eval=TRUE}
+library("palmerpenguins") # Pinguin-Daten
+library("RColorBrewer")   # Hübsche Farben
+library("scales")         # Für transparente Farben: alpha()
+
+col_v <- RColorBrewer::brewer.pal(n = 3, name = "Set2")
+
+## Vorbereitung der Daten:
+Pinguine <- palmerpenguins::penguins %>% # Pinguin-Daten
+  tidyr::as_tibble() %>%                 # Datenformat: 'tibble'-dataframe
+  dplyr::filter(species!="Adelie") %>%   # Pinguin-Art 'Adelie' löschen 
+  droplevels() %>%                       # Lösche das nicht mehr benötigte Adelie-Level
+  tidyr::drop_na() %>%                   # NAs löschen
+  dplyr::mutate(Art    = species,        # Variablen umbenennen
+                Flosse = flipper_length_mm) %>% 
+  dplyr::select(Art, Flosse)             # Variablen auswählen
+
+##  
+n      <- nrow(Pinguine)                 # Stichprobenumfang
+
+## Variable 'Penguine_Art' aus Pinguine-Daten "herausziehen"
+Penguine_Art    <- dplyr::pull(Pinguine, Art)
+
+## Variable 'Penguine_Flosse' aus Pinguine-Daten "herausziehen"
+Penguine_Flosse <- dplyr::pull(Pinguine, Flosse)
+
+## Plot
+## Histogramm:
+hist(x = Penguine_Flosse, freq = FALSE, 
+     xlab="Flossenlänge (mm)", main="Pinguine\n(Zwei Gruppen)",
+     col=gray(.65,.5), border=gray(.35,.5), ylim=c(0.0003, 0.039))
+## Stipchart hinzufügen:
+stripchart(x = Penguine_Flosse, method = "jitter", 
+           jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[3],.5), 
+           bg=alpha(col_v[3],.5), cex=1.3, add = TRUE)
+```
+
+
+**Das Clusterverfahren basierend auf Gaußschen Mischverteilungen:**
+
+1. Gaußsche Mischverteilung (**per EM Algorithmus**) schätzen
+2. Die Datenpunkte $x_i$ derjenigen Gruppe zuordnen, welche die **„a-posteriori-Wahrscheinlichkeit“** maximiert (siehe Abbildung \@ref(fig:GMM-plot1))
+
+<br>
+
+```{r GMM-plot1, fig.align='center', out.width="100%", echo=FALSE, fig.cap="Clusteranalyse basierend auf einer  Mischverteilung mit zwei gewichteten Normalverteilungen."}
+## mclust R-Paket:
+## Clusteranalyse mit Hilfe von Gaußschen Mischmodellen
+suppressMessages(library("mclust"))
+
+## Anzahl der Gruppen
+G <- 2 
+
+## Schätzung des Gaußschen Mischmodells (per EM Algorithmus)
+## und Clusteranalyse
+mclust_obj <- mclust::Mclust(data = Penguine_Flosse, G=G, 
+                              modelNames = "V", 
+                              verbose = FALSE)
+
+# summary(mclust_obj)
+# str(mclust_obj)
+
+## Geschätzte Gruppen-Zuordnungen
+class <- mclust_obj$classification
+
+## Anteil der korrekten Zuordnungen:
+# cbind(class, Penguine_Art)
+# round(sum(class == as.numeric(Penguine_Art))/n, 2)
+
+## Geschätzte Mittelwerte 
+mean_m <- t(mclust_obj$parameters$mean)
+
+## Geschätzte Varianzen (und evtl. Kovarianzen) 
+cov_l  <- list("Cov1" = mclust_obj$parameters$variance$sigmasq[1], 
+               "Cov2" = mclust_obj$parameters$variance$sigmasq[2])
+
+## Geschätzte Gewichte (a-priori-Wahrscheinlichkeiten) 
+prop_v <- mclust_obj$parameters$pro
+
+## Auswerten der Gaußsche Mischungs-Dichtefunktion
+np      <- 100 # Anzahl der Auswertungspunkte
+xxd     <- seq(min(Penguine_Flosse)-3, max(Penguine_Flosse)+5, length.out = np)
+## Mischungs-Dichte
+yyd     <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1] +
+           dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
+## Einzel-Dichten
+yyd1    <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1]
+yyd2    <- dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
+
+## Plot
+hist(x = Penguine_Flosse, xlab="Flossenlänge (mm)", main="Pinguine\n(Zwei Gruppen)",
+     col=gray(.65,.5), border=gray(.35,.5), freq = FALSE, ylim=c(0, 0.04))
+lines(x = xxd, y=yyd, lwd=2, col=gray(.35,.75))
+lines(x = xxd, y=yyd1, lwd=2, col=gray(.35,.75), lty=2)
+lines(x = xxd, y=yyd2, lwd=2, col=gray(.35,.75), lty=2)
+abline(v=203.1, lty=3)
+stripchart(Penguine_Flosse[class==1], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[1],.5), bg=alpha(col_v[1],.5), cex=1.3, add = TRUE)
+stripchart(Penguine_Flosse[class==2], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
+```
+
+Abbildung \@ref(fig:GMM-plot1) zeigt das Resultat einer Clusteranalyse basierend auf einer Mischverteilung zweier gewichteter Normalverteilungen. Cluster-Ergebnis: `r round(sum(class == as.numeric(Penguine_Art))/n, 2)*100`% der Pinguine konnten richtig zugeordnet werden - lediglich auf Basis ihrer Flossenlängen.  
+
+
+<br><br><br>
+
+
+
+```{r , eval=my_output == "html", results='asis', echo=FALSE}
+cat('<hr style="background-color:#3C6690;height:2px">')
+```
+
+
+
+Mit Hilfe der folgenden R-Codes kann die obige Clusteranalyse und die Ergebnisgrafik repliziert werden:
+<br>
+
+```{r, echo=TRUE, eval=FALSE}
+## mclust R-Paket:
+## Clusteranalyse mit Hilfe von Gaußschen Mischmodellen
+suppressMessages(library("mclust"))
+
+## Anzahl der Gruppen
+G <- 2 
+
+## Schätzung des Gaußschen Mischmodells (per EM Algorithmus)
+## und Clusteranalyse
+mclust_obj <- mclust::Mclust(data = Penguine_Flosse, G=G, 
+                              modelNames = "V", 
+                              verbose = FALSE)
+
+# summary(mclust_obj)
+# str(mclust_obj)
+
+## Geschätzte Gruppen-Zuordnungen (Cluster-Resultat)
+class <- mclust_obj$classification
+
+## Anteil der korrekten Zuordnungen:
+# cbind(class, Penguine_Art)
+round(sum(class == as.numeric(Penguine_Art))/n, 2)
+
+## Geschätzte Mittelwerte 
+mean_m <- t(mclust_obj$parameters$mean)
+
+## Geschätzte Varianzen (und evtl. Kovarianzen) 
+cov_l  <- list("Cov1" = mclust_obj$parameters$variance$sigmasq[1], 
+               "Cov2" = mclust_obj$parameters$variance$sigmasq[2])
+
+## Geschätzte Gewichte (a-priori-Wahrscheinlichkeiten) 
+prop_v <- mclust_obj$parameters$pro
+
+## Auswerten der Gaußsche Mischung-Dichtefunktion
+np      <- 100 # Anzahl der Auswertungspunkte
+xxd     <- seq(min(Penguine_Flosse)-3, max(Penguine_Flosse)+5, length.out = np)
+## Mischungs-Dichte
+yyd     <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1] +
+           dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
+## Einzel-Dichten
+yyd1    <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1]
+yyd2    <- dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
+
+## Plot
+hist(x = Penguine_Flosse, xlab="Flossenlänge (mm)", main="Pinguine\n(Zwei Gruppen)",
+     col=gray(.65,.5), border=gray(.35,.5), freq = FALSE, ylim=c(0, 0.04))
+lines(x = xxd, y=yyd, lwd=2, col=gray(.35,.75))
+lines(x = xxd, y=yyd1, lwd=2, col=gray(.35,.75), lty=2)
+lines(x = xxd, y=yyd2, lwd=2, col=gray(.35,.75), lty=2)
+stripchart(Penguine_Flosse[class==1], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[1],.5), bg=alpha(col_v[1],.5), cex=1.3, add = TRUE)
+stripchart(Penguine_Flosse[class==2], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
+```
+
+
+
+## Der EM Algorithmus zur ML-Schätzung Gaußscher Mischverteilungen
+
+### Gaußsche Mischmodelle (GMM) 
+
+Eine Zufallsvariable $X$, die einer Gauschen Mischverteilung folgt, bezeichnen wir als 
+$$
+X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+$$
+
+Die dazugehörige Dichtefunktion einer Gaußschen Mischverteilung ist folgendermaßen definiert:
+\begin{equation}
+f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g) (\#eq:GMMdens)
+\end{equation}
+
+* **Gewichte:** $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$ mit $\pi_g>0$ und $\sum_{g=1}^G\pi_g=1$
+* **Mittelwerte:** $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ mit $\mu_g\in\mathbb{R}$
+* **Standardabweichungen:** $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$ mit $\sigma_g>0$ 
+* **Normalverteilung der Gruppe $g=1,\dots,G$:** 
+$$
+f(x|\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
+$$
+* **Unbekannte Parameter:** <span style="color:#FF5733">$\boldsymbol{\pi}$</span>, <span style="color:#FF5733">$\boldsymbol{\mu}$</span> und <span style="color:#FF5733">$\boldsymbol{\sigma}$</span>
+
+
+### Maximum Likelihood (ML) Schätzung 
+
+Man kann versuchen die unbekannten Parameter $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ und $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$ eines Gaußschen Mischmodells klassisch mit Hilfe der Maximum Likelihood Methode zu schätzen.
+
+> Ich sag's gleich: Der Versuch wird scheitern. 
+
+**Wiederholung der Grundidee der ML-Schätzung:** 
+
+* **Annahme:** Die Daten $\mathbf{x}=(x_1,\dots,x_n)$ sind eine Realisation einer einfachen (also i.i.d.) Zufallsstichprobe $(X_1,\dots,X_n)$ mit 
+$$ 
+X_i\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+$$ 
+für alle $i=1,\dots,n$. 
+
+<!-- und dazugehöriger Dichtefunktion $f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g).$  -->
+
+> Die Daten $\mathbf{x}=(x_1,\dots,x_n)$ „kennen“ also die unbekannten Parameter $\boldsymbol{\pi},$ $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ und wir müssen ihnen diese Informationen „nur noch“ entlocken.
+
+* **Schätz-Idee:** Wähle $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ so, dass $f_G(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **„optimal“** zu den beobachteten Daten $\mathbf{x}$ passt.<br>
+
+* **Umsetzung der Schätz-Idee:** Maximiere (bzgl. $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$) die Likelihood Funktion
+$$\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$$
+Bzw. maximiere die Log-Likelihood Funktion (einfachere Maximierung)
+\begin{align*}
+\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+=&\sum_{i=1}^n\ln\left(f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
+=&\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
+\end{align*}
+**Beachte:** Die Maximierung muss die Parameterrestriktionen in \@ref(eq:GMMdens) berücksichtigen ($\sigma_g>0$ und $\pi_g>0$ für alle $g=1,\dots,G$ und $\sum_{g=1}^G\pi_g=1$). 
+
+* Die maximierenden Parameterwerte <span style="color:#FF5733">$\hat{\boldsymbol{\pi}}$</span>, <span style="color:#FF5733">$\hat{\boldsymbol{\mu}}$</span> und <span style="color:#FF5733">$\hat{\boldsymbol{\sigma}}$</span> sind die <span style="color:#FF5733">**ML-Schätzer**</span>. Das kann man so ausdrücken: 
+$$
+(\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+$$
+
+
+
+`r emo::ji("unamused_face")` **Probleme mit Singularitäten bei Numerische Lösungen:** Versucht man obiges Maximierungsproblem [numerisch mit Hilfe des Computers zu lösen](https://cran.r-project.org/web/packages/EstimationTools/vignettes/maxlogL.pdf), wird man schnell merken, dass die Ergebnisse höchst instabil, unplausibel und wenig vertrauenswürdig sind. Der Grund für diese instabilen Schätzungen sind Probleme mit Singularitäten: <br>
+Für echte GMMs ($G>1$) treten während einer numerischen Maximierung sehr leicht Probleme mit Singularitäten auf. Dies geschieht immer dann, wenn eine der Normalverteilungskomponenten versucht den ganzen Datensatz $\mathbf{x}$ zu beschreiben und die andere(n) Normalverteilungskomponente(n) versuchen lediglich einzelne Datenpunkte zu beschreiben. Eine Gaußsche Dichtefunktion, die sich um einen einzigen Datenpunkt $x_i$ konzentriert (d.h. $\mu_g=x_i$ und $\sigma_g\to 0$) wird dabei sehr große Werte annehmen (d.h. $f(x_i|\mu_g=x_i,\sigma_g)\to\infty$ für $\sigma_g\to 0$) und so die Log-Likelihood auf unerwünschte Weise maximieren (siehe Abbildung `r if (knitr::is_html_output()) '\\@ref(fig:dirac1)' else '\\@ref(fig:dirac2)'`). Solch **unerwünschte, triviale Maximierungslösungen** führen i.d.R. zu unplausiblen Schätzergebnissen. 
+
+
+
+```{r dirac1, include=knitr::is_html_output(), animation.hook="gifski", interval=0.1, fig.align="center", echo=FALSE, fig.cap="Normalverteilung mit $\\mu_g=x_i$ für $\\sigma_g\\to 0$."}
+np  <- 1000
+rep <- 30
+xxd <- seq(-3, 3, length.out = np)
+sd_v <- seq(.5,0.05, len=rep)
+for(i in 1:length(sd_v)){
+  plot(x=xxd, y=dnorm(xxd, 0, sd_v[i]), type="l", ylim=c(0,max(dnorm(xxd, 0, sd_v[rep-3]))), xlim = c(-1.5,1.5),
+       ylab="",xlab="", lwd=2, col="darkblue", axes = FALSE)
+  axis(2); axis(1, at=0, labels = expression(x[i])); box()
+}
+```
+
+
+
+```{r dirac2, include=knitr::is_latex_output(), fig.align="center", echo=FALSE, fig.cap="Normalverteilung mit $\\mu_g=x_i$ für $\\sigma_g\\to 0$."}
+np  <- 1000
+rep <- 30
+xxd <- seq(-3, 3, length.out = np)
+sd_v <- seq(.5,0.05, len=rep)
+plot(x=xxd, y=dnorm(xxd, 0, sd_v[i]), ylim=c(0,max(dnorm(xxd, 0, sd_v[rep]))), xlim = c(-1.5,1.5),
+       ylab="",xlab="", lwd=2, col="darkblue", axes = FALSE, type="n")
+axis(2); axis(1, at=0, labels = expression(x[i])); box()
+##
+for(i in 1:rep){
+  lines(x=xxd, y=dnorm(xxd, 0, sd_v[i]), type="l", ylim=c(0,max(dnorm(xxd, 0, sd_v[rep]))), xlim = c(-1.5,1.5), lwd=2, col=gray(.5, 0.5))
+}
+  lines(x=xxd, y=dnorm(xxd, 0, sd_v[rep]), type="l", ylim=c(0,max(dnorm(xxd, 0, sd_v[rep]))), xlim = c(-1.5,1.5), lwd=2, col=alpha("darkblue", 1))
+```
+
+
+<br><br>
+
+`r emo::ji("unamused_face")` **Analytische Lösung:** Es ist zwar etwas mühsam, aber man kann versuchen die Log-Likelihood analytisch zu maximieren. Tut man sich das an, kommt man zu folgenden Ausdrücken:
+\begin{align*}
+\hat\pi_g&=\frac{1}{n}\sum_{i=1}^np_{ig}\\
+\hat\mu_g&=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\
+\hat\sigma_g&=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2}
+\end{align*}
+für $g=1,\dots,G$.
+
+> Die Herleitung der Ausdrücke für $\hat{\mu}_g$, $\hat{\sigma}_g$ und $\hat{\pi}_g$ ist wirklich etwas lästig (mehrfache Anwendungen der Kettenregel, Produktregel, etc., sowie Anwendung des Lagrange-Multiplikator Verfahrens zur Optimierung unter Nebenbedingungen) aber machbar.  In einer der Übungsaufgaben dürfen Sie den Ausdruck für $\hat\mu_g$ herleiten.
+
+`r emo::ji("see_no_evil")` <span style="color:#FF5733">**Aber:**</span> Diese Ausdrücke für $\hat\pi_g$, $\hat\mu_g$ und $\hat\sigma_g$ hängen von den <span style="color:#FF5733">**unbekannten**</span> Parametern $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ und $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$, denn: 
+$$
+p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+$$
+für $i=1,\dots,n$ und $g=1,\dots,G$. Die Ausdrücke für $\hat\pi_g$, $\hat\mu_g$, und $\hat\sigma_g$ erlauben also keine keine direkte Schätzung der unbekannten Parameter $\pi_g$, $\mu_g$ und $\sigma_g$.
+
+
+`r emo::ji("partying_face")` <span style="color:#138D75">**Lösung: Der EM Algorithmus**</span>  
+
+
+<!-- ## Der <span style="color:#FF5733">E</span><span style="color:#2471A3">M</span> Algorithmus -->
+
+### Der EM Algorithmus für GMMs {#ch:EM1}
+
+
+Die Ausdrücke für $\hat\pi_g$, $\hat\mu_g$ und $\hat\sigma_g$ legen jedoch ein einfaches, iteratives ML-Schätzverfahren nahe: Nämlich einer alternierenden Schätzung von $p_{ig}$ und $(\hat\pi_g, \hat\mu_g,\hat\sigma_g)$.     
+
+<!-- ist einfach und folgt einem iterativen Schema: Für gegebene Werte  -->
+
+<!-- 1. Starte mit errateten Werten für $\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\boldsymbol{\sigma}^{(0)}$.  -->
+<!-- 2. In der $k$ten Wiederholung ($k=1,2,\dots$) kann man, erstens, neue $p_{ig}^{(r)}$ Werte berechnen (basierend auf $\boldsymbol{\pi}^{(r-1)}$, $\boldsymbol{\mu}^{(r-1)}$ und $\boldsymbol{\sigma}^{(r-1)}$) und, zweitens, neue ML-Schätzer $\boldsymbol{\pi}^{(r)}$, $\boldsymbol{\mu}^{(r)}$ und $\boldsymbol{\sigma}^{(r)}$ berechnen (basierend auf den neuen $p_{ig}^{(r)}$).  -->
+<!-- 3. Dies wiederholt man bis die Schätzung konvergiert - d.h. bis sich das Schätzergebnis nicht mehr ändert.  -->
+
+
+**Der Der EM Algorithmus:**
+
+1. Setze Startwerte $\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\boldsymbol{\sigma}^{(0)}$
+
+2. Für $r=1,2,\dots$
+
+    - <span style="color:#FF5733">**(Expectation)**</span> Berechne: 
+     $$p_{ig}^{(r)}=\frac{\pi_g^{(r-1)}f(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
+    
+    - <span style="color:#2471A3">**(Maximization)**</span>  Berechne: 
+    <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}x_i$</center> 
+    <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center> 
+
+3. Prüfe Konvergenz: 
+    
+    - Stoppe, falls sich der Wert der maximierten Log-Likelihood Funktion, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{z})$, nicht mehr ändert.
+
+
+<br>
+
+Der obige pseudo-Code wird im Folgenden Code-Chunck umgesetzt:
+
+```{r, echo=TRUE}
+library("MASS")
+library("mclust")
+
+## Daten:
+x <- cbind(Penguine_Flosse) # Daten [n x d]-Dimensional. 
+d <- ncol(x)                # Dimension (d=1: univariat)
+n <- nrow(x)                # Stichprobenumfang
+G <- 2                      # Anzahl Gruppen
+
+## Weitere Deklarationen:
+llk       <- matrix(NA, n, G)
+p         <- matrix(NA, n, G)  
+loglikOld <- 1e07
+tol       <- 1e-05
+it        <- 0
+check     <- TRUE 
+
+
+## EM Algorithmus
+
+## 1. Startwerte für pi, mu und sigma:
+pi    <- rep(1/G, G)              # Naive pi
+sigma <- array(diag(d), c(d,d,G)) # Varianz = 1
+mu    <- t(MASS::mvrnorm(G, colMeans(x), sigma[,,1]*4) )
+
+while(check){
+  
+  ## 2.a Expectation-Schritt 
+  for(g in 1:G){
+    p[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
+  }
+  p <- sweep(p, 1, STATS = rowSums(p), FUN = "/")
+  
+  ## 2.b Maximization-Schritt
+  par   <- mclust::covw(x, p, normalize = FALSE)
+  mu    <- par$mean
+  sigma <- par$S
+  pi    <- colMeans(p)
+  
+  ## 3. Prüfung der Konvergenz
+  for(g in 1:G) {
+    llk[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
+  }
+  loglik <- sum(log(rowSums(llk))) # aktueller max. Log-Likelihood Wert
+  ##
+  diff      <- abs(loglik - loglikOld)/abs(loglik) # Änderungsrate
+  loglikOld <- loglik
+  it        <- it + 1
+  ## Änderungsrate noch groß genug (> tol)?
+  check     <- diff > tol
+}
+
+## Schätz-Resultate:
+results <- matrix(c(pi, mu, sqrt(sigma)), 
+                  nrow = 3, ncol = 2, byrow = TRUE,
+                  dimnames = list(
+            c("Gewichte", "Mittelwerte", "Standardabweichungen"),
+            c("Gruppe 1", "Gruppe 2"))) 
+##
+results %>% round(., 2)
+```
+
+<br>
+
+**Das Clusterverfahren basierend auf Gaußschen Mischverteilungen:**
+
+1. Gaußsche Mischverteilung (**per EM Algorithmus**) schätzen
+2. Die Datenpunkte $x_i$ derjenigen Gruppe $g$ zuordnen, welche die **a-posteriori-Wahrscheinlichkeit** $p_{ig}$ maximiert. 
+
+`r if(knitr::is_html_output()) 'Abbildung \\@ref(fig:EMGif) visualisiert den Fortschritt der iterativen Schätzung mit Hilfe des EM Algorithmuses.'`
+
+```{r EMGif, include=knitr::is_html_output(), animation.hook="gifski", interval=0.15, fig.align="center", echo=FALSE, fig.cap="Iterative Schätzung mit Hilfe des EM Algorithmuses."}
+library("MASS")
+library("mclust")
+
+## Daten:
+x <- cbind(Penguine_Flosse) # Daten [n x d]-Dimensional. 
+d <- ncol(x)                # Dimension (d=1: univariat)
+n <- nrow(x)                # Stichprobenumfang
+G <- 2                      # Anzahl Gruppen
+
+## Weitere Deklarationen:
+llk       <- matrix(NA, n, G)
+p         <- matrix(NA, n, G)  
+loglikOld <- 1e07
+tol       <- 1e-06
+it        <- 0
+check     <- TRUE 
+
+
+## EM Algorithmus
+
+## 1. Startwerte für pi, mu und sigma:
+pi    <- c(.5,.5)              # Naive pi
+sigma <- array(diag(d), c(d,d,G)) # Varianz = 1
+mu    <- matrix(c(205,225), nrow=1, byrow=TRUE)
+#t(MASS::mvrnorm(G, colMeans(x), sigma[,,1]*4) )
+
+while(check){
+  
+  ## 2.a Expectation-Schritt 
+  for(g in 1:G){
+    p[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
+  }
+  p <- sweep(p, 1, STATS = rowSums(p), FUN = "/")
+  
+  ## 2.b Maximization-Schritt
+  par   <- mclust::covw(x, p, normalize = FALSE)
+  mu    <- par$mean
+  sigma <- par$S
+  pi    <- colMeans(p)
+  
+  ## 3. Prüfung der Konvergenz
+  for(g in 1:G) {
+    llk[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
+  }
+  loglik <- sum(log(rowSums(llk))) # aktueller max. Log-Likelihood Wert
+  ##
+  diff      <- abs(loglik - loglikOld)/abs(loglik) # Änderungsrate
+  loglikOld <- loglik
+  it        <- it + 1
+  ## Änderungsrate noch groß genug (> tol)?
+  check     <- diff > tol
+  
+  ## Plot 
+  ##
+  xxd     <- seq(min(Penguine_Flosse)-3, max(Penguine_Flosse)+5, length.out = np)
+  ## Mischungs-Dichte
+  yyd     <- dnorm(xxd, mu[1,1], sqrt(sigma)[,,1])*pi[1] +
+             dnorm(xxd, mu[1,2], sqrt(sigma)[,,2])*pi[2]
+  ## Einzel-Dichten
+  yyd1    <- dnorm(xxd, mu[1,1], sqrt(sigma)[,,1])*pi[1]
+  yyd2    <- dnorm(xxd, mu[1,2], sqrt(sigma)[,,2])*pi[2]
+
+  loc_line <- which.min(diff(sign(yyd1 - yyd2)))
+  
+  ## Classification
+  cl <- as.numeric(
+    dnorm(x, mu[1,1], sqrt(sigma)[,,1])*pi[1] < dnorm(x, mu[1,2], sqrt(sigma)[,,2])*pi[2])
+
+  #class
+  
+  hist(x = Penguine_Flosse, xlab="Flossenlänge (mm)", main="Pinguine\n(Zwei Gruppen)",
+       col=gray(.65,.5), border=gray(.35,.5), freq = FALSE, ylim=c(0, 0.04))
+  lines(x = xxd, y=yyd, lwd=2, col=gray(.35,.75))
+  lines(x = xxd, y=yyd1, lwd=2, col=gray(.35,.75), lty=2)
+  lines(x = xxd, y=yyd2, lwd=2, col=gray(.35,.75), lty=2)
+  text(x = 175, y=0.035, labels = paste("Wiederholung k =",it), pos = 4)
+  ##
+  set.seed(1)
+  stripchart(Penguine_Flosse[cl==0], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[1],.5), bg=alpha(col_v[1],.5), cex=1.3, add = TRUE)
+  set.seed(1)
+  stripchart(Penguine_Flosse[cl==1], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
+  ##
+  abline(v=xxd[loc_line-1], lty=3)
+}
+```
+
+
+Das finale Schätzergebnis erlaubt es uns, Abbildung \@ref(fig:GMM-plot1) zu replizieren.
+<br>
+```{r, echo=TRUE, include=knitr::is_latex_output()}
+## Auswerten der Gaußsche Mischungs-Dichtefunktion
+np      <- 100 # Anzahl der Auswertungspunkte
+xxd     <- seq(min(Penguine_Flosse)-3, max(Penguine_Flosse)+5, length.out = np)
+## Mischungs-Dichte
+yyd     <- dnorm(xxd, mu[1,1], sqrt(sigma)[,,1])*pi[1] +
+           dnorm(xxd, mu[1,2], sqrt(sigma)[,,2])*pi[2]
+## Einzel-Dichten
+yyd1    <- dnorm(xxd, mu[1,1], sqrt(sigma)[,,1])*pi[1]
+yyd2    <- dnorm(xxd, mu[1,2], sqrt(sigma)[,,2])*pi[2]
+
+## Plot
+hist(x = Penguine_Flosse, xlab="Flossenlänge (mm)", main="Pinguine\n(Zwei Gruppen)",
+     col=gray(.65,.5), border=gray(.35,.5), freq = FALSE, ylim=c(0, 0.04))
+lines(x = xxd, y=yyd, lwd=2, col=gray(.35,.75))
+lines(x = xxd, y=yyd1, lwd=2, col=gray(.35,.75), lty=2)
+lines(x = xxd, y=yyd2, lwd=2, col=gray(.35,.75), lty=2)
+abline(v=203.1, lty=3)
+stripchart(Penguine_Flosse[class==1], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[1],.5), bg=alpha(col_v[1],.5), cex=1.3, add = TRUE)
+stripchart(Penguine_Flosse[class==2], method = "jitter", jitter = .0005, at = .001,
+           pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
+```
+
+
+
+## Der alternative (wahre) Blick auf den EM Algorithmus
+
+Der EM Algorithmus ermöglicht es Maximum Likelihood Probleme zu vereinfachen, indem man die Daten durch nicht beobachtete („latente“) Variablen vervollständigt. Dieses Prinzip ist der eigentliche wahre Beitrag des EM Algorithmus. Es ermöglicht die Lösung verschiedener Maximum Likelihood Probleme - wir bleiben aber hier bei der Schätzung von GMMs. 
+
+> **Zur Erinnerung:** Wir haben es ja nicht geschafft, die Log-Likelihood Funktion 
+$$
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+=\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
+$$
+direkt zu maximieren. Die $\ln(\sum_{g=1}^G[\dots])$-Konstruktion macht einem hier das Leben schwer.
+
+### Vervollständigung der Daten 
+
+In unseren Pinguin-Daten gibt zwei Gruppen ($g\in\{1,2\}$). Es gäbe also im Prinzip $G=2$-dimensionale Zuordnungsvektoren $(z_{i1},z_{i2})$ mit 
+$$
+(z_{i1},z_{i2})=
+\left\{\begin{array}{ll}
+(1,0)&\text{falls Pinguin }i\text{ zu Gruppe }g=1\text{ gehört.}\\
+(0,1)&\text{falls Pinguin }i\text{ zu Gruppe }g=2\text{ gehört.}\\
+\end{array}\right.
+$$
+Im Fall von $G>2$ Gruppen:  
+$$
+(z_{i1},\dots,z_{ig},\dots,z_{iG})=
+\left\{\begin{array}{ll}
+(1,0,\dots,0)&\text{falls Datenpunkt }i\text{ zu Gruppe }g=1\text{ gehört.}\\
+(0,1,\dots,0)&\text{falls Datenpunkt }i\text{ zu Gruppe }g=2\text{ gehört.}\\
+\quad\quad\vdots&\\
+(0,0,\dots,1)&\text{falls Datenpunkt }i\text{ zu Gruppe }g=G\text{ gehört.}\\
+\end{array}\right.
+$$
+
+Die Zuordnungen $z_{ig}$ können also die Werte $z_{ig}\in\{0,1\}$ annehmen, wobei aber gelten muss, dass $\sum_{g=1}^Gz_{ig}=1$.
+
+> **Beachte:**  Für jeden Datenpunkt $i$ (jeder Pinguin $i$) gibt es nur **eine** Gruppe (daher $\sum_{g=1}^Gz_{ig}=1$). Dies ist eine wichtige Restriktion von GMMs, welche bei den Pinguindaten unproblematisch ist. Bei Anwendungen mit hirarchischen Gruppierungen ist dies aber evtl. problematisch. 
+
+Die Zuordnungen $z_{ig}$ sind leider unbekannt (latent). Wir wissen aber trotzdem etwas über diese Zuordnungen. Die Gewichte $\pi_1,\dots,\pi_G$ der Gaußschen Mischverteilung 
+$$
+f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g),
+$$
+geben die Anteile der Einzelverteilungen $f(\cdot|\mu_g,\sigma_g)$ an der Gesamtverteilung $f_G$ an. Im Schnitt kommen also $\pi_g\cdot 100\%$ der Datenpunkte von Gruppe $g$, $g=1,\dots,G$. Somit können wir die (latente) Zuordnung $z_{ig}$ als eine Realisation der Zufallsvariablen $Z_{ig}$ mit Wahrscheinlichkeitsfunktion
+$$
+P(Z_{ig}=1)=\pi_g
+$$
+auffassen. 
+
+
+Wegen der Bedingung $\sum_{g=1}^Gz_{ig}=1$, gilt dass
+<!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  -->
+$$
+Z_{ig}=1\quad \Rightarrow\quad Z_{i1}=0,\dots,Z_{ig-1}=0,Z_{ig+1}=0,\dots,Z_{iG}=0.
+$$ 
+
+<!-- Somit können wir die Zuordnungsdaten  $\mathbf{z}=\big((z_{11},\dots,z_{1G}),\dots,(z_{n1},\dots,z_{nG})\big)$ als eine Realisation einer einfachen (i.i.d.) Zufallsstichprobe $(Z_1,\dots,Z_n)$ auffassen, wobei $Z_i\in\{(z_1,\dots,z_G)\in\{0,1\}^G\text{ so, dass }\sum_{g=1}^Gz_g=1\}$ eine diskrete Zufallsvariable ist. Die Wahrscheinlichkeitsfunktion $p_Z$ von $Z_i=(Z_{i1},\dots,Z_{iG})$ lautet: -->
+<!-- $$ -->
+<!-- \begin{array}{ll} -->
+<!-- p_Z\big((1,0,\dots,0)\big)&=\pi_1\\ -->
+<!-- p_Z\big((0,1,\dots,0)\big)&=\pi_2\\ -->
+<!-- \quad\quad\quad\quad\vdots&\\ -->
+<!-- p_Z\big((0,0,\dots,1)\big)&=\pi_G\\ -->
+<!-- \end{array} -->
+<!-- $$ -->
+<!-- Achtung: Wegen der restrition sind dann immer all anderen null. -->
+
+<!-- (Im Falle von $G=2$, wie bei den Pinguinen, kann man das alles vereinfachen zu einer Bernoulli Zufallsvariable) -->
+<!-- \begin{align*} -->
+<!-- P(Z_{ig}=1)&=\;\;\;\pi_g\;\;=P(\text{Pinguin $i$ gehört zu Gruppe }g)\\ -->
+<!-- P(Z_{ig}=0)&=1-\pi_g=P(\text{Pinguin $i$ gehört nicht zu Gruppe }g) -->
+<!-- \end{align*} -->
+
+### A-priori und A-posteriori Wahrscheinlichkeiten: $\pi_g$ und $p_{ig}$
+
+**A-priori-Wahrscheinlichkeit $\pi_g$:** Man bezeichnet die Wahrscheinlichkeiten $\pi_g$ als die *a-priori-Wahrscheinlichkeiten*. Wenn wir nichts über die Flossenlänge von Pinguin $i$ wissen, dann bleiben uns nur die a-priori-Wahrscheinlichkeiten: 
+<br>
+<center>„Mit Wahrscheinlichkeit $\pi_g=P(Z_{ig}=1)$ gehört Pinguin $i$ zu Gruppe $g$.“</center> 
+<br>
+
+
+**A-posteriori-Wahrscheinlichkeit $\;p_{ig}$:** Falls wir die Flossenlänge $x_i$ von Pinguin $i$ erfahren, können wir die a-priori-Wahrscheinlichkeiten mit Hilfe des **Satzes von Bayes** aktualisieren. Dies führt dann zur *a-posteriori-Wahrscheinlichkeit*: 
+<br>
+<center>„Mit Wahrscheinlichkeit $p_{ig}=P(Z_{ig=1}|X_i=x_i)$  gehört ein Pinguin $i$ mit Flossenlänge $x_i$ zu Gruppe $g$.</center>
+<br>
+<br>
+
+**Satz von Bayes:**
+\begin{align*}
+p_{ig}
+&=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
+&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{„A-priori-Wahrs.“}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{„A-posteriori-Wahrs.“}}=p_{ig}\\
+\end{align*}
+
+<br><br>
+
+
+### Der (bedingte) Mittelwert: $p_{ig}$
+
+**Beachte:** Die a-posteriori-Wahrscheinlichkeiten $p_{ig}$ sind tatsächlich (bedingte) Erwartungswerte:
+\begin{align*}
+p_{ig}&= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i) = E(Z_{ig}|X_i=x_i)\\
+\end{align*}
+Damit ist die Berechnung von $p_{ig}$ im **(Expectation)**-Schritt des EM Algorithmuses (siehe Kapitel \@ref(ch:EM1)) also tatsächlich eine Erwartungswertberechnung. 
+
+
+<!-- ### Der EM Algorithmus: *Tatsächlich eine Expectation*  -->
+
+<!-- Der folgende EM Algorithmus unterscheidet sich lediglich in der Notation von der oben eingeführten Version (siehe Kapitel \@ref(ch:EM1)). Die hier gewählte Notation  wird es klar, warum es ein **Expectation**-Maximization Algorithmus ist:  -->
+<!-- <br> -->
+
+<!-- 1. Setze Startwerte $\theta^{(0)}=\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\boldsymbol{\sigma}^{(0)}$ -->
+
+<!-- 2. Für $r=1,2,\dots$ -->
+
+<!--     - <span style="color:#FF5733">**(Expectation)** </span> Berechne:         -->
+<!--     $$p_{ig}^{(r)}=E_{\theta^{(r-1)}}\left(Z_{ig}\left|X_i=x_i\right.\right)=\frac{\pi_g^{(r-1)}f(x_i|\mu^{(r-1)}_g\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$ -->
+
+<!--     - <span style="color:#2471A3">**(Maximization)**</span>  Berechne:  -->
+<!--     <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}x_i$</center>  -->
+<!--     <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center>  -->
+
+<!-- 3. Prüfe Konvergenz: -->
+
+<!--     - Stoppe, falls sich der Wert der maximierten Log-Likelihood Funktion, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{z})$, nicht mehr ändert. -->
+
+
+
+
+
+
+<!-- **Likelihood Funktion (klassisch/erfolglos):** -->
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x}) -->
+<!-- &=\prod_{i=1}^n\sum_{k=1}^K\pi_g\phi_{\mu_g,\sigma_g}(x_i)\\[2ex] -->
+<!-- \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x}) -->
+<!-- &=\sum_{i=1}^n\ln\left(\sum_{k=1}^K\pi_g\phi_{\mu_g,\sigma_g}(x_i)\right) -->
+<!-- \end{align*} -->
+<!-- $$ -->
+
+
+<!-- ##  -->
+
+<!-- <br><br><br><br> -->
+<!-- <div class="centered"> -->
+<!-- <bdi style="font-size:300%;"><b>Zum Schluss Abstrakt:<span style="color:#34495E">Die Essenz des EM Algorithmuses</span></b></bdi> -->
+<!-- </div> -->
+
+
+## Das Große Ganze
+
+Hätten wir neben den Datenpunkten $\mathbf{x}=(x_1,\dots,x_n)$ auch die Gruppenzuordnungen  $\mathbf{z}=(z_{11},\dots,z_{nG})$ beobachtet, dann könnten wir folgende **Likelihood ($\tilde{\mathcal{L}}$) bzw. Log-Likelihood ($\tilde{\ell}$) Funktion** aufstellen:
+\begin{align*}
+\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_gf(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
+
+* Im Gegensatz zur ursprünglichen Log-Likelihood Funktion ($\ell$), wäre die neue Log-Likelihood Funktion $\tilde\ell$ **einfach zu maximieren**, da hier keine Summe innerhalb der Logarithmusfunktion steckt, sodass wir direkt den Logarithmus der Normalverteilung berechnen können.  Dies vereinfacht das Maximierungsproblem deutlich, da die Normalverteilung zur Exponentialfamilie gehört. 
+
+* Aber: Wir beobachten die Realisationen $\mathbf{z}=(z_{11},\dots,z_{nG})$ nicht, sondern kennen lediglich die Verteilung der Zufallsvariablen $\mathbf{Z}=(Z_{11},\dots,Z_{nG})$. Dies führt zu einer stochastischen Version der Log-Likelihood Funktion:
+$$
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+$$
+* Von dieser können jedoch den bedingten Erwartungswert berechnen:
+$$
+E(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+$$
+
+
+### Der EM Algorithmus: *Die abstrakte Version* {#ch:EM2}
+
+Der folgende EM Algorithmus unterscheidet sich wieder lediglich in der Notation von den oben bereits besprochenen Versionen (siehe Kapitel \@ref(ch:EM1)). Die hier gewählte Notation verdeutlicht, dass der **Expectation**-Schritt die zu maximierende Log-Likelihood Funktion aktualisiert und diese dann im **(Maximization)**-Schritt maximiert wird. Darüber hinaus ist die gewählte Notation abstrakt genug, um die Grundidee des EM Algorithmuses auf andere Maximum Likelihood Probleme zu übertragen. Im Folgenden wird der Parametervektor $(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ der Einfachheit halber auch mit $\boldsymbol{\theta}$ bezeichnet.
+<br>
+
+1. Setze Startwerte $\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})$
+
+2. Für $r=1,2,\dots$
+
+    - <span style="color:#FF5733">**(Expectation)** </span> Berechne:
+    \begin{align*}
+    \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+    &=E_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
+    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+    \end{align*}
+    
+    - <span style="color:#2471A3">**(Maximization)**</span>  Berechne:
+    \begin{align*}
+    \boldsymbol{\theta}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+    \end{align*}
+    
+3. Prüfe Konvergenz: 
+    
+    - Stoppe, falls sich der Wert der maximierten Log-Likelihood Funktion, $\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})$, nicht mehr ändert. -->
+
+
+### End {-}
+
+The average penguine does not care about the EM Algorithm 
+```{r pinguinattack, include=knitr::is_html_output(), echo=FALSE, fig.cap="Penguine research on the limit."}
+knitr::include_graphics("images/penguin_attack.gif")
+```
+
+
+
+
+
+
+
