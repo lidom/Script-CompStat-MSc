@@ -474,9 +474,9 @@ Note
 <section id="generation-of-discrete-random-variables" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="generation-of-discrete-random-variables"><span class="header-section-number">1.2</span> Generation of Discrete Random Variables</h2>
 <!-- https://rpubs.com/maheshraje982/617094 -->
-<p>Assume the discrete random variable <span class="math inline">\(X\)</span> of interest takes on the values <span class="math display">\[
+<p>Assume the discrete random variable <span class="math inline">\(X\)</span> of interest takes on the values <span id="eq-DiscRV"><span class="math display">\[
 X\in \{x_1, \dots , x_k \}
-\]</span> with <span class="math display">\[
+\tag{1.1}\]</span></span> with <span class="math display">\[
 p_i = \mathbb{P}(X = x_i ), \quad i = 1,\dots , k,
 \]</span> and <span class="math display">\[
 \sum_{i=1}^kp_i = 1.
@@ -489,31 +489,28 @@ I_i = (a_{i-1}, a_i],
 \]</span> where <span class="math display">\[
 a_i = \sum_{j=1}^ip_j\quad\text{and}\quad a_0 = 0.
 \]</span></li>
-<li>Define the new discrete realizations <span class="math display">\[x=\left\{
+<li>Define the new discrete realizations <span id="eq-U2DiscrX"><span class="math display">\[x=\left\{
 \begin{array}{cc}
        x_1&amp;\quad\text{if}\quad u\in I_1\\
        \vdots&amp; \vdots\\
        x_k&amp;\quad\text{if}\quad u\in I_k
        \end{array}\right.
-\]</span></li>
+\tag{1.2}\]</span></span></li>
 </ol>
 <div id="lem-GenDiscrRV" class="theorem lemma">
-<p><span class="theorem-title"><strong>Lemma 1.1 </strong></span>Let <span class="math inline">\(u\)</span> be a realization from <span class="math inline">\(\mathcal{U}[0, 1]\)</span> and if <span class="math inline">\(u\in I_i\)</span>, set <span class="math inline">\(x = x_i\)</span>. Then <span class="math inline">\(x\)</span> is a realizaton from the discrete distribution of <span class="math inline">\(X\)</span>.</p>
+<p><span class="theorem-title"><strong>Lemma 1.1 </strong></span>Let <span class="math inline">\(u\)</span> be a realization from <span class="math inline">\(\mathcal{U}[0, 1]\)</span> and if <span class="math inline">\(u\in I_i\)</span>, set <span class="math inline">\(x = x_i\)</span> (see <a href="#eq-U2DiscrX">Equation&nbsp;<span>1.2</span></a>). Then <span class="math inline">\(x\)</span> is a realizaton of the discrete random variable <span class="math inline">\(X\)</span> (see <a href="#eq-DiscRV">Equation&nbsp;<span>1.1</span></a>).</p>
 </div>
-<p><strong>Proof:</strong> Done in the lecture.</p>
-<!-- **Proof:** 
-
-For any $i = 1, \dots, k$ we have that
-$$
+<!-- **Proof:** Done in the lecture. -->
+<p><strong>Proof:</strong></p>
+<p>For any <span class="math inline">\(i = 1, \dots, k\)</span> we have that <span class="math display">\[
 \begin{align*}
-\mathbb{P}(X = x_i) 
-& = \mathbb{P}(U \in I_i)  \\
-& = F_\mathcal{U}(a_i) - F_\mathcal{U}(a_{i-1})\\
-& = a_i - a_{i-1}\\
-& = \sum_{j=1}^ip_j - \sum_{j=1}^{i-1}p_j  = p_i,
+\mathbb{P}(X = x_i)
+&amp; = \mathbb{P}(U \in I_i)  \\
+&amp; = F_\mathcal{U}(a_i) - F_\mathcal{U}(a_{i-1})\\
+&amp; = a_i - a_{i-1}\\
+&amp; = \sum_{j=1}^ip_j - \sum_{j=1}^{i-1}p_j  = p_i,
 \end{align*}
-$$
-which shows the statement of @lem-GenDiscrRV.  -->
+\]</span> which shows the statement of <a href="#lem-GenDiscrRV">Lemma&nbsp;<span>1.1</span></a>.</p>
 <div id="exm-Bernoulli" class="theorem example">
 <p><span class="theorem-title"><strong>Example 1.2 (Bernoulli Distribution) </strong></span>Generate random numbers from <span class="math display">\[
 X\sim\mathrm{Bernoulli}(p),
@@ -668,7 +665,7 @@ F_U(u) = \left\{
   1 &amp; \text{for } 1 &lt; u.\\
   \end{array}
 \right.  
-\tag{1.1}\]</span></span></p>
+\tag{1.3}\]</span></span></p>
 <!-- https://statproofbook.github.io/P/cdf-itm.html#:~:text=Proof%3A%20Inverse%20transformation%20method%20using%20cumulative%20distribution%20function&text=has%20a%20probability%20distribution%20characterized,)%20F%20X%20(%20x%20)%20.&text=U%E2%88%BCU(0%2C1,U%E2%89%A4u)%3Du. -->
 <!-- http://www.columbia.edu/~ks20/4404-Sigman/4404-Notes-ITM.pdf -->
 <div id="exm-Exponential" class="theorem example">
@@ -707,9 +704,9 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>The inverse method is mainly a good &amp; general way to think about transforming random variables, in practice, however, we often use other methods.</p>
-<p>The inverse method often cannot be applied, because the inverse of many important distribution functions cannot be derived explicitly:</p>
+<p>The inverse method often cannot be applied or is often inefficient, because the inverse of many important distribution functions cannot be derived in <a href="https://en.wikipedia.org/wiki/Closed-form_expression">closed form</a>:</p>
 <ul>
-<li>The Gaussian distribution function <span class="math inline">\(\Phi\)</span> and therefore also its inverse <span class="math inline">\(\Phi^{-1}\)</span> is not available in explicit terms.</li>
+<li>The Gaussian distribution function <span class="math inline">\(\Phi\)</span> and therefore also its inverse <span class="math inline">\(\Phi^{-1}\)</span> is not available in closed form.</li>
 <li>For discontinuous random variables we need efficient algorithms for computing the <em>generalized</em> inverse of their distribution function <span class="math inline">\(F.\)</span></li>
 </ul>
 </div>
@@ -717,7 +714,7 @@ Note
 </section>
 <section id="transformation-methods" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="transformation-methods"><span class="header-section-number">1.3.2</span> Transformation Methods</h3>
-<p><strong>Idea:</strong> Construct algorithms from theoretical links between distributions.</p>
+<p><strong>Idea:</strong> Construct algorithms from <a href="http://www.math.wm.edu/~leemis/2008amstat.pdf">theoretical links</a> between distributions.</p>
 <p><strong>Pro:</strong> These methods can be advantageous if a distribution <span class="math inline">\(f\)</span> is linked (in a relatively simple way) to another distribution that is easy to simulate.</p>
 <p><strong>Con:</strong> Generally, these methods are rather case-specific, and difficult to generalize.</p>
 <div id="exm-BuildOnExp" class="theorem example">
@@ -776,14 +773,21 @@ Tip
 <li>The result follows, if the bivariate density of <span class="math inline">\((X_1,X_2)\)</span> equals the product of two standard normal densities.</li>
 </ol>
 <p><strong>Transformation formula (bivariate case):</strong></p>
-<p>Assume that the bivariate random variable <span class="math inline">\(\left(\begin{matrix}R\\ Q\end{matrix}\right)\)</span> has a bivariate density <span class="math inline">\(f_{RQ}(r, q)\)</span> and that there is a one-to-one mapping <span class="math inline">\(g\)</span> between the bivariate random variables <span class="math inline">\(\left(\begin{matrix}R\\ Q\end{matrix}\right)\)</span> and <span class="math inline">\(\left(\begin{matrix}X_1\\ X_2\end{matrix}\right)\)</span> such that <span class="math display">\[
+<p>Assume that the bivariate random variable <span class="math display">\[
+\left(\begin{matrix}R\\ Q\end{matrix}\right)
+\]</span> has a bivariate density <span class="math inline">\(f_{RQ}(r, q)\)</span> and that there is a mapping <span class="math inline">\(g\)</span> between the bivariate random variables <span class="math display">\[
+\left(\begin{matrix}R\\ Q\end{matrix}\right)\text{ and }
+\left(\begin{matrix}X_1\\ X_2\end{matrix}\right)
+\]</span> such that <span class="math display">\[
 \left(\begin{matrix}X_1\\ X_2\end{matrix}\right)=
 g(R, Q)=
 \left(\begin{matrix}g_1(R, Q)\\ g_2 (R, Q)\end{matrix}\right),
-\]</span> where <span class="math inline">\(g:\mathbb{R}^2\to\mathbb{R}^2\)</span> is a one-to-one differentiable transformation with inverse <span class="math inline">\(g^{-1}\)</span>.</p>
+\]</span> where <span class="math inline">\(g:\mathbb{R}^2\to\mathbb{R}^2\)</span> is a differentiable and invertible function with inverse <span class="math inline">\(g^{-1}.\)</span></p>
 <p>Then, the bivariate density of <span class="math inline">\(\left(\begin{matrix}X_1\\X_2\end{matrix}\right)\)</span> is given by <span id="eq-TransformFormula"><span class="math display">\[
 f_{X_1X_2}(x_1,x_2)=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\,\left|\det\left(J_{g^{-1}}(x_1,x_2)\right)\right|,
-\tag{1.2}\]</span></span> where <span class="math inline">\(\det\left(J_{g^{-1}}(x_1,x_2)\right)\)</span> denotes the determinant of the Jacobian matrix of <span class="math inline">\(g^{-1}\)</span> evaluated at <span class="math inline">\((x_1,x_2),\)</span> <span class="math display">\[
+\tag{1.4}\]</span></span> where <span class="math display">\[
+\det\left(J_{g^{-1}}(x_1,x_2)\right)
+\]</span> denotes the determinant of the Jacobian matrix of <span class="math inline">\(g^{-1}\)</span> evaluated at <span class="math inline">\((x_1,x_2),\)</span> <span class="math display">\[
 J_{g^{-1}}(x_1,x_2)=\left(\begin{matrix}
 \frac{\partial g_1^{-1}}{\partial x_1}(x_1,x_2) &amp; \frac{\partial g_1^{-1}}{\partial x_2}(x_1,x_2)\\
 \frac{\partial g_2^{-1}}{\partial x_1}(x_1,x_2) &amp; \frac{\partial g_2^{-1}}{\partial x_2}(x_1,x_2)\\
@@ -808,11 +812,11 @@ F_R(r)=\mathbb{P}\left(R\leq r\right)
 &amp; = 1 - F_U\left(\exp\left(-\frac{r^2}{2}\right)\right)\\
 &amp; = 1 - \exp\left(-\frac{r^2}{2}\right),
 \end{align*}
-\]</span> where the last step follows from applying the distribution <span class="math inline">\(F_U\)</span> of <span class="math inline">\(U\sim\mathcal{U}[0,1];\)</span> see <a href="#eq-FUnif">Equation&nbsp;<span>1.1</span></a>.</p>
+\]</span> where the last step follows from applying the distribution <span class="math inline">\(F_U\)</span> of <span class="math inline">\(U\sim\mathcal{U}[0,1];\)</span> see <a href="#eq-FUnif">Equation&nbsp;<span>1.3</span></a>.</p>
 <p>For the density function <span class="math inline">\(f_R\)</span> of <span class="math inline">\(R\)</span> we get <span class="math display">\[
 f_R(r)=F_R'(r)=\left\{
   \begin{array}{ll}
-  \exp\left(\frac{r^2}{2}\right)\cdot r&amp;\text{for }r \in[0,\infty)\\
+  \exp\left(-\frac{r^2}{2}\right)\cdot r&amp;\text{for }r \in[0,\infty)\\
   0&amp;\text{for }r &lt; 0.\\
   \end{array}\right.
 \]</span> Next, define the random variable <span class="math display">\[
@@ -831,7 +835,7 @@ f_{RQ}(r,q)
 &amp; = f_R(r)\cdot f_Q(q) \\
 &amp; = \left\{
   \begin{array}{ll}
-  \exp\left(\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} &amp; \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
+  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} &amp; \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
   0&amp;\text{otherwise}.\\
   \end{array}\right.
 \end{align*}
@@ -875,7 +879,12 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that, <span class="math inline">\(g\)</span> is just the one-to-one transformation that maps points <span class="math inline">\((r,q)\)</span> of the polar coordinate system (<strong>radius</strong> <span class="math inline">\(r\in [0,\infty)\)</span> and <strong>angle</strong> <span class="math inline">\(q\in[0, 2\pi]\)</span>) to points <span class="math inline">\((x_1,x_2)\)</span> of the Cartesian coordinate system: <span class="math display">\[
+<p>Note that, <span class="math inline">\(g\)</span> is just the one-to-one transformation that maps points <span class="math inline">\((r,q)\)</span> of the polar coordinate system</p>
+<ul>
+<li><strong>radius</strong> <span class="math inline">\(r\in [0,\infty)\)</span> and</li>
+<li><strong>angle</strong> <span class="math inline">\(q\in[0, 2\pi]\)</span></li>
+</ul>
+<p>to points <span class="math inline">\((x_1,x_2)\)</span> of the Cartesian coordinate system: <span class="math display">\[
 \begin{align*}
 \left(\begin{matrix}x_1\\ x_2\end{matrix}\right)
 &amp; = g(r,q)\\
@@ -938,17 +947,17 @@ r\cos(q) &amp; r\sin(q)\\
 \left|\frac{1}{r}\cos^2(q) + \frac{1}{r}\sin^2(q)\right| = \frac{1}{r},
 \end{align*}
 \]</span> again using Pythagorean’s identity <span class="math inline">\(\cos^2(x_2) + \sin^2(x_2)=1\)</span> and using that <span class="math inline">\(r\in[0,\infty).\)</span></p>
-<p>Thus, by the transformation formula for bivariate densities (<a href="#eq-TransformFormula">Equation&nbsp;<span>1.2</span></a>), we have <span class="math display">\[
+<p>Thus, by the transformation formula for bivariate densities (<a href="#eq-TransformFormula">Equation&nbsp;<span>1.4</span></a>), we have <span class="math display">\[
 \begin{align*}
 f_{X_1X_2}(x_1,x_2)
 &amp;=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\left|\operatorname{det}\left(J_{g^{-1}}(x_1,x_2)\right)\right|\\
 &amp;=f_{RQ}\Big(\underbrace{\sqrt{x_1^2+x_2^2}}_{=r},\underbrace{\operatorname{atan2}(x_1,x_2)}_{=q}\Big)\frac{1}{r}\\
-&amp;=\exp\left(\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
-&amp;=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
+&amp;=\exp\left(-\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
+&amp;=\exp\left(-\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
 \end{align*}
 \]</span> where the last step uses that <span class="math inline">\(r=\sqrt{x_1^2+x_2^2}.\)</span></p>
 <p>This shows the result of <a href="#thm-NormalVariableGeneration">Theorem&nbsp;<span>1.2</span></a>, since <span class="math display">\[
-f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(\frac{x_1^2+x_2^2}{2}\right)
+f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right)
 \]</span> is <a href="https://online.stat.psu.edu/stat505/lesson/4/4.2">known to be</a> the bivariate standard normal density for two uncorrelated (thus independent) standard normal random variables with marginal distributions <span class="math inline">\(X_1\sim\mathcal{N}(0,1)\)</span> and <span class="math inline">\(X_2\sim\mathcal{N}(0,1).\)</span></p>
 <p><strong>Implementation</strong> of the Box-Muller algorithm:</p>
 <div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-9_c52b6f599ca7ef9dc596ebeb338e4bb8">

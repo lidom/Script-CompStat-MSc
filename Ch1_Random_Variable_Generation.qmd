@@ -223,7 +223,7 @@ IBM's [RANDU](https://en.wikipedia.org/wiki/RANDU) is a famous example of an mis
 Assume the discrete random variable $X$ of interest takes on the values 
 $$
 X\in \{x_1, \dots , x_k \}
-$$ 
+$${#eq-DiscRV}
 with
 $$
 p_i = \mathbb{P}(X = x_i ), \quad i = 1,\dots , k,
@@ -253,20 +253,20 @@ $$x=\left\{
           \vdots& \vdots\\
           x_k&\quad\text{if}\quad u\in I_k
           \end{array}\right.
-$$
+$${#eq-U2DiscrX}
 
 
 
 ::: {#lem-GenDiscrRV}
 
-Let $u$ be a realization from $\mathcal{U}[0, 1]$ and if $u\in I_i$, set $x = x_i$. Then $x$ is a realizaton from the discrete distribution of $X$.
+Let $u$ be a realization from $\mathcal{U}[0, 1]$ and if $u\in I_i$, set $x = x_i$ (see @eq-U2DiscrX). Then $x$ is a realizaton of the discrete random variable $X$ (see @eq-DiscRV).
       
 ::: 
 
-**Proof:** Done in the lecture.
+<!-- **Proof:** Done in the lecture. -->
 
 
-<!-- **Proof:** 
+**Proof:** 
 
 For any $i = 1, \dots, k$ we have that
 $$
@@ -278,7 +278,7 @@ $$
 & = \sum_{j=1}^ip_j - \sum_{j=1}^{i-1}p_j  = p_i,
 \end{align*}
 $$
-which shows the statement of @lem-GenDiscrRV.  -->
+which shows the statement of @lem-GenDiscrRV. 
 
 
 ::: {#exm-Bernoulli}
@@ -506,9 +506,9 @@ $$
 
 The inverse method is mainly a good & general way to think about transforming random variables, in practice, however, we often use other methods. 
 
-The inverse method often cannot be applied, because the inverse of many important distribution functions cannot be derived explicitly:
+The inverse method often cannot be applied or is often inefficient, because the inverse of many important distribution functions cannot be derived in [closed form](https://en.wikipedia.org/wiki/Closed-form_expression):
 
-* The Gaussian distribution function $\Phi$ and therefore also its inverse $\Phi^{-1}$ is not available in explicit terms. 
+* The Gaussian distribution function $\Phi$ and therefore also its inverse $\Phi^{-1}$ is not available in closed form. 
 * For discontinuous random variables we need efficient algorithms for computing the *generalized* inverse of their distribution function $F.$
 :::
 
@@ -517,7 +517,7 @@ The inverse method often cannot be applied, because the inverse of many importan
 
 
 
-**Idea:** Construct algorithms from theoretical links between distributions. 
+**Idea:** Construct algorithms from [theoretical links](http://www.math.wm.edu/~leemis/2008amstat.pdf) between distributions. 
 
 **Pro:** These methods can be advantageous if a distribution $f$ is linked (in a relatively simple way) to another distribution that is easy to simulate. 
 
@@ -592,21 +592,33 @@ $$
 
 **Transformation formula (bivariate case):**
 
-Assume that the bivariate random variable $\left(\begin{matrix}R\\ Q\end{matrix}\right)$ 
-has a bivariate density $f_{RQ}(r, q)$ and that there is a one-to-one mapping $g$ between the bivariate random variables $\left(\begin{matrix}R\\ Q\end{matrix}\right)$ and $\left(\begin{matrix}X_1\\ X_2\end{matrix}\right)$ such that 
+Assume that the bivariate random variable 
+$$
+\left(\begin{matrix}R\\ Q\end{matrix}\right)
+$$ 
+has a bivariate density $f_{RQ}(r, q)$ and that there is a mapping $g$ between the bivariate random variables 
+$$
+\left(\begin{matrix}R\\ Q\end{matrix}\right)\text{ and }
+\left(\begin{matrix}X_1\\ X_2\end{matrix}\right)
+$$ 
+such that 
 $$
 \left(\begin{matrix}X_1\\ X_2\end{matrix}\right)=
 g(R, Q)=
 \left(\begin{matrix}g_1(R, Q)\\ g_2 (R, Q)\end{matrix}\right),
 $$
-where $g:\mathbb{R}^2\to\mathbb{R}^2$ is a one-to-one differentiable transformation with inverse $g^{-1}$. 
+where $g:\mathbb{R}^2\to\mathbb{R}^2$ is a differentiable and invertible function with inverse $g^{-1}.$ 
 
 Then, the bivariate density of $\left(\begin{matrix}X_1\\X_2\end{matrix}\right)$ 
 is given by 
 $$
 f_{X_1X_2}(x_1,x_2)=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\,\left|\det\left(J_{g^{-1}}(x_1,x_2)\right)\right|,
 $${#eq-TransformFormula}
-where $\det\left(J_{g^{-1}}(x_1,x_2)\right)$ denotes the determinant of the Jacobian matrix of $g^{-1}$ evaluated at $(x_1,x_2),$
+where 
+$$
+\det\left(J_{g^{-1}}(x_1,x_2)\right)
+$$ 
+denotes the determinant of the Jacobian matrix of $g^{-1}$ evaluated at $(x_1,x_2),$
 $$
 J_{g^{-1}}(x_1,x_2)=\left(\begin{matrix}
 \frac{\partial g_1^{-1}}{\partial x_1}(x_1,x_2) & \frac{\partial g_1^{-1}}{\partial x_2}(x_1,x_2)\\
@@ -644,7 +656,7 @@ For the density function $f_R$ of $R$ we get
 $$
 f_R(r)=F_R'(r)=\left\{
   \begin{array}{ll}
-  \exp\left(\frac{r^2}{2}\right)\cdot r&\text{for }r \in[0,\infty)\\
+  \exp\left(-\frac{r^2}{2}\right)\cdot r&\text{for }r \in[0,\infty)\\
   0&\text{for }r < 0.\\
   \end{array}\right.
 $$
@@ -671,7 +683,7 @@ f_{RQ}(r,q)
 & = f_R(r)\cdot f_Q(q) \\
 & = \left\{
   \begin{array}{ll}
-  \exp\left(\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} & \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
+  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} & \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
   0&\text{otherwise}.\\
   \end{array}\right.
 \end{align*}
@@ -713,7 +725,12 @@ $$
 for all $r\in [0,\infty)$ and all $q\in[0, 2\pi].$ -->
 
 ::: {.callout-tip}
-Note that, $g$ is just the one-to-one transformation that maps points $(r,q)$ of the polar coordinate system (**radius** $r\in [0,\infty)$ and **angle** $q\in[0, 2\pi]$) to points $(x_1,x_2)$ of the Cartesian coordinate system:
+Note that, $g$ is just the one-to-one transformation that maps points $(r,q)$ of the polar coordinate system 
+
+* **radius** $r\in [0,\infty)$ and 
+* **angle** $q\in[0, 2\pi]$ 
+
+to points $(x_1,x_2)$ of the Cartesian coordinate system:
 $$
 \begin{align*}
 \left(\begin{matrix}x_1\\ x_2\end{matrix}\right) 
@@ -794,15 +811,15 @@ $$
 f_{X_1X_2}(x_1,x_2)
 &=f_{RQ}\left(g^{-1}(x_1,x_2)\right)\left|\operatorname{det}\left(J_{g^{-1}}(x_1,x_2)\right)\right|\\
 &=f_{RQ}\Big(\underbrace{\sqrt{x_1^2+x_2^2}}_{=r},\underbrace{\operatorname{atan2}(x_1,x_2)}_{=q}\Big)\frac{1}{r}\\
-&=\exp\left(\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
-&=\exp\left(\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
+&=\exp\left(-\frac{x_1^2+x_2^2}{2}\right) \sqrt{x_1^2+x_2^2} \cdot \frac{1}{2\pi} \frac{1}{r}\\
+&=\exp\left(-\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
 \end{align*}
 $$
 where the last step uses that $r=\sqrt{x_1^2+x_2^2}.$ 
 
 This shows the result of @thm-NormalVariableGeneration, since 
 $$
-f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(\frac{x_1^2+x_2^2}{2}\right) 
+f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right) 
 $$
 is [known to be](https://online.stat.psu.edu/stat505/lesson/4/4.2) the bivariate standard normal density for two uncorrelated (thus independent) standard normal random variables with marginal distributions $X_1\sim\mathcal{N}(0,1)$ and $X_2\sim\mathcal{N}(0,1).$ 
 
