@@ -256,13 +256,15 @@ $$x=\left\{
 $${#eq-U2DiscrX}
 
 
+::: {.callout-note icon=false} 
 
+## 
 ::: {#lem-GenDiscrRV}
 
 Let $u$ be a realization from $\mathcal{U}[0, 1]$ and if $u\in I_i$, set $x = x_i$ (see @eq-U2DiscrX). Then $x$ is a realizaton of the discrete random variable $X$ (see @eq-DiscRV).
       
 ::: 
-
+:::
 <!-- **Proof:** Done in the lecture. -->
 
 
@@ -416,7 +418,9 @@ n
 
 A rather general method to generate continuous random variables is the **Inverse Method**.
 
+::: {.callout-note icon=false} 
 
+## 
 ::: {#thm-InverseMethod}
 
 ## Inverse Method
@@ -429,6 +433,7 @@ has then the distribution function $F_X,$
 $$
 P(X\leq x) = F_X(x).
 $$
+:::
 :::
 
 ::: {.callout-important}
@@ -553,6 +558,9 @@ We cannot use exponential random variables to generate Gamma random variable wit
 
 The well-known Box-Muller algorithm for generating standard normal random variables is based on the following theorem of @BoxMuller1958:
 
+::: {.callout-note icon=false} 
+
+## 
 
 ::: {#thm-NormalVariableGeneration}
 
@@ -568,6 +576,7 @@ X_2=\sqrt{-2\ln(U_1)}\,\sin(2\pi U_2)
 $$
 are both i.i.d. as $X\sim\mathcal{N}(0,1).$
 ::: 
+:::
 
 **Proof:** 
 
@@ -803,7 +812,7 @@ $$
 \left|\frac{1}{r}\cos^2(q) + \frac{1}{r}\sin^2(q)\right| = \frac{1}{r},
 \end{align*}
 $$
-again using [Pythagorean's identity](https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity) $\cos^2(x_2) + \sin^2(x_2)=1$ and using that $r\in[0,\infty).$
+again using [Pythagorean's identity](https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity) $\cos^2(x_2) + \sin^2(x_2)=1$ and using that $r\in(0,\infty).$
 
 
 Thus, by the transformation formula for bivariate densities (@eq-TransformFormula), we have 
@@ -847,7 +856,7 @@ BM_Algo <- function(){
 set.seed(321)
 
 n     <- 1000
-X_vec <- numeric(n)
+X_vec <- vector(length = n, mode = "double")
 
 for(i in seq(1, n, by=2)){
   X_vec[c(i, i+1)] <- BM_Algo()
@@ -868,39 +877,79 @@ shapiro.test(X_vec)
 par(mfrow=c(1,1))
 ```
 
-\
+That is, the Shapiro Wilk is not able to reject its null-hypothesis that the data comes from a normal distribution. However, this was only a single test result and the results may differ in other samples. So, let's check the test results across $B=5000$ samples.
+
+```{r}
+## Monte Carlo (MC) replications
+B     <- 5000
+
+## Sample size
+n     <- 1000
+
+## Significance level
+alpha <- 0.05
+
+## Container vectors
+X_vec <- vector(length = n, mode = "double")
+T_vec <- vector(length = B, mode = "logical")
+
+## MC-Simulation
+for(b in 1:B){ 
+
+  for(i in seq(1, n, by=2)){
+    X_vec[c(i, i+1)] <- BM_Algo()
+  }
+
+  ## Collect test decisions
+  tmp      <- shapiro.test(X_vec)
+  T_vec[b] <- tmp$p.value < alpha
+}
+
+round(mean(T_vec), 2)
+```
+
+It turns out that the false positive rate (empirical frequency of Type I errors) of the Shapiro Wilk test equals the chosen significance level $\alpha.$ That is, the test is not able to reject its null-hypothesis ("normal distribution") beyond the expected frequency of a Type I error.  
+
 
 
 ### Accept-Reject Methods
 
 
-For many distributions it is difficult (or impossible) to apply the Inverse or Transformation Methods, since the distribution function $F$ is somehow unusable. For instance, surprisingly often there is no explicit form of $F$ available or its inverse does not exists.
+For many distributions $F$ it is difficult (or impossible) to apply the Inverse Method or some Transformation Method, since the distribution function $F$ is somehow "unsuitable". For instance, surprisingly often there is no explicit form of $F$ available or its inverse does not exists.
 
  
 Accept-Reject Methods methods can provide a solution here, since they only require the knowledge of the functional form of the density $f$ of interest---actually, $f$ needs to be known only up to a multiplicative constant. No deep analytic study of $f$ is necessary.
+
+
+::: {.callout-note icon=false} 
+
+## 
 
 ::: {#thm-FundamentalThmSimulation}
 
 ## Fundamental Theorem of Simulation
 
-Let $X\in\mathbb{R}^d$ be a random variable with density function $f_X.$ Then simulating $X$ is equivalent to simulating from a  
+Let $X\in\mathbb{R}^d$ be a random variable with density function $f_X,$
+$$
+X\sim f_X.
+$$ 
+Then simulating $X$ is equivalent to simulating $(X,U)\in\mathbb{R}^{d+1},$  
 $$
 (X,U)\sim\mathcal{U}(\mathcal{A}),
 $$
 where $\mathcal{U}(\mathcal{A})$ denotes the uniform distribution over the area
 $$
-\mathcal{A}=\left\{(x,u)\text{ such that } x\in\mathbb{R}^d, 0<u<f_X(x)\right\}.
+\mathcal{A}=\left\{(x,u)\;|\; x\in\mathbb{R}^d \text{ and } 0<u<f_X(x)\right\}.
 $$
 :::
+:::
 
-@fig-FundThmSim visualizes the statement of @thm-FundamentalThmSimulation.
-
-
+@fig-FundThmSim visualizes the statement of @thm-FundamentalThmSimulation for the univariate $(d=1)$ case.
 ```{r}
 #| echo: false
 #| eval: true
 #| label: fig-FundThmSim
-#| fig-cap: To simulate a random variable $X,$ one can simulate $(X,U)$ uniformely over $\mathcal{A}$ and take those $X$'s as simulation results (see tick-marks at $x$-axis). 
+#| fig-cap: To simulate a random variable $X,$ one can simulate $(X,U)$ uniformely over $\mathcal{A},$ and then take those $X$ realizations (tick-marks at $x$-axis) as simulation results. 
 
 set.seed(123)
 # Accept-Reject Algorithm:
@@ -931,7 +980,10 @@ $$
 $$ 
 such that simulating a random variable uniformly distributed over $\mathcal{S}$ is easy. 
 
-A uniform distribution on $\mathcal{A}$ can then be obtained by drawing from a uniform distribution on $\mathcal{S},$ and rejecting samples that are in $\mathcal{S},$ but not in $\mathcal{A}.$
+A uniform distribution on $\mathcal{A}$ can then be obtained by 
+
+1. drawing from a uniform distribution on $\mathcal{S}$ and 
+2. rejecting samples that are in $\mathcal{S},$ but not in $\mathcal{A}.$
 
 
 
