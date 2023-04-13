@@ -753,7 +753,7 @@ X_2=\sqrt{-2\ln(U_1)}\,\sin(2\pi U_2)
 <p>Define the random variables <span class="math display">\[
 R = \sqrt{-2 \ln(U_1)}\quad\text{and}\quad Q = 2\pi U_2,
 \]</span> where <span class="math display">\[
-R\in(0,\infty)\quad\text{and}\quad Q\in(0,2\pi).
+R\in(0,\infty)\quad\text{and}\quad Q\in[0,2\pi].
 \]</span></p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -816,10 +816,10 @@ F_R(r)=\mathbb{P}\left(R\leq r\right)
 <p>For the density function <span class="math inline">\(f_R\)</span> of <span class="math inline">\(R\)</span> we get <span class="math display">\[
 f_R(r)=F_R'(r)=\left\{
   \begin{array}{ll}
-  \exp\left(-\frac{r^2}{2}\right)\cdot r&amp;\text{for }r \in[0,\infty)\\
-  0&amp;\text{for }r &lt; 0.\\
+  \exp\left(-\frac{r^2}{2}\right)\cdot r&amp;\text{for }r \in(0,\infty)\\
+  0&amp;\text{otherwise}\\
   \end{array}\right.
-\]</span> Next, define the random variable <span class="math display">\[
+\]</span> Next, we derive the density function of <span class="math display">\[
 Q = 2\pi U_2.
 \]</span> Since <span class="math inline">\(U_2\sim\mathcal{U}[0,1],\)</span> <span class="math display">\[
 Q\sim\mathcal{U}[0,2\pi].
@@ -835,7 +835,7 @@ f_{RQ}(r,q)
 &amp; = f_R(r)\cdot f_Q(q) \\
 &amp; = \left\{
   \begin{array}{ll}
-  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} &amp; \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
+  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} &amp; \text{for } (r,q) \in (0,\infty)\times [0, 2\pi] \\
   0&amp;\text{otherwise}.\\
   \end{array}\right.
 \end{align*}
@@ -857,7 +857,7 @@ Now, as we know the bivariate density of <span class="math inline">\((R,Q)\)</sp
 %   \end{matrix}\right)\\
 \end{align*}
 \]</span> with <span class="math display">\[
-R = \sqrt{-\ln(U_1)}\in [0,\infty)
+R = \sqrt{-\ln(U_1)}\in (0,\infty)
 \]</span> and <span class="math display">\[
 Q=2\pi U_2\in[0, 2\pi].
 \]</span> <!-- $$
@@ -881,7 +881,7 @@ Tip
 <div class="callout-body-container callout-body">
 <p>Note that, <span class="math inline">\(g\)</span> is just the one-to-one transformation that maps points <span class="math inline">\((r,q)\)</span> of the polar coordinate system</p>
 <ul>
-<li><strong>radius</strong> <span class="math inline">\(r\in [0,\infty)\)</span> and</li>
+<li><strong>radius</strong> <span class="math inline">\(r\in (0,\infty)\)</span> and</li>
 <li><strong>angle</strong> <span class="math inline">\(q\in[0, 2\pi]\)</span></li>
 </ul>
 <p>to points <span class="math inline">\((x_1,x_2)\)</span> of the Cartesian coordinate system: <span class="math display">\[
@@ -893,7 +893,7 @@ Tip
 \end{align*}
 \]</span></p>
 <p>Play around with this mapping here: <a href="https://mathinsight.org/applet/polar_coordinates_map_rectangle">https://mathinsight.org/applet/polar_coordinates_map_rectangle</a></p>
-<p>The inverse mapping <span class="math inline">\(g^{-1}\)</span> maps points <span class="math inline">\((x_1,x_2)\)</span> from the Cartesian coordinate system to polar-points <span class="math inline">\((r,q)\)</span> in the polar coordinate system <span class="math display">\[
+<p>The inverse mapping <span class="math inline">\(g^{-1}\)</span> maps points <span class="math inline">\((x_1,x_2)\)</span> from the Cartesian coordinate system to points <span class="math inline">\((r,q)\)</span> in the polar coordinate system <span class="math display">\[
 \begin{align*}
 \left(\begin{matrix}r\\ q\end{matrix}\right)
 &amp; = g^{-1}(x_1,x_2)\\
@@ -901,7 +901,7 @@ Tip
 = \left(\begin{matrix}\sqrt{x_1^2 + x_2^2}\\ \operatorname{atan2}(x_1,x_2)
 \end{matrix}\right),
 \end{align*}
-\]</span> <!-- where the Jacobian determinant of $g^{-1}$ is given by (derivation is a little cumbersome)
+\]</span> where the function <span class="math inline">\(\operatorname{atan2}\)</span> is the <a href="https://en.wikipedia.org/wiki/Atan2">2-argument arctangent</a>. <!-- where the Jacobian determinant of $g^{-1}$ is given by (derivation is a little cumbersome)
 $$
 \left|J_{g^{-1}}(r,q)\right| = r.
 $$ --></p>
@@ -932,7 +932,7 @@ r\cos(q) &amp; r\sin(q)\\
 -\sin(q) &amp;  \cos(q)\\
 \end{matrix}\right)
 \end{align*},
-\]</span> where the last step follows from Pythagorean’s identity <span class="math inline">\(\cos^2(q) + \sin^2(q)=1.\)</span> So <span class="math display">\[
+\]</span> where the last step follows from <a href="https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity">Pythagorean’s identity</a> <span class="math inline">\(\cos^2(q) + \sin^2(q)=1.\)</span> So <span class="math display">\[
 \begin{align*}
 \left|\operatorname{det}\left(J_{g^{-1}}(x_1,x_2)\right)\right|
 &amp;=\left|\operatorname{det}\left(\left(J_{g}(r,q)\right)^{-1}\right)\right|\\
@@ -946,7 +946,7 @@ r\cos(q) &amp; r\sin(q)\\
 &amp;=
 \left|\frac{1}{r}\cos^2(q) + \frac{1}{r}\sin^2(q)\right| = \frac{1}{r},
 \end{align*}
-\]</span> again using Pythagorean’s identity <span class="math inline">\(\cos^2(x_2) + \sin^2(x_2)=1\)</span> and using that <span class="math inline">\(r\in[0,\infty).\)</span></p>
+\]</span> again using <a href="https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity">Pythagorean’s identity</a> <span class="math inline">\(\cos^2(x_2) + \sin^2(x_2)=1\)</span> and using that <span class="math inline">\(r\in[0,\infty).\)</span></p>
 <p>Thus, by the transformation formula for bivariate densities (<a href="#eq-TransformFormula">Equation&nbsp;<span>1.4</span></a>), we have <span class="math display">\[
 \begin{align*}
 f_{X_1X_2}(x_1,x_2)
@@ -956,9 +956,14 @@ f_{X_1X_2}(x_1,x_2)
 &amp;=\exp\left(-\frac{x_1^2+x_2^2}{2}\right)  \frac{1}{2\pi},
 \end{align*}
 \]</span> where the last step uses that <span class="math inline">\(r=\sqrt{x_1^2+x_2^2}.\)</span></p>
-<p>This shows the result of <a href="#thm-NormalVariableGeneration">Theorem&nbsp;<span>1.2</span></a>, since <span class="math display">\[
-f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right)
-\]</span> is <a href="https://online.stat.psu.edu/stat505/lesson/4/4.2">known to be</a> the bivariate standard normal density for two uncorrelated (thus independent) standard normal random variables with marginal distributions <span class="math inline">\(X_1\sim\mathcal{N}(0,1)\)</span> and <span class="math inline">\(X_2\sim\mathcal{N}(0,1).\)</span></p>
+<p>This shows the result of <a href="#thm-NormalVariableGeneration">Theorem&nbsp;<span>1.2</span></a>, since the bivariate density of <span class="math inline">\((X_1,X_2)\)</span> equals the product of two marginal standard normal density functions, <span class="math display">\[
+\begin{align*}
+f_{X_1X_2}(x_1,x_2)
+&amp; = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right) \\
+&amp; = \underbrace{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x_1^2}{2}\right)}_{=\phi(x_1)} \cdot
+    \underbrace{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x_2^2}{2}\right)}_{=\phi(x_2)},
+\end{align*}
+\]</span> where <span class="math inline">\(\phi\)</span> denotes the density function of the standard normal distribution <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
 <p><strong>Implementation</strong> of the Box-Muller algorithm:</p>
 <div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-9_c52b6f599ca7ef9dc596ebeb338e4bb8">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Implementation:</span></span>

@@ -577,7 +577,7 @@ R = \sqrt{-2 \ln(U_1)}\quad\text{and}\quad Q = 2\pi U_2,
 $$
 where
 $$
-R\in(0,\infty)\quad\text{and}\quad Q\in(0,2\pi).
+R\in(0,\infty)\quad\text{and}\quad Q\in[0,2\pi].
 $$
 
 ::: {.callout-tip}
@@ -656,11 +656,11 @@ For the density function $f_R$ of $R$ we get
 $$
 f_R(r)=F_R'(r)=\left\{
   \begin{array}{ll}
-  \exp\left(-\frac{r^2}{2}\right)\cdot r&\text{for }r \in[0,\infty)\\
-  0&\text{for }r < 0.\\
+  \exp\left(-\frac{r^2}{2}\right)\cdot r&\text{for }r \in(0,\infty)\\
+  0&\text{otherwise}\\
   \end{array}\right.
 $$
-Next, define the random variable 
+Next, we derive the density function of 
 $$
 Q = 2\pi U_2.
 $$
@@ -683,7 +683,7 @@ f_{RQ}(r,q)
 & = f_R(r)\cdot f_Q(q) \\
 & = \left\{
   \begin{array}{ll}
-  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} & \text{for } (r,q) \in [0,\infty)\times [0, 2\pi] \\
+  \exp\left(-\frac{r^2}{2}\right) r\cdot \frac{1}{2\pi} & \text{for } (r,q) \in (0,\infty)\times [0, 2\pi] \\
   0&\text{otherwise}.\\
   \end{array}\right.
 \end{align*}
@@ -708,7 +708,7 @@ $$
 $$
 with 
 $$
-R = \sqrt{-\ln(U_1)}\in [0,\infty)
+R = \sqrt{-\ln(U_1)}\in (0,\infty)
 $$ 
 and 
 $$
@@ -727,7 +727,7 @@ for all $r\in [0,\infty)$ and all $q\in[0, 2\pi].$ -->
 ::: {.callout-tip}
 Note that, $g$ is just the one-to-one transformation that maps points $(r,q)$ of the polar coordinate system 
 
-* **radius** $r\in [0,\infty)$ and 
+* **radius** $r\in (0,\infty)$ and 
 * **angle** $q\in[0, 2\pi]$ 
 
 to points $(x_1,x_2)$ of the Cartesian coordinate system:
@@ -743,7 +743,7 @@ $$
 Play around with this mapping here: 
 [https://mathinsight.org/applet/polar_coordinates_map_rectangle](https://mathinsight.org/applet/polar_coordinates_map_rectangle)
 
-The inverse mapping $g^{-1}$ maps points $(x_1,x_2)$ from the Cartesian coordinate system to polar-points $(r,q)$ in the polar coordinate system
+The inverse mapping $g^{-1}$ maps points $(x_1,x_2)$ from the Cartesian coordinate system to points $(r,q)$ in the polar coordinate system
 $$
 \begin{align*}
 \left(\begin{matrix}r\\ q\end{matrix}\right) 
@@ -753,6 +753,7 @@ $$
 \end{matrix}\right), 
 \end{align*}
 $$
+where the function $\operatorname{atan2}$ is the [2-argument arctangent](https://en.wikipedia.org/wiki/Atan2).
 <!-- where the Jacobian determinant of $g^{-1}$ is given by (derivation is a little cumbersome)
 $$
 \left|J_{g^{-1}}(r,q)\right| = r.
@@ -785,7 +786,7 @@ r\cos(q) & r\sin(q)\\
 \end{matrix}\right)
 \end{align*},
 $$
-where the last step follows from Pythagorean's identity $\cos^2(q) + \sin^2(q)=1.$
+where the last step follows from [Pythagorean's identity](https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity) $\cos^2(q) + \sin^2(q)=1.$
 So 
 $$
 \begin{align*}
@@ -802,7 +803,7 @@ $$
 \left|\frac{1}{r}\cos^2(q) + \frac{1}{r}\sin^2(q)\right| = \frac{1}{r},
 \end{align*}
 $$
-again using Pythagorean's identity $\cos^2(x_2) + \sin^2(x_2)=1$ and using that $r\in[0,\infty).$
+again using [Pythagorean's identity](https://en.wikipedia.org/wiki/Pythagorean_trigonometric_identity) $\cos^2(x_2) + \sin^2(x_2)=1$ and using that $r\in[0,\infty).$
 
 
 Thus, by the transformation formula for bivariate densities (@eq-TransformFormula), we have 
@@ -817,11 +818,17 @@ f_{X_1X_2}(x_1,x_2)
 $$
 where the last step uses that $r=\sqrt{x_1^2+x_2^2}.$ 
 
-This shows the result of @thm-NormalVariableGeneration, since 
+This shows the result of @thm-NormalVariableGeneration, since the bivariate density of $(X_1,X_2)$ equals the product of two marginal standard normal density functions,
 $$
-f_{X_1X_2}(x_1,x_2) = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right) 
+\begin{align*}
+f_{X_1X_2}(x_1,x_2) 
+& = \frac{1}{2\pi}\exp\left(-\frac{x_1^2+x_2^2}{2}\right) \\ 
+& = \underbrace{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x_1^2}{2}\right)}_{=\phi(x_1)} \cdot 
+    \underbrace{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x_2^2}{2}\right)}_{=\phi(x_2)}, 
+\end{align*}
 $$
-is [known to be](https://online.stat.psu.edu/stat505/lesson/4/4.2) the bivariate standard normal density for two uncorrelated (thus independent) standard normal random variables with marginal distributions $X_1\sim\mathcal{N}(0,1)$ and $X_2\sim\mathcal{N}(0,1).$ 
+where $\phi$ denotes the density function of the standard normal distribution $\mathcal{N}(0,1)$. 
+
 
 **Implementation** of the Box-Muller algorithm:
 ```{r,fig.width=10, fig.height=5, out.width='\\textwidth', fig.align='center'}
