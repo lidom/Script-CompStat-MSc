@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computational Statistics (M.Sc.) - 2&nbsp; Monte Carlo Method</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Ch3_Bootstrap.html" rel="next">
+<link href="./Ch1_Random_Variable_Generation.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./" class="sidebar-logo-link">
+      <img src="./images/Uni_Bonn_Logo.jpeg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Computational Statistics (M.Sc.)</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Organization of the Course</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch1_Random_Variable_Generation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Random Variable Generation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch2_MonteCarlo.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch4_MaximumLikelihood.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch6_NonparametricRegression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonparametric Regression Analysis</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#classical-monte-carlo-integration" id="toc-classical-monte-carlo-integration" class="nav-link active" data-scroll-target="#classical-monte-carlo-integration"><span class="toc-section-number">2.1</span>  Classical Monte Carlo Integration</a></li>
+  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Monte Carlo methods take advantage of the availability of:</p>
+<ol type="i">
+<li>computer generated random variables</li>
+<li>the law of large numbers</li>
+<li>the central limit theorem</li>
+</ol>
+<p><strong>Notions:</strong></p>
+<ul>
+<li><strong>Monte Carlo Method</strong>: The use of (pseudo) random sampling as a tool to produce observations on which statistical inference can be performed to extract information about a system.</li>
+<li><strong>Monte Carlo Integration</strong>: A specific Monte Carlo method, where we randomly sample uniformly over some domain and use the produced sample to construct an estimator for a <strong>univariate and multivariate integral</strong>. (Integrals are everywhere in statistics!)</li>
+<li><strong>Stochastic Simulation</strong> (or <strong>Monte Carlo Simulation</strong>): The application of the Monte Carlo method.</li>
+</ul>
+<p><br>
+</p>
+<section id="classical-monte-carlo-integration" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="classical-monte-carlo-integration"><span class="header-section-number">2.1</span> Classical Monte Carlo Integration</h2>
+<p>The generic problem here is the evaluation of integrals. (Be aware: Integrals are everywhere in statistics!). For instance, <span class="math display">\[
+\mathbb{E}_f\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx.
+\]</span></p>
+<p><strong>Convergence:</strong></p>
+<p>Given our previous developments, it is natural to propose using a realization <span class="math inline">\(x_1,\dots,x_m\)</span> from a (pseudo random) i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> with each <span class="math inline">\(X_j\)</span> distributed as <span class="math inline">\(X\sim f\)</span> to approximate the above integral by the empirical mean <span class="math display">\[
+\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
+\]</span> By the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers</a> we know that the empirical mean <span class="math inline">\(\bar{h}_m\)</span> converges almost surely (a.s.) to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> as <span class="math inline">\(m\to\infty\)</span>. (The only prerequisits are that <span class="math inline">\(f\)</span> has finite first moments, i.e., <span class="math inline">\(\mathbb{E}\left(h(X)\right)&lt;\infty\)</span>, and that <span class="math inline">\(\bar{h}_m\)</span> is constructed from an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>.)</p>
+<p>As we can use the computer to produce realizations from the i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>, we can in principle choose an arbitrary <strong>large sample</strong> size <span class="math inline">\(m\)</span> such that <span class="math inline">\(\bar{h}_m\)</span> can (in principle) be <strong>arbitrarily close</strong> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>.</p>
+<p><strong>Though,</strong> …</p>
+<ul>
+<li>… which sample size <span class="math inline">\(m\)</span> is large enough?</li>
+<li>Or “equivalently”: How fast converges <span class="math inline">\(\bar{h}_m\)</span> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>?</li>
+</ul>
+<p><br>
+</p>
+<p><strong>Speed of Convergence:</strong></p>
+<p>OK, we know now that <span class="math inline">\(\bar{h}_m\)</span> reaches its limit (here in the “almost surely” sense) as <span class="math inline">\(m\to\infty\)</span> under some rather loose conditions on the random sample <span class="math inline">\(X_1,\dots,X_m\)</span>.</p>
+<p>If we are willing to additionally assume that <span class="math inline">\(f\)</span> has finite second moments, i.e., <span class="math inline">\(\mathbb{E}(h(X)^2)&lt;\infty\)</span>, we can additionally say something about <strong>how fast</strong> <span class="math inline">\(\bar{h}_m\)</span> converges (a.s.) to <span class="math inline">\(\mathbb{E}(h(X))\)</span>.</p>
+<p>The <strong>speed of convergence</strong> of the stochastic sequence <span class="math inline">\(\{\bar{h}_m\}\)</span> (i.e., now we think of <span class="math inline">\(\bar{h}_m\)</span> as the {RV} <span class="math inline">\(\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h({\color{red}{X_{j}}})\)</span>) to its limit <span class="math inline">\(\mathbb{E}(h(X))\)</span> can be assessed by answering the question how fast the standard deviation (which is a function of <span class="math inline">\(m\)</span>) of the stochastic sequence converges to zero as <span class="math inline">\(m\to\infty\)</span>.</p>
+<ul>
+<li><p>The variance of <span class="math inline">\(\bar{h}_m\)</span> is given by <span class="math display">\[
+\mathbb{V}_f\left(\bar{h}_m\right)=
+\mathbb{V}\left(\frac{1}{m}\sum_{j=1}^m h(X_j)\right)=
+\frac{1}{m}\mathbb{V}\left(h(X)\right)
+\]</span></p></li>
+<li><p>Note that assuming finite second moments <span class="math inline">\(\mathbb{E}(h(X)^2)&lt;\infty\)</span> is equivalent to assuming finite variance <span class="math inline">\(\mathbb{V}\left(h(X)\right)&lt;\infty\)</span>. Consequently, we can set <span class="math inline">\(\mathtt{const}=\sqrt{\mathbb{V}\left(h(X)\right)}\)</span> with <span class="math inline">\(0&lt;\mathtt{const}&lt;\infty\)</span> such that <span class="math display">\[
+\sqrt{\mathbb{V}\left(\bar{h}_m\right)}=m^{-1/2}\mathtt{const}\propto m^{-1/2}.
+\]</span></p></li>
+</ul>
+<p>I.e., the speed of convergence (or rate) of the stochastic sequence <span class="math inline">\(\{\bar{h}_m\}\)</span> is proportional to the deterministic sequence <span class="math inline">\(\{m^{-1/2}\}\)</span>.</p>
+<p><br>
+</p>
+<p><strong>Remark:</strong> Even if we would not know the value of <span class="math inline">\(\mathtt{const}=\sqrt{\mathbb{V}\left(h(X)\right)}\)</span>, we know now that the improvement from <span class="math inline">\(m=10\)</span> to <span class="math inline">\(m=100\)</span> will be <em>much</em> higher than from <span class="math inline">\(m=110\)</span> to <span class="math inline">\(m=200\)</span>. In practice, a typical choice is <span class="math inline">\(m=10000\)</span>; for moderate standard deviations this choice will guarantee a very good approximation.</p>
+<p><br>
+</p>
+<p><strong>Limit Distribution:</strong></p>
+<p>Of course, we can estimate the variance of the estimator <span class="math inline">\(\mathbb{V}\left(\bar{h}_m\right)\)</span> by its empirical version <span class="math display">\[
+v_m=\frac{1}{m}\left(\frac{1}{m}\sum_{j=1}^m\left(h(x_j)-\bar{h}_m\right)^2\right),
+\]</span> where again by the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers (SLLN)</a> <span class="math display">\[
+\left(\frac{1}{m}\sum_{j=1}^m\left(h(x_j)-\bar{h}_m\right)^2\right)\to_{\text{a.s.}}\mathbb{V}\left(h(X)\right).
+\]</span> <!--
+I.e., after some rewriting, we have that: 
+$$
+\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{v_m}}\to_{\text{a.s.}}
+\sqrt{m}\left(\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{\mathbb{V}\left(h(X)\right)}}\right).
+$$
+--> By the <a href="http://www.statlect.com/central_limit_theorem.htm">Central Limit Theorem (CLT)</a> we have <span class="math display">\[
+\sqrt{m}\left(\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{\mathbb{V}\left(h(X)\right)}}\right)\to_d Z,
+\]</span> where <span class="math inline">\(Z\sim N(0,1)\)</span>. Note that the the above sequence <span class="math inline">\(\{\sqrt{m}\}\)</span> <strong>just hinders</strong> the convergence of the sequence <span class="math inline">\(\bar{h}_m - \mathbb{E}\left(h(X)\right)\to_{a.s.}0\)</span> such that the quotient converges to a “stable” distribution.</p>
+<p>The above result can now be used for the construction of (asymptotically valid) <strong>convergence tests</strong> and <strong>confidence intervals</strong> with respect to <span class="math inline">\(\bar{h}_m\)</span>, since for large <span class="math inline">\(m\)</span> <span class="math display">\[
+\bar{h}_m\,\overset{d}{\approx} N\left(\mathbb{E}\left(h(X)\right),\frac{\mathbb{V}\left(h(X)\right)}{m}\right).
+\]</span></p>
+<p>And as we can use the computer to generate realizations of the i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> from a generic <span class="math inline">\(X\sim f\)</span>, we can easily approximate the mean <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> and the variance <span class="math inline">\(\mathbb{V}\left(h(X)\right)\)</span> with arbitrary accuracy as <span class="math inline">\(m\to\infty\)</span>; by the SLLN (or the WLLN).</p>
+<p><br>
+</p>
+<p><strong>Example: A first Monte Carlo Integration</strong></p>
+<p>Let’s say we want to integrate the function <span class="math inline">\(h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2\)</span>. Although this function could be integrated analytically it is a good first test case. The left plot below shows the graph of the function <span class="math inline">\(h(.)\)</span>.</p>
+<p>To approximate the integral <span class="math display">\[
+\int_\mathcal{X}h(x)dx\quad\text{with}\quad\mathcal{X}=[0,1]
+\]</span> we can use that <span class="math display">\[
+\int_\mathcal{X}h(x)dx=\int_\mathcal{[0,1]}1\cdot h(x)dx =\mathbb{E}_{f_\text{Unif[0,1]}}(h(X)).
+\]</span></p>
+<p>Thus, we generate a realization <span class="math inline">\((u_1,\dots,u_n)\)</span> from the i.i.d. random sample <span class="math inline">\(U_1,\dots,U_n\sim[0,1]\)</span> and approximate <span class="math display">\[
+\int_\mathcal{X}h(x)dx\approx \bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(u_i).
+\]</span></p>
+<p>In order to assess how good this approximation is, we need to consider the stochastic propoerties of the RV <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n h(U_i).
+\]</span> This is done using the above (review of) results on the limit distribution of the sample mean which allows us to construct an approximative <span class="math inline">\(95\%\)</span> confidence interval, since for large <span class="math inline">\(n\)</span> <span class="math display">\[
+\left[\bar{h}_n - 1.96\frac{\mathtt{std.error}_n}{\sqrt{n}}, \bar{h}_n + 1.96\frac{\mathtt{std.error}_n}{\sqrt{n}}\right]\approx
+\left[\bar{h}_n - 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}, \bar{h}_n + 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}\right],
+\]</span> where <span class="math inline">\(\mathtt{std.error}_n^2=n^{-1}\sum_{i=1}^n(h(u_i)-\bar{h}_n)^2\)</span>.</p>
+<p>The right plot below shows one realization of the stochastic sequence <span class="math inline">\(\{\bar{h}_1,\dots,\bar{h}_n\}\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_n\)</span> is <span class="math inline">\(0.966\)</span>. This compares favorably with the with the exact value of <span class="math inline">\(0.965\)</span>.</p>
+<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-1_328d87b45fc40ef55e82d6af668233e4">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-2_ac23ed2e5d6e5d81117162640e047633">
+
+</div>
+<p><br>
+</p>
+<p><strong>Remarks:</strong></p>
+<ul>
+<li>The approach followed in the above example can be successfully utilized in many cases, even though it is often possible to achieve greater efficiency through numerical methods (e.g., <a href="https://en.wikipedia.org/wiki/Riemann_sum">Riemann Sum</a>, <a href="https://en.wikipedia.org/wiki/Trapezoidal_rule">Trapezoidal Rule</a>, <a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson’s Rule</a>, etc.) in dimensions 1 or 2.</li>
+<li>The approach is particularly useful for approximating integrals over higher dimensional sets.</li>
+</ul>
+<p><br>
+</p>
+<p><strong>Example: Approximation of Normal Distribution Tables</strong></p>
+<p>A possible way to construct normal distribution tables is to use MC simulations.</p>
+<p>Generate a realization <span class="math inline">\((x_1,\dots,x_n)\)</span> from an i.i.d. standard normal random sample, e.g., using the Box-Muller algorithm.</p>
+<p>The approximation of the standard normal cdf <span class="math display">\[
+\Phi(t)=\int_{-\infty}^t\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy
+\]</span> by the Monte Carlo method is thus <span class="math display">\[
+\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n 1_{(x_i\leq t)}.
+\]</span> The corresponding RV <span class="math inline">\(\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n1_{(X_i\leq t)}\)</span> has (exact) variance <span class="math display">\[
+\mathbb{V}(\hat{\Phi}_n(t))=\frac{\Phi(t)(1-\Phi(t))}{n},
+\]</span> since the single RVs <span class="math inline">\(1_{(X_i\leq t)}\)</span> are independent Bernoulli with success probability <span class="math inline">\(\Phi(t)\)</span>.</p>
+<p>For values of <span class="math inline">\(t\)</span> around <span class="math inline">\(t=0\)</span>, the variance is thus approximately <span class="math inline">\(1/4n\)</span>.</p>
+<p>To achieve a precision of <strong>four decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, the approximation requires on average <span class="math inline">\(n\approx 10^8\)</span> simulations.</p>
+<p>The table below gives the evolution of this approximation for several values of <span class="math inline">\(t\)</span> and shows a very accurate evaluation for <span class="math inline">\(n=10^8\)</span>.</p>
+<p><br>
+</p>
+<p><span class="math display">\[
+\begin{array}{cccccccccc}
+\hline
+n   &amp;t=0.0  &amp;t=0.67 &amp;t=0.84 &amp;t=1.28 &amp;t=1.65 &amp;t=2.32 &amp;t=2.58 &amp;t=3.09 &amp;t=3.72 \\
+\hline
+10^2 &amp;0.485  &amp;0.74   &amp;0.77   &amp;0.9    &amp;0.945  &amp;0.985  &amp;0.995  &amp;1      &amp;1      \\
+10^3 &amp;0.4925 &amp;0.7455 &amp;0.801  &amp;0.902  &amp;0.9425 &amp;0.9885 &amp;0.9955 &amp;0.9985 &amp;1      \\
+10^4 &amp;0.4962 &amp;0.7425 &amp;0.7941 &amp;0.9    &amp;0.9498 &amp;0.9896 &amp;0.995  &amp;0.999  &amp;0.9999 \\
+10^5 &amp;0.4995 &amp;0.7489 &amp;0.7993 &amp;0.9003 &amp;0.9498 &amp;0.9898 &amp;0.995  &amp;0.9989 &amp;0.9999 \\
+10^6 &amp;0.5001 &amp;0.7497 &amp;0.8    &amp;0.9002 &amp;0.9502 &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
+10^7 &amp;0.5002 &amp;0.7499 &amp;0.8    &amp;0.9001 &amp;0.9501 &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
+10^8 &amp;0.5    &amp;0.75   &amp;0.8    &amp;0.9    &amp;0.95   &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
+\end{array}
+\]</span></p>
+<p><br>
+</p>
+<p><strong>Remarks:</strong></p>
+<ul>
+<li>To achieve a precision of <strong>two decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, already <span class="math inline">\(n=10^4\)</span> leads to satisfactory results.</li>
+<li>Note that <strong>greater accuracy is achieved in the tails</strong> and that more efficient simulation methods could be used (e.g., Importance Sampling).</li>
+</ul>
+<p><br>
+</p>
+</section>
+<section id="importance-sampling" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">2.2</span> Importance Sampling</h2>
+<p>Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it’s refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
+<p>As in the case of Monte Carlo integration the focus lies on evaluating the integral <span class="math display">\[
+\mathbb{E}_f(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
+\]</span></p>
+<ul>
+<li><p>Though, it turns out that the above approach, i.e., sampling from <span class="math inline">\(f\)</span> is often suboptimal.</p></li>
+<li><p>Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet <span class="math inline">\((\mathcal{X}, h, f)\)</span>. Therefore, the search for an optimal estimator should encompass all these possible representations.</p></li>
+</ul>
+<p>Let’s illustrate this with a simple example.</p>
+<p><strong>Example: Cauchy Tail Probability (from <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">Ripley 1987</a>)</strong></p>
+<p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> <span class="math inline">\(\mathrm{C}(0,1)\)</span> RV is larger than <span class="math inline">\(2\)</span>, i.e.: <span class="math display">\[
+p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx.
+\]</span></p>
+<p><strong>1. Naive Approach:</strong> If <span class="math inline">\(p\)</span> is approximated through the empirical mean <span class="math display">\[
+\hat{p}_{1}=\frac{1}{m}\sum_{j=1}^m1_{(X_j&gt;2)}
+\]</span> of an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\sim\mathrm{C}(0,1)\)</span>, then the variance of this estimator, a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial</a> RV scaled by <span class="math inline">\(1/m\)</span>, is <span class="math display">\[
+\mathbb{V}(\hat{p}_{1})=\frac{1}{m^2}\mathbb{V}\left(\sum_{j=1}^m1_{(X_j&gt;2)}\right)=\frac{p(1-p)}{m},
+\]</span> which is equal to <span class="math inline">\(0.1275/m\)</span>, since (we already know that) <span class="math inline">\(p=0.15\)</span>.</p>
+<p><br>
+</p>
+<p><strong>2. Accounting for Symmetry (i.e., using the ‘Adjusting Screws’ <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(h\)</span>):</strong> We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathrm{C}(0,1)\)</span>. Obviously, our target integral can be equivalently written as <span class="math display">\[
+p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right).
+\]</span> This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean: <span class="math display">\[
+\hat{p}_{2}=
+\frac{1}{2}\left(\frac{1}{m}\sum_{j=1}^m1_{(X_j&lt;-2)}+ \frac{1}{m}\sum_{j=1}^m1_{(X_j&gt;2)}\right)\;=\;
+\frac{1}{2m}\sum_{j=1}^m1_{(|X_i|&gt;2)}.
+\]</span> The variance of this new estimator, <span class="math display">\[
+\mathbb{V}(\hat{p}_{2})=\frac{1}{4m^2}\mathbb{V}\left(\sum_{j=1}^m1_{(|X_i|&gt;2)}\right)=\frac{2p(1-2p)}{4m},
+\]</span> is equal to <span class="math inline">\(0.0525/m\)</span>, i.e., lower than in the naive approach.</p>
+<p><br>
+</p>
+<p><strong>3. Using all ‘Adjusting Screws’ <span class="math inline">\(\mathcal{X}\)</span>, <span class="math inline">\(h\)</span>, and <span class="math inline">\(f\)</span>:</strong> The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, <span class="math inline">\([2,+\infty)\)</span>, which are in some sense irrelevant for the approximation of <span class="math inline">\(p\)</span>. This motivates the following reformulation of <span class="math inline">\(p\)</span>:</p>
+<p>By symmetry of <span class="math inline">\(f\)</span>: <span class="math display">\[
+\frac{1}{2}=\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}
+\]</span> <span class="math display">\[
+\Leftrightarrow \; p=\frac{1}{2}-\int_{0}^2\frac{1}{\pi(1+x^2)}dx.
+\]</span> Furthermore, we can re-arrange the last integral a bit such that <span class="math display">\[
+\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx =
+\int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathrm{Unif}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx =
+\mathbb{E}(h(U)),\quad\text{where}\quad U\sim\mathrm{Unif}[0,2].
+\]</span></p>
+<p>Therefore a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{j=1}^m h(U_j),\quad\text{where}\quad U_j\sim\mathrm{Unif}[0,2].
+\]</span> Using integration by parts, it can be shown that <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/m\)</span>. (Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/m\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/m\)</span>.)</p>
+<p><br>
+</p>
+<p><strong>A More General Point of View:</strong></p>
+<p>The idea of importance sampling is related to weighted and stratified sampling ideas. As illustrated by the above example, when estimating <span class="math display">\[
+\theta=\mathbb{E}_f(h(X))=\int h(x)f(x)dx.
+\]</span></p>
+<p>Some outcomes of <span class="math inline">\(X\sim f\)</span> may be more important than others in determining <span class="math inline">\(\theta\)</span> and we wish to select such values more frequently.</p>
+<p>For instance, if <span class="math inline">\(\theta\)</span> denotes the probability of the occurrence of a very rare event, then the only way to estimate <span class="math inline">\(\theta\)</span> at all accurately may be to produce the rare events more frequently.</p>
+<p>To achieve this, we can simulate a model which gives pdf <span class="math inline">\(g\)</span> to <span class="math inline">\(X\)</span> instead of the correct pdf <span class="math inline">\(f\)</span>, where both pdfs need to be known. This can be easily done, since <span class="math display">\[
+\theta=\mathbb{E}_f(h(X))=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx=
+\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=\psi(x)}\;g(x)dx=
+\int \psi(x)\;g(x)dx=
+\mathbb{E}_g(\psi(X)).
+\]</span></p>
+<p>This leads to the following unbiased estimator for <span class="math inline">\(\theta\)</span> based on sampling from <span class="math inline">\(g\)</span>: <span class="math display">\[
+\hat{\theta}_g=\frac{1}{n}\sum_{i=1}^n\psi(X_i)\quad\text{with}\quad X_i\sim g,
+\]</span> which is a weighted mean of the <span class="math inline">\(h(X_i)\)</span> with weights inversely proportional to the “<strong>selection factor</strong>” <span class="math inline">\(\frac{g(X_i)}{f(X_i)}\)</span>. <!-- 
+For appropriately chosen pdfs f and g: 
+The *selection factor* refers to "how more likely is it to select a 'rare event'?".
+The inverse weight re-scales these 'too often' chosen rare events. 
+--></p>
+<p>For the variance of the estimator <span class="math inline">\(\hat{\theta}_g\)</span> we have <span class="math display">\[
+\mathbb{V}(\hat{\theta}_g)=\frac{1}{n}\mathbb{V}(\psi(X_i))=
+\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)dx=
+\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)dx,
+\]</span> which, depending on the choice of <span class="math inline">\(g(.)\)</span>, can be much smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary empricial mean. <!-- 
+$$
+\mathbb{V}(\hat{\theta}_{\text{naive}})=
+\mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\in\{\mathtt{Rare.Event}\})}\right)=
+\frac{1}{n}\mathbb{V}\left(1_{(X_i\in\{\mathtt{Rare.Event}\})}\right)=\frac{\theta(1-\theta)}{n}.
+$$ 
+--></p>
+<p><br>
+<br>
+</p>
+<dl>
+<dt><em>Minimum Variance Theorem</em></dt>
+<dd>
+<p>The <strong>importance function</strong> <span class="math inline">\(g(.)\)</span> which minimizes the variance <span class="math inline">\(\mathbb{V}(\psi(X_i))\)</span>, and therefore the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span>, is given by <span class="math display">\[
+g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
+\]</span></p>
+</dd>
+</dl>
+<p><strong>Proof:</strong> Done in the lecture.</p>
+<p><br>
+</p>
+<p>Though, this result is rather formal (in the sense of “impractical”), since, e.g., if <span class="math inline">\(h(x)&gt;0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\int h(z)f(z)dz\)</span>, which is just the integral of interest!</p>
+<p><strong>Remarks:</strong></p>
+<p>The above minimum variance result is still useful:</p>
+<ul>
+<li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>.</li>
+<li>Furthermore, <span class="math inline">\(g(x)\)</span> should be chosen such that it has a thicker tail than <span class="math inline">\(f(x)\)</span>, since the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span> crucially depends on the quotient <span class="math inline">\(f(x)/g(x)\)</span> which would “explode” for <span class="math inline">\(g(x)\approx 0\)</span>.</li>
+</ul>
+<p><br>
+</p>
+<p>Let’s apply our new insights to the above example on the Cauchy tail probability <span class="math inline">\(p\)</span>.</p>
+<p><strong>Example: Cauchy Tail Probability (cont.)</strong></p>
+<p>Above we had:</p>
+<ol type="1">
+<li><span class="math inline">\(f(x)=\frac{1}{\pi(1+x^2)}\)</span>, the pdf of <span class="math inline">\(\mathrm{C}(0,1)\)</span> and</li>
+<li><span class="math inline">\(h(x)=1_{(x&gt;2)}\)</span>, i.e., here <span class="math inline">\(|h(x)|=h(x)\)</span>.</li>
+</ol>
+<p>Therefore <span class="math display">\[
+p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx=\mathbb{E}_g(\psi(X)),
+\]</span> where the <span class="math inline">\(h\)</span> function is absorbed by the formulation of the definite integral.</p>
+<p>A possibly good (and simple) choice of <span class="math inline">\(g\)</span> is, e.g., <span class="math inline">\(g(x)=2/(x^2)\)</span>, since this function:</p>
+<ul>
+<li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
+<li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f\)</span>.</li>
+</ul>
+<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-3_a2f503f30dc41aedb71adf7654790527">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br>
+</p>
+<p><strong>Caution:</strong> It is not straight forward to directly sample from <span class="math inline">\(g\)</span>, therefore we need some further steps:</p>
+<p><br>
+</p>
+<p>The choice of <span class="math inline">\(g\)</span> leads to <span class="math display">\[
+p=\mathbb{E}_g(\psi(X))=
+\int_{2}^{+\infty}\left(\frac{x^2}{2\,\pi(1+x^2)}\right)\,\frac{2}{x^2}\,dx=
+\int_{2}^{+\infty}\left(\frac{1}{\pi(1+x^{-2})}\right)\,x^{-2}\,dx.
+\]</span></p>
+<p><br>
+</p>
+<p>Now we can apply some additional (rather case-specific) re-arrangements:</p>
+<p>Integration by substitution (substituting <span class="math inline">\(u=x^{-1}\)</span>) yields: <span class="math display">\[
+p=\int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
+\]</span> Again, we can re-arrange the last integral a bit such that <span class="math display">\[
+p=\int_{0}^{1/2}\underbrace{2}_{f_{\mathrm{Unif}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du=\mathbb{E}(h(U)),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2].
+\]</span> Therefore, we have a final fourth version of the estimator of <span class="math inline">\(p\)</span>: <span class="math display">\[
+\hat{p}_4=\sum_{j=1}^m h(U_j),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2]
+\]</span> and <span class="math inline">\(h(u)=1/(2\pi(1+u^2))\)</span>.</p>
+<p>The variance of <span class="math inline">\(\hat{p}_4\)</span> is <span class="math inline">\((\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/m\)</span> and an integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/m\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/m\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/m\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/m\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
+<!--
+**Version 2:** It can be shown that (see [Ripley 1987](http://onlinelibrary.wiley.com/book/10.1002/9780470316726))
+$$
+p=\int_0^{1/2}\frac{y^{-2}}{\pi(1+y^{-2})}dy,
+$$
+where this integral can also be seen as the expectation of 
+$$
+\frac{1}{4}h(U)=\frac{1}{2\pi(1+U^2)},\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2].
+$$
+-->
+
+<!--
+## The 'Real Need' of Monte Carlo Simulation 
+
+**Monte Carlo Simulation applied to Hypothesis Tests**
+
+* **Problem:** Very often, statistical test procedures (or estimators) rely on asymptotic arguments. Asymptotic arguments ease the live of a statistician. In practice, however, we never have something like a diverging sample size of $n\to\infty$, but need to deal with a finite sample size $n$. All we can hope for is that the asymptotic results (e.g., on the level of significance of a test statistic and its power) are good approximations to the finite $n$ case. 
+
+* **Solution:** Monte Carlo simulation the classical tool to investigate the finite $n$ performance of statistical test procedures (or estimators). It helps to answer questions like: How good are the asymptotic results given finite sample size scenarios of $n=100$, $n=500$, etc.
+
+For instance, the **likelihood ratio (LR)** test statistic  
+$$
+-2\,\log\left[\ell(\hat\theta|x)/\ell(\hat\theta_0|x)\right]=-2\,\left\{\log\ell(\hat\theta|x)-\log\ell(\hat\theta_0|x)\right\}\to_d\chi^2_r
+$$
+is distributed as $\chi^2_r$ generally only in the limiting case as $n\to\infty$; and under some regularity constraints on the likelihood function. In the formula above $\ell(\theta|x)$ denotes the likelihood function, $\hat\theta\in\mathbb{R}^k$ is the estimated (via maximum likelihood) parameter vector from the unconstrained model and $\hat\theta_0\in\mathbb{R}^k$ is the estimated parameter vector from the constrained model with $r\leq k$ restrictions.
+
+\
+
+**Example: Contingency Tables**
+
+The following table gives the results of a study comparing radiation therapy with surgery in treating cancer of the larynx. 
+
+
+$$
+\begin{array}{c|cc|c}
+                   &  \text{Cancer}  &  \text{Cancer not}&           \\
+                   &  \text{Controlled}  &  \text{Controlled}&           \\
+\hline                   
+\text{Surgery}     &  y_{11}=21      &   y_{12}=2        &  n_{1.}=23\\
+\text{Radiation}   &  y_{21}=15      &   y_{22}=3        &  n_{2.}=18\\
+\hline
+                   &  n_{.1}=36      &   n_{.2}=5        &  n=41
+\end{array}
+$$
+
+\
+
+Let's condition on a fix number of total observations $n$. Then the random vector $(Y_{11},Y_{12},Y_{21},Y_{22})^\top$ comes from a [multinomial distribiton](https://en.wikipedia.org/wiki/Multinomial_distribution) with 4 cells and cell probabilities 
+$$
+p=(p_{11}, p_{12}, p_{21}, p_{22}),\quad\text{with}\quad\sum_{ij}p_{ij}=1,
+$$
+that is, 
+$$
+(Y_{11},Y_{12},Y_{21},Y_{22})^\top\sim\mathcal{M}_4(n, p).
+$$
+With $y_{ij}$ denoting the number of realizations in cell $ij$, the likelihood function can be written as 
+$$
+\ell(p|y)\propto\prod_{ij}p_{ij}^{y_{ij}},
+$$
+where the 4-dimensional parameter space can be displayed as following:
+$$
+\begin{array}{cc|c}
+p_{11} & p_{12} & p_{1.}\\
+p_{21} & p_{22} & p_{2.}\\
+\hline
+p_{.1} & p_{.2} & 1\\
+\end{array}
+$$
+
+
+
+**Null Hypothesis:** The null hypothesis to be tested is one of independence, which is to say that the surgery treatment has no bearing on the control of cancer. Translated into a parameter statement this means
+$$\text{H}_0: p_{11}=p_{1.}\,p_{.1}\quad\text{against}\quad\text{H}_1: p_{11}\neq p_{1.}\,p_{.1}.$$
+
+
+The likelihood ratio statistic for testing this hypothesis is 
+$$
+\lambda=\frac{\max_{p\text{ s.t. }p_{11}=p_{1.}p_{.1}}\ell(p|y)}{\max_{p}\ell(p|y)}.
+$$
+It is "straightforward" to show that the denominator maximum is attained at:
+$$
+\hat{p}_{ij}=\frac{n_{ij}}{n}\quad\text{for all}\quad ij. 
+$$
+and the numerator maximum at
+$$
+\hat{p}_{11}=\hat{p}_{1.}\hat{p}_{.1}\quad\text{with}\quad \hat{p}_{1.}=\frac{n_{1.}}{n}\quad\text{and}\quad\hat{p}_{2.}=\frac{n_{2.}}{n},
+$$
+$$
+\text{and} \quad \hat{p}_{ij}=\frac{n_{ij}}{n}\quad\text{for all other}\quad ij. 
+$$
+
+As mentioned above, under H$_0$, $-2\log \lambda$ is asymptotically distributed as $\chi^2_1$. However, with only $n=42$ observations, the asymptotics do not necessarily apply. One alternative is to use devise a **Monte Carlo experiment** to simulate the null distribution of $-2\log \lambda$ or equivalently of $\lambda$ in order to obtain a cutoff point for a hypothesis test. A more sophisticated approach is that of [Mehta at el. (2000)](http://amstat.tandfonline.com/doi/abs/10.1080/01621459.2000.10473906).  
+
+**Description of the Procedure:**
+
+* Let's denote the finite $n$ null distribution of $\lambda$ by $f_{0,n}(.)$. As we are interested in an $\alpha$ level test, we need to specify $\alpha$ (e.g., $\alpha=0.05$) and to solve the following integral for the $1-\alpha$ quantile $\lambda_\alpha$:
+$$
+\int_0^{\lambda_\alpha}f_{0,n}(u)du=1-\alpha.
+$$
+
+* The standard Monte Carlo approach to this problem is to generate random variables $\lambda_k\sim f_{0,n}$, $k=1,\dots,m$, then order the sample 
+$$
+\lambda_{(1)}\leq \lambda_{(2)}\leq\dots\leq \lambda_{(m)}
+$$
+and finally calculate the empirical $1-\alpha$ quantile $\lambda_{(\lfloor (1-\alpha)\,m\rfloor)}$, where $\lfloor x \rfloor$ is the next lower integer to $x$, e.g., $\lfloor 2.9 \rfloor=2$.
+
+* Similarly to the above integration example which builds on the SLLN, the central idea here is to use the so-to-say SLLN for quantiles:
+$$
+\lambda_{(\lfloor (1-\alpha)\,m\rfloor)}\to_{a.s.} \lambda_{\alpha}\quad\text{as}\quad m \to\infty;
+$$
+see, e.g., the classical book "Approximation Theorems of Mathematical Statistics" of R. Serfling Ch. 2.3.1. As a computer is doing this job for us, we can in principle choose an arbitrary large $m$ such that the above approximation of $\lambda_{\alpha}$ by $\lambda_{(\lfloor (1-\alpha)\,m\rfloor)}$ can be arbitrarily good. 
+
+To run the 
+
+
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-4_403a130c769f2073ce57aabfab7c914c'}
+
+```{.r .cell-code}
+set.seed(123)
+#
+p_init <- runif(4)
+#
+p_11   <- p_init[1]
+p_12   <- p_init[2]
+p_21   <- p_init[3]
+p_22   <- p_init[4]
+#
+p_1.   <- p_11 + p_12
+p_.1   <- p_11 + p_21
+#
+p_11   <- p_1. * p_.1
+
+# probabilities under H0:
+p_0 <- c(p_11, p_21, p_12, p_22)
+
+
+Y_vec <- rmultinom(n=1, size=4, prob=p_0)
+```
+:::
+
+-->
+<!-- 
+**Example: LR Test**
+
+Let's assume we want to test the following regression model 
+$$
+Y_t=\beta_0 + \beta_1 t +\varepsilon_{t}
+$$
+against the constrained model without a time trend:
+$$
+Y_t=\beta_0 + \varepsilon_{t},
+$$
+where $\varepsilon_{t}\sim N(0,\sigma_\varepsilon^2)$ with $0<\varepsilon^2<\infty$.
+
+
+
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-5_118d26bfcfef4658f2819b78b8758983'}
+
+```{.r .cell-code}
+LL_fun <- function(beta0, beta1, sigma) {
+      # residuals
+      res_vec   <-  y - x * beta1 - beta0
+      # log-transformed probabilities of observing the vector of residuals res_vec: 
+      Log_probs <- dnorm(x = R, mean = 0, sd = sigma, log = TRUE)
+      # 
+      result <- - sum(Log_probs)
+      return(result)
+}
+```
+:::
+
+-->
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Ch1_Random_Variable_Generation.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Random Variable Generation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Ch3_Bootstrap.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

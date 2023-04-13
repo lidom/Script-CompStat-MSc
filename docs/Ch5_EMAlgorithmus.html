@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Prof.&nbsp;Dr.&nbsp;Dominik Liebl">
 
-<title>Computational Statistics (M.Sc.)</title>
+<title>Computational Statistics (M.Sc.) - 5&nbsp; The Expectation Maximization (EM) Algorithm</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +20,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -31,7 +49,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Ch1_Random_Variable_Generation.html" rel="next">
+<link href="./Ch6_NonparametricRegression.html" rel="next">
+<link href="./Ch4_MaximumLikelihood.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -61,9 +80,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
-
 
 </head>
 
@@ -73,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Computational Statistics (M.Sc.)</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -101,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Organization of the Course</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Organization of the Course</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -126,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -139,38 +155,20 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#organization-of-the-course" id="toc-organization-of-the-course" class="nav-link active" data-scroll-target="#organization-of-the-course">Organization of the Course</a>
-  <ul class="collapse">
-  <li><a href="#timetable" id="toc-timetable" class="nav-link" data-scroll-target="#timetable">Timetable</a></li>
-  <li><a href="#lecture-material" id="toc-lecture-material" class="nav-link" data-scroll-target="#lecture-material">Lecture Material</a></li>
-  <li><a href="#communication" id="toc-communication" class="nav-link" data-scroll-target="#communication">Communication</a></li>
-  <li><a href="#miscellaneous" id="toc-miscellaneous" class="nav-link" data-scroll-target="#miscellaneous">Miscellaneous</a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Computational Statistics (M.Sc.)</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Prof.&nbsp;Dr.&nbsp;Dominik Liebl </p>
-          </div>
-  </div>
     
     
   </div>
@@ -178,97 +176,24 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="organization-of-the-course" class="level1 unnumbered">
-<h1 class="unnumbered">Organization of the Course</h1>
-<section id="timetable" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="timetable">Timetable</h3>
-<div class="cell" data-hash="index_cache/html/unnamed-chunk-1_acd083cbadf02aaf13d59fdc396824ef">
-<div class="cell-output-display">
-
-<table class="table" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Day </th>
-   <th style="text-align:left;"> Time </th>
-   <th style="text-align:left;"> Lecture Hall </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Monday </td>
-   <td style="text-align:left;"> 12:15-13:45 </td>
-   <td style="text-align:left;"> Jur / Hörsaal K </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Thursday </td>
-   <td style="text-align:left;"> 14:15-15:45 </td>
-   <td style="text-align:left;"> Jur / RS 0.017 </td>
-  </tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</section>
-<section id="lecture-material" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="lecture-material">Lecture Material</h3>
+<p>The EM algorithm is often used to simplify, or make possible, complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating Gaussian mixture distributions, as this is probably its most well-known application. Even the original work on the EM algorithm <span class="citation" data-cites="Dempster_1977">(<a href="#ref-Dempster_1977" role="doc-biblioref">Dempster, Laird, and Rubin 1977</a>)</span> already dealt with the estimation of Gaussian mixture distributions.</p>
+<p><strong>Possible Applications of Gaussian mixture distributions:</strong></p>
 <ul>
-<li><p>This online script available at: <a href="https://www.dliebl.com/computational-statistics-script-MSc/">https://www.dliebl.com/computational-statistics-script-MSc/</a></p></li>
-<li><p>Basic material from our econometrics course:</p>
+<li><p>General: Finding grouping structures (two or more) in data (<strong>Clusteranalyse</strong>). For instance:</p>
 <ul>
-<li><a href="https://www.dliebl.com/Script-Econometrics-MSc/85467d963958861b842aa28b9eb262b1ea250101/docs/01-Introduction-to-R.html">Introduction to R</a></li>
-<li><a href="https://www.dliebl.com/Script-Econometrics-MSc/85467d963958861b842aa28b9eb262b1ea250101/docs/02-Probability.html">Probability</a></li>
+<li>Automatic video editing (e.g., separation of back- and foreground)<br>
+</li>
+<li>Behavioral clustering</li>
+<li>etc.</li>
 </ul></li>
 </ul>
-<!-- * Course Textbook (`ISLR`): 
-  * [An Introduction to Statistical Learning (2nd Edition)](https://www.statlearning.com/), by Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani
-  * The pdf-Version of the textbook `ISLR` can be downloaded for free: [Free Book](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)   -->
-<!-- * Online resources (datasets, etc.) for the book can be found [HERE](https://www.statlearning.com/resources-second-edition).
-* [eWhiteboard](https://uni-bonn.sciebo.de/s/qdGFYfqMno0QfzX) for the lecture notes.
-* [This online script](https://www.dliebl.com/Script-ISLR/)
-
-The above links to the lecture materials can also be found at [eCampus](https://ecampus.uni-bonn.de/goto_ecampus_crs_2700628.html) -->
-</section>
-<section id="communication" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="communication">Communication</h3>
-<ul>
-<li>You can use the Zulip-Chat <a href="https://ifs-bonn.zulipchat.com/join/mpq7rq7enmwv23rjp7c3giwn/">CompStat (M.Sc.)</a> to post questions, share codes, etc. Happy sharing and discussing!</li>
-</ul>
-</section>
-<section id="miscellaneous" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="miscellaneous">Miscellaneous</h3>
-<ul>
-<li>Consider using <strong>git/github</strong> for your personal course notes.
-<ul>
-<li><a href="https://happygitwithr.com/">https://happygitwithr.com/</a></li>
-</ul></li>
-</ul>
-<!-- ### Further Material
-
-The following resources are not directly used in our course, but you may find them useful nevertheless:
-
-* [`R` Labs using `Tidymodels`](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html)
-
-* [Slides, Datasets, R-Scripts, etc](https://www.statlearning.com/resources-second-edition)
-
-* [Slides and Videos (1st edition of the course textbook)](https://www.dataschool.io/15-hours-of-expert-machine-learning-videos/)
 
 
-Zur Vorbereitung der Klausur ist es grundsätzlich aussreichend dieses Kapitel durchzuarbeiten - aber Lesen hat ja noch nie geschadet. Dieses Kapitel basiert hauptsächlich auf: 
-
-+ Kapitel 9 in [**Pattern Recognition and Machine Learning**](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) [@book_Bishop2006].<br> 
-Die pdf-Version des Buches ist frei erhältlichen: [**pdf-Version**](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
-
-Weiteren guten Lesestoff zum EM Algoithmus gibt es z.B. hier:
-
-+ Kapitel 8.5 in [**Elements of Statistical Learning: Data Mining, Inference and Prediction**](https://web.stanford.edu/~hastie/ElemStatLearn/) [@Elements].<br> 
-Die pdf-Version des Buches ist frei erhältlichen: [**pdf-Version**](https://web.stanford.edu/~hastie/ElemStatLearn/)
-
- -->
-
-
-</section>
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Dempster_1977" class="csl-entry" role="doc-biblioentry">
+Dempster, Arthur P, Nan M Laird, and Donald B Rubin. 1977. <span>“Maximum Likelihood from Incomplete Data via the EM Algorithm.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 39 (1): 1–22.
+</div>
+</div>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -371,10 +296,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./Ch4_MaximumLikelihood.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Ch1_Random_Variable_Generation.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Random Variable Generation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Ch6_NonparametricRegression.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonparametric Regression Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
