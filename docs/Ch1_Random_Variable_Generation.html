@@ -1128,8 +1128,8 @@ X\sim f_X.
 <li>drawing from a uniform distribution on <span class="math inline">\(\mathcal{S}\)</span> and</li>
 <li>rejecting samples that are in <span class="math inline">\(\mathcal{S},\)</span> but not in <span class="math inline">\(\mathcal{A}.\)</span></li>
 </ol>
-<section id="the-case-of-densities-with-compact-support" class="level4" data-number="1.3.3.1">
-<h4 data-number="1.3.3.1" class="anchored" data-anchor-id="the-case-of-densities-with-compact-support"><span class="header-section-number">1.3.3.1</span> The case of densities with compact support</h4>
+<section id="sec-ARd1compact" class="level4" data-number="1.3.3.1">
+<h4 data-number="1.3.3.1" class="anchored" data-anchor-id="sec-ARd1compact"><span class="header-section-number">1.3.3.1</span> The case of bounded densities with compact support</h4>
 <p>The general principle of the accept-reject method is easily explained using a <em>bounded</em> density function <span class="math inline">\(f\)</span> with <em>compact support</em>.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1142,56 +1142,126 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><strong>Bounded</strong> means that there exists a constant <span class="math inline">\(m\)</span> with <span class="math inline">\(0&lt;m&lt;\infty\)</span> such that <span class="math display">\[
+<li><p><strong>Bounded</strong> (from above) means that there exists a constant <span class="math inline">\(m\)</span> with <span class="math inline">\(0&lt;m&lt;\infty\)</span> such that <span class="math display">\[
 \sup_xf(x)\leq m
-\]</span> Note that only degenerated density functions are not bounded.</li>
-<li>An interval <span class="math inline">\([a,b]\)</span> is called <strong>compact</strong> if it is closed and the boundaries are finite. For instance, the Gaussian density <span class="math inline">\(\phi\)</span> has <em>not</em> a compact support, but <span class="math inline">\(\mathrm{supp}(\phi)=(-\infty,\infty)\)</span>.</li>
+\]</span></p></li>
+<li><p>An interval <span class="math inline">\([a,b]\)</span> is called <strong>compact</strong> if it is closed and the boundaries are finite. For instance, the Gaussian density <span class="math inline">\(\phi\)</span> has <em>not</em> a compact support, but <span class="math inline">\(\mathrm{supp}(\phi)=(-\infty,\infty)\)</span>.</p></li>
+<li><p>Examples:</p>
+<ul>
+<li>A <strong>bounded</strong> density function with <strong>compact support</strong>: <span class="math display">\[
+f_c(x)=\frac{3}{4}\left(1-\left(x-c\right)^2\right)\,1_{(|x-c|\leq 1)},
+\]</span> where the (compact) support of <span class="math inline">\(f\)</span> is <span class="math inline">\([a,b]=[c-1,c+1]\)</span> and its range is <span class="math inline">\([0,m]=[0,3/4]\)</span>, i.e., <span class="math inline">\(f_c\)</span> is bounded from above by <span class="math inline">\(3/4\)</span> for all <span class="math inline">\(c\in\mathbb{R}.\)</span> <!-- (Yes, it's a stupid example as we do not necessarily need the Accept-Reject Method here.) --></li>
+<li>An <strong>unbounded</strong> density function with <strong>compact support</strong>: <span class="math display">\[
+f(x)=\left\{
+\begin{array}{ll}
+\frac{x}{b^2}\left(1-\frac{x^2}{b^2}\right)^{-1/2}&amp;\text{ for }x\in(0,b)\\
+0&amp;\text{ otherwise}
+\end{array}
+\right.
+\]</span> <span class="math inline">\(f(x)\)</span> is <span class="math inline">\(0\)</span> for <span class="math inline">\(x=0,\)</span> but diverges to positive infinity for <span class="math inline">\(x\to b.\)</span></li>
+</ul></li>
 </ul>
-<p>Example: <span class="math display">\[
-f(x)=\frac{3}{4}\left(1-\left(x-1\right)^2\right)\,1_{(|x-1|\leq 1)},
-\]</span> where the (compact) support of <span class="math inline">\(f\)</span> is <span class="math inline">\([a,b]=[-1,1]\)</span> and its range is <span class="math inline">\([0,m]=[0,3/4]\)</span>, i.e., <span class="math inline">\(f\)</span> is bounded from above by <span class="math inline">\(3/4\)</span>.<br>
-<!-- (Yes, it's a stupid example as we do not necessarily need the Accept-Reject Method here.) --></p>
 </div>
 </div>
+<p><strong>The Accept-Reject Algorithm for bounded densities with compact support:</strong></p>
+<ul>
+<li><p><strong>Compact support:</strong> Let <span class="math display">\[
+\operatorname{supp}(f)=[a_1,b_1]\times \dots\times[a_d,b_d],
+\]</span> where <span class="math inline">\([a_j,b_j]\subseteq\mathbb{R}\)</span> are compact intervals for each <span class="math inline">\(j=1,\dots,d.\)</span></p></li>
+<li><p><strong>Bounded (from above):</strong> Let <span class="math display">\[
+\sup_{x\in[a_1,b_1]\times \dots\times[a_d,b_d]} f(x)\leq m,
+\]</span> where <span class="math inline">\(m\)</span> is a constant with <span class="math inline">\(0&lt;m&lt;\infty.\)</span></p></li>
+</ul>
 <p>To simulate <span class="math display">\[
 X\sim f_X
-\]</span> with a bounded and compactly supported density function <span class="math inline">\(f_X,\)</span> simulate the random pair <span class="math display">\[
-(Y,U)\sim\mathcal{U}([a,b]\times[0,m])
-\]</span> by simulating<br>
-<!-- $$Y\sim \mathrm{Unif}[a,b]\quad\text{and}\quad U\sim \mathrm{Unif}[0,m],$$ --> <span class="math display">\[
-Y\sim\mathcal{U}[a,b]\quad\text{and}\quad U|Y=y \sim \mathcal{U}[0,m].
-\]</span> <!-- but with **accepting** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejecting** all others.  --> Then <strong>accept</strong> a simulated <span class="math inline">\(Y\)</span> as a simulation for <span class="math inline">\(X\)</span>, i.e.&nbsp; <span class="math display">\[
+\]</span> simulate the random pair <span class="math display">\[
+(Y,U)\sim\mathcal{U}\big(\underbrace{[a_1,b_1]\times \dots\times[a_d,b_d] \times[0,m]}_{=\mathcal{S}}\big)
+\]</span> by simulating independently <span class="math display">\[
+Y\sim\mathcal{U}([a_1,b_1]\times \dots\times[a_d,b_d])
+\]</span> and <span class="math display">\[
+U \sim \mathcal{U}[0,m].
+\]</span></p>
+<p><strong>Accept-Reject Step:</strong></p>
+<p><strong>Accept</strong> a simulated <span class="math inline">\(Y\)</span> as a simulation for <span class="math inline">\(X\)</span>, i.e.&nbsp;set <span class="math display">\[
 X=Y,
 \]</span> <strong>only if</strong> <span class="math display">\[
 U\leq f_X(Y),
 \]</span> and <strong>reject</strong> all other <span class="math inline">\(Y\)</span>’s.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<!-- ::: {.callout-tip}
+Simulating 
+$$
+U|Y=y \sim \mathcal{U}[0,m]
+$$ 
+is particularly simple, since the conditional random variable $U|Y$ does here not depend on $Y$ and thus has the same distribution as the **unconditional** random variable 
+$$
+U|Y \sim U,
+$$
+where $U\sim\mathcal{U}[0,m].$ 
+::: -->
+<p><a href="#fig-ARExample1">Figure&nbsp;<span>1.3</span></a> illustrates the Accept-Reject algorithm for simulating <span class="math inline">\(X\sim f_X\)</span> with <span class="math display">\[
+f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
+\]</span> where <span class="math display">\[
+\operatorname{supp}(f_X)=[-1,1]
+\]</span> and <span class="math display">\[
+\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4},
+\]</span> thus using <span class="math display">\[
+(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4]).
+\]</span></p>
+<p>Look at the following code. It’s a very simple algorithm, where we effectively only need to evaluate the density function <span class="math inline">\(f_X,\)</span> <code>target_pdf</code>:</p>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-13_833cdbdeb62791584c9bf67aafa96576">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Target pdf f_X</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>target_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  pdf <span class="ot">&lt;-</span> (<span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>(x)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  pdf[(x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">&gt;</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="do">##</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pdf)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept-Reject Algo:</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>) </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">min =</span>  <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>) </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># A-R Step:</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">target_pdf</span>(Y)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-ARExample1_6a24512d60ebc0b158b31da7a053b1f0">
+<div class="cell-output-display">
+<div id="fig-ARExample1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/fig-ARExample1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.3: Accept-Reject algorithm for univariate <span class="math inline">\((d=1)\)</span> bounded densities with compact support.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-15_3522c318e4068fba61b96d2c3c5447ab">
+
+</div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Tip
+
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Simulating <span class="math display">\[
-U|Y=y \sim \mathcal{U}[0,m]
-\]</span> is particularly simple, since the distribution of <span class="math inline">\(U|Y=y\)</span> is here equal to the distribution of the unconditional random variable <span class="math display">\[
-U|Y=y \sim U\sim \mathcal{U}[0,m]
-\]</span> for any possible realization <span class="math inline">\(Y=y.\)</span></p>
+<div id="thm-ARAlgo1" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1.4 (Accept-Reject Algorithm bounded density functions with compact support.) </strong></span>Let <span class="math inline">\(f_X\)</span> be a <span class="math inline">\(d\)</span>-dimensional density function with</p>
+<ul>
+<li>compact support <span class="math inline">\(\operatorname{supp}(f)=[a_1,b_1]\times \dots\times[a_d,b_d]\subseteq\mathbb{R}^d,\)</span> and</li>
+<li>bounded from above <span class="math inline">\(\sup_{x\in[a_1,b_1]\times \dots\times[a_d,b_d]}f_X(x)\leq m\)</span> with <span class="math inline">\(0&lt;m&lt;\infty.\)</span></li>
+</ul>
+<p>Then the Accept-Reject algorithm as introduced in <a href="#sec-ARd1compact"><span>Section&nbsp;1.3.3.1</span></a> allows to simulate <span class="math display">\[
+X\sim f_X.
+\]</span></p>
 </div>
 </div>
-<p><strong>The Accept-Reject Algorithm (for compact densities):</strong></p>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-13_9b0205b4346a8ae149dd493c26201f5a">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept-Reject Algorithm:</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> a, <span class="at">max =</span> b) </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> m) </span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A-R Step:</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">f</span>(Y)</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The following derivation shows that the simulated random variable <span class="math inline">\(X\)</span> has the correct distribution <span class="math inline">\(F_X(x)=\int_a^xf_X(x)dx.\)</span> <span class="math display">\[
+<p><strong>Proof</strong> of <a href="#thm-ARAlgo1">Theorem&nbsp;<span>1.4</span></a> for the case <span class="math inline">\(d=1\)</span>:</p>
+<p>The following derivation shows that the Accept-Reject algorithm as introduced in <a href="#sec-ARd1compact"><span>Section&nbsp;1.3.3.1</span></a> allows to simulate random variables <span class="math inline">\(X\)</span> with the correct target distribution <span class="math inline">\(F_X(x)=\int_a^xf_X(x)dx.\)</span></p>
+<p><span class="math display">\[
 \begin{align*}
 \mathbb{P}(X\leq x)
 &amp;=\mathbb{P}(Y\leq x|U\leq f_X(Y))\\[2ex]
@@ -1211,67 +1281,147 @@ U|Y=y \sim U\sim \mathcal{U}[0,m]
 \begin{align*}
 \mathbb{P}(X\leq x)
 &amp; =\frac{\int_a^x f_X(y)\,dy}{\int_a^b f_X(y)\,dy}\\[2ex]
-&amp; =\int_a^x f_X(y)dy = F_X(x).
+&amp; =\int_a^x f_X(y)dy = F_X(x),
 \end{align*}
-\]</span></p>
-<p>In the following you see a graphical illustration of this procedure:</p>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-14_670ff1ca966e2f97d5d0af6b81a3218b">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-15_3522c318e4068fba61b96d2c3c5447ab">
-
-</div>
-<p>The good thing is that we only need to evaluate the density function <span class="math inline">\(f_X,\)</span> nothing more.</p>
+\]</span> which completes the proof.</p>
 </section>
-<section id="the-case-of-densities-with-non-compact-support" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="the-case-of-densities-with-non-compact-support">The case of densities with non-compact support</h4>
-<p>The larger set does not necessarily need to be a surrounding closed box as used above. In fact, it can be any “larger set”, enclosing the pdf <span class="math inline">\(f\)</span>, as long as simulating uniformly over this larger set is feasible. This generalization allows for cases where the support of <span class="math inline">\(f\)</span> is unbounded.</p>
+<section id="sec-ARd1noncompact" class="level4" data-number="1.3.3.2">
+<h4 data-number="1.3.3.2" class="anchored" data-anchor-id="sec-ARd1noncompact"><span class="header-section-number">1.3.3.2</span> The case of densities with non-compact support</h4>
+<p>If <span class="math inline">\(f_X\)</span> has no compact support, the larger set <span class="math inline">\(\mathcal{S}\)</span> does not necessarily need to be a surrounding closed box as used above. In fact, it can be any “larger set” <span class="math inline">\(\mathcal{S},\)</span> enclosing the density function <span class="math inline">\(f_X\)</span>, as long as simulating uniformly over this larger set <span class="math inline">\(\mathcal{S}\)</span> is feasible. This generalization allows for cases, where the support of <span class="math inline">\(f_X\)</span> is <strong>not compact</strong> (i.e.&nbsp;unbounded).</p>
 <p>Let the larger set denote by <span class="math display">\[
-\mathscr{L}=\{(y,u):\, 0&lt;u&lt;m(y)\},
+\mathcal{S}=\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0&lt;u&lt;m(y)\},
 \]</span> where:</p>
 <ul>
-<li><p>simulation of a uniform on <span class="math inline">\(\mathscr{L}\)</span> is <strong>feasible</strong> and<br>
-</p></li>
-<li><p><span class="math inline">\(m(x)\geq f(x)\)</span> for all <span class="math inline">\(x\)</span>.</p></li>
+<li><p>simulation of a uniform on <span class="math inline">\(\mathcal{S}\)</span> is <strong>feasible</strong> and</p></li>
+<li><p><span class="math inline">\(f_X(x)\leq m(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R}^d.\)</span></p></li>
 </ul>
-<p><br>
-</p>
-<p>From the <strong>feasibility-requirement</strong> it follows that <span class="math inline">\(m(.)\)</span> is necessarily integrable, i.e., that <span class="math display">\[\int_{\mathcal{X}}m(x)dx=M,\]</span> where <span class="math inline">\(M\)</span> exists and is finite (and positive), since otherwise, <span class="math inline">\(\mathscr{L}\)</span> would not have finite mass and a uniform distribution would not exists on <span class="math inline">\(\mathscr{L}\)</span>.</p>
-<p><br>
-</p>
-<p>Integrability of <span class="math inline">\(m(.)\)</span> is crucial here, since it allows us to relate <span class="math inline">\(m(.)\)</span> with a corresponding (auxiliary) pdf <span class="math inline">\(g(.)\)</span> as following: <span class="math display">\[m(x)=M\,g(x),\quad\text{where}\quad\int_{\mathcal{X}}m(x)\,dx=\int_{\mathcal{X}}M\,g(x)\,dx=M.\]</span></p>
+<p>From the <strong>feasibility-requirement</strong> it follows that the function <span class="math inline">\(m\)</span> is necessarily integrable, i.e., that <span class="math display">\[
+\int\dots \int m(x_1,\dots,x_d)dx_1\dots dx_d=M,
+\]</span> or short with <span class="math inline">\(x=(x_1,\dots,x_d)\)</span> and <span class="math inline">\(X\in\mathbb{R}^d\)</span> <span class="math display">\[
+\int_{\mathbb{R}^d} m(x)dx=M,
+\]</span> where <span class="math inline">\(M\)</span> exists and is finite (and positive), since otherwise, <span class="math inline">\(\mathcal{S}\)</span> would not have finite mass and a uniform distribution would not exists on <span class="math inline">\(\mathcal{S}\)</span>.</p>
+<p>Integrability of <span class="math inline">\(m\)</span> is crucial here, since it allows us to relate the function <span class="math inline">\(m\)</span> with a corresponding (auxiliary) density function <span class="math inline">\(g\)</span> as following: <span class="math display">\[
+m(x)=M\,g(x),
+\]</span> where <span class="math display">\[
+\int_{\mathbb{R}^d} m(x)\,dx=\int_{\mathbb{R}^d} M\,g(x)\,dx=M.
+\]</span> Therefore, a uniform distribution over <span class="math inline">\(\mathcal{S},\)</span> <span class="math display">\[
+\mathcal{U}\big(\underbrace{\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0&lt;u&lt;m(y)\}}_{\mathcal{S}}\big)
+\]</span> has a <strong>density function</strong> that is equal to <span class="math display">\[
+\frac{1}{M}
+\]</span> for all points <span class="math inline">\((y,u)\in\mathcal{S}\)</span> and zero else—otherwise the density would not integrate to one.</p>
 <p>Terminology:</p>
 <ul>
-<li>The pdf <span class="math inline">\(g(.)\)</span> is called the <strong>instrumental density</strong>. (Choose <span class="math inline">\(g(.)\)</span> as a pdf from which it is easy to simulate!)</li>
-<li>The pdf <span class="math inline">\(f(.)\)</span> is called the <strong>target density</strong>.</li>
+<li><p>The density function <span class="math inline">\(g\)</span> is called the <strong>instrumental density</strong>. (Choose <span class="math inline">\(g\)</span> as a density from which it is easy to simulate!)</p></li>
+<li><p>The density function <span class="math inline">\(f_X\)</span> is called the <strong>target density</strong>.</p></li>
 </ul>
-<p><br>
-</p>
-<p>In order to simulate the pair <span class="math inline">\((Y,U)\sim\mathrm{Unif}(\mathscr{L})\)</span> we can now simulate <span class="math display">\[Y\sim g\quad\text{and}\quad U|Y={\color{red}y}\sim\mathrm{Unif}[0,M\,g({\color{red}y})],\]</span> but <strong>accept</strong> the pair <span class="math inline">\((Y,U)\)</span> only if <span class="math inline">\(U\leq f(Y)\)</span> and to <strong>reject</strong> all others.</p>
-<p>This results in the correct distribution of the accepted value of <span class="math inline">\(Y\)</span>, call it <span class="math inline">\(X\)</span>, because <span class="math display">\[
-\mathbb{P}(X\in A)=\mathbb{P}(Y\in A|U\leq f(Y))
-=\frac{\int_{\color{red}A}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}{\int_\mathcal{X}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}
-=\frac{\int_A f(y)\,dy}{\int_\mathcal{X} f(y)\,dy}
-=\int_A f(y)dy,
-\]</span> for every set <span class="math inline">\(A\)</span>, <!-- measurable set $A$, i.e., is a member of the corresponding sigma algebra. --> where we again used that <span class="math inline">\(f(y)=\int_{0}^{f(y)}du\)</span>.</p>
-<p>Note that the above derivation implies that we only need to know the pdf <span class="math inline">\(f(.)\)</span> <strong>up to an unkown multiplicative constant</strong> <span class="math inline">\(c&gt;0\)</span>. I.e., it is enough to know <span class="math inline">\(f(x)=c\,\tilde{f}_{\textrm{true}}(x)\)</span>, often written as <span class="math inline">\(f(x)\propto \tilde{f}_{\textrm{true}}(x)\)</span>, since the unknown constant <span class="math inline">\(c\)</span> cancels out in the above quotient anyways. This is not so much of importance for us, but useful in <strong>Bayesian Statistics</strong>.</p>
-<p><br>
-</p>
+<p><strong>The Accept-Reject Algorithm for densities with non-compact support:</strong></p>
+<p>To simulate <span class="math display">\[
+X\sim f_X
+\]</span> simulate the <span class="math inline">\((d+1)\)</span>-dimensional random variable<br>
+<span class="math display">\[
+(Y,U)\sim\mathcal{U}\big(\underbrace{\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0&lt;u&lt;m(y)\}}_{\mathcal{S}}\big)
+\]</span> by simulating</p>
+<ol type="1">
+<li>a realization of <span class="math display">\[
+Y\sim g
+\]</span> and</li>
+<li>for a given realization <span class="math inline">\(Y={\color{red}y},\)</span> a realization of<br>
+<span class="math display">\[
+U|Y={\color{red}y}\sim\mathcal{U}[0,M\,g({\color{red}y})].
+\]</span></li>
+</ol>
+<p><strong>Accept-Reject Step:</strong></p>
+<p><strong>Accept</strong> a simulated <span class="math inline">\(Y\)</span> as a simulation for <span class="math inline">\(X\)</span>, i.e.&nbsp;set <span class="math display">\[
+X=Y
+\]</span> <strong>only if</strong> <span class="math display">\[
+U\leq f_X(Y)
+\]</span> and <strong>reject</strong> all other <span class="math inline">\(Y\)</span>’s.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-ARAlgo2" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1.5 (Accept-Reject Algorithm bounded density functions with non-compact support.) </strong></span>Let <span class="math inline">\(f_X\)</span> be a <span class="math inline">\(d\)</span>-dimensional density function and let <span class="math inline">\(m(x)=Mg(x)\)</span> such that <span class="math inline">\(g\)</span> is a <span class="math inline">\(d\)</span>-dimensional auxiliary density function with</p>
+<ul>
+<li><span class="math inline">\(\int m(x)dx=\int Mg(x)dx = M\)</span> with constant <span class="math inline">\(0&lt;M&lt;\infty,\)</span> and</li>
+<li><span class="math inline">\(f_X(x)\leq m(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R^d}.\)</span></li>
+</ul>
+<p>Then the Accept-Reject algorithm as introduced in <a href="#sec-ARd1noncompact"><span>Section&nbsp;1.3.3.2</span></a> allows to simulate <span class="math display">\[
+X\sim f_X.
+\]</span></p>
+</div>
+</div>
+</div>
+<p><strong>Proof</strong> of <a href="#thm-ARAlgo2">Theorem&nbsp;<span>1.6</span></a>:</p>
+<p>The following derivation shows that the Appcept-Reject algorithm as introduced in <a href="#sec-ARd1noncompact"><span>Section&nbsp;1.3.3.2</span></a> allows to simulate random variables <span class="math inline">\(X\)</span> with the correct target distribution <span class="math inline">\(f_X.\)</span></p>
+<p>First, note that <span class="math inline">\(X\sim f_X\)</span> if and only if <span class="math display">\[
+P(X\in A) = \int_A f_X(y)dy
+\]</span> for every <span class="math inline">\(A\subseteq \mathbb{R}^d.\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\in A)
+&amp; =\mathbb{P}(Y\in A|U\leq f_X(Y))\\[2ex]
+&amp; = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}
+\end{align*}
+\]</span> Using that the density function of <span class="math inline">\((Y,U)\sim\mathcal{U}(\mathcal{S})\)</span> equals <span class="math inline">\(\frac{1}{M}\)</span> for all <span class="math inline">\((y,u)\in\mathcal{S}\)</span> and zero else we have</p>
+<ul>
+<li><p><span class="math inline">\(\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span> and</p></li>
+<li><p><span class="math inline">\(\mathbb{P}(U\leq f_X(Y)) = \int_{\mathbb{R}^d}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span> by integrating out <span class="math inline">\(y\)</span> to get the marginal density.</p></li>
+</ul>
+<p>Thus, <span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\in A)
+&amp; =\frac{\int_A \int_0^{f_X(y)}\,\frac{1}{M}\,du\,dy}{\int_{\mathbb{R}^d}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}\\[2ex]
+&amp; =\frac{\frac{1}{M}\,\int_A \,\int_0^{f_X(y)}\,1\,du\,dy}{\frac{1}{M}\,\int_{\mathbb{R}^d}\,\int_0^{f(y)}\,1\,du\,dy}\\[2ex]
+&amp; =\frac{\int_A \,\int_0^{f_X(y)}\,1\,du\,dy}{\int_{\mathbb{R}^d}\,\int_0^{f(y)}\,1\,du\,dy}\\[2ex]
+\end{align*}
+\]</span> Using that <span class="math inline">\(\int_{0}^{f_X(y)}\, 1\, du = f_X(y),\)</span> we get that <span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\in A)
+&amp; =\frac{\int_A f_X(y)\,dy}{\int_{\mathbb{R}^d} f_X(y)\,dy}\\[2ex]
+&amp; =\int_A f_X(y)dy,
+\end{align*}
+\]</span> which applies to every set <span class="math inline">\(A\)</span> and thus shows the result.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the above derivation implies that we only need to know the density function <span class="math inline">\(fX\)</span> <strong>up to an unkown multiplicative constant</strong> <span class="math inline">\(c&gt;0\)</span>. I.e., it is enough to know <span class="math inline">\(f_X(x)=c\,\tilde{f}_{\textrm{true}}(x)\)</span>, often written as <span class="math inline">\(f(x)\propto \tilde{f}_{\textrm{true}}(x)\)</span>, since the unknown constant <span class="math inline">\(c\)</span> cancels out in the above quotient anyways. This is particularly useful in <strong>Bayesian Statistics</strong>.</p>
+</div>
+</div>
 <p>All this leads to a more general version of the Fundamental Theorem of Simulation:</p>
-<dl>
-<dt><em>Fundamental Theorem of Simulation (General Version):</em></dt>
-<dd>
-<p>Let <span class="math inline">\(X\sim f\)</span> and let <span class="math inline">\(g(.)\)</span> be a pdf s.t. <span class="math inline">\(f(x)\leq M\,g(x)\)</span> for some <span class="math inline">\(M\)</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> and all <span class="math inline">\(x\)</span>. Then to simulate <span class="math inline">\(X\sim f\)</span> it is sufficient to generate <span class="math display">\[Y\sim g\quad\text{and}\quad U|Y=y\sim\mathrm{Unif}[0,M\,g(y)]\]</span> if one <strong>accepts</strong> the pair <span class="math inline">\((Y,U)\)</span> only if <span class="math inline">\(U\leq f(Y)\)</span> and <strong>rejects</strong> all others.</p>
-</dd>
-</dl>
-<p><br>
-</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-ARAlgo2" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1.6 (Fundamental Theorem of Simulation (General Version):) </strong></span>Let <span class="math inline">\(X\sim f_X\)</span> and let <span class="math inline">\(g\)</span> be a density function such that <span class="math display">\[
+f_X(x)\leq M\,g(x)
+\]</span> for some <span class="math inline">\(M\)</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> and all <span class="math inline">\(x\in\mathbb{R}^d.\)</span></p>
+<p>Then to simulate <span class="math inline">\(X\sim f_X\)</span> it is sufficient to generate <span class="math display">\[
+Y\sim g\quad\text{and}\quad U|Y=y\sim\mathcal{U}[0,M\,g(y)]
+\]</span> if one <strong>accepts</strong> the pair <span class="math inline">\((Y,U)\)</span> only if <span class="math inline">\(U\leq f_X(Y)\)</span> and <strong>rejects</strong> all others.</p>
+</div>
+</div>
+</div>
 <p>The Accept-Reject Algorithm (General Version):</p>
 <pre><code># Accept-Reject Algorithm:
 Y   &lt;- generate n random numbers from g(.)

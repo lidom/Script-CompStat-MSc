@@ -987,43 +987,73 @@ A uniform distribution on $\mathcal{A}$ can then be obtained by
 
 
 
-#### The case of densities with compact support 
+#### The case of bounded densities with compact support {#sec-ARd1compact}
 
 The general principle of the accept-reject method is easily explained using a *bounded* density function $f$ with *compact support*. 
 
 ::: {.callout-tip}
 
-* **Bounded** means that there exists a constant $m$ with $0<m<\infty$ such that 
+* **Bounded** (from above) means that there exists a constant $m$ with $0<m<\infty$ such that 
 $$
 \sup_xf(x)\leq m
 $$ 
-Note that only degenerated density functions are not bounded.
+
 * An interval $[a,b]$ is called **compact** if it is closed and the boundaries are finite. For instance, the Gaussian density $\phi$ has *not* a compact support, but $\mathrm{supp}(\phi)=(-\infty,\infty)$.
   
+* Examples:   
 
-Example:
+  * A **bounded** density function with **compact support**:
 $$
-f(x)=\frac{3}{4}\left(1-\left(x-1\right)^2\right)\,1_{(|x-1|\leq 1)},
+f_c(x)=\frac{3}{4}\left(1-\left(x-c\right)^2\right)\,1_{(|x-c|\leq 1)},
 $$
-where the (compact) support of $f$ is $[a,b]=[-1,1]$ and its range is $[0,m]=[0,3/4]$, i.e., $f$ is bounded from above by $3/4$. \
+where the (compact) support of $f$ is $[a,b]=[c-1,c+1]$ and its range is $[0,m]=[0,3/4]$, i.e., $f_c$ is bounded from above by $3/4$ for all $c\in\mathbb{R}.$
 <!-- (Yes, it's a stupid example as we do not necessarily need the Accept-Reject Method here.) -->
+   * An **unbounded** density function with **compact support**:
+  $$
+  f(x)=\left\{
+  \begin{array}{ll}
+  \frac{x}{b^2}\left(1-\frac{x^2}{b^2}\right)^{-1/2}&\text{ for }x\in(0,b)\\
+  0&\text{ otherwise}
+  \end{array}
+  \right.
+  $$
+  $f(x)$ is $0$ for $x=0,$ but diverges to positive infinity for $x\to b.$
 :::
+
+**The Accept-Reject Algorithm for bounded densities with compact support:**
+
+* **Compact support:** Let 
+   $$
+   \operatorname{supp}(f)=[a_1,b_1]\times \dots\times[a_d,b_d],
+   $$ 
+   where $[a_j,b_j]\subseteq\mathbb{R}$ are compact intervals for each $j=1,\dots,d.$
+
+* **Bounded (from above):** Let 
+   $$
+   \sup_{x\in[a_1,b_1]\times \dots\times[a_d,b_d]} f(x)\leq m,
+   $$ 
+   where $m$ is a constant with $0<m<\infty.$
 
 To simulate 
 $$
 X\sim f_X
 $$
-with a bounded and compactly supported density function $f_X,$ simulate the random pair 
+simulate the random pair 
 $$
-(Y,U)\sim\mathcal{U}([a,b]\times[0,m])
+(Y,U)\sim\mathcal{U}\big(\underbrace{[a_1,b_1]\times \dots\times[a_d,b_d] \times[0,m]}_{=\mathcal{S}}\big)
 $$ 
-by simulating   
-<!-- $$Y\sim \mathrm{Unif}[a,b]\quad\text{and}\quad U\sim \mathrm{Unif}[0,m],$$ -->
+by simulating independently 
 $$
-Y\sim\mathcal{U}[a,b]\quad\text{and}\quad U|Y=y \sim \mathcal{U}[0,m]. 
+Y\sim\mathcal{U}([a_1,b_1]\times \dots\times[a_d,b_d])
 $$
-<!-- but with **accepting** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejecting** all others.  -->
-Then **accept** a simulated $Y$ as a simulation for $X$, i.e. 
+and 
+$$
+U \sim \mathcal{U}[0,m]. 
+$$
+
+**Accept-Reject Step:**
+
+**Accept** a simulated $Y$ as a simulation for $X$, i.e. set 
 $$
 X=Y, 
 $$
@@ -1034,34 +1064,144 @@ $$
 and **reject** all other $Y$'s. 
 
 
-::: {.callout-tip}
+<!-- ::: {.callout-tip}
 Simulating 
 $$
 U|Y=y \sim \mathcal{U}[0,m]
 $$ 
-is particularly simple, since the distribution of $U|Y=y$ is here equal to the distribution of the unconditional random variable 
+is particularly simple, since the conditional random variable $U|Y$ does here not depend on $Y$ and thus has the same distribution as the **unconditional** random variable 
 $$
-U|Y=y \sim U\sim \mathcal{U}[0,m]
+U|Y \sim U,
 $$
-for any possible realization $Y=y.$
-:::
+where $U\sim\mathcal{U}[0,m].$ 
+::: -->
 
 
-**The Accept-Reject Algorithm (for compact densities):**
+
+@fig-ARExample1 illustrates the Accept-Reject algorithm for simulating $X\sim f_X$ with 
+$$
+f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
+$$
+where 
+$$
+\operatorname{supp}(f_X)=[-1,1]
+$$ 
+and 
+$$
+\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4},
+$$
+thus using 
+$$
+(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4]).
+$$
+
+Look at the following code. It's a very simple algorithm, where we effectively only need to evaluate the density function $f_X,$ `target_pdf`:
 
 ```{r}
 #| echo: true
 #| eval: false
-# Accept-Reject Algorithm:
-Y <- runif(n, min = a, max = b) 
-U <- runif(n, min = 0, max = m) 
+# Target pdf f_X
+target_pdf <- function(x){
+  pdf <- (3/4) * (1-(x)^2)
+  pdf[(x)^2 > 1] <- 0
+  ##
+  return(pdf)
+}
+
+# Accept-Reject Algo:
+Y <- runif(n=1000, min = -1, max = 1) 
+U <- runif(n=1000, min =  0, max = 3/4) 
 # A-R Step:
-accept <- U <= f(Y)
+accept <- U <= target_pdf(Y)
 X      <- Y[accept]
 ```
 
 
-The following derivation shows that the simulated random variable $X$ has the correct distribution $F_X(x)=\int_a^xf_X(x)dx.$
+```{r}
+#| echo: false
+#| eval: true
+#| label: fig-ARExample1
+#| fig-cap: Accept-Reject algorithm for univariate $(d=1)$ bounded densities with compact support.
+
+# target pdf
+target_pdf <- function(x){
+  pdf <- (3/4) * (1-(x)^2)
+  pdf[(x)^2 > 1] <- 0
+  ##
+  return(pdf)
+}
+
+# Accept-Reject Algo:
+Y <- runif(n=1000, min = -1, max = 1) 
+U <- runif(n=1000, min =  0, max = 3/4) 
+# A-R Step:
+accept <- U <= target_pdf(Y)
+X    <- Y[accept]
+
+# #######
+# plots #
+# #######
+library("scales")
+xx <- seq(-1.2, 1.2, len=500)
+
+par(mfrow=c(2,2))
+# 1. plot #
+plot(y = target_pdf(x=xx), x = xx, type="l", main=expression(f[X](x)), 
+     xlab = "X", ylab = "Density", ylim=c(0,1.25))
+# 2. plot #
+plot(y=target_pdf(x=xx), x=xx, type="l", 
+     main="Accept-Reject Regions", xlab = "Y", ylab = "U", ylim=c(0,1.25))
+rect(xleft = -1, ybottom = 0, xright = 1, ytop = c((3/4)),      col=gray(0.8, alpha = 0.5))
+polygon(x=c(xx, rev(xx)), y=c(target_pdf(x=xx), rep(0,length(xx))), col=alpha("darkgreen", 0.5))
+points(y=U[1:200], x=Y[1:200], pch=19, cex=.4)
+legend("topleft", 
+legend = c("Accept"), 
+pch=c(22), 
+pt.cex=1.5,
+     pt.bg = c(alpha("darkgreen", 0.5)), 
+     col =   c(alpha("darkgreen", 0.5)), bty="n")
+     legend("topright", 
+legend = c("Reject"), 
+pch=c(22), 
+pt.cex=1.5,
+     pt.bg = c(gray(.7, alpha = .5)), 
+     col =   c(gray(.7, alpha = .5)), bty="n")
+# 3. plot 
+hist(x = X, main="Histogram of \n X=Y|(U<= f(Y))", 
+     freq = FALSE, ylim=c(0,.85), xlim=range(xx), xlab="X", ylab="Density")
+axis(side=1, at = X[seq(from = 1,to = length(X), by=3)], 
+     tick = TRUE, labels = FALSE, col.ticks = alpha("darkgreen", 0.5))
+lines(y=target_pdf(x=xx), x=xx, lty=2)
+box()
+```
+
+```{r, echo=FALSE}
+par(mfrow=c(1,1))
+```
+
+::: {.callout-note icon=false} 
+
+## 
+::: {#thm-ARAlgo1}
+
+## Accept-Reject Algorithm bounded density functions with compact support.
+
+Let $f_X$ be a $d$-dimensional density function with 
+
+* compact support $\operatorname{supp}(f)=[a_1,b_1]\times \dots\times[a_d,b_d]\subseteq\mathbb{R}^d,$ and 
+* bounded from above $\sup_{x\in[a_1,b_1]\times \dots\times[a_d,b_d]}f_X(x)\leq m$ with $0<m<\infty.$  
+
+Then the Accept-Reject algorithm as introduced in @sec-ARd1compact allows to simulate 
+$$
+X\sim f_X.
+$$  
+:::
+:::
+
+**Proof** of @thm-ARAlgo1 for the case $d=1$:
+
+The following derivation shows that the Accept-Reject algorithm as introduced in @sec-ARd1compact allows to simulate random variables $X$ with the correct target distribution $F_X(x)=\int_a^xf_X(x)dx.$
+
 $$
 \begin{align*}
 \mathbb{P}(X\leq x)
@@ -1088,133 +1228,195 @@ $$
 \begin{align*}
 \mathbb{P}(X\leq x)
 & =\frac{\int_a^x f_X(y)\,dy}{\int_a^b f_X(y)\,dy}\\[2ex]
-& =\int_a^x f_X(y)dy = F_X(x).
+& =\int_a^x f_X(y)dy = F_X(x),
 \end{align*}
 $$
+which completes the proof. 
 
 
-In the following you see a graphical illustration of this procedure:
-
-```{r,echo=FALSE, out.width='\\textwidth', fig.align='center', fig.width=10, fig.height=5}
-# target pdf
-target_pdf <- function(x){
-  pdf <- (3/4) * (1-(x)^2)
-  pdf[(x)^2 > 1] <- 0
-  ##
-  return(pdf)
-}
-
-# Accept-Reject Algo:
-Y <- runif(n=1000, min = -1, max = 1) 
-U <- runif(n=1000, min =  0, max = 3/4) 
-# A-R Step:
-accept <- U <= target_pdf(Y)
-X    <- Y[accept]
-
-# #######
-# plots #
-# #######
-library("scales")
-xx <- seq(-1.2, 1.2, len=500)
-
-par(mfrow=c(1,3))
-# 1. plot #
-plot(y = target_pdf(x=xx), x = xx, type="l", main=expression(f[X](x)), 
-     xlab = "X", ylab = "Density", ylim=c(0,.85))
-# 2. plot #
-plot(y=target_pdf(x=xx), x=xx, type="l", 
-     main="Accept-Reject Regions", xlab = "Y", ylab = "U", ylim=c(0,.85))
-rect(xleft = -1, ybottom = 0, xright = 1, ytop = c((3/4)),      col=gray(0.8, alpha = 0.5))
-polygon(x=c(xx, rev(xx)), y=c(target_pdf(x=xx), rep(0,length(xx))), col=alpha("darkgreen", 0.5))
-points(y=U, x=Y, pch=19, cex=.4)
-legend("topleft", legend = c("Accept","Reject"), pch=22, pt.cex=1.5,
-     pt.bg = c(alpha("darkgreen", 0.5), gray(.7, alpha = .5)), 
-     col =   c(alpha("darkgreen", 0.5), gray(.7, alpha = .5)))
-legend("topright", legend = c("(Y,U) ~ Unif([-1,1]x[0,3/4])"), pch=19, pt.cex=.4)
-# 3. plot 
-hist(x = X, main="Histogram of \n X=Y|(U<= f(Y))", 
-     freq = FALSE, ylim=c(0,.85), xlim=range(xx), xlab="X", ylab="Density")
-axis(side=1, at = X[seq(from = 1,to = length(X), by=3)], 
-     tick = TRUE, labels = FALSE, col.ticks = alpha("darkgreen", 0.5))
-lines(y=target_pdf(x=xx), x=xx, lty=2)
-box()
-```
-
-```{r, echo=FALSE}
-par(mfrow=c(1,1))
-```
-
-The good thing is that we only need to evaluate the density function $f_X,$ nothing more.  
+  
 
 
 
 
-#### The case of densities with non-compact support {-}
+#### The case of densities with non-compact support {#sec-ARd1noncompact}
 
-The larger set does not necessarily need to be a surrounding closed box as used above. In fact, it can be any "larger set", enclosing the pdf $f$, as long as simulating uniformly over this larger set is feasible. This generalization allows for cases where the support of $f$ is unbounded. 
+If $f_X$ has no compact support, the larger set $\mathcal{S}$ does not necessarily need to be a surrounding closed box as used above. In fact, it can be any "larger set" $\mathcal{S},$ enclosing the density function $f_X$, as long as simulating uniformly over this larger set $\mathcal{S}$ is feasible. This generalization allows for cases, where the support of $f_X$ is **not compact** (i.e. unbounded). 
 
 Let the larger set denote by
 $$
-\mathscr{L}=\{(y,u):\, 0<u<m(y)\},
+\mathcal{S}=\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0<u<m(y)\},
 $$
 where: 
 
-* simulation of a uniform on $\mathscr{L}$ is **feasible** and 
-\
-
-* $m(x)\geq f(x)$ for all $x$.
-
-\
+* simulation of a uniform on $\mathcal{S}$ is **feasible** and 
 
 
-From the **feasibility-requirement** it follows that $m(.)$ is necessarily integrable, i.e., that
-$$\int_{\mathcal{X}}m(x)dx=M,$$
-where $M$ exists and is finite (and positive), since otherwise, $\mathscr{L}$ would not have finite mass and a uniform distribution would not exists on $\mathscr{L}$.
-
-\
+* $f_X(x)\leq m(x)$ for all $x\in\mathbb{R}^d.$
 
 
-Integrability of $m(.)$ is crucial here, since it allows us to relate $m(.)$ with a corresponding (auxiliary) pdf $g(.)$ as following: 
-$$m(x)=M\,g(x),\quad\text{where}\quad\int_{\mathcal{X}}m(x)\,dx=\int_{\mathcal{X}}M\,g(x)\,dx=M.$$
+From the **feasibility-requirement** it follows that the function $m$ is necessarily integrable, i.e., that
+$$
+\int\dots \int m(x_1,\dots,x_d)dx_1\dots dx_d=M,
+$$
+or short with $x=(x_1,\dots,x_d)$ and $X\in\mathbb{R}^d$
+$$
+\int_{\mathbb{R}^d} m(x)dx=M,
+$$
+where $M$ exists and is finite (and positive), since otherwise, $\mathcal{S}$ would not have finite mass and a uniform distribution would not exists on $\mathcal{S}$.
+
+
+Integrability of $m$ is crucial here, since it allows us to relate the function $m$ with a corresponding (auxiliary) density function $g$ as following: 
+$$
+m(x)=M\,g(x),
+$$
+where
+$$
+\int_{\mathbb{R}^d} m(x)\,dx=\int_{\mathbb{R}^d} M\,g(x)\,dx=M.
+$$
+Therefore, a uniform distribution over $\mathcal{S},$
+$$
+\mathcal{U}\big(\underbrace{\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0<u<m(y)\}}_{\mathcal{S}}\big)
+$$ 
+has a **density function** that is equal to 
+$$
+\frac{1}{M}
+$$ 
+for all points $(y,u)\in\mathcal{S}$ and zero else---otherwise the density would not integrate to one. 
 
 Terminology:
 
-* The pdf $g(.)$ is called the **instrumental density**. (Choose $g(.)$ as a pdf from which it is easy to simulate!)
-* The pdf $f(.)$ is called the **target density**.
+* The density function $g$ is called the **instrumental density**. (Choose $g$ as a density from which it is easy to simulate!)
 
-\
+* The density function $f_X$ is called the **target density**.
 
 
-In order to simulate the pair $(Y,U)\sim\mathrm{Unif}(\mathscr{L})$ we can now simulate
-$$Y\sim g\quad\text{and}\quad U|Y={\color{red}y}\sim\mathrm{Unif}[0,M\,g({\color{red}y})],$$
-but **accept** the pair $(Y,U)$ only if $U\leq f(Y)$ and to **reject** all others.
+**The Accept-Reject Algorithm for densities with non-compact support:**
 
-This results in the correct distribution of the accepted value of $Y$, call it $X$, because
+To simulate 
 $$
-\mathbb{P}(X\in A)=\mathbb{P}(Y\in A|U\leq f(Y))
-=\frac{\int_{\color{red}A}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}{\int_\mathcal{X}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}
-=\frac{\int_A f(y)\,dy}{\int_\mathcal{X} f(y)\,dy}
-=\int_A f(y)dy,
+X\sim f_X
 $$
-for every set $A$, 
-<!-- measurable set $A$, i.e., is a member of the corresponding sigma algebra. -->
-where we again used that $f(y)=\int_{0}^{f(y)}du$. 
+simulate the $(d+1)$-dimensional random variable  
+$$
+(Y,U)\sim\mathcal{U}\big(\underbrace{\{(y,u)\;|\;y\in\mathbb{R}^d\text{ and } 0<u<m(y)\}}_{\mathcal{S}}\big)
+$$ 
+by simulating 
+
+1. a realization of
+$$
+Y\sim g
+$$
+and
+2. for a given realization $Y={\color{red}y},$ a realization of  
+$$
+U|Y={\color{red}y}\sim\mathcal{U}[0,M\,g({\color{red}y})].
+$$
+
+**Accept-Reject Step:**
+
+**Accept** a simulated $Y$ as a simulation for $X$, i.e. set 
+$$
+X=Y
+$$ 
+**only if** 
+$$
+U\leq f_X(Y)
+$$ 
+and **reject** all other $Y$'s. 
 
 
-Note that the above derivation implies that we only need to know the pdf $f(.)$ **up to an unkown multiplicative constant** $c>0$. I.e., it is enough to know $f(x)=c\,\tilde{f}_{\textrm{true}}(x)$, often written as $f(x)\propto \tilde{f}_{\textrm{true}}(x)$, since the unknown constant $c$ cancels out in the above quotient anyways. This is not so much of importance for us, but useful in **Bayesian Statistics**.
+::: {.callout-note icon=false} 
 
-\
+## 
+::: {#thm-ARAlgo2}
+
+## Accept-Reject Algorithm bounded density functions with non-compact support.
+
+Let $f_X$ be a $d$-dimensional density function and let $m(x)=Mg(x)$ such that $g$ is a $d$-dimensional auxiliary density function with   
+
+* $\int m(x)dx=\int Mg(x)dx = M$ with constant $0<M<\infty,$ and
+* $f_X(x)\leq m(x)$ for all $x\in\mathbb{R^d}.$
+
+
+Then the Accept-Reject algorithm as introduced in @sec-ARd1noncompact allows to simulate 
+$$
+X\sim f_X.
+$$  
+:::
+:::
+
+**Proof** of @thm-ARAlgo2:
+
+The following derivation shows that the Appcept-Reject algorithm as introduced in @sec-ARd1noncompact allows to simulate random variables $X$ with the correct target distribution $f_X.$
+
+First, note that $X\sim f_X$ if and only if 
+$$
+P(X\in A) = \int_A f_X(y)dy
+$$
+for every $A\subseteq \mathbb{R}^d.$
+
+
+$$
+\begin{align*}
+\mathbb{P}(X\in A)
+& =\mathbb{P}(Y\in A|U\leq f_X(Y))\\[2ex]
+& = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}
+\end{align*}
+$$
+Using that the density function of $(Y,U)\sim\mathcal{U}(\mathcal{S})$ equals $\frac{1}{M}$ for all $(y,u)\in\mathcal{S}$ and zero else we have 
+
+* $\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad$ and
+
+* $\mathbb{P}(U\leq f_X(Y)) = \int_{\mathbb{R}^d}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad$ by integrating out $y$ to get the marginal density.
+
+Thus,
+$$
+\begin{align*}
+\mathbb{P}(X\in A)
+& =\frac{\int_A \int_0^{f_X(y)}\,\frac{1}{M}\,du\,dy}{\int_{\mathbb{R}^d}\int_0^{f(y)}\,\frac{1}{M}\,du\,dy}\\[2ex]
+& =\frac{\frac{1}{M}\,\int_A \,\int_0^{f_X(y)}\,1\,du\,dy}{\frac{1}{M}\,\int_{\mathbb{R}^d}\,\int_0^{f(y)}\,1\,du\,dy}\\[2ex]
+& =\frac{\int_A \,\int_0^{f_X(y)}\,1\,du\,dy}{\int_{\mathbb{R}^d}\,\int_0^{f(y)}\,1\,du\,dy}\\[2ex]
+\end{align*}
+$$
+Using that $\int_{0}^{f_X(y)}\, 1\, du = f_X(y),$ we get that 
+$$
+\begin{align*}
+\mathbb{P}(X\in A)
+& =\frac{\int_A f_X(y)\,dy}{\int_{\mathbb{R}^d} f_X(y)\,dy}\\[2ex]
+& =\int_A f_X(y)dy,
+\end{align*}
+$$
+which applies to every set $A$ and thus shows the result. 
+
+::: {.callout-note}
+Note that the above derivation implies that we only need to know the density function $fX$ **up to an unkown multiplicative constant** $c>0$. I.e., it is enough to know $f_X(x)=c\,\tilde{f}_{\textrm{true}}(x)$, often written as $f(x)\propto \tilde{f}_{\textrm{true}}(x)$, since the unknown constant $c$ cancels out in the above quotient anyways. This is particularly useful in **Bayesian Statistics**.
+::: 
+
 
 All this leads to a more general version of the Fundamental Theorem of Simulation:
 
-*Fundamental Theorem of Simulation (General Version):*
 
-:   Let $X\sim f$ and let $g(.)$ be a pdf s.t. $f(x)\leq M\,g(x)$ for some $M$ with $1\leq M<\infty$ and all $x$. 
-    Then to simulate $X\sim f$ it is sufficient to generate
-    $$Y\sim g\quad\text{and}\quad U|Y=y\sim\mathrm{Unif}[0,M\,g(y)]$$
-    if one **accepts** the pair $(Y,U)$ only if $U\leq f(Y)$ and **rejects** all others.
+::: {.callout-note icon=false} 
 
-\
+## 
+::: {#thm-ARAlgo2}
+
+## Fundamental Theorem of Simulation (General Version):
+
+Let $X\sim f_X$ and let $g$ be a density function such that 
+$$
+f_X(x)\leq M\,g(x)
+$$ 
+for some $M$ with $1\leq M<\infty$ and all $x\in\mathbb{R}^d.$ 
+
+Then to simulate $X\sim f_X$ it is sufficient to generate
+$$
+Y\sim g\quad\text{and}\quad U|Y=y\sim\mathcal{U}[0,M\,g(y)]
+$$
+if one **accepts** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejects** all others.
+:::
+:::
 
 
 The Accept-Reject Algorithm (General Version):
