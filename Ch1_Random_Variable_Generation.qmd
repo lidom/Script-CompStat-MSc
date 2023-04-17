@@ -1076,11 +1076,11 @@ $$
 where $U\sim\mathcal{U}[0,m].$ 
 ::: -->
 
+::: {#exm-ARAlgo1Example} 
 
-
-@fig-ARExample1 illustrates the Accept-Reject algorithm for simulating $X\sim f_X$ with 
+Let the target density be 
 $$
-f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
+f_X(x)=\frac{3}{4} \left(1-x^2\right)\mathbf{1}_{(|x|\leq 1)},
 $$
 where 
 $$
@@ -1088,12 +1088,14 @@ $$
 $$ 
 and 
 $$
-\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4},
+\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4}.
 $$
-thus using 
+Thus the Accept-Reject algorithm for simulating $X\sim f_X$ can be implemented by generating  
 $$
-(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4]).
+(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4])
 $$
+and accepting $Y$ as realizations of $X$ only if $U\leq f_X(Y).$ 
+:::
 
 Look at the following code. It's a very simple algorithm, where we effectively only need to evaluate the density function $f_X,$ `target_pdf`:
 
@@ -1115,6 +1117,8 @@ U <- runif(n=1000, min =  0, max = 3/4)
 accept <- U <= target_pdf(Y)
 X      <- Y[accept]
 ```
+
+@fig-ARExample1 illustrates @exm-ARAlgo1Example.
 
 
 ```{r}

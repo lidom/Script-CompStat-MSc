@@ -1198,15 +1198,18 @@ U|Y \sim U,
 $$
 where $U\sim\mathcal{U}[0,m].$ 
 ::: -->
-<p><a href="#fig-ARExample1">Figure&nbsp;<span>1.3</span></a> illustrates the Accept-Reject algorithm for simulating <span class="math inline">\(X\sim f_X\)</span> with <span class="math display">\[
-f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
+<div id="exm-ARAlgo1Example" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1.7 </strong></span>Let the target density be <span class="math display">\[
+f_X(x)=\frac{3}{4} \left(1-x^2\right)\mathbf{1}_{(|x|\leq 1)},
 \]</span> where <span class="math display">\[
 \operatorname{supp}(f_X)=[-1,1]
 \]</span> and <span class="math display">\[
-\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4},
-\]</span> thus using <span class="math display">\[
-(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4]).
-\]</span></p>
+\sup_{x\in[-1,1]}f_X(x)\leq\frac{3}{4}.
+\]</span> Thus the Accept-Reject algorithm for simulating <span class="math inline">\(X\sim f_X\)</span> can be implemented by generating<br>
+<span class="math display">\[
+(Y,X)\sim\mathcal{U}([-1,1]\times[0,3/4])
+\]</span> and accepting <span class="math inline">\(Y\)</span> as realizations of <span class="math inline">\(X\)</span> only if <span class="math inline">\(U\leq f_X(Y).\)</span></p>
+</div>
 <p>Look at the following code. It’s a very simple algorithm, where we effectively only need to evaluate the density function <span class="math inline">\(f_X,\)</span> <code>target_pdf</code>:</p>
 <div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-13_833cdbdeb62791584c9bf67aafa96576">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Target pdf f_X</span></span>
@@ -1224,6 +1227,7 @@ f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">target_pdf</span>(Y)</span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><a href="#fig-ARExample1">Figure&nbsp;<span>1.3</span></a> illustrates <a href="#exm-ARAlgo1Example">Example&nbsp;<span>1.7</span></a>.</p>
 <div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-ARExample1_71ddb21035f9ed797e18f7a67b6a3fc8">
 <div class="cell-output-display">
 <div id="fig-ARExample1" class="quarto-figure quarto-figure-center anchored">
@@ -1457,7 +1461,7 @@ accept <- U <= f(Y)
 X      <- Y[accept]
 ``` -->
 <div id="exm-ARAlgo2Example" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1.7 </strong></span>Let the target “density” be <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 1.8 </strong></span>Let the target “density” be <span class="math display">\[
 f_X(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
 \]</span> The function <span class="math inline">\(\tilde{f}_X(x)\)</span> is dominated (i.e.&nbsp;<span class="math inline">\(\tilde{f}_X(x) \leq g(x)\)</span> for all <span class="math inline">\(x\)</span>) by the standard normal density <span class="math display">\[
 g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
@@ -1503,7 +1507,7 @@ g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
 <div id="fig-ARAlgo2Example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="Ch1_Random_Variable_Generation_files/figure-html/fig-ARAlgo2Example-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Accept-Reject algorithm for univariate <span class="math inline">\((d=1)\)</span> densities with non-compact support—visualizing <a href="#exm-ARAlgo2Example">Example&nbsp;<span>1.7</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Accept-Reject algorithm for univariate <span class="math inline">\((d=1)\)</span> densities with non-compact support—visualizing <a href="#exm-ARAlgo2Example">Example&nbsp;<span>1.8</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1540,7 +1544,7 @@ Tip
 </div>
 </div>
 <div id="exm-AREfficiency" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1.8 (Normals from Double Exponentials) </strong></span>Consider simulating from <span class="math inline">\(\mathcal{N}(0,1)\)</span> using the Accept-Reject algorithm with the a double-exponential distribution <span class="math inline">\(\mathcal{L}(\alpha),\)</span> also called <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a>, as the instrumental density, <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 1.9 (Normals from Double Exponentials) </strong></span>Consider simulating from <span class="math inline">\(\mathcal{N}(0,1)\)</span> using the Accept-Reject algorithm with the a double-exponential distribution <span class="math inline">\(\mathcal{L}(\alpha),\)</span> also called <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a>, as the instrumental density, <span class="math display">\[
 g(x|b)=\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right).
 \]</span> <!-- here: location-param mu=0, scale.param=b\geq 0, precision=alpha=b^{-1} --> It is then straightforward to show (see Exercises) that <span class="math display">\[
 \begin{align*}
