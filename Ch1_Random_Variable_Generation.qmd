@@ -157,7 +157,7 @@ r_vec[ 1:16]
 r_vec[17:32]
 ```
 
-\
+
 
 ::: {#exm-GoodVsBadRNG}
 
@@ -1167,7 +1167,7 @@ pt.cex=1.5,
      pt.bg = c(gray(.7, alpha = .5)), 
      col =   c(gray(.7, alpha = .5)), bty="n")
 # 3. plot 
-hist(x = X, main="Histogram of \n X=Y|(U<= f(Y))", 
+hist(x = X, main=expression("Histogram of"~X==Y~"|"~(U<= f[X](Y))), #"Histogram of \n X=Y|(U<= f(Y))", 
      freq = FALSE, ylim=c(0,.85), xlim=range(xx), xlab="X", ylab="Density")
 axis(side=1, at = X[seq(from = 1,to = length(X), by=3)], 
      tick = TRUE, labels = FALSE, col.ticks = alpha("darkgreen", 0.5))
@@ -1354,19 +1354,27 @@ First, note that $X\sim f_X$ if and only if
 $$
 P(X\in A) = \int_A f_X(y)dy
 $$
-for every $A\subseteq \mathbb{R}^d.$
+for every $A\subseteq \mathbb{R}^d.$ I.e., this is what we need to show. 
 
 
+In a first step, we use that $X=Y$ only if $U\leq f_X(Y),$ which implies that  
+$$
+\begin{align*}
+\mathbb{P}(X\in A) & =\mathbb{P}(Y\in A|U\leq f_X(Y)).
+\end{align*}
+$$
+The definition of conditional probabilities yields that 
 $$
 \begin{align*}
 \mathbb{P}(X\in A)
-& =\mathbb{P}(Y\in A|U\leq f_X(Y))\\[2ex]
-& = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}
+& = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}.
 \end{align*}
 $$
-Using that the density function of $(Y,U)\sim\mathcal{U}(\mathcal{S})$ equals $\frac{1}{M}$ for all $(y,u)\in\mathcal{S}$ and zero else we have 
+Using that the density function of $(Y,U)\sim\mathcal{U}(\mathcal{S})$ equals $\frac{1}{M}$ for all $(y,u)\in\mathcal{S}$ and zero else we have that 
 
-* $\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad$ and
+* $\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad$ 
+
+and that 
 
 * $\mathbb{P}(U\leq f_X(Y)) = \int_{\mathbb{R}^d}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad$ by integrating out $y$ to get the marginal density.
 
@@ -1390,19 +1398,36 @@ $$
 which applies to every set $A$ and thus shows the result. 
 
 ::: {.callout-note}
-Note that the above derivation implies that we only need to know the density function $fX$ **up to an unkown multiplicative constant** $c>0$. I.e., it is enough to know $f_X(x)=c\,\tilde{f}_{\textrm{true}}(x)$, often written as $f(x)\propto \tilde{f}_{\textrm{true}}(x)$, since the unknown constant $c$ cancels out in the above quotient anyways. This is particularly useful in **Bayesian Statistics**.
+Note that the above derivation implies that we only need to know the density function $f_X$ **up to a multiplicative constant** $c>0,$ since constant factors cancel---just as the normalizing constant $1/M.$
+
+That is, instead of working with $f_X,$ we can also work with a scaled version $\tilde{f}_X$ that is proportional to $f_X,$
+$$
+f_{X}(x) = c \tilde{f}_X(x)
+$$ 
+often written as 
+$$
+f_{X}(x)\propto \tilde{f}_X(x),
+$$ 
+since the constant $c$ cancels out anyways in the above quotient expression. (The sign "$\propto$" means "proportional to".)
+
+
+This is a very useful property for implementing the Accept-Reject algorithm, since it implies that it is **irrelevant** whether we scale the **instrumental density** $g$ by some $1\leq M <\infty,$ or the **target density** $f_X$ by some constant $c>0.$ All we need is that 
+$$
+\frac{1}{c}f_X(x)=\tilde{f}_X(x) \leq M g(x) \text{ for all } x\in\mathbb{R}^d.
+$$ 
+for some some $c>0$ and some $1\leq M < \infty.$ This allows us to choose $c$ and $M$ such that simulating from $M g$ is as simple as possible. 
 ::: 
 
 
-All this leads to a more general version of the Fundamental Theorem of Simulation:
+<!-- All this leads to a more general version of the Fundamental Theorem of Simulation: -->
 
 
-::: {.callout-note icon=false} 
+<!-- ::: {.callout-note icon=false} 
 
 ## 
 ::: {#thm-ARAlgo2}
 
-## Fundamental Theorem of Simulation (General Version):
+## Fundamental Theorem of Simulation (General Version)
 
 Let $X\sim f_X$ and let $g$ be a density function such that 
 $$
@@ -1410,16 +1435,17 @@ f_X(x)\leq M\,g(x)
 $$ 
 for some $M$ with $1\leq M<\infty$ and all $x\in\mathbb{R}^d.$ 
 
-Then to simulate $X\sim f_X$ it is sufficient to generate
+Then simulating $X\sim f_X$ is equivalent to simulating 
 $$
 Y\sim g\quad\text{and}\quad U|Y=y\sim\mathcal{U}[0,M\,g(y)]
 $$
-if one **accepts** the pair $(Y,U)$ only if $U\leq f_X(Y)$ and **rejects** all others.
+of one **accepts** $Y$ as a simulation for $X$ (i.e. sets $X=Y$) only if 
+$U\leq f_X(Y),$ and **rejects** all other $Y$'s.
 :::
-:::
+::: -->
 
 
-The Accept-Reject Algorithm (General Version):
+<!-- The Accept-Reject Algorithm (General Version):
 
 ```
 # Accept-Reject Algorithm:
@@ -1436,24 +1462,66 @@ for(i in 1:n){
 # A-R Step:
 accept <- U <= f(Y)
 X      <- Y[accept]
-```
+``` -->
 
-\
-
-
-**Example**
+::: {#exm-ARAlgo2Example} 
 
 Let the target "density" be 
-$$f(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)$$
-with upper bound (or, rather, dominating density) the standard normal density
-$$g(x)=\exp(-x^2/2)/\sqrt{2\pi},$$
-which is obviously straightforward to generate. 
+$$
+f_X(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
+$$
+The function $\tilde{f}_X(x)$ is dominated (i.e. $\tilde{f}_X(x) \leq g(x)$ for all $x$) by the standard normal density
+$$
+g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
+$$
+which is obviously straightforward to simulate from.  
 
-In this example we can set $m(x)=M\,g(x)$ with $M=1$, since we can simply scale the target "density" $f$ such that $f(x)\leq g(x)$ for all $x$. Specifically, we set $f(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)$. 
+Thus, in this example we can set $m(x)=M\,g(x)$ with $M=1$, since we can simply scale the target density $f_X$ such that $\tilde{f}_X(x)\leq g(x)$ for all $x$. Specifically, we set 
+$$
+\tilde{f}_X(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
+$$ 
+:::
 
-In the following you see the graphical illustration of this example:
+The following code provides a possible implementation of the Accept-Reject algorithm for this example. @fig-ARAlgo2Example shows the results.  
 
-```{r,echo=FALSE, out.width='\\textwidth', fig.align='center', fig.width=10, fig.height=5}
+```{r}
+# Target density
+target_pdf <- function(x, c=.075){
+  pdf <- c * exp(-x^2 / 2) * 
+            (sin(6*x)^2 + 3*cos(x)^2 * sin(4*x)^2 + 1)
+  return(pdf)
+}
+
+# Upper bound
+m_fun <- function(x){
+  m <- exp(-x^2 / 2)/sqrt(2*pi)
+  return(m)  
+}
+
+# Accept-Reject Algo:
+set.seed(32280)
+
+## 1. Generate Y
+Y   <- rnorm(n=1000)
+
+## 2. Generate U|Y=y 
+U   <- vector(length = length(Y), mode = "double")
+
+for(i in 1:length(Y)){
+  U[i] <- runif(n=1, min = 0, max = m_fun(Y[i])) 
+}
+
+# A-R Step:
+accept <- U <= target_pdf(Y)
+X      <- Y[accept]
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| label: fig-ARAlgo2Example
+#| fig-cap: Accept-Reject algorithm for univariate $(d=1)$ densities with non-compact support---visualizing @exm-ARAlgo2Example.
+
 # Target pdf
 target_pdf <- function(x, c=.075){
   pdf <- c * (exp(-x^2 / 2) * (sin(6*x)^2 + 3*cos(x)^2 * sin(4*x)^2 + 1))
@@ -1485,20 +1553,20 @@ xx <- seq(-4, 4, len=500)
 
 par(mfrow=c(1,3))
 # 1. plot #
-plot(y = target_pdf(x=xx), x = xx, type="l", main="pdf f(x)", 
+plot(y = target_pdf(x=xx), x = xx, type="l", main=expression(f[X](x)), 
      xlab = "X", ylab = "Density", ylim=c(0,.40))
 # 2. plot #
 plot(y=target_pdf(x=xx), x=xx, type="l", 
      main="Accept-Reject Regions", xlab = "Y", ylab = "U", ylim=c(0,0.40))
 polygon(x=c(xx, rev(xx)), y=c(m_fun(x=xx), rep(0,length(xx))), col=gray(0.8, alpha = 0.5))
 polygon(x=c(xx, rev(xx)), y=c(target_pdf(x=xx), rep(0,length(xx))), col=alpha("darkgreen", 0.5))
-points(y=U, x=Y, pch=19, cex=.4)
+points(y=U[1:100], x=Y[1:100], pch=19, cex=.4)
 legend("topleft", legend = c("Accept","Reject"), pch=22, pt.cex=1.5,
      pt.bg = c(alpha("darkgreen", 0.5), gray(.7, alpha = .5)), 
-     col =   c(alpha("darkgreen", 0.5), gray(.7, alpha = .5)))
-legend("topright", legend = c("(Y,U) ~ Unif(L)"), pch=19, pt.cex=.4)
+     col =   c(alpha("darkgreen", 0.5), gray(.7, alpha = .5)), bty="n")
+#legend("topright", legend = c("(Y,U) ~ Unif(L)"), pch=19, pt.cex=.4)
 # 3. plot
-hist(x = X, main="Histogram of \n X=Y|(U<= f(Y))", 
+hist(x = X, main=expression("Histogram of"~X==Y~"|"~(U<= f[X](Y))), 
      freq = FALSE, ylim=c(0,.40), xlim=range(xx), xlab="X", ylab="Density")
 axis(side=1, at = X[seq(from = 1,to = length(X), by=3)], 
      tick = TRUE, labels = FALSE, col.ticks = alpha("darkgreen", 0.5))
@@ -1512,45 +1580,70 @@ par(mfrow=c(1,1))
 
 
 
-**Efficiency of the Accept-Reject algorithm:** 
 
-Statements with respect to the efficiency of the Accept-Reject algorithm can be made if $f$ and $g$ are **normalized** such that they are **both pdfs**. Then:
+#### Efficiency of the Accept-Reject algorithm 
+
+Statements with respect to the efficiency of the Accept-Reject algorithm can be made if $f_X$ and $g$ are **normalized** such that they are **both pdfs**. Then:
 
 * The constant $M$ is necessarily larger than $1$.
 * The probability of acceptance is $1/M$. (See Exercises.)
-* $M$ is interpreted as the efficiency of the Accept-Reject algorithm. (The closer $M$ is to $1$ the better.)
-* $M$ is a function of how closely $g$ can imitate $f$. 
+* $M$ is interpreted as the **efficiency** of the Accept-Reject algorithm. The closer $M$ is to $1$ the better. 
+* $M$ quantifies how closely $g$ can imitate $f_X.$ 
 
-Note that, for such normalized $f$ and $g$ the inequality $f(x)\leq M\,g(x)$ with $1\leq M<\infty$ for all $x$ is equivalent to saying that the quotient $f/g$ is bounded, i.e., that 
+Note that, for normalized $f_X$ and $g$ the inequality 
 $$
-0\leq \frac{f(x)}{g(x)}\leq M <\infty\quad\text{for all}\quad x.
+f_X(x)\leq M\,g(x),
+$$ 
+with $1\leq M<\infty$ for all $x\in\mathbb{R}^d,$ implies that the quotient $f_X/g$ is bounded, i.e., that 
 $$
-That is, it is necessary for $g$ to have, e.g., thicker tails than $f$. This makes it, for instance, impossible to simulate a Cauchy distribution $f$ using a normal distribution $g$. The reverse, however, works quite well. 
-<!--
-Remember: Using the Cauchy as instrumental pdf $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one!
--->
-
-
-\
-
-**Example: Normals from Double Exponentials**
-
-Consider generating a $N(0,1)$ by the Accept-Reject algorithm using a double-exponential distribution $\mathcal{L}(\alpha)$, also called [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution), 
-with density $g(x|b)=(1/(2b))\exp(-\,|x|/b)$. <!-- here: location-param mu=0, scale.param=b\geq 0, precision=alpha=b^{-1} -->
-It is then straightforward to show that 
+0\leq \frac{f_X(x)}{g(x)}\leq M <\infty\quad\text{for all}\quad x.
 $$
+That is, it is necessary for $g$ to have, e.g., thicker tails than $f_X$. This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g.$ The reverse, however, works quite well.
+
+::: {.callout-tip}
+Remember: Using the Cauchy as instrumental density $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one.
+:::
+
+
+
+::: {#exm-AREfficiency} 
+
+## Normals from Double Exponentials
+
+Consider simulating from $\mathcal{N}(0,1)$ using the Accept-Reject algorithm with the a double-exponential distribution $\mathcal{L}(\alpha),$ also called [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution), as the instrumental density, 
+$$
+g(x|b)=\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right).
+$$
+<!-- here: location-param mu=0, scale.param=b\geq 0, precision=alpha=b^{-1} -->
+It is then straightforward to show (see Exercises) that 
+$$
+\begin{align*}
 \frac{f(x)}{g(x|b)}
-%=\frac{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)}{\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right)}
-%=\sqrt{\frac{2}{\pi}}\,b\,\exp\left(-\frac{1}{2}x^2+\frac{|x|}{b}\right)
-\leq\sqrt{\frac{2}{\pi}}\,b\,\exp\left(\frac{1}{2\,b^2}\right)
+%&=\frac{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)}{\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right)}\\[2ex]
+%&=\sqrt{\frac{2}{\pi}}\,b\,\exp\left(-\frac{1}{2}x^2+\frac{|x|}{b}\right)\\[2ex]
+&\leq\sqrt{\frac{2}{\pi}}\,b\,\exp\left(\frac{1}{2\,b^2}\right)
+\end{align*}
 $$
 and that the minimum of the bound (in $b$) is attained for $b=1$. 
 
-This leads to the following optimal (i.e. most efficient) specification of the double-exponential distribution as instrumental pdf:
+This leads to the following optimal (i.e. most efficient) specification of the double-exponential distribution as instrumental density:
 $$
-\frac{f(x)}{g(x|1)}
-\leq M=\sqrt{\frac{2}{\pi}}\,\exp\left(\frac{1}{2}\right).
+\begin{align*}
+\frac{f(x)}{g(x|1)} \leq M 
+& =\sqrt{\frac{2}{\pi}}\,\exp\left(\frac{1}{2}\right)\\[2ex]
+& =\sqrt{\frac{2}{\pi} \,\exp\left(1\right)}.
+\end{align*}
 $$
 
-The probability of acceptance is then $\sqrt{\pi/(2e)}=0.76$. I.e., to produce one normal random variable, this Accept-Reject algorithm requires on the average $1/0.76\approx 1.3$ uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is 1.
+The probability of acceptance is then 
+$$
+\frac{1}{M}=\sqrt{\frac{\pi}{2\exp(1)}}\approx 0.76.
+$$ 
+I.e., to produce one normal random variable, this Accept-Reject algorithm requires on average 
+$$
+\frac{1}{0.76}\approx 1.3
+$$ 
+uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is $1.$
+:::
 
+### References {-}

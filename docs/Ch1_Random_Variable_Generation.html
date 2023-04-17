@@ -232,6 +232,7 @@ div.csl-indent {
   <li><a href="#the-inverse-method" id="toc-the-inverse-method" class="nav-link" data-scroll-target="#the-inverse-method"><span class="toc-section-number">1.3.1</span>  The Inverse Method</a></li>
   <li><a href="#transformation-methods" id="toc-transformation-methods" class="nav-link" data-scroll-target="#transformation-methods"><span class="toc-section-number">1.3.2</span>  Transformation Methods</a></li>
   <li><a href="#accept-reject-methods" id="toc-accept-reject-methods" class="nav-link" data-scroll-target="#accept-reject-methods"><span class="toc-section-number">1.3.3</span>  Accept-Reject Methods</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -406,8 +407,6 @@ Devroye (1986) is very comprehensive book on non-uniform random variate generati
 <pre><code> [1] 57 37 17 61 41 21  1 45 25  5 49 29  9 53 33 13</code></pre>
 </div>
 </div>
-<p><br>
-</p>
 <div id="exm-GoodVsBadRNG" class="theorem example">
 <p><span class="theorem-title"><strong>Example 1.1 (Good vs.&nbsp;Bad RNGs) </strong></span>Average heads ratios <span class="math display">\[
 \bar{C}_n=\frac{1}{n}\sum_{i=1}^nC_i
@@ -1224,7 +1223,7 @@ f_X(x)=(3/4)  (1-x^2)\mathbf{1}_{(|x|\leq 1)},
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">target_pdf</span>(Y)</span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-ARExample1_6a24512d60ebc0b158b31da7a053b1f0">
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-ARExample1_71ddb21035f9ed797e18f7a67b6a3fc8">
 <div class="cell-output-display">
 <div id="fig-ARExample1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -1358,21 +1357,28 @@ X\sim f_X.
 </div>
 </div>
 </div>
-<p><strong>Proof</strong> of <a href="#thm-ARAlgo2">Theorem&nbsp;<span>1.6</span></a>:</p>
+<p><strong>Proof</strong> of <a href="#thm-ARAlgo2">Theorem&nbsp;<span>1.5</span></a>:</p>
 <p>The following derivation shows that the Appcept-Reject algorithm as introduced in <a href="#sec-ARd1noncompact"><span>Section&nbsp;1.3.3.2</span></a> allows to simulate random variables <span class="math inline">\(X\)</span> with the correct target distribution <span class="math inline">\(f_X.\)</span></p>
 <p>First, note that <span class="math inline">\(X\sim f_X\)</span> if and only if <span class="math display">\[
 P(X\in A) = \int_A f_X(y)dy
-\]</span> for every <span class="math inline">\(A\subseteq \mathbb{R}^d.\)</span></p>
-<p><span class="math display">\[
+\]</span> for every <span class="math inline">\(A\subseteq \mathbb{R}^d.\)</span> I.e., this is what we need to show.</p>
+<p>In a first step, we use that <span class="math inline">\(X=Y\)</span> only if <span class="math inline">\(U\leq f_X(Y),\)</span> which implies that<br>
+<span class="math display">\[
+\begin{align*}
+\mathbb{P}(X\in A) &amp; =\mathbb{P}(Y\in A|U\leq f_X(Y)).
+\end{align*}
+\]</span> The definition of conditional probabilities yields that <span class="math display">\[
 \begin{align*}
 \mathbb{P}(X\in A)
-&amp; =\mathbb{P}(Y\in A|U\leq f_X(Y))\\[2ex]
-&amp; = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}
+&amp; = \frac{\mathbb{P}(Y\in A, \; U\leq f_X(Y))}{\mathbb{P}(U\leq f_X(Y))}.
 \end{align*}
-\]</span> Using that the density function of <span class="math inline">\((Y,U)\sim\mathcal{U}(\mathcal{S})\)</span> equals <span class="math inline">\(\frac{1}{M}\)</span> for all <span class="math inline">\((y,u)\in\mathcal{S}\)</span> and zero else we have</p>
+\]</span> Using that the density function of <span class="math inline">\((Y,U)\sim\mathcal{U}(\mathcal{S})\)</span> equals <span class="math inline">\(\frac{1}{M}\)</span> for all <span class="math inline">\((y,u)\in\mathcal{S}\)</span> and zero else we have that</p>
 <ul>
-<li><p><span class="math inline">\(\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span> and</p></li>
-<li><p><span class="math inline">\(\mathbb{P}(U\leq f_X(Y)) = \int_{\mathbb{R}^d}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span> by integrating out <span class="math inline">\(y\)</span> to get the marginal density.</p></li>
+<li><span class="math inline">\(\mathbb{P}(Y\in{\color{red}A}, \; U\leq f_X(Y)) = \int_{\color{red}A}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span></li>
+</ul>
+<p>and that</p>
+<ul>
+<li><span class="math inline">\(\mathbb{P}(U\leq f_X(Y)) = \int_{\mathbb{R}^d}\int_0^{f(y)}\frac{1}{M}\,du\,dy\quad\)</span> by integrating out <span class="math inline">\(y\)</span> to get the marginal density.</li>
 </ul>
 <p>Thus, <span class="math display">\[
 \begin{align*}
@@ -1398,90 +1404,168 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that the above derivation implies that we only need to know the density function <span class="math inline">\(fX\)</span> <strong>up to an unkown multiplicative constant</strong> <span class="math inline">\(c&gt;0\)</span>. I.e., it is enough to know <span class="math inline">\(f_X(x)=c\,\tilde{f}_{\textrm{true}}(x)\)</span>, often written as <span class="math inline">\(f(x)\propto \tilde{f}_{\textrm{true}}(x)\)</span>, since the unknown constant <span class="math inline">\(c\)</span> cancels out in the above quotient anyways. This is particularly useful in <strong>Bayesian Statistics</strong>.</p>
+<p>Note that the above derivation implies that we only need to know the density function <span class="math inline">\(f_X\)</span> <strong>up to a multiplicative constant</strong> <span class="math inline">\(c&gt;0,\)</span> since constant factors cancel—just as the normalizing constant <span class="math inline">\(1/M.\)</span></p>
+<p>That is, instead of working with <span class="math inline">\(f_X,\)</span> we can also work with a scaled version <span class="math inline">\(\tilde{f}_X\)</span> that is proportional to <span class="math inline">\(f_X,\)</span> <span class="math display">\[
+f_{X}(x) = c \tilde{f}_X(x)
+\]</span> often written as <span class="math display">\[
+f_{X}(x)\propto \tilde{f}_X(x),
+\]</span> since the constant <span class="math inline">\(c\)</span> cancels out anyways in the above quotient expression. (The sign “<span class="math inline">\(\propto\)</span>” means “proportional to”.)</p>
+<p>This is a very useful property for implementing the Accept-Reject algorithm, since it implies that it is <strong>irrelevant</strong> whether we scale the <strong>instrumental density</strong> <span class="math inline">\(g\)</span> by some <span class="math inline">\(1\leq M &lt;\infty,\)</span> or the <strong>target density</strong> <span class="math inline">\(f_X\)</span> by some constant <span class="math inline">\(c&gt;0.\)</span> All we need is that <span class="math display">\[
+\frac{1}{c}f_X(x)=\tilde{f}_X(x) \leq M g(x) \text{ for all } x\in\mathbb{R}^d.
+\]</span> for some some <span class="math inline">\(c&gt;0\)</span> and some <span class="math inline">\(1\leq M &lt; \infty.\)</span> This allows us to choose <span class="math inline">\(c\)</span> and <span class="math inline">\(M\)</span> such that simulating from <span class="math inline">\(M g\)</span> is as simple as possible.</p>
 </div>
 </div>
-<p>All this leads to a more general version of the Fundamental Theorem of Simulation:</p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
+<!-- All this leads to a more general version of the Fundamental Theorem of Simulation: -->
+<!-- ::: {.callout-note icon=false} 
 
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div id="thm-ARAlgo2" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.6 (Fundamental Theorem of Simulation (General Version):) </strong></span>Let <span class="math inline">\(X\sim f_X\)</span> and let <span class="math inline">\(g\)</span> be a density function such that <span class="math display">\[
+## 
+::: {#thm-ARAlgo2}
+
+## Fundamental Theorem of Simulation (General Version)
+
+Let $X\sim f_X$ and let $g$ be a density function such that 
+$$
 f_X(x)\leq M\,g(x)
-\]</span> for some <span class="math inline">\(M\)</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> and all <span class="math inline">\(x\in\mathbb{R}^d.\)</span></p>
-<p>Then to simulate <span class="math inline">\(X\sim f_X\)</span> it is sufficient to generate <span class="math display">\[
+$$ 
+for some $M$ with $1\leq M<\infty$ and all $x\in\mathbb{R}^d.$ 
+
+Then simulating $X\sim f_X$ is equivalent to simulating 
+$$
 Y\sim g\quad\text{and}\quad U|Y=y\sim\mathcal{U}[0,M\,g(y)]
-\]</span> if one <strong>accepts</strong> the pair <span class="math inline">\((Y,U)\)</span> only if <span class="math inline">\(U\leq f_X(Y)\)</span> and <strong>rejects</strong> all others.</p>
-</div>
-</div>
-</div>
-<p>The Accept-Reject Algorithm (General Version):</p>
-<pre><code># Accept-Reject Algorithm:
-Y   &lt;- generate n random numbers from g(.)
+$$
+of one **accepts** $Y$ as a simulation for $X$ (i.e. sets $X=Y$) only if 
+$U\leq f_X(Y),$ and **rejects** all other $Y$'s.
+:::
+::: -->
+<!-- The Accept-Reject Algorithm (General Version):
+
+```
+# Accept-Reject Algorithm:
+Y   <- generate n random numbers from g(.)
 
 # Specify function m():
-m &lt;- function(y){YOUR CODE}
+m <- function(y){YOUR CODE}
 
-U   &lt;- numeric(n)
+U   <- numeric(n)
 for(i in 1:n){
-  U[i] &lt;- runif(n=1, min = 0, max = m(Y[i])) 
+  U[i] <- runif(n=1, min = 0, max = m(Y[i])) 
 }
 
 # A-R Step:
-accept &lt;- U &lt;= f(Y)
-X      &lt;- Y[accept]</code></pre>
-<p><br>
-</p>
-<p><strong>Example</strong></p>
-<p>Let the target “density” be <span class="math display">\[f(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)\]</span> with upper bound (or, rather, dominating density) the standard normal density <span class="math display">\[g(x)=\exp(-x^2/2)/\sqrt{2\pi},\]</span> which is obviously straightforward to generate.</p>
-<p>In this example we can set <span class="math inline">\(m(x)=M\,g(x)\)</span> with <span class="math inline">\(M=1\)</span>, since we can simply scale the target “density” <span class="math inline">\(f\)</span> such that <span class="math inline">\(f(x)\leq g(x)\)</span> for all <span class="math inline">\(x\)</span>. Specifically, we set <span class="math inline">\(f(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1)\)</span>.</p>
-<p>In the following you see the graphical illustration of this example:</p>
-<div class="cell" data-layout-align="center" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-16_43729f1ee9af1047f3508606964f51c6">
+accept <- U <= f(Y)
+X      <- Y[accept]
+``` -->
+<div id="exm-ARAlgo2Example" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1.7 </strong></span>Let the target “density” be <span class="math display">\[
+f_X(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
+\]</span> The function <span class="math inline">\(\tilde{f}_X(x)\)</span> is dominated (i.e.&nbsp;<span class="math inline">\(\tilde{f}_X(x) \leq g(x)\)</span> for all <span class="math inline">\(x\)</span>) by the standard normal density <span class="math display">\[
+g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
+\]</span> which is obviously straightforward to simulate from.</p>
+<p>Thus, in this example we can set <span class="math inline">\(m(x)=M\,g(x)\)</span> with <span class="math inline">\(M=1\)</span>, since we can simply scale the target density <span class="math inline">\(f_X\)</span> such that <span class="math inline">\(\tilde{f}_X(x)\leq g(x)\)</span> for all <span class="math inline">\(x\)</span>. Specifically, we set <span class="math display">\[
+\tilde{f}_X(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
+\]</span></p>
+</div>
+<p>The following code provides a possible implementation of the Accept-Reject algorithm for this example. <a href="#fig-ARAlgo2Example">Figure&nbsp;<span>1.4</span></a> shows the results.</p>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-16_34c2dd8327c9a853f9f705e747c20a47">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Target density</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>target_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">c=</span>.<span class="dv">075</span>){</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  pdf <span class="ot">&lt;-</span> c <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">*</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            (<span class="fu">sin</span>(<span class="dv">6</span><span class="sc">*</span>x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span><span class="fu">cos</span>(x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">4</span><span class="sc">*</span>x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pdf)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Upper bound</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>m_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(m)  </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Accept-Reject Algo:</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">32280</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="do">## 1. Generate Y</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>Y   <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="do">## 2. Generate U|Y=y </span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>U   <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">length =</span> <span class="fu">length</span>(Y), <span class="at">mode =</span> <span class="st">"double"</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(Y)){</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  U[i] <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n=</span><span class="dv">1</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="fu">m_fun</span>(Y[i])) </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="co"># A-R Step:</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>accept <span class="ot">&lt;-</span> U <span class="sc">&lt;=</span> <span class="fu">target_pdf</span>(Y)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>X      <span class="ot">&lt;-</span> Y[accept]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/fig-ARAlgo2Example_d9bed0f3f3aa4bc0eccafe52bbf208be">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-ARAlgo2Example" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img"></p>
+<p><img src="Ch1_Random_Variable_Generation_files/figure-html/fig-ARAlgo2Example-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.4: Accept-Reject algorithm for univariate <span class="math inline">\((d=1)\)</span> densities with non-compact support—visualizing <a href="#exm-ARAlgo2Example">Example&nbsp;<span>1.7</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-17_d90bd8ce02906b45c38eeedeb7235515">
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-18_3825b6cf40949a306fe5721ef1ca45a6">
 
 </div>
-<p><strong>Efficiency of the Accept-Reject algorithm:</strong></p>
-<p>Statements with respect to the efficiency of the Accept-Reject algorithm can be made if <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are <strong>normalized</strong> such that they are <strong>both pdfs</strong>. Then:</p>
+</section>
+<section id="efficiency-of-the-accept-reject-algorithm" class="level4" data-number="1.3.3.3">
+<h4 data-number="1.3.3.3" class="anchored" data-anchor-id="efficiency-of-the-accept-reject-algorithm"><span class="header-section-number">1.3.3.3</span> Efficiency of the Accept-Reject algorithm</h4>
+<p>Statements with respect to the efficiency of the Accept-Reject algorithm can be made if <span class="math inline">\(f_X\)</span> and <span class="math inline">\(g\)</span> are <strong>normalized</strong> such that they are <strong>both pdfs</strong>. Then:</p>
 <ul>
 <li>The constant <span class="math inline">\(M\)</span> is necessarily larger than <span class="math inline">\(1\)</span>.</li>
 <li>The probability of acceptance is <span class="math inline">\(1/M\)</span>. (See Exercises.)</li>
-<li><span class="math inline">\(M\)</span> is interpreted as the efficiency of the Accept-Reject algorithm. (The closer <span class="math inline">\(M\)</span> is to <span class="math inline">\(1\)</span> the better.)</li>
-<li><span class="math inline">\(M\)</span> is a function of how closely <span class="math inline">\(g\)</span> can imitate <span class="math inline">\(f\)</span>.</li>
+<li><span class="math inline">\(M\)</span> is interpreted as the <strong>efficiency</strong> of the Accept-Reject algorithm. The closer <span class="math inline">\(M\)</span> is to <span class="math inline">\(1\)</span> the better.</li>
+<li><span class="math inline">\(M\)</span> quantifies how closely <span class="math inline">\(g\)</span> can imitate <span class="math inline">\(f_X.\)</span></li>
 </ul>
-<p>Note that, for such normalized <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> the inequality <span class="math inline">\(f(x)\leq M\,g(x)\)</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> for all <span class="math inline">\(x\)</span> is equivalent to saying that the quotient <span class="math inline">\(f/g\)</span> is bounded, i.e., that <span class="math display">\[
-0\leq \frac{f(x)}{g(x)}\leq M &lt;\infty\quad\text{for all}\quad x.
-\]</span> That is, it is necessary for <span class="math inline">\(g\)</span> to have, e.g., thicker tails than <span class="math inline">\(f\)</span>. This makes it, for instance, impossible to simulate a Cauchy distribution <span class="math inline">\(f\)</span> using a normal distribution <span class="math inline">\(g\)</span>. The reverse, however, works quite well. <!--
-Remember: Using the Cauchy as instrumental pdf $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one!
---></p>
-<p><br>
-</p>
-<p><strong>Example: Normals from Double Exponentials</strong></p>
-<p>Consider generating a <span class="math inline">\(N(0,1)\)</span> by the Accept-Reject algorithm using a double-exponential distribution <span class="math inline">\(\mathcal{L}(\alpha)\)</span>, also called <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a>, with density <span class="math inline">\(g(x|b)=(1/(2b))\exp(-\,|x|/b)\)</span>. <!-- here: location-param mu=0, scale.param=b\geq 0, precision=alpha=b^{-1} --> It is then straightforward to show that <span class="math display">\[
+<p>Note that, for normalized <span class="math inline">\(f_X\)</span> and <span class="math inline">\(g\)</span> the inequality <span class="math display">\[
+f_X(x)\leq M\,g(x),
+\]</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> for all <span class="math inline">\(x\in\mathbb{R}^d,\)</span> implies that the quotient <span class="math inline">\(f_X/g\)</span> is bounded, i.e., that <span class="math display">\[
+0\leq \frac{f_X(x)}{g(x)}\leq M &lt;\infty\quad\text{for all}\quad x.
+\]</span> That is, it is necessary for <span class="math inline">\(g\)</span> to have, e.g., thicker tails than <span class="math inline">\(f_X\)</span>. This makes it, for instance, impossible to simulate from a Cauchy density <span class="math inline">\(f_X\)</span> using a normal density <span class="math inline">\(g.\)</span> The reverse, however, works quite well.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember: Using the Cauchy as instrumental density <span class="math inline">\(g\)</span> does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one.</p>
+</div>
+</div>
+<div id="exm-AREfficiency" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1.8 (Normals from Double Exponentials) </strong></span>Consider simulating from <span class="math inline">\(\mathcal{N}(0,1)\)</span> using the Accept-Reject algorithm with the a double-exponential distribution <span class="math inline">\(\mathcal{L}(\alpha),\)</span> also called <a href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a>, as the instrumental density, <span class="math display">\[
+g(x|b)=\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right).
+\]</span> <!-- here: location-param mu=0, scale.param=b\geq 0, precision=alpha=b^{-1} --> It is then straightforward to show (see Exercises) that <span class="math display">\[
+\begin{align*}
 \frac{f(x)}{g(x|b)}
-%=\frac{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)}{\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right)}
-%=\sqrt{\frac{2}{\pi}}\,b\,\exp\left(-\frac{1}{2}x^2+\frac{|x|}{b}\right)
-\leq\sqrt{\frac{2}{\pi}}\,b\,\exp\left(\frac{1}{2\,b^2}\right)
+%&amp;=\frac{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)}{\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right)}\\[2ex]
+%&amp;=\sqrt{\frac{2}{\pi}}\,b\,\exp\left(-\frac{1}{2}x^2+\frac{|x|}{b}\right)\\[2ex]
+&amp;\leq\sqrt{\frac{2}{\pi}}\,b\,\exp\left(\frac{1}{2\,b^2}\right)
+\end{align*}
 \]</span> and that the minimum of the bound (in <span class="math inline">\(b\)</span>) is attained for <span class="math inline">\(b=1\)</span>.</p>
-<p>This leads to the following optimal (i.e.&nbsp;most efficient) specification of the double-exponential distribution as instrumental pdf: <span class="math display">\[
-\frac{f(x)}{g(x|1)}
-\leq M=\sqrt{\frac{2}{\pi}}\,\exp\left(\frac{1}{2}\right).
+<p>This leads to the following optimal (i.e.&nbsp;most efficient) specification of the double-exponential distribution as instrumental density: <span class="math display">\[
+\begin{align*}
+\frac{f(x)}{g(x|1)} \leq M
+&amp; =\sqrt{\frac{2}{\pi}}\,\exp\left(\frac{1}{2}\right)\\[2ex]
+&amp; =\sqrt{\frac{2}{\pi} \,\exp\left(1\right)}.
+\end{align*}
 \]</span></p>
-<p>The probability of acceptance is then <span class="math inline">\(\sqrt{\pi/(2e)}=0.76\)</span>. I.e., to produce one normal random variable, this Accept-Reject algorithm requires on the average <span class="math inline">\(1/0.76\approx 1.3\)</span> uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is 1.</p>
+<p>The probability of acceptance is then <span class="math display">\[
+\frac{1}{M}=\sqrt{\frac{\pi}{2\exp(1)}}\approx 0.76.
+\]</span> I.e., to produce one normal random variable, this Accept-Reject algorithm requires on average <span class="math display">\[
+\frac{1}{0.76}\approx 1.3
+\]</span> uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is <span class="math inline">\(1.\)</span></p>
+</div>
+</section>
+</section>
+<section id="references" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="references">References</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
@@ -1495,7 +1579,6 @@ Robert, Christian P, and George Casella. 2004. <em>Monte Carlo Statistical Metho
 ———. 2010. <em>Introducing Monte Carlo Methods with r</em>. 1st ed. Use r! Springer.
 </div>
 </div>
-</section>
 </section>
 </section>
 
