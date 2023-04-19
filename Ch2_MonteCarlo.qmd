@@ -14,7 +14,7 @@ Monte Carlo methods take advantage of the availability of:
   iii. the central limit theorem
 
 
-**Notions:** 
+**Terminology:** 
 
 * **Monte Carlo Method**: The use of (pseudo) random sampling as a tool to produce observations on which statistical inference can be performed to extract information about a system.
 * **Monte Carlo Integration**: A specific Monte Carlo method, where we randomly sample uniformly over some domain and use the produced sample to construct an estimator for a **univariate and multivariate  integral**. (Integrals are everywhere in statistics!)
@@ -27,19 +27,20 @@ Monte Carlo methods take advantage of the availability of:
 ## Classical Monte Carlo Integration
 
 
-The generic problem here is the evaluation of integrals. (Be aware: Integrals are everywhere in statistics!). For instance, 
+The generic problem here is the evaluation of integrals. For instance, 
 $$
-\mathbb{E}_f\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx.
+\mathbb{E}_{f_X}\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx,
 $$
+where $\mathcal{X}$ denotes the domain of the random variable $X\in\mathcal{X}\subseteq\mathbb{R}^d,$ and where $h$ is some transformation function (e.g. $h(x)=x^2,$ $h(x)=\ln(x),$ $h(x)=x,$ etc.). 
 
 
 **Convergence:**
 
-Given our previous developments, it is natural to propose using a realization $x_1,\dots,x_m$ from a (pseudo random) i.i.d. sample $X_1,\dots,X_m$ with each $X_j$ distributed as $X\sim f$ to approximate the above integral by the empirical mean
+Given our previous developments, it is natural to propose using a realization $x_1,\dots,x_m$ from a (pseudo random) i.i.d. sample $X_1,\dots,X_m$ with each $X_j$ distributed as $X\sim f_X$ to approximate the above integral by the empirical mean
 $$
-\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
+\mathbb{E}\left(h(X)\right)\approx\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
 $$
-By the [Strong Law of Large Numbers](http://www.statlect.com/asylln1.htm) we know that the empirical mean $\bar{h}_m$ converges almost surely (a.s.) to the desired limit $\mathbb{E}\left(h(X)\right)$ as $m\to\infty$. (The only prerequisits are that $f$ has finite first moments, i.e., $\mathbb{E}\left(h(X)\right)<\infty$, and that $\bar{h}_m$ is constructed from an i.i.d. sample $X_1,\dots,X_m$.)
+By the [Strong Law of Large Numbers](http://www.statlect.com/asylln1.htm) we know that the empirical mean $\bar{h}_m$ converges almost surely (a.s.) to the desired limit $\mathbb{E}\left(h(X)\right)$ as the sample size $m$ becomes large, i.e., as $m\to\infty$. (The only prerequisits are that $h(X)$ has finite first moments, i.e., $\mathbb{E}\left(h(X)\right)<\infty$, and that $\bar{h}_m$ is constructed from an i.i.d. sample $X_1,\dots,X_m$.)
 
 As we can use the computer to produce realizations from the i.i.d. sample $X_1,\dots,X_m$, we can in principle choose an arbitrary **large sample** size $m$ such that $\bar{h}_m$ can (in principle) be **arbitrarily close** to the desired limit $\mathbb{E}\left(h(X)\right)$. 
 

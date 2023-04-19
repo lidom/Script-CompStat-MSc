@@ -198,7 +198,7 @@ div.csl-indent {
 <li>the law of large numbers</li>
 <li>the central limit theorem</li>
 </ol>
-<p><strong>Notions:</strong></p>
+<p><strong>Terminology:</strong></p>
 <ul>
 <li><strong>Monte Carlo Method</strong>: The use of (pseudo) random sampling as a tool to produce observations on which statistical inference can be performed to extract information about a system.</li>
 <li><strong>Monte Carlo Integration</strong>: A specific Monte Carlo method, where we randomly sample uniformly over some domain and use the produced sample to construct an estimator for a <strong>univariate and multivariate integral</strong>. (Integrals are everywhere in statistics!)</li>
@@ -209,13 +209,13 @@ div.csl-indent {
 </section>
 <section id="classical-monte-carlo-integration" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="classical-monte-carlo-integration"><span class="header-section-number">2.1</span> Classical Monte Carlo Integration</h2>
-<p>The generic problem here is the evaluation of integrals. (Be aware: Integrals are everywhere in statistics!). For instance, <span class="math display">\[
-\mathbb{E}_f\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx.
-\]</span></p>
+<p>The generic problem here is the evaluation of integrals. For instance, <span class="math display">\[
+\mathbb{E}_{f_X}\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx,
+\]</span> where <span class="math inline">\(\mathcal{X}\)</span> denotes the domain of the random variable <span class="math inline">\(X\in\mathcal{X}\subseteq\mathbb{R}^d,\)</span> and where <span class="math inline">\(h\)</span> is some transformation function (e.g.&nbsp;<span class="math inline">\(h(x)=x^2,\)</span> <span class="math inline">\(h(x)=\ln(x),\)</span> <span class="math inline">\(h(x)=x,\)</span> etc.).</p>
 <p><strong>Convergence:</strong></p>
-<p>Given our previous developments, it is natural to propose using a realization <span class="math inline">\(x_1,\dots,x_m\)</span> from a (pseudo random) i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> with each <span class="math inline">\(X_j\)</span> distributed as <span class="math inline">\(X\sim f\)</span> to approximate the above integral by the empirical mean <span class="math display">\[
-\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
-\]</span> By the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers</a> we know that the empirical mean <span class="math inline">\(\bar{h}_m\)</span> converges almost surely (a.s.) to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> as <span class="math inline">\(m\to\infty\)</span>. (The only prerequisits are that <span class="math inline">\(f\)</span> has finite first moments, i.e., <span class="math inline">\(\mathbb{E}\left(h(X)\right)&lt;\infty\)</span>, and that <span class="math inline">\(\bar{h}_m\)</span> is constructed from an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>.)</p>
+<p>Given our previous developments, it is natural to propose using a realization <span class="math inline">\(x_1,\dots,x_m\)</span> from a (pseudo random) i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> with each <span class="math inline">\(X_j\)</span> distributed as <span class="math inline">\(X\sim f_X\)</span> to approximate the above integral by the empirical mean <span class="math display">\[
+\mathbb{E}\left(h(X)\right)\approx\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
+\]</span> By the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers</a> we know that the empirical mean <span class="math inline">\(\bar{h}_m\)</span> converges almost surely (a.s.) to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> as the sample size <span class="math inline">\(m\)</span> becomes large, i.e., as <span class="math inline">\(m\to\infty\)</span>. (The only prerequisits are that <span class="math inline">\(h(X)\)</span> has finite first moments, i.e., <span class="math inline">\(\mathbb{E}\left(h(X)\right)&lt;\infty\)</span>, and that <span class="math inline">\(\bar{h}_m\)</span> is constructed from an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>.)</p>
 <p>As we can use the computer to produce realizations from the i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>, we can in principle choose an arbitrary <strong>large sample</strong> size <span class="math inline">\(m\)</span> such that <span class="math inline">\(\bar{h}_m\)</span> can (in principle) be <strong>arbitrarily close</strong> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>.</p>
 <p><strong>Though,</strong> …</p>
 <ul>
