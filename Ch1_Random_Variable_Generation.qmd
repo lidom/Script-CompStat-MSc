@@ -1602,27 +1602,6 @@ Simple statements with respect to the efficiency of the Accept-Reject algorithm 
 * $M$ is interpreted as the **efficiency** of the Accept-Reject algorithm. The closer $M$ is to $1$ the better. 
 * $M$ quantifies how closely $g$ can imitate $f_X.$ 
 
-Note that, for normalized $f_X$ and $g$ the inequality 
-$$
-f_X(x)\leq M\,g(x),
-$$ 
-with $1<M<\infty$ for all $x\in\mathbb{R}^d,$ implies that the quotient $f_X/g$ is bounded, i.e., that 
-$$
-0\leq \frac{f_X(x)}{g(x)}\leq M <\infty\quad\text{for all}\quad x.
-$$
-
-That is, a density $g$ that has thicker tails than $f_X$ is generally not problematic since then $\frac{f_X(x)}{g(x)}\leq 1$ for $x$ in the tails. That is, we can, for instance, use the Cauchy density $g$ to simulate from a normal density $f_X$. The reverse, however, can be problematic. 
-
-<!-- This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g.$ The reverse, however, works quite well. -->
-
-
-<!-- That is, it is necessary for $g$ to have, e.g., thicker tails than $f_X$. This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g$. The reverse, however, works quite well. -->
-
-::: {.callout-tip}
-Remember: Using the Cauchy as instrumental density $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one.
-:::
-
-
 
 ::: {#exm-AREfficiency} 
 
@@ -1661,10 +1640,51 @@ I.e., to produce one normal random variable, this Accept-Reject algorithm requir
 $$
 \frac{1}{0.76}\approx 1.3
 $$ 
-uniform variables. This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is $1.$
+uniform variables. 
+
+
+This is to be compared with the Box-Muller algorithm for which the ratio between produced normals and required uniforms is $1.$
 :::
 
-## References {-}
+
+#### The instrumental density $g$ needs thicker tails than the target density $f_X$
+
+Note that, for normalized $f_X$ and $g$ the inequality 
+$$
+f_X(x)\leq M\,g(x),
+$$ 
+with $1<M<\infty$ for all $x\in\mathbb{R}^d,$ implies that the quotient $f_X/g$ is bounded, i.e., that 
+$$
+0\leq \frac{f_X(x)}{g(x)}\leq M <\infty\quad\text{for all}\quad x.
+$$
+
+This implies, for instance, that $g$ **has to have thicker tails** than $f_X.$ To see this, observe that both 
+$$
+f_X(x)\to 0 \quad\text{and}\quad g(x)\to 0
+$$
+for "extreme" values $|x|\to\infty,$ simply because both $f_X$ and $g$ are densities.  
+
+
+If $g$ has thicker tails than $f_X,$ then 
+$$
+0 \leq \frac{f_X(x)}{g(x)} \leq 1 \leq M 
+$$
+for all sufficiently large values $|x|.$ Thus with $g$ having thicker tails than $f_X,$ we can be sure that the requirement $\frac{f_X(x)}{g(x)}\leq M <\infty$ holds for all sufficiently extreme values of $x.$ 
+
+By constrast, if $g$ has strictly *thinner* tails than $f_X,$ then 
+$$
+0\leq \frac{f_X(x)}{g(x)} \to\infty,\quad\text{as}\quad|x|\to\infty, 
+$$
+which makes the requirement that $\frac{f_X(x)}{g(x)}\leq M <\infty$ impossible to hold for extreme values of $x.$
+
+Therefore, it is, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g$. The reverse, however, works quite well.
+
+
+<!-- ::: {.callout-tip}
+Remember: Using the Cauchy as instrumental density $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one.
+::: -->
+
+
 
 
 ## Exercises {-}
@@ -1686,3 +1706,8 @@ Asses this algorithm critically by answering the following questions.
  $$
  M_U(t) = E\left(\exp\left(t U\right)\right)=\frac{\exp(t) - 1}{t}.
  $$  -->
+
+
+
+
+## References {-}
