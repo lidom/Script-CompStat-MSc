@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -161,8 +224,13 @@ div.csl-indent {
    
   <ul>
   <li><a href="#literature" id="toc-literature" class="nav-link active" data-scroll-target="#literature">Literature</a></li>
-  <li><a href="#classical-monte-carlo-integration" id="toc-classical-monte-carlo-integration" class="nav-link" data-scroll-target="#classical-monte-carlo-integration"><span class="toc-section-number">2.1</span>  Classical Monte Carlo Integration</a></li>
+  <li><a href="#classical-monte-carlo-integration" id="toc-classical-monte-carlo-integration" class="nav-link" data-scroll-target="#classical-monte-carlo-integration"><span class="toc-section-number">2.1</span>  Classical Monte Carlo Integration</a>
+  <ul class="collapse">
+  <li><a href="#speed-of-convergence" id="toc-speed-of-convergence" class="nav-link" data-scroll-target="#speed-of-convergence">Speed of Convergence</a></li>
+  <li><a href="#limit-distribution" id="toc-limit-distribution" class="nav-link" data-scroll-target="#limit-distribution">Limit Distribution</a></li>
+  </ul></li>
   <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -209,186 +277,533 @@ div.csl-indent {
 </section>
 <section id="classical-monte-carlo-integration" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="classical-monte-carlo-integration"><span class="header-section-number">2.1</span> Classical Monte Carlo Integration</h2>
-<p>The generic problem here is the evaluation of integrals. For instance, <span class="math display">\[
-\mathbb{E}_{f_X}\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f(x)\,dx,
-\]</span> where <span class="math inline">\(\mathcal{X}\)</span> denotes the domain of the random variable <span class="math inline">\(X\in\mathcal{X}\subseteq\mathbb{R}^d,\)</span> and where <span class="math inline">\(h\)</span> is some transformation function (e.g.&nbsp;<span class="math inline">\(h(x)=x^2,\)</span> <span class="math inline">\(h(x)=\ln(x),\)</span> <span class="math inline">\(h(x)=x,\)</span> etc.).</p>
-<p><strong>Convergence:</strong></p>
-<p>Given our previous developments, it is natural to propose using a realization <span class="math inline">\(x_1,\dots,x_m\)</span> from a (pseudo random) i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> with each <span class="math inline">\(X_j\)</span> distributed as <span class="math inline">\(X\sim f_X\)</span> to approximate the above integral by the empirical mean <span class="math display">\[
-\mathbb{E}\left(h(X)\right)\approx\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h(x_j).
-\]</span> By the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers</a> we know that the empirical mean <span class="math inline">\(\bar{h}_m\)</span> converges almost surely (a.s.) to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> as the sample size <span class="math inline">\(m\)</span> becomes large, i.e., as <span class="math inline">\(m\to\infty\)</span>. (The only prerequisits are that <span class="math inline">\(h(X)\)</span> has finite first moments, i.e., <span class="math inline">\(\mathbb{E}\left(h(X)\right)&lt;\infty\)</span>, and that <span class="math inline">\(\bar{h}_m\)</span> is constructed from an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>.)</p>
-<p>As we can use the computer to produce realizations from the i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span>, we can in principle choose an arbitrary <strong>large sample</strong> size <span class="math inline">\(m\)</span> such that <span class="math inline">\(\bar{h}_m\)</span> can (in principle) be <strong>arbitrarily close</strong> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>.</p>
+<p>The generic problem here is the evaluation of integrals. For instance, <span id="eq-MeanIntegral"><span class="math display">\[
+\mathbb{E}_{f_{X}}\left(h(X)\right)=\mathbb{E}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f_X(x)\,dx,
+\tag{2.1}\]</span></span> where <span class="math inline">\(\mathcal{X}\)</span> denotes the domain of the random variable <span class="math inline">\(X\in\mathcal{X}\subseteq\mathbb{R}^d,\)</span> and where <span class="math inline">\(h\)</span> is some transformation function, e.g., <span class="math display">\[
+h(x)=x^2,\;\;h(x)=\ln(x),\;\;h(x)=x,\;\;\text{etc.}
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Computing means means computing integrals. To stress that one computes the integral with respect to the distribution characterized by the density function <span class="math inline">\(f_X,\)</span> one can write <span class="math display">\[
+\mathbb{E}_{f_{X}}\left(h(X)\right)
+\]</span> instead of <span class="math display">\[
+\mathbb{E}\left(h(X)\right).
+\]</span> We will use this notation more often below.</p>
+</div>
+</div>
+<p>Often, analytical solutions for integrals such as in <a href="#eq-MeanIntegral">Equation&nbsp;<span>2.1</span></a> are not readily available and one needs to use some numerical approaches/computational. Given our previous developments, it is kind of natural to propose using a realization <span class="math display">\[
+x_1,\dots,x_n
+\]</span> from a (pseudo) random sample <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}f_X
+\]</span> to approximate the integral in <a href="#eq-MeanIntegral">Equation&nbsp;<span>2.1</span></a> using the empirical mean <span class="math display">\[
+\mathbb{E}\left(h(X)\right)\approx\bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(x_i).
+\]</span> By the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers (SLLN)</a> we know that the empirical mean <span class="math inline">\(\bar{h}_n\)</span> converges almost surely (a.s.), and thus also “in probabiliuty” to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> as the sample size <span class="math inline">\(n\)</span> becomes large, i.e., as <span class="math inline">\(n\to\infty\)</span>. Prerequisites for the SLLN:</p>
+<ol type="1">
+<li><span class="math inline">\(h(X)\)</span> has finite first moment, i.e., <span class="math inline">\(\mathbb{E}\left(h(X)\right)&lt;\infty\)</span> and</li>
+<li><span class="math inline">\(\bar{h}_n\)</span> is constructed from a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}f_X.\)</span></li>
+</ol>
+<p>As we can use the computer to produce realizations from the i.i.d. sample <span class="math inline">\(X_1,\dots,X_n\)</span>, we can in principle choose an arbitrary <strong>large sample</strong> size <span class="math inline">\(n\)</span> such that <span class="math inline">\(\bar{h}_n\)</span> can, in principle, be <strong>arbitrarily close</strong> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>.</p>
 <p><strong>Though,</strong> …</p>
 <ul>
-<li>… which sample size <span class="math inline">\(m\)</span> is large enough?</li>
-<li>Or “equivalently”: How fast converges <span class="math inline">\(\bar{h}_m\)</span> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>?</li>
+<li>… which sample size <span class="math inline">\(n\)</span> is large enough?</li>
+<li>or “equivalently”, how fast converges <span class="math inline">\(\bar{h}_n\)</span> to the desired limit <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span>?</li>
 </ul>
-<p><br>
-</p>
-<p><strong>Speed of Convergence:</strong></p>
-<p>OK, we know now that <span class="math inline">\(\bar{h}_m\)</span> reaches its limit (here in the “almost surely” sense) as <span class="math inline">\(m\to\infty\)</span> under some rather loose conditions on the random sample <span class="math inline">\(X_1,\dots,X_m\)</span>.</p>
-<p>If we are willing to additionally assume that <span class="math inline">\(f\)</span> has finite second moments, i.e., <span class="math inline">\(\mathbb{E}(h(X)^2)&lt;\infty\)</span>, we can additionally say something about <strong>how fast</strong> <span class="math inline">\(\bar{h}_m\)</span> converges (a.s.) to <span class="math inline">\(\mathbb{E}(h(X))\)</span>.</p>
-<p>The <strong>speed of convergence</strong> of the stochastic sequence <span class="math inline">\(\{\bar{h}_m\}\)</span> (i.e., now we think of <span class="math inline">\(\bar{h}_m\)</span> as the {RV} <span class="math inline">\(\bar{h}_m=\frac{1}{m}\sum_{j=1}^m h({\color{red}{X_{j}}})\)</span>) to its limit <span class="math inline">\(\mathbb{E}(h(X))\)</span> can be assessed by answering the question how fast the standard deviation (which is a function of <span class="math inline">\(m\)</span>) of the stochastic sequence converges to zero as <span class="math inline">\(m\to\infty\)</span>.</p>
-<ul>
-<li><p>The variance of <span class="math inline">\(\bar{h}_m\)</span> is given by <span class="math display">\[
-\mathbb{V}_f\left(\bar{h}_m\right)=
-\mathbb{V}\left(\frac{1}{m}\sum_{j=1}^m h(X_j)\right)=
-\frac{1}{m}\mathbb{V}\left(h(X)\right)
-\]</span></p></li>
-<li><p>Note that assuming finite second moments <span class="math inline">\(\mathbb{E}(h(X)^2)&lt;\infty\)</span> is equivalent to assuming finite variance <span class="math inline">\(\mathbb{V}\left(h(X)\right)&lt;\infty\)</span>. Consequently, we can set <span class="math inline">\(\mathtt{const}=\sqrt{\mathbb{V}\left(h(X)\right)}\)</span> with <span class="math inline">\(0&lt;\mathtt{const}&lt;\infty\)</span> such that <span class="math display">\[
-\sqrt{\mathbb{V}\left(\bar{h}_m\right)}=m^{-1/2}\mathtt{const}\propto m^{-1/2}.
-\]</span></p></li>
-</ul>
-<p>I.e., the speed of convergence (or rate) of the stochastic sequence <span class="math inline">\(\{\bar{h}_m\}\)</span> is proportional to the deterministic sequence <span class="math inline">\(\{m^{-1/2}\}\)</span>.</p>
-<p><br>
-</p>
-<p><strong>Remark:</strong> Even if we would not know the value of <span class="math inline">\(\mathtt{const}=\sqrt{\mathbb{V}\left(h(X)\right)}\)</span>, we know now that the improvement from <span class="math inline">\(m=10\)</span> to <span class="math inline">\(m=100\)</span> will be <em>much</em> higher than from <span class="math inline">\(m=110\)</span> to <span class="math inline">\(m=200\)</span>. In practice, a typical choice is <span class="math inline">\(m=10000\)</span>; for moderate standard deviations this choice will guarantee a very good approximation.</p>
-<p><br>
-</p>
-<p><strong>Limit Distribution:</strong></p>
-<p>Of course, we can estimate the variance of the estimator <span class="math inline">\(\mathbb{V}\left(\bar{h}_m\right)\)</span> by its empirical version <span class="math display">\[
-v_m=\frac{1}{m}\left(\frac{1}{m}\sum_{j=1}^m\left(h(x_j)-\bar{h}_m\right)^2\right),
-\]</span> where again by the <a href="http://www.statlect.com/asylln1.htm">Strong Law of Large Numbers (SLLN)</a> <span class="math display">\[
-\left(\frac{1}{m}\sum_{j=1}^m\left(h(x_j)-\bar{h}_m\right)^2\right)\to_{\text{a.s.}}\mathbb{V}\left(h(X)\right).
+<section id="speed-of-convergence" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="speed-of-convergence">Speed of Convergence</h3>
+<p>OK, we know now that <span class="math inline">\(\bar{h}_n\)</span> reaches its limit (here in the “almost surely” sense, but likewise in the “in probability” case) as <span class="math inline">\(n\to\infty\)</span> under some rather loose conditions on the random sample <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
+<p>If we are willing to additionally assume that <span class="math inline">\(h(X)\)</span> has finite <em>second</em> moments, i.e. <span class="math display">\[
+\mathbb{E}(h(X)^2)&lt;\infty,
+\]</span> then we can additionally say something about <strong>how fast</strong> <span class="math display">\[
+\bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(X_i)\to_{p} \mathbb{E}(h(X)).
+\]</span></p>
+<p>The <strong>speed of convergence</strong> of the stochastic sequence <span class="math display">\[
+\{\bar{h}_n\}_{n=1,2,\dots}= \bar{h}_1,\;\bar{h}_2,\;\;\bar{h}_3,\;\dots
+\]</span> to its limit <span class="math inline">\(\mathbb{E}(h(X))\)</span> can be quantified by the rate at which the standard error <span class="math display">\[
+\operatorname{SE}\left(\bar{h}_n\right)=\sqrt{\mathbb{V}\left(\bar{h}_n\right)}
+\]</span> converges to zero as <span class="math inline">\(n\to\infty\)</span>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We think of <span class="math inline">\(\{\bar{h}_n\}_{n=1,2,\dots}\)</span> as the sequence of <strong>random variables</strong><br>
+<span class="math display">\[
+\bar{h}_n=\frac{1}{n}\sum_{i=1}^n h({\color{red}{X_{i}}})
+\]</span> with <span class="math inline">\({\color{red}{X_1}},\dots,{\color{red}{X_n}}\overset{\text{i.i.d.}}{\sim}f_X.\)</span></p>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that assuming finite second moments <span class="math inline">\(\mathbb{E}(h(X)^2)&lt;\infty\)</span> is equivalent to assuming finite variance <span class="math inline">\(\mathbb{V}\left(h(X)\right)&lt;\infty,\)</span> since <span class="math display">\[
+\mathbb{V}\left(h(X)\right) = \mathbb{E}(h(X)^2) - \left(\mathbb{E}(h(X))\right)^2,
+\]</span> and since if higher moments, like <span class="math inline">\(\mathbb{E}(h(X)^2),\)</span> are finite, also the lower moments, like <span class="math inline">\(\mathbb{E}(h(X)),\)</span> are finite.</p>
+</div>
+</div>
+<p>The standard error of <span class="math inline">\(\bar{h}_n\)</span> is just the square root of the variance of <span class="math inline">\(\bar{h}_n.\)</span> The variance of <span class="math inline">\(\bar{h}_n\)</span> is given by <span class="math display">\[
+\begin{align*}
+\mathbb{V}\left(\bar{h}_n\right)
+&amp;=\mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n h(X_i)\right) \\[2ex]
+&amp;=\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n h(X_i)\right) \\[2ex]
+&amp;=\frac{n}{n^2}\mathbb{V}\left(h(X_1)\right)\quad \text{(since i.i.d.)} \\[2ex]
+&amp;=\frac{1}{n}  \mathbb{V}\left(h(X_1)\right)
+\end{align*}
+\]</span> The square root of <span class="math inline">\(\mathbb{V}\left(h(X_1)\right)\)</span> equals some finite, positive constant <span class="math inline">\(0&lt;\mathtt{const}&lt;\infty\)</span>,<br>
+<span class="math display">\[
+\mathtt{const}=\sqrt{\mathbb{V}\left(h(X_1)\right)}
+\]</span> such that <span class="math display">\[
+\sqrt{\mathbb{V}\left(\bar{h}_n\right)}=n^{-1/2}\mathtt{const}%\propto n^{-1/2}.
+\]</span> I.e., the speed of convergence (or rate) of the stochastic sequence <span class="math inline">\(\{\bar{h}_n\}\)</span> is proportional to the deterministic sequence <span class="math inline">\(\{n^{-1/2}\}.\)</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even if we would not know the value of <span class="math inline">\(\mathtt{const}=\sqrt{\mathbb{V}\left(h(X)\right)},\)</span> we know now that the improvement from <span class="math inline">\(n=10\)</span> to <span class="math inline">\(n=100\)</span> will be <em>much</em> higher than from <span class="math inline">\(n=110\)</span> to <span class="math inline">\(n=200\)</span>. In practice, a typical choice is <span class="math inline">\(n=10,000;\)</span> for moderate standard errors this choice will guarantee a very good approximation.</p>
+</div>
+</div>
+</section>
+<section id="limit-distribution" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="limit-distribution">Limit Distribution</h3>
+<p>Besides the speed of convergence of <span class="math inline">\(\{\bar{h}_n\}_{n=1,2,\dots}\)</span> for <span class="math inline">\(n\to\infty,\)</span> we can also say something about the distribution of the random variable <span class="math inline">\(\bar{h}_n\)</span> for large sample sizes <span class="math inline">\(n.\)</span></p>
+<p>We can estimate the variance of the estimator <span class="math inline">\(\mathbb{V}\left(\bar{h}_n\right)\)</span> by its empirical version <span class="math display">\[
+v_n^2=\frac{1}{n}\sum_{i=1}^n\left(h(x_i)-\bar{h}_n\right)^2,
+\]</span> where by the SLLN, which also implies convergence in probability, <span class="math display">\[
+v_n^2\to_{p}\mathbb{V}\left(h(X)\right),\quad n\to\infty.
 \]</span> <!--
 I.e., after some rewriting, we have that: 
 $$
-\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{v_m}}\to_{\text{a.s.}}
-\sqrt{m}\left(\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{\mathbb{V}\left(h(X)\right)}}\right).
+\frac{\bar{h}_n - \mathbb{E}\left(h(X)\right)}{\sqrt{v_n}}\to_{\text{a.s.}}
+\sqrt{m}\left(\frac{\bar{h}_n - \mathbb{E}\left(h(X)\right)}{\sqrt{\mathbb{V}\left(h(X)\right)}}\right).
 $$
---> By the <a href="http://www.statlect.com/central_limit_theorem.htm">Central Limit Theorem (CLT)</a> we have <span class="math display">\[
-\sqrt{m}\left(\frac{\bar{h}_m - \mathbb{E}\left(h(X)\right)}{\sqrt{\mathbb{V}\left(h(X)\right)}}\right)\to_d Z,
-\]</span> where <span class="math inline">\(Z\sim N(0,1)\)</span>. Note that the the above sequence <span class="math inline">\(\{\sqrt{m}\}\)</span> <strong>just hinders</strong> the convergence of the sequence <span class="math inline">\(\bar{h}_m - \mathbb{E}\left(h(X)\right)\to_{a.s.}0\)</span> such that the quotient converges to a “stable” distribution.</p>
-<p>The above result can now be used for the construction of (asymptotically valid) <strong>convergence tests</strong> and <strong>confidence intervals</strong> with respect to <span class="math inline">\(\bar{h}_m\)</span>, since for large <span class="math inline">\(m\)</span> <span class="math display">\[
-\bar{h}_m\,\overset{d}{\approx} N\left(\mathbb{E}\left(h(X)\right),\frac{\mathbb{V}\left(h(X)\right)}{m}\right).
+--> Then, by the <a href="https://bookdown.org/ts_robinson1994/10_fundamental_theorems_for_econometrics/slutsky.html#cmt">Continuous Mapping Theorem (CMT)</a>, the <a href="http://www.statlect.com/central_limit_theorem.htm">Central Limit Theorem (CLT)</a>, and <a href="https://bookdown.org/ts_robinson1994/10_fundamental_theorems_for_econometrics/slutsky.html#slutsky">Slutsky’s theorem</a>, we have that <span class="math display">\[
+\sqrt{n}\left(\frac{\bar{h}_n - \mathbb{E}\left(h(X)\right)}{v_n}\right)\to_d \mathcal{N}(0,1),\quad n\to\infty.
+\]</span> <!-- Note that the the above sequence $\{\sqrt{m}\}$ **just hinders** the convergence of the sequence $\bar{h}_n - \mathbb{E}\left(h(X)\right)\to_{a.s.}0$ such that the quotient converges to a "stable" distribution.  --></p>
+<p>The above result can now be used for the construction of (asymptotically valid) <strong>convergence tests</strong> and <strong>confidence intervals</strong> with respect to <span class="math inline">\(\bar{h}_n\)</span>, since for large <span class="math inline">\(n\)</span> <span class="math display">\[
+\bar{h}_n\,\overset{d}{\approx}\mathcal{N}\left(\mathbb{E}\left(h(X)\right),\frac{\mathbb{V}\left(h(X)\right)}{n}\right).
 \]</span></p>
-<p>And as we can use the computer to generate realizations of the i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\)</span> from a generic <span class="math inline">\(X\sim f\)</span>, we can easily approximate the mean <span class="math inline">\(\mathbb{E}\left(h(X)\right)\)</span> and the variance <span class="math inline">\(\mathbb{V}\left(h(X)\right)\)</span> with arbitrary accuracy as <span class="math inline">\(m\to\infty\)</span>; by the SLLN (or the WLLN).</p>
-<p><br>
-</p>
-<p><strong>Example: A first Monte Carlo Integration</strong></p>
-<p>Let’s say we want to integrate the function <span class="math inline">\(h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2\)</span>. Although this function could be integrated analytically it is a good first test case. The left plot below shows the graph of the function <span class="math inline">\(h(.)\)</span>.</p>
-<p>To approximate the integral <span class="math display">\[
-\int_\mathcal{X}h(x)dx\quad\text{with}\quad\mathcal{X}=[0,1]
-\]</span> we can use that <span class="math display">\[
-\int_\mathcal{X}h(x)dx=\int_\mathcal{[0,1]}1\cdot h(x)dx =\mathbb{E}_{f_\text{Unif[0,1]}}(h(X)).
-\]</span></p>
-<p>Thus, we generate a realization <span class="math inline">\((u_1,\dots,u_n)\)</span> from the i.i.d. random sample <span class="math inline">\(U_1,\dots,U_n\sim[0,1]\)</span> and approximate <span class="math display">\[
-\int_\mathcal{X}h(x)dx\approx \bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(u_i).
-\]</span></p>
-<p>In order to assess how good this approximation is, we need to consider the stochastic propoerties of the RV <span class="math display">\[
-\frac{1}{n}\sum_{i=1}^n h(U_i).
-\]</span> This is done using the above (review of) results on the limit distribution of the sample mean which allows us to construct an approximative <span class="math inline">\(95\%\)</span> confidence interval, since for large <span class="math inline">\(n\)</span> <span class="math display">\[
-\left[\bar{h}_n - 1.96\frac{\mathtt{std.error}_n}{\sqrt{n}}, \bar{h}_n + 1.96\frac{\mathtt{std.error}_n}{\sqrt{n}}\right]\approx
-\left[\bar{h}_n - 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}, \bar{h}_n + 1.96  \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}\right],
-\]</span> where <span class="math inline">\(\mathtt{std.error}_n^2=n^{-1}\sum_{i=1}^n(h(u_i)-\bar{h}_n)^2\)</span>.</p>
-<p>The right plot below shows one realization of the stochastic sequence <span class="math inline">\(\{\bar{h}_1,\dots,\bar{h}_n\}\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_n\)</span> is <span class="math inline">\(0.966\)</span>. This compares favorably with the with the exact value of <span class="math inline">\(0.965\)</span>.</p>
-<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-1_328d87b45fc40ef55e82d6af668233e4">
+<p>Since we can use the computer to generate realizations of the i.i.d. sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\)</span> with <span class="math inline">\(X\sim f_X,\)</span> we can easily approximate the mean <span class="math display">\[
+\mathbb{E}\left(h(X)\right)\approx \bar{h}_n
+\]</span> and the variance <span class="math display">\[
+\mathbb{V}\left(h(X)\right)\approx v_n^2
+\]</span> with arbitrary accuracy as <span class="math inline">\(n\to\infty\)</span> (justification: strong/weak law of large numbers).</p>
+<div id="exm-MCInt1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.1 (A first Monte Carlo Integration) </strong></span>Let’s say we want to compute the integral <span class="math display">\[
+\int_0^1h(x)dx
+\]</span> with <span class="math display">\[
+h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2
+\]</span> over <span class="math inline">\(x\in[0,1].\)</span> Although this integral could also be computed analytically, it is a good first test case. The following code computes the analytic result that <span class="math inline">\(\int_0^1h(x)dx = 0.9652009.\)</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-1_54804e3ecaaf05a6aa3264dfb1361bf7">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages("mosaicCalc")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"mosaicCalc"</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Symbolic (= analytic) integration </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>F <span class="ot">&lt;-</span> <span class="fu">antiD</span>( (<span class="fu">cos</span>(<span class="dv">50</span><span class="sc">*</span>x)<span class="sc">+</span><span class="fu">sin</span>(<span class="dv">20</span><span class="sc">*</span>x))<span class="sc">^</span><span class="dv">2</span> <span class="sc">~</span> x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">F</span>(<span class="dv">1</span>) <span class="sc">-</span> <span class="fu">F</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9652009</code></pre>
+</div>
+</div>
+<p><a href="#fig-MCInt1_1">Figure&nbsp;<span>2.1</span></a> shows the graph of the function <span class="math inline">\(h\)</span>.</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/fig-MCInt1_1_dc51bbbf89d1fefee7571c153e27e80e">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>h_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> (<span class="fu">cos</span>(<span class="dv">50</span><span class="sc">*</span>x)<span class="sc">+</span><span class="fu">sin</span>(<span class="dv">20</span><span class="sc">*</span>x))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>xx  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">0</span>, <span class="at">to=</span><span class="dv">1</span>, <span class="at">len=</span><span class="dv">500</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> xx, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="fu">h_fun</span>(xx), </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"l"</span>, </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Function h"</span>, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">"h(x)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-MCInt1_1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img"></p>
+<p><img src="Ch2_MonteCarlo_files/figure-html/fig-MCInt1_1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Function <span class="math inline">\(h\)</span> of <a href="#exm-MCInt1">Example&nbsp;<span>2.1</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-2_ac23ed2e5d6e5d81117162640e047633">
-
+<p>To approximate the integral <span class="math display">\[
+\int_0^1 h(x)dx
+\]</span> using Monte Carlo integration, we can use that <span class="math display">\[
+\begin{align*}
+\int_0^1 h(x)dx
+&amp;=\int_0^11\cdot h(x)dx \\[2ex]
+&amp;=\int_0^1f_{\mathcal{U}\text{[0,1]}}(x)\cdot h(x)dx \\[2ex]
+&amp;= \mathbb{E}_{f_{\mathcal{U}\text{[0,1]}}}(h(X)),
+\end{align*}
+\]</span> where <span class="math inline">\(f_{\mathcal{U}\text{[0,1]}}\)</span> denotes the density function of the standard uniform distribution <span class="math inline">\(\mathcal{U}\text{[0,1]}.\)</span></p>
+<p>Thus, to compute <span class="math inline">\(\int_0^1 h(x)dx\)</span> we generate a realization <span class="math inline">\((u_1,\dots,u_n)\)</span> from the random sample <span class="math inline">\(U_1,\dots,U_n\sim[0,1]\)</span> and approximate <span class="math display">\[
+\int_0^1 h(x)dx\approx \bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(u_i).
+\]</span></p>
+<p>In order to assess how good this approximation is, we need to consider the stochastic properties of the random variable <span class="math display">\[
+\bar{h}_n = \frac{1}{n}\sum_{i=1}^n h(U_i).
+\]</span> This is done using the above (review of) results on the limit distribution of the sample mean <span class="math inline">\(\bar{h}_n\)</span> which allows us to construct an approximate <span class="math inline">\(95\%\)</span> confidence interval, since for large <span class="math inline">\(n\)</span> <span class="math display">\[
+\begin{align*}
+\operatorname{CI}^{95\%}_n
+=&amp;\left[\bar{h}_n - z_{1-\alpha/2}\sqrt{\frac{v_n^2}{n}}, \bar{h}_n + z_{1-\alpha/2}\sqrt{\frac{v_n^2}{n}}\right]\\[2ex]
+\approx&amp;
+\left[\bar{h}_n - z_{1-\alpha/2} \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}, \bar{h}_n + z_{1-\alpha/2} \sqrt{\frac{\mathbb{V}(h(U_i))}{n}}\right],
+\end{align*}
+\]</span> where <span class="math inline">\(z_{1-\alpha/2}\approx 1.96\)</span> denotes the <span class="math inline">\((1-\alpha/2)\)</span>-quantile of <span class="math inline">\(\mathcal{N}(0,1),\)</span> <span class="math inline">\(v_n^2=n^{-1}\sum_{i=1}^n(h(u_i)-\bar{h}_n)^2,\)</span> and where <span class="math display">\[
+P\left(\int_0^1 h(x)dx  \in \operatorname{CI}^{95\%}_n \right) \to 0.95,\quad n \to\infty,
+\]</span> by the CLT.</p>
+<p><a href="#fig-MCInt1_2">Figure&nbsp;<span>2.2</span></a> shows <em>one</em> realization of the stochastic sequence <span class="math display">\[
+\bar{h}_1,\dots,\bar{h}_n
+\]</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_n\)</span> is <span class="math inline">\(0.966\)</span>. This compares favorably with the with the exact value of <span class="math inline">\(\int_0^1h(x)dx = 0.9652009.\)</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/fig-MCInt1_2_ba10bfdb31c3b0451eee9cedcc2e2cbe">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"scales"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># h(x):</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>h_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> (<span class="fu">cos</span>(<span class="dv">50</span><span class="sc">*</span>x)<span class="sc">+</span><span class="fu">sin</span>(<span class="dv">20</span><span class="sc">*</span>x))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># sample size</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate sample of uniforms</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>u_vec <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n=</span>n)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Approximation of the integral </span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>h_bar_n <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">h_fun</span>(u_vec))<span class="sc">/</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># True value:</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>true.value <span class="ot">&lt;-</span> <span class="fl">0.9652009</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error of the estimator using the "algebraic </span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># formula" for the variance (german: 'verschiebungssatz')</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>st.error_n <span class="ot">&lt;-</span>  <span class="fu">sqrt</span>((<span class="fu">cumsum</span>(<span class="fu">h_fun</span>(u_vec)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span>n) <span class="sc">-</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">cumsum</span>(<span class="fu">h_fun</span>(u_vec))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>CI_u       <span class="ot">&lt;-</span>  h_bar_n <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> st.error_n <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>CI_l       <span class="ot">&lt;-</span>  h_bar_n <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> st.error_n <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>n), <span class="at">y =</span> h_bar_n, <span class="at">type=</span><span class="st">"n"</span>, </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">1.2</span>), </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"n"</span>, </span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">""</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="fu">rev</span>(<span class="dv">1</span><span class="sc">:</span>n)), </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">c</span>(CI_u, <span class="fu">rev</span>(CI_l)), </span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">col    =</span> <span class="fu">alpha</span>(<span class="st">"blue"</span>, <span class="fl">0.5</span>), </span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">border =</span> <span class="fu">alpha</span>(<span class="st">"blue"</span>, <span class="fl">0.5</span>))</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>n), </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> h_bar_n, <span class="at">type=</span><span class="st">"l"</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>n), </span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">rep</span>(true.value, n), <span class="at">type=</span><span class="st">"l"</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, </span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">expression</span>(<span class="fu">bar</span>(h)[n]), </span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"True Value"</span>, <span class="st">"95% CI"</span>), </span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty   =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">22</span>,<span class="dv">22</span>,<span class="dv">22</span>), <span class="at">pt.cex=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>),</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="fu">alpha</span>(<span class="st">"blue"</span>, <span class="fl">0.5</span>)), </span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">col   =</span>   <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="fu">alpha</span>(<span class="st">"blue"</span>, <span class="fl">0.5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-MCInt1_2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch2_MonteCarlo_files/figure-html/fig-MCInt1_2-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.2: One realization of the stochastic sequence <span class="math inline">\(\bar{h}_1,\dots,\bar{h}_n\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_{n=10000}\)</span> is <span class="math inline">\(0.966\)</span>. The blue band shows the point-wise (i.e.&nbsp;for each given sample size <span class="math inline">\(n\)</span>) confidence intervals <span class="math inline">\(\operatorname{CI}^{95\%}_n.\)</span></figcaption><p></p>
+</figure>
 </div>
-<p><br>
-</p>
-<p><strong>Remarks:</strong></p>
-<ul>
-<li>The approach followed in the above example can be successfully utilized in many cases, even though it is often possible to achieve greater efficiency through numerical methods (e.g., <a href="https://en.wikipedia.org/wiki/Riemann_sum">Riemann Sum</a>, <a href="https://en.wikipedia.org/wiki/Trapezoidal_rule">Trapezoidal Rule</a>, <a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson’s Rule</a>, etc.) in dimensions 1 or 2.</li>
-<li>The approach is particularly useful for approximating integrals over higher dimensional sets.</li>
-</ul>
-<p><br>
-</p>
-<p><strong>Example: Approximation of Normal Distribution Tables</strong></p>
-<p>A possible way to construct normal distribution tables is to use MC simulations.</p>
-<p>Generate a realization <span class="math inline">\((x_1,\dots,x_n)\)</span> from an i.i.d. standard normal random sample, e.g., using the Box-Muller algorithm.</p>
-<p>The approximation of the standard normal cdf <span class="math display">\[
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The approach of <a href="#exm-MCInt1">Example&nbsp;<span>2.1</span></a> can be successfully utilized in many cases, even though it is often possible to achieve greater efficiency/accuracy through numerical methods (e.g., <a href="https://en.wikipedia.org/wiki/Riemann_sum">Riemann Sum</a>, <a href="https://en.wikipedia.org/wiki/Trapezoidal_rule">Trapezoidal Rule</a>, <a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson’s Rule</a>, etc.) in dimensions 1 or 2; see the following code example:</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-4_cbfbccb62ac2a53f3937a23b91d220ad">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>numericalIntegration <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f     =</span> h_fun, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">lower =</span> <span class="dv">0</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">upper =</span> <span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>numericalIntegration</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.9652009 with absolute error &lt; 1.9e-10</code></pre>
+</div>
+</div>
+<p>However, the Monte Carlo integration approach is particularly useful for approximating integrals over higher dimensional sets <span class="math inline">\(\mathcal{X}\subseteq\mathbb{R}^d.\)</span></p>
+</div>
+</div>
+<div id="exm-ApproxNormTables" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables is to use MC simulations.</p>
+<p>Generate a realization <span class="math inline">\((x_1,\dots,x_n)\)</span> from an i.i.d. standard normal random sample <span class="math inline">\((X_1,\dots,X_n)\)</span>, e.g., using the Box-Muller algorithm.</p>
+<p>Then, the approximation of the standard normal cdf <span class="math display">\[
 \Phi(t)=\int_{-\infty}^t\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy
 \]</span> by the Monte Carlo method is thus <span class="math display">\[
 \hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n 1_{(x_i\leq t)}.
-\]</span> The corresponding RV <span class="math inline">\(\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n1_{(X_i\leq t)}\)</span> has (exact) variance <span class="math display">\[
+\]</span> The corresponding random variable<br>
+<span class="math display">\[
+\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n1_{(X_i\leq t)}
+\]</span> has (exact) variance <span class="math display">\[
 \mathbb{V}(\hat{\Phi}_n(t))=\frac{\Phi(t)(1-\Phi(t))}{n},
-\]</span> since the single RVs <span class="math inline">\(1_{(X_i\leq t)}\)</span> are independent Bernoulli with success probability <span class="math inline">\(\Phi(t)\)</span>.</p>
-<p>For values of <span class="math inline">\(t\)</span> around <span class="math inline">\(t=0\)</span>, the variance is thus approximately <span class="math inline">\(1/4n\)</span>.</p>
+\]</span> since the single random variables <span class="math inline">\(1_{(X_i\leq t)}\)</span> are independent Bernoulli distributed random variables with success probability <span class="math inline">\(p=\Phi(t),\)</span> and thus <span class="math inline">\(\hat{\Phi}_n(t)\)</span> is a binomial distributed random variables with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p=\Phi(t).\)</span></p>
+<p>For values of <span class="math inline">\(t\)</span> around <span class="math inline">\(t=0\)</span>, the variance is thus approximately <span class="math inline">\(1/4n,\)</span> <span class="math display">\[
+\mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
+\]</span></p>
 <p>To achieve a precision of <strong>four decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, the approximation requires on average <span class="math inline">\(n\approx 10^8\)</span> simulations.</p>
 <p>The table below gives the evolution of this approximation for several values of <span class="math inline">\(t\)</span> and shows a very accurate evaluation for <span class="math inline">\(n=10^8\)</span>.</p>
-<p><br>
-</p>
-<p><span class="math display">\[
+<table class="table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span></th>
+<th>t=0.0</th>
+<th>t=0.67</th>
+<th>t=0.84</th>
+<th>t=1.28</th>
+<th>t=1.65</th>
+<th>t=2.32</th>
+<th>t=2.58</th>
+<th>t=3.09</th>
+<th>t=3.72</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10^2</td>
+<td>0.485</td>
+<td>0.74</td>
+<td>0.77</td>
+<td>0.9</td>
+<td>0.945</td>
+<td>0.985</td>
+<td>0.995</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>10^3</td>
+<td>0.4925</td>
+<td>0.7455</td>
+<td>0.801</td>
+<td>0.902</td>
+<td>0.9425</td>
+<td>0.9885</td>
+<td>0.9955</td>
+<td>0.9985</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>10^4</td>
+<td>0.4962</td>
+<td>0.7425</td>
+<td>0.7941</td>
+<td>0.9</td>
+<td>0.9498</td>
+<td>0.9896</td>
+<td>0.995</td>
+<td>0.999</td>
+<td>0.9999</td>
+</tr>
+<tr class="even">
+<td>10^5</td>
+<td>0.4995</td>
+<td>0.7489</td>
+<td>0.7993</td>
+<td>0.9003</td>
+<td>0.9498</td>
+<td>0.9898</td>
+<td>0.995</td>
+<td>0.9989</td>
+<td>0.9999</td>
+</tr>
+<tr class="odd">
+<td>10^6</td>
+<td>0.5001</td>
+<td>0.7497</td>
+<td>0.8</td>
+<td>0.9002</td>
+<td>0.9502</td>
+<td>0.99</td>
+<td>0.995</td>
+<td>0.999</td>
+<td>0.9999</td>
+</tr>
+<tr class="even">
+<td>10^7</td>
+<td>0.5002</td>
+<td>0.7499</td>
+<td>0.8</td>
+<td>0.9001</td>
+<td>0.9501</td>
+<td>0.99</td>
+<td>0.995</td>
+<td>0.999</td>
+<td>0.9999</td>
+</tr>
+<tr class="odd">
+<td>10^8</td>
+<td>0.5</td>
+<td>0.75</td>
+<td>0.8</td>
+<td>0.9</td>
+<td>0.95</td>
+<td>0.99</td>
+<td>0.995</td>
+<td>0.999</td>
+<td>0.9999</td>
+</tr>
+</tbody>
+</table>
+<!-- $$
 \begin{array}{cccccccccc}
 \hline
-n   &amp;t=0.0  &amp;t=0.67 &amp;t=0.84 &amp;t=1.28 &amp;t=1.65 &amp;t=2.32 &amp;t=2.58 &amp;t=3.09 &amp;t=3.72 \\
+n   &t=0.0  &t=0.67 &t=0.84 &t=1.28 &t=1.65 &t=2.32 &t=2.58 &t=3.09 &t=3.72 \\
 \hline
-10^2 &amp;0.485  &amp;0.74   &amp;0.77   &amp;0.9    &amp;0.945  &amp;0.985  &amp;0.995  &amp;1      &amp;1      \\
-10^3 &amp;0.4925 &amp;0.7455 &amp;0.801  &amp;0.902  &amp;0.9425 &amp;0.9885 &amp;0.9955 &amp;0.9985 &amp;1      \\
-10^4 &amp;0.4962 &amp;0.7425 &amp;0.7941 &amp;0.9    &amp;0.9498 &amp;0.9896 &amp;0.995  &amp;0.999  &amp;0.9999 \\
-10^5 &amp;0.4995 &amp;0.7489 &amp;0.7993 &amp;0.9003 &amp;0.9498 &amp;0.9898 &amp;0.995  &amp;0.9989 &amp;0.9999 \\
-10^6 &amp;0.5001 &amp;0.7497 &amp;0.8    &amp;0.9002 &amp;0.9502 &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
-10^7 &amp;0.5002 &amp;0.7499 &amp;0.8    &amp;0.9001 &amp;0.9501 &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
-10^8 &amp;0.5    &amp;0.75   &amp;0.8    &amp;0.9    &amp;0.95   &amp;0.99   &amp;0.995  &amp;0.999  &amp;0.9999 \\
+10^2 &0.485  &0.74   &0.77   &0.9    &0.945  &0.985  &0.995  &1      &1      \\
+10^3 &0.4925 &0.7455 &0.801  &0.902  &0.9425 &0.9885 &0.9955 &0.9985 &1      \\
+10^4 &0.4962 &0.7425 &0.7941 &0.9    &0.9498 &0.9896 &0.995  &0.999  &0.9999 \\
+10^5 &0.4995 &0.7489 &0.7993 &0.9003 &0.9498 &0.9898 &0.995  &0.9989 &0.9999 \\
+10^6 &0.5001 &0.7497 &0.8    &0.9002 &0.9502 &0.99   &0.995  &0.999  &0.9999 \\
+10^7 &0.5002 &0.7499 &0.8    &0.9001 &0.9501 &0.99   &0.995  &0.999  &0.9999 \\
+10^8 &0.5    &0.75   &0.8    &0.9    &0.95   &0.99   &0.995  &0.999  &0.9999 \\
 \end{array}
-\]</span></p>
-<p><br>
-</p>
-<p><strong>Remarks:</strong></p>
+$$ -->
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>To achieve a precision of <strong>two decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, already <span class="math inline">\(n=10^4\)</span> leads to satisfactory results.</li>
 <li>Note that <strong>greater accuracy is achieved in the tails</strong> and that more efficient simulation methods could be used (e.g., Importance Sampling).</li>
 </ul>
-<p><br>
-</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="importance-sampling" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">2.2</span> Importance Sampling</h2>
 <p>Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it’s refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
 <p>As in the case of Monte Carlo integration the focus lies on evaluating the integral <span class="math display">\[
-\mathbb{E}_f(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
+\mathbb{E}_{f_X}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
 \]</span></p>
-<ul>
-<li><p>Though, it turns out that the above approach, i.e., sampling from <span class="math inline">\(f\)</span> is often suboptimal.</p></li>
-<li><p>Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet <span class="math inline">\((\mathcal{X}, h, f)\)</span>. Therefore, the search for an optimal estimator should encompass all these possible representations.</p></li>
-</ul>
+<p>However, it turns out that the above approach, i.e., sampling from <span class="math inline">\(f\)</span> is often suboptimal.</p>
+<p>Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet <span class="math display">\[
+(\mathcal{X}, h, f_X).
+\]</span> Therefore, the search for an optimal estimator should encompass all these possible representations.</p>
 <p>Let’s illustrate this with a simple example.</p>
-<p><strong>Example: Cauchy Tail Probability (from <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">Ripley 1987</a>)</strong></p>
-<p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> <span class="math inline">\(\mathrm{C}(0,1)\)</span> RV is larger than <span class="math inline">\(2\)</span>, i.e.: <span class="math display">\[
+<div id="exm-CauchTailProb" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.3 (Cauchy Tail Probability) </strong></span>This example is from <span class="citation" data-cites="Ripley_2009">Ripley (<a href="#ref-Ripley_2009" role="doc-biblioref">2009</a>)</span>.</p>
+<p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> <span class="math inline">\(\mathcal{C}(0,1)\)</span>-distributed random variable is larger than <span class="math inline">\(2\)</span>, i.e. <span id="eq-CauchIntegral"><span class="math display">\[
 p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx.
-\]</span></p>
-<p><strong>1. Naive Approach:</strong> If <span class="math inline">\(p\)</span> is approximated through the empirical mean <span class="math display">\[
-\hat{p}_{1}=\frac{1}{m}\sum_{j=1}^m1_{(X_j&gt;2)}
-\]</span> of an i.i.d. sample <span class="math inline">\(X_1,\dots,X_m\sim\mathrm{C}(0,1)\)</span>, then the variance of this estimator, a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial</a> RV scaled by <span class="math inline">\(1/m\)</span>, is <span class="math display">\[
-\mathbb{V}(\hat{p}_{1})=\frac{1}{m^2}\mathbb{V}\left(\sum_{j=1}^m1_{(X_j&gt;2)}\right)=\frac{p(1-p)}{m},
-\]</span> which is equal to <span class="math inline">\(0.1275/m\)</span>, since (we already know that) <span class="math inline">\(p=0.15\)</span>.</p>
-<p><br>
-</p>
-<p><strong>2. Accounting for Symmetry (i.e., using the ‘Adjusting Screws’ <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(h\)</span>):</strong> We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathrm{C}(0,1)\)</span>. Obviously, our target integral can be equivalently written as <span class="math display">\[
+\tag{2.2}\]</span></span> This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of <a href="#eq-CauchIntegral">Equation&nbsp;<span>2.2</span></a>; namely, <span class="math inline">\(p=0.1476\)</span> <!-- $$
+\begin{align*}
+p
+&=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&=\frac{1}{\pi}\int_{2}^{+\infty}\frac{1}{1+x^2}\,dx\\[2ex]
+&=\frac{1}{\pi}\lim_{b\to\infty}\left[\frac{1}{\tan(x)}\right]_2^b\\[2ex]
+&=\frac{1}{\pi}\lim_{b\to\infty}\left(\frac{1}{\tan(b)}-\frac{1}{\tan(2)}\right)\\[2ex]
+\end{align*}
+$$ --></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-5_ebc843e4c3a8fbf223c4b4cc6a189f53">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pcauchy</span>(<span class="dv">2</span>), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1476</code></pre>
+</div>
+</div>
+<p><strong>1. Approach: The Naive Approach</strong></p>
+<p>If <span class="math inline">\(p\)</span> is approximated through the empirical mean <span class="math display">\[
+\hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i&gt;2)}
+\]</span> of a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{C}(0,1),\)</span> then <span class="math inline">\(\hat{p}\)</span> is a binomial distributed random variable with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p.\)</span> The variance is thus <span class="math display">\[
+\begin{align*}
+\mathbb{V}(\hat{p}_{1})
+&amp;=\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(X_i&gt;2)}\right)\\[2ex]
+&amp;=\frac{n}{n^2}\mathbb{V}\left(1_{(X_1&gt;2)}\right)\quad\text{(i.i.d.)}\\[2ex]
+&amp;=\frac{p(1-p)}{n},
+\end{align*}
+\]</span> which is equal to <span class="math inline">\(0.1258/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>.</p>
+<p><strong>2. Approach: Accounting for Symmetry</strong></p>
+<p>In this approach, we use the “adjusting Screws” <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(h.\)</span></p>
+<p>We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathcal{C}(0,1).\)</span> Obviously, our target integral can be equivalently written as <span class="math display">\[
 p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right).
 \]</span> This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean: <span class="math display">\[
-\hat{p}_{2}=
-\frac{1}{2}\left(\frac{1}{m}\sum_{j=1}^m1_{(X_j&lt;-2)}+ \frac{1}{m}\sum_{j=1}^m1_{(X_j&gt;2)}\right)\;=\;
-\frac{1}{2m}\sum_{j=1}^m1_{(|X_i|&gt;2)}.
+\begin{align*}
+\hat{p}_{2}
+&amp;=\frac{1}{2}\left(\frac{1}{n}\sum_{i=1}^n1_{(X_i &lt; -2)}+ \frac{1}{n}\sum_{i=1}^n 1_{(X_i &gt; 2)}\right)\\[2ex]
+&amp;=\frac{1}{2n}\sum_{i=1}^n 1_{(|X_i|&gt;2)}.
+\end{align*}
 \]</span> The variance of this new estimator, <span class="math display">\[
-\mathbb{V}(\hat{p}_{2})=\frac{1}{4m^2}\mathbb{V}\left(\sum_{j=1}^m1_{(|X_i|&gt;2)}\right)=\frac{2p(1-2p)}{4m},
-\]</span> is equal to <span class="math inline">\(0.0525/m\)</span>, i.e., lower than in the naive approach.</p>
-<p><br>
-</p>
-<p><strong>3. Using all ‘Adjusting Screws’ <span class="math inline">\(\mathcal{X}\)</span>, <span class="math inline">\(h\)</span>, and <span class="math inline">\(f\)</span>:</strong> The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, <span class="math inline">\([2,+\infty)\)</span>, which are in some sense irrelevant for the approximation of <span class="math inline">\(p\)</span>. This motivates the following reformulation of <span class="math inline">\(p\)</span>:</p>
+\begin{align*}
+\mathbb{V}(\hat{p}_{2})
+&amp;=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|&gt;2)}\right)\\[2ex]
+&amp;=\frac{2p(1-2p)}{4n},
+\end{align*}
+\]</span> which is equal to <span class="math inline">\(0.052/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>. This is clearly lower than in the naive approach, where we had <span class="math inline">\(0.1258/n.\)</span></p>
+<p><strong>3. Approach:</strong></p>
+<p>In this approach, we use all the “adjusting screws” <span class="math inline">\(\mathcal{X}\)</span>, <span class="math inline">\(h\)</span>, and <span class="math inline">\(f.\)</span></p>
+<p>The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, <span class="math inline">\([2,+\infty)\)</span>, which are in some sense irrelevant for the approximation of <span class="math inline">\(p\)</span>. This motivates the following reformulation of <span class="math inline">\(p\)</span>:</p>
 <p>By symmetry of <span class="math inline">\(f\)</span>: <span class="math display">\[
-\frac{1}{2}=\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}
-\]</span> <span class="math display">\[
-\Leftrightarrow \; p=\frac{1}{2}-\int_{0}^2\frac{1}{\pi(1+x^2)}dx.
+\begin{align*}
+\frac{1}{2} &amp; =\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}\\[2ex]
+\Leftrightarrow \; p&amp; =\frac{1}{2}-\int_{0}^2\frac{1}{\pi(1+x^2)}dx.
+\end{align*}
 \]</span> Furthermore, we can re-arrange the last integral a bit such that <span class="math display">\[
-\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx =
-\int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathrm{Unif}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx =
-\mathbb{E}(h(U)),\quad\text{where}\quad U\sim\mathrm{Unif}[0,2].
-\]</span></p>
+\begin{align*}
+&amp;\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx \\[2ex]
+=&amp;\int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathcal{U}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx \\[2ex]
+=&amp;\mathbb{E}_{f_{\mathcal{U}[0,2]}}(h(U)),
+\end{align*}
+\]</span> where <span class="math inline">\(U\sim\mathcal{U}[0,2].\)</span></p>
 <p>Therefore a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
-\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{j=1}^m h(U_j),\quad\text{where}\quad U_j\sim\mathrm{Unif}[0,2].
-\]</span> Using integration by parts, it can be shown that <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/m\)</span>. (Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/m\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/m\)</span>.)</p>
-<p><br>
-</p>
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),\quad\text{where}\quad U_i\sim\mathrm{Unif}[0,2].
+\]</span> Using integration by parts, it can be shown that <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>. (Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>.)</p>
+</div>
 <p><strong>A More General Point of View:</strong></p>
 <p>The idea of importance sampling is related to weighted and stratified sampling ideas. As illustrated by the above example, when estimating <span class="math display">\[
 \theta=\mathbb{E}_f(h(X))=\int h(x)f(x)dx.
@@ -457,11 +872,11 @@ p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\u
 <li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
 <li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f\)</span>.</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-3_a2f503f30dc41aedb71adf7654790527">
+<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-6_5463de1d21fab0c73d3a006d73d15b54">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -484,9 +899,9 @@ p=\int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
 \]</span> Again, we can re-arrange the last integral a bit such that <span class="math display">\[
 p=\int_{0}^{1/2}\underbrace{2}_{f_{\mathrm{Unif}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du=\mathbb{E}(h(U)),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2].
 \]</span> Therefore, we have a final fourth version of the estimator of <span class="math inline">\(p\)</span>: <span class="math display">\[
-\hat{p}_4=\sum_{j=1}^m h(U_j),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2]
+\hat{p}_4=\sum_{i=1}n h(U_i),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2]
 \]</span> and <span class="math inline">\(h(u)=1/(2\pi(1+u^2))\)</span>.</p>
-<p>The variance of <span class="math inline">\(\hat{p}_4\)</span> is <span class="math inline">\((\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/m\)</span> and an integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/m\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/m\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/m\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/m\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
+<p>The variance of <span class="math inline">\(\hat{p}_4\)</span> is <span class="math inline">\((\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/n\)</span> and an integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
 <!--
 **Version 2:** It can be shown that (see [Ripley 1987](http://onlinelibrary.wiley.com/book/10.1002/9780470316726))
 $$
@@ -597,12 +1012,12 @@ and finally calculate the empirical $1-\alpha$ quantile $\lambda_{(\lfloor (1-\a
 $$
 \lambda_{(\lfloor (1-\alpha)\,m\rfloor)}\to_{a.s.} \lambda_{\alpha}\quad\text{as}\quad m \to\infty;
 $$
-see, e.g., the classical book "Approximation Theorems of Mathematical Statistics" of R. Serfling Ch. 2.3.1. As a computer is doing this job for us, we can in principle choose an arbitrary large $m$ such that the above approximation of $\lambda_{\alpha}$ by $\lambda_{(\lfloor (1-\alpha)\,m\rfloor)}$ can be arbitrarily good. 
+see, e.g., the classical book "Approximation Theorems of Mathematical Statistics" of R. Serfling Ch. 2.3.1. As a computer is doing this job for us, we can in principle choose an arbitrary large $n$ such that the above approximation of $\lambda_{\alpha}$ by $\lambda_{(\lfloor (1-\alpha)\,m\rfloor)}$ can be arbitrarily good. 
 
 To run the 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-4_403a130c769f2073ce57aabfab7c914c'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-7_4d1b02113eadc62e7c8c6063a6e30113'}
 
 ```{.r .cell-code}
 set.seed(123)
@@ -643,7 +1058,7 @@ where $\varepsilon_{t}\sim N(0,\sigma_\varepsilon^2)$ with $0<\varepsilon^2<\inf
 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-5_118d26bfcfef4658f2819b78b8758983'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-8_67ed805b8d79b114d2f7016da9b0d2b8'}
 
 ```{.r .cell-code}
 LL_fun <- function(beta0, beta1, sigma) {
@@ -659,9 +1074,15 @@ LL_fun <- function(beta0, beta1, sigma) {
 :::
 
 -->
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Ripley_2009" class="csl-entry" role="doc-biblioentry">
+Ripley, Brian D. 2009. <em>Stochastic Simulation</em>. John Wiley &amp; Sons. <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">http://onlinelibrary.wiley.com/book/10.1002/9780470316726</a>.
+</div>
 <div id="ref-RobertCasella1999" class="csl-entry" role="doc-biblioentry">
 Robert, Christian P, and George Casella. 2004. <em>Monte Carlo Statistical Methods</em>. 2nd ed. Springer Texts in Statistics. Springer.
 </div>
