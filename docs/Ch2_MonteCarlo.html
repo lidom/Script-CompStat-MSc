@@ -229,7 +229,10 @@ div.csl-indent {
   <li><a href="#speed-of-convergence" id="toc-speed-of-convergence" class="nav-link" data-scroll-target="#speed-of-convergence">Speed of Convergence</a></li>
   <li><a href="#limit-distribution" id="toc-limit-distribution" class="nav-link" data-scroll-target="#limit-distribution">Limit Distribution</a></li>
   </ul></li>
-  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a></li>
+  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a>
+  <ul class="collapse">
+  <li><a href="#a-more-general-point-of-view" id="toc-a-more-general-point-of-view" class="nav-link" data-scroll-target="#a-more-general-point-of-view"><span class="toc-section-number">2.2.1</span>  A More General Point of View</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -578,7 +581,6 @@ Note
 <p>For values of <span class="math inline">\(t\)</span> around <span class="math inline">\(t=0\)</span>, the variance is thus approximately <span class="math inline">\(1/4n,\)</span> <span class="math display">\[
 \mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
 \]</span></p>
-<p>To achieve a precision of <strong>four decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, the approximation requires on average <span class="math inline">\(n\approx 10^8\)</span> simulations.</p>
 <p>The table below gives the evolution of this approximation for several values of <span class="math inline">\(t\)</span> and shows a very accurate evaluation for <span class="math inline">\(n=10^8\)</span>.</p>
 <table class="table">
 <colgroup>
@@ -719,8 +721,9 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>To achieve a precision of <strong>two decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, already <span class="math inline">\(n=10^4\)</span> leads to satisfactory results.</li>
-<li>Note that <strong>greater accuracy is achieved in the tails</strong> and that more efficient simulation methods could be used (e.g., Importance Sampling).</li>
+<li><p>To achieve a precision of <strong>four decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, the approximation requires on average <span class="math inline">\(n\approx 10^8\)</span> simulations.</p></li>
+<li><p>To achieve a precision of <strong>two decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, already <span class="math inline">\(n=10^4\)</span> leads to satisfactory results.</p></li>
+<li><p>Note that <strong>greater accuracy is achieved in the tails</strong> and that more efficient simulation methods could be used (e.g., Importance Sampling).</p></li>
 </ul>
 </div>
 </div>
@@ -767,7 +770,7 @@ $$ --></p>
 &amp;=\frac{n}{n^2}\mathbb{V}\left(1_{(X_1&gt;2)}\right)\quad\text{(i.i.d.)}\\[2ex]
 &amp;=\frac{p(1-p)}{n},
 \end{align*}
-\]</span> which is equal to <span class="math inline">\(0.1258/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>.</p>
+\]</span> which is equal to <span class="math inline">\(0.126/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>.</p>
 <p><strong>2. Approach: Accounting for Symmetry</strong></p>
 <p>In this approach, we use the “adjusting Screws” <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(h.\)</span></p>
 <p>We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathcal{C}(0,1).\)</span> Obviously, our target integral can be equivalently written as <span class="math display">\[
@@ -784,7 +787,7 @@ p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\inf
 &amp;=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|&gt;2)}\right)\\[2ex]
 &amp;=\frac{2p(1-2p)}{4n},
 \end{align*}
-\]</span> which is equal to <span class="math inline">\(0.052/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>. This is clearly lower than in the naive approach, where we had <span class="math inline">\(0.1258/n.\)</span></p>
+\]</span> which is equal to <span class="math inline">\(0.052/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>. This is clearly lower than in the naive approach, where we had <span class="math inline">\(0.126/n.\)</span></p>
 <p><strong>3. Approach:</strong></p>
 <p>In this approach, we use all the “adjusting screws” <span class="math inline">\(\mathcal{X}\)</span>, <span class="math inline">\(h\)</span>, and <span class="math inline">\(f.\)</span></p>
 <p>The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, <span class="math inline">\([2,+\infty)\)</span>, which are in some sense irrelevant for the approximation of <span class="math inline">\(p\)</span>. This motivates the following reformulation of <span class="math inline">\(p\)</span>:</p>
@@ -801,63 +804,87 @@ p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\inf
 \end{align*}
 \]</span> where <span class="math inline">\(U\sim\mathcal{U}[0,2].\)</span></p>
 <p>Therefore a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
-\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),\quad\text{where}\quad U_i\sim\mathrm{Unif}[0,2].
-\]</span> Using integration by parts, it can be shown that <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>. (Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>.)</p>
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),
+\]</span> where <span class="math inline">\(U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].\)</span></p>
+<p>Using integration by parts and that <span class="math inline">\(p=0.1476\)</span>, it can be shown that <span class="math display">\[
+\mathbb{V}(\hat p_3)=0.029/n,
+\]</span> which is lower than both previous approaches, where we had that <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.052/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.126/n\)</span>.</p>
 </div>
-<p><strong>A More General Point of View:</strong></p>
-<p>The idea of importance sampling is related to weighted and stratified sampling ideas. As illustrated by the above example, when estimating <span class="math display">\[
-\theta=\mathbb{E}_f(h(X))=\int h(x)f(x)dx.
-\]</span></p>
+<section id="a-more-general-point-of-view" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="a-more-general-point-of-view"><span class="header-section-number">2.2.1</span> A More General Point of View</h3>
+<p>The idea of <strong>importance sampling</strong> is related to weighted and stratified sampling ideas, when estimating <span class="math display">\[
+\theta=\mathbb{E}_{f}(h(X))=\int h(x)f(x)dx,
+\]</span> as already illustrated in <a href="#exm-CauchTailProb">Example&nbsp;<span>2.3</span></a>.</p>
 <p>Some outcomes of <span class="math inline">\(X\sim f\)</span> may be more important than others in determining <span class="math inline">\(\theta\)</span> and we wish to select such values more frequently.</p>
 <p>For instance, if <span class="math inline">\(\theta\)</span> denotes the probability of the occurrence of a very rare event, then the only way to estimate <span class="math inline">\(\theta\)</span> at all accurately may be to produce the rare events more frequently.</p>
-<p>To achieve this, we can simulate a model which gives pdf <span class="math inline">\(g\)</span> to <span class="math inline">\(X\)</span> instead of the correct pdf <span class="math inline">\(f\)</span>, where both pdfs need to be known. This can be easily done, since <span class="math display">\[
-\theta=\mathbb{E}_f(h(X))=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx=
-\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=\psi(x)}\;g(x)dx=
-\int \psi(x)\;g(x)dx=
-\mathbb{E}_g(\psi(X)).
+<p>To achieve this, we can simulate a model which gives a density <span class="math inline">\(g\)</span> to <span class="math inline">\(X\)</span> instead of the correct density <span class="math inline">\(f,\)</span> where both density functions need to be known. This can be easily done, since <span class="math display">\[
+\begin{align*}
+\theta
+&amp;=\mathbb{E}_{f}(h(X))\\[2ex]
+&amp;=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx\\[2ex]
+&amp;=\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=:\psi(x)}\;g(x)dx\\[2ex]
+&amp;=\int \psi(x)\;g(x)dx\\[2ex]
+&amp;=\mathbb{E}_g(\psi(X)).
+\end{align*}
 \]</span></p>
-<p>This leads to the following unbiased estimator for <span class="math inline">\(\theta\)</span> based on sampling from <span class="math inline">\(g\)</span>: <span class="math display">\[
-\hat{\theta}_g=\frac{1}{n}\sum_{i=1}^n\psi(X_i)\quad\text{with}\quad X_i\sim g,
-\]</span> which is a weighted mean of the <span class="math inline">\(h(X_i)\)</span> with weights inversely proportional to the “<strong>selection factor</strong>” <span class="math inline">\(\frac{g(X_i)}{f(X_i)}\)</span>. <!-- 
+<p>This leads to the following unbiased estimator for <span class="math inline">\(\theta\)</span> based on sampling from <span class="math inline">\(g\)</span>: <span id="eq-ImportSample"><span class="math display">\[
+\begin{align*}
+\hat{\theta}_g
+&amp;=\frac{1}{n}\sum_{i=1}^n\psi(X_i) \\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\underbrace{\left(\frac{f(X_i)}{g(X_i)}\right)}_{=:W_i} h(X_i)
+\end{align*}
+\tag{2.3}\]</span></span> with <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} g.
+\]</span></p>
+<p>Note that <a href="#eq-ImportSample">Equation&nbsp;<span>2.3</span></a> can be seen as a weighted mean of the transformed random variables <span class="math inline">\(h(X_i)\)</span> with weights <span class="math display">\[
+W_i = \frac{f(X_i)}{g(X_i)}
+\]</span> that are inversely proportional to the so-called <strong>selection factor</strong> <span class="math display">\[
+\frac{g(X_i)}{f(X_i)}.
+\]</span> <!-- 
 For appropriately chosen pdfs f and g: 
 The *selection factor* refers to "how more likely is it to select a 'rare event'?".
 The inverse weight re-scales these 'too often' chosen rare events. 
 --></p>
 <p>For the variance of the estimator <span class="math inline">\(\hat{\theta}_g\)</span> we have <span class="math display">\[
-\mathbb{V}(\hat{\theta}_g)=\frac{1}{n}\mathbb{V}(\psi(X_i))=
-\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)dx=
-\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)dx,
-\]</span> which, depending on the choice of <span class="math inline">\(g(.)\)</span>, can be much smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary empricial mean. <!-- 
+\begin{align*}
+\mathbb{V}_g(\hat{\theta}_g)
+&amp;=\mathbb{V}_g\left(\frac{1}{n}\sum_{i=1}^n\psi(X_i)\right) \\[2ex]
+&amp;=\frac{1}{n}\mathbb{V}_g(\psi(X_i))\quad\text{(i.i.d)}\\[2ex]
+&amp;=\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)\;dx\\[2ex]
+&amp;=\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)\;dx,
+\end{align*}
+\]</span> which, depending on the choice of <span class="math inline">\(g\)</span>, can be <em>much</em> smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary (unweighted) empirical mean. <!-- 
 $$
 \mathbb{V}(\hat{\theta}_{\text{naive}})=
 \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\in\{\mathtt{Rare.Event}\})}\right)=
 \frac{1}{n}\mathbb{V}\left(1_{(X_i\in\{\mathtt{Rare.Event}\})}\right)=\frac{\theta(1-\theta)}{n}.
 $$ 
 --></p>
-<p><br>
-<br>
-</p>
-<dl>
-<dt><em>Minimum Variance Theorem</em></dt>
-<dd>
-<p>The <strong>importance function</strong> <span class="math inline">\(g(.)\)</span> which minimizes the variance <span class="math inline">\(\mathbb{V}(\psi(X_i))\)</span>, and therefore the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span>, is given by <span class="math display">\[
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-MinVarTheorem" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2.1 (Minimum Variance Theorem) </strong></span>The <strong>importance function</strong> <span class="math inline">\(g\)</span> which minimizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span>, and therefore also the variance <span class="math inline">\(\mathbb{V}_g(\hat{\theta}_g),\)</span> is given by <span class="math display">\[
 g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 \]</span></p>
-</dd>
-</dl>
+</div>
+</div>
+</div>
 <p><strong>Proof:</strong> Done in the lecture.</p>
-<p><br>
-</p>
-<p>Though, this result is rather formal (in the sense of “impractical”), since, e.g., if <span class="math inline">\(h(x)&gt;0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\int h(z)f(z)dz\)</span>, which is just the integral of interest!</p>
-<p><strong>Remarks:</strong></p>
+<p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as rather impractical, since, for instance, if <span class="math inline">\(h(x)&gt;0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
 <p>The above minimum variance result is still useful:</p>
 <ul>
 <li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>.</li>
 <li>Furthermore, <span class="math inline">\(g(x)\)</span> should be chosen such that it has a thicker tail than <span class="math inline">\(f(x)\)</span>, since the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span> crucially depends on the quotient <span class="math inline">\(f(x)/g(x)\)</span> which would “explode” for <span class="math inline">\(g(x)\approx 0\)</span>.</li>
 </ul>
-<p><br>
-</p>
-<p>Let’s apply our new insights to the above example on the Cauchy tail probability <span class="math inline">\(p\)</span>.</p>
+<p>Let’s apply our new insights to the above <a href="#exm-CauchTailProb">Example&nbsp;<span>2.3</span></a> on the Cauchy tail probability <span class="math inline">\(p\)</span>.</p>
 <p><strong>Example: Cauchy Tail Probability (cont.)</strong></p>
 <p>Above we had:</p>
 <ol type="1">
@@ -1074,6 +1101,7 @@ LL_fun <- function(beta0, beta1, sigma) {
 :::
 
 -->
+</section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>

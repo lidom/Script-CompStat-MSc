@@ -383,8 +383,6 @@ $$
 \mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
 $$  
 
-To achieve a precision of **four decimals** by means of a $99.9\%$ confidence interval, the approximation requires on average $n\approx 10^8$ simulations. 
-
 The table below gives the evolution of this approximation for several values of $t$ and shows a very accurate evaluation for $n=10^8$. 
 
 
@@ -421,7 +419,11 @@ $$ -->
 
 
 ::: {.callout-note}
+
+* To achieve a precision of **four decimals** by means of a $99.9\%$ confidence interval, the approximation requires on average $n\approx 10^8$ simulations. 
+
 * To achieve a precision of **two decimals** by means of a $99.9\%$  confidence interval, already $n=10^4$ leads to satisfactory results. 
+
 * Note that **greater accuracy is achieved in the tails** and that more efficient simulation methods could be used (e.g., Importance Sampling). 
 :::
 
@@ -487,8 +489,7 @@ $$
 &=\frac{p(1-p)}{n},
 \end{align*}
 $$
-which is equal to $`r round(0.1476 * (1-0.1476),4)`/n,$ since we know that $p=0.1476$. 
-
+which is equal to $`r round(0.1476 * (1-0.1476),3)`/n,$ since we know that $p=0.1476$. 
 
 
 
@@ -516,7 +517,7 @@ $$
 &=\frac{2p(1-2p)}{4n},
 \end{align*}
 $$
-which is equal to $`r round( (2*0.1476 * (1- 2*0.1476) )/4, 4)`/n,$ since we know that $p=0.1476$. This is clearly lower than in the naive approach, where we had $`r round(0.1476 * (1-0.1476),4)`/n.$
+which is equal to $`r round( (2*0.1476 * (1- 2*0.1476) )/4, 4)`/n,$ since we know that $p=0.1476$. This is clearly lower than in the naive approach, where we had $`r round(0.1476 * (1-0.1476),3)`/n.$
 
 
 
@@ -546,37 +547,64 @@ where $U\sim\mathcal{U}[0,2].$
 
 Therefore a new alternative method for evaluating $p$ is:
 $$
-\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),\quad\text{where}\quad U_i\sim\mathrm{Unif}[0,2].
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),
 $$
-Using integration by parts, it can be shown that $\mathbb{V}(\hat p_3)=0.0285/n$. (Compare this to the former results: $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$.)
+where $U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].$
+
+Using integration by parts and that $p=0.1476$, it can be shown that 
+$$
+\mathbb{V}(\hat p_3)=0.029/n,
+$$ 
+which is lower than both previous approaches, where we had that $\mathbb{V}(\hat{p}_{2})=0.052/n$ and $\mathbb{V}(\hat{p}_{1})=0.126/n$.
 
 ::: 
 
 
-**A More General Point of View:**
+### A More General Point of View 
 
-The idea of importance sampling is related to weighted and stratified sampling ideas. As illustrated by the above example, when estimating 
+The idea of **importance sampling** is related to weighted and stratified sampling ideas, when estimating 
 $$
-\theta=\mathbb{E}_f(h(X))=\int h(x)f(x)dx.
+\theta=\mathbb{E}_{f}(h(X))=\int h(x)f(x)dx,
 $$
+as already illustrated in @exm-CauchTailProb.
 
 Some outcomes of $X\sim f$ may be more important than others in determining $\theta$ and we wish to select such values more frequently. 
 
 For instance, if $\theta$ denotes the probability of the occurrence of a very rare event, then the only way to estimate $\theta$ at all accurately may be to produce the rare events more frequently. 
 
-To achieve this, we can simulate a model which gives pdf $g$ to $X$ instead of the correct pdf $f$, where both pdfs need to be known. This can be easily done, since
+To achieve this, we can simulate a model which gives a density  $g$ to $X$ instead of the correct density $f,$ where both density functions need to be known. This can be easily done, since
 $$
-\theta=\mathbb{E}_f(h(X))=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx=
-\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=\psi(x)}\;g(x)dx=
-\int \psi(x)\;g(x)dx=
-\mathbb{E}_g(\psi(X)).
+\begin{align*}
+\theta
+&=\mathbb{E}_{f}(h(X))\\[2ex]
+&=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx\\[2ex]
+&=\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=:\psi(x)}\;g(x)dx\\[2ex]
+&=\int \psi(x)\;g(x)dx\\[2ex]
+&=\mathbb{E}_g(\psi(X)).
+\end{align*}
 $$
 
 This leads to the following unbiased estimator for $\theta$ based on sampling from $g$:
 $$
-\hat{\theta}_g=\frac{1}{n}\sum_{i=1}^n\psi(X_i)\quad\text{with}\quad X_i\sim g,
+\begin{align*}
+\hat{\theta}_g
+&=\frac{1}{n}\sum_{i=1}^n\psi(X_i) \\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\underbrace{\left(\frac{f(X_i)}{g(X_i)}\right)}_{=:W_i} h(X_i)
+\end{align*}
+$${#eq-ImportSample}
+with 
 $$
-which is a weighted mean of the $h(X_i)$ with weights inversely proportional to the "**selection factor**" $\frac{g(X_i)}{f(X_i)}$.
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} g.
+$$
+
+Note that @eq-ImportSample can be seen as a weighted mean of the transformed random variables $h(X_i)$ with weights 
+$$
+W_i = \frac{f(X_i)}{g(X_i)}
+$$
+that are inversely proportional to the so-called **selection factor** 
+$$
+\frac{g(X_i)}{f(X_i)}.
+$$
 <!-- 
 For appropriately chosen pdfs f and g: 
 The *selection factor* refers to "how more likely is it to select a 'rare event'?".
@@ -586,11 +614,15 @@ The inverse weight re-scales these 'too often' chosen rare events.
 
 For the variance of the estimator $\hat{\theta}_g$ we have
 $$
-\mathbb{V}(\hat{\theta}_g)=\frac{1}{n}\mathbb{V}(\psi(X_i))=
-\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)dx=
-\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)dx,
+\begin{align*}
+\mathbb{V}_g(\hat{\theta}_g)
+&=\mathbb{V}_g\left(\frac{1}{n}\sum_{i=1}^n\psi(X_i)\right) \\[2ex]
+&=\frac{1}{n}\mathbb{V}_g(\psi(X_i))\quad\text{(i.i.d)}\\[2ex]
+&=\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)\;dx\\[2ex]
+&=\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)\;dx,
+\end{align*}
 $$
-which, depending on the choice of $g(.)$, can be much smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary empricial mean.
+which, depending on the choice of $g$, can be *much* smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary (unweighted) empirical mean.
 <!-- 
 $$
 \mathbb{V}(\hat{\theta}_{\text{naive}})=
@@ -599,26 +631,25 @@ $$
 $$ 
 -->
 
-\
-\
+::: {.callout-note icon=false} 
 
+## 
+::: {#thm-MinVarTheorem}
 
-*Minimum Variance Theorem*
+## Minimum Variance Theorem
 
-:    The **importance function** $g(.)$ which minimizes the variance $\mathbb{V}(\psi(X_i))$, and therefore the variance $\mathbb{V}(\hat{\theta}_g)$,      is given by 
-     $$
-     g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
-     $$ 
-
+The **importance function** $g$ which minimizes the variance $\mathbb{V}_g(\psi(X_i))$, and therefore also the variance $\mathbb{V}_g(\hat{\theta}_g),$  is given by 
+$$
+g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
+$$ 
+:::
+::: 
 
 **Proof:** Done in the lecture. 
 
-\
 
+Note that @thm-MinVarTheorem may appear as rather impractical, since, for instance, if $h(x)>0$ then $g^\ast$ requires us to know $\theta=\int h(z)f(z)dz,$ which, however, is just the integral of interest! 
 
-Though, this result is rather formal (in the sense of "impractical"), since, e.g., if $h(x)>0$ then $g^\ast$ requires us to know $\int h(z)f(z)dz$, which is just the integral of interest! 
-
-**Remarks:**
 
 The above minimum variance result is still useful:
 
@@ -626,10 +657,9 @@ The above minimum variance result is still useful:
 *  Furthermore, $g(x)$ should be chosen such that it has a thicker tail than $f(x)$, since the variance $\mathbb{V}(\hat{\theta}_g)$ crucially depends on the quotient $f(x)/g(x)$ which would "explode" for $g(x)\approx 0$.
 
 
-\
 
 
-Let's apply our new insights to the above example on the Cauchy tail probability $p$. 
+Let's apply our new insights to the above @exm-CauchTailProb on the Cauchy tail probability $p$. 
 
 **Example: Cauchy Tail Probability (cont.)**
 
