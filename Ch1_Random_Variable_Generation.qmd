@@ -1474,17 +1474,25 @@ Let the target "density" be
 $$
 f_X(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
 $$
-The function $\tilde{f}_X(x)$ is dominated (i.e. $\tilde{f}_X(x) \leq g(x)$ for all $x$) by the standard normal density
+
+Given our considerations above, we can try to scaling such that the above "density" is dominated (i.e. $\tilde{f}_X(x) \leq g(x)$ for all $x$) by the standard normal density
 $$
 g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
 $$
 which is obviously straightforward to simulate from.  
 
-Thus, in this example we can set $m(x)=M\,g(x)$ with $M=1$, since we can simply scale the target density $f_X$ such that $\tilde{f}_X(x)\leq g(x)$ for all $x$. Specifically, we set 
+Thus, in this example we can set 
+$$
+m(x)=M\,g(x)\quad\text{with}\quad M=1,
+$$ 
+since we can simply scale the target "density" $f_X$ such that 
+$$
+\tilde{f}_X(x)\leq g(x)\quad\text{for all}\quad x.
+$$ 
+Specifically, we can set 
 $$
 \tilde{f}_X(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
 $$ 
-:::
 
 The following code provides a possible implementation of the Accept-Reject algorithm for this example. @fig-ARAlgo2Example shows the results.  
 
@@ -1582,12 +1590,12 @@ box()
 par(mfrow=c(1,1))
 ```
 
-
+:::
 
 
 #### Efficiency of the Accept-Reject algorithm 
 
-Statements with respect to the efficiency of the Accept-Reject algorithm can be made if $f_X$ and $g$ are **normalized** such that they are **both pdfs**. Then:
+Simple statements with respect to the efficiency of the Accept-Reject algorithm can be made if $f_X$ and $g$ are both **normalized** such that they are **both density functions**. Then:
 
 * The constant $M$ is necessarily larger than $1$.
 * The probability of acceptance is $1/M$. (See Exercises.)
@@ -1598,11 +1606,17 @@ Note that, for normalized $f_X$ and $g$ the inequality
 $$
 f_X(x)\leq M\,g(x),
 $$ 
-with $1\leq M<\infty$ for all $x\in\mathbb{R}^d,$ implies that the quotient $f_X/g$ is bounded, i.e., that 
+with $1<M<\infty$ for all $x\in\mathbb{R}^d,$ implies that the quotient $f_X/g$ is bounded, i.e., that 
 $$
 0\leq \frac{f_X(x)}{g(x)}\leq M <\infty\quad\text{for all}\quad x.
 $$
-That is, it is necessary for $g$ to have, e.g., thicker tails than $f_X$. This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g.$ The reverse, however, works quite well.
+
+That is, a density $g$ that has thicker tails than $f_X$ is generally not problematic since then $\frac{f_X(x)}{g(x)}\leq 1$ for $x$ in the tails. That is, we can, for instance, use the Cauchy density $g$ to simulate from a normal density $f_X$. The reverse, however, can be problematic. 
+
+<!-- This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g.$ The reverse, however, works quite well. -->
+
+
+<!-- That is, it is necessary for $g$ to have, e.g., thicker tails than $f_X$. This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g$. The reverse, however, works quite well. -->
 
 ::: {.callout-tip}
 Remember: Using the Cauchy as instrumental density $g$ does not harm the integrability/feasibility requirement! The fact that the Cauchy distribution has no mean, does not change the fact that the density of the Cauchy integrates to one.

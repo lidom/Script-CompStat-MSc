@@ -1463,13 +1463,17 @@ X      <- Y[accept]
 <div id="exm-ARAlgo2Example" class="theorem example">
 <p><span class="theorem-title"><strong>Example 1.8 </strong></span>Let the target “density” be <span class="math display">\[
 f_X(x)\propto \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
-\]</span> The function <span class="math inline">\(\tilde{f}_X(x)\)</span> is dominated (i.e.&nbsp;<span class="math inline">\(\tilde{f}_X(x) \leq g(x)\)</span> for all <span class="math inline">\(x\)</span>) by the standard normal density <span class="math display">\[
+\]</span></p>
+<p>Given our considerations above, we can try to scaling such that the above “density” is dominated (i.e.&nbsp;<span class="math inline">\(\tilde{f}_X(x) \leq g(x)\)</span> for all <span class="math inline">\(x\)</span>) by the standard normal density <span class="math display">\[
 g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
 \]</span> which is obviously straightforward to simulate from.</p>
-<p>Thus, in this example we can set <span class="math inline">\(m(x)=M\,g(x)\)</span> with <span class="math inline">\(M=1\)</span>, since we can simply scale the target density <span class="math inline">\(f_X\)</span> such that <span class="math inline">\(\tilde{f}_X(x)\leq g(x)\)</span> for all <span class="math inline">\(x\)</span>. Specifically, we set <span class="math display">\[
+<p>Thus, in this example we can set <span class="math display">\[
+m(x)=M\,g(x)\quad\text{with}\quad M=1,
+\]</span> since we can simply scale the target “density” <span class="math inline">\(f_X\)</span> such that <span class="math display">\[
+\tilde{f}_X(x)\leq g(x)\quad\text{for all}\quad x.
+\]</span> Specifically, we can set <span class="math display">\[
 \tilde{f}_X(x)=0.075 \cdot \exp(-x^2/2)\,(\sin(6x)^2 + 3\cos(x)^2\,\sin(4x)^2 + 1).
 \]</span></p>
-</div>
 <p>The following code provides a possible implementation of the Accept-Reject algorithm for this example. <a href="#fig-ARAlgo2Example">Figure&nbsp;<span>1.4</span></a> shows the results.</p>
 <div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-16_34c2dd8327c9a853f9f705e747c20a47">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Target density</span></span>
@@ -1515,10 +1519,11 @@ g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
 <div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-18_3825b6cf40949a306fe5721ef1ca45a6">
 
 </div>
+</div>
 </section>
 <section id="efficiency-of-the-accept-reject-algorithm" class="level4" data-number="1.3.3.3">
 <h4 data-number="1.3.3.3" class="anchored" data-anchor-id="efficiency-of-the-accept-reject-algorithm"><span class="header-section-number">1.3.3.3</span> Efficiency of the Accept-Reject algorithm</h4>
-<p>Statements with respect to the efficiency of the Accept-Reject algorithm can be made if <span class="math inline">\(f_X\)</span> and <span class="math inline">\(g\)</span> are <strong>normalized</strong> such that they are <strong>both pdfs</strong>. Then:</p>
+<p>Simple statements with respect to the efficiency of the Accept-Reject algorithm can be made if <span class="math inline">\(f_X\)</span> and <span class="math inline">\(g\)</span> are both <strong>normalized</strong> such that they are <strong>both density functions</strong>. Then:</p>
 <ul>
 <li>The constant <span class="math inline">\(M\)</span> is necessarily larger than <span class="math inline">\(1\)</span>.</li>
 <li>The probability of acceptance is <span class="math inline">\(1/M\)</span>. (See Exercises.)</li>
@@ -1527,9 +1532,12 @@ g(x)=\frac{1}{\sqrt{2\pi}}\exp(-x^2/2),
 </ul>
 <p>Note that, for normalized <span class="math inline">\(f_X\)</span> and <span class="math inline">\(g\)</span> the inequality <span class="math display">\[
 f_X(x)\leq M\,g(x),
-\]</span> with <span class="math inline">\(1\leq M&lt;\infty\)</span> for all <span class="math inline">\(x\in\mathbb{R}^d,\)</span> implies that the quotient <span class="math inline">\(f_X/g\)</span> is bounded, i.e., that <span class="math display">\[
+\]</span> with <span class="math inline">\(1&lt;M&lt;\infty\)</span> for all <span class="math inline">\(x\in\mathbb{R}^d,\)</span> implies that the quotient <span class="math inline">\(f_X/g\)</span> is bounded, i.e., that <span class="math display">\[
 0\leq \frac{f_X(x)}{g(x)}\leq M &lt;\infty\quad\text{for all}\quad x.
-\]</span> That is, it is necessary for <span class="math inline">\(g\)</span> to have, e.g., thicker tails than <span class="math inline">\(f_X\)</span>. This makes it, for instance, impossible to simulate from a Cauchy density <span class="math inline">\(f_X\)</span> using a normal density <span class="math inline">\(g.\)</span> The reverse, however, works quite well.</p>
+\]</span></p>
+<p>That is, a density <span class="math inline">\(g\)</span> that has thicker tails than <span class="math inline">\(f_X\)</span> is generally not problematic since then <span class="math inline">\(\frac{f_X(x)}{g(x)}\leq 1\)</span> for <span class="math inline">\(x\)</span> in the tails. That is, we can, for instance, use the Cauchy density <span class="math inline">\(g\)</span> to simulate from a normal density <span class="math inline">\(f_X\)</span>. The reverse, however, can be problematic.</p>
+<!-- This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g.$ The reverse, however, works quite well. -->
+<!-- That is, it is necessary for $g$ to have, e.g., thicker tails than $f_X$. This makes it, for instance, impossible to simulate from a Cauchy density $f_X$ using a normal density $g$. The reverse, however, works quite well. -->
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
