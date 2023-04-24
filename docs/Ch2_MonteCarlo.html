@@ -222,7 +222,7 @@ div.csl-indent {
   <li><a href="#classical-monte-carlo-integration" id="toc-classical-monte-carlo-integration" class="nav-link" data-scroll-target="#classical-monte-carlo-integration"><span class="toc-section-number">2.1</span>  Classical Monte Carlo Integration</a>
   <ul class="collapse">
   <li><a href="#speed-of-convergence" id="toc-speed-of-convergence" class="nav-link" data-scroll-target="#speed-of-convergence">Speed of Convergence</a></li>
-  <li><a href="#limit-distribution" id="toc-limit-distribution" class="nav-link" data-scroll-target="#limit-distribution">Limit Distribution</a></li>
+  <li><a href="#distributional-properties" id="toc-distributional-properties" class="nav-link" data-scroll-target="#distributional-properties">Distributional Properties</a></li>
   </ul></li>
   <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a>
   <ul class="collapse">
@@ -258,7 +258,7 @@ div.csl-indent {
 <ul>
 <li><a href="http://www.springer.com/us/book/9780387212395">Monte Carlo Statistical Methods</a>, Ch. 3, <span class="citation" data-cites="RobertCasella1999">Robert and Casella (<a href="#ref-RobertCasella1999" role="doc-biblioref">2004</a>)</span></li>
 <li><a href="https://link.springer.com/book/10.1007/978-1-4419-1576-4">Introducing Monte Carlo Methods with R</a>, Ch. 3, <span class="citation" data-cites="RobertCasella2010">Robert and Casella (<a href="#ref-RobertCasella2010" role="doc-biblioref">2010</a>)</span></li>
-<li><a href="https://mitpress.mit.edu/9780262547741/numerical-methods-in-economics/">Numerical Methods in Economics</a>, Ch. 8.2 Monte Carlo Integration, <span class="citation" data-cites="Kenneth_Judd_Book_1998">Judd (<a href="#ref-Kenneth_Judd_Book_1998" role="doc-biblioref">1998</a>)</span></li>
+<li><a href="https://mitpress.mit.edu/9780262547741/numerical-methods-in-economics/">Numerical Methods in Economics</a>, Ch. 8.2 Monte Carlo Integration, <span class="citation" data-cites="Kenneth_Judd_Book_1998">Kenneth (<a href="#ref-Kenneth_Judd_Book_1998" role="doc-biblioref">1998</a>)</span></li>
 </ul>
 <p>Monte Carlo methods take advantage of the availability of:</p>
 <ol type="i">
@@ -394,8 +394,8 @@ Note
 </div>
 </div>
 </section>
-<section id="limit-distribution" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="limit-distribution">Limit Distribution</h3>
+<section id="distributional-properties" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="distributional-properties">Distributional Properties</h3>
 <p>Besides the speed of convergence of <span class="math inline">\(\{\bar{h}_n\}_{n=1,2,\dots}\)</span> for <span class="math inline">\(n\to\infty,\)</span> we can also say something about the distribution of the random variable <span class="math inline">\(\bar{h}_n\)</span> for large sample sizes <span class="math inline">\(n.\)</span></p>
 <p>We can estimate the variance of the estimator <span class="math inline">\(\mathbb{V}\left(\bar{h}_n\right)\)</span> by its empirical version <span class="math display">\[
 v_n^2=\frac{1}{n}\sum_{i=1}^n\left(h(x_i)-\bar{h}_n\right)^2,
@@ -569,7 +569,7 @@ Note
 </div>
 </div>
 <div id="exm-ApproxNormTables" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use Monte Carlo integration. Besides this specific usecase, this example showcases the treatment of integrals that can be approximated using propoartions <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use Monte Carlo integration. Besides this specific use case, this example showcases the treatment of integrals that can be approximated using propoartions <span class="math display">\[
 \hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
 \]</span> where we choose the sample size <span class="math inline">\(n\)</span> to achieve a certain level of precision for our integral approximation.</p>
 <p>Observe that the distribution function <span class="math inline">\(\Phi(x)\)</span> can be written as the mean of a binary (taking values 0 and 1) random variable, <span class="math display">\[
@@ -577,9 +577,31 @@ Note
 \Phi(x)
 &amp;=\int_{-\infty}^x\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy\\[2ex]
 &amp;=P\left(X \leq x\right)\\[2ex]
+&amp;=P\left(1_{(X \leq x)} = 1\right)\\[2ex]
+&amp;=P\left(1_{(X \leq x)} = 1\right)\cdot 1 + P\left(1_{(X \leq x)} = 0\right)\cdot 0\\[2ex]
 &amp;=\mathbb{E}\left(1_{(X \leq x)}\right),
 \end{align*}
 \]</span> where <span class="math inline">\(X\sim\mathcal{N}(0,1),\)</span> and where <span class="math inline">\(1_{(\texttt{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\texttt{FALSE})}=0.\)</span></p>
+<p>That is, we can write the integration problem as the mean of a Bernoulli random variable <span class="math display">\[
+1_{(X \leq x)}\in\{0,1\}
+\]</span> <span class="math display">\[
+1_{(X \leq x)}\sim\mathcal{Bern}\left(p=\Phi(x)\right),
+\]</span> with parameter <span class="math display">\[
+p=P\left(X \leq x\right) = \Phi(x).
+\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that <span class="math inline">\(1_{(X \leq x)}\)</span> is a Bernoulli random variable no matter the distribution of <span class="math inline">\(X.\)</span> Here <span class="math inline">\(X\)</span> is a standard normal random variable; however, in other use cases <span class="math inline">\(X\)</span> can have, of course, another distribution, but <span class="math inline">\(1_{(X \leq x)}\)</span> remains a Bernoulli random variable. We use this feature below when we think about the distributional properties of our estimator for approximating the integral value.</p>
+</div>
+</div>
 <p>Monte Carlo integration, allows us to approximate the integral <span class="math inline">\(\Phi(x)\)</span> using the empirical mean <span class="math display">\[
 \hat{p}_n(x)=\frac{1}{n}\sum_{i=1}^n 1_{(X_i\leq x)}
 \]</span> with <span class="math display">\[
@@ -587,8 +609,8 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{N}(0,1),
 \]</span> and <span class="math display">\[
 \hat{p}_n(x)\in[0,1]
 \]</span> for all <span class="math inline">\(x\in\mathbb{R},\)</span> and all “sample sizes” (chosen by us) <span class="math inline">\(n=1,2,\dots\)</span></p>
-<section id="distributional-properties-of-proportions" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="distributional-properties-of-proportions">Distributional Properties of Proportions</h4>
+<section id="distributional-properties-of-proportions" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="distributional-properties-of-proportions">Distributional Properties of Proportions</h3>
 <p>Now, to assess the accuracy of our Monte Carlo integration for approximating <span class="math inline">\(\Phi_n(x),\)</span> we need to derive the distributional properties of our estimator <span class="math inline">\(\hat{p}_n(x).\)</span></p>
 <p>For this we consider, firstly, the transformed random variable <span class="math display">\[
 n \hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)},
@@ -689,7 +711,6 @@ Note
 <p>Note that <strong>greater accuracy is achieved in the tails</strong>.</p>
 </div>
 </div>
-</section>
 <section id="confidence-intervals-for-proportions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="confidence-intervals-for-proportions">Confidence Intervals for Proportions</h4>
 <p>As an additional tool for showing the accuracy of our Monte Carlo integration, we can report confidence intervals.</p>
@@ -769,6 +790,7 @@ $$ -->
 
 * More efficient simulation methods could be used (e.g., Importance Sampling).  -->
 <p>That is, we actually need (at least) a sample size of <span class="math inline">\(n^7\)</span> to achieve a precision of <strong>three decimal places</strong> by means of a 99% Clopper-Pearson confidence interval.</p>
+</section>
 </section>
 </div>
 </section>
@@ -1231,7 +1253,7 @@ Bourreau, Marc, Yutec Sun, and Frank Verboven. 2021. <span>“Market Entry, Figh
 Clopper, Charles J, and Egon S Pearson. 1934. <span>“The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial.”</span> <em>Biometrika</em> 26 (4): 404–13.
 </div>
 <div id="ref-Kenneth_Judd_Book_1998" class="csl-entry" role="doc-biblioentry">
-Judd, Kenneth L. 1998. <em>Numerical Methods in Economics</em>. MIT press.
+Kenneth, Judd L. 1998. <em>Numerical Methods in Economics</em>. MIT press.
 </div>
 <div id="ref-Ripley_2009" class="csl-entry" role="doc-biblioentry">
 Ripley, Brian D. 2009. <em>Stochastic Simulation</em>. John Wiley &amp; Sons. <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">http://onlinelibrary.wiley.com/book/10.1002/9780470316726</a>.

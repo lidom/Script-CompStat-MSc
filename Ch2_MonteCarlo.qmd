@@ -147,7 +147,7 @@ Even if we would not know the value of $\mathtt{const}=\sqrt{\mathbb{V}\left(h(X
 :::
 
 
-### Limit Distribution {-}
+### Distributional Properties {-}
 
 Besides the speed of convergence of $\{\bar{h}_n\}_{n=1,2,\dots}$ for $n\to\infty,$ we can also say something about the distribution of the random variable $\bar{h}_n$ for large sample sizes $n.$
 
@@ -361,7 +361,7 @@ However, the Monte Carlo integration approach is particularly useful for approxi
 
 ## Approximation of Normal Distribution Tables 
 
-A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use Monte Carlo integration. Besides this specific usecase, this example showcases the treatment of integrals that can be approximated using propoartions 
+A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use Monte Carlo integration. Besides this specific use case, this example showcases the treatment of integrals that can be approximated using propoartions 
 $$
 \hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
 $$
@@ -373,10 +373,29 @@ $$
 \Phi(x)
 &=\int_{-\infty}^x\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy\\[2ex]
 &=P\left(X \leq x\right)\\[2ex]
+&=P\left(1_{(X \leq x)} = 1\right)\\[2ex]
+&=P\left(1_{(X \leq x)} = 1\right)\cdot 1 + P\left(1_{(X \leq x)} = 0\right)\cdot 0\\[2ex]
 &=\mathbb{E}\left(1_{(X \leq x)}\right),
 \end{align*}
 $$
-where $X\sim\mathcal{N}(0,1),$ and where $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$
+where $X\sim\mathcal{N}(0,1),$ and where $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$ 
+
+That is, we can write the integration problem as the mean of a Bernoulli random variable
+$$
+1_{(X \leq x)}\in\{0,1\}
+$$ 
+$$
+1_{(X \leq x)}\sim\mathcal{Bern}\left(p=\Phi(x)\right),
+$$
+with parameter
+$$
+p=P\left(X \leq x\right) = \Phi(x).
+$$
+
+::: {.callout-note}
+Note that $1_{(X \leq x)}$ is a Bernoulli random variable no matter the distribution of $X.$ Here $X$ is a standard normal random variable; however, in other use cases $X$ can have, of course, another distribution, but $1_{(X \leq x)}$ remains a Bernoulli random variable. We use this feature below when we think about the distributional properties of our estimator for approximating the integral value.    
+:::
+
 
 Monte Carlo integration, allows us to approximate the integral $\Phi(x)$ using the empirical mean 
 $$
@@ -393,7 +412,7 @@ $$
 for all $x\in\mathbb{R},$ and all "sample sizes" (chosen by us) $n=1,2,\dots$
 
 
-#### Distributional Properties of Proportions {-}
+### Distributional Properties of Proportions {-}
 
 Now, to assess the accuracy of our Monte Carlo integration for approximating $\Phi_n(x),$ we need to derive the distributional properties of our estimator $\hat{p}_n(x).$
 
