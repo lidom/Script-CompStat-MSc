@@ -233,6 +233,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#a-more-general-point-of-view" id="toc-a-more-general-point-of-view" class="nav-link" data-scroll-target="#a-more-general-point-of-view"><span class="toc-section-number">2.2.1</span>  A More General Point of View</a></li>
   </ul></li>
+  <li><a href="#exercises-of-chapters-1-2" id="toc-exercises-of-chapters-1-2" class="nav-link" data-scroll-target="#exercises-of-chapters-1-2">Exercises of Chapters 1 &amp; 2</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -465,7 +466,7 @@ h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2
 &amp;= \mathbb{E}_{f_{\mathcal{U}\text{[0,1]}}}(h(X)),
 \end{align*}
 \]</span> where <span class="math inline">\(f_{\mathcal{U}\text{[0,1]}}\)</span> denotes the density function of the standard uniform distribution <span class="math inline">\(\mathcal{U}\text{[0,1]}.\)</span></p>
-<p>Thus, to compute <span class="math inline">\(\int_0^1 h(x)dx\)</span> we generate a realization <span class="math inline">\((u_1,\dots,u_n)\)</span> from the random sample <span class="math inline">\(U_1,\dots,U_n\sim[0,1]\)</span> and approximate <span class="math display">\[
+<p>Thus, to compute <span class="math inline">\(\int_0^1 h(x)dx\)</span> we generate a realization <span class="math inline">\((u_1,\dots,u_n)\)</span> from the random sample <span class="math inline">\(U_1,\dots,U_n\sim \mathcal{U}[0,1]\)</span> and approximate <span class="math display">\[
 \int_0^1 h(x)dx\approx \bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(u_i).
 \]</span></p>
 <p>In order to assess how good this approximation is, we need to consider the stochastic properties of the random variable <span class="math display">\[
@@ -566,136 +567,183 @@ Note
 </div>
 </div>
 <div id="exm-ApproxNormTables" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables is to use MC simulations.</p>
-<p>Generate a realization <span class="math inline">\((x_1,\dots,x_n)\)</span> from an i.i.d. standard normal random sample <span class="math inline">\((X_1,\dots,X_n)\)</span>, e.g., using the Box-Muller algorithm.</p>
-<p>Then, the approximation of the standard normal cdf <span class="math display">\[
-\Phi(t)=\int_{-\infty}^t\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy
-\]</span> by the Monte Carlo method is thus <span class="math display">\[
-\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n 1_{(x_i\leq t)}.
-\]</span> The corresponding random variable<br>
-<span class="math display">\[
-\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n1_{(X_i\leq t)}
-\]</span> has (exact) variance <span class="math display">\[
-\mathbb{V}(\hat{\Phi}_n(t))=\frac{\Phi(t)(1-\Phi(t))}{n},
-\]</span> since the single random variables <span class="math inline">\(1_{(X_i\leq t)}\)</span> are independent Bernoulli distributed random variables with success probability <span class="math inline">\(p=\Phi(t),\)</span> and thus <span class="math inline">\(\hat{\Phi}_n(t)\)</span> is a binomial distributed random variables with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p=\Phi(t).\)</span></p>
-<p>For values of <span class="math inline">\(t\)</span> around <span class="math inline">\(t=0\)</span>, the variance is thus approximately <span class="math inline">\(1/4n,\)</span> <span class="math display">\[
-\mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
+<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use MC integration.</p>
+<p>Observe that the distribution function <span class="math inline">\(\Phi(x)\)</span> can be written as the mean of a binary (taking values 0 and 1) random variable, <span class="math display">\[
+\begin{align*}
+\Phi(x)
+&amp;=\int_{-\infty}^x\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy\\[2ex]
+&amp;=P\left(X \leq x\right)\\[2ex]
+&amp;=\mathbb{E}\left(1_{(X \leq x)}\right),
+\end{align*}
+\]</span> where <span class="math inline">\(X\sim\mathcal{N}(0,1),\)</span> and where <span class="math inline">\(1_{(\texttt{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\texttt{FALSE})}=0.\)</span></p>
+<p>Monte Carlo integration, allows us to approximate the integral <span class="math inline">\(\Phi(x)\)</span> using the empirical mean <span class="math display">\[
+\hat{p}_n(x)=\frac{1}{n}\sum_{i=1}^n 1_{(X_i\leq x)}
+\]</span> with <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{N}(0,1),
+\]</span> and <span class="math display">\[
+\hat{p}_n(x)\in[0,1]
+\]</span> for all <span class="math inline">\(x\in\mathbb{R},\)</span> and all “sample sizes” (chosen by us) <span class="math inline">\(n=1,2,\dots\)</span></p>
+<section id="distributional-properties-of-proportions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="distributional-properties-of-proportions">Distributional Properties of Proportions</h4>
+<p>Now, to assess the accuracy of our Monte Carlo integration for approximating <span class="math inline">\(\Phi_n(x),\)</span> we need to derive the distributional properties of our estimator <span class="math inline">\(\hat{p}_n(x).\)</span></p>
+<p>For this we consider, firstly, the transformed random variable <span class="math display">\[
+n \hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)},
+\]</span> which is just the sum of independent Bernoulli distributed random variables with success probability <span class="math inline">\(p=\Phi(x),\)</span> <span class="math display">\[
+1_{(X_1\leq x)},\dots,1_{(X_n\leq x)}\overset{\text{i.i.d.}}{\sim} \mathcal{Bern}\left(p=\Phi(x)\right)
+\]</span> Thus, the transformed random variable <span class="math display">\[
+n\hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)}
+\]</span> is <strong>binomial distributed</strong> with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p=\Phi(x),\)</span> <span class="math display">\[
+n \hat{p}_n(x)\sim \mathcal{Binom}\left(n, p=\Phi(x)\right).
+\]</span> Thus, we know the <em>exact</em> variance which is <span class="math display">\[
+\begin{align*}
+\mathbb{V}\left(n\hat{p}_n(x)\right)&amp;=\Phi(x)(1-\Phi(x)).
+%\Leftrightarrow \mathbb{V}\left(\hat{p}_n(t)\right) &amp;=\frac{\Phi(x)(1-\Phi(x))}{n}
+\end{align*}
+\]</span> The standard error for our estimator <span class="math inline">\(\hat{p}_n(x)\)</span> thus is equal to <span class="math display">\[
+\begin{align*}
+\operatorname{SE}\left(\hat{p}_n(x)\right)
+&amp;=\sqrt{\frac{\Phi(x)(1-\Phi(x))}{n}}\\[2ex]
+&amp;=\texttt{const}\cdot \frac{1}{\sqrt{n}}
+\end{align*}
+\]</span> That is, the Monte Carlo integration algorithm has the typical parametric convergence rate of <span class="math display">\[
+\frac{1}{\sqrt{n}}.
 \]</span></p>
-<p>The table below gives the evolution of this approximation for several values of <span class="math inline">\(t\)</span> and shows a very accurate evaluation for <span class="math inline">\(n=10^8\)</span>.</p>
+<!-- For values of $x$ around $x=0$, the variance is thus approximately $1/4n,$
+$$
+\mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
+$$   -->
+<p><a href="#tbl-CIProp">Table&nbsp;<span>2.1</span></a> gives the evolution of the Monte Carlo integration results <span class="math display">\[
+\hat{p}_n(x)\approx \Phi(x)
+\]</span> for several values of <span class="math inline">\(x\)</span> and <span class="math inline">\(n.\)</span> Very accurate approximations are achieved for <span class="math inline">\(n=10^8.\)</span></p>
+<div id="tbl-CIProp" class="anchored">
 <table class="table">
-<colgroup>
-<col style="width: 7%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 12%">
-</colgroup>
+<caption>Table&nbsp;2.1: Monte Carlo integration results <span class="math inline">\(\hat{p}_n(x)\approx \Phi(x)\)</span> for different values of <span class="math inline">\(x\)</span> and sample sizes <span class="math inline">\(n.\)</span></caption>
 <thead>
 <tr class="header">
 <th><span class="math inline">\(n\)</span></th>
-<th>t=0.0</th>
-<th>t=0.67</th>
-<th>t=0.84</th>
-<th>t=1.28</th>
-<th>t=1.65</th>
-<th>t=2.32</th>
-<th>t=2.58</th>
-<th>t=3.09</th>
-<th>t=3.72</th>
+<th><span class="math inline">\(x=0.0\)</span></th>
+<th><span class="math inline">\(x=0.84\)</span></th>
+<th><span class="math inline">\(x=3.72\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>10^2</td>
-<td>0.485</td>
-<td>0.74</td>
-<td>0.77</td>
-<td>0.9</td>
-<td>0.945</td>
-<td>0.985</td>
-<td>0.995</td>
-<td>1</td>
-<td>1</td>
+<td><span class="math inline">\(10^2\)</span></td>
+<td><span class="math inline">\(0.4850\)</span></td>
+<td><span class="math inline">\(0.7700\)</span></td>
+<td><span class="math inline">\(1.0000\)</span></td>
 </tr>
 <tr class="even">
-<td>10^3</td>
-<td>0.4925</td>
-<td>0.7455</td>
-<td>0.801</td>
-<td>0.902</td>
-<td>0.9425</td>
-<td>0.9885</td>
-<td>0.9955</td>
-<td>0.9985</td>
-<td>1</td>
+<td><span class="math inline">\(10^3\)</span></td>
+<td><span class="math inline">\(0.4925\)</span></td>
+<td><span class="math inline">\(0.8010\)</span></td>
+<td><span class="math inline">\(1.0000\)</span></td>
 </tr>
 <tr class="odd">
-<td>10^4</td>
-<td>0.4962</td>
-<td>0.7425</td>
-<td>0.7941</td>
-<td>0.9</td>
-<td>0.9498</td>
-<td>0.9896</td>
-<td>0.995</td>
-<td>0.999</td>
-<td>0.9999</td>
+<td><span class="math inline">\(10^4\)</span></td>
+<td><span class="math inline">\(0.4962\)</span></td>
+<td><span class="math inline">\(0.7941\)</span></td>
+<td><span class="math inline">\(0.9999\)</span></td>
 </tr>
 <tr class="even">
-<td>10^5</td>
-<td>0.4995</td>
-<td>0.7489</td>
-<td>0.7993</td>
-<td>0.9003</td>
-<td>0.9498</td>
-<td>0.9898</td>
-<td>0.995</td>
-<td>0.9989</td>
-<td>0.9999</td>
+<td><span class="math inline">\(10^5\)</span></td>
+<td><span class="math inline">\(0.4995\)</span></td>
+<td><span class="math inline">\(0.7993\)</span></td>
+<td><span class="math inline">\(0.9999\)</span></td>
 </tr>
 <tr class="odd">
-<td>10^6</td>
-<td>0.5001</td>
-<td>0.7497</td>
-<td>0.8</td>
-<td>0.9002</td>
-<td>0.9502</td>
-<td>0.99</td>
-<td>0.995</td>
-<td>0.999</td>
-<td>0.9999</td>
+<td><span class="math inline">\(10^6\)</span></td>
+<td><span class="math inline">\(0.5001\)</span></td>
+<td><span class="math inline">\(0.8000\)</span></td>
+<td><span class="math inline">\(0.9999\)</span></td>
 </tr>
 <tr class="even">
-<td>10^7</td>
-<td>0.5002</td>
-<td>0.7499</td>
-<td>0.8</td>
-<td>0.9001</td>
-<td>0.9501</td>
-<td>0.99</td>
-<td>0.995</td>
-<td>0.999</td>
-<td>0.9999</td>
+<td><span class="math inline">\(10^7\)</span></td>
+<td><span class="math inline">\({\color{red}0.5002}\)</span></td>
+<td><span class="math inline">\(0.8000\)</span></td>
+<td><span class="math inline">\(0.9999\)</span></td>
 </tr>
 <tr class="odd">
-<td>10^8</td>
-<td>0.5</td>
-<td>0.75</td>
-<td>0.8</td>
-<td>0.9</td>
-<td>0.95</td>
-<td>0.99</td>
-<td>0.995</td>
-<td>0.999</td>
-<td>0.9999</td>
+<td><span class="math inline">\(10^8\)</span></td>
+<td><span class="math inline">\(0.5000\)</span></td>
+<td><span class="math inline">\(0.8000\)</span></td>
+<td><span class="math inline">\(0.9999\)</span></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that <strong>greater accuracy is achieved in the tails</strong>.</p>
+</div>
+</div>
+</section>
+<section id="confidence-intervals-for-proportions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="confidence-intervals-for-proportions">Confidence Intervals for Proportions</h4>
+<p>As an additional tool for showing the accuracy of our Monte Carlo integration, we can report confidence intervals.</p>
+<p>For large <span class="math inline">\(n,\)</span> we have by the CLT that <span id="eq-AsymDistrProp"><span class="math display">\[
+\begin{align*}
+\frac{\hat{p}_n(x) -  \Phi(x)}{\operatorname{SE}\left(\hat{p}_n(x)\right)} \overset{d}{\approx}\mathcal{N}(0,1).
+\end{align*}
+\tag{2.2}\]</span></span> Thus, for large <span class="math inline">\(n,\)</span> we can provide an approximate confidence interval <span id="eq-CIProp1"><span class="math display">\[
+\begin{align*}
+\operatorname{CI}^{95\%}_n\left(\Phi(x)\right)
+=&amp;\left[
+  \hat{p}_n(x) \pm z_{1-\alpha/2}\operatorname{SE}\left(\hat{p}_n(x)\right)
+  \right].
+\end{align*}
+\tag{2.3}\]</span></span> This confidence interval is an approximate one, since the quantile <span class="math inline">\(z_{1-\alpha/2}\)</span> uses the approximate asymptotic <span class="math inline">\(\mathcal{N}(0,1)\)</span> distribution in <a href="#eq-AsymDistrProp">Equation&nbsp;<span>2.2</span></a>. To make the confidence interval in <a href="#eq-CIProp1">Equation&nbsp;<span>2.3</span></a> usable in practice, we need to plug-in an estimate for the unknown <span class="math inline">\(\operatorname{SE}\left(\hat{p}_n(x)\right),\)</span> <span class="math display">\[
+\widehat{\operatorname{SE}}\left(\hat{p}_n(x)\right) = \sqrt{\frac{\hat{p}_n(x)(1-\hat{p}_n(x))}{n}}.
+\]</span></p>
+<p>However, it turns out that going the indirect way via the central limit theorem to derive a confidence interval is not optimal here. A more efficient <strong>confidence interval for proportions</strong> is, for instance, the <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Clopper%E2%80%93Pearson_interval">Clopper-Pearson confidence interval</a> (<span class="citation" data-cites="Clopper_Pearson_1934">Clopper and Pearson (<a href="#ref-Clopper_Pearson_1934" role="doc-biblioref">1934</a>)</span>).</p>
+<p>The following code snippet computes the 99% Clopper-Pearson confidence interval for the <span style="color:red">red marked</span> Monte Carlo integration result, <span class="math inline">\(\hat{p}_n(0)=0.5002,\)</span> in <a href="#tbl-CIProp">Table&nbsp;<span>2.1</span></a>.</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-5_2f6319a78a68e973f59df089514e5a26">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages("PropCIs")</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"PropCIs"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Clopper-Pearson confidence interval</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">10e7</span>       <span class="co"># "sample" size (chosen by use)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">0.5002</span> <span class="sc">*</span> n <span class="co"># observed value of n * \hat{p}_n(x) </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">&lt;-</span> <span class="fu">exactci</span>(<span class="at">x          =</span> x, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">n          =</span> n, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Lower and upper CI-border              </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(CI<span class="sc">$</span>conf.int[<span class="dv">1</span>], CI<span class="sc">$</span>conf.int[<span class="dv">2</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5001089 0.5002911</code></pre>
+</div>
+</div>
+<!-- $n$    |$x=0.0$  |$x=0.84$ |$x=1.65$ |$x=2.58$ |$x=3.72$ 
+-------|---------|---------|---------|---------|---------
+$10^2$ |$0.485$  |$0.77$   |$0.945$  |$0.995$  |$1$      
+$10^3$ |$0.4925$ |$0.801$  |$0.9425$ |$0.9955$ |$1$      
+$10^4$ |$0.4962$ |$0.7941$ |$0.9498$ |$0.995$  |$0.9999$ 
+$10^5$ |$0.4995$ |$0.7993$ |$0.9498$ |$0.995$  |$0.9999$ 
+$10^6$ |$0.5001$ |$0.8$    |$0.9502$ |$0.995$  |$0.9999$ 
+$10^7$ |$0.5002$ |$0.8$    |$0.9501$ |$0.995$  |$0.9999$ 
+$10^8$ |$0.5$    |$0.8$    |$0.95$   |$0.995$  |$0.9999$  -->
+<!--                  X                   X                   X                   X
+$n$    |$x=0.0$  |$x=0.67$ |$x=0.84$ |$x=1.28$ |$x=1.65$ |$x=2.32$ |$x=2.58$ |$x=3.09$ |$x=3.72$ 
+-----  |-------  |-------  |-------  |-------  |-------  |-------  |-------  |-------  |---------
+$10^2$ |$0.485$  |$0.74$   |0.77     |0.9      |0.945    |0.985    |0.995    |1        |1      
+$10^3$ |$0.4925$ |$0.7455$ |0.801    |0.902    |0.9425   |0.9885   |0.9955   |0.9985   |1      
+$10^4$ |$0.4962$ |$0.7425$ |0.7941   |0.9      |0.9498   |0.9896   |0.995    |0.999    |0.9999 
+$10^5$ |$0.4995$ |$0.7489$ |0.7993   |0.9003   |0.9498   |0.9898   |0.995    |0.9989   |0.9999 
+$10^6$ |$0.5001$ |$0.7497$ |0.8      |0.9002   |0.9502   |0.99     |0.995    |0.999    |0.9999 
+$10^7$ |$0.5002$ |$0.7499$ |0.8      |0.9001   |0.9501   |0.99     |0.995    |0.999    |0.9999 
+$10^8$ |$0.5$    |$0.75$   |0.8      |0.9      |0.95     |0.99     |0.995    |0.999    |0.9999  
+-->
 <!-- $$
 \begin{array}{cccccccccc}
 \hline
@@ -710,28 +758,19 @@ n   &t=0.0  &t=0.67 &t=0.84 &t=1.28 &t=1.65 &t=2.32 &t=2.58 &t=3.09 &t=3.72 \\
 10^8 &0.5    &0.75   &0.8    &0.9    &0.95   &0.99   &0.995  &0.999  &0.9999 \\
 \end{array}
 $$ -->
-<div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li><p>To achieve a precision of <strong>four decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, the approximation requires on average <span class="math inline">\(n\approx 10^8\)</span> simulations.</p></li>
-<li><p>To achieve a precision of <strong>two decimals</strong> by means of a <span class="math inline">\(99.9\%\)</span> confidence interval, already <span class="math inline">\(n=10^4\)</span> leads to satisfactory results.</p></li>
-<li><p>Note that <strong>greater accuracy is achieved in the tails</strong> and that more efficient simulation methods could be used (e.g., Importance Sampling).</p></li>
-</ul>
-</div>
-</div>
+<!-- * To achieve a precision of **four decimals** by means of a $99.9\%$ confidence interval, the approximation requires on average $n\approx 10^8$ simulations. 
+
+* To achieve a precision of **two decimals** by means of a $99.9\%$  confidence interval, already $n=10^4$ leads to satisfactory results.  -->
+<!-- * Note that **greater accuracy is achieved in the tails** 
+
+* More efficient simulation methods could be used (e.g., Importance Sampling).  -->
+</section>
 </div>
 </section>
 </section>
 <section id="importance-sampling" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">2.2</span> Importance Sampling</h2>
+<p>As demonstrated in <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, the accuracy of the Monte Carlo integration method depends on the variance of the estimate that approximates the integral value.</p>
 <p>Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it’s refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
 <p>As in the case of Monte Carlo integration the focus lies on evaluating the integral <span class="math display">\[
 \mathbb{E}_{f_X}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
@@ -745,7 +784,7 @@ Note
 <p><span class="theorem-title"><strong>Example 2.3 (Cauchy Tail Probability) </strong></span>This example is from <span class="citation" data-cites="Ripley_2009">Ripley (<a href="#ref-Ripley_2009" role="doc-biblioref">2009</a>)</span>.</p>
 <p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> <span class="math inline">\(\mathcal{C}(0,1)\)</span>-distributed random variable is larger than <span class="math inline">\(2\)</span>, i.e. <span id="eq-CauchIntegral"><span class="math display">\[
 p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx.
-\tag{2.2}\]</span></span> This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of <a href="#eq-CauchIntegral">Equation&nbsp;<span>2.2</span></a>; namely, <span class="math inline">\(p=0.1476\)</span> <!-- $$
+\tag{2.4}\]</span></span> This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of <a href="#eq-CauchIntegral">Equation&nbsp;<span>2.4</span></a>; namely, <span class="math inline">\(p=0.1476\)</span> <!-- $$
 \begin{align*}
 p
 &=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
@@ -754,8 +793,8 @@ p
 &=\frac{1}{\pi}\lim_{b\to\infty}\left(\frac{1}{\tan(b)}-\frac{1}{\tan(2)}\right)\\[2ex]
 \end{align*}
 $$ --></p>
-<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-5_ebc843e4c3a8fbf223c4b4cc6a189f53">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pcauchy</span>(<span class="dv">2</span>), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-6_910b12e9c35fd9721643eb44f1b988db">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pcauchy</span>(<span class="dv">2</span>), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1476</code></pre>
 </div>
@@ -833,10 +872,10 @@ p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\inf
 &amp;=\frac{1}{n}\sum_{i=1}^n\psi(X_i) \\[2ex]
 &amp;=\frac{1}{n}\sum_{i=1}^n\underbrace{\left(\frac{f(X_i)}{g(X_i)}\right)}_{=:W_i} h(X_i)
 \end{align*}
-\tag{2.3}\]</span></span> with <span class="math display">\[
+\tag{2.5}\]</span></span> with <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} g.
 \]</span></p>
-<p>Note that <a href="#eq-ImportSample">Equation&nbsp;<span>2.3</span></a> can be seen as a weighted mean of the transformed random variables <span class="math inline">\(h(X_i)\)</span> with weights <span class="math display">\[
+<p>Note that <a href="#eq-ImportSample">Equation&nbsp;<span>2.5</span></a> can be seen as a weighted mean of the transformed random variables <span class="math inline">\(h(X_i)\)</span> with weights <span class="math display">\[
 W_i = \frac{f(X_i)}{g(X_i)}
 \]</span> that are inversely proportional to the so-called <strong>selection factor</strong> <span class="math display">\[
 \frac{g(X_i)}{f(X_i)}.
@@ -899,11 +938,11 @@ p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\u
 <li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
 <li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f\)</span>.</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-6_5463de1d21fab0c73d3a006d73d15b54">
+<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-7_beb39e0cb94c451b649d5c5a219ab27f">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1044,7 +1083,7 @@ see, e.g., the classical book "Approximation Theorems of Mathematical Statistics
 To run the 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-7_4d1b02113eadc62e7c8c6063a6e30113'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-8_007bedb57ed10c2dfe97d45b96ef5c0c'}
 
 ```{.r .cell-code}
 set.seed(123)
@@ -1085,7 +1124,7 @@ where $\varepsilon_{t}\sim N(0,\sigma_\varepsilon^2)$ with $0<\varepsilon^2<\inf
 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-8_67ed805b8d79b114d2f7016da9b0d2b8'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-9_ca81624119e21fc2b128118e96c78cb5'}
 
 ```{.r .cell-code}
 LL_fun <- function(beta0, beta1, sigma) {
@@ -1103,11 +1142,86 @@ LL_fun <- function(beta0, beta1, sigma) {
 -->
 </section>
 </section>
+<section id="exercises-of-chapters-1-2" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises-of-chapters-1-2">Exercises of Chapters 1 &amp; 2</h2>
+<ol type="1">
+<li><p>Consider <a href="Ch1_Random_Variable_Generation.html#exm-AREfficiency">Example&nbsp;<span>1.9</span></a> (“Normals from Double Exponentials”). Let <span class="math inline">\(f\)</span> be the density of the standard normal distribution <span class="math inline">\(\mathcal{N}(0,1),\)</span> <span class="math display">\[
+\begin{align*}
+f(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right),
+\end{align*}
+\]</span> and <span class="math inline">\(g\)</span> the density of the Laplace (double exponential) distribution <span class="math display">\[
+\begin{align*}
+g(x|b) = \frac{1}{2b}\exp\left(-\frac{|x|}{2}\right),\quad b&gt;0.
+\end{align*}
+\]</span></p>
+<ol type="a">
+<li>Show that <span class="math display">\[
+\begin{align*}
+\frac{f(x)}{g(x|b)}\leq \sqrt{\frac{2}{\pi}} \; b\;\exp\left(\frac{1}{2b^2}\right).
+\end{align*}
+\]</span></li>
+<li>Show that the minimum of the bound (in <span class="math inline">\(b&gt;0\)</span>) is attained at <span class="math inline">\(b=1.\)</span></li>
+</ol></li>
+<li><p>Consider the Accept-Reject Algorithm for a target density function <span class="math inline">\(f_X\)</span> and an instrumental density function <span class="math inline">\(g\)</span> with <span class="math inline">\(f_X(x) \leq Mg(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span> and <span class="math inline">\(g(x)&gt;0\)</span> for all <span class="math inline">\(x\in\operatorname{supp}(f_X).\)</span></p>
+<ol type="a">
+<li>What is the probability of accepting <span class="math inline">\(Y\)</span> from a simulation <span class="math display">\[
+(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right)?
+\]</span></li>
+<li>Show that <span class="math inline">\(M\geq 1.\)</span></li>
+</ol></li>
+<li><p>Consider the following faster version of the Box-Muller algorithm:<br> <strong>1. Step:</strong> Generate <span class="math display">\[
+  U_1, U_2\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1]
+  \]</span> until <span class="math inline">\(S = U_1^2+ U_2^2 \leq 1.\)</span><br> <strong>2. Step:</strong> Define <span class="math display">\[
+  Z = \sqrt{-2\log(S)/S}
+  \]</span> and take <span class="math display">\[
+  X_1 = Z U_1\quad\text{and}\quad X_2 = Z U_2
+  \]</span></p>
+<ol type="a">
+<li>Show that <span class="math inline">\((U_1,U_2)\)</span> is uniformly distributed over the unit sphere.</li>
+<li>Show that <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> are independent.</li>
+</ol></li>
+</ol>
+<!-- MC Stat Methods. Problem 2.10. -->
+<!-- 1. A possible algorithm for generating standard normal random variables from $n$ standard uniformly distributed random variables $U_1,\dots,U_n\sim\mathcal{U}[0,1],$ would be to use the Central Limit Theorem (CLT), i.e.
+$$
+Y_n=\frac{\sqrt{n}\left(\bar{U}_n - \mu\right)}{\sigma}\to_d \mathcal{N}(0,1).
+$$
+as $n\to\infty,$ where $\mathbb{E}(U_1)=\mu$ and $\mathbb{V}(U_1)=\sigma^2.$
+
+Asses this "algorithm" critically by answering the following questions: 
+ (a) What is the maximal range of values of the generated random variables $Y_n$?  
+ (b) Compare the moments of $Y_n$ with those of $\mathcal{N}(0,1)$ using the moment generating function 
+$$
+ M_X(t) = \mathbb{E}\left(\exp\left(t X\right)\right)
+$$ 
+ Hint: For the case of $U\sim\mathcal{U}[0,1],$ the moment generating function is 
+$$
+ M_U(t) = \mathbb{E}\left(\exp\left(t U\right)\right)=\frac{\exp(t) - 1}{t}.
+$$ 
+
+::: {.callout-tip}
+The distribution of a random variable $X$ can be characterized (completely) using any of the following functions (provided they exist):
+
+* Density function $f_X$
+
+* Distribution function $F_X(x)=\int_{-\infty}^x f_X(u)\,du$
+
+* Moment generating function $M_X(t)=\mathbb{E}\left(\exp\left(t X\right)\right),$ where $t\in\mathbb{R}.$ The $j$th derivative of $M_X$ evaluated at $t=0$ gives the $j$th moment  
+  $$
+  \left.M_X^{(j)}(t)\right|_{t=0} = \mathbb{E}(X^j),\quad j=1,2,\dots 
+  $$
+:::
+-->
+<!-- {{< include Ch2_Solutions.qmd >}} -->
+</section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Clopper_Pearson_1934" class="csl-entry" role="doc-biblioentry">
+Clopper, Charles J, and Egon S Pearson. 1934. <span>“The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial.”</span> <em>Biometrika</em> 26 (4): 404–13.
+</div>
 <div id="ref-Ripley_2009" class="csl-entry" role="doc-biblioentry">
 Ripley, Brian D. 2009. <em>Stochastic Simulation</em>. John Wiley &amp; Sons. <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">http://onlinelibrary.wiley.com/book/10.1002/9780470316726</a>.
 </div>

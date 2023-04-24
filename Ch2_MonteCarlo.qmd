@@ -251,7 +251,7 @@ $$
 $$ 
 where $f_{\mathcal{U}\text{[0,1]}}$ denotes the density function of the standard uniform distribution $\mathcal{U}\text{[0,1]}.$ 
 
-Thus, to compute $\int_0^1 h(x)dx$ we generate a realization $(u_1,\dots,u_n)$ from the random sample $U_1,\dots,U_n\sim[0,1]$ and approximate 
+Thus, to compute $\int_0^1 h(x)dx$ we generate a realization $(u_1,\dots,u_n)$ from the random sample $U_1,\dots,U_n\sim \mathcal{U}[0,1]$ and approximate 
 $$
 \int_0^1 h(x)dx\approx \bar{h}_n=\frac{1}{n}\sum_{i=1}^n h(u_i).
 $$ 
@@ -356,47 +356,175 @@ However, the Monte Carlo integration approach is particularly useful for approxi
 
 ## Approximation of Normal Distribution Tables
 
-A possible way to construct normal distribution tables is to use MC simulations. 
+A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use MC integration. 
 
-Generate a realization $(x_1,\dots,x_n)$ from an i.i.d. standard normal random sample $(X_1,\dots,X_n)$, e.g., using the Box-Muller algorithm. 
+Observe that the distribution function $\Phi(x)$ can be written as the mean of a binary (taking values 0 and 1) random variable,
+$$
+\begin{align*}
+\Phi(x)
+&=\int_{-\infty}^x\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy\\[2ex]
+&=P\left(X \leq x\right)\\[2ex]
+&=\mathbb{E}\left(1_{(X \leq x)}\right),
+\end{align*}
+$$
+where $X\sim\mathcal{N}(0,1),$ and where $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$
 
-Then, the approximation of the standard normal cdf
+Monte Carlo integration, allows us to approximate the integral $\Phi(x)$ using the empirical mean 
 $$
-\Phi(t)=\int_{-\infty}^t\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy
+\hat{p}_n(x)=\frac{1}{n}\sum_{i=1}^n 1_{(X_i\leq x)}
 $$
-by the Monte Carlo method is thus
+with 
 $$
-\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n 1_{(x_i\leq t)}.
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{N}(0,1),
 $$
-The corresponding random variable  
+and 
 $$
-\hat{\Phi}_n(t)=\frac{1}{n}\sum_{i=1}^n1_{(X_i\leq t)}
+\hat{p}_n(x)\in[0,1]
+$$
+for all $x\in\mathbb{R},$ and all "sample sizes" (chosen by us) $n=1,2,\dots$
+
+
+#### Distributional Properties of Proportions {-}
+
+Now, to assess the accuracy of our Monte Carlo integration for approximating $\Phi_n(x),$ we need to derive the distributional properties of our estimator $\hat{p}_n(x).$
+
+For this we consider, firstly, the transformed random variable 
+$$
+n \hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)},
 $$ 
-has (exact) variance 
+which is just the sum of independent Bernoulli distributed random variables with success probability $p=\Phi(x),$ 
 $$
-\mathbb{V}(\hat{\Phi}_n(t))=\frac{\Phi(t)(1-\Phi(t))}{n},
+1_{(X_1\leq x)},\dots,1_{(X_n\leq x)}\overset{\text{i.i.d.}}{\sim} \mathcal{Bern}\left(p=\Phi(x)\right)
 $$
-since the single random variables $1_{(X_i\leq t)}$ are independent Bernoulli distributed random variables with success probability $p=\Phi(t),$ and thus $\hat{\Phi}_n(t)$ is a binomial distributed random variables with parameters $n$ and $p=\Phi(t).$ 
+Thus, the transformed random variable 
+$$
+n\hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)}
+$$ 
+is **binomial distributed** with parameters $n$ and $p=\Phi(x),$
+$$
+n \hat{p}_n(x)\sim \mathcal{Binom}\left(n, p=\Phi(x)\right).
+$$ 
+Thus, we know the *exact* variance which is 
+$$
+\begin{align*}
+\mathbb{V}\left(n\hat{p}_n(x)\right)&=\Phi(x)(1-\Phi(x)).
+%\Leftrightarrow \mathbb{V}\left(\hat{p}_n(t)\right) &=\frac{\Phi(x)(1-\Phi(x))}{n}
+\end{align*}
+$$
+The standard error for our estimator $\hat{p}_n(x)$ thus is equal to 
+$$
+\begin{align*}
+\operatorname{SE}\left(\hat{p}_n(x)\right) 
+&=\sqrt{\frac{\Phi(x)(1-\Phi(x))}{n}}\\[2ex]
+&=\texttt{const}\cdot \frac{1}{\sqrt{n}}
+\end{align*}
+$$
+That is, the Monte Carlo integration algorithm has the typical parametric convergence rate of 
+$$
+\frac{1}{\sqrt{n}}.
+$$
 
-For values of $t$ around $t=0$, the variance is thus approximately $1/4n,$
+
+
+
+<!-- For values of $x$ around $x=0$, the variance is thus approximately $1/4n,$
 $$
 \mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
-$$  
+$$   -->
 
-The table below gives the evolution of this approximation for several values of $t$ and shows a very accurate evaluation for $n=10^8$. 
+@tbl-CIProp gives the evolution of the Monte Carlo integration results 
+$$
+\hat{p}_n(x)\approx \Phi(x)
+$$
+for several values of $x$ and $n.$ Very accurate approximations are achieved for $n=10^8.$ 
+
+
+$n$    |$x=0.0$  |$x=0.84$ |$x=3.72$ 
+-------|---------|---------|---------
+$10^2$ |$0.4850$ |$0.7700$ |$1.0000$      
+$10^3$ |$0.4925$ |$0.8010$ |$1.0000$      
+$10^4$ |$0.4962$ |$0.7941$ |$0.9999$ 
+$10^5$ |$0.4995$ |$0.7993$ |$0.9999$ 
+$10^6$ |$0.5001$ |$0.8000$ |$0.9999$ 
+$10^7$ |${\color{red}0.5002}$ |$0.8000$ |$0.9999$ 
+$10^8$ |$0.5000$ |$0.8000$ |$0.9999$ 
+
+: Monte Carlo integration results $\hat{p}_n(x)\approx \Phi(x)$ for different values of $x$ and sample sizes $n.$  {#tbl-CIProp}
+
+
+::: {.callout-note}
+Note that **greater accuracy is achieved in the tails**. 
+:::
+
+#### Confidence Intervals for Proportions {-}
+
+As an additional tool for showing the accuracy of our Monte Carlo integration, we can report confidence intervals. 
+
+For large $n,$ we have by the CLT that 
+$$
+\begin{align*}
+\frac{\hat{p}_n(x) -  \Phi(x)}{\operatorname{SE}\left(\hat{p}_n(x)\right)} \overset{d}{\approx}\mathcal{N}(0,1).
+\end{align*}
+$${#eq-AsymDistrProp}
+Thus, for large $n,$ we can provide an approximate confidence interval 
+$$
+\begin{align*}
+\operatorname{CI}^{95\%}_n\left(\Phi(x)\right)
+=&\left[
+  \hat{p}_n(x) \pm z_{1-\alpha/2}\operatorname{SE}\left(\hat{p}_n(x)\right)
+  \right].
+\end{align*}
+$${#eq-CIProp1}
+This confidence interval is an approximate one, since the quantile $z_{1-\alpha/2}$ uses the approximate asymptotic $\mathcal{N}(0,1)$ distribution in @eq-AsymDistrProp. To make the confidence interval in @eq-CIProp1 usable in practice, we need to plug-in an estimate for the unknown $\operatorname{SE}\left(\hat{p}_n(x)\right),$ 
+$$
+\widehat{\operatorname{SE}}\left(\hat{p}_n(x)\right) = \sqrt{\frac{\hat{p}_n(x)(1-\hat{p}_n(x))}{n}}.
+$$
+
+However, it turns out that going the indirect way via the central limit theorem to derive a confidence interval is not optimal here. A more efficient **confidence interval for proportions** is, for instance, the [Clopper-Pearson confidence interval](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Clopper%E2%80%93Pearson_interval) (@Clopper_Pearson_1934). 
+
+The following code snippet computes the 99% Clopper-Pearson confidence interval for the <span style="color:red">red marked</span> Monte Carlo integration result, $\hat{p}_n(0)=0.5002,$ in @tbl-CIProp. 
+
+```{r}
+## install.packages("PropCIs")
+library("PropCIs")
+
+## Clopper-Pearson confidence interval
+
+n <- 10e7       # "sample" size (chosen by use)
+x <- 0.5002 * n # observed value of n * \hat{p}_n(x) 
+
+CI <- exactci(x          = x, 
+              n          = n, 
+              conf.level = 0.99)
+
+## Lower and upper CI-border              
+c(CI$conf.int[1], CI$conf.int[2]) 
+```
 
 
 
+<!-- $n$    |$x=0.0$  |$x=0.84$ |$x=1.65$ |$x=2.58$ |$x=3.72$ 
+-------|---------|---------|---------|---------|---------
+$10^2$ |$0.485$  |$0.77$   |$0.945$  |$0.995$  |$1$      
+$10^3$ |$0.4925$ |$0.801$  |$0.9425$ |$0.9955$ |$1$      
+$10^4$ |$0.4962$ |$0.7941$ |$0.9498$ |$0.995$  |$0.9999$ 
+$10^5$ |$0.4995$ |$0.7993$ |$0.9498$ |$0.995$  |$0.9999$ 
+$10^6$ |$0.5001$ |$0.8$    |$0.9502$ |$0.995$  |$0.9999$ 
+$10^7$ |$0.5002$ |$0.8$    |$0.9501$ |$0.995$  |$0.9999$ 
+$10^8$ |$0.5$    |$0.8$    |$0.95$   |$0.995$  |$0.9999$  -->
 
-$n$  |t=0.0|t=0.67 |t=0.84 |t=1.28 |t=1.65 |t=2.32 |t=2.58 |t=3.09 |t=3.72 
------|-------|-------|-------|-------|-------|-------|-------|-------|---------
-10^2 |0.485  |0.74   |0.77   |0.9    |0.945  |0.985  |0.995  |1      |1      
-10^3 |0.4925 |0.7455 |0.801  |0.902  |0.9425 |0.9885 |0.9955 |0.9985 |1      
-10^4 |0.4962 |0.7425 |0.7941 |0.9    |0.9498 |0.9896 |0.995  |0.999  |0.9999 
-10^5 |0.4995 |0.7489 |0.7993 |0.9003 |0.9498 |0.9898 |0.995  |0.9989 |0.9999 
-10^6 |0.5001 |0.7497 |0.8    |0.9002 |0.9502 |0.99   |0.995  |0.999  |0.9999 
-10^7 |0.5002 |0.7499 |0.8    |0.9001 |0.9501 |0.99   |0.995  |0.999  |0.9999 
-10^8 |0.5    |0.75   |0.8    |0.9    |0.95   |0.99   |0.995  |0.999  |0.9999 
+
+<!--                  X                   X                   X                   X
+$n$    |$x=0.0$  |$x=0.67$ |$x=0.84$ |$x=1.28$ |$x=1.65$ |$x=2.32$ |$x=2.58$ |$x=3.09$ |$x=3.72$ 
+-----  |-------  |-------  |-------  |-------  |-------  |-------  |-------  |-------  |---------
+$10^2$ |$0.485$  |$0.74$   |0.77     |0.9      |0.945    |0.985    |0.995    |1        |1      
+$10^3$ |$0.4925$ |$0.7455$ |0.801    |0.902    |0.9425   |0.9885   |0.9955   |0.9985   |1      
+$10^4$ |$0.4962$ |$0.7425$ |0.7941   |0.9      |0.9498   |0.9896   |0.995    |0.999    |0.9999 
+$10^5$ |$0.4995$ |$0.7489$ |0.7993   |0.9003   |0.9498   |0.9898   |0.995    |0.9989   |0.9999 
+$10^6$ |$0.5001$ |$0.7497$ |0.8      |0.9002   |0.9502   |0.99     |0.995    |0.999    |0.9999 
+$10^7$ |$0.5002$ |$0.7499$ |0.8      |0.9001   |0.9501   |0.99     |0.995    |0.999    |0.9999 
+$10^8$ |$0.5$    |$0.75$   |0.8      |0.9      |0.95     |0.99     |0.995    |0.999    |0.9999  
+-->
 
 
 
@@ -416,21 +544,20 @@ n   &t=0.0  &t=0.67 &t=0.84 &t=1.28 &t=1.65 &t=2.32 &t=2.58 &t=3.09 &t=3.72 \\
 $$ -->
 
 
+<!-- * To achieve a precision of **four decimals** by means of a $99.9\%$ confidence interval, the approximation requires on average $n\approx 10^8$ simulations. 
 
+* To achieve a precision of **two decimals** by means of a $99.9\%$  confidence interval, already $n=10^4$ leads to satisfactory results.  -->
 
-::: {.callout-note}
+<!-- * Note that **greater accuracy is achieved in the tails** 
 
-* To achieve a precision of **four decimals** by means of a $99.9\%$ confidence interval, the approximation requires on average $n\approx 10^8$ simulations. 
-
-* To achieve a precision of **two decimals** by means of a $99.9\%$  confidence interval, already $n=10^4$ leads to satisfactory results. 
-
-* Note that **greater accuracy is achieved in the tails** and that more efficient simulation methods could be used (e.g., Importance Sampling). 
-:::
+* More efficient simulation methods could be used (e.g., Importance Sampling).  -->
 
 :::
 
 
 ## Importance Sampling
+
+As demonstrated in @exm-ApproxNormTables, the accuracy of the Monte Carlo integration method depends on the variance of the estimate that approximates the integral value. 
 
 Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it's refereed to as a **variance reduction** technique. This variance reduction is achieved by weighting functions, so-called **importance functions**. 
 
@@ -901,6 +1028,97 @@ LL_fun <- function(beta0, beta1, sigma) {
 }
 ```
 -->
+
+
+
+## Exercises of Chapters 1 & 2 {-}
+
+1. Consider @exm-AREfficiency ("Normals from Double Exponentials"). Let $f$ be the density of the standard normal distribution $\mathcal{N}(0,1),$
+$$
+\begin{align*}
+f(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right),
+\end{align*}
+$$
+and $g$ the density of the Laplace (double exponential) distribution
+$$
+\begin{align*}
+g(x|b) = \frac{1}{2b}\exp\left(-\frac{|x|}{2}\right),\quad b>0.
+\end{align*}
+$$
+
+    (a) Show that 
+    $$
+    \begin{align*}
+    \frac{f(x)}{g(x|b)}\leq \sqrt{\frac{2}{\pi}} \; b\;\exp\left(\frac{1}{2b^2}\right).
+    \end{align*}
+    $$
+    (b) Show that the minimum of the bound (in $b>0$) is attained at $b=1.$
+
+1. Consider the Accept-Reject Algorithm for a target density function $f_X$ and an instrumental density function $g$ with $f_X(x) \leq Mg(x)$ for all $x\in\mathbb{R}$ and $g(x)>0$ for all $x\in\operatorname{supp}(f_X).$ 
+  
+   (a) What is the probability of accepting $Y$ from a simulation 
+   $$
+   (Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right)?
+   $$ 
+   (b) Show that $M\geq 1.$
+
+2. Consider the following faster version of the Box-Muller algorithm:<br> 
+  **1. Step:** Generate 
+  $$
+  U_1, U_2\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1] 
+  $$
+  until $S = U_1^2+ U_2^2 \leq 1.$<br>
+  **2. Step:** Define 
+  $$
+  Z = \sqrt{-2\log(S)/S}
+  $$
+  and take 
+  $$
+  X_1 = Z U_1\quad\text{and}\quad X_2 = Z U_2
+  $$
+
+   (a) Show that $(U_1,U_2)$ is uniformly distributed over the unit sphere. 
+   (b) Show that $X_1$ and $X_2$ are independent. 
+
+
+
+<!-- MC Stat Methods. Problem 2.10. -->
+
+<!-- 1. A possible algorithm for generating standard normal random variables from $n$ standard uniformly distributed random variables $U_1,\dots,U_n\sim\mathcal{U}[0,1],$ would be to use the Central Limit Theorem (CLT), i.e.
+$$
+Y_n=\frac{\sqrt{n}\left(\bar{U}_n - \mu\right)}{\sigma}\to_d \mathcal{N}(0,1).
+$$
+as $n\to\infty,$ where $\mathbb{E}(U_1)=\mu$ and $\mathbb{V}(U_1)=\sigma^2.$
+
+Asses this "algorithm" critically by answering the following questions: 
+ (a) What is the maximal range of values of the generated random variables $Y_n$?  
+ (b) Compare the moments of $Y_n$ with those of $\mathcal{N}(0,1)$ using the moment generating function 
+$$
+ M_X(t) = \mathbb{E}\left(\exp\left(t X\right)\right)
+$$ 
+ Hint: For the case of $U\sim\mathcal{U}[0,1],$ the moment generating function is 
+$$
+ M_U(t) = \mathbb{E}\left(\exp\left(t U\right)\right)=\frac{\exp(t) - 1}{t}.
+$$ 
+
+::: {.callout-tip}
+The distribution of a random variable $X$ can be characterized (completely) using any of the following functions (provided they exist):
+
+* Density function $f_X$
+
+* Distribution function $F_X(x)=\int_{-\infty}^x f_X(u)\,du$
+
+* Moment generating function $M_X(t)=\mathbb{E}\left(\exp\left(t X\right)\right),$ where $t\in\mathbb{R}.$ The $j$th derivative of $M_X$ evaluated at $t=0$ gives the $j$th moment  
+  $$
+  \left.M_X^{(j)}(t)\right|_{t=0} = \mathbb{E}(X^j),\quad j=1,2,\dots 
+  $$
+:::
+-->
+
+
+
+<!-- {{< include Ch2_Solutions.qmd >}} -->
+
 
 
 ## References {-}

@@ -1,0 +1,199 @@
+## Solutions {-}
+
+1. Deriving the upper bound in @exm-AREfficiency ("Normals from Double Exponentials"): 
+$$
+\begin{align*}
+\frac{f(x)}{g(x|b)} 
+&= \frac{\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right)}{\frac{1}{2b}\exp\left(-\frac{|x|}{b}\right)}\\[2ex]
+&= \sqrt{\frac{2}{\pi}}\;b\; \exp\left(-\frac{x^2}{2}\right) \exp\left(\frac{|x|}{b}\right)\\[2ex]
+&= \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2|x| - x^2b}{2b}\right)\\[2ex]
+&=\left\{
+ \begin{array}{ll}
+ \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2 x  - x^2b}{2b}\right) &\;\text{for}\; x\geq 0\\
+ \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{-2 x  - x^2b}{2b}\right) &\;\text{for}\; x <0\\
+ \end{array}
+\right.
+\end{align*}
+$$
+Consider a given value of $b>0,$ and the case of $x\geq 0.$ Maximizing  
+$$
+\begin{align*}
+\exp\left(\frac{2x - x^2b}{2b}\right) 
+& = \exp\left(\frac{1}{b}x - \frac{1}{2}x^2 \right)
+\end{align*}
+$$ 
+maximal with respect to $x\geq 0$ yields
+$$
+\begin{align*}
+\exp\left(\frac{1}{b}x - \frac{1}{2}x^2 \right) \cdot \left(\frac{1}{b} - x \right) &\overset{!}{=} 0
+\Leftrightarrow 
+x=\frac{1}{b}
+\end{align*}
+$$ 
+Correspondingly, for a given value of $b>0,$ and the case of $x<0,$ maximizing 
+$$
+\begin{align*}
+\exp\left(\frac{-2x - x^2b}{2b}\right) 
+& = \exp\left(-\frac{1}{b}x - \frac{1}{2}x^2 \right)
+\end{align*}
+$$ 
+yields
+$$
+\begin{align*}
+\exp\left(-\frac{1}{b}x - \frac{1}{2}x^2 \right) \cdot \left(-\frac{1}{b} - x \right) &\overset{!}{=} 0
+\Leftrightarrow 
+x=-\frac{1}{b}
+\end{align*}
+$$ 
+
+```{r}
+b <- 2
+myfun <- function(x, b){exp( (2*abs(x) - x^2 * b)/(2 * b) )}
+xx <- seq(-10, 10, len = 500)
+yy <- myfun(xx, b = b)
+plot(x = xx, y = yy, type = "l")
+abline(v=c(-1/b,1/b), lty=2)
+```
+Thus
+$$
+\begin{align*}
+\frac{f(x)}{g(x|b)} 
+& \leq 
+\left\{
+ \begin{array}{ll}
+ \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2 \frac{1}{b}  - \frac{1}{b^2} b}{2b}\right) &\;\text{for}\; x\geq 0\\
+ \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2 \frac{1}{b}  - \frac{1}{b^2} b}{2b}\right) &\;\text{for}\; x <0\\
+ \end{array}
+\right.\\[2ex]
+& = 
+\sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2 \frac{1}{b}  - \frac{1}{b} }{2b}\right) \quad \;\text{for}\; x\in\mathbb{R},
+\end{align*}
+$$
+which shows that 
+$$
+\begin{align*}
+\frac{f(x)}{g(x|b)}\leq \sqrt{\frac{2}{\pi}} \; b\;\exp\left(\frac{1}{2b^2}\right).
+\end{align*}
+$$
+Now, to show that the minimum of the bound (in $b>0$) is attained at $b=1,$ we minimize 
+$$
+b\;\exp\left(\frac{1}{2b^2}\right)
+$$
+with respect to $b>0,$ which yields
+$$
+\begin{align*}
+1\;\exp\left(\frac{1}{2b^2}\right) + b\;\exp\left(\frac{1}{2b^2}\right)\cdot \left(-2\frac{1}{2b^3}\right) &\overset{!}{=} 0\\[2ex]
+1\; - 2\frac{1}{2b} &= 0\\[2ex]
+b &= 1
+\end{align*}
+$$
+where we used that $\exp\left(\frac{1}{2b^2}\right)>0.$
+
+```{r}
+myfun2 <- function(b){b * exp( 1/(2*b^2) )}
+bb <- seq(.5, 2, len = 500)
+yy <- myfun2(b = bb)
+plot(x = bb, y = yy, type = "l")
+abline(v = 1, lty=2)
+```
+
+1. 
+   (a) Deriving the probability of accepting $Y$ from a simulation 
+$$
+(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right).
+$$ 
+
+$$
+\begin{align*}
+P\left(\text{Accepting }Y\right)
+&=P\left(U\leq f_X(Y)\right),
+\end{align*}
+$$
+where $U\sim\mathcal{U}\left[0,Mg(Y)\right].$ Standardizing the uniform distribution yields
+$$
+\begin{align*}
+P\left(\text{Accepting }Y\right)
+&=P\left(\frac{U}{Mg(Y)}\leq \frac{f_X(Y)}{Mg(Y)}\right),\\[2ex]
+\end{align*}
+$$
+where dividing by $Mg(Y)$ is allowed, since $Mg(y)>0$ for all $y\in\operatorname{supp}(f_X).$ Using that 
+$$
+\frac{U}{Mg(Y)} \sim\mathcal{U}\left[0,1\right],
+$$ 
+we have
+$$
+\begin{align*}
+P\left(\text{Accepting }Y\right)
+&=\int_{-\infty}^{\infty}\int_0^{\frac{f_X(y)}{Mg(y)}} 1 \; du\; g(y) \;dy\\[2ex] 
+&=\int_{-\infty}^{\infty}\;\;\;\frac{f_X(y)}{Mg(y)}\;\; g(y) \;\;dy\\[2ex] 
+&=\frac{1}{M}\int_{-\infty}^{\infty}\;f_X(y) \;\;dy\\[2ex] 
+&=\frac{1}{M}
+\end{align*}
+$$
+<!-- Note that this also is the ratio between the surface $\{\}$ of the subgraph of 
+$$
+\begin{align*}
+\frac{1}{M} = \frac{\int f_X(y)dy}{\int M g(y)dy}
+\end{align*}
+$$ -->
+  (b) 
+  $$
+  \begin{align*}
+  f_X(x) & \leq M g(x)\quad x\in\operatorname{f_X}\\[2ex]
+  \int f_X(x) dx & \leq \int M g(x)dx\\[2ex]
+  1              & \leq M \cdot 1\\[2ex]
+  \end{align*}
+  $$
+
+
+
+
+
+
+<!-- 1.  If $U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1],$ then with $\mathbb{E}(U_1)=\mu=1/2$ and $\mathbb{V}(U_1)=\sigma^2=1/12,$
+$$
+\begin{align*}
+Y_n
+& =\frac{\sqrt{n}\left(\bar{U}_n - \mu\right)}{\sigma}\\[2ex]
+& = \sqrt{12\; n}\left(\bar{U}_n - \frac{1}{2}\right) \\[2ex]
+& \to_d \mathcal{N}(0,1).
+\end{align*}
+$$
+  (a) Largest value $Y_n$ can take: 
+     * Largest value $U_1$ can take is $1.$ 
+     * Largest value $\bar{U}_n$ can take is $\frac{1}{n} n 1 = 1.$ 
+     * Largest value $Y_n$ can take is $\sqrt{12\; n}\frac{1}{2}=\sqrt{3\;n}$
+     By the same arguments, the smallest value $Y_n$ can take is $\sqrt{3\;n},$ thus the range of $Y_n$ is **bounded** for each given sample size $n,$ 
+     $$
+     Y_n\in\left[-\sqrt{3\; n}, \sqrt{3\; n}\right],
+     $$
+     while the standard normal distribution has **unbounded** range from $-\infty$ to $\infty$
+  (b) Next, we derive the moments of $Y_n.$ 
+     $$
+     \begin{align*}
+     M_{Y_n}(t) 
+     & = \mathbb{E}\left(\exp\left(t Y_n \right)\right) \\[2ex] 
+     & = \mathbb{E}\left(\exp\left(t \; \sqrt{12\; n}\left(\bar{U}_n - \frac{1}{2}\right)  \right)\right) \\[2ex] 
+     & = \mathbb{E}\left(\exp\left(t \; \sqrt{12\; n}\left(\frac{1}{n}\sum_{i=1}^n U_i - \frac{1}{2}\right)  \right)\right) \\[2ex] 
+     & = \mathbb{E}\left(\exp\left(t \; \sqrt{12\; n}\left(\frac{1}{n}\sum_{i=1}^n \left(U_i - \frac{1}{2}\right)\right)  \right)\right) \\[2ex] 
+     & = \mathbb{E}\left(\exp\left( \frac{t \;\sqrt{12}}{\sqrt{n}}\sum_{i=1}^n \left(U_i - \frac{1}{2}\right)  \right)\right) \\[2ex] 
+     & = \mathbb{E}\left(\exp\left( \sum_{i=1}^n \frac{t \;\sqrt{12}}{\sqrt{n}}\left(U_i - \frac{1}{2}\right)  \right)\right) \\[2ex] 
+     & = \prod_{i=1}^n\mathbb{E}\left(\exp\left( \frac{t \;\sqrt{12}}{\sqrt{n}}\left(U_i - \frac{1}{2}\right)  \right)\right) \\[2ex] 
+     & = \left(\mathbb{E}\left(\exp\left( \frac{t \;\sqrt{12}}{\sqrt{n}}\left(U_i - \frac{1}{2}\right)  \right)\right)\right)^n \\[2ex] 
+     & = \left(\mathbb{E}\left(\exp\left( \frac{t U_i\;\sqrt{12}}{\sqrt{n}} - \frac{1}{2}\frac{t \;\sqrt{12}}{\sqrt{n}}  \right)\right)\right)^n \\[2ex]
+     & = \left(\mathbb{E}\left(\exp\left( \frac{t U_i\;\sqrt{12}}{\sqrt{n}} + \frac{ - t \;\sqrt{3}}{\sqrt{n}}  \right)\right)\right)^n \\[2ex] 
+     & = \left(\exp\left(\frac{ - t \;\sqrt{3}}{\sqrt{n}}\right)\right)^n
+          \left(\mathbb{E}\left(\exp\left( \frac{t U_i\;\sqrt{12}}{\sqrt{n}}   \right)\right)\right)^n \\[2ex]
+     & = \left(\exp\left(\frac{ - t \;\sqrt{3}}{\sqrt{n}}\right)\right)^n
+          \left(\mathbb{E}\left(\exp\left( \frac{t \sqrt{12}}{\sqrt{n}} U_i   \right)\right)\right)^n \\[2ex] 
+     & = \left(\exp\left(\frac{ - t \;\sqrt{3}}{\sqrt{n}}\right)\right)^n
+          \left( \frac{\exp\left( \frac{t \sqrt{12}}{\sqrt{n}} -1 \right)}{\frac{t \sqrt{12}}{\sqrt{n}}}\right)^n \\[2ex] 
+     & = \left(\exp\left(\frac{ - t \;\sqrt{3}}{\sqrt{n}}\right)\right)^n
+          \left( \frac{t \sqrt{12}}{\sqrt{n}} \exp\left( \frac{t \sqrt{12}}{\sqrt{n}} -1 \right)\right)^n \\[2ex] 
+     \end{align*}
+     $$
+     Since 
+     $$
+     M_U(t) = \mathbb{E}\left(\exp\left(t U\right)\right)=\frac{\exp(t) - 1}{t}.
+     $$ 
+     we also have  -->
