@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computational Statistics (M.Sc.) - 2&nbsp; Monte Carlo Method</title>
+<title>Computational Statistics (M.Sc.) - 2&nbsp; Monte Carlo Integration</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -153,7 +153,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Integration</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -191,7 +191,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch2_MonteCarlo.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></a>
+  <a href="./Ch2_MonteCarlo.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Integration</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -238,7 +238,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Integration</span></h1>
 </div>
 
 
@@ -258,6 +258,7 @@ div.csl-indent {
 <ul>
 <li><a href="http://www.springer.com/us/book/9780387212395">Monte Carlo Statistical Methods</a>, Ch. 3, <span class="citation" data-cites="RobertCasella1999">Robert and Casella (<a href="#ref-RobertCasella1999" role="doc-biblioref">2004</a>)</span></li>
 <li><a href="https://link.springer.com/book/10.1007/978-1-4419-1576-4">Introducing Monte Carlo Methods with R</a>, Ch. 3, <span class="citation" data-cites="RobertCasella2010">Robert and Casella (<a href="#ref-RobertCasella2010" role="doc-biblioref">2010</a>)</span></li>
+<li><a href="https://mitpress.mit.edu/9780262547741/numerical-methods-in-economics/">Numerical Methods in Economics</a>, Ch. 8.2 Monte Carlo Integration, <span class="citation" data-cites="Kenneth_Judd_Book_1998">Judd (<a href="#ref-Kenneth_Judd_Book_1998" role="doc-biblioref">1998</a>)</span></li>
 </ul>
 <p>Monte Carlo methods take advantage of the availability of:</p>
 <ol type="i">
@@ -271,8 +272,14 @@ div.csl-indent {
 <li><strong>Monte Carlo Integration</strong>: A specific Monte Carlo method, where we randomly sample uniformly over some domain and use the produced sample to construct an estimator for a <strong>univariate and multivariate integral</strong>. (Integrals are everywhere in statistics!)</li>
 <li><strong>Stochastic Simulation</strong> (or <strong>Monte Carlo Simulation</strong>): The application of the Monte Carlo method.</li>
 </ul>
-<p><br>
-</p>
+<p>This chapter is about <strong>Monte Carlo Integration</strong> which is a stochastic alternative to deterministic numerical integration methods such as numerical quadrature.</p>
+<p><a href="#fig-MCIntPublishedExample">Figure&nbsp;<span>2.1</span></a> shows a screenshot of a published example (see <span class="citation" data-cites="Bourreau2021market">Bourreau, Sun, and Verboven (<a href="#ref-Bourreau2021market" role="doc-biblioref">2021</a>)</span>), where the authors use Monte Carlo simulation to solve a hard-to-compute integral.</p>
+<div id="fig-MCIntPublishedExample" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/MCIntPublishedExample2.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Market share function in <span class="citation" data-cites="Bourreau2021market">Bourreau, Sun, and Verboven (<a href="#ref-Bourreau2021market" role="doc-biblioref">2021</a>)</span>, which involves a hard-to-compute integral. Here Monte Carlo integration is used to solve the integral.</figcaption><p></p>
+</figure>
+</div>
 </section>
 <section id="classical-monte-carlo-integration" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="classical-monte-carlo-integration"><span class="header-section-number">2.1</span> Classical Monte Carlo Integration</h2>
@@ -429,7 +436,7 @@ h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2
 <pre><code>[1] 0.9652009</code></pre>
 </div>
 </div>
-<p><a href="#fig-MCInt1_1">Figure&nbsp;<span>2.1</span></a> shows the graph of the function <span class="math inline">\(h\)</span>.</p>
+<p><a href="#fig-MCInt1_1">Figure&nbsp;<span>2.2</span></a> shows the graph of the function <span class="math inline">\(h\)</span>.</p>
 <div class="cell" data-hash="Ch2_MonteCarlo_cache/html/fig-MCInt1_1_dc51bbbf89d1fefee7571c153e27e80e">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>h_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> (<span class="fu">cos</span>(<span class="dv">50</span><span class="sc">*</span>x)<span class="sc">+</span><span class="fu">sin</span>(<span class="dv">20</span><span class="sc">*</span>x))<span class="sc">^</span><span class="dv">2</span></span>
@@ -446,7 +453,7 @@ h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2
 <div id="fig-MCInt1_1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="Ch2_MonteCarlo_files/figure-html/fig-MCInt1_1-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Function <span class="math inline">\(h\)</span> of <a href="#exm-MCInt1">Example&nbsp;<span>2.1</span></a>.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.2: Function <span class="math inline">\(h\)</span> of <a href="#exm-MCInt1">Example&nbsp;<span>2.1</span></a>.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -476,7 +483,7 @@ h(x)=\left(\cos(50\,x)+\sin(20\,x)\right)^2
 \]</span> where <span class="math inline">\(z_{1-\alpha/2}\approx 1.96\)</span> denotes the <span class="math inline">\((1-\alpha/2)\)</span>-quantile of <span class="math inline">\(\mathcal{N}(0,1),\)</span> <span class="math inline">\(v_n^2=n^{-1}\sum_{i=1}^n(h(u_i)-\bar{h}_n)^2,\)</span> and where <span class="math display">\[
 P\left(\int_0^1 h(x)dx  \in \operatorname{CI}^{95\%}_n \right) \to 0.95,\quad n \to\infty,
 \]</span> by the CLT.</p>
-<p><a href="#fig-MCInt1_2">Figure&nbsp;<span>2.2</span></a> shows <em>one</em> realization of the stochastic sequence <span class="math display">\[
+<p><a href="#fig-MCInt1_2">Figure&nbsp;<span>2.3</span></a> shows <em>one</em> realization of the stochastic sequence <span class="math display">\[
 \bar{h}_1,\dots,\bar{h}_n
 \]</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_n\)</span> is <span class="math inline">\(0.966\)</span>. This compares favorably with the with the exact value of <span class="math inline">\(\int_0^1h(x)dx = 0.9652009.\)</span></p>
 <div class="cell" data-hash="Ch2_MonteCarlo_cache/html/fig-MCInt1_2_ba10bfdb31c3b0451eee9cedcc2e2cbe">
@@ -532,7 +539,7 @@ P\left(\int_0^1 h(x)dx  \in \operatorname{CI}^{95\%}_n \right) \to 0.95,\quad n 
 <div id="fig-MCInt1_2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="Ch2_MonteCarlo_files/figure-html/fig-MCInt1_2-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2.2: One realization of the stochastic sequence <span class="math inline">\(\bar{h}_1,\dots,\bar{h}_n\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_{n=10000}\)</span> is <span class="math inline">\(0.966\)</span>. The blue band shows the point-wise (i.e.&nbsp;for each given sample size <span class="math inline">\(n\)</span>) confidence intervals <span class="math inline">\(\operatorname{CI}^{95\%}_n.\)</span></figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.3: One realization of the stochastic sequence <span class="math inline">\(\bar{h}_1,\dots,\bar{h}_n\)</span> with <span class="math inline">\(n=10000\)</span>, where the realized value of <span class="math inline">\(\bar{h}_{n=10000}\)</span> is <span class="math inline">\(0.966\)</span>. The blue band shows the point-wise (i.e.&nbsp;for each given sample size <span class="math inline">\(n\)</span>) confidence intervals <span class="math inline">\(\operatorname{CI}^{95\%}_n.\)</span></figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1217,8 +1224,14 @@ The distribution of a random variable $X$ can be characterized (completely) usin
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Bourreau2021market" class="csl-entry" role="doc-biblioentry">
+Bourreau, Marc, Yutec Sun, and Frank Verboven. 2021. <span>“Market Entry, Fighting Brands, and Tacit Collusion: Evidence from the French Mobile Telecommunications Market.”</span> <em>American Economic Review</em> 111 (11): 3459–99.
+</div>
 <div id="ref-Clopper_Pearson_1934" class="csl-entry" role="doc-biblioentry">
 Clopper, Charles J, and Egon S Pearson. 1934. <span>“The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial.”</span> <em>Biometrika</em> 26 (4): 404–13.
+</div>
+<div id="ref-Kenneth_Judd_Book_1998" class="csl-entry" role="doc-biblioentry">
+Judd, Kenneth L. 1998. <em>Numerical Methods in Economics</em>. MIT press.
 </div>
 <div id="ref-Ripley_2009" class="csl-entry" role="doc-biblioentry">
 Ripley, Brian D. 2009. <em>Stochastic Simulation</em>. John Wiley &amp; Sons. <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">http://onlinelibrary.wiley.com/book/10.1002/9780470316726</a>.
