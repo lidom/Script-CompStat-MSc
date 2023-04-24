@@ -354,9 +354,13 @@ However, the Monte Carlo integration approach is particularly useful for approxi
 
 ::: {#exm-ApproxNormTables}
 
-## Approximation of Normal Distribution Tables
+## Approximation of Normal Distribution Tables 
 
-A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use MC integration. 
+A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use Monte Carlo integration. Besides this specific usecase, this example showcases the treatment of integrals that can be approximated using propoartions 
+$$
+\hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
+$$
+where we choose the sample size $n$ to achieve a certain level of precision for our integral approximation. 
 
 Observe that the distribution function $\Phi(x)$ can be written as the mean of a binary (taking values 0 and 1) random variable,
 $$
@@ -552,14 +556,18 @@ $$ -->
 
 * More efficient simulation methods could be used (e.g., Importance Sampling).  -->
 
+
+That is, we actually need (at least) a sample size of $n^7$ to achieve a precision of **three decimal places** by means of a 99% Clopper-Pearson confidence interval.
+
 :::
+
 
 
 ## Importance Sampling
 
-As demonstrated in @exm-ApproxNormTables, the accuracy of the Monte Carlo integration method depends on the variance of the estimate that approximates the integral value. 
+As demonstrated in @exm-ApproxNormTables, the accuracy of the Monte Carlo integration method as a tool for approximating integral values depends on the variance of the estimate that approximates the integral value. 
 
-Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it's refereed to as a **variance reduction** technique. This variance reduction is achieved by weighting functions, so-called **importance functions**. 
+"Importance sampling" aims to reduce the variance of the Monte Carlo integral estimator. Therefore, importance sampling is also refereed to as a **variance reduction** technique. This variance reduction is achieved by weighting functions, so-called **importance functions**. 
 
 As in the case of Monte Carlo integration the focus lies on evaluating the integral
 $$

@@ -562,7 +562,9 @@ Note
 </div>
 </div>
 <div id="exm-ApproxNormTables" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use MC integration.</p>
+<p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use Monte Carlo integration. Besides this specific usecase, this example showcases the treatment of integrals that can be approximated using propoartions <span class="math display">\[
+\hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
+\]</span> where we choose the sample size <span class="math inline">\(n\)</span> to achieve a certain level of precision for our integral approximation.</p>
 <p>Observe that the distribution function <span class="math inline">\(\Phi(x)\)</span> can be written as the mean of a binary (taking values 0 and 1) random variable, <span class="math display">\[
 \begin{align*}
 \Phi(x)
@@ -759,14 +761,15 @@ $$ -->
 <!-- * Note that **greater accuracy is achieved in the tails** 
 
 * More efficient simulation methods could be used (e.g., Importance Sampling).  -->
+<p>That is, we actually need (at least) a sample size of <span class="math inline">\(n^7\)</span> to achieve a precision of <strong>three decimal places</strong> by means of a 99% Clopper-Pearson confidence interval.</p>
 </section>
 </div>
 </section>
 </section>
 <section id="importance-sampling" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">2.2</span> Importance Sampling</h2>
-<p>As demonstrated in <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, the accuracy of the Monte Carlo integration method depends on the variance of the estimate that approximates the integral value.</p>
-<p>Importance sampling aims to reduce the variance of the Monte Carlo integral estimate therefore it’s refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
+<p>As demonstrated in <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, the accuracy of the Monte Carlo integration method as a tool for approximating integral values depends on the variance of the estimate that approximates the integral value.</p>
+<p>“Importance sampling” aims to reduce the variance of the Monte Carlo integral estimator. Therefore, importance sampling is also refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
 <p>As in the case of Monte Carlo integration the focus lies on evaluating the integral <span class="math display">\[
 \mathbb{E}_{f_X}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
 \]</span></p>
