@@ -1703,7 +1703,76 @@ Remember: Using the Cauchy as instrumental density $g$ does not harm the integra
 ::: -->
 
 
+## Exercises {-}
+
+#### Exercise 1. {-} 
+
+Consider @exm-AREfficiency ("Normals from Double Exponentials"). Let $f$ be the density of the standard normal distribution $\mathcal{N}(0,1),$
+$$
+\begin{align*}
+f(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right),
+\end{align*}
+$$
+and $g$ the density of the Laplace (double exponential) distribution
+$$
+\begin{align*}
+g(x|b) = \frac{1}{2b}\exp\left(-\frac{|x|}{2}\right),\quad b>0.
+\end{align*}
+$$
+
+(a) Show that 
+$$
+\begin{align*}
+\frac{f(x)}{g(x|b)}\leq \sqrt{\frac{2}{\pi}} \; b\;\exp\left(\frac{1}{2b^2}\right).
+\end{align*}
+$$
+
+(b) Show that the minimum of the bound (in $b>0$) is attained at $b=1.$
+
+#### Exercise 2. {-} 
+
+Let $X \sim f$ and $Y\sim g,$ where $f$ and $g$ are density functions of the random variables $X$ and $Y.$ Show that 
+
+$$
+\begin{align*}
+P\left(X \leq h (Y)\right)
+&=\int_{-\infty}^\infty \left(\int_{-\infty}^{h (y)} f(x) dx \right) g(y) dy.
+\end{align*}
+$$
+**Note:** This was used, for instance, in the proofs of @thm-ARAlgo1 and @thm-ARAlgo2. 
+
+**Hint:** Use that the probability of an event $A$ (e.g. $A=X \leq a$) can be written as 
+$$
+\begin{align*}
+P(A) 
+& = \;\;\;\;P(A) \;\;\cdot \;\;1 \;\;+\;\; P(\text{not}\;A) \;\;\cdot\;\; 0 \\[2ex]
+& = P(1_{(A)} = 1) \cdot 1 + P(1_{(A)} = 0) \;\;\cdot 0 \\[2ex]
+& = \mathbb{E}\left(1_{(A)}\right),
+\end{align*}
+$$
+where $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$ This allows you to use the iterated law of expectations. 
+
+#### Exercise 3. {-} 
 
 
+Consider the Accept-Reject Algorithm for a target density function $f_X$ with compact support $[a,b]$ and $0\leq f(x)\leq m$ for all $x\in[a,b]$. What is the probability of accepting $Y$ from a simulation $(Y,U)$ as described in the lecture? 
+
+
+#### Exercise 4. {-} 
+
+Consider the Accept-Reject Algorithm for a target density function $f_X$ and an instrumental density function $g$ with 
+$$
+f_X(x) \leq Mg(x)
+$$ 
+for all $x\in\mathbb{R}$ and $g(x)>0$ for all $x\in\operatorname{supp}(f_X).$ 
+  
+   (a) What is the probability of accepting $Y$ from a simulation 
+   $$
+   (Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right)?
+   $$ 
+   (b) Show that $M\geq 1.$
+
+
+<!-- {{< include Ch1_Solutions.qmd >}} -->
 
 ## References {-}
