@@ -357,6 +357,10 @@ numericalIntegration
 However, the Monte Carlo integration approach is particularly useful for approximating integrals over higher dimensional sets $\mathcal{X}\subseteq\mathbb{R}^d.$ 
 ::: 
 
+
+### Classical Monte Carlo Integration using Proportions
+
+
 ::: {#exm-ApproxNormTables}
 
 ## Approximation of Normal Distribution Tables 
@@ -581,7 +585,7 @@ $$ -->
 * More efficient simulation methods could be used (e.g., Importance Sampling).  -->
 
 
-That is, we actually need (at least) a sample size of $n^7$ to achieve a precision of **three decimal places** by means of a 99% Clopper-Pearson confidence interval.
+That is, we need a sample size of $n^7$ to achieve a precision of **three decimal places** by means of a 99% Clopper-Pearson confidence interval.
 
 :::
 
@@ -610,14 +614,17 @@ Let's illustrate this with a simple example.
 
 ::: {#exm-CauchTailProb}
 
-# Cauchy Tail Probability
+# [Cauchy](https://en.wikipedia.org/wiki/Cauchy_distribution) Tail Probability
 
 This example is from @Ripley_2009.
 
-Suppose that the quantity of interest is the probability, say $p$, that a [Cauchy](https://en.wikipedia.org/wiki/Cauchy_distribution) $\mathcal{C}(0,1)$-distributed random variable is larger than $2$, i.e.
+Suppose that the quantity of interest is the probability, say $p$, that a  $\mathcal{Cauchy}(0,1)$-distributed random variable is larger than $2$, i.e.
 $$
-p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx.
+p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx,
 $${#eq-CauchIntegral}
+where $1/(\pi(1+x^2))$ is the density function of the $\mathcal{Cauchy}(0,1)$-distribution. 
+
+
 This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of @eq-CauchIntegral; namely, $p=0.1476$
 <!-- $$
 \begin{align*}
@@ -635,11 +642,27 @@ round(1 - pcauchy(2), 4)
 
 **1. Approach: The Naive Approach** 
 
-If $p$ is approximated through the empirical mean
+The most direct approach would be to use the following mean expression for the integral of interest: 
+$$
+\begin{align*}
+p
+&=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&=P\left(X \leq 2\right)\\[2ex]
+&=P\left(1_{(X \leq 2)}=1\right)\\[2ex]
+&= P\left(1_{(X \leq 2)}=1\right)\cdot 1 + P\left(1_{(X \leq 2)}=0\right)\cdot 0\\[2ex]
+&=\mathbb{E}\left(1_{(X \leq 2)}\right)
+\end{align*}
+$$
+
+So, we can approximate $p$ using the empirical mean
 $$
 \hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i>2)}
 $$
-of a random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{C}(0,1),$ then $\hat{p}$ is a binomial distributed random variable with parameters $n$ and $p.$ The variance is thus 
+of a random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),$ where 
+$$
+1_{(X_1>2)},\dots,1_{(X_n>2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(p).
+$$
+The variance of $\hat{p}_1$ is thus 
 $$
 \begin{align*}
 \mathbb{V}(\hat{p}_{1})
@@ -656,23 +679,37 @@ which is equal to $`r round(0.1476 * (1-0.1476),3)`/n,$ since we know that $p=0.
 
 In this approach, we use the "adjusting Screws" $\mathcal{X}$ and $h.$
 
-We can achieve a **more efficient estimator** (i.e., an estimator with lower variance for a given same sample size $n$) if we take into account the symmetric nature of $\mathcal{C}(0,1).$ Obviously, our target integral can be equivalently written as
+We can achieve a **more efficient estimator** (i.e., an estimator with lower variance for a given same sample size $n$) if we take into account the symmetric nature of $\mathcal{Cauchy}(0,1).$ 
+
+
+Obviously, due to the symmetry of our target integrand, can do the following rearrangement
 $$
-p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right).
+\begin{align*}
+p
+&=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right)\\[2ex]
+&=\frac{1}{2}\left(\mathbb{E}\left(1_{(X \leq -2)}\right) + \mathbb{E}\left(1_{(X \geq 2)}\right)\right)\\[2ex]
+&=\frac{1}{2} \; \mathbb{E}\left(1_{(|X| \geq 2)}\right) 
+\end{align*}
 $$
-This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean:
+This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean
 $$
 \begin{align*}
 \hat{p}_{2}
-&=\frac{1}{2}\left(\frac{1}{n}\sum_{i=1}^n1_{(X_i < -2)}+ \frac{1}{n}\sum_{i=1}^n 1_{(X_i > 2)}\right)\\[2ex]
-&=\frac{1}{2n}\sum_{i=1}^n 1_{(|X_i|>2)}.
+%&=\frac{1}{2}\left(\frac{1}{n}\sum_{i=1}^n1_{(X_i \leq -2)}+ \frac{1}{n}\sum_{i=1}^n 1_{(X_i \geq 2)}\right)\\[2ex]
+&=\frac{1}{2n}\sum_{i=1}^n 1_{(|X_i|\geq 2)}
 \end{align*}
+$$
+again of a random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),$ where 
+$$
+1_{(|X_1|>2)},\dots,1_{(|X_n|>2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(2\,p).
 $$
 The variance of this new estimator,
 $$
 \begin{align*}
 \mathbb{V}(\hat{p}_{2})
-&=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|>2)}\right)\\[2ex]
+&=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|\geq 2)}\right)\\[2ex]
+&=\frac{1}{4n}\mathbb{V}\left(1_{(|X_1|\geq 2)}\right)\\[2ex]
 &=\frac{2p(1-2p)}{4n},
 \end{align*}
 $$
@@ -687,14 +724,22 @@ In this approach, we use all the "adjusting screws" $\mathcal{X}$, $h$, and $f.$
 
 The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, $[2,+\infty)$, which are in some sense irrelevant for the approximation of $p$. This motivates the following reformulation of $p$: 
 
-By symmetry of $f$:
+By symmetry of $f,$ we have that 
 $$
 \begin{align*}
-\frac{1}{2} & =\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}\\[2ex]
+\frac{1}{2} 
+& =\int_{0}^\infty\frac{1}{\pi(1+x^2)}dx.
+\end{align*}
+$$
+This can be used to do the following: 
+$$
+\begin{align*}
+\frac{1}{2} 
+& =\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}\\[2ex]
 \Leftrightarrow \; p& =\frac{1}{2}-\int_{0}^2\frac{1}{\pi(1+x^2)}dx.
 \end{align*}
 $$
-Furthermore, we can re-arrange the last integral a bit such that 
+Furthermore, we can rearrange the integral a bit such that 
 $$
 \begin{align*}
  &\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx \\[2ex]
@@ -706,10 +751,20 @@ where $U\sim\mathcal{U}[0,2].$
 
 Therefore a new alternative method for evaluating $p$ is:
 $$
-\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{n}\sum_{i=1}^n h(U_i),
 $$
-where $U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].$
-
+where 
+$$
+U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].
+$$
+Computing the variance is here cumbersome. 
+$$
+\begin{align*}
+\mathbb{V}\left(\hat{p}_{3}\right)
+& =\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n h(U_i)\right)\\[2ex]
+& =\frac{1}{n}\mathbb{V}\left(h(U_1)\right)\\[2ex]
+\end{align*}
+$$
 Using integration by parts and that $p=0.1476$, it can be shown that 
 $$
 \mathbb{V}(\hat p_3)=0.029/n,
@@ -804,33 +859,108 @@ $$
 :::
 ::: 
 
-**Proof:** Done in the lecture. 
+**Proof of @thm-MinVarTheorem:**
 
+Note that 
+$$
+\begin{align*}
+\mathbb{V}_g(\psi(X_i))
+&=\quad\quad \mathbb{E}_g(\psi(X_i)^2)\quad\quad  - \quad\quad \left(\mathbb{E}_g(\psi(X_i))\right)^2\\[2ex]
+&=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx - 
+  \left(\int\frac{h(x)f(x)}{g(x)}g(x)dx\right)^2\\[2ex]
+  &=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx - 
+  \left(\int h(x)f(x)dx\right)^2.
+\end{align*}
+$$
+Thus, $\left(\mathbb{E}_g(\psi(X_i))\right)^2$ does not depend on $g.$ Consequently, the density $g$ that minimizizes the variance $\mathbb{V}_g(\psi(X_i))$ is also the density $g$ that minimizes $\mathbb{E}_g(\psi(X_i)^2).$ We use this in the following since minimizing $\mathbb{E}_g(\psi(X_i)^2)$ is simpler than minimizing $\mathbb{V}_g(\psi(X_i)).$ 
 
+We begin with a small trick by including an absolute value function as following:
+$$
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+&=\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|}^2).
+\end{align*}
+$$
+
+::: {.callout-tip}
+**[Jensen's Inequality](https://www.statlect.com/fundamentals-of-probability/Jensen-inequality):** Let $u$ be a "convex function" such as, for instance, $u(x)=x^2,$ and let $X$ be some random variable. Then, 
+$$
+\mathbb{E}\left(u(X)\right) \geq u\left(\mathbb{E}\left(X\right)\right), 
+$$
+where we assume that the moments exist. 
+:::
+
+Applying Jensen's inequality yields, the following lower bound for $\mathbb{E}_g(\psi(X_i)^2):$
+$$
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+&=\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|}^2)\\[2ex]
+&\geq \left(\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|})\right)^2\\[2ex]
+&=\left(\int\left|\frac{h(x)f(x)}{g(x)}\right|g(x)dx\right)^2\\[2ex]
+&=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{(since $f$ and $g$ are non-negative)}\\[2ex]
+&=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}},
+\end{align*}
+$$
+where this lower bound is independent of $g.$
+
+It is now straight forward to show that this lower bound is achieved if 
+$$
+g(x) = g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
+$$ 
+For this, observe that
+$$
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+& = \int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx\\[2ex]
+& = \int\frac{h^2(x)f^2(x)}{g(x)}dx.
+\end{align*}
+$$
+Now, setting $g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}$ yields
+$$
+\begin{align*}
+\mathbb{E}_{g^\ast}(\psi(X_i)^2)
+& = \int\frac{h^2(x)f^2(x)}{|h(x)|f(x)} \left(\int |h(z)|f(z)dz\right) dx\\[2ex]
+& = \int\frac{\left|h(x)\right|^2f(x)}{|h(x)|} \; \left(\int |h(z)|f(z)dz\right) dx\\
+& = \left(\int\left|h(x)\right|f(x) dx\right) \; \left(\int |h(z)|f(z)dz\right) \\[2ex]
+& = \underbrace{\left(\int\left|h(x)\right|f(x) dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}}
+\end{align*}
+$$
+This shows that the lower bound of $\mathbb{E}_g(\psi(X_i)^2)$ is achieved for $g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},$ which shows the statement of @thm-MinVarTheorem. 
+
+::: {.callout-note}
 Note that @thm-MinVarTheorem may appear as rather impractical, since, for instance, if $h(x)>0$ then $g^\ast$ requires us to know $\theta=\int h(z)f(z)dz,$ which, however, is just the integral of interest! 
 
-
-The above minimum variance result is still useful:
+The minimum variance result of @thm-MinVarTheorem is, however, still useful:
 
 *  It tells us that a good choice of $g(x)$ shall mimic the shape of $|h(x)|f(x)$, since the optimal $g^\ast(x)\propto |h(x)|f(x)$.
 *  Furthermore, $g(x)$ should be chosen such that it has a thicker tail than $f(x)$, since the variance $\mathbb{V}(\hat{\theta}_g)$ crucially depends on the quotient $f(x)/g(x)$ which would "explode" for $g(x)\approx 0$.
-
+:::
 
 
 
 Let's apply our new insights to the above @exm-CauchTailProb on the Cauchy tail probability $p$. 
 
-**Example: Cauchy Tail Probability (cont.)**
 
+
+::: {#exm-CauchTailProb2}
+
+## Cauchy Tail Probability (continued) 
 
 Above we had: 
 
-1. $f(x)=\frac{1}{\pi(1+x^2)}$, the pdf of $\mathrm{C}(0,1)$ and
+1. $f(x)=\frac{1}{\pi(1+x^2)}$, the density of $\mathcal{Cauchy}(0,1)$ and
 2. $h(x)=1_{(x>2)}$, i.e., here $|h(x)|=h(x)$.
 
 Therefore
 $$
-p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx=\mathbb{E}_g(\psi(X)),
+\begin{align*}
+p 
+& =\mathbb{E}_f(h(X)) \\[2ex]
+& =\int h(x)f(x)dx    \\[2ex]
+& =\int_{2}^{\infty}f(x)dx \\[2ex]
+& =\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx \\[2ex]
+& =\mathbb{E}_g(\psi(X)), 
+\end{align*}
 $$
 where the $h$ function is absorbed by the formulation of the definite integral.
 
@@ -891,7 +1021,7 @@ $$
 and $h(u)=1/(2\pi(1+u^2))$. 
 
 The variance of $\hat{p}_4$ is $(\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/n$ and an integration by parts shows that $\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n$. Compare this to the former results: $\mathbb{V}(\hat p_3)=0.0285/n$, $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$. The variance of $\hat{p}_4$ is by a factor of $10^{-3}$ lower than the variance of the original $\hat{p}_1$.
-
+:::
 
 <!--
 **Version 2:** It can be shown that (see [Ripley 1987](http://onlinelibrary.wiley.com/book/10.1002/9780470316726))

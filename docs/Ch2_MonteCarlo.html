@@ -223,6 +223,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#speed-of-convergence" id="toc-speed-of-convergence" class="nav-link" data-scroll-target="#speed-of-convergence">Speed of Convergence</a></li>
   <li><a href="#distributional-properties" id="toc-distributional-properties" class="nav-link" data-scroll-target="#distributional-properties">Distributional Properties</a></li>
+  <li><a href="#classical-monte-carlo-integration-using-proportions" id="toc-classical-monte-carlo-integration-using-proportions" class="nav-link" data-scroll-target="#classical-monte-carlo-integration-using-proportions"><span class="toc-section-number">2.1.1</span>  Classical Monte Carlo Integration using Proportions</a></li>
   </ul></li>
   <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">2.2</span>  Importance Sampling</a>
   <ul class="collapse">
@@ -258,7 +259,7 @@ div.csl-indent {
 <ul>
 <li><a href="http://www.springer.com/us/book/9780387212395">Monte Carlo Statistical Methods</a>, Ch. 3, <span class="citation" data-cites="RobertCasella1999">Robert and Casella (<a href="#ref-RobertCasella1999" role="doc-biblioref">2004</a>)</span></li>
 <li><a href="https://link.springer.com/book/10.1007/978-1-4419-1576-4">Introducing Monte Carlo Methods with R</a>, Ch. 3, <span class="citation" data-cites="RobertCasella2010">Robert and Casella (<a href="#ref-RobertCasella2010" role="doc-biblioref">2010</a>)</span></li>
-<li><a href="https://mitpress.mit.edu/9780262547741/numerical-methods-in-economics/">Numerical Methods in Economics</a>, Ch. 8.2 Monte Carlo Integration, <span class="citation" data-cites="Kenneth_Judd_Book_1998">Kenneth (<a href="#ref-Kenneth_Judd_Book_1998" role="doc-biblioref">1998</a>)</span></li>
+<li><a href="https://mitpress.mit.edu/9780262547741/numerical-methods-in-economics/">Numerical Methods in Economics</a>, Ch. 8.2 Monte Carlo Integration, <span class="citation" data-cites="Kenneth_Judd_Book_1998">Judd (<a href="#ref-Kenneth_Judd_Book_1998" role="doc-biblioref">1998</a>)</span></li>
 </ul>
 <p>Monte Carlo methods take advantage of the availability of:</p>
 <ol type="i">
@@ -568,6 +569,9 @@ Note
 <p>However, the Monte Carlo integration approach is particularly useful for approximating integrals over higher dimensional sets <span class="math inline">\(\mathcal{X}\subseteq\mathbb{R}^d.\)</span></p>
 </div>
 </div>
+</section>
+<section id="classical-monte-carlo-integration-using-proportions" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="classical-monte-carlo-integration-using-proportions"><span class="header-section-number">2.1.1</span> Classical Monte Carlo Integration using Proportions</h3>
 <div id="exm-ApproxNormTables" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2.2 (Approximation of Normal Distribution Tables) </strong></span>A possible way to construct normal distribution tables, i.e., table for the values of the distribution function <span class="math inline">\(0\leq \Phi(x)\leq 1,\)</span> is to use Monte Carlo integration. Besides this specific use case, this example showcases the treatment of integrals that can be approximated using propoartions <span class="math display">\[
 \hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
@@ -789,7 +793,7 @@ $$ -->
 <!-- * Note that **greater accuracy is achieved in the tails** 
 
 * More efficient simulation methods could be used (e.g., Importance Sampling).  -->
-<p>That is, we actually need (at least) a sample size of <span class="math inline">\(n^7\)</span> to achieve a precision of <strong>three decimal places</strong> by means of a 99% Clopper-Pearson confidence interval.</p>
+<p>That is, we need a sample size of <span class="math inline">\(n^7\)</span> to achieve a precision of <strong>three decimal places</strong> by means of a 99% Clopper-Pearson confidence interval.</p>
 </section>
 </section>
 </div>
@@ -808,10 +812,11 @@ $$ -->
 \]</span> Therefore, the search for an optimal estimator should encompass all these possible representations.</p>
 <p>Let’s illustrate this with a simple example.</p>
 <div id="exm-CauchTailProb" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.3 (Cauchy Tail Probability) </strong></span>This example is from <span class="citation" data-cites="Ripley_2009">Ripley (<a href="#ref-Ripley_2009" role="doc-biblioref">2009</a>)</span>.</p>
-<p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> <span class="math inline">\(\mathcal{C}(0,1)\)</span>-distributed random variable is larger than <span class="math inline">\(2\)</span>, i.e. <span id="eq-CauchIntegral"><span class="math display">\[
-p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx.
-\tag{2.4}\]</span></span> This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of <a href="#eq-CauchIntegral">Equation&nbsp;<span>2.4</span></a>; namely, <span class="math inline">\(p=0.1476\)</span> <!-- $$
+<p><span class="theorem-title"><strong>Example 2.3 (<a href="https://en.wikipedia.org/wiki/Cauchy_distribution">Cauchy</a> Tail Probability) </strong></span>This example is from <span class="citation" data-cites="Ripley_2009">Ripley (<a href="#ref-Ripley_2009" role="doc-biblioref">2009</a>)</span>.</p>
+<p>Suppose that the quantity of interest is the probability, say <span class="math inline">\(p\)</span>, that a <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distributed random variable is larger than <span class="math inline">\(2\)</span>, i.e. <span id="eq-CauchIntegral"><span class="math display">\[
+p=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx,
+\tag{2.4}\]</span></span> where <span class="math inline">\(1/(\pi(1+x^2))\)</span> is the density function of the <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distribution.</p>
+<p>This is a nice example. One the one hand, it allows us to showcase possibilities to improve efficiency of Monte Carlo integration. On the other hand, we know already the result of <a href="#eq-CauchIntegral">Equation&nbsp;<span>2.4</span></a>; namely, <span class="math inline">\(p=0.1476\)</span> <!-- $$
 \begin{align*}
 p
 &=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
@@ -827,9 +832,21 @@ $$ --></p>
 </div>
 </div>
 <p><strong>1. Approach: The Naive Approach</strong></p>
-<p>If <span class="math inline">\(p\)</span> is approximated through the empirical mean <span class="math display">\[
+<p>The most direct approach would be to use the following mean expression for the integral of interest: <span class="math display">\[
+\begin{align*}
+p
+&amp;=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&amp;=P\left(X \leq 2\right)\\[2ex]
+&amp;=P\left(1_{(X \leq 2)}=1\right)\\[2ex]
+&amp;= P\left(1_{(X \leq 2)}=1\right)\cdot 1 + P\left(1_{(X \leq 2)}=0\right)\cdot 0\\[2ex]
+&amp;=\mathbb{E}\left(1_{(X \leq 2)}\right)
+\end{align*}
+\]</span></p>
+<p>So, we can approximate <span class="math inline">\(p\)</span> using the empirical mean <span class="math display">\[
 \hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i&gt;2)}
-\]</span> of a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{C}(0,1),\)</span> then <span class="math inline">\(\hat{p}\)</span> is a binomial distributed random variable with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p.\)</span> The variance is thus <span class="math display">\[
+\]</span> of a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),\)</span> where <span class="math display">\[
+1_{(X_1&gt;2)},\dots,1_{(X_n&gt;2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(p).
+\]</span> The variance of <span class="math inline">\(\hat{p}_1\)</span> is thus <span class="math display">\[
 \begin{align*}
 \mathbb{V}(\hat{p}_{1})
 &amp;=\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(X_i&gt;2)}\right)\\[2ex]
@@ -839,30 +856,46 @@ $$ --></p>
 \]</span> which is equal to <span class="math inline">\(0.126/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>.</p>
 <p><strong>2. Approach: Accounting for Symmetry</strong></p>
 <p>In this approach, we use the “adjusting Screws” <span class="math inline">\(\mathcal{X}\)</span> and <span class="math inline">\(h.\)</span></p>
-<p>We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathcal{C}(0,1).\)</span> Obviously, our target integral can be equivalently written as <span class="math display">\[
-p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right).
-\]</span> This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean: <span class="math display">\[
+<p>We can achieve a <strong>more efficient estimator</strong> (i.e., an estimator with lower variance for a given same sample size <span class="math inline">\(n\)</span>) if we take into account the symmetric nature of <span class="math inline">\(\mathcal{Cauchy}(0,1).\)</span></p>
+<p>Obviously, due to the symmetry of our target integrand, can do the following rearrangement <span class="math display">\[
+\begin{align*}
+p
+&amp;=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&amp;=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right)\\[2ex]
+&amp;=\frac{1}{2}\left(\mathbb{E}\left(1_{(X \leq -2)}\right) + \mathbb{E}\left(1_{(X \geq 2)}\right)\right)\\[2ex]
+&amp;=\frac{1}{2} \; \mathbb{E}\left(1_{(|X| \geq 2)}\right)
+\end{align*}
+\]</span> This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean <span class="math display">\[
 \begin{align*}
 \hat{p}_{2}
-&amp;=\frac{1}{2}\left(\frac{1}{n}\sum_{i=1}^n1_{(X_i &lt; -2)}+ \frac{1}{n}\sum_{i=1}^n 1_{(X_i &gt; 2)}\right)\\[2ex]
-&amp;=\frac{1}{2n}\sum_{i=1}^n 1_{(|X_i|&gt;2)}.
+%&amp;=\frac{1}{2}\left(\frac{1}{n}\sum_{i=1}^n1_{(X_i \leq -2)}+ \frac{1}{n}\sum_{i=1}^n 1_{(X_i \geq 2)}\right)\\[2ex]
+&amp;=\frac{1}{2n}\sum_{i=1}^n 1_{(|X_i|\geq 2)}
 \end{align*}
+\]</span> again of a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),\)</span> where <span class="math display">\[
+1_{(|X_1|&gt;2)},\dots,1_{(|X_n|&gt;2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(2\,p).
 \]</span> The variance of this new estimator, <span class="math display">\[
 \begin{align*}
 \mathbb{V}(\hat{p}_{2})
-&amp;=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|&gt;2)}\right)\\[2ex]
+&amp;=\frac{1}{4n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(|X_i|\geq 2)}\right)\\[2ex]
+&amp;=\frac{1}{4n}\mathbb{V}\left(1_{(|X_1|\geq 2)}\right)\\[2ex]
 &amp;=\frac{2p(1-2p)}{4n},
 \end{align*}
 \]</span> which is equal to <span class="math inline">\(0.052/n,\)</span> since we know that <span class="math inline">\(p=0.1476\)</span>. This is clearly lower than in the naive approach, where we had <span class="math inline">\(0.126/n.\)</span></p>
 <p><strong>3. Approach:</strong></p>
 <p>In this approach, we use all the “adjusting screws” <span class="math inline">\(\mathcal{X}\)</span>, <span class="math inline">\(h\)</span>, and <span class="math inline">\(f.\)</span></p>
 <p>The (relative) inefficiency of the above approaches is due to the generation of RVs outside the domain of interest, <span class="math inline">\([2,+\infty)\)</span>, which are in some sense irrelevant for the approximation of <span class="math inline">\(p\)</span>. This motivates the following reformulation of <span class="math inline">\(p\)</span>:</p>
-<p>By symmetry of <span class="math inline">\(f\)</span>: <span class="math display">\[
+<p>By symmetry of <span class="math inline">\(f,\)</span> we have that <span class="math display">\[
 \begin{align*}
-\frac{1}{2} &amp; =\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}\\[2ex]
+\frac{1}{2}
+&amp; =\int_{0}^\infty\frac{1}{\pi(1+x^2)}dx.
+\end{align*}
+\]</span> This can be used to do the following: <span class="math display">\[
+\begin{align*}
+\frac{1}{2}
+&amp; =\int_{0}^2\frac{1}{\pi(1+x^2)}dx + \underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}dx}_{=p}\\[2ex]
 \Leftrightarrow \; p&amp; =\frac{1}{2}-\int_{0}^2\frac{1}{\pi(1+x^2)}dx.
 \end{align*}
-\]</span> Furthermore, we can re-arrange the last integral a bit such that <span class="math display">\[
+\]</span> Furthermore, we can rearrange the integral a bit such that <span class="math display">\[
 \begin{align*}
 &amp;\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx \\[2ex]
 =&amp;\int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathcal{U}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx \\[2ex]
@@ -870,9 +903,16 @@ p=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\inf
 \end{align*}
 \]</span> where <span class="math inline">\(U\sim\mathcal{U}[0,2].\)</span></p>
 <p>Therefore a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
-\hat{p}_{3}=\frac{1}{2} - \frac{1}{m}\sum_{i=1}n h(U_i),
-\]</span> where <span class="math inline">\(U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].\)</span></p>
-<p>Using integration by parts and that <span class="math inline">\(p=0.1476\)</span>, it can be shown that <span class="math display">\[
+\hat{p}_{3}=\frac{1}{2} - \frac{1}{n}\sum_{i=1}^n h(U_i),
+\]</span> where <span class="math display">\[
+U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].
+\]</span> Computing the variance is here cumbersome. <span class="math display">\[
+\begin{align*}
+\mathbb{V}\left(\hat{p}_{3}\right)
+&amp; =\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n h(U_i)\right)\\[2ex]
+&amp; =\frac{1}{n}\mathbb{V}\left(h(U_1)\right)\\[2ex]
+\end{align*}
+\]</span> Using integration by parts and that <span class="math inline">\(p=0.1476\)</span>, it can be shown that <span class="math display">\[
 \mathbb{V}(\hat p_3)=0.029/n,
 \]</span> which is lower than both previous approaches, where we had that <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.052/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.126/n\)</span>.</p>
 </div>
@@ -943,22 +983,99 @@ g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 </div>
 </div>
 </div>
-<p><strong>Proof:</strong> Done in the lecture.</p>
+<p><strong>Proof of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>:</strong></p>
+<p>Note that <span class="math display">\[
+\begin{align*}
+\mathbb{V}_g(\psi(X_i))
+&amp;=\quad\quad \mathbb{E}_g(\psi(X_i)^2)\quad\quad  - \quad\quad \left(\mathbb{E}_g(\psi(X_i))\right)^2\\[2ex]
+&amp;=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx -
+  \left(\int\frac{h(x)f(x)}{g(x)}g(x)dx\right)^2\\[2ex]
+  &amp;=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx -
+  \left(\int h(x)f(x)dx\right)^2.
+\end{align*}
+\]</span> Thus, <span class="math inline">\(\left(\mathbb{E}_g(\psi(X_i))\right)^2\)</span> does not depend on <span class="math inline">\(g.\)</span> Consequently, the density <span class="math inline">\(g\)</span> that minimizizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span> is also the density <span class="math inline">\(g\)</span> that minimizes <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2).\)</span> We use this in the following since minimizing <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is simpler than minimizing <span class="math inline">\(\mathbb{V}_g(\psi(X_i)).\)</span></p>
+<p>We begin with a small trick by including an absolute value function as following: <span class="math display">\[
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+&amp;=\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|}^2).
+\end{align*}
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong><a href="https://www.statlect.com/fundamentals-of-probability/Jensen-inequality">Jensen’s Inequality</a>:</strong> Let <span class="math inline">\(u\)</span> be a “convex function” such as, for instance, <span class="math inline">\(u(x)=x^2,\)</span> and let <span class="math inline">\(X\)</span> be some random variable. Then, <span class="math display">\[
+\mathbb{E}\left(u(X)\right) \geq u\left(\mathbb{E}\left(X\right)\right),
+\]</span> where we assume that the moments exist.</p>
+</div>
+</div>
+<p>Applying Jensen’s inequality yields, the following lower bound for <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2):\)</span> <span class="math display">\[
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+&amp;=\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|}^2)\\[2ex]
+&amp;\geq \left(\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|})\right)^2\\[2ex]
+&amp;=\left(\int\left|\frac{h(x)f(x)}{g(x)}\right|g(x)dx\right)^2\\[2ex]
+&amp;=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{(since $f$ and $g$ are non-negative)}\\[2ex]
+&amp;=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}},
+\end{align*}
+\]</span> where this lower bound is independent of <span class="math inline">\(g.\)</span></p>
+<p>It is now straight forward to show that this lower bound is achieved if <span class="math display">\[
+g(x) = g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
+\]</span> For this, observe that <span class="math display">\[
+\begin{align*}
+\mathbb{E}_g(\psi(X_i)^2)
+&amp; = \int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx\\[2ex]
+&amp; = \int\frac{h^2(x)f^2(x)}{g(x)}dx.
+\end{align*}
+\]</span> Now, setting <span class="math inline">\(g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}\)</span> yields <span class="math display">\[
+\begin{align*}
+\mathbb{E}_{g^\ast}(\psi(X_i)^2)
+&amp; = \int\frac{h^2(x)f^2(x)}{|h(x)|f(x)} \left(\int |h(z)|f(z)dz\right) dx\\[2ex]
+&amp; = \int\frac{\left|h(x)\right|^2f(x)}{|h(x)|} \; \left(\int |h(z)|f(z)dz\right) dx\\
+&amp; = \left(\int\left|h(x)\right|f(x) dx\right) \; \left(\int |h(z)|f(z)dz\right) \\[2ex]
+&amp; = \underbrace{\left(\int\left|h(x)\right|f(x) dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}}
+\end{align*}
+\]</span> This shows that the lower bound of <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is achieved for <span class="math inline">\(g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},\)</span> which shows the statement of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as rather impractical, since, for instance, if <span class="math inline">\(h(x)&gt;0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
-<p>The above minimum variance result is still useful:</p>
+<p>The minimum variance result of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> is, however, still useful:</p>
 <ul>
 <li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>.</li>
 <li>Furthermore, <span class="math inline">\(g(x)\)</span> should be chosen such that it has a thicker tail than <span class="math inline">\(f(x)\)</span>, since the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span> crucially depends on the quotient <span class="math inline">\(f(x)/g(x)\)</span> which would “explode” for <span class="math inline">\(g(x)\approx 0\)</span>.</li>
 </ul>
+</div>
+</div>
 <p>Let’s apply our new insights to the above <a href="#exm-CauchTailProb">Example&nbsp;<span>2.3</span></a> on the Cauchy tail probability <span class="math inline">\(p\)</span>.</p>
-<p><strong>Example: Cauchy Tail Probability (cont.)</strong></p>
-<p>Above we had:</p>
+<div id="exm-CauchTailProb2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2.4 (Cauchy Tail Probability (continued)) </strong></span>Above we had:</p>
 <ol type="1">
-<li><span class="math inline">\(f(x)=\frac{1}{\pi(1+x^2)}\)</span>, the pdf of <span class="math inline">\(\mathrm{C}(0,1)\)</span> and</li>
+<li><span class="math inline">\(f(x)=\frac{1}{\pi(1+x^2)}\)</span>, the density of <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span> and</li>
 <li><span class="math inline">\(h(x)=1_{(x&gt;2)}\)</span>, i.e., here <span class="math inline">\(|h(x)|=h(x)\)</span>.</li>
 </ol>
 <p>Therefore <span class="math display">\[
-p=\mathbb{E}_f(h(X))=\int h(x)f(x)dx=\int_{2}^{\infty}f(x)dx=\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx=\mathbb{E}_g(\psi(X)),
+\begin{align*}
+p
+&amp; =\mathbb{E}_f(h(X)) \\[2ex]
+&amp; =\int h(x)f(x)dx    \\[2ex]
+&amp; =\int_{2}^{\infty}f(x)dx \\[2ex]
+&amp; =\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx \\[2ex]
+&amp; =\mathbb{E}_g(\psi(X)),
+\end{align*}
 \]</span> where the <span class="math inline">\(h\)</span> function is absorbed by the formulation of the definite integral.</p>
 <p>A possibly good (and simple) choice of <span class="math inline">\(g\)</span> is, e.g., <span class="math inline">\(g(x)=2/(x^2)\)</span>, since this function:</p>
 <ul>
@@ -995,6 +1112,7 @@ p=\int_{0}^{1/2}\underbrace{2}_{f_{\mathrm{Unif}[0,1/2]}}\;\underbrace{\frac{1}{
 \hat{p}_4=\sum_{i=1}n h(U_i),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2]
 \]</span> and <span class="math inline">\(h(u)=1/(2\pi(1+u^2))\)</span>.</p>
 <p>The variance of <span class="math inline">\(\hat{p}_4\)</span> is <span class="math inline">\((\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/n\)</span> and an integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
+</div>
 <!--
 **Version 2:** It can be shown that (see [Ripley 1987](http://onlinelibrary.wiley.com/book/10.1002/9780470316726))
 $$
@@ -1235,7 +1353,7 @@ Bourreau, Marc, Yutec Sun, and Frank Verboven. 2021. <span>“Market Entry, Figh
 Clopper, Charles J, and Egon S Pearson. 1934. <span>“The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial.”</span> <em>Biometrika</em> 26 (4): 404–13.
 </div>
 <div id="ref-Kenneth_Judd_Book_1998" class="csl-entry" role="doc-biblioentry">
-Kenneth, Judd L. 1998. <em>Numerical Methods in Economics</em>. MIT press.
+Judd, Kenneth L. 1998. <em>Numerical Methods in Economics</em>. MIT press.
 </div>
 <div id="ref-Ripley_2009" class="csl-entry" role="doc-biblioentry">
 Ripley, Brian D. 2009. <em>Stochastic Simulation</em>. John Wiley &amp; Sons. <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316726">http://onlinelibrary.wiley.com/book/10.1002/9780470316726</a>.
