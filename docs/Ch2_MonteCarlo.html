@@ -576,7 +576,7 @@ Note
 </section>
 <section id="classical-monte-carlo-integration-using-proportions" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="classical-monte-carlo-integration-using-proportions"><span class="header-section-number">2.2</span> Classical Monte Carlo Integration using Proportions</h2>
-<p>Many integration problems, such <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, can be written as a proportion <span class="math inline">\(0\leq p\leq 1.\)</span> This allows us compute the integral using using empirical proportions <span class="math display">\[
+<p>Many integration problems, such as the one in <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, can be written as a proportion <span class="math inline">\(0\leq p\leq 1.\)</span> This allows us compute the integral using using empirical proportions <span class="math display">\[
 \hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
 \]</span> where we choose the sample size <span class="math inline">\(n\)</span> to achieve a certain level of precision for our integral approximation.</p>
 <div id="exm-ApproxNormTables" class="theorem example">
@@ -989,7 +989,7 @@ $$
 </div>
 <div class="callout-body-container callout-body">
 <div id="thm-MinVarTheorem" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 2.1 (Minimum Variance Theorem) </strong></span>The <strong>importance function</strong> <span class="math inline">\(g\)</span> which minimizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span>, and therefore also the variance <span class="math inline">\(\mathbb{V}_g(\hat{\theta}_g),\)</span> is given by <span class="math display">\[
+<p><span class="theorem-title"><strong>Theorem 2.1 (Minimum Variance Theorem) </strong></span>The <strong>importance function</strong> <span class="math inline">\(g\)</span> which minimizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span>, and, therefore, minimizes also the variance of the integral estimator in <a href="#eq-ImportSample">Equation&nbsp;<span>2.5</span></a>, <span class="math inline">\(\mathbb{V}_g(\hat{\theta}_g)\)</span>, is given by <span class="math display">\[
 g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 \]</span></p>
 </div>
@@ -1098,7 +1098,11 @@ p
 \end{align*}
 \]</span> with <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span> and <span class="math inline">\(X\sim g,\)</span> where <span class="math inline">\(g\)</span> needs to be chosen by the statistician.</p>
 <p>A possibly good (and simple) choice of <span class="math inline">\(g\)</span> is, for instance, <span class="math display">\[
-g(x)=\frac{2}{x^2},
+g(x)=\left\{
+  \begin{array}{ll}
+  \frac{2}{x^2}&amp; x\geq 2\\
+  0&amp;\text{otherwise},\\
+  \end{array}\right.
 \]</span> since this function:</p>
 <ul>
 <li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
@@ -1111,6 +1115,30 @@ g(x)=\frac{2}{x^2},
 <p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The function <span class="math inline">\(g\)</span> is indeed a density function, since it is non-negative and integrates to one.</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-8_c2cdd6df08852bac6e94f99a29cf1d28">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"mosaicCalc"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>F <span class="ot">&lt;-</span> <span class="fu">antiD</span>( <span class="dv">2</span><span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">~</span> x)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="sc">-</span> <span class="fu">F</span>(<span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>(Double-check this also without computer support.)</p>
 </div>
 </div>
 <p><strong>Caution:</strong> It is not straight forward to directly sample from <span class="math inline">\(g\)</span>, therefore we need some further steps:</p>
@@ -1167,7 +1195,7 @@ p
 \]</span> where <span class="math display">\[
 U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1/2]
 \]</span> and <span class="math display">\[
-h(u)=\frac{1}{(2\pi(1+u^2))}
+h(u)=\frac{1}{2\pi(1+u^2)}
 \]</span></p>
 <p>The variance and standard error of <span class="math inline">\(\hat{p}_4\)</span> are <span class="math display">\[
 \begin{align*}
@@ -1295,7 +1323,7 @@ see, e.g., the classical book "Approximation Theorems of Mathematical Statistics
 To run the 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-8_007bedb57ed10c2dfe97d45b96ef5c0c'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-9_0827ac873c8187a49d20183358bc45c7'}
 
 ```{.r .cell-code}
 set.seed(123)
@@ -1336,7 +1364,7 @@ where $\varepsilon_{t}\sim N(0,\sigma_\varepsilon^2)$ with $0<\varepsilon^2<\inf
 
 
 
-::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-9_ca81624119e21fc2b128118e96c78cb5'}
+::: {.cell hash='Ch2_MonteCarlo_cache/html/unnamed-chunk-10_dc677e7c2188761cc4eb35e870aa30a2'}
 
 ```{.r .cell-code}
 LL_fun <- function(beta0, beta1, sigma) {
@@ -1356,6 +1384,7 @@ LL_fun <- function(beta0, beta1, sigma) {
 </section>
 <section id="exercises" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<!-- Problem 3.4 / 3.10 (solutions) -->
 <!-- #### Exercise 3. {-} 
 
 Consider the following faster version of the Box-Muller algorithm:<br> 

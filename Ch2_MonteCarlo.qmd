@@ -361,7 +361,7 @@ However, the Monte Carlo integration approach is particularly useful for approxi
 ## Classical Monte Carlo Integration using Proportions
 
 
-Many integration problems, such @exm-ApproxNormTables, can be written as a proportion $0\leq p\leq 1.$ This allows us compute the integral using using empirical proportions 
+Many integration problems, such as the one in @exm-ApproxNormTables, can be written as a proportion $0\leq p\leq 1.$ This allows us compute the integral using using empirical proportions 
 $$
 \hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
 $$
@@ -870,7 +870,7 @@ $$
 
 ## Minimum Variance Theorem
 
-The **importance function** $g$ which minimizes the variance $\mathbb{V}_g(\psi(X_i))$, and therefore also the variance $\mathbb{V}_g(\hat{\theta}_g),$  is given by 
+The **importance function** $g$ which minimizes the variance $\mathbb{V}_g(\psi(X_i))$, and, therefore, minimizes also the variance of the integral estimator in @eq-ImportSample, $\mathbb{V}_g(\hat{\theta}_g)$, is given by 
 $$
 g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 $$ 
@@ -997,7 +997,11 @@ with $h(x)=1_{(x\geq 2)}$ and $X\sim g,$ where $g$ needs to be chosen by the sta
 
 A possibly good (and simple) choice of $g$ is, for instance, 
 $$
-g(x)=\frac{2}{x^2},
+g(x)=\left\{
+  \begin{array}{ll}
+  \frac{2}{x^2}& x\geq 2\\
+  0&\text{otherwise},\\
+  \end{array}\right.
 $$ 
 since this function:
 
@@ -1023,7 +1027,18 @@ legend("topright", legend = c("pdf-Cauchy(0,1)", expression(g(x)==2/(x^2))), lty
      col = c("black", "red"))
 ```
 
+:::{.callout-note}
+The function $g$ is indeed a density function, since it is non-negative and integrates to one.
 
+```{r}
+suppressPackageStartupMessages(library("mosaicCalc"))
+
+F <- antiD( 2/x^2 ~ x)
+
+0 - F(2) 
+```
+(Double-check this also without computer support.)
+:::
 
 **Caution:** It is not straight forward to directly sample from $g$, therefore we need some further steps:
 
@@ -1088,7 +1103,7 @@ U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1/2]
 $$
 and 
 $$
-h(u)=\frac{1}{(2\pi(1+u^2))}
+h(u)=\frac{1}{2\pi(1+u^2)}
 $$ 
 
 The variance and standard error of $\hat{p}_4$ are 
@@ -1277,6 +1292,10 @@ LL_fun <- function(beta0, beta1, sigma) {
 
 
 ## Exercises {-}
+
+
+<!-- Problem 3.4 / 3.10 (solutions) -->
+
 
 <!-- #### Exercise 3. {-} 
 
