@@ -632,7 +632,9 @@ n\hat{p}_n(x)=\sum_{i=1}^n1_{(X_i\leq x)}
 n \hat{p}_n(x)\sim \mathcal{Binom}\left(n, p=\Phi(x)\right).
 \]</span> Thus, we know the <em>exact</em> variance which is <span class="math display">\[
 \begin{align*}
-\mathbb{V}\left(n\hat{p}_n(x)\right)&amp;=n\Phi(x)(1-\Phi(x)).
+\mathbb{V}\left(n\hat{p}_n(x)\right)
+&amp;=n p (1-p)\\[2ex]
+&amp;=n\Phi(x)(1-\Phi(x)).
 %\Leftrightarrow \mathbb{V}\left(\hat{p}_n(t)\right) &amp;=\frac{\Phi(x)(1-\Phi(x))}{n}
 \end{align*}
 \]</span> The standard error for our estimator <span class="math inline">\(\hat{p}_n(x)\)</span> thus is equal to <span class="math display">\[
@@ -845,11 +847,11 @@ p
 &amp;= P\left(1_{(X \geq 2)}=1\right)\cdot 1 + P\left(1_{(X \geq 2)}=0\right)\cdot 0\\[2ex]
 &amp;=\mathbb{E}_{f}\left(1_{(X \geq 2)}\right),
 \end{align*}
-\]</span> i.e., here <span class="math inline">\(f\)</span> is the density of the <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distribution and <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span>.</p>
+\]</span> where <span class="math inline">\(X\sim \mathcal{Cauchy}(0,1),\)</span> <span class="math inline">\(f\)</span> is the density of the <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distribution, and <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span>.</p>
 <p>So, we can approximate <span class="math inline">\(p\)</span> using the empirical mean <span class="math display">\[
 \hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 2)}
 \]</span> of a random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),\)</span> where <span class="math display">\[
-1_{(X_1&gt;2)},\dots,1_{(X_n&gt;2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(p).
+1_{(X_1\geq 2)},\dots,1_{(X_n\geq 2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(p).
 \]</span> The variance of <span class="math inline">\(\hat{p}_1\)</span> is thus <span class="math display">\[
 \begin{align*}
 \mathbb{V}(\hat{p}_{1})
@@ -1027,11 +1029,11 @@ Tip
 \]</span> where we assume that the moments exist.</p>
 </div>
 </div>
-<p>Applying Jensen’s inequality yields, the following lower bound for <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2):\)</span> <span class="math display">\[
+<p>Using Jensen’s inequality, we can derive the lower bound for <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2):\)</span> <span class="math display">\[
 \begin{align*}
-\mathbb{E}_g(\psi(X_i)^2)
-&amp;=\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|}^2)\\[2ex]
-&amp;\geq \left(\mathbb{E}_g({\color{red}|}\psi(X_i){\color{red}|})\right)^2\\[2ex]
+\mathbb{E}_g( \; (\psi(X_i) ) ^2 \; )
+&amp;=\mathbb{E}_g( \; |\psi(X_i)|^2 \; )\quad\text{(bringing in $|.|$)}\\[2ex]
+&amp;\geq \left(\mathbb{E}_g(|\psi(X_i)|)\right)^2\quad\text{(Jensen's inequality)}\\[2ex]
 &amp;=\left(\int\left|\frac{h(x)f(x)}{g(x)}\right|g(x)dx\right)^2\\[2ex]
 &amp;=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{(since $f$ and $g$ are non-negative)}\\[2ex]
 &amp;=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}},
@@ -1064,7 +1066,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as rather impractical, since, for instance, if <span class="math inline">\(h(x)&gt;0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
+<p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as rather impractical, since, for instance, if <span class="math inline">\(h(x)\geq 0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
 <p>The minimum variance result of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> is, however, still useful:</p>
 <ul>
 <li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>.</li>
