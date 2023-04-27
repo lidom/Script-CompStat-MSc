@@ -24,10 +24,10 @@ Monte Carlo methods take advantage of the availability of:
 
 This chapter is about **Monte Carlo Integration** which is a stochastic alternative to deterministic numerical integration methods such as numerical quadrature. 
 
-@fig-MCIntPublishedExample shows a screenshot of a published example (see @Bourreau2021market), where the authors use Monte Carlo simulation to solve a hard-to-compute integral. 
+@fig-MCIntPublishedExample shows a screenshot of a published example (see @Bourreau2021market). The authors use Monte Carlo integration to solve the shown integral. 
 
 
-![Market share function in @Bourreau2021market, which involves a hard-to-compute integral. Here Monte Carlo integration is used to solve the integral.](images/MCIntPublishedExample2.png){#fig-MCIntPublishedExample}
+![Market share function in @Bourreau2021market. The authors use Monte Carlo integration to solve this integral.](images/MCIntPublishedExample2.png){#fig-MCIntPublishedExample}
 
 ## Classical Monte Carlo Integration
 
@@ -79,7 +79,7 @@ As we can use the computer to produce realizations from the i.i.d. sample $X_1,\
 * or "equivalently", how fast converges $\bar{h}_n$ to the desired limit $\mathbb{E}\left(h(X)\right)$?
 
 
-### Speed of Convergence {-}
+### Speed of Convergence
 
 OK, we know now that $\bar{h}_n$ reaches its limit (here in the "almost surely" sense, but likewise in the "in probability" case) as $n\to\infty$ under some rather loose conditions on the random sample $X_1,\dots,X_n$. 
 
@@ -147,7 +147,7 @@ Even if we would not know the value of $\mathtt{const}=\sqrt{\mathbb{V}\left(h(X
 :::
 
 
-### Distributional Properties {-}
+### Distributional Properties 
 
 Besides the speed of convergence of $\{\bar{h}_n\}_{n=1,2,\dots}$ for $n\to\infty,$ we can also say something about the distribution of the random variable $\bar{h}_n$ for large sample sizes $n.$
 
@@ -358,18 +358,21 @@ However, the Monte Carlo integration approach is particularly useful for approxi
 ::: 
 
 
-### Classical Monte Carlo Integration using Proportions
+## Classical Monte Carlo Integration using Proportions
+
+
+Many integration problems, such @exm-ApproxNormTables, can be written as a proportion $0\leq p\leq 1.$ This allows us compute the integral using using empirical proportions 
+$$
+\hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
+$$
+where we choose the sample size $n$ to achieve a certain level of precision for our integral approximation. 
 
 
 ::: {#exm-ApproxNormTables}
 
 ## Approximation of Normal Distribution Tables 
 
-A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use Monte Carlo integration. Besides this specific use case, this example showcases the treatment of integrals that can be approximated using propoartions 
-$$
-\hat{p} =\frac{\text{Number of successes}}{\text{Sample size}},
-$$
-where we choose the sample size $n$ to achieve a certain level of precision for our integral approximation. 
+A possible way to construct normal distribution tables, i.e., table for the values of the distribution function $0\leq \Phi(x)\leq 1,$ is to use Monte Carlo integration. 
 
 Observe that the distribution function $\Phi(x)$ can be written as the mean of a binary (taking values 0 and 1) random variable,
 $$
@@ -383,6 +386,7 @@ $$
 \end{align*}
 $$
 where $X\sim\mathcal{N}(0,1),$ and where $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$ 
+:::
 
 That is, we can write the integration problem as the mean of a Bernoulli random variable
 $$
@@ -397,7 +401,7 @@ p=P\left(X \leq x\right) = \Phi(x).
 $$
 
 ::: {.callout-note}
-Note that $1_{(X \leq x)}$ is a Bernoulli random variable no matter the distribution of $X.$ Here $X$ is a standard normal random variable; however, in other use cases $X$ can have, of course, another distribution, but $1_{(X \leq x)}$ remains a Bernoulli random variable. We use this feature below when we think about the distributional properties of our estimator for approximating the integral value.    
+Note that $1_{(X \leq x)}$ is a Bernoulli random variable no matter the distribution of $X.$ In @exm-ApproxNormTables, $X$ is a standard normal random variable; however, in other use cases $X$ can have, of course, another distribution, but $1_{(X \leq x)}$ remains a Bernoulli random variable. We use this feature below when we think about the distributional properties of our estimator for approximating the integral value.    
 :::
 
 
@@ -416,7 +420,9 @@ $$
 for all $x\in\mathbb{R},$ and all "sample sizes" (chosen by us) $n=1,2,\dots$
 
 
-### Distributional Properties of Proportions {-}
+
+
+### Distributional Properties of Proportions 
 
 Now, to assess the accuracy of our Monte Carlo integration for approximating $\Phi_n(x),$ we need to derive the distributional properties of our estimator $\hat{p}_n(x).$
 
@@ -464,7 +470,7 @@ $$
 \mathbb{V}(\hat{\Phi}_n(t))\approx \frac{\Phi(0)(1-\Phi(0))}{n}=\frac{0.5^2}{n},\quad t\approx 0.
 $$   -->
 
-@tbl-CIProp gives the evolution of the Monte Carlo integration results 
+@tbl-CIProp gives the evolution of the Monte Carlo integration results for @exm-ApproxNormTables
 $$
 \hat{p}_n(x)\approx \Phi(x)
 $$
@@ -587,7 +593,7 @@ $$ -->
 
 That is, we need a sample size of $n^7$ to achieve a precision of **three decimal places** by means of a 99% Clopper-Pearson confidence interval.
 
-:::
+
 
 
 
@@ -599,14 +605,14 @@ As demonstrated in @exm-ApproxNormTables, the accuracy of the Monte Carlo integr
 
 As in the case of Monte Carlo integration the focus lies on evaluating the integral
 $$
-\mathbb{E}_{f_X}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
+\mathbb{E}_{f}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
 $$
 
 However, it turns out that the above approach, i.e., sampling from $f$ is often suboptimal. 
 
 Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet 
 $$
-(\mathcal{X}, h, f_X).
+(\mathcal{X}, h, f).
 $$ 
 Therefore, the search for an optimal estimator should encompass all these possible representations.
 
@@ -647,16 +653,18 @@ $$
 \begin{align*}
 p
 &=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
-&=P\left(X \leq 2\right)\\[2ex]
-&=P\left(1_{(X \leq 2)}=1\right)\\[2ex]
-&= P\left(1_{(X \leq 2)}=1\right)\cdot 1 + P\left(1_{(X \leq 2)}=0\right)\cdot 0\\[2ex]
-&=\mathbb{E}\left(1_{(X \leq 2)}\right)
+&=P\left(X \geq 2\right)\\[2ex]
+&=P\left(1_{(X \geq 2)}=1\right)\\[2ex]
+&= P\left(1_{(X \geq 2)}=1\right)\cdot 1 + P\left(1_{(X \geq 2)}=0\right)\cdot 0\\[2ex]
+&=\mathbb{E}_{f}\left(1_{(X \geq 2)}\right),
 \end{align*}
 $$
+i.e., here $f$ is the density of the $\mathcal{Cauchy}(0,1)$-distribution and $h(x)=1_{(x\geq 2)}$. 
+
 
 So, we can approximate $p$ using the empirical mean
 $$
-\hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i>2)}
+\hat{p}_{1}=\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 2)}
 $$
 of a random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),$ where 
 $$
@@ -666,8 +674,8 @@ The variance of $\hat{p}_1$ is thus
 $$
 \begin{align*}
 \mathbb{V}(\hat{p}_{1})
-&=\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(X_i>2)}\right)\\[2ex]
-&=\frac{n}{n^2}\mathbb{V}\left(1_{(X_1>2)}\right)\quad\text{(i.i.d.)}\\[2ex]
+&=\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n1_{(X_i\geq 2)}\right)\\[2ex]
+&=\frac{n}{n^2}\mathbb{V}\left(1_{(X_1\geq 2)}\right)\quad\text{(i.i.d.)}\\[2ex]
 &=\frac{p(1-p)}{n},
 \end{align*}
 $$
@@ -689,9 +697,11 @@ p
 &=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
 &=\frac{1}{2}\left(\int_{-\infty}^{-2}\frac{1}{\pi(1+x^2)}\,dx + \int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx \right)\\[2ex]
 &=\frac{1}{2}\left(\mathbb{E}\left(1_{(X \leq -2)}\right) + \mathbb{E}\left(1_{(X \geq 2)}\right)\right)\\[2ex]
-&=\frac{1}{2} \; \mathbb{E}\left(1_{(|X| \geq 2)}\right) 
+&=\mathbb{E}_{f}\left(\frac{1}{2} \; 1_{(|X| \geq 2)}\right),
 \end{align*}
 $$
+i.e., here $f$ is the density of the $\mathcal{Cauchy}(0,1)$-distribution and $h(x)=\frac{1}{2} 1_{(|x|\geq 2)}$.
+
 This representation has the attractive feature that we can use a much higher fraction of the simulated data by using the following new empirical mean
 $$
 \begin{align*}
@@ -702,7 +712,7 @@ $$
 $$
 again of a random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Cauchy}(0,1),$ where 
 $$
-1_{(|X_1|>2)},\dots,1_{(|X_n|>2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(2\,p).
+1_{(|X_1|\geq 2)},\dots,1_{(|X_n|\geq 2)}\overset{\text{i.i.d.}}{\sim}\mathcal{Bernoulli}(2\,p).
 $$
 The variance of this new estimator,
 $$
@@ -742,9 +752,10 @@ $$
 Furthermore, we can rearrange the integral a bit such that 
 $$
 \begin{align*}
- &\int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx \\[2ex]
-=&\int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathcal{U}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx \\[2ex]
-=&\mathbb{E}_{f_{\mathcal{U}[0,2]}}(h(U)),
+p
+& =\frac{1}{2} - \int_{0}^2\;\left(\frac{1}{2}\cdot 2\right)\;\frac{1}{\pi(1+x^2)}\,dx \\[2ex]
+& = \frac{1}{2} - \int_{0}^2\;\underbrace{\frac{1}{2}}_{f_{\mathcal{U}[0,2]}}\;\underbrace{\frac{2}{\pi(1+x^2)}}_{=h(x)}\,dx \\[2ex]
+& = \frac{1}{2} - \mathbb{E}_{f_{\mathcal{U}[0,2]}}(h(U)),
 \end{align*}
 $$
 where $U\sim\mathcal{U}[0,2].$
@@ -757,15 +768,17 @@ where
 $$
 U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].
 $$
-Computing the variance is here cumbersome. 
+As in the previous approaches, the standard error converges with the classic parametric convergence rate: 
 $$
 \begin{align*}
 \mathbb{V}\left(\hat{p}_{3}\right)
 & =\frac{1}{n^2}\mathbb{V}\left(\sum_{i=1}^n h(U_i)\right)\\[2ex]
 & =\frac{1}{n}\mathbb{V}\left(h(U_1)\right)\\[2ex]
+\Rightarrow 
+\operatorname{SE}\left(\hat{p}_{3}\right)&=\texttt{const}\frac{1}{\sqrt{n}}
 \end{align*}
 $$
-Using integration by parts and that $p=0.1476$, it can be shown that 
+Computing the variance $\mathbb{V}\left(\hat{p}_{3}\right)$ is a bit cumbersome, but using integration by parts and that $p=0.1476$, it can be shown that 
 $$
 \mathbb{V}(\hat p_3)=0.029/n,
 $$ 
@@ -791,6 +804,7 @@ $$
 \begin{align*}
 \theta
 &=\mathbb{E}_{f}(h(X))\\[2ex]
+&=\int h(x)\;f(x)dx\\[2ex]
 &=\int h(x)\left(\frac{g(x)}{g(x)}\right)\;f(x)dx\\[2ex]
 &=\int \underbrace{\left(h(x)\frac{f(x)}{g(x)}\right)}_{=:\psi(x)}\;g(x)dx\\[2ex]
 &=\int \psi(x)\;g(x)dx\\[2ex]
@@ -813,9 +827,9 @@ $$
 
 Note that @eq-ImportSample can be seen as a weighted mean of the transformed random variables $h(X_i)$ with weights 
 $$
-W_i = \frac{f(X_i)}{g(X_i)}
+W_i = \frac{f(X_i)}{g(X_i)}.
 $$
-that are inversely proportional to the so-called **selection factor** 
+These weights $W_i$ are inversely proportional to the so-called **selection factor** 
 $$
 \frac{g(X_i)}{f(X_i)}.
 $$
@@ -831,12 +845,16 @@ $$
 \begin{align*}
 \mathbb{V}_g(\hat{\theta}_g)
 &=\mathbb{V}_g\left(\frac{1}{n}\sum_{i=1}^n\psi(X_i)\right) \\[2ex]
-&=\frac{1}{n}\mathbb{V}_g(\psi(X_i))\quad\text{(i.i.d)}\\[2ex]
+&=\frac{1}{n}\mathbb{V}_g(\psi(X_i))\quad\text{(since i.i.d. random sample)}\\[2ex]
 &=\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)\;dx\\[2ex]
 &=\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)\;dx,
 \end{align*}
 $$
-which, depending on the choice of $g$, can be *much* smaller (or larger) than the variance of the naive estimator from the classical Monte Carlo Integration using the ordinary (unweighted) empirical mean.
+
+Depending on the choice of the **importance function** $g,$ the variance of the estimator $\hat{\theta}_g$ can be *much* smaller than the variance of the more naive estimators from the classical Monte Carlo integrations which use *unweighted* empirical means.
+
+@thm-MinVarTheorem gives us the best choice for the **importance function** $g.$
+
 <!-- 
 $$
 \mathbb{V}(\hat{\theta}_{\text{naive}})=
@@ -946,25 +964,40 @@ Let's apply our new insights to the above @exm-CauchTailProb on the Cauchy tail 
 
 ## Cauchy Tail Probability (continued) 
 
-Above we had: 
+Above we had
+$$
+\begin{align*}
+p
+&=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
+&=P\left(X \geq 2\right)\\[2ex]
+&=P\left(1_{(X \geq 2)}=1\right)\\[2ex]
+&= P\left(1_{(X \geq 2)}=1\right)\cdot 1 + P\left(1_{(X \geq 2)}=0\right)\cdot 0\\[2ex]
+&=\mathbb{E}_{f}\left(1_{(X \geq 2)}\right),
+\end{align*}
+$$
+where $f$ is the density of the $\mathcal{Cauchy}(0,1)$-distribution and $h(x)=1_{(x\geq 2)}$. 
 
-1. $f(x)=\frac{1}{\pi(1+x^2)}$, the density of $\mathcal{Cauchy}(0,1)$ and
-2. $h(x)=1_{(x>2)}$, i.e., here $|h(x)|=h(x)$.
+I.e., here $h$ is non-negative, such that $|h(x)|=h(x)$ for all $x.$
 
-Therefore
+Therefore, 
 $$
 \begin{align*}
 p 
 & =\mathbb{E}_f(h(X)) \\[2ex]
 & =\int h(x)f(x)dx    \\[2ex]
-& =\int_{2}^{\infty}f(x)dx \\[2ex]
-& =\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx \\[2ex]
+%& =\int_{2}^{\infty}f(x)dx \\[2ex]
+%& =\int_{2}^{\infty}\underbrace{\frac{f(x)}{g(x)}}_{=\psi(x)}\;g(x)dx \\[2ex]
+& =\int\underbrace{\left(h(x) \frac{f(x)}{g(x)}\right)}_{=\psi(x)}\;g(x)dx \\[2ex]
 & =\mathbb{E}_g(\psi(X)), 
 \end{align*}
 $$
-where the $h$ function is absorbed by the formulation of the definite integral.
+with $h(x)=1_{(x\geq 2)}$ and $X\sim g,$ where $g$ needs to be chosen by the statistician. 
 
-A possibly good (and simple) choice of $g$ is, e.g., $g(x)=2/(x^2)$, since this function:
+A possibly good (and simple) choice of $g$ is, for instance, 
+$$
+g(x)=\frac{2}{x^2},
+$$ 
+since this function:
 
 * "closely" matches $h(x)f(x)$ and 
 * $g$ has thicker tails than $f$. 
@@ -988,39 +1021,87 @@ legend("topright", legend = c("pdf-Cauchy(0,1)", expression(g(x)==2/(x^2))), lty
      col = c("black", "red"))
 ```
 
-\
+
 
 **Caution:** It is not straight forward to directly sample from $g$, therefore we need some further steps:
 
-\
+
 
 The choice of $g$ leads to 
 $$
-p=\mathbb{E}_g(\psi(X))=
-\int_{2}^{+\infty}\left(\frac{x^2}{2\,\pi(1+x^2)}\right)\,\frac{2}{x^2}\,dx=
-\int_{2}^{+\infty}\left(\frac{1}{\pi(1+x^{-2})}\right)\,x^{-2}\,dx.
+\begin{align*}
+p 
+& =\mathbb{E}_g(\psi(X)) \\[2ex]
+& =\int \left(h(x) \frac{f(x)}{g(x)}\right) \;g(x)dx \\[2ex]
+& =\int_{2}^{+\infty} \left(\frac{f(x)}{g(x)}\right) \;g(x)dx\quad\text{(using $h(x)=1_{(x\geq 2)}$)} \\[2ex]
+& =\int_{2}^{+\infty}\left(\frac{\frac{1}{\pi(1+x^2)}}{\frac{2}{x^2}}\right)\,\frac{2}{x^2}\,dx \quad\text{(using $g(x)=2/x^2$)} \\[2ex]
+& =\int_{2}^{+\infty}\left(\frac{1}{\pi(1+x^2) \cdot \frac{1}{x^2}} \right)\,\frac{1}{x^2}\,dx  \\[2ex]
+& =\int_{2}^{+\infty}\left(\frac{1}{\pi(\frac{1}{x^2}+ 1) } \right)\,\frac{1}{x^2}\,dx  \\[2ex]
+& =\int_{2}^{+\infty}\left(\frac{1}{\pi(1+x^{-2})}\right)\,x^{-2}\,dx.
+\end{align*}
 $$
 
-\
 
+Integration by substitution 
 
-Now we can apply some additional (rather case-specific) re-arrangements:
+* substituting $u(x)=x^{-1}$
+* $\frac{du}{dx}=- x^{-2}$
 
-Integration by substitution (substituting $u=x^{-1}$) yields:
+yields:
 $$
-p=\int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
+\begin{align*}
+p 
+& =\lim_{b\to\infty}\int_{u(2)}^{u(b)} - \frac{1}{\pi(1+u^2)}du \\[2ex]
+& = - \int_{1/2}^{0} \frac{1}{\pi(1+u^2)}du \\[2ex]
+& = \int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du
+\end{align*}
 $$
-Again, we can re-arrange the last integral a bit such that
-$$
-p=\int_{0}^{1/2}\underbrace{2}_{f_{\mathrm{Unif}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du=\mathbb{E}(h(U)),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2].
-$$
-Therefore, we have a final fourth version of the estimator of $p$:
-$$
-\hat{p}_4=\sum_{i=1}n h(U_i),\quad\text{where}\quad U\sim\mathrm{Unif}[0,1/2] 
-$$
-and $h(u)=1/(2\pi(1+u^2))$. 
 
-The variance of $\hat{p}_4$ is $(\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2)/n$ and an integration by parts shows that $\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n$. Compare this to the former results: $\mathbb{V}(\hat p_3)=0.0285/n$, $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$. The variance of $\hat{p}_4$ is by a factor of $10^{-3}$ lower than the variance of the original $\hat{p}_1$.
+::: {.callout-important}
+We just showed that 
+$$
+p =\underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx}_{\text{Our original problem}} 
+  =\int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
+$$
+That is, we shifted the integration problem from the tail to the "center" of the distribution. 🤓
+:::
+
+Rearranging the integral a bit, allows us to write 
+$$
+\begin{align*}
+p
+&=\int_{0}^{1/2}\underbrace{2}_{f_{\mathcal{U}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du\\[2ex]
+&=\mathbb{E}(h(U)),
+\end{align*}
+$$
+where $U\sim\mathcal{U}[0,1/2].$
+
+Thus, we have a final fourth version of the estimator of $p$:
+$$
+\hat{p}_4=\frac{1}{n}\sum_{i=1}^n h(U_i), 
+$$
+where 
+$$
+U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,1/2]
+$$
+and 
+$$
+h(u)=\frac{1}{(2\pi(1+u^2))}
+$$ 
+
+The variance and standard error of $\hat{p}_4$ are 
+$$
+\begin{align*}
+\mathbb{V}(\hat{p}_4) 
+& = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n h(U_i)\right)\\[2ex]
+& = \frac{1}{n}\mathbb{V}\left(h(U)\right)\\[2ex]
+& = \frac{\mathbb{E}(h(U)^2)-\mathbb{E}(h(U))^2}{n}\\[2ex]
+\Rightarrow
+\operatorname{SE}(\hat{p}_4) 
+& = \texttt{const}\frac{1}{\sqrt{n}}
+\end{align*}
+$$ 
+An integration by parts shows that $\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n$. Compare this to the former results: $\mathbb{V}(\hat p_3)=0.0285/n$, $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$. The variance of $\hat{p}_4$ is by a factor of $10^{-3}$ lower than the variance of the original $\hat{p}_1$.
 :::
 
 <!--
