@@ -605,12 +605,12 @@ As demonstrated in @exm-ApproxNormTables, the accuracy of the Monte Carlo integr
 
 "Importance sampling" aims to reduce the variance of the Monte Carlo integral estimator. Therefore, importance sampling is also refereed to as a **variance reduction** technique. This variance reduction is achieved by weighting functions, so-called **importance functions**. 
 
-As in the case of Monte Carlo integration the focus lies on evaluating the integral
+As in the case of classical Monte Carlo integration (see @eq-MeanIntegral), the generic problem is the evaluation of the integral 
 $$
-\mathbb{E}_{f}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
+\mathbb{E}_{f}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f_X(x)\,dx.
 $$
 
-However, it turns out that the above approach, i.e., sampling from $f$ is often suboptimal. 
+However, it turns out that the classical Monte Carlo integration approach, i.e., a direct sampling from $f$ is often suboptimal. 
 
 Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet 
 $$
@@ -648,7 +648,7 @@ round(1 - pcauchy(2), 4)
 ```
 
 
-**1. Approach: The Naive Approach** 
+**1. Approach: The Naive Approach (Classical Monte Carlo Integration)** 
 
 The most direct approach would be to use the following mean expression for the integral of interest: 
 $$
@@ -762,7 +762,7 @@ p
 $$
 where $U\sim\mathcal{U}[0,2].$
 
-Therefore a new alternative method for evaluating $p$ is:
+Therefore, a new alternative method for evaluating $p$ is:
 $$
 \hat{p}_{3}=\frac{1}{2} - \frac{1}{n}\sum_{i=1}^n h(U_i),
 $$
@@ -782,7 +782,7 @@ $$
 $$
 Computing the variance $\mathbb{V}\left(\hat{p}_{3}\right)$ is a bit cumbersome, but using integration by parts and that $p=0.1476$, it can be shown that 
 $$
-\mathbb{V}(\hat p_3)=0.029/n,
+\mathbb{V}(\hat p_3)=\frac{0.0285}{n},
 $$ 
 which is lower than both previous approaches, where we had that $\mathbb{V}(\hat{p}_{2})=0.052/n$ and $\mathbb{V}(\hat{p}_{1})=0.126/n$.
 
@@ -891,8 +891,10 @@ $$
   &=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx - 
   \left(\int h(x)f(x)dx\right)^2.
 \end{align*}
-$$
-Thus, $\left(\mathbb{E}_g(\psi(X_i))\right)^2$ does not depend on $g.$ Consequently, the density $g$ that minimizizes the variance $\mathbb{V}_g(\psi(X_i))$ is also the density $g$ that minimizes $\mathbb{E}_g(\psi(X_i)^2).$ We use this in the following since minimizing $\mathbb{E}_g(\psi(X_i)^2)$ is simpler than minimizing $\mathbb{V}_g(\psi(X_i)).$ 
+$${#eq-VarExpression}
+Thus, the second term, $\left(\mathbb{E}_g(\psi(X_i))\right)^2,$ does not depend on $g.$ 
+
+Consequently, the density $g$ that minimizes the variance $\mathbb{V}_g(\psi(X_i))$ is also the density $g$ that minimizes $\mathbb{E}_g(\psi(X_i)^2).$ We use this in the following, since minimizing $\mathbb{E}_g(\psi(X_i)^2)$ is simpler than minimizing $\mathbb{V}_g(\psi(X_i)).$ 
 
 We begin with a small trick by including an absolute value function as following:
 $$
@@ -910,15 +912,15 @@ $$
 where we assume that the moments exist. 
 :::
 
-Using Jensen's inequality, we can derive the lower bound for $\mathbb{E}_g(\psi(X_i)^2):$
+Now, using Jensen's inequality, we can derive the lower bound for $\mathbb{E}_g(\psi(X_i)^2):$
 $$
 \begin{align*}
 \mathbb{E}_g( \; (\psi(X_i) ) ^2 \; )
 &=\mathbb{E}_g( \; |\psi(X_i)|^2 \; )\quad\text{(bringing in $|.|$)}\\[2ex]
 &\geq \left(\mathbb{E}_g(|\psi(X_i)|)\right)^2\quad\text{(Jensen's inequality)}\\[2ex]
 &=\left(\int\left|\frac{h(x)f(x)}{g(x)}\right|g(x)dx\right)^2\\[2ex]
-&=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{(since $f$ and $g$ are non-negative)}\\[2ex]
-&=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}},
+&=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{($f$ and $g$ are non-negative)}\\[2ex]
+&=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}} = \left(\mathbb{E}_{f}\left(h(X)\right)\right)^2,
 \end{align*}
 $$
 where this lower bound is independent of $g.$
@@ -945,15 +947,15 @@ $$
 & = \underbrace{\left(\int\left|h(x)\right|f(x) dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}}
 \end{align*}
 $$
-This shows that the lower bound of $\mathbb{E}_g(\psi(X_i)^2)$ is achieved for $g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},$ which shows the statement of @thm-MinVarTheorem. 
+This shows that the lower bound of $\mathbb{E}_g(\psi(X_i)^2)$ is achieved for $g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},$ which implies the statement of @thm-MinVarTheorem. 
 
 ::: {.callout-note}
-Note that @thm-MinVarTheorem may appear as rather impractical, since, for instance, if $h(x)\geq 0$ then $g^\ast$ requires us to know $\theta=\int h(z)f(z)dz,$ which, however, is just the integral of interest! 
+Note that @thm-MinVarTheorem may appear as **rather impractical**. If, for instance, $h(x)\geq 0$ then $g^\ast$ requires us to know $\theta=\int h(z)f(z)dz,$ which, however, is just the integral of interest! 
 
-The minimum variance result of @thm-MinVarTheorem is, however, still useful:
+The minimum variance result of @thm-MinVarTheorem is, nevertheless, useful:
 
-*  It tells us that a good choice of $g(x)$ shall mimic the shape of $|h(x)|f(x)$, since the optimal $g^\ast(x)\propto |h(x)|f(x)$.
-*  Furthermore, $g(x)$ should be chosen such that it has a thicker tail than $f(x)$, since the variance $\mathbb{V}(\hat{\theta}_g)$ crucially depends on the quotient $f(x)/g(x)$ which would "explode" for $g(x)\approx 0$.
+*  It tells us that a good choice of $g(x)$ shall mimic the shape of $|h(x)|f(x)$, since the optimal $g^\ast(x)\propto |h(x)|f(x)$. (We know the integrand functions $h$ and $f$.)
+*  Furthermore, $g(x)$ should be chosen such that it has a thicker tail than $f(x)$, since the variance $\mathbb{V}(\hat{\theta}_g)$ crucially depends on the quotient $f(x)/g(x)$ (see @eq-VarExpression) which would "explode" for $g(x)\approx 0$.
 :::
 
 
@@ -966,7 +968,7 @@ Let's apply our new insights to the above @exm-CauchTailProb on the Cauchy tail 
 
 ## Cauchy Tail Probability (continued) 
 
-Above we had
+Above, in @exm-CauchTailProb, we had
 $$
 \begin{align*}
 p
@@ -977,7 +979,7 @@ p
 &=\mathbb{E}_{f}\left(1_{(X \geq 2)}\right),
 \end{align*}
 $$
-where $f$ is the density of the $\mathcal{Cauchy}(0,1)$-distribution and $h(x)=1_{(x\geq 2)}$. 
+where $f(x)=1/(\pi(1+x^2))$ is the density of the $\mathcal{Cauchy}(0,1)$-distribution and $h(x)=1_{(x\geq 2)}$. 
 
 I.e., here $h$ is non-negative, such that $|h(x)|=h(x)$ for all $x.$
 :::
@@ -997,7 +999,7 @@ p
 $$
 with $h(x)=1_{(x\geq 2)}$ and $X\sim g,$ where $g$ needs to be chosen by the statistician. 
 
-A possibly good (and simple) choice of $g$ is, for instance, 
+A possibly good (and simple) choice for the **importance function** $g$ is, for instance, 
 $$
 g(x)=\left\{
   \begin{array}{ll}
@@ -1005,17 +1007,22 @@ g(x)=\left\{
   0&\text{otherwise},\\
   \end{array}\right.
 $$ 
-since this function:
 
-* "closely" matches $h(x)f(x)$ and 
-* $g$ has thicker tails than $f$. 
+This choice takes into account our insights from @thm-MinVarTheorem, since 
+
+* $g$ "closely" matches $h(x)f(x)$ and 
+* $g$ has thicker tails than $f=1/(\pi(1+x^2))$. 
 
 
-```{r, fig.width=7, fig.height=4, fig.align='center', echo=FALSE}
+```{r}
+#| echo: false
+#| eval: true
+#| label: fig-CauchyExm
+#| fig-cap: Density function $f(x)=1/(\pi(1+x^2)),$ and importance function $g(x)=2/x^2$ for $x\geq 2.$
 # g(x):
 g_fun <- function(x){2/(x^2)}
 # 
-xx    <- seq(from= 0, to=15, length.out = 500)
+xx    <- seq(from= 2, to=15, length.out = 500)
 # plot
 plot(x = xx, dcauchy(xx, location = 0, scale = 1), 
      type="l", xlab="", ylab="", ylim=c(0,0.55), axes = FALSE)
@@ -1025,25 +1032,15 @@ lines(x = xx[xx>2], g_fun(xx[xx>2]), col="red")
 # region of interest selected by h(x): x>2
 abline(v=2, lty=2)
 # legend
-legend("topright", legend = c("pdf-Cauchy(0,1)", expression(g(x)==2/(x^2))), lty=c(1,1),
-     col = c("black", "red"))
+legend("topright", legend = c("Cauchy(0,1)", expression(g(x)==2/x^2)), lty=c(1,1),
+     col = c("black", "red"), bty="n")
 ```
 
 :::{.callout-note}
-The function $g$ is indeed a density function, since it is non-negative and integrates to one.
-
-```{r}
-suppressPackageStartupMessages(library("mosaicCalc"))
-
-F <- antiD( 2/x^2 ~ x)
-
-0 - F(2) 
-```
-(Double-check this also without computer support.)
+The function $g$ is indeed a density function, since it is non-negative and integrates to one; i.e., $\int_2^\infty g(x)dx = 1.$ (Double-check this.)
 :::
 
-**Caution:** It is not straight forward to directly sample from $g$, therefore we need some further steps:
-
+**Caution:** It is not straight forward to directly sample from the importance function $g(x)=2/x^2,$ but we can apply some further steps:
 
 
 The choice of $g$ leads to 
@@ -1061,18 +1058,18 @@ p
 $$
 
 
-Integration by substitution 
+Now, integration by substitution 
 
 * substituting $u(x)=x^{-1}$
 * $\frac{du}{dx}=- x^{-2}$
 
-yields:
+yields that 
 $$
 \begin{align*}
 p 
 & =\lim_{b\to\infty}\int_{u(2)}^{u(b)} - \frac{1}{\pi(1+u^2)}du \\[2ex]
 & = - \int_{1/2}^{0} \frac{1}{\pi(1+u^2)}du \\[2ex]
-& = \int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du
+& = \int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
 \end{align*}
 $$
 
@@ -1090,7 +1087,7 @@ $$
 \begin{align*}
 p
 &=\int_{0}^{1/2}\underbrace{2}_{f_{\mathcal{U}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du\\[2ex]
-&=\mathbb{E}(h(U)),
+&=\mathbb{E}_{f_{\mathcal{U}[0,1/2]}}(h(U)),
 \end{align*}
 $$
 where $U\sim\mathcal{U}[0,1/2].$
@@ -1120,7 +1117,23 @@ $$
 & = \texttt{const}\frac{1}{\sqrt{n}}
 \end{align*}
 $$ 
-An integration by parts shows that $\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n$. Compare this to the former results: $\mathbb{V}(\hat p_3)=0.0285/n$, $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$. The variance of $\hat{p}_4$ is by a factor of $10^{-3}$ lower than the variance of the original $\hat{p}_1$.
+
+
+```{r, echo=FALSE, eval = FALSE}
+
+## install.packages("mosaicCalc")
+suppressPackageStartupMessages(library("mosaicCalc"))
+
+
+F1 <- antiD( 2 * (1/(2 * 3.14159265358979 * (1+u^2)))^2 ~ u )
+F2 <- antiD( 2 * (1/(2 * 3.14159265358979 * (1+u^2)))   ~ u )
+
+F1(1/2) - F1(0)  - (F2(1/2) - F2(0))^2
+
+```
+
+
+An integration by parts shows that $\mathbb{V}(\hat{p}_4)=0.0955\cdot 10^{-3}/n$. Compare this to the former results: $\mathbb{V}(\hat p_3)=0.0285/n$, $\mathbb{V}(\hat{p}_{2})=0.0525/n$ and $\mathbb{V}(\hat{p}_{1})=0.1275/n$. The variance of $\hat{p}_4$ is by a factor of $10^{-3}$ lower than the variance of the original $\hat{p}_1$.
 
 
 <!--

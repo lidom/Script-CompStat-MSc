@@ -809,10 +809,10 @@ $$ -->
 <h2 data-number="2.3" class="anchored" data-anchor-id="importance-sampling"><span class="header-section-number">2.3</span> Importance Sampling</h2>
 <p>As demonstrated in <a href="#exm-ApproxNormTables">Example&nbsp;<span>2.2</span></a>, the accuracy of the Monte Carlo integration method as a tool for approximating integral values depends on the variance of the estimate that approximates the integral value.</p>
 <p>“Importance sampling” aims to reduce the variance of the Monte Carlo integral estimator. Therefore, importance sampling is also refereed to as a <strong>variance reduction</strong> technique. This variance reduction is achieved by weighting functions, so-called <strong>importance functions</strong>.</p>
-<p>As in the case of Monte Carlo integration the focus lies on evaluating the integral <span class="math display">\[
-\mathbb{E}_{f}(h(X))=\int_\mathcal{X}h(x)f(x)\,dx.
+<p>As in the case of classical Monte Carlo integration (see <a href="#eq-MeanIntegral">Equation&nbsp;<span>2.1</span></a>), the generic problem is the evaluation of the integral <span class="math display">\[
+\mathbb{E}_{f}\left(h(X)\right)=\int_\mathcal{X}h(x)\,f_X(x)\,dx.
 \]</span></p>
-<p>However, it turns out that the above approach, i.e., sampling from <span class="math inline">\(f\)</span> is often suboptimal.</p>
+<p>However, it turns out that the classical Monte Carlo integration approach, i.e., a direct sampling from <span class="math inline">\(f\)</span> is often suboptimal.</p>
 <p>Observe that the value of the above integral can be represented by infinitely many alternative choices of the triplet <span class="math display">\[
 (\mathcal{X}, h, f).
 \]</span> Therefore, the search for an optimal estimator should encompass all these possible representations.</p>
@@ -837,7 +837,7 @@ $$ --></p>
 <pre><code>[1] 0.1476</code></pre>
 </div>
 </div>
-<p><strong>1. Approach: The Naive Approach</strong></p>
+<p><strong>1. Approach: The Naive Approach (Classical Monte Carlo Integration)</strong></p>
 <p>The most direct approach would be to use the following mean expression for the integral of interest: <span class="math display">\[
 \begin{align*}
 p
@@ -910,7 +910,7 @@ p
 &amp; = \frac{1}{2} - \mathbb{E}_{f_{\mathcal{U}[0,2]}}(h(U)),
 \end{align*}
 \]</span> where <span class="math inline">\(U\sim\mathcal{U}[0,2].\)</span></p>
-<p>Therefore a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
+<p>Therefore, a new alternative method for evaluating <span class="math inline">\(p\)</span> is: <span class="math display">\[
 \hat{p}_{3}=\frac{1}{2} - \frac{1}{n}\sum_{i=1}^n h(U_i),
 \]</span> where <span class="math display">\[
 U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].
@@ -923,7 +923,7 @@ U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}\mathcal{U}[0,2].
 \operatorname{SE}\left(\hat{p}_{3}\right)&amp;=\texttt{const}\frac{1}{\sqrt{n}}
 \end{align*}
 \]</span> Computing the variance <span class="math inline">\(\mathbb{V}\left(\hat{p}_{3}\right)\)</span> is a bit cumbersome, but using integration by parts and that <span class="math inline">\(p=0.1476\)</span>, it can be shown that <span class="math display">\[
-\mathbb{V}(\hat p_3)=0.029/n,
+\mathbb{V}(\hat p_3)=\frac{0.0285}{n},
 \]</span> which is lower than both previous approaches, where we had that <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.052/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.126/n\)</span>.</p>
 </div>
 <section id="a-more-general-point-of-view" class="level3" data-number="2.3.1">
@@ -998,7 +998,7 @@ g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 </div>
 </div>
 <p><strong>Proof of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>:</strong></p>
-<p>Note that <span class="math display">\[
+<p>Note that <span id="eq-VarExpression"><span class="math display">\[
 \begin{align*}
 \mathbb{V}_g(\psi(X_i))
 &amp;=\quad\quad \mathbb{E}_g(\psi(X_i)^2)\quad\quad  - \quad\quad \left(\mathbb{E}_g(\psi(X_i))\right)^2\\[2ex]
@@ -1007,7 +1007,8 @@ g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
   &amp;=\int\left(\frac{h(x)f(x)}{g(x)}\right)^2g(x)dx -
   \left(\int h(x)f(x)dx\right)^2.
 \end{align*}
-\]</span> Thus, <span class="math inline">\(\left(\mathbb{E}_g(\psi(X_i))\right)^2\)</span> does not depend on <span class="math inline">\(g.\)</span> Consequently, the density <span class="math inline">\(g\)</span> that minimizizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span> is also the density <span class="math inline">\(g\)</span> that minimizes <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2).\)</span> We use this in the following since minimizing <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is simpler than minimizing <span class="math inline">\(\mathbb{V}_g(\psi(X_i)).\)</span></p>
+\tag{2.6}\]</span></span> Thus, the second term, <span class="math inline">\(\left(\mathbb{E}_g(\psi(X_i))\right)^2,\)</span> does not depend on <span class="math inline">\(g.\)</span></p>
+<p>Consequently, the density <span class="math inline">\(g\)</span> that minimizes the variance <span class="math inline">\(\mathbb{V}_g(\psi(X_i))\)</span> is also the density <span class="math inline">\(g\)</span> that minimizes <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2).\)</span> We use this in the following, since minimizing <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is simpler than minimizing <span class="math inline">\(\mathbb{V}_g(\psi(X_i)).\)</span></p>
 <p>We begin with a small trick by including an absolute value function as following: <span class="math display">\[
 \begin{align*}
 \mathbb{E}_g(\psi(X_i)^2)
@@ -1029,14 +1030,14 @@ Tip
 \]</span> where we assume that the moments exist.</p>
 </div>
 </div>
-<p>Using Jensen’s inequality, we can derive the lower bound for <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2):\)</span> <span class="math display">\[
+<p>Now, using Jensen’s inequality, we can derive the lower bound for <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2):\)</span> <span class="math display">\[
 \begin{align*}
 \mathbb{E}_g( \; (\psi(X_i) ) ^2 \; )
 &amp;=\mathbb{E}_g( \; |\psi(X_i)|^2 \; )\quad\text{(bringing in $|.|$)}\\[2ex]
 &amp;\geq \left(\mathbb{E}_g(|\psi(X_i)|)\right)^2\quad\text{(Jensen's inequality)}\\[2ex]
 &amp;=\left(\int\left|\frac{h(x)f(x)}{g(x)}\right|g(x)dx\right)^2\\[2ex]
-&amp;=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{(since $f$ and $g$ are non-negative)}\\[2ex]
-&amp;=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}},
+&amp;=\left(\int\frac{\left|h(x)\right|f(x)}{g(x)}g(x)dx\right)^2\quad\text{($f$ and $g$ are non-negative)}\\[2ex]
+&amp;=\underbrace{\left(\int\left|h(x)\right|f(x)dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}} = \left(\mathbb{E}_{f}\left(h(X)\right)\right)^2,
 \end{align*}
 \]</span> where this lower bound is independent of <span class="math inline">\(g.\)</span></p>
 <p>It is now straight forward to show that this lower bound is achieved if <span class="math display">\[
@@ -1055,7 +1056,7 @@ g(x) = g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz}.
 &amp; = \left(\int\left|h(x)\right|f(x) dx\right) \; \left(\int |h(z)|f(z)dz\right) \\[2ex]
 &amp; = \underbrace{\left(\int\left|h(x)\right|f(x) dx\right)^2}_{\text{Lower bound of $\mathbb{E}_g(\psi(X_i)^2)$}}
 \end{align*}
-\]</span> This shows that the lower bound of <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is achieved for <span class="math inline">\(g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},\)</span> which shows the statement of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>.</p>
+\]</span> This shows that the lower bound of <span class="math inline">\(\mathbb{E}_g(\psi(X_i)^2)\)</span> is achieved for <span class="math inline">\(g(x)=g^\ast(x)=\frac{|h(x)|f(x)}{\int |h(z)|f(z)dz},\)</span> which implies the statement of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1066,17 +1067,17 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as rather impractical, since, for instance, if <span class="math inline">\(h(x)\geq 0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
-<p>The minimum variance result of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> is, however, still useful:</p>
+<p>Note that <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> may appear as <strong>rather impractical</strong>. If, for instance, <span class="math inline">\(h(x)\geq 0\)</span> then <span class="math inline">\(g^\ast\)</span> requires us to know <span class="math inline">\(\theta=\int h(z)f(z)dz,\)</span> which, however, is just the integral of interest!</p>
+<p>The minimum variance result of <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a> is, nevertheless, useful:</p>
 <ul>
-<li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>.</li>
-<li>Furthermore, <span class="math inline">\(g(x)\)</span> should be chosen such that it has a thicker tail than <span class="math inline">\(f(x)\)</span>, since the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span> crucially depends on the quotient <span class="math inline">\(f(x)/g(x)\)</span> which would “explode” for <span class="math inline">\(g(x)\approx 0\)</span>.</li>
+<li>It tells us that a good choice of <span class="math inline">\(g(x)\)</span> shall mimic the shape of <span class="math inline">\(|h(x)|f(x)\)</span>, since the optimal <span class="math inline">\(g^\ast(x)\propto |h(x)|f(x)\)</span>. (We know the integrand functions <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>.)</li>
+<li>Furthermore, <span class="math inline">\(g(x)\)</span> should be chosen such that it has a thicker tail than <span class="math inline">\(f(x)\)</span>, since the variance <span class="math inline">\(\mathbb{V}(\hat{\theta}_g)\)</span> crucially depends on the quotient <span class="math inline">\(f(x)/g(x)\)</span> (see <a href="#eq-VarExpression">Equation&nbsp;<span>2.6</span></a>) which would “explode” for <span class="math inline">\(g(x)\approx 0\)</span>.</li>
 </ul>
 </div>
 </div>
 <p>Let’s apply our new insights to the above <a href="#exm-CauchTailProb">Example&nbsp;<span>2.3</span></a> on the Cauchy tail probability <span class="math inline">\(p\)</span>.</p>
 <div id="exm-CauchTailProb2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2.4 (Cauchy Tail Probability (continued)) </strong></span>Above we had <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 2.4 (Cauchy Tail Probability (continued)) </strong></span>Above, in <a href="#exm-CauchTailProb">Example&nbsp;<span>2.3</span></a>, we had <span class="math display">\[
 \begin{align*}
 p
 &amp;=\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx\\[2ex]
@@ -1085,7 +1086,7 @@ p
 &amp;= P\left(1_{(X \geq 2)}=1\right)\cdot 1 + P\left(1_{(X \geq 2)}=0\right)\cdot 0\\[2ex]
 &amp;=\mathbb{E}_{f}\left(1_{(X \geq 2)}\right),
 \end{align*}
-\]</span> where <span class="math inline">\(f\)</span> is the density of the <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distribution and <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span>.</p>
+\]</span> where <span class="math inline">\(f(x)=1/(\pi(1+x^2))\)</span> is the density of the <span class="math inline">\(\mathcal{Cauchy}(0,1)\)</span>-distribution and <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span>.</p>
 <p>I.e., here <span class="math inline">\(h\)</span> is non-negative, such that <span class="math inline">\(|h(x)|=h(x)\)</span> for all <span class="math inline">\(x.\)</span></p>
 </div>
 <p>Therefore, <span class="math display">\[
@@ -1099,22 +1100,24 @@ p
 &amp; =\mathbb{E}_g(\psi(X)),
 \end{align*}
 \]</span> with <span class="math inline">\(h(x)=1_{(x\geq 2)}\)</span> and <span class="math inline">\(X\sim g,\)</span> where <span class="math inline">\(g\)</span> needs to be chosen by the statistician.</p>
-<p>A possibly good (and simple) choice of <span class="math inline">\(g\)</span> is, for instance, <span class="math display">\[
+<p>A possibly good (and simple) choice for the <strong>importance function</strong> <span class="math inline">\(g\)</span> is, for instance, <span class="math display">\[
 g(x)=\left\{
   \begin{array}{ll}
   \frac{2}{x^2}&amp; x\geq 2\\
   0&amp;\text{otherwise},\\
   \end{array}\right.
-\]</span> since this function:</p>
+\]</span></p>
+<p>This choice takes into account our insights from <a href="#thm-MinVarTheorem">Theorem&nbsp;<span>2.1</span></a>, since</p>
 <ul>
-<li>“closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
-<li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f\)</span>.</li>
+<li><span class="math inline">\(g\)</span> “closely” matches <span class="math inline">\(h(x)f(x)\)</span> and</li>
+<li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(f=1/(\pi(1+x^2))\)</span>.</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-7_beb39e0cb94c451b649d5c5a219ab27f">
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/fig-CauchyExm_8c1302a0da1945c3045ec78d5a2b942a">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-CauchyExm" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch2_MonteCarlo_files/figure-html/fig-CauchyExm-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.4: Density function <span class="math inline">\(f(x)=1/(\pi(1+x^2)),\)</span> and importance function <span class="math inline">\(g(x)=2/x^2\)</span> for <span class="math inline">\(x\geq 2.\)</span></figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1129,21 +1132,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The function <span class="math inline">\(g\)</span> is indeed a density function, since it is non-negative and integrates to one.</p>
-<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-8_c2cdd6df08852bac6e94f99a29cf1d28">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"mosaicCalc"</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>F <span class="ot">&lt;-</span> <span class="fu">antiD</span>( <span class="dv">2</span><span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">~</span> x)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span> <span class="sc">-</span> <span class="fu">F</span>(<span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<p>The function <span class="math inline">\(g\)</span> is indeed a density function, since it is non-negative and integrates to one; i.e., <span class="math inline">\(\int_2^\infty g(x)dx = 1.\)</span> (Double-check this.)</p>
 </div>
 </div>
-<p>(Double-check this also without computer support.)</p>
-</div>
-</div>
-<p><strong>Caution:</strong> It is not straight forward to directly sample from <span class="math inline">\(g\)</span>, therefore we need some further steps:</p>
+<p><strong>Caution:</strong> It is not straight forward to directly sample from the importance function <span class="math inline">\(g(x)=2/x^2,\)</span> but we can apply some further steps:</p>
 <p>The choice of <span class="math inline">\(g\)</span> leads to <span class="math display">\[
 \begin{align*}
 p
@@ -1156,17 +1148,17 @@ p
 &amp; =\int_{2}^{+\infty}\left(\frac{1}{\pi(1+x^{-2})}\right)\,x^{-2}\,dx.
 \end{align*}
 \]</span></p>
-<p>Integration by substitution</p>
+<p>Now, integration by substitution</p>
 <ul>
 <li>substituting <span class="math inline">\(u(x)=x^{-1}\)</span></li>
 <li><span class="math inline">\(\frac{du}{dx}=- x^{-2}\)</span></li>
 </ul>
-<p>yields: <span class="math display">\[
+<p>yields that <span class="math display">\[
 \begin{align*}
 p
 &amp; =\lim_{b\to\infty}\int_{u(2)}^{u(b)} - \frac{1}{\pi(1+u^2)}du \\[2ex]
 &amp; = - \int_{1/2}^{0} \frac{1}{\pi(1+u^2)}du \\[2ex]
-&amp; = \int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du
+&amp; = \int_{0}^{1/2}\frac{1}{\pi(1+u^2)}du.
 \end{align*}
 \]</span></p>
 <div class="callout-important callout callout-style-default callout-captioned">
@@ -1189,7 +1181,7 @@ p =\underbrace{\int_{2}^{+\infty}\frac{1}{\pi(1+x^2)}\,dx}_{\text{Our original p
 \begin{align*}
 p
 &amp;=\int_{0}^{1/2}\underbrace{2}_{f_{\mathcal{U}[0,1/2]}}\;\underbrace{\frac{1}{2\,\pi(1+u^2)}}_{=h(u)}\,du\\[2ex]
-&amp;=\mathbb{E}(h(U)),
+&amp;=\mathbb{E}_{f_{\mathcal{U}[0,1/2]}}(h(U)),
 \end{align*}
 \]</span> where <span class="math inline">\(U\sim\mathcal{U}[0,1/2].\)</span></p>
 <p>Thus, we have a final fourth version of the estimator of <span class="math inline">\(p\)</span>: <span class="math display">\[
@@ -1209,7 +1201,11 @@ h(u)=\frac{1}{2\pi(1+u^2)}
 \operatorname{SE}(\hat{p}_4)
 &amp; = \texttt{const}\frac{1}{\sqrt{n}}
 \end{align*}
-\]</span> An integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.95\cdot 10^{-4}/n\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
+\]</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-8_4197857acf0ad7c7b1d7b61cd2ca1792">
+
+</div>
+<p>An integration by parts shows that <span class="math inline">\(\mathbb{V}(\hat{p}_4)=0.0955\cdot 10^{-3}/n\)</span>. Compare this to the former results: <span class="math inline">\(\mathbb{V}(\hat p_3)=0.0285/n\)</span>, <span class="math inline">\(\mathbb{V}(\hat{p}_{2})=0.0525/n\)</span> and <span class="math inline">\(\mathbb{V}(\hat{p}_{1})=0.1275/n\)</span>. The variance of <span class="math inline">\(\hat{p}_4\)</span> is by a factor of <span class="math inline">\(10^{-3}\)</span> lower than the variance of the original <span class="math inline">\(\hat{p}_1\)</span>.</p>
 <!--
 **Version 2:** It can be shown that (see [Ripley 1987](http://onlinelibrary.wiley.com/book/10.1002/9780470316726))
 $$
