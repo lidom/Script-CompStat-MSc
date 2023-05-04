@@ -1,19 +1,19 @@
 # The Bootstrap 
 
 
-The bootstrap is an important tool of modern statistical analysis. It establishes a general framework for simulation-based statistical inference. In simple situations the uncertainty of an estimate may be gauged by analytical calculations leading (asymptotic statistics), for example, to the construction of confidence intervals based on an assumed probability model for the available data. The bootstrap replaces complicated and often inaccurate approximations to biases, variances and other measures of uncertainty by computer simulations.
+The bootstrap is an important tool of modern statistical analysis. It establishes a general framework for simulation-based statistical inference. In simple situations the uncertainty of an estimate may be gauged by analytical calculations (asymptotic statistics) leading, for example, to the construction of (approximate) confidence intervals. The bootstrap replaces complicated and often inaccurate approximations to biases, variances and other measures of uncertainty by computer simulations.
 
 
 Some literature:
 
-* Hall, P. (1992): The Bootstrap and Edgeworth Expansion; Springer Verlag
-* Shao, J. and Tu, D. (1995): The Jacknife and Bootstrap; Springer Verlag
-* Horowitz, J.L. (2001): The Bootstrap. In: Handbook of Econometrics, Volume 5; Elsevier Science B.V.
-* Davison, A.C. and Hinkley, D.V. (2005): Bootstrap Methods and their
-Applications; Cambridge University Press
+* @Hall_1992: The Bootstrap and Edgeworth Expansion
+* @Efron_Tibshirani_1994: An Introduction to the Bootstrap
+* @Shao_Tu_1996: The Jackknife and Bootstrap
+* @Horowitz_2001: The Bootstrap. In: Handbook of Econometrics
+* @Davison_Hinkley_2013: Bootstrap Methods and their Applications
 
 
-## The empirical distribution function
+## The Empirical Distribution Function
 
 
 The distribution of a real-valued random variable $X$ can be completely described by its distribution function
@@ -22,12 +22,14 @@ F(x)=P(X\leq x)\quad \text{for all } x\in\mathbb{R}.
 $$
 
 
+
+
+For given data, the sample analogue of $F$ is the so-called **empirical distribution function**, which is an important tool of statistical inference.
+
 **Data:** i.i.d. random sample $X_1,\dots,X_n$
 
-For given data, the sample analogue of $F$ is the so-called *empirical distribution function*, which is an important tool of statistical inference.
 
-
-Let $I(\cdot)$ denote the indicator function, i.e., $I(x\leq t)=1$ if $x\leq t$, and $I(x\leq t)=0$ if $x>t.$
+Let $1_{(\cdot)}$ denote the indicator function, i.e., $1_{(x\leq t)}=1$ if $x\leq t$, and $1_{(x\leq t)}=0$ if $x>t.$
 
 
 ::: {#def-ecdf}
@@ -35,19 +37,26 @@ Let $I(\cdot)$ denote the indicator function, i.e., $I(x\leq t)=1$ if $x\leq t$,
 # Empirical distribution function
 
 $$
-F_n(x)=\frac{1}{n} \sum_{i=1}^n I(X_i\leq x)
+F_n(x)=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}
 $$
-i.e $F_n(x)$ is the proportion of observations with $X_i\le x,$ $i=1,\dots,n.$
+I.e $F_n(x)$ is the proportion of observations with $X_i\le x,$ $i=1,\dots,n.$
 :::
 
 
 **Properties:**
 
 * $0\le F_n(x)\le 1$ 
-* $F_n(x)=0$, if $x<X_{(1)}$, where $X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}$ denotes the **order-statistic**; i.e. $X_{(1)}$ is the smallest observation 
-* $F(x)=1$, if $x\ge X_{(n)}$, where $X_{(n)}$ is largest observation
-* $F_n$ monotonically increasing step function
-* Structurally, $F_n$ itself is a distribution function; it is equivalent to the distribution function of a **discrete random variable** $X^*$ with possible values $X^*\in\{X_1,\dots,X_n\}$ and with $P(X^*=X_i)=\frac{1}{n}$ for all $i=1,\dots,n.$
+* $F_n(x)=0,$ if $x<X_{(1)}$, where $X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}$ denotes the **order-statistic**. 
+* $F_n(x)=1,$ if $x\ge X_{(n)}$, where $X_{(n)}$ is largest observation
+* $F_n$ is a monotonically increasing step function
+
+
+::: {.callout-note}
+Structurally, $F_n$ itself is a distribution function. $F_n$ is the distribution function of a **discrete random variable** $X^*$ 
+
+* with possible values $X^*\in\{X_1,\dots,X_n\}$ and 
+* with $P(X^*=X_i)=\frac{1}{n}$ for each $i=1,\dots,n.$
+:::
 
 
 ::: {#exm-ecdfexample}
@@ -84,15 +93,17 @@ plot(myecdf_fun, main="")
 :::
 
 
-$F_n(x)$ depends on the observed sample and thus is **random**. We obtain
+$F_n(x)$ depends on the i.i.d. random sample $X_1,\dots,X_n$ and thus is itself a **random function**. 
+
+We obtain
 
 * For every $x\in\mathbb{R}$
  $$
  nF_n(x)\sim B(n, p=F(x))
  $$
- I.e., $nF_n(x)$ has a binomial distribution with parameters $n$ and $p=F(x)$.
-* $E(F_n(x))=F(x)$
-* $Var(F_n(x))=\frac{F(x)(1-F(x))}{n}$
+ I.e., $nF_n(x)$ has a binomial distribution with parameters $n$ ("number of trials") and $p=F(x)$ ("probability of success on a single trial").
+* $\mathbb{E}(F_n(x))=F(x)$
+* $\mathbb{V}(F_n(x))=\frac{F(x)(1-F(x))}{n}$
 
 
 
@@ -106,48 +117,56 @@ $$
 :::
 
 
-## Basic idea
+## Basic Idea of the Bootstrap
 
 The basic idea of the bootstrap is to replace random sampling from the true (unknown) population $F$ (infeasible Monte Carlo simulation) by random sampling from the empirical distribution $F_n$ (feasible Monte Carlo simulation). 
 
 
-* The random sample $X_1,\dots,X_n$ is generated by drawing observations independently and with replacement from the unknown population distribution function $F$. That is, for each interval $[a,b]$ the probability of drawing an observation in $[a,b]$ is given by 
+**Population distribution $F$:** The random sample $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}F$ is generated by drawing observations independently and with replacement from the unknown population distribution function $F$. That is, for each interval $[a,b]$ the probability of drawing an observation in $[a,b]$ is given by 
 $$
 P(X\in [a,b])=F(b)-F(a).
 $$
-* For large $n$: The empirical distribution $F_n$ of the sample values is "close" to the unknown distribution $F$ (@thm-Clivenk-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$ 
-  $$
+
+
+**Empirical distribution $F_n$:** For large $n,$ the empirical distribution $F_n$ of the sample values is "close" to the unknown distribution $F$ (Glivenko-Cantelli @thm-Clivenk-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$   
+$$
   \begin{align*}
-  \frac{1}{n}\sum_{i=1}^nI(X_i\in[a,b])&\to_p P(X\in [a,b])\\
-  \Leftrightarrow \qquad F_n(b)-F_n(a)&\to_p F(b)-F(a)
+  \underbrace{\frac{1}{n}\sum_{i=1}^n1_{(X_i\in[a,b])}}_{=F_n(b)-F_n(a)}&\to_p \underbrace{P(X\in [a,b])}_{=F(b)-F(a)}
   \end{align*}
-  $$
-* The idea of the bootstrap consists in mimicking the data generating process: Instead of random sampling from the true unknown population distribution $F$, the bootstrap uses random sampling from the known $F_n$. This is justified by the insight that the empirical distribution $F_n$ of the observed data is "similar" to the true distribution $F$ (@thm-Clivenk-Cantelli).
+$$
 
 
+**The idea of the bootstrap** consists in mimicking the data generating process: Instead of random sampling from the true unknown population distribution $F,$ the bootstrap uses random sampling from the known $F_n.$ This is justified by the insight that the empirical distribution $F_n$ of the observed data is "similar" to the true distribution $F$ (Glivenko-Cantelli @thm-Clivenk-Cantelli).
 
 
+::: {.callout-tip}
 
-## The nonparametric (standard) bootstrap
+## Bradley Efron
+
+The bootstrap method is attributed to [Bradley Efron](https://statistics.stanford.edu/people/bradley-efron), who received the *[International Prize in Statistics](https://statsandstories.net/methods/2018/9/28/bootstrapping-an-international-prize)* (the Nobel price of statistics) for his seminal works on the bootstrap method. 
+:::
+
+## The Nonparametric (Standard) Bootstrap
 
 
 **Setup:**
 
-* **Data:** i.i.d. sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ from $X\sim F$. 
-  * The distribution $X_i\sim F,$ $i=1,\dots,n,$ depends on an unknown parameter (vector) $\theta.$
-  * The data $X_1,\dots,X_n$ is used to estimate an element $\theta$ of the parameter vector $\theta.$  
-  * Thus, the estimator is a function of the random sample 
-  $$
+* i.i.d. sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ from $X\sim F$. 
+* The distribution $X_i\sim F,$ $i=1,\dots,n,$ depends on an unknown parameter (vector) $\theta.$
+* The data $X_1,\dots,X_n$ is used to estimate an element $\theta$ of the parameter vector $\theta.$  
+* Thus, the estimator is a function of the random sample 
+$$
   \hat\theta\equiv \hat\theta(X_1,\dots,X_n).
-  $$
-* **Inference:** We are interested in evaluating the distribution of $\hat\theta-\theta$
-in order to 
-  * provide standard errors
-  * construct confidence intervals 
-  * perform tests of hypothesis.
+$$
+
+**Inference:** We are interested in evaluating the distribution of 
+$$
+\hat\theta-\theta
+$$ 
+in order to provide standard errors, construct confidence intervals, and to  perform tests of hypothesis.
 
 
-### The bootstrap algorithm {-}
+### The Bootstrap Algorithm {-}
 
 1. **Draw a bootstrap sample:** Generate a new random sample $X_1^*,\dots,X_n^*$ by drawing observations independently and with replacement from the available sample $X_1,\dots,X_n.$
 2. **Compute bootstrap estimate:** Compute the estimate 
@@ -173,7 +192,7 @@ The bootstrap does **not always work**. A necessary condition for the use of the
 
 
 
-The bootstrap is called **consistent**, if for large $n$, the bootstrap distribution of $\hat{\theta}^* -\hat{\theta}$ is a good approximation of the underlying distribution of $\hat{\theta}-\theta$, i.e.
+The bootstrap is called **consistent** if, for large $n$, the bootstrap distribution of $\hat{\theta}^* -\hat{\theta}$ is a good approximation of the underlying distribution of $\hat{\theta}-\theta$, i.e.
 $$
 \text{distribution}(\hat{\theta}^* -\hat{\theta}\ |{\cal S}_n)\approx 
 \text{distribution}(\hat{\theta}-\theta).
@@ -189,7 +208,7 @@ $$
 \sup_\delta \left|
    P\left(n^\gamma(\hat\theta^*-\hat\theta)\le \delta|{\cal S}_n\right) 
   -P\left(n^\gamma(\hat\theta      -\theta)\le \delta\right)
-  \right|\rightarrow 0
+  \right|\rightarrow_p 0
 $$
 as $n\to\infty.$*
 
@@ -197,7 +216,7 @@ as $n\to\infty.$*
 
 
 
-Luckily, the standard bootstrap works for a large number of statistical and econometrical problems. However, there are some crucial requirements:
+Luckily, the standard bootstrap works for a large number of statistical and econometrical problems. However, there are **some crucial requirements**:
 
 1. Generation of the bootstrap sample must reflect appropriately the way in which the original sample has been generated (here i.i.d. sampling).
 2. The distribution of the estimator $\hat\theta$ needs to be asymptotically normal. 
@@ -207,20 +226,32 @@ The standard bootstrap **will usually fail** if one of the above conditions
 1 or 2 is violated. For instance, 
 
 * The  bootstrap will not work if the i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $X_1,\dots,X_n$ does not properly reflect the way how the $X_1,\dots,X_n$ are generated when $X_1,\dots,X_n$ is a time-series with auto-correlated data. 
-* The distribution of the estimator $\hat\theta$ is not asymptotically normal. (E.g. in case of extreme value problems.)
+* The distribution of the estimator $\hat\theta$ is not asymptotically normal. (For instance, in case of extreme value problems.)
 
 **Note:** In order to deal with more complex situations alternative bootstrap procedures have been proposed in the literature (e.g. the block-bootstrap in case of time-series data).
 
 
 
-### Example: Inference about the population mean 
+### Example: Inference About the Population Mean 
 
 
 **Setup:**
 
-* **Population Model:** Continuous random variable $X\sim F$ with unknown $F$ and thus unknown mean $\mu$
-* **Data:** i.i.d. sample $X_1,\dots,X_n$ from $X$
-* **Problem:** What is the distribution of $\bar{X} -\mu$?
+* i.i.d. sample $X_1,\dots,X_n$ from $X\sim F.$
+* Continuous random variable $X\sim F$ with unknown $F$ and thus unknown mean $\mu = \int x f(x) dx = \int x d F(x),$ where $f=F'.$
+* Estimator: empirical mean
+$$
+\begin{align*}
+\bar{X}
+&\equiv \bar{X}(X_1,\dots,X_n) \\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n X_i \\[2ex]
+&=\int x d F_n(x)
+\end{align*}
+$$
+
+
+
+**Inference Problem:** What is the distribution of $\bar{X} -\mu$?
 
 Now assume that $n=8$ and that the **observed sample** is
 
@@ -260,8 +291,9 @@ bootSample <- sample(x       = observedSample,
 ```
 * The distribution of $\bar X -\mu$ is approximated by the conditional distribution of $\bar X^* -\bar X$ given the original sample ${\cal S}_n$
 $$
-\underbrace{P\left(\bar{X}-\mu<\delta\right)}_{\text{unknown}}\approx 
-\underbrace{P\left(\bar{X}^*-\bar{X}<\delta|\mathcal{S}_n\right)}_{\text{approximable}}
+\underbrace{P\left(\bar{X}^*-\bar{X}<\delta|\mathcal{S}_n\right)}_{\text{approximable}} 
+\approx 
+\underbrace{P\left(\bar{X}-\mu<\delta\right)}_{\text{unknown}}.
 $$
 
 
@@ -275,7 +307,7 @@ The conditional distribution function of $\bar{X}^*-\bar{X}$ given $\mathcal{S}_
 $$
 P\left(\bar{X}^*-\bar{X}<\delta|\mathcal{S}_n\right)
 $$
-can be approximated using a Monte-Carlo simulation. For this, we draw new data from $F_n,$ i.e., we sample with replacement data points from the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}.$
+can be approximated using a Monte-Carlo simulation. For this, we draw new data $X_1^*,\dots,X_n^*$ from $F_n,$ i.e., we sample with replacement data points from the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}.$
 
 Using a large number $m$ (e.g. $m=10000$) of simulation runs allows us to generate bootstrap estimates
 $$
@@ -292,12 +324,13 @@ $$
 5 | 1.0| 0.7| -0.1|  0.7| 1.4| -0.8| 1.0| 1.6 |  `r 0.6875-mean(observedSample)`
 ... ||||||||| -->
 
-These bootstrap estimates are then used to approximate 
+These bootstrap estimates are then used to approximate the bootstrap distribution
 $$
-\frac{1}{m}\sum_{k=1}^m
- I( \bar X^*_k-\bar X\leq \delta) \approx \underbrace{P\left(\bar X^*-\bar X\leq \delta |{\cal S}_n\right)}_{\text{bootstrap distribution}}, 
+\overbrace{\underbrace{P\left(\bar X^*-\bar X\leq \delta |{\cal S}_n\right)}_{\text{bootstrap distribution}}}^{=P^*\left(\bar X^*-\bar X\leq \delta\right)}
+\approx
+\frac{1}{m}\sum_{k=1}^m 1_{( \bar X^*_k-\bar X\leq \delta)},  
 $$
-where the approximation will be arbitrarily precise as $m\to\infty$. 
+where this approximation will be **arbitrarily precise** as $m\to\infty.$ (So, we can effectively ignore this type of approximation error.)
 
 <!-- 
 ```{r}
@@ -320,12 +353,28 @@ plot(ecdf(bootRealizations), main="")
 
 
 ::: {.callout-tip}
-## Notation $E^*(\cdot),$ $Var^*(\cdot),$ and $P^*(\cdot)$
-In the bootstrap literature one also frequently finds the notation $E^*(\cdot),$ $Var^*(\cdot),$ or $P^*(\cdot)$ to denote **conditional** expectations $E^*(\cdot)=E(\cdot|\mathcal{S}_n),$, variances $Var^*(\cdot)=Var(\cdot|\mathcal{S}_n),$, or probabilities $P^*(\cdot)=P(\cdot|\mathcal{S}_n),$ given the sample ${\cal S}_n.$
+## Notation $\mathbb{E}^*(\cdot),$ $\mathbb{V}^*(\cdot),$ and $P^*(\cdot)$
+In the bootstrap literature one frequently finds the notation 
+$$
+\mathbb{E}^*(\cdot),\;\mathbb{V}^*(\cdot),\;\text{and}\;P^*(\cdot)
+$$ 
+to denote the **conditional** expectation
+$$
+\mathbb{E}^*(\cdot)=\mathbb{E}(\cdot|\mathcal{S}_n),
+$$
+the **conditional** variance 
+$$
+\mathbb{V}^*(\cdot)=\mathbb{V}(\cdot|\mathcal{S}_n),
+$$ 
+and the **conditional** probability 
+$$
+P^*(\cdot)=P(\cdot|\mathcal{S}_n),
+$$ 
+given the sample ${\cal S}_n.$
 :::
 
 
-#### The bootstrap distribution of $\bar X^*$ {-}
+#### The Bootstrap Distribution of $\bar X^*$ {-}
 
 The bootstrap focuses on the **conditional** distribution of $X_1^*,\dots,X_n^*$ given the observed sample ${\cal S}_n=\{X_1,\dots,X_n\}$ and the resulting conditional distribution of 
 $$
@@ -334,12 +383,13 @@ $$
 Often these conditional distributions are called **bootstrap distributions**.
 
 
+::: {.callout-tip}
 🤟 We can analyze the bootstrap distribution of $\bar X^* -\bar X$, since **we *know* the discrete distribution** of the conditional random variables 
 $$
 X_i^*|\mathcal{S}_n,
 $$ 
 even though, we do **not know** the distribution of $X_i\sim F.$
-
+:::
 
 For each $i=1,\dots,n$, the possible values of the discrete random variable $X_i^*|\mathcal{S}_n$ are 
 $$
@@ -355,13 +405,13 @@ P^*(X_i^*=X_n)&= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 $$
 
-Thus, we know the whole distribution of the (conditional) discrete random variable $X_i^*|\mathcal{S}_n$ and can compute, for instance, easily its conditional mean and its variance.
+Thus, **we know the whole distribution** of the (conditional) discrete random variable $X_i^*|\mathcal{S}_n$ and, therefore, can compute, for instance, easily its conditional mean and its variance.
 
 * The conditional mean of $X_i^*$ is
 $$
 \begin{align*}
-E^*(X_i^*)
-&=E(X_i^*|{\cal S}_n)\\
+\mathbb{E}^*(X_i^*)
+&=\mathbb{E}(X_i^*|{\cal S}_n)\\
 &=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_2\\
 &=\bar X
 \end{align*}
@@ -370,9 +420,9 @@ $$
 * The conditional variance of $X_i^*$ is
 $$
 \begin{align*}
-Var^*(X_i^*)
-&=Var(X_i^*|{\cal S}_n)\\ 
-&=E((X_i^* - E(X_i^*|{\cal S}_n))^2|{\cal S}_n)\\ 
+\mathbb{V}^*(X_i^*)
+&=\mathbb{V}(X_i^*|{\cal S}_n)\\ 
+&=\mathbb{E}((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n)\\ 
 &=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2\\ 
 &=\hat\sigma^2
 \end{align*}
@@ -384,22 +434,27 @@ $$
 
 For any measurable function $g$ we have 
 $$
-E^*(g(X_i^*))=E(g(X_i^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
+\mathbb{E}^*(g(X_i^*))=\mathbb{E}(g(X_i^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
 $$
+For instance, $g(X_i)=1_{(X_i\leq \delta)}.$
 :::
 
 ::: {.callout-important}
 
 ## Conditioning on $\mathcal{S}_n$ in important!
 
-Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is very important. The **marginal** (non-conditional) distribution of $X_i^*$ is equal to the distribution of $X_i.$ This follows from the fact that for 
+Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is very important. 
+
+The unconditional distribution of $X_i^*$ is equal to the **unknown distribution** of $X_i.$ This follows from the fact that for 
 $$
 \begin{align*}
 P(X_i^*\leq \delta) 
-&= E\left(I\left(X_i^*\leq \delta\right)\right)\\
-&= E\left[E\left(I\left(X_i^*\leq \delta\right)|\mathcal{S}_n\right)\right]\\
-&= E\left[\frac{1}{n}\sum_{i=1}^nI\left(X_i\leq \delta\right)\right]\\
-&= E\left[I\left(X_i\leq \delta\right)\right]\\
+&= P(1_{(X_i^*\leq \delta)}=1) \\[2ex]
+&= P(1_{(X_i^*\leq \delta)}=1) \cdot 1 + P(1_{(X_i^*\leq \delta)}=0) \cdot 0\\[2ex]
+&= E\left(1_{\left(X_i^*\leq \delta\right)}\right)\\[2ex]
+&= E\left[E\left(1_{\left(X_i^*\leq \delta\right)}|\mathcal{S}_n\right)\right]\\[2ex]
+&= E\left[\frac{1}{n}\sum_{i=1}^n 1_{\left(X_i\leq \delta\right)}\right]\\[2ex]
+&= \frac{n}{n}E\left[1_{\left(X_i\leq \delta\right)}\right]\\[2ex]
 &= P\left(X_i\leq \delta\right)=F(\delta)
 \end{align*}
 $$
@@ -423,9 +478,9 @@ $$
 * The conditional mean of $\bar X^*$ is
 $$
 \begin{align*}
-E^*(\bar X^*)
-&=E(\bar X^*|{\cal S}_n)\\
-&=\frac{1}{n}\sum_{i=1}^nE(X_i^*|{\cal S}_n)\\
+\mathbb{E}^*(\bar X^*)
+&=\mathbb{E}(\bar X^*|{\cal S}_n)\\
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}(X_i^*|{\cal S}_n)\\
 &=\frac{1}{n}\sum_{i=1}^n \bar X\\
 &=\frac{n}{n}\bar X \\
 &=\bar X
@@ -435,9 +490,9 @@ $$
 * The conditional variance of $\bar X^*$ is
 $$
 \begin{align*}
-Var^*(\bar X^*)
-&=Var(\bar X^*|{\cal S}_n)\\
-&=\frac{1}{n^2}\sum_{i=1}^n Var(X_i^*|{\cal S}_n)\\
+\mathbb{V}^*(\bar X^*)
+&=\mathbb{V}(\bar X^*|{\cal S}_n)\\
+&=\frac{1}{n^2}\sum_{i=1}^n \mathbb{V}(X_i^*|{\cal S}_n)\\
 &=\frac{1}{n^2}\sum_{i=1}^n \hat\sigma^2\\
 &=\frac{n}{n^2}\hat\sigma^2\\
 &=\frac{1}{n}\hat\sigma^2
@@ -451,8 +506,8 @@ $$
 Note that, conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,  
 
 * the random variables $X_1^*,\dots,X_n^*$ are i.i.d.
-* with mean $E^*(X_i^*)=\bar X$ 
-* and variance $Var^*(X^*)=\hat\sigma^2$
+* with mean $\mathbb{E}^*(X_i^*)=\bar X$ 
+* and variance $\mathbb{V}^*(X^*)=\hat\sigma^2$
 
 Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.statlect.com/asymptotic-theory/central-limit-theorem) to the appropriately scaled sample mean conditionally on ${\cal S}_n$
 $$
@@ -537,8 +592,8 @@ $$
 and
 $$
 \begin{align*}
-&   E^*(\hat p^*)=E(\hat p^*|\ {\cal S}_n)=\hat p, \\ 
-& Var^*(\hat p^*)=E[(\hat p^*-\hat p)^2|\ {\cal S}_n]=\frac{\hat p(1-\hat p)}{n}
+&   \mathbb{E}^*(\hat p^*)=\mathbb{E}(\hat p^*|\ {\cal S}_n)=\hat p, \\ 
+& \mathbb{V}^*(\hat p^*)=E[(\hat p^*-\hat p)^2|\ {\cal S}_n]=\frac{\hat p(1-\hat p)}{n}
 \end{align*}
 $$
 
@@ -793,7 +848,7 @@ This means that $T_n= \sqrt{n}\frac{(\hat{\theta}-\theta)}{\hat v_n}$ is *asympt
 
 #### Example: $\bar{X}$ is asymptotically pivotal {-}
 
-Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $E(X)=\mu$, variance $Var(X)=\sigma^2>0$, and $E(|X|^4)=\beta<\infty$. 
+Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu$, variance $\mathbb{V}(X)=\sigma^2>0$, and $\mathbb{E}(|X|^4)=\beta<\infty$. 
  
 If $X$ is normally distributed, we obtain
 $$
@@ -970,26 +1025,26 @@ denotes the vector of predictor variables. In the following, we differentiate be
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
-are i.i.d. random variables and $E(\varepsilon_i|X_i)=0$ with either*
+are i.i.d. random variables and $\mathbb{E}(\varepsilon_i|X_i)=0$ with either*
 
-* ***homoscedastic** errors: $E(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a fixed $\sigma^2<\infty$ or* 
-* ***heteroscedastic** errors: $E(\varepsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n.$*
+* ***homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a fixed $\sigma^2<\infty$ or* 
+* ***heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n.$*
 
 ***Fixed design:** 
 $$
 X_1, X_2, \dots, X_n
 $$
-are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. random variables with zero mean $E(\varepsilon_i)=0$ and **homoscedastic errors** $E(\varepsilon_i^2)=\sigma^2$ for all $i=1,\dots,n.$*
+are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. random variables with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic errors** $\mathbb{E}(\varepsilon_i^2)=\sigma^2$ for all $i=1,\dots,n.$*
 :::
 
 
 We additionally assume that there exists a positive definite (thus invertible) matrix $M$ 
 $$
-M=E(X_iX_i^T)
+M=\mathbb{E}(X_iX_i^T)
 $$
 and a positive semi-definite matrix $Q$ such that
 $$
-Q=E(\varepsilon_i^2X_iX_i^T)=E(\sigma^2(X_i)X_iX_i^T)
+Q=\mathbb{E}(\varepsilon_i^2X_iX_i^T)=\mathbb{E}(\sigma^2(X_i)X_iX_i^T)
 $$
 **Note:** For homoscedastic errors we have $Q=\sigma^2 M.$
 
@@ -1072,9 +1127,9 @@ In the following we will formally assume a regression model
 $$
 Y_i=X_i^T\beta+ \varepsilon_i, \quad i=1,\dots,n,
 $$
-under **fixed design** (@def-RandomFixedDesign), i.e., where $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. with zero mean $E(\varepsilon_i)=0$ and **homoscedastic** errors
+under **fixed design** (@def-RandomFixedDesign), i.e., where $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic** errors
 $$
-E(\varepsilon_i^2)=\sigma^2.
+\mathbb{E}(\varepsilon_i^2)=\sigma^2.
 $$ 
 
 
@@ -1107,7 +1162,7 @@ $$
 $$ 
 provides an unbiased, consistent estimator of the error variance $\sigma^2$. That is,
 $$
-E(\hat\sigma^2)=\sigma^2 \quad \text{and}\quad \hat\sigma^2\rightarrow_p \sigma^2.
+\mathbb{E}(\hat\sigma^2)=\sigma^2 \quad \text{and}\quad \hat\sigma^2\rightarrow_p \sigma^2.
 $$
 
 
@@ -1154,11 +1209,11 @@ $$
 $$
 Conditional on ${\cal S}_n,$ the bootstrap error terms are i.i.d with
 $$
-E(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i =0
+\mathbb{E}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i =0
 $$
 and
 $$
-Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2
+\mathbb{V}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2
 $$
 Thus, by the central limit ([Lindeberg-Lévy](https://www.statlect.com/asymptotic-theory/central-limit-theorem)) one obtains that 
 $$
