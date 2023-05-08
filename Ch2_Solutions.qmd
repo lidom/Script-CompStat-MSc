@@ -69,13 +69,14 @@
   \frac{f(x)}{g(x|b)} = \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2|x| - x^2b}{2b}\right)
   $$
   and marks the maximizing arguments $x=\pm 1/b$ for a given value of $b>0:$
+
 ```{r}
-  b <- 1
-  myfun <- function(x, b){sqrt(2/pi) * exp( (2*abs(x) - x^2 * b)/(2 * b) )}
-  xx <- seq(-(1/b)*3, (1/b)*3, len = 500)
-  yy <- myfun(xx, b = b)
-  plot(x = xx, y = yy, type = "l")
-  abline(v=c(-1/b, 1/b), lty=2)
+b <- 1
+myfun <- function(x, b){sqrt(2/pi) * exp( (2*abs(x) - x^2 * b)/(2 * b) )}
+xx <- seq(-(1/b)*3, (1/b)*3, len = 500)
+yy <- myfun(xx, b = b)
+plot(x = xx, y = yy, type = "l")
+abline(v=c(-1/b, 1/b), lty=2)
 ```
   
   (b) To show that the minimum of the bound (in $b>0$) is attained at $b=1,$ we minimize 
@@ -112,7 +113,8 @@ P\left(X \leq h (Y)\right)
 &=\mathbb{E}\left[P\left(1_{(X \leq h (Y))}=1|Y\right)\cdot 1 + 0\right]\\[2ex]
 &=\mathbb{E}\left[\;\;P\left(X \leq h (Y)|Y\right)\;\;\cdot\; 1\; + 0\right]\\[2ex]
 &=\mathbb{E}\left[\;\;\int_{-\infty}^{h(Y)} f(x)dx \right]\\[2ex]
-&=\int_{-\infty}^{\infty} \left(\int_{-\infty}^{h (y)} f(x) dx \right) g(y) dy
+&=\mathbb{E}\left[\mathbb{E}\left[\left.\;\;\int_{-\infty}^{h(Y)} f(x)dx\right| Y \right]\right]\\[2ex]
+&=\int_{-\infty}^{\infty} \;\;\left(\int_{-\infty}^{h (y)} f(x) dx \right) \quad g(y) dy
 \end{align*}
 $$
 

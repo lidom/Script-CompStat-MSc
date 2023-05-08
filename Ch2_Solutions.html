@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   \]</span> and marks the maximizing arguments <span class="math inline">\(x=\pm 1/b\)</span> for a given value of <span class="math inline">\(b&gt;0:\)</span></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  myfun <span class="ot">&lt;-</span> <span class="cf">function</span>(x, b){<span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">/</span>pi) <span class="sc">*</span> <span class="fu">exp</span>( (<span class="dv">2</span><span class="sc">*</span><span class="fu">abs</span>(x) <span class="sc">-</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> b)<span class="sc">/</span>(<span class="dv">2</span> <span class="sc">*</span> b) )}</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, (<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, <span class="at">len =</span> <span class="dv">500</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  yy <span class="ot">&lt;-</span> <span class="fu">myfun</span>(xx, <span class="at">b =</span> b)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">x =</span> xx, <span class="at">y =</span> yy, <span class="at">type =</span> <span class="st">"l"</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>b, <span class="dv">1</span><span class="sc">/</span>b), <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>myfun <span class="ot">&lt;-</span> <span class="cf">function</span>(x, b){<span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">/</span>pi) <span class="sc">*</span> <span class="fu">exp</span>( (<span class="dv">2</span><span class="sc">*</span><span class="fu">abs</span>(x) <span class="sc">-</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> b)<span class="sc">/</span>(<span class="dv">2</span> <span class="sc">*</span> b) )}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, (<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, <span class="at">len =</span> <span class="dv">500</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>yy <span class="ot">&lt;-</span> <span class="fu">myfun</span>(xx, <span class="at">b =</span> b)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> xx, <span class="at">y =</span> yy, <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>b, <span class="dv">1</span><span class="sc">/</span>b), <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch2_Solutions_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -213,7 +213,8 @@ P\left(X \leq h (Y)\right)
 &amp;=\mathbb{E}\left[P\left(1_{(X \leq h (Y))}=1|Y\right)\cdot 1 + 0\right]\\[2ex]
 &amp;=\mathbb{E}\left[\;\;P\left(X \leq h (Y)|Y\right)\;\;\cdot\; 1\; + 0\right]\\[2ex]
 &amp;=\mathbb{E}\left[\;\;\int_{-\infty}^{h(Y)} f(x)dx \right]\\[2ex]
-&amp;=\int_{-\infty}^{\infty} \left(\int_{-\infty}^{h (y)} f(x) dx \right) g(y) dy
+&amp;=\mathbb{E}\left[\mathbb{E}\left[\left.\;\;\int_{-\infty}^{h(Y)} f(x)dx\right| Y \right]\right]\\[2ex]
+&amp;=\int_{-\infty}^{\infty} \;\;\left(\int_{-\infty}^{h (y)} f(x) dx \right) \quad g(y) dy
 \end{align*}
 \]</span></p>
 </section>
