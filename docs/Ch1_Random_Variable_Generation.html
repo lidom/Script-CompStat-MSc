@@ -1656,10 +1656,10 @@ P(A)
 <h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
 <p>Consider the Accept-Reject Algorithm for a target density function <span class="math inline">\(f_X\)</span> and an instrumental density function <span class="math inline">\(g\)</span> with <span class="math display">\[
 f_X(x) \leq Mg(x)
-\]</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span> and <span class="math inline">\(g(x)&gt;0\)</span> for all <span class="math inline">\(x\in\operatorname{supp}(f_X).\)</span></p>
+\]</span> with <span class="math inline">\(M&gt;0\)</span> for all <span class="math inline">\(x\in\operatorname{supp}(f_X).\)</span></p>
 <ol type="a">
 <li>What is the probability of accepting <span class="math inline">\(Y\)</span> from a simulation <span class="math display">\[
-   (Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right)?
+   (Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(y)\right\}\right)?
    \]</span></li>
 <li>Show that <span class="math inline">\(M\geq 1.\)</span></li>
 </ol>
@@ -1722,8 +1722,9 @@ f_X(x) \leq Mg(x)
   \end{align*}
   \]</span> for <span class="math inline">\(x\in\mathbb{R}.\)</span> The following code produces a plot of the graph of <span class="math display">\[
   \frac{f(x)}{g(x|b)} = \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2|x| - x^2b}{2b}\right)
-  \]</span> and marks the maximizing arguments <span class="math inline">\(x=\pm 1/b\)</span> for a given value of <span class="math inline">\(b&gt;0:\)</span> ::: {.cell hash=‘Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-19_1853706f9017bbe982c11ee4eef9532c’}</li>
+  \]</span> and marks the maximizing arguments <span class="math inline">\(x=\pm 1/b\)</span> for a given value of <span class="math inline">\(b&gt;0:\)</span></li>
 </ol>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-19_1853706f9017bbe982c11ee4eef9532c">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  myfun <span class="ot">&lt;-</span> <span class="cf">function</span>(x, b){<span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">/</span>pi) <span class="sc">*</span> <span class="fu">exp</span>( (<span class="dv">2</span><span class="sc">*</span><span class="fu">abs</span>(x) <span class="sc">-</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> b)<span class="sc">/</span>(<span class="dv">2</span> <span class="sc">*</span> b) )}</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, (<span class="dv">1</span><span class="sc">/</span>b)<span class="sc">*</span><span class="dv">3</span>, <span class="at">len =</span> <span class="dv">500</span>)</span>
@@ -1733,7 +1734,7 @@ f_X(x) \leq Mg(x)
 <div class="cell-output-display">
 <p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
-<p>:::</p>
+</div>
 <ol start="2" type="a">
 <li>To show that the minimum of the bound (in <span class="math inline">\(b&gt;0\)</span>) is attained at <span class="math inline">\(b=1,\)</span> we minimize <span class="math display">\[
 b\;\exp\left(\frac{1}{2b^2}\right)
@@ -1745,8 +1746,9 @@ b &amp;= 1,
 \end{align*}
 \]</span> where we used that <span class="math inline">\(\exp\left(\frac{1}{2b^2}\right)&gt;0,\)</span> which allows us to multiply both sides by <span class="math inline">\(1/\exp\left(\frac{1}{2b^2}\right),\)</span> and where the second solution <span class="math inline">\(b=-1\)</span> does not fulfill the requirement that <span class="math inline">\(b&gt;0.\)</span> The following code produces a plot of the graph of <span class="math display">\[
 b\;\exp\left(\frac{1}{2b^2}\right).
-\]</span> ::: {.cell hash=‘Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-20_f3564f038d4daa399b2ad3156e3463ca’}</li>
+\]</span></li>
 </ol>
+<div class="cell" data-hash="Ch1_Random_Variable_Generation_cache/html/unnamed-chunk-20_f3564f038d4daa399b2ad3156e3463ca">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>myfun2 <span class="ot">&lt;-</span> <span class="cf">function</span>(b){b <span class="sc">*</span> <span class="fu">exp</span>( <span class="dv">1</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>b<span class="sc">^</span><span class="dv">2</span>) )}</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">5</span>, <span class="dv">2</span>, <span class="at">len =</span> <span class="dv">500</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>yy <span class="ot">&lt;-</span> <span class="fu">myfun2</span>(<span class="at">b =</span> bb)</span>
@@ -1755,7 +1757,7 @@ b\;\exp\left(\frac{1}{2b^2}\right).
 <div class="cell-output-display">
 <p><img src="Ch1_Random_Variable_Generation_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
-<p>:::</p>
+</div>
 </section>
 <section id="exercise-2.-1" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-2.-1">Exercise 2.</h4>
@@ -1767,7 +1769,8 @@ P\left(X \leq h (Y)\right)
 &amp;=\mathbb{E}\left[P\left(1_{(X \leq h (Y))}=1|Y\right)\cdot 1 + 0\right]\\[2ex]
 &amp;=\mathbb{E}\left[\;\;P\left(X \leq h (Y)|Y\right)\;\;\cdot\; 1\; + 0\right]\\[2ex]
 &amp;=\mathbb{E}\left[\;\;\int_{-\infty}^{h(Y)} f(x)dx \right]\\[2ex]
-&amp;=\int_{-\infty}^{\infty} \left(\int_{-\infty}^{h (y)} f(x) dx \right) g(y) dy
+&amp;=\mathbb{E}\left[\mathbb{E}\left[\left.\;\;\int_{-\infty}^{h(Y)} f(x)dx\right| Y \right]\right]\\[2ex]
+&amp;=\int_{-\infty}^{\infty} \;\;\left(\int_{-\infty}^{h (y)} f(x) dx \right) \quad g(y) dy
 \end{align*}
 \]</span></p>
 </section>
@@ -1790,7 +1793,7 @@ P\left(U\leq f_X(Y)\right)
 <h4 class="unnumbered anchored" data-anchor-id="exercise-4.-1">Exercise 4.</h4>
 <ol type="a">
 <li>Deriving the probability of accepting <span class="math inline">\(Y\)</span> from a simulation <span class="math display">\[
-(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right).
+(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(y)\right\}\right).
 \]</span> Since we accept <span class="math inline">\(Y\)</span> only if <span class="math inline">\(U\leq f_X(Y),\)</span> <span class="math display">\[
 \begin{align*}
 P\left(\text{Accepting }Y\right)

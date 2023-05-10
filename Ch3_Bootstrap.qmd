@@ -26,7 +26,7 @@ $$
 
 For given data, the sample analogue of $F$ is the so-called **empirical distribution function**, which is an important tool of statistical inference.
 
-**Data:** i.i.d. random sample $X_1,\dots,X_n$
+**Data:** i.i.d. random sample $X_1,\dots,X_n$ from $X\sim F$
 
 
 Let $1_{(\cdot)}$ denote the indicator function, i.e., $1_{(x\leq t)}=1$ if $x\leq t$, and $1_{(x\leq t)}=0$ if $x>t.$
@@ -83,7 +83,7 @@ Corresponding empirical distribution function using `R`:
 
 ```{r, ecdfPlot}
 
-observedSample <- c(5.20, 4.80, 5.40, 4.60, 
+observedSample <- c(5.20, 4.80, 5.30, 4.60, 
                     6.10, 5.40, 5.80, 5.50)
 
 myecdf_fun     <- ecdf(observedSample)
@@ -178,7 +178,10 @@ $$
 $$
 \hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*
 $$
-4. For large $m$, the estimates $\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*$ allow to approximate the **bootstrap distribution** of $\hat\theta^*-\hat\theta$ arbitrarily well. The bootstrap distribution of $\hat\theta^*-\hat\theta$ is used to approximate the unknown distribution of $\hat\theta-\theta$.
+4. For large $m$, the estimates $\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*$ allow to approximate the **bootstrap distribution** of $\hat\theta^*-\hat\theta$ arbitrarily well. 
+
+
+The bootstrap distribution of $\hat\theta^*-\hat\theta$ is used to approximate the unknown distribution of $\hat\theta-\theta$.
 
 
 The theoretical justification of the bootstrap is based on asymptotic arguments. In many important applications the bootstrap is able to provide confidence intervals or tests which are more accurate than those based on standard asymptotic approximations.
@@ -1296,8 +1299,30 @@ $$
 
 #### Exercise 1. {-} 
 
-Derive the exact and the asymptotic distribution of the empirical distribution function $F_n(x)$ for a given $x\in\mathbb{R}.$  
+Consider the empirical distribution function 
+$$
+F_n(x) = \frac{1}{n}\sum_{i=1}^n 1_{(X_i\leq x)}
+$$
+for a random sample 
+$$
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} F.
+$$
 
+(a) Derive the exact and the asymptotic distribution of the empirical distribution function $F_n(x)$ for a given $x\in\mathbb{R}.$  
+
+(b) Show that $F_n(x)$ is a point-wise (weakly) consistent estimator of $F(x)$ for each given $x\in\mathbb{R}$.
+
+(c) Point-wise convergence of a function $g_n(x),$ i.e.,
+$$
+|g_n(x) - g(x)|\to 0
+$$ 
+for each $x\in\mathbb{R}$ as $n\to\infty$ does not imply uniform convergence, i.e., 
+$$
+\sup_{x\in\mathbb{R}}|g_n(x) - g(x)|\to 0
+$$ 
+as $n\to\infty.$ Show this by prividing an example for $g_n$ which converges point-wise, but not uniformly. 
+
+<!-- http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf -->
 
 
 <!-- {{< include Ch3_Solutions.qmd >}} -->

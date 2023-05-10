@@ -69,6 +69,8 @@
   \frac{f(x)}{g(x|b)} = \sqrt{\frac{2}{\pi}}\;b\; \exp\left(\frac{2|x| - x^2b}{2b}\right)
   $$
   and marks the maximizing arguments $x=\pm 1/b$ for a given value of $b>0:$
+
+
 ```{r}
   b <- 1
   myfun <- function(x, b){sqrt(2/pi) * exp( (2*abs(x) - x^2 * b)/(2 * b) )}
@@ -94,6 +96,8 @@ where we used that $\exp\left(\frac{1}{2b^2}\right)>0,$ which allows us to multi
 $$
 b\;\exp\left(\frac{1}{2b^2}\right).
 $$
+
+
 ```{r}
 myfun2 <- function(b){b * exp( 1/(2*b^2) )}
 bb <- seq(.5, 2, len = 500)
@@ -112,7 +116,8 @@ P\left(X \leq h (Y)\right)
 &=\mathbb{E}\left[P\left(1_{(X \leq h (Y))}=1|Y\right)\cdot 1 + 0\right]\\[2ex]
 &=\mathbb{E}\left[\;\;P\left(X \leq h (Y)|Y\right)\;\;\cdot\; 1\; + 0\right]\\[2ex]
 &=\mathbb{E}\left[\;\;\int_{-\infty}^{h(Y)} f(x)dx \right]\\[2ex]
-&=\int_{-\infty}^{\infty} \left(\int_{-\infty}^{h (y)} f(x) dx \right) g(y) dy
+&=\mathbb{E}\left[\mathbb{E}\left[\left.\;\;\int_{-\infty}^{h(Y)} f(x)dx\right| Y \right]\right]\\[2ex]
+&=\int_{-\infty}^{\infty} \;\;\left(\int_{-\infty}^{h (y)} f(x) dx \right) \quad g(y) dy
 \end{align*}
 $$
 
@@ -139,7 +144,7 @@ $$
 
 (a) Deriving the probability of accepting $Y$ from a simulation 
 $$
-(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(x)\right\}\right).
+(Y,U)\sim\mathcal{U}\left(\left\{(y,u)|y\in \operatorname{supp}(f_X)\;\text{and}\;0\leq u\leq Mg(y)\right\}\right).
 $$ 
 Since we accept $Y$ only if $U\leq f_X(Y),$
 $$

@@ -279,7 +279,7 @@ div.csl-indent {
 F(x)=P(X\leq x)\quad \text{for all } x\in\mathbb{R}.
 \]</span></p>
 <p>For given data, the sample analogue of <span class="math inline">\(F\)</span> is the so-called <strong>empirical distribution function</strong>, which is an important tool of statistical inference.</p>
-<p><strong>Data:</strong> i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span></p>
+<p><strong>Data:</strong> i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> from <span class="math inline">\(X\sim F\)</span></p>
 <p>Let <span class="math inline">\(1_{(\cdot)}\)</span> denote the indicator function, i.e., <span class="math inline">\(1_{(x\leq t)}=1\)</span> if <span class="math inline">\(x\leq t\)</span>, and <span class="math inline">\(1_{(x\leq t)}=0\)</span> if <span class="math inline">\(x&gt;t.\)</span></p>
 <div id="def-ecdf" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.1 (Empirical distribution function) </strong></span><span class="math display">\[
@@ -356,8 +356,8 @@ Note
 </tbody>
 </table>
 <p>Corresponding empirical distribution function using <code>R</code>:</p>
-<div class="cell" data-hash="Ch3_Bootstrap_cache/html/ecdfPlot_716257fe251b64551eef091272b75d79">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.20</span>, <span class="fl">4.80</span>, <span class="fl">5.40</span>, <span class="fl">4.60</span>, </span>
+<div class="cell" data-hash="Ch3_Bootstrap_cache/html/ecdfPlot_93f9239fda49e47f1862b4eb6bd0cc52">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.20</span>, <span class="fl">4.80</span>, <span class="fl">5.30</span>, <span class="fl">4.60</span>, </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">6.10</span>, <span class="fl">5.40</span>, <span class="fl">5.80</span>, <span class="fl">5.50</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>myecdf_fun     <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(observedSample)</span>
@@ -435,7 +435,7 @@ Bradley Efron
 \]</span></li>
 </ul>
 <p><strong>Inference:</strong> We are interested in evaluating the distribution of <span class="math display">\[
-\hat\theta
+\hat\theta-\theta
 \]</span> in order to provide standard errors, construct confidence intervals, and to perform tests of hypothesis.</p>
 <section id="the-bootstrap-algorithm" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="the-bootstrap-algorithm">The Bootstrap Algorithm</h3>
@@ -447,8 +447,9 @@ Bradley Efron
 <li><strong>Bootstrap replications:</strong> Repeat Steps 1 and 2 <span class="math inline">\(m\)</span> times (e.g.&nbsp;<span class="math inline">\(m=2000\)</span>) leading to <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
 \hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*
 \]</span></li>
-<li>For large <span class="math inline">\(m\)</span>, the estimates <span class="math inline">\(\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*\)</span> allow to approximate the <strong>bootstrap distribution</strong> of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> arbitrarily well. The bootstrap distribution of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> is used to approximate the unknown distribution of <span class="math inline">\(\hat\theta-\theta\)</span>.</li>
+<li>For large <span class="math inline">\(m\)</span>, the estimates <span class="math inline">\(\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*\)</span> allow to approximate the <strong>bootstrap distribution</strong> of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> arbitrarily well.</li>
 </ol>
+<p>The bootstrap distribution of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> is used to approximate the unknown distribution of <span class="math inline">\(\hat\theta-\theta\)</span>.</p>
 <p>The theoretical justification of the bootstrap is based on asymptotic arguments. In many important applications the bootstrap is able to provide confidence intervals or tests which are more accurate than those based on standard asymptotic approximations.</p>
 <div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1335,7 +1336,21 @@ T^*_1,T_2^*,\dots, T_m^*.
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
 <section id="exercise-1." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
-<p>Derive the exact and the asymptotic distribution of the empirical distribution function <span class="math inline">\(F_n(x)\)</span> for a given <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
+<p>Consider the empirical distribution function <span class="math display">\[
+F_n(x) = \frac{1}{n}\sum_{i=1}^n 1_{(X_i\leq x)}
+\]</span> for a random sample <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} F.
+\]</span></p>
+<ol type="a">
+<li><p>Derive the exact and the asymptotic distribution of the empirical distribution function <span class="math inline">\(F_n(x)\)</span> for a given <span class="math inline">\(x\in\mathbb{R}.\)</span></p></li>
+<li><p>Show that <span class="math inline">\(F_n(x)\)</span> is a point-wise (weakly) consistent estimator of <span class="math inline">\(F(x)\)</span> for each given <span class="math inline">\(x\in\mathbb{R}\)</span>.</p></li>
+<li><p>Point-wise convergence of a function <span class="math inline">\(g_n(x),\)</span> i.e., <span class="math display">\[
+|g_n(x) - g(x)|\to 0
+\]</span> for each <span class="math inline">\(x\in\mathbb{R}\)</span> as <span class="math inline">\(n\to\infty\)</span> does not imply uniform convergence, i.e., <span class="math display">\[
+\sup_{x\in\mathbb{R}}|g_n(x) - g(x)|\to 0
+\]</span> as <span class="math inline">\(n\to\infty.\)</span> Show this by prividing an example for <span class="math inline">\(g_n\)</span> which converges point-wise, but not uniformly.</p></li>
+</ol>
+<!-- http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf -->
 <!-- {{< include Ch3_Solutions.qmd >}} -->
 </section>
 </section>
