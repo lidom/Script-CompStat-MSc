@@ -453,11 +453,13 @@ These conditional distributions are usually called **bootstrap distributions**.
 
 
 ::: {.callout-tip}
-🤟 We can analyze the bootstrap distribution of $\bar X^* -\bar X$, since **we *know* the discrete distribution** of the conditional random variables 
+## We know the distribution of $X_i^*|\mathcal{S}_n$
+
+We can analyze the bootstrap distribution of $\bar X^* -\bar X$, since **we *know* 🤟 the discrete distribution** of the conditional random variables 
 $$
-X_i^*|\mathcal{S}_n,
+X_i^*|\mathcal{S}_n,\;i=1,\dots,n,
 $$ 
-even though, we do **not know** the distribution of $X_i\sim F.$
+even though, we do **not know** the distribution of $X_i\sim F,$ $i=1,\dots,n.$
 
 <!-- The discrete distribution of the conditional random variables 
 $X_i^*|\mathcal{S}_n,$ is 
@@ -467,6 +469,7 @@ $$
 with  -->
 :::
 
+
 For each $i=1,\dots,n$, the possible values of the discrete random variable $X_i^*|\mathcal{S}_n$ are 
 $$
 X_i^*|\mathcal{S}_n\in\{X_1,\dots,X_n\},
@@ -474,9 +477,9 @@ $$
 and each of these values is equally probable 
 $$
 \begin{align*}
-P^*(X_i^*=X_1)&= P(X_i^*=X_1|{\cal S}_n) = \frac{1}{n} \\
-P^*(X_i^*=X_2)&= P(X_i^*=X_2|{\cal S}_n) = \frac{1}{n} \\
-&\vdots\\ 
+P^*(X_i^*=X_1)&= P(X_i^*=X_1|{\cal S}_n) = \frac{1}{n} \\[2ex]
+P^*(X_i^*=X_2)&= P(X_i^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
+&\vdots\\[2ex] 
 P^*(X_i^*=X_n)&= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 $$
@@ -487,8 +490,8 @@ Thus, **we know the whole distribution** of the (conditional) discrete random va
 $$
 \begin{align*}
 \mathbb{E}^*(X_i^*)
-&=\mathbb{E}(X_i^*|{\cal S}_n)\\
-&=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_2\\
+&=\mathbb{E}(X_i^*|{\cal S}_n)\\[2ex]
+&=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_n\\[2ex]
 &=\bar X
 \end{align*}
 $$
@@ -497,18 +500,19 @@ $$
 $$
 \begin{align*}
 \mathbb{V}^*(X_i^*)
-&=\mathbb{V}(X_i^*|{\cal S}_n)\\ 
-&=\mathbb{E}((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n)\\ 
-&=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2\\ 
+&=\mathbb{V}(X_i^*|{\cal S}_n)\\[2ex] 
+&=\mathbb{E}((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n)\\[2ex] 
+&=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2\\[2ex] 
 &=\hat\sigma^2
 \end{align*}
 $$
 
+That is, in the bootstrap sample $X_1^*,\dots,X_n^*$ the "population" mean and the "population" variance are equal to the empirical mean, $\bar{X},$ and the empirical variance, $\hat{\sigma}^2,$ of the original sample $X_1,\dots,X_n.$ 
 
 ::: {.callout-tip}
 ## General case: Conditional moments of transformed $g(X_i^*)$
 
-For any measurable function $g$ we have 
+For any (measurable) function $g$ we have 
 $$
 \mathbb{E}^*(g(X_i^*))=\mathbb{E}(g(X_i^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
 $$
@@ -517,11 +521,11 @@ For instance, $g(X_i)=1_{(X_i\leq \delta)}.$
 
 ::: {.callout-important}
 
-## Conditioning on $\mathcal{S}_n$ in important!
+## Caution: Conditioning on $\mathcal{S}_n$ in important!
 
 Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is very important. 
 
-The unconditional distribution of $X_i^*$ is equal to the **unknown distribution** of $X_i.$ This follows from the fact that for 
+The unconditional distribution of $X_i^*$ is equal to the **unknown distribution** $F$ of $X_i.$ This can be seen from the following derivation: 
 $$
 \begin{align*}
 P(X_i^*\leq \delta) 
@@ -534,7 +538,6 @@ P(X_i^*\leq \delta)
 &= P\left(X_i\leq \delta\right)=F(\delta)
 \end{align*}
 $$
-But we do not know $F.$
 :::
 
 
@@ -544,7 +547,7 @@ Since we know the distribution of the i.i.d. sample
 $$
 X_1|\mathcal{S}_n, X_2|\mathcal{S}_n,\dots, X_n|\mathcal{S}_n
 $$
-it is straight forward to derive the asymptotic distribution of $\bar X^*$ using the central limit theorem. 
+it is straight forward to derive the asymptotic distribution of $(\bar X^*-\bar{X})|\mathcal{S}_n$ using the central limit theorem. 
 
 Firstly, let us derive the conditional mean and variance of 
 $$
@@ -575,7 +578,6 @@ $$
 \end{align*}
 $$
 
-
 ::: {.callout-tip}
 ## We can apply the CLT to $\bar X^*|\mathcal{S}_n$
 
@@ -585,7 +587,7 @@ Note that, conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,
 * with mean $\mathbb{E}^*(X_i^*)=\bar X$ 
 * and variance $\mathbb{V}^*(X^*)=\hat\sigma^2$
 
-Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.statlect.com/asymptotic-theory/central-limit-theorem) to the appropriately scaled sample mean conditionally on ${\cal S}_n$
+Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.statlect.com/asymptotic-theory/central-limit-theorem) to the appropriately standardized bootstrap sample mean $\hat{X}^*$ conditionally on ${\cal S}_n$
 $$
 \left(\left.\frac{\sqrt{n}(\bar X^* - \bar X)}{\hat\sigma}\right|{\cal S}_n\right)
 $$
@@ -600,19 +602,32 @@ $$
 
 Moreover, $\hat\sigma^2$ is a consistent estimator of $\sigma^2,$ and thus asymptotically $\hat\sigma^2$ may be replaced by $\sigma$. Therefore, 
 $$
-\left(\left.\frac{\sqrt{n}(\bar X^* -\bar X)}{\sigma}\right|{\cal S}_n\right)\rightarrow_{d} \mathcal{N}(0,1),\quad n\to\infty.
+\begin{align*}
+\left(\left.\frac{\sqrt{n}(\bar X^* -\bar X)}{\sigma}\right|{\cal S}_n\right)\rightarrow_{d} \mathcal{N}(0,1),\quad n\to\infty\\[2ex]
+\Rightarrow\left(\left.\sqrt{n}(\bar X^* -\bar X)\right|{\cal S}_n\right)\rightarrow_{d} \mathcal{N}(0,\sigma^2),\quad n\to\infty.
+\end{align*}
 $$
 
 
 
 On the other hand, we also have that 
 $$
+\begin{align*}
 \left(\frac{\sqrt{n}(\bar X -\mu )}{ \sigma}\right) 
-\rightarrow_{d} \mathcal{N}(0,1),\quad n\to\infty.
+\rightarrow_{d} \mathcal{N}(0,1),\quad n\to\infty\\[2ex]
+\Rightarrow\left(\left.\sqrt{n}(\bar X - \mu)\right|{\cal S}_n\right)\rightarrow_{d} \mathcal{N}(0,\sigma^2),\quad n\to\infty.
+\end{align*}
 $$
 
-This means that the bootstrap is **consistent**. The bootstrap distribution of $\sqrt{n}(\bar X^* -\bar X)$ asymptotically coincides with the distribution of $\sqrt{n}(\bar X-\mu)$ as $n\rightarrow
-\infty$. In other words, for large $n$,
+This means that the bootstrap is **consistent**. The bootstrap distribution of 
+$$
+\sqrt{n}(\bar X^* -\bar X)|{\cal S}_n
+$$ 
+asymptotically $(n\rightarrow\infty)$ coincides with the distribution of 
+$$
+\sqrt{n}(\bar X-\mu).
+$$
+In other words, for large $n$,
 $$
 \text{distribution}(\bar X^* -\bar X|{\cal S}_n)\approx \text{distribution}(\bar X-\mu).
 $$
@@ -621,7 +636,12 @@ This bootstrap consistency result justifies using the bootstrap distribution
 $$
 P(\bar{X}^*-\bar{X}\leq \delta|\mathcal{S}_n),
 $$ 
-which we can approximate with arbitrary precision (as $m\to\infty),$ and which we thus can use as a tool for doing inference about $\mu.$ 
+which we can approximate using the bootstrap realizations 
+$$
+\bar{X}^*_1,\;\bar{X}^*_2, \dots, \bar{X}^*_m
+$$
+with arbitrary precision as $m\to\infty.$ 
+<!-- and which we thus can use as a tool for doing inference about $\mu.$  -->
 
 
 ### Example: Inference about a population proportion
@@ -629,55 +649,116 @@ which we can approximate with arbitrary precision (as $m\to\infty),$ and which w
 **Setup:** 
 
 * **Data:** i.i.d. random sample $X_1,\dots,X_n,$ where $X_i\in\{0,1\}$ is dichotomous and $P(X_i=1)=p$, $P(X_i=0)=1-p$. 
-* **Estimator:** Let $S$ denote the number of $X_i$ which are equal to $1.$ The maximum likelihood estimate of $p$ is $\hat p=S/n.$
-* **Problem:** Inference about $p$.
+* **Estimator:** Let 
+$$
+S=\sum_{i=1}^n 1_{(X_i = 1)}
+$$ 
+denote the number of $X_i$ which are equal to $1.$ Then, the  maximum likelihood estimate of $p$ is 
+$$
+\hat p=\frac{1}{n}S.
+$$
+* **Inference Problem:** What is the distribution of 
+$$
+(\hat{p} - p)?
+$$
 
-**Recall:** 
+**Recall Asymptotics:** 
 
-* $n\hat p=S\sim B(n,p)$
-* As $n\rightarrow\infty$ the central limit theorem implies that
+* $n\hat p=S\sim \mathcal{Binom}(n,p)$
+* As $n\rightarrow\infty,$ the central limit theorem implies that
 $$
 \frac{\sqrt{n}(\hat p -p)}{\sqrt{p(1-p)}}\rightarrow_d \mathcal{N}(0,1)
 $$
-* Thus for $n$ large, the distributions of $\sqrt{n}(\hat p -p)$ and $\hat p -p$ can be approximated by $\mathcal{N}(0,p(1-p))$ and $\mathcal{N}(0,p(1-p)/n)$, respectively.
+Thus for $n$ large, the distributions of $\sqrt{n}(\hat p -p)$ and $\hat p -p$ can be approximated by $\mathcal{N}(0,p(1-p))$ and $\mathcal{N}(0,p(1-p)/n)$, respectively.
 
-**Bootstrap:**
+**Bootstrap Approach:**
 
 * Random sample $X_1^*,\dots,X_n^*$  generated by drawing observations
 independently and with replacement from
 $$
 {\cal S}_n:=\{X_1,\dots,X_n\}.
 $$ 
-* Let $S^*$ denote the number of $X_i^*$ which are equal to $1.$
-* Bootstrap estimate of $p$: $\hat p^*=S^*/n$
+* Let 
+$$
+S^*=\sum_{i=1}^n 1_{(X_i^* = 1)}
+$$  
+denote the number of $X_i^*$ which are equal to $1.$
+* Bootstrap estimate of $p$: 
+$$
+\hat p^*=\frac{1}{n}S^*.
+$$
 
 
 The distribution of $\hat p^*$ depends on the observed sample ${\cal S}_n:=\{X_1,\dots,X_n\}$. A different sample ${\cal S}_n$ will lead to a different distribution. The bootstrap now tries to approximate the true distribution of $\hat p - p$ by the **conditional** distribution of $\hat p^*-\hat p$ given the observed sample ${\cal S}_n$. 
 
 
-The bootstrap is called **consistent** if asymptotically (i.e. for $n\rightarrow \infty$) the conditional distribution of $\hat p^*-\hat p$  coincides with the true distribution of $\hat p - p.$ (Note: a proper scaling is required!)
+The bootstrap is called **consistent** if asymptotically $(n\rightarrow \infty)$ the conditional distribution of $(\hat p^*-\hat p)|{\cal S}_n$  coincides with the true distribution of $\hat p - p.$ (Note: a proper scaling is required!)
 
 
 We obtain
 $$
 \begin{align*}
-& P^*(X_i^*=1)=P(X_i^*=1|\ {\cal S}_n)=\hat p, \\  
-& P^*(X_i^*=0)=P(X_i^*=0|\ {\cal S}_n)=1-\hat p
+& P^*(X_i^*=1)=P(X_i^*=1|{\cal S}_n)=\hat p, \\[2ex]  
+& P^*(X_i^*=0)=P(X_i^*=0|{\cal S}_n)=1-\hat p.
 \end{align*}
 $$
-and
+Thus, $X_i^*|{\cal S}_n$ is a Bernoulli distributed random variable 
+$$
+X_i^*|{\cal S}_n \sim\mathcal{Bern}(p=\hat p), \quad i=1,\dots,n.
+$$
+
+This implies that the  distribution of $n \hat{p}^*|{\cal S}_n$ is a Binomial distribution   
+$$
+\underbrace{n \hat{p}_i^*}_{=S^*}|{\cal S}_n \sim\mathcal{Binom}(n, p=\hat p), \quad i=1,\dots,n.
+$$
+
+Therefore,
 $$
 \begin{align*}
-&   \mathbb{E}^*(\hat p^*)=\mathbb{E}(\hat p^*|\ {\cal S}_n)=\hat p, \\ 
-& \mathbb{V}^*(\hat p^*)=E[(\hat p^*-\hat p)^2|\ {\cal S}_n]=\frac{\hat p(1-\hat p)}{n}
+\mathbb{E}^*(n \hat p^*)
+&=\mathbb{E}(n \hat p^*|\ {\cal S}_n)\\[2ex]
+& = n \hat{p}\\[2ex]
+\Rightarrow \mathbb{E}^*(\hat p^*) & = \hat{p}
+\end{align*}
+$$
+and 
+$$
+\begin{align*}
+\mathbb{V}^*(n \hat p^*)
+&=\mathbb{V}(n \hat p^*|\ {\cal S}_n)\\[2ex]
+& = n \hat{p} (1- \hat{p})\\[2ex]
+\Rightarrow \mathbb{V}^*(\hat p^*) & = \frac{\hat{p}(1-\hat{p})}{n}
 \end{align*}
 $$
 
-The **bootstrap distribution** of $n\hat p^*=S^*$ given ${\cal S}_n$ is equal to the binomial distribution $B(n,\hat p).$ That is, for large $n$, the bootstrap distribution of 
+<!-- $$
+\begin{align*}
+\mathbb{E}^*(\hat p^*)
+&=\mathbb{E}(\hat p^*|\ {\cal S}_n)\\[2ex]
+&=\mathbb{E}\left( \left.\frac{1}{n}\sum_{i=1}^n 1_{(X_i^* = 1)}\right|\ {\cal S}_n \right)\\[2ex]
+&=\mathbb{E}\left( \left.1_{(X_i^* = 1)}\right|\ {\cal S}_n \right)\\[2ex]
+&=P\left( \left.1_{(X_i^* = 1)} = 1\right|\ {\cal S}_n \right)\cdot 1 + P\left( \left.1_{(X_i^* = 1)} = 0\right|\ {\cal S}_n \right)\cdot 0\\[2ex]
+&=P\left( \left.1_{(X_i^* = 1)} = 1\right|\ {\cal S}_n \right)\\[2ex]
+&=P\left( \left. X_i^* = 1 \right|\ {\cal S}_n \right)\\[2ex]
+&=\hat p, \\ 
+\end{align*}
+$$
+and 
+$$
+\begin{align*}
+\mathbb{V}^*(\hat p^*)
+&=\mathbb{E}[(\hat p^*- \mathbb{E}(\hat p^*|\ {\cal S}_n) )^2|\ {\cal S}_n]\\[2ex]
+&=\mathbb{E}[(\hat p^*-\hat p)^2|\ {\cal S}_n]\\[2ex]
+&=\frac{\hat p(1-\hat p)}{n}
+\end{align*}
+$$ -->
+
+<!-- The **bootstrap distribution** of $n\hat p^*=S^*$ given ${\cal S}_n$ is equal to the binomial distribution $B(n,\hat p).$  -->
+That is, for large $n$, the bootstrap distribution of 
 $$
 \frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}
 $$ 
-is approximately standard normal. In other words,
+is approximately standard normal. I.e., formally,
 $$
 \left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}\right|{\cal S}_n\right) \rightarrow_d \mathcal{N}(0,1),\quad n\to\infty.
 $$
