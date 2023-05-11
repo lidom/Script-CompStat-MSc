@@ -223,6 +223,7 @@ div.csl-indent {
   <li><a href="#the-nonparametric-standard-bootstrap" id="toc-the-nonparametric-standard-bootstrap" class="nav-link" data-scroll-target="#the-nonparametric-standard-bootstrap"><span class="toc-section-number">3.3</span>  The Nonparametric (Standard) Bootstrap</a>
   <ul class="collapse">
   <li><a href="#the-bootstrap-algorithm" id="toc-the-bootstrap-algorithm" class="nav-link" data-scroll-target="#the-bootstrap-algorithm">The Bootstrap Algorithm</a></li>
+  <li><a href="#bootstrap-consistency" id="toc-bootstrap-consistency" class="nav-link" data-scroll-target="#bootstrap-consistency">Bootstrap Consistency</a></li>
   <li><a href="#example-inference-about-the-population-mean" id="toc-example-inference-about-the-population-mean" class="nav-link" data-scroll-target="#example-inference-about-the-population-mean"><span class="toc-section-number">3.3.1</span>  Example: Inference About the Population Mean</a></li>
   <li><a href="#example-inference-about-a-population-proportion" id="toc-example-inference-about-a-population-proportion" class="nav-link" data-scroll-target="#example-inference-about-a-population-proportion"><span class="toc-section-number">3.3.2</span>  Example: Inference about a population proportion</a></li>
   <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="toc-section-number">3.3.3</span>  Confidence intervals</a></li>
@@ -447,14 +448,30 @@ Bradley Efron
 <li><strong>Bootstrap replications:</strong> Repeat Steps 1 and 2 <span class="math inline">\(m\)</span> times (e.g.&nbsp;<span class="math inline">\(m=2000\)</span>) leading to <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
 \hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*
 \]</span></li>
-<li>For large <span class="math inline">\(m\)</span>, the estimates <span class="math inline">\(\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*\)</span> allow to approximate the <strong>bootstrap distribution</strong> of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> arbitrarily well.</li>
 </ol>
+<p>For large <span class="math inline">\(m\)</span>, the estimates <span class="math inline">\(\hat\theta_1^*,\hat\theta_2^*,\dots,\hat\theta_m^*\)</span> allow to approximate the <strong>bootstrap distribution</strong> of <span class="math inline">\(\hat\theta^*-\hat\theta\)</span> arbitrarily well.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>The bootstrap distribution of <span class="math display">\[
 \hat\theta^*-\hat\theta
 \]</span> is used to approximate the unknown distribution of <span class="math display">\[
 \hat\theta-\theta.
 \]</span></p>
-<p>The theoretical justification of the bootstrap is based on asymptotic arguments. In many important applications the bootstrap is able to provide confidence intervals or tests which are more accurate than those based on standard asymptotic approximations.</p>
+<p>Note: For the bootstrap distribution <span class="math inline">\(\hat\theta\)</span> is a “population parameter”.</p>
+</div>
+</div>
+<p>The theoretical justification of the bootstrap is based on asymptotic arguments. In many important applications the bootstrap is able to provide confidence intervals or tests which are <strong>more accurate</strong> than those based on standard asymptotic approximations.</p>
+</section>
+<section id="bootstrap-consistency" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="bootstrap-consistency">Bootstrap Consistency</h3>
 <div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -497,7 +514,8 @@ Caution: The bootstrap does <em>not</em> always work
 <p><strong>Setup:</strong></p>
 <ul>
 <li>i.i.d. sample <span class="math inline">\(X_1,\dots,X_n\)</span> from <span class="math inline">\(X\sim F.\)</span></li>
-<li>Continuous random variable <span class="math inline">\(X\sim F\)</span> with unknown <span class="math inline">\(F\)</span> and thus unknown mean <span class="math inline">\(\mu = \int x f(x) dx = \int x d F(x),\)</span> where <span class="math inline">\(f=F'.\)</span></li>
+<li>Continuous random variable <span class="math inline">\(X\sim F\)</span> with unknown <span class="math inline">\(F\)</span> and thus unknown mean <span class="math display">\[
+\mu = \int x f(x) dx = \int x d F(x),\]</span> where <span class="math inline">\(f=F'.\)</span></li>
 <li>Estimator: empirical mean <span class="math display">\[
 \begin{align*}
 \bar{X}
@@ -507,7 +525,9 @@ Caution: The bootstrap does <em>not</em> always work
 \end{align*}
 \]</span></li>
 </ul>
-<p><strong>Inference Problem:</strong> What is the distribution of <span class="math inline">\(\bar{X} -\mu\)</span>?</p>
+<p><strong>Inference Problem:</strong> What is the distribution of <span class="math display">\[
+\bar{X} -\mu?
+\]</span></p>
 <p>Now assume that <span class="math inline">\(n=8\)</span> and that the <strong>observed sample</strong> is</p>
 <table class="table">
 <thead>
@@ -551,8 +571,9 @@ Caution: The bootstrap does <em>not</em> always work
 </tr>
 </tbody>
 </table>
-<div class="cell" data-hash="Ch3_Bootstrap_cache/html/unnamed-chunk-1_d2b193f22b79ccac21d7eabb4523451b">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">1.0</span>, <span class="fl">1.4</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="fl">1.6</span>, <span class="fl">1.9</span>, <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch3_Bootstrap_cache/html/unnamed-chunk-1_0f5f5a4c86b5e9cf771df83d09ea6ca5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">1.0</span>,  <span class="fl">1.4</span>, <span class="sc">-</span><span class="fl">0.8</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">1.6</span>, <span class="fl">1.9</span>, <span class="sc">-</span><span class="fl">0.1</span>,  <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 So the sample mean is
 <center>
@@ -560,7 +581,9 @@ So the sample mean is
 </center>
 <p><br></p>
 <p><strong>Bootstrap:</strong></p>
-<p>The observed sample <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}\)</span> is taken as underlying empirical “population” in order to generate <strong>“bootstrap data”</strong> <span class="math inline">\(X_1^*,\dots,X_n^*\)</span>:</p>
+<p>The observed sample <span class="math display">\[
+{\cal S}_n=\{X_1,\dots,X_n\}
+\]</span> is taken as underlying empirical “population” in order to generate the <strong>bootstrap sample</strong> <span class="math inline">\(X_1^*,\dots,X_n^*\)</span>:</p>
 <ul>
 <li>i.i.d. samples <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> are generated by drawing observations independently and with replacement from <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}\)</span>.</li>
 </ul>
@@ -571,7 +594,11 @@ So the sample mean is
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>The distribution of <span class="math inline">\(\bar X -\mu\)</span> is approximated by the conditional distribution of <span class="math inline">\(\bar X^* -\bar X\)</span> given the original sample <span class="math inline">\({\cal S}_n\)</span> <span class="math display">\[
+<li>The distribution of <span class="math display">\[
+\bar X -\mu
+\]</span> is approximated by the conditional distribution of <span class="math display">\[
+\bar X^* -\bar X,
+\]</span> given the original sample <span class="math inline">\({\cal S}_n,\)</span> i.e.&nbsp;more formally <span class="math display">\[
 \underbrace{P\left(\bar{X}^*-\bar{X}&lt;\delta|\mathcal{S}_n\right)}_{\text{approximable}}
 \approx
 \underbrace{P\left(\bar{X}-\mu&lt;\delta\right)}_{\text{unknown}}.
@@ -595,37 +622,63 @@ P\left(\bar{X}^*-\bar{X}&lt;\delta|\mathcal{S}_n\right)
 5 | 1.0| 0.7| -0.1|  0.7| 1.4| -0.8| 1.0| 1.6 |  0.05
 ... ||||||||| -->
 <p>These bootstrap estimates are then used to approximate the bootstrap distribution <span class="math display">\[
-\overbrace{\underbrace{P\left(\bar X^*-\bar X\leq \delta |{\cal S}_n\right)}_{\text{bootstrap distribution}}}^{=P^*\left(\bar X^*-\bar X\leq \delta\right)}
+%\overbrace{
+  \underbrace{P\left(\bar X^*-\bar X\leq \delta |{\cal S}_n\right)}_{\text{bootstrap distribution}}%}^{=P^*\left(\bar X^*-\bar X\leq \delta\right)}
 \approx
 \frac{1}{m}\sum_{k=1}^m 1_{( \bar X^*_k-\bar X\leq \delta)},  
 \]</span> where this approximation will be <strong>arbitrarily precise</strong> as <span class="math inline">\(m\to\infty.\)</span> (So, we can effectively ignore this type of approximation error.)</p>
+<div class="cell" data-hash="Ch3_Bootstrap_cache/html/unnamed-chunk-3_4d454b59edc79e6b5c2a5832a627004d">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of bootstrap samples </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Xbar_boot        <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> m)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a> Xbar_boot[k]        <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>( Xbar_boot <span class="sc">-</span> Xbar ), </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Approximate Bootstrap Distribution"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To approximate, for instance, the standard error of <span class="math inline">\(\bar{X},\)</span> we can now simply use the <strong>empirical standard deviation</strong> of <span class="math inline">\(\bar{X}^*_k,\)</span> <span class="math inline">\(k=1,\dots,m.\)</span></p>
+<div class="cell" data-hash="Ch3_Bootstrap_cache/html/unnamed-chunk-4_6c9d31826ede111a8b435799f8bace68">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sd</span>(Xbar_boot), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.34</code></pre>
+</div>
+</div>
+<!-- to test the null-hypothesis 
+<center>
+H$_0:$ $\mu = \mu_0$
+</center>
+against the alternative hypothesis that 
+<center>
+H$_1:$ $\mu \neq \mu_0$
+</center>
+we can use the simulated distribution of $\bar{X}^*_k,$ $k=1,\dots,m.$ 
+
+Under H$_0,$ we know that the true (unknown) mean equals the hypothetical mean $\mu = \mu_0,$ and we know that $\bar{X}\approx \mu$ if $n$ is large.   -->
 <!-- 
 
-::: {.cell hash='Ch3_Bootstrap_cache/html/unnamed-chunk-3_70dacffb80f08ee17ee068732d39d96f'}
+m         <- 10000 # number of bootstrap samples
+Xbar_boot <- vector(model = "double", length = m)
 
-```{.r .cell-code}
-n                <- length(observedSample)
-Xbar             <- mean(observedSample)
-m                <- 2000
-bootRealizations <- numeric(m)
-
-for(l in seq_len(m)){
- bootSample          <- sample(x       = observedSample, 
-                               size    = n, 
-                               replace = TRUE)
- bootXbar            <- mean(bootSample)
- bootRealizations[l] <- bootXbar - Xbar
+for(k in 1:m){
+  bootSample   <- sample(x       = observedSample, 
+                         size    = length(observedSample), 
+                         replace = TRUE)
+  Xbar_boot[k] <- mean(bootSample)
 }
 
-plot(ecdf(bootRealizations), main="")
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-3-1.png){width=672}
-:::
-:::
-
- -->
+## Some (approximate) quantiles of the bootstrap distribution 
+quantile(Xbar_boot, probs = seq(from = 0, to = 1,  by = 0.25))
+``` -->
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -647,11 +700,11 @@ P^*(\cdot)=P(\cdot|\mathcal{S}_n),
 \]</span> given the sample <span class="math inline">\({\cal S}_n.\)</span></p>
 </div>
 </div>
-<section id="the-bootstrap-distribution-of-bar-x" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="the-bootstrap-distribution-of-bar-x">The Bootstrap Distribution of <span class="math inline">\(\bar X^*\)</span></h4>
+<section id="theory-the-bootstrap-distribution-of-bar-x--barx" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="theory-the-bootstrap-distribution-of-bar-x--barx">Theory: The Bootstrap Distribution of <span class="math inline">\(\bar X^*- \bar{X}\)</span></h4>
 <p>The bootstrap focuses on the <strong>conditional</strong> distribution of <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> given the observed sample <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}\)</span> and the resulting conditional distribution of <span class="math display">\[
-(\bar X^* -\bar X)|\mathcal{S}_n
-\]</span> Often these conditional distributions are called <strong>bootstrap distributions</strong>.</p>
+(\bar X^* -\bar X)|\mathcal{S}_n.
+\]</span> These conditional distributions are usually called <strong>bootstrap distributions</strong>.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -665,6 +718,12 @@ Tip
 <p>🤟 We can analyze the bootstrap distribution of <span class="math inline">\(\bar X^* -\bar X\)</span>, since <strong>we <em>know</em> the discrete distribution</strong> of the conditional random variables <span class="math display">\[
 X_i^*|\mathcal{S}_n,
 \]</span> even though, we do <strong>not know</strong> the distribution of <span class="math inline">\(X_i\sim F.\)</span></p>
+<!-- The discrete distribution of the conditional random variables 
+$X_i^*|\mathcal{S}_n,$ is 
+$$
+X_i^*|\mathcal{S}_n\in\{X_1,\dots,X_n\}
+$$
+with  -->
 </div>
 </div>
 <p>For each <span class="math inline">\(i=1,\dots,n\)</span>, the possible values of the discrete random variable <span class="math inline">\(X_i^*|\mathcal{S}_n\)</span> are <span class="math display">\[
