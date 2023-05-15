@@ -421,6 +421,9 @@ quantile(Xbar_boot, probs = seq(from = 0, to = 1,  by = 0.25))
 
 
 
+#### Theory: The Bootstrap Distribution of $\bar X^*- \bar{X}$ {-}
+
+
 ::: {.callout-tip}
 ## Notation $\mathbb{E}^*(\cdot),$ $\mathbb{V}^*(\cdot),$ and $P^*(\cdot)$
 In the bootstrap literature one frequently finds the notation 
@@ -442,8 +445,6 @@ $$
 given the sample ${\cal S}_n.$
 :::
 
-
-#### Theory: The Bootstrap Distribution of $\bar X^*- \bar{X}$ {-}
 
 The bootstrap focuses on the **conditional** distribution of $X_1^*,\dots,X_n^*$ given the observed sample ${\cal S}_n=\{X_1,\dots,X_n\}$ and the resulting conditional distribution of 
 $$
@@ -543,15 +544,19 @@ $$
 
 **Now consider the bootstrap distribution of $\bar X^*$**
 
-Since we know the distribution of the i.i.d. sample 
+Since we know the distribution of the i.i.d. random variables 
 $$
-X_1|\mathcal{S}_n, X_2|\mathcal{S}_n,\dots, X_n|\mathcal{S}_n
+X_i^*|\mathcal{S}_n, \quad i=1,\dots,n,
 $$
-it is straight forward to derive the asymptotic distribution of $(\bar X^*-\bar{X})|\mathcal{S}_n$ using the central limit theorem. 
+it is straight forward to derive the asymptotic distribution of 
+$$
+(\bar X^*-\bar{X})|\mathcal{S}_n
+$$ 
+using the central limit theorem. 
 
 Firstly, let us derive the conditional mean and variance of 
 $$
-\bar X^* = \frac{1}{n}\sum_{i=1}^nX_i^*
+\bar X^* = \frac{1}{n}\sum_{i=1}^nX_i^*.
 $$
 
 * The conditional mean of $\bar X^*$ is
@@ -578,10 +583,12 @@ $$
 \end{align*}
 $$
 
-::: {.callout-tip}
-## We can apply the CLT to $\bar X^*|\mathcal{S}_n$
+Next, we can check whether we can apply the classical Lindeberg-Lévy CLT. 
 
-Note that, conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,  
+::: {.callout-tip}
+## Good news: We can apply the CLT to $\bar X^*|\mathcal{S}_n$
+
+Conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,  
 
 * the random variables $X_1^*,\dots,X_n^*$ are i.i.d.
 * with mean $\mathbb{E}^*(X_i^*)=\bar X$ 
@@ -591,7 +598,6 @@ Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.sta
 $$
 \left(\left.\frac{\sqrt{n}(\bar X^* - \bar X)}{\hat\sigma}\right|{\cal S}_n\right)
 $$
-
 :::
 
 The central limit theorem (Lindeberg-Lévy) implies that
@@ -610,7 +616,7 @@ $$
 
 
 
-On the other hand, we also have that 
+On the other hand, by the CLT, we also have that 
 $$
 \begin{align*}
 \left(\frac{\sqrt{n}(\bar X -\mu )}{ \sigma}\right) 
@@ -619,7 +625,7 @@ $$
 \end{align*}
 $$
 
-This means that the bootstrap is **consistent**. The bootstrap distribution of 
+This means that the bootstrap is **consistent**, since the bootstrap distribution of 
 $$
 \sqrt{n}(\bar X^* -\bar X)|{\cal S}_n
 $$ 
@@ -634,15 +640,13 @@ $$
 
 This bootstrap consistency result justifies using the bootstrap distribution 
 $$
-P(\bar{X}^*-\bar{X}\leq \delta|\mathcal{S}_n),
+P(\bar{X}^*-\bar{X}\leq \delta|\mathcal{S}_n) \approx
+\frac{1}{m}\sum_{k=1}^m 1_{( \bar X^*_k-\bar X\leq \delta)},  
 $$ 
-which we can approximate using the bootstrap realizations 
+which we can approximate (arbitrary precise as $m\to\infty$) using the bootstrap realizations 
 $$
-\bar{X}^*_1,\;\bar{X}^*_2, \dots, \bar{X}^*_m
+\bar{X}^*_1,\;\bar{X}^*_2, \dots, \bar{X}^*_m.
 $$
-with arbitrary precision as $m\to\infty.$ 
-<!-- and which we thus can use as a tool for doing inference about $\mu.$  -->
-
 
 ### Example: Inference about a population proportion
 
@@ -662,7 +666,11 @@ $$
 (\hat{p} - p)?
 $$
 
-**Recall Asymptotics:** 
+
+
+::: {.callout-note}
+
+## Recall Asymptotics:
 
 * $n\hat p=S\sim \mathcal{Binom}(n,p)$
 * As $n\rightarrow\infty,$ the central limit theorem implies that
@@ -670,6 +678,8 @@ $$
 \frac{\sqrt{n}(\hat p -p)}{\sqrt{p(1-p)}}\rightarrow_d \mathcal{N}(0,1)
 $$
 Thus for $n$ large, the distributions of $\sqrt{n}(\hat p -p)$ and $\hat p -p$ can be approximated by $\mathcal{N}(0,p(1-p))$ and $\mathcal{N}(0,p(1-p)/n)$, respectively.
+
+::: 
 
 **Bootstrap Approach:**
 
@@ -685,29 +695,46 @@ $$
 denote the number of $X_i^*$ which are equal to $1.$
 * Bootstrap estimate of $p$: 
 $$
-\hat p^*=\frac{1}{n}S^*.
+\hat p^*=\frac{1}{n}S^*
 $$
 
 
-The distribution of $\hat p^*$ depends on the observed sample ${\cal S}_n:=\{X_1,\dots,X_n\}$. A different sample ${\cal S}_n$ will lead to a different distribution. The bootstrap now tries to approximate the true distribution of $\hat p - p$ by the **conditional** distribution of $\hat p^*-\hat p$ given the observed sample ${\cal S}_n$. 
+<!-- The distribution of $\hat p^*$ depends on the observed sample ${\cal S}_n:=\{X_1,\dots,X_n\}$. That is, a different sample ${\cal S}_n$ will lead to a different distribution.  -->
 
+
+The bootstrap now tries to approximate the true distribution of $\hat p - p$ by the **conditional** distribution of $(\hat p^*-\hat p)|\mathcal{S}_n$ given the observed sample ${\cal S}_n,$ where the latter can be approximated arbitrarily well $(m\to\infty)$ using the bootstrap estimators 
+$$
+p^*_1,p^*_2,\dots,p^*_m;
+$$
+namely by
+$$
+P\left(\hat{p}^* - \hat{p} \leq \delta|\mathcal{S}_n\right)\approx \frac{1}{m}\sum_{k=1}^m 1_{(\hat{p}^*_k - \hat{p} \leq\delta )}. 
+$$
 
 The bootstrap is called **consistent** if asymptotically $(n\rightarrow \infty)$ the conditional distribution of $(\hat p^*-\hat p)|{\cal S}_n$  coincides with the true distribution of $\hat p - p.$ (Note: a proper scaling is required!)
 
+**The distribution of $X_i^*|\mathcal{S}_n$**
 
-We obtain
+The conditional random variable $X_i^*|\mathcal{S}_n$ is a binary random variable 
+$$
+X_i^*|\mathcal{S}_n\in\{0,1\}.
+$$
+Since $X_i^*$ is drawn independently and with replacement from $\mathcal{S}_n,$ we obtain for each $i=1,\dots,n,$
 $$
 \begin{align*}
 & P^*(X_i^*=1)=P(X_i^*=1|{\cal S}_n)=\hat p, \\[2ex]  
 & P^*(X_i^*=0)=P(X_i^*=0|{\cal S}_n)=1-\hat p.
 \end{align*}
 $$
-Thus, $X_i^*|{\cal S}_n$ is a Bernoulli distributed random variable 
+Thus, $X_i^*|{\cal S}_n$ is a Bernoulli distributed random variable with parameter $p=\hat{p}$
 $$
-X_i^*|{\cal S}_n \sim\mathcal{Bern}(p=\hat p), \quad i=1,\dots,n.
+X_i^*|{\cal S}_n \sim\mathcal{Bern}(p=\hat p), \quad i=1,\dots,n.\\[5ex]
 $$
 
-This implies that the  distribution of $n \hat{p}^*|{\cal S}_n$ is a Binomial distribution   
+
+**The distribution of $p^*|\mathcal{S}_n$**
+
+The above implies that $n \hat{p}^*|{\cal S}_n$ has a Binomial distribution with parameters $n$ and $p=\hat{p},$  
 $$
 \underbrace{n \hat{p}_i^*}_{=S^*}|{\cal S}_n \sim\mathcal{Binom}(n, p=\hat p), \quad i=1,\dots,n.
 $$
@@ -731,60 +758,37 @@ $$
 \end{align*}
 $$
 
-<!-- $$
-\begin{align*}
-\mathbb{E}^*(\hat p^*)
-&=\mathbb{E}(\hat p^*|\ {\cal S}_n)\\[2ex]
-&=\mathbb{E}\left( \left.\frac{1}{n}\sum_{i=1}^n 1_{(X_i^* = 1)}\right|\ {\cal S}_n \right)\\[2ex]
-&=\mathbb{E}\left( \left.1_{(X_i^* = 1)}\right|\ {\cal S}_n \right)\\[2ex]
-&=P\left( \left.1_{(X_i^* = 1)} = 1\right|\ {\cal S}_n \right)\cdot 1 + P\left( \left.1_{(X_i^* = 1)} = 0\right|\ {\cal S}_n \right)\cdot 0\\[2ex]
-&=P\left( \left.1_{(X_i^* = 1)} = 1\right|\ {\cal S}_n \right)\\[2ex]
-&=P\left( \left. X_i^* = 1 \right|\ {\cal S}_n \right)\\[2ex]
-&=\hat p, \\ 
-\end{align*}
+That is, by the CLT, the bootstrap distribution of 
 $$
-and 
-$$
-\begin{align*}
-\mathbb{V}^*(\hat p^*)
-&=\mathbb{E}[(\hat p^*- \mathbb{E}(\hat p^*|\ {\cal S}_n) )^2|\ {\cal S}_n]\\[2ex]
-&=\mathbb{E}[(\hat p^*-\hat p)^2|\ {\cal S}_n]\\[2ex]
-&=\frac{\hat p(1-\hat p)}{n}
-\end{align*}
-$$ -->
-
-<!-- The **bootstrap distribution** of $n\hat p^*=S^*$ given ${\cal S}_n$ is equal to the binomial distribution $B(n,\hat p).$  -->
-That is, for large $n$, the bootstrap distribution of 
-$$
-\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}
+\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}\right|\mathcal{S}_n
 $$ 
-is approximately standard normal. I.e., formally,
+is approximately standard normal; i.e., 
 $$
 \left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}\right|{\cal S}_n\right) \rightarrow_d \mathcal{N}(0,1),\quad n\to\infty.
 $$
 
-Moreover, $\hat p$ is a consistent estimator of $p$
+Moreover, $\hat p$ is a consistent estimator of $p,$ and thus 
 $$
 \hat p(1-\hat p)\rightarrow_p p(1-p),\quad n\rightarrow\infty.
 $$ 
-This implies that asymptotically $\hat p(1-\hat p)$ may be replaced by $p(1-p)$, and
+Therefore, $\hat p(1-\hat p)$ can be replaced asymptotically by $p(1-p)$, and
 $$
 \left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{ \sqrt{p(1-p)}}\right|{\cal S}_n\right)\rightarrow_d \mathcal{N}(0,1),\quad n\to\infty.
 $$
-More precisely, as $n\rightarrow\infty$
+So, we can conclude that, 
 $$
 \sup_\delta \left|
-  P\left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{p(1-p)}}\le \delta\right|{\cal S}_n\right)-\Phi(\delta)\right|\rightarrow_p 0,
+  P\left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{p(1-p)}}\le \delta\right|{\cal S}_n\right)-\Phi(\delta)\right|\rightarrow_p 0
 $$
-where $\Phi$ denotes the distribution function of the standard normal distribution. This means that the bootstrap is consistent, i.e. for large $n$
+as $n\rightarrow\infty,$ where $\Phi$ denotes the distribution function of the standard normal distribution. This means that the bootstrap is consistent, i.e. for large $n$
 $$
 \text{distribution}(\sqrt{n}(\hat p^* -\hat p)|{\cal S}_n)\approx 
 \text{distribution}(\sqrt{n}(\hat p -p))%\approx N(0,p(1-p))
 $$
-as well as
+and therefore also
 $$
 \text{distribution}(\hat p^* -\hat p|{\cal S}_n)\approx 
-\text{distribution}(\hat p -p)%\approx N(0,p(1-p)/n)
+\text{distribution}(\hat p -p).%\approx N(0,p(1-p)/n)
 $$
 
 
@@ -795,7 +799,7 @@ $$
 ### Confidence intervals
 
 
-#### The traditional (non-bootstrap) approach {-}
+#### Recall: The traditional (non-bootstrap) approach {-}
 
 Traditional, non-bootstrap approaches for constructing confidence intervals and statistical hypothesis tests are usually based on asymptotic normal approximations. For example, if 
 
@@ -837,7 +841,9 @@ $$
 &\overset{d}{\approx} \sqrt{n}(\hat{\theta}-\theta)
 \end{align*}
 $$
-if $n$ is sufficiently large. This is not always the case and in cases of doubt one needs to show this property. 
+if $n$ is sufficiently large. 
+
+Caution: This is not always the case and in cases of doubt one needs to show this property. 
 :::
 
 
@@ -862,42 +868,42 @@ for $p=\frac{\alpha}{2}$ or $p=1-\frac{\alpha}{2},$ where $\hat\theta_{(i)}^*$ d
 $$
 \hat\theta_{(1)}^* \leq \hat\theta_{(2)}^*\leq \dots\leq \hat\theta_{(m)}^*,
 $$
-and $\lfloor mp\rfloor$ denotes the greatest whole number less than or equal to $mp.$
+and $\lfloor mp\rfloor$ denotes the greatest whole number less than or equal to $mp$ (e.g. $\lfloor 4.9\rfloor = 4$).
 
 Then 
 $$
 \begin{align*}
 &P^*\left(\hat t_\frac{\alpha}{2} \leq \hat{\theta}^* \leq \hat t_{1-\frac{\alpha}{2}}\right)
-\approx 1-\alpha\\
+\approx 1-\alpha\\[2ex]
 \Rightarrow & P^*\left(\hat t_\frac{\alpha}{2}-\hat{\theta}\leq\hat{\theta}^*-\hat{\theta} \leq \hat t_{1-\frac{\alpha}{2}}-\hat{\theta}\right)
-\approx 1-\alpha\\
+\approx 1-\alpha\\[2ex]
 \Rightarrow & P^*\left(
 \sqrt{n}(\hat t_\frac{\alpha}{2}-\hat{\theta})\leq{\color{red}\sqrt{n}(\hat{\theta}^*-\hat{\theta})}\leq \sqrt{n}(\hat t_{1-\frac{\alpha}{2}}-\hat{\theta})\right)
-\approx 1-\alpha
+\approx 1-\alpha,
 \end{align*}
 $$
-Here, $P^*$  denotes probabilities with respect to the   conditional distribution of  $\hat{\theta}^*$ given ${\cal S}_n:=\{X_1,\dots,X_n\}$.
+where the approximation becomes arbitrarily precise for $m\to\infty.$ Here, $P^*$  denotes probabilities with respect to the   conditional distribution of  $\hat{\theta}^*$ given ${\cal S}_n:=\{X_1,\dots,X_n\}$.
 
 
 Due to the assumed consistency of the bootstrap, we have that for large $n$
 $$
 {\color{red}\sqrt{n}(\hat{\theta}^*-\hat{\theta})}|{\cal S}_n\overset{d}{\approx} {\color{blue}\sqrt{n}(\hat{\theta}-\theta)}.
 $$ 
-Therefore, for large $n$
+Therefore, for large $n,$
 $$
 \begin{align*}
 &P\left(
-\sqrt{n}(\hat t_\frac{\alpha}{2}-\hat{\theta})\leq{\color{blue}\sqrt{n}(\hat{\theta}-\theta)}\leq \sqrt{n}(\hat t_{1-\frac{\alpha}{2}}-\hat{\theta})\right)\approx 1-\alpha\\
+\sqrt{n}(\hat t_\frac{\alpha}{2}-\hat{\theta})\leq{\color{blue}\sqrt{n}(\hat{\theta}-\theta)}\leq \sqrt{n}(\hat t_{1-\frac{\alpha}{2}}-\hat{\theta})\right)\approx 1-\alpha\\[2ex]
 \Rightarrow &P\left(\hat t_\frac{\alpha}{2}-\hat{\theta}\leq\hat{\theta}-\theta \leq \hat t_{1-\frac{\alpha}{2}}-\hat{\theta}\right)
-\approx 1-\alpha\\
+\approx 1-\alpha\\[2ex]
 \Rightarrow &P\left(\hat{\theta}-(\hat t_{1-\frac{\alpha}{2}}-\hat{\theta})\le \theta\le \hat{\theta}-
- (\hat t_\frac{\alpha}{2}-\hat{\theta})\right)\approx 1-\alpha\\
+ (\hat t_\frac{\alpha}{2}-\hat{\theta})\right)\approx 1-\alpha\\[2ex]
 \Rightarrow &P\left(2\hat{\theta}-\hat t_{1-\frac{\alpha}{2}}\le \theta\le 2\hat{\theta}-
  \hat t_\frac{\alpha}{2}\right)\approx 1-\alpha.
 \end{align*}
 $$
 
-Thus, the approximate $(1-\alpha)\times 100\%$ (symmetric) bootstrap confidence interval is given by 
+Thus, the approximate $(1-\alpha)\times 100\%$ (symmetric) **bootstrap confidence interval** is given by 
 $$
 \left[2\hat{\theta}-\hat t_{1-\frac{\alpha}{2}}, 2\hat{\theta}-\hat t_\frac{\alpha}{2}\right],
 $${#eq-NPBootCI}
@@ -908,32 +914,33 @@ where $\hat t_\frac{\alpha}{2}$ and $\hat t_{1-\frac{\alpha}{2}}$ are the  $\fra
 
 **Setup:**
 
-* **Data:** Let $X_1,\dots,X_n$ denote an i.i.d. random sample with mean $\mu$ and variance $\sigma^2$.
+* **Data:** Let $X_1,\dots,X_n$ denote an i.i.d. random sample from $X\sim F$ with mean $\mu$ and variance $\sigma^2.$
   <!-- * In the following $F$ will denote the corresponding distribution function; i.e., $X_i\sim F$ for all $i=1,\dots,n.$ -->
 * **Estimator:** $\bar X=\frac{1}{n} \sum_{i=1}^n X_i$ is an unbiased estimator of $\mu$
 * **Inference Problem:** Construct a confidence interval for $\mu.$
 
-#### The traditional (non-bootstrap) approach {-}
+#### Recall: The traditional (non-bootstrap) approach {-}
 
 Traditional, non-bootstrap approach for constructing a $(1-\alpha)\times 100\%$ confidence interval:
 
 * By the CLT: $\bar X\overset{a}{\sim} \mathcal{N}(\mu,\frac{\sigma^2}{n})$ for large $n$
-* Estimation of $\sigma^2$: $S^2=\frac{1}{n-1}\sum_{i=1}^n (X_i-\bar X)^2$
-* This implies: $\sqrt{n}((\bar X -\mu)/S)\overset{a}{\sim} t_{n-1}$, and hence
+* Estimation of $\sigma^2$: $s^2=\frac{1}{n-1}\sum_{i=1}^n (X_i-\bar X)^2$
+* This implies: $\sqrt{n}((\bar X -\mu)/s)\overset{a}{\sim} t_{n-1}$, and hence
 $$
 \begin{align*}
-&P\left(-t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}\le \bar X -\mu\le t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}\right)\approx 1-\alpha\\
+&P\left(-t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}}\le \bar X -\mu\le t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}}\right)\approx 1-\alpha\\
 \Rightarrow 
-&P\left(\bar X-t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}\le \mu\le 
-        \bar X+t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}
+&P\left(\bar X-t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}}\le \mu\le 
+        \bar X+t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}}
   \right)\approx 1-\alpha
 \end{align*}
 $$
 * $(1-\alpha)\times 100\%$ confidence interval: 
 $$
-\left[\bar X-t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}},
-      \bar X+t_{n-1,1-\frac{\alpha}{2}}\frac{S}{\sqrt{n}}\right]
+\left[\bar X-t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}},
+      \bar X+t_{n-1,1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}}\right],
 $$
+where $t_{n-1,1-\frac{\alpha}{2}}$ denotes the $1-\frac{\alpha}{2}$-quantile of the $t$-distribution with $n-1$ degrees of freedom. 
 
 
 ::: {.callout-note}
@@ -943,7 +950,7 @@ This traditional construction relies on the assumption that
 $$
 \bar X \overset{a}{\sim}\mathcal{N}\left(\mu,\frac{\sigma^2}{n}\right).
 $$ 
-$\bar X$ is exactly normal distributed (also for small $n$) if the random sample $X_1,\dots,X_n$ is i.i.d. normally distributed. If the underlying distribution is **not normal**, then this condition is *approximately* fulfilled if the sample size $n$ is sufficiently large (central limit theorem). In this case the constructed confidence interval is an *approximate* $(1-\alpha)\times 100\%$ confidence interval. 
+$\bar X$ is exactly normal distributed (also for small $n$) if the random sample $X_1,\dots,X_n$ is i.i.d. *normally* distributed. If the underlying distribution is **not normal**, then this normal distribution holds *approximately* if the sample size $n$ is sufficiently large (central limit theorem). In this case the constructed confidence interval is an *approximate* $(1-\alpha)\times 100\%$ confidence interval. 
 :::
 
 
@@ -954,7 +961,7 @@ that the bootstrap is consistent in this situation.
 
 **Construction of the nonparametric (standard) bootstrap confidence interval:**
 
-* Draw $m$ bootstrap samples (e.g. $m=10000$) and calculate the corresponding estimates $\bar X^*_1,\bar X^*_2,\dots,\bar X^*_m$.
+* Draw $m$ bootstrap samples (e.g. $m=10,000$) and calculate the corresponding estimates $\bar X^*_1,\bar X^*_2,\dots,\bar X^*_m$.
 * Compute the empirical quantiles $\hat t_{\frac{\alpha}{2}}$ and $\hat t_{1-\frac{\alpha}{2}}$ from $\bar X^*_1,\bar X^*_2,\dots,\bar X^*_m$ 
 * Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) nonparametric bootstrap confidence interval as in @eq-NPBootCI:
 $$
@@ -1009,13 +1016,13 @@ Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$
  
 If $X$ is normally distributed, we obtain
 $$
-T_n:=\frac{\sqrt{n}(\bar X-\mu)}{S}\sim t_{n-1}
+T_n:=\frac{\sqrt{n}(\bar X-\mu)}{s}\sim t_{n-1}
 $$
-with $S^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X)^2$, where $t_{n-1}$ denotes the $t$-distribution with $n-1$ degrees of freedom. We can conclude that $T_n$ is pivotal.
+with $s^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X)^2$, where $t_{n-1}$ denotes the $t$-distribution with $n-1$ degrees of freedom. We can conclude that $T_n$ is pivotal.
 
 If $X$ is *not* normally distributed, the central limit theorem implies that
 $$
-T_n:=\frac{\sqrt{n}(\bar X-\mu)}{S}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+T_n:=\frac{\sqrt{n}(\bar X-\mu)}{s}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 $$
 In this case $T_n$ is an asymptotically pivotal statistics.
 
@@ -1030,15 +1037,15 @@ by the approximable (via bootstrap resampling) conditional distribution of
 $$
 T_n^*=\sqrt{n}\frac{(\hat{\theta}^*-\hat{\theta})}{\hat v_n^*},
 $$ 
-given $\mathcal{S}_n=\{X_1,\dots,X_n\},$ where the variance estimate
+given $\mathcal{S}_n=\{X_1,\dots,X_n\},$ where the variance estimate $v_n^*$ is computed from the bootstrap sample $X_1^*,\dots,X_n^*,$ i.e.
 $$
-\hat v_n^*=v_n(X_1^*,\dots,X_n^*)
+\hat v_n^*=v_n(X_1^*,\dots,X_n^*).
 $$
-is computed from the bootstrap sample $X_1^*,\dots,X_n^*.$ 
+ 
 
 
 ::: {.callout-tip}
-## Bootstrap-$t$ consistency follows if the standard nonparametric bootstrap is consistent 
+## Good news: Bootstrap-$t$ consistency follows if the standard nonparametric bootstrap is consistent 
 
 If the standard nonparametric bootstrap is consistent, i.e. if the conditional distribution of $\sqrt{n}(\hat{\theta}^*-\hat{\theta})|\mathcal{S}_n$, given $\mathcal{S}_n$, yields a consistent estimate of $\mathcal{N}(0,v^2)$, then also the bootstrap-$t$ method is consistent. That is, then the conditional distribution of $T_n^*|\mathcal{S}_n$, given $\mathcal{S}_n$, provides a consistent estimate of the asymptotic distribution of $T_n\rightarrow_d \mathcal{N}(0,1)$ such that
 $$
@@ -1051,25 +1058,25 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 
 ### Bootstrap-t confidence interval 
 
-Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be a i.i.d. random sample and let the distribution $X_i\sim F$, $i=1,\dots,n,$ depend on the unknown parameter (vector) $\theta$. Assume that bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. Furthermore, suppose that a **consistent** estimator 
+Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter (vector) $\theta.$ Assume that bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. Furthermore, suppose that a **consistent** estimator 
 $$
 \hat v\equiv \hat v(X_1,\dots,X_n)
 $$ 
-of the asymptotic standard deviation $v$ is available.
+of the asymptotic standard error,  $v,$ of $\hat{\theta}$ is available.
 
 
 **Derivation of the bootstrap-$t$ confidence interval:**
 
-* Based on an i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\},$ calculate the bootstrap estimates $\hat{\theta}^*$ and $v^*$ and the bootstrap statistic $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.$ Repeating this yields $m$ many bootstrap statistics 
+* Based on an i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\},$ calculate the bootstrap estimates $\hat{\theta}^*$ **and** $v^*$ and the bootstrap statistic $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.$ Repeating this yields $m$ many bootstrap statistics 
 $$
 T_1^*,T_2^*, \dots, T_m^*
 $$
-which allow us to approximate the bootstrap distribution of 
-of $T^*\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.$ arbitrarily precise as $m\to\infty.$ 
+which allow us to approximate the bootstrap distribution 
+of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*},$ conditionally on $\mathcal{S}_n,$ arbitrarily precise as $m\to\infty.$ 
 
-* Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ of the bootstrap distribution of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}$ using the empirical quantiles based on $T_1^*,T_2^*, \dots, T_m^*.$ (see @eq-empiricalQuantile)
+* Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ of the bootstrap distribution of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}$ using the empirical quantiles based on $T_1^*,T_2^*, \dots, T_m^*$ (see @eq-empiricalQuantile).
 
-This implies 
+This implies, for large $m,$
 $$
 \begin{align*}
 &P^*\left(\hat \tau_\frac{\alpha}{2}\leq {\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
@@ -1078,10 +1085,10 @@ $$
 $$
 Due to the assumed consistency of the bootstrap, we have that for large $n$ that 
 $$
-{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}}|\mathcal{S}_n\overset{d}{\approx}
-{\color{blue}\frac{\hat{\theta}-\theta}{\hat v}}
+\left.{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}}\right|\mathcal{S}_n\overset{d}{\approx}
+{\color{blue}\frac{\hat{\theta}-\theta}{\hat v}}.
 $$
-Therefore, for lage $n$ 
+Therefore, for lage $n,$ 
 $$
 \begin{align*}
 & P\left(\hat \tau_\frac{\alpha}{2}\leq {\color{blue}\frac{\hat{\theta}-\theta}{\hat v}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
@@ -1119,7 +1126,7 @@ $$
 
 ### Accuracy of the Bootstrap-$t$ method 
 
-Usually, the bootstrap-$t$ provides a **gain in accuracy** over the standard nonparametric bootstrap. The reason is that the approximation of the law of $T_n$ by the bootstrap law of $T_n^*=\sqrt{n}(\hat{\theta}^*-\hat{\theta})/v^*_n$ is more direct and hence more accurate (also $v^*n$ depends on the bootstrap sample) than the approximation of the law of $\sqrt{n}(\hat{\theta}-\theta)$ by the bootstrap law of $\sqrt{n}(\hat{\theta}^*-\hat{\theta}).$
+Usually, the bootstrap-$t$ provides a **gain in accuracy** over the standard nonparametric bootstrap. The reason is that the approximation of the law of $T_n$ by the bootstrap law of $T_n^*=\sqrt{n}(\hat{\theta}^*-\hat{\theta})/v^*_n$ is more direct and hence more accurate ($v^*_n$ depends on the bootstrap sample --- not the original sample) than the approximation of the law of $\sqrt{n}(\hat{\theta}-\theta)$ by the bootstrap law of $\sqrt{n}(\hat{\theta}^*-\hat{\theta}).$
 
 
 The use of pivotal statistics and the corresponding construction of bootstrap-$t$ confidence intervals is motivated by theoretical results which show that under mild conditions the bootstrap-$t$ methods are  **second order accurate**.
