@@ -1,6 +1,12 @@
 # The Bootstrap 
 
 
+<!-- TO-DO: 
+1. Rework this chapter using the overview article of Horowitz
+BOOTSTRAP METHODS IN ECONOMETRICS 
+2. Remove the fraction estimator parts 
+-->
+
 The bootstrap is an important tool of modern statistical analysis. It establishes a general framework for simulation-based statistical inference. In simple situations the uncertainty of an estimate may be gauged by analytical calculations (asymptotic statistics) leading, for example, to the construction of (approximate) confidence intervals. The bootstrap replaces complicated and often inaccurate approximations to biases, variances and other measures of uncertainty by computer simulations.
 
 
@@ -108,7 +114,7 @@ We obtain
 
 ::: {.callout-note icon=false} 
 ## 
-::: {#thm-Clivenk-Cantelli}
+::: {#thm-Clivenko-Cantelli}
 
 # Theorem of Glivenko-Cantelli
 $$
@@ -129,7 +135,7 @@ P(X\in [a,b])=F(b)-F(a).
 $$
 
 
-**Empirical distribution $F_n$:** For large $n,$ the empirical distribution $F_n$ of the sample values is "close" to the unknown distribution $F$ (Glivenko-Cantelli @thm-Clivenk-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$   
+**Empirical distribution $F_n$:** For large $n,$ the empirical distribution $F_n$ of the sample values is "close" to the unknown distribution $F$ (Glivenko-Cantelli @thm-Clivenko-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$   
 $$
   \begin{align*}
   \underbrace{\frac{1}{n}\sum_{i=1}^n1_{(X_i\in[a,b])}}_{=F_n(b)-F_n(a)}&\to_p \underbrace{P(X\in [a,b])}_{=F(b)-F(a)}
@@ -137,7 +143,7 @@ $$
 $$
 
 
-**The idea of the bootstrap** consists in mimicking the data generating process: Instead of random sampling from the true unknown population distribution $F,$ the bootstrap uses random sampling from the known $F_n.$ This is justified by the insight that the empirical distribution $F_n$ of the observed data is "similar" to the true distribution $F$ (Glivenko-Cantelli @thm-Clivenk-Cantelli).
+**The idea of the bootstrap** consists in mimicking the data generating process: Instead of random sampling from the true unknown population distribution $F,$ the bootstrap uses random sampling from the known $F_n.$ This is justified by the insight that the empirical distribution $F_n$ of the observed data is "similar" to the true distribution $F$ (Glivenko-Cantelli @thm-Clivenko-Cantelli).
 
 
 ::: {.callout-tip}
@@ -544,7 +550,7 @@ $$
 
 **Now consider the bootstrap distribution of $\bar X^*$**
 
-Since we know the distribution of the i.i.d. random variables 
+<!-- We know the distribution of the i.i.d. random variables 
 $$
 X_i^*|\mathcal{S}_n, \quad i=1,\dots,n,
 $$
@@ -552,7 +558,7 @@ it is straight forward to derive the asymptotic distribution of
 $$
 (\bar X^*-\bar{X})|\mathcal{S}_n
 $$ 
-using the central limit theorem. 
+using the central limit theorem.  -->
 
 Firstly, let us derive the conditional mean and variance of 
 $$
@@ -584,7 +590,7 @@ $$
 $$
 where $\hat{\sigma}=\sqrt{\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}\right)^2}.$
 
-Next, we can check whether we can apply the classical Lindeberg-Lévy CLT. 
+<!-- Next, we can check whether we can apply the classical Lindeberg-Lévy CLT. 
 
 ::: {.callout-tip}
 
@@ -600,9 +606,9 @@ Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.sta
 $$
 \left(\left.\frac{\sqrt{n}(\bar X^* - \bar X)}{\hat\sigma}\right|{\cal S}_n\right)
 $$
-:::
+::: -->
 
-The central limit theorem (Lindeberg-Lévy) implies that
+An appropriate central limit theorem argument implies that
 $$
 \left(\left.\frac{\sqrt{n}(\bar X^* -\bar X)}{\hat\sigma}\right|{\cal S}_n\right)\rightarrow_{d} \mathcal{N}(0,1),\quad n\to\infty.
 $$
@@ -760,11 +766,7 @@ $$
 \end{align*}
 $$
 
-That is, by the CLT, the bootstrap distribution of 
-$$
-\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}\right|\mathcal{S}_n
-$$ 
-is approximately standard normal; i.e., 
+An appropriate central limit theorem argument implies that 
 $$
 \left(\left.\frac{\sqrt{n}(\hat p^* -\hat p)}{\sqrt{\hat p(1-\hat p)}}\right|{\cal S}_n\right) \rightarrow_d \mathcal{N}(0,1),\quad n\to\infty.
 $$
@@ -1148,13 +1150,19 @@ $${#eq-Boot_tCI}
 **Algorithm:**
 
 * Draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
-$\bar X^*$ as well as $s^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2}$.
-* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$  of the bootstrap distribution
-of  $\frac{\bar X^*-\bar X}{s^*}$
+$\bar X^*$ as well as $s^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2}$ to generate $m$ (e.g. $m=100,000$) bootstrap realizations
+$$
+\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}
+$$ 
+* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ from $\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}$ using @eq-empiricalQuantile.
 * This yields the $1-\alpha$ confidence interval (using @eq-Boot_tCI):
 $$
 \left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}s,
-      \bar X-\hat \tau_{\frac{\alpha}{2}}s\right]
+      \bar X-\hat \tau_{\frac{\alpha}{2}}s\right],
+$$
+where $s$ is computed from the original sample, i.e., 
+$$
+s=\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2}. 
 $$
 
 
@@ -1249,7 +1257,25 @@ are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon
 :::
 :::
 
-We additionally assume that there exists a positive definite (thus invertible) matrix $M$ 
+
+
+
+The least squares estimator $\hat\beta\in\mathbb{R}^p$ is given by
+$$
+\begin{align*}
+\hat\beta 
+&=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i\\
+&=\beta+\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\varepsilon_i.
+\end{align*}
+$$
+
+
+
+
+### Bootstrapping Pairs: Bootstrap under Random Design
+
+
+Under the random design, we additionally assume that there exists a positive definite (thus invertible) matrix $M$ 
 $$
 M=\mathbb{E}(X_iX_i^T)
 $$
@@ -1269,26 +1295,15 @@ Q
 $$
 :::
 
-
-
-The least squares estimator $\hat\beta\in\mathbb{R}^p$ is given by
-$$
-\begin{align*}
-\hat\beta 
-&=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i\\
-&=\beta+\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\varepsilon_i.
-\end{align*}
-$$
-
 The law of large numbers, the continuous mapping theorem, Slutsky's theorem, and the central limit theorem (see your econometrics lecture) implies that
 $$
 \sqrt{n}(\hat\beta-\beta)\rightarrow_d\mathcal{N}(0,M^{-1}QM^{-1}),\quad n\to\infty.
 $$
 
+Bootstrapping regression estimates $\hat\beta$ is straightforward under a **random design** (@def-RandomFixedDesign). 
 
-### Bootstrapping Pairs: Bootstrap under Random Design
 
-Bootstrapping regression estimates $\hat\beta$ is straightforward under a **random design** (@def-RandomFixedDesign). Assuming a random design, $(Y_i,X_i)$ are i.i.d. and one may apply the nonparametric bootstrap in order to approximate the distribution of the estimation errors
+Under a random design, $(Y_i,X_i)$ are i.i.d. and one may apply the nonparametric bootstrap in order to approximate the distribution of the estimation errors
 $$
 \hat\beta-\beta.
 $$ 
@@ -1313,13 +1328,20 @@ $$
 \text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta) |{\cal S}_n)\approx\mathcal{N}(0,M^{-1}QM^{-1})
 $$
 
-This allows to construct basic bootstrap confidence intervals for the regression coefficients $\beta_j$, $j=1,\dots,p$:
+#### Confidence Intervals {-}
+
+This allows to construct basic bootstrap confidence intervals for the $j$th regression coefficient $\beta_j$, $j=1,\dots,p$:
+
+* Generate $m$ (e.g. $m=100,000$) bootstrap realizations
+$$
+\hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*
+$$
 
 * Determine the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles 
 $\hat t_{\frac{\alpha}{2},j}$ 
 and 
 $\hat t_{1-\frac{\alpha}{2},j}$  
-of the conditional distribution of $\hat\beta_j^*$ given ${\cal S}_n.$
+from the bootstrap realizations $\hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*$ using @eq-empiricalQuantile.
 
 * Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) confidence interval as in @eq-NPBootCI:
 $$
@@ -1438,11 +1460,11 @@ $$
 $$
 and
 $$
-\mathbb{V}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2
+\mathbb{V}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2.
 $$
-Thus, by the central limit ([Lindeberg-Lévy](https://www.statlect.com/asymptotic-theory/central-limit-theorem)) one obtains that 
+An appropriate central limit theorem argument implies that 
 $$
-\sqrt{n}(\hat\beta^*-\hat\beta)\to_d\mathcal{N}\left(0,\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 (\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\right),
+\left.\sqrt{n}(\hat\beta^*-\hat\beta)\right|\mathcal{S}_n\to_d\mathcal{N}\left(0,\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right),
 $$
 for $n\to\infty.$
 
@@ -1466,7 +1488,7 @@ Basic **nonparametric bootstrap** confidence intervals for the regression coeffi
 
 Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat t_{\frac{\alpha}{2},j}$ and $\hat t_{1-\frac{\alpha}{2},j}$ of the conditional distribution of  $\hat\beta_j^*|\mathcal{S}_n$ using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles based on the $m$ bootstrap estimates 
 $$
-\hat\beta_1^*,\hat\beta_2^*, \dots, \hat\beta_m^*.
+\hat\beta_{j1}^*,\hat\beta_{j2}^*, \dots, \hat\beta_{jm}^*.
 $$
 <!-- This approximation step is with arbitrary accuracy as $m\to\infty.$ -->
 
@@ -1489,6 +1511,10 @@ Then
 $$
 \frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}
 $$ 
+with 
+$$
+\hat{\sigma}=\sqrt{\frac{1}{n-p}\sum_{i=1}^n\hat{\varepsilon}_i^2}
+$$
 is an asymptotically pivotal statistic, since
 $$
 \frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
@@ -1504,7 +1530,7 @@ and approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat 
 $$
 T^*=\frac{\hat\beta_j^*-\hat\beta_j}{\hat\sigma^* \sqrt{\gamma_{jj}}}
 $$
-using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles based on the $m$ bootstrap realizations
+using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles  (see @eq-empiricalQuantile) based on the $m$ bootstrap realizations
 $$
 T^*_1,T_2^*,\dots, T_m^*.
 $$
@@ -1514,8 +1540,9 @@ $$
 \left[
   \hat\beta_j-\hat \tau_{1-\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}},\; 
   \hat\beta_j-\hat \tau_{\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}}
-\right]
+\right],
 $$
+where $\hat{\sigma}=\sqrt{\frac{1}{n-p}\sum_{i=1}^n\hat{\varepsilon}_i^2}.$
 
 ::: {.callout-tip}
 There are many more bootstrap procedures. In case of heteroscedastic errors, for instance, there's also the "Wild Bootstrap." 
@@ -1537,23 +1564,55 @@ $$
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim} F.
 $$
 
-(a) Derive the exact and the asymptotic distribution of the empirical distribution function $F_n(x)$ for a given $x\in\mathbb{R}.$  
+(a) Derive the exact distribution of $nF_n(x)$ and the asymptotic distribution of the empirical distribution function $F_n(x)$ for a given $x\in\mathbb{R}.$  
 
 (b) Show that $F_n(x)$ is a point-wise (weakly) consistent estimator of $F(x)$ for each given $x\in\mathbb{R}$.
 
-(c) Point-wise convergence of a function $g_n(x),$ i.e.,
+
+#### Exercise 2. {-} 
+
+::: {.callout-tip}
+Exercise 1 shows that the empirical distribution function is a **point-wise** consistent estimator for each given $x\in\mathbb{R}.$ However, point-wise consistency generally does not imply **uniformly** consistency for all $x\in\mathbb{R},$ and therefore the Clivenko-Cantelli (@thm-Clivenko-Cantelli) is so famous.  
+
+This exercise is intended to show that that point-wise convergence does generally not imply uniform convergence.
+:::  
+
+Point-wise convergence of a function $g_n(x),$ i.e.,
 $$
 |g_n(x) - g(x)|\to 0
 $$ 
-for each $x\in\mathbb{R}$ as $n\to\infty$ does not imply uniform convergence, i.e., 
+for each $x\in\mathcal{X}\subset\mathbb{R}$ as $n\to\infty$ generally does not imply uniform convergence, i.e., 
 $$
-\sup_{x\in\mathbb{R}}|g_n(x) - g(x)|\to 0
+\sup_{x\in\mathcal{X}}|g_n(x) - g(x)|\to 0
 $$ 
-as $n\to\infty.$ Show this by prividing an example for $g_n$ which converges point-wise, but not uniformly. 
+as $n\to\infty.$ 
 
-<!-- http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf -->
+Show this by providing an example for $g_n$ which converges point-wise, but not uniformly for $x\in\mathcal{X}$. 
 
+<!-- 
+http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf 
+-->
+
+
+#### Exercise 3. {-} 
+
+Consider the following setup:
+
+*  iid data $X_1,\dots,X_n$ with $X_i\sim F$
+*  $\mathbb{E}(X_i)=\mu$
+*  $\mathbb{V}(X_i)=\sigma^2<\infty$
+*  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
+
+(a) Derive the classic confidence interval for $\mu$ using the asymptotic normality of the estimator $\bar{X}.$ Use a Monte Carlo simulation to approximate the coverage probability of this confidence interval for a sample size of $n=30$ and, 
+
+* first, for $F$ being the normal distribution with $\mu=1$ and standard deviation $\sigma=2$, and 
+* second, for $F$ being the $\chi^2_1$-distribution with $1$ degree of freedom. 
+
+(b) Reconsider the case of $n=30$ and $F$ being the $\chi^2_1$-distribution with $1$ degree of freedom. Use a Monte Carlo simulation to approximate the coverage probability of the standard nonparametric bootstrap confidence interval.  
+
+(c) Reconsider the case of $n=30$ and $F$ being the $\chi^2_1$-distribution with $1$ degree of freedom. Use a Monte Carlo simulation to approximate the coverage probability of the bootstrap-$t$ confidence interval.
 
 <!-- {{< include Ch3_Solutions.qmd >}} -->
+
 
 ## References {-}
