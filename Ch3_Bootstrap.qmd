@@ -587,6 +587,7 @@ where $\hat{\sigma}=\sqrt{\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}\right)^2}.$
 Next, we can check whether we can apply the classical Lindeberg-Lévy CLT. 
 
 ::: {.callout-tip}
+
 ## Good news: We can apply the CLT to $\bar X^*|\mathcal{S}_n$
 
 Conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,  
@@ -649,7 +650,7 @@ $$
 \bar{X}^*_1,\;\bar{X}^*_2, \dots, \bar{X}^*_m.
 $$
 
-### Example: Inference about a population proportion
+### Example: Inference about a Population Proportion
 
 **Setup:** 
 
@@ -797,10 +798,12 @@ $$
 
 
 
-### Confidence intervals
+### Confidence Intervals
 
 
-#### Recall: The traditional (non-bootstrap) approach {-}
+::: {.callout-note}
+
+## Recall: The traditional (non-bootstrap) approach {-}
 
 Traditional, non-bootstrap approaches for constructing confidence intervals and statistical hypothesis tests are usually based on asymptotic normal approximations. For example, if 
 
@@ -816,11 +819,12 @@ $$
 $$
 
 In some cases it is, however, very difficult to obtain approximations $\hat v$ of $v$. Statistical inference is then usually based on the bootstrap.
+::: 
 
 In contemporary statistical analysis the bootstrap is frequently used even for standard problems, where estimates $\hat v$ of $v$ are easily constructed. The reason is that in many situations it can be shown that bootstrap confidence intervals or tests are indeed **more precise** than those determined analytically based on asymptotic formulas. (This particularly applies to the bootstrap t-method discussed in the next section.)
 
 
-#### The bootstrap approach {-}
+#### The Bootstrap Approach {-}
 
 <!-- General approach: Basic bootstrap $(1-\alpha)\times 100\%$ confidence interval -->
 
@@ -830,6 +834,7 @@ In contemporary statistical analysis the bootstrap is frequently used even for s
 * **Problem:** Construct a confidence interval for $\theta.$
 
 ::: {.callout-warning}
+
 ## Assumption: Bootstrap is consistent
 
 In the following, we will assume that the bootstrap is consistent; i.e. that
@@ -911,7 +916,7 @@ $${#eq-NPBootCI}
 where $\hat t_\frac{\alpha}{2}$ and $\hat t_{1-\frac{\alpha}{2}}$ are the  $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles of the bootstrap distribution approximated by the empirical quantiles of the $m$ bootstrap realizations $\hat{\theta}^*_1, \hat{\theta}^*_2,\dots, \hat{\theta}^*_m.$
 
 
-#### Example: Confidence intervals for the population mean {-}
+#### Example: Confidence Intervals for the Population Mean {-}
 
 **Setup:**
 
@@ -920,7 +925,10 @@ where $\hat t_\frac{\alpha}{2}$ and $\hat t_{1-\frac{\alpha}{2}}$ are the  $\fra
 * **Estimator:** $\bar X=\frac{1}{n} \sum_{i=1}^n X_i$ is an unbiased estimator of $\mu$
 * **Inference Problem:** Construct a confidence interval for $\mu.$
 
-#### Recall: The traditional (non-bootstrap) approach {-}
+
+::: {.callout-note}
+
+## Recall: The traditional (non-bootstrap) approach {-}
 
 Traditional, non-bootstrap approach for constructing a $(1-\alpha)\times 100\%$ confidence interval:
 
@@ -944,18 +952,20 @@ $$
 where $t_{n-1,1-\frac{\alpha}{2}}$ denotes the $1-\frac{\alpha}{2}$-quantile of the $t$-distribution with $n-1$ degrees of freedom. 
 
 
-::: {.callout-note}
+::: {.callout-tip}
 
 # Remark
-This traditional construction relies on the assumption that 
+This traditional construction relies on the assumption that $\bar X$ is exactly normal distributed, also for small $n,$ which requires that the random sample $X_1,\dots,X_n$ is i.i.d. *normally* distributed. 
+
+If the underlying distribution is **not normal**, then this normal distribution holds *approximately* if the sample size $n$ is sufficiently large (central limit theorem), i.e.,
 $$
 \bar X \overset{a}{\sim}\mathcal{N}\left(\mu,\frac{\sigma^2}{n}\right).
 $$ 
-$\bar X$ is exactly normal distributed (also for small $n$) if the random sample $X_1,\dots,X_n$ is i.i.d. *normally* distributed. If the underlying distribution is **not normal**, then this normal distribution holds *approximately* if the sample size $n$ is sufficiently large (central limit theorem). In this case the constructed confidence interval is an *approximate* $(1-\alpha)\times 100\%$ confidence interval. 
+In this case the constructed confidence interval is an *approximate* $(1-\alpha)\times 100\%$ confidence interval. 
+:::
 :::
 
-
-#### The nonparametric (standard) bootstrap approach {-}
+#### The Nonparametric (Standard) Bootstrap Approach {-}
 
 The bootstrap offers an alternative method for constructing approximate $(1-\alpha)\times 100\%$ confidence intervals. We already know
 that the bootstrap is consistent in this situation.
@@ -973,13 +983,15 @@ $$
 
 
 
-## Pivot statistics and the bootstrap-$t$ method
+## Pivot Statistics and the Bootstrap-$t$ Method
 
 
-In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-$t$ method (one also speaks of "studentized bootstrap"). The construction relies on so-called pivotal statistics.
+In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-$t$ method (one also speaks of the "studentized bootstrap"). The construction relies on so-called pivotal statistics.
 
 Let $X_1,\dots,X_n$ be an i.i.d. random sample and assume that the distribution of $X$ depends on an unknown parameter (or parameter vector) $\theta$.
 
+::: {.callout-note icon=false} 
+## 
 ::: {#def-pivotal}
 
 ## Asymptotically pivotal statistics
@@ -989,9 +1001,10 @@ T_n\equiv T(X_1,\dots,X_n)
 $$ 
 is called (exact) **pivotal**, if the distribution of $T_n$ does not depend on any unknown population parameter. A statistic $T_n$ is called **asymptotically pivotal**, if the asymptotic distribution of $T_n$ does not depend on any unknown population parameter.*
 :::
+::: 
 
 
-Exact pivotal statistics are rare and not available in most statistical or econometric applications. It is, however, often possible to construct an *asymptotically pivotal* statistic. Assume that an estimator $\hat{\theta}$ satisfies
+*Exact* pivotal statistics are rare and not available in most statistical or econometric applications. It is, however, often possible to construct an *asymptotically pivotal* statistic. Assume that an estimator $\hat{\theta}$ satisfies
 $$
 \sqrt{n}(\hat{\theta}-\theta)\rightarrow_d\mathcal{N}(0,v^2),
 $$
@@ -1007,11 +1020,15 @@ Then, of course, also $\hat v_n\rightarrow_p v$, and
 $$
 T_n:= \sqrt{n}\frac{(\hat{\theta}-\theta)}{\hat v_n}\rightarrow_d \mathcal{N}(0,1),\quad n\to\infty.
 $$
-This means that $T_n= \sqrt{n}\frac{(\hat{\theta}-\theta)}{\hat v_n}$ is *asymptotically pivotal*.
+This means that 
+$$
+T_n= \sqrt{n}\frac{(\hat{\theta}-\theta)}{\hat v_n}
+$$ 
+is **asymptotically pivotal**.
 
 
 
-#### Example: $\bar{X}$ is asymptotically pivotal {-}
+#### Example: $\bar{X}$ is Asymptotically Pivotal {-}
 
 Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu$, variance $\mathbb{V}(X)=\sigma^2>0$, and $\mathbb{E}(|X|^4)=\beta<\infty$. 
  
@@ -1028,7 +1045,7 @@ $$
 In this case $T_n$ is an asymptotically pivotal statistics.
 
 
-#### Bootstrap-$t$ consistency {-}
+#### Bootstrap-$t$ Consistency {-}
 
 The general idea of the bootstrap-$t$ method relies on approximating the unknown distribution of 
 $$
@@ -1056,10 +1073,9 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 :::
 
 
+### Bootstrap-t Confidence Interval 
 
-### Bootstrap-t confidence interval 
-
-Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter (vector) $\theta.$ Assume that bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. Furthermore, suppose that a **consistent** estimator 
+Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter (vector) $\theta.$ Assume that the bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. Furthermore, suppose that a **consistent** estimator 
 $$
 \hat v\equiv \hat v(X_1,\dots,X_n)
 $$ 
@@ -1068,14 +1084,33 @@ of the asymptotic standard error,  $v,$ of $\hat{\theta}$ is available.
 
 **Derivation of the bootstrap-$t$ confidence interval:**
 
-* Based on an i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\},$ calculate the bootstrap estimates $\hat{\theta}^*$ **and** $v^*$ and the bootstrap statistic $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.$ Repeating this yields $m$ many bootstrap statistics 
+* Based on an i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\},$ calculate the bootstrap estimates 
+$$
+\hat{\theta}^*\equiv \hat{\theta}^*(X_1^*,\dots,X_n^*)
+$$ 
+and
+$$
+v^*\equiv v^*(X_1^*,\dots,X_n^*)
+$$ 
+and the bootstrap statistic 
+$$
+\begin{align*}
+T^*&=T^*(X_1^*,\dots,X_n^*)\\
+   &=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.
+\end{align*}
+$$ 
+Repeating this yields $m$ (e.g. $m=100,000$) many bootstrap statistics 
 $$
 T_1^*,T_2^*, \dots, T_m^*
 $$
 which allow us to approximate the bootstrap distribution 
 of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*},$ conditionally on $\mathcal{S}_n,$ arbitrarily precise as $m\to\infty.$ 
 
-* Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ of the bootstrap distribution of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}$ using the empirical quantiles based on $T_1^*,T_2^*, \dots, T_m^*$ (see @eq-empiricalQuantile).
+* Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ of the bootstrap distribution of 
+$$
+\left.\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}\right|\mathcal{S}_n
+$$ 
+using the empirical quantiles based on $T_1^*,T_2^*, \dots, T_m^*$ (see @eq-empiricalQuantile).
 
 This implies, for large $m,$
 $$
@@ -1102,24 +1137,24 @@ $$
 $$
 Thus, the approximate $(1-\alpha)\times 100\%$ (symmetric) bootstrap-$t$ confidence interval is given by 
 $$
-\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat v,
+\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat v,\;
       \hat{\theta}-\hat \tau_{  \frac{\alpha}{2}}\hat v\right]
 $${#eq-Boot_tCI}
 
 
-#### Example: Bootstrap-$t$ confidence interval for the mean {-}
+#### Example: Bootstrap-$t$ Confidence Interval for the Mean {-}
 
 
 **Algorithm:**
 
 * Draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
-$\bar X^*$ as well as $S^{*2}=\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2$.
+$\bar X^*$ as well as $s^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2}$.
 * Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$  of the bootstrap distribution
-of  $\frac{\bar X^*-\bar X}{S^*}$
+of  $\frac{\bar X^*-\bar X}{s^*}$
 * This yields the $1-\alpha$ confidence interval (using @eq-Boot_tCI):
 $$
-\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}S,
-      \bar X-\hat \tau_{\frac{\alpha}{2}}S\right]
+\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}s,
+      \bar X-\hat \tau_{\frac{\alpha}{2}}s\right]
 $$
 
 
@@ -1127,7 +1162,14 @@ $$
 
 ### Accuracy of the Bootstrap-$t$ method 
 
-Usually, the bootstrap-$t$ provides a **gain in accuracy** over the standard nonparametric bootstrap. The reason is that the approximation of the law of $T_n$ by the bootstrap law of $T_n^*=\sqrt{n}(\hat{\theta}^*-\hat{\theta})/v^*_n$ is more direct and hence more accurate ($v^*_n$ depends on the bootstrap sample --- not the original sample) than the approximation of the law of $\sqrt{n}(\hat{\theta}-\theta)$ by the bootstrap law of $\sqrt{n}(\hat{\theta}^*-\hat{\theta}).$
+Usually, the bootstrap-$t$ provides a **gain in accuracy** over the standard nonparametric bootstrap. The reason is that the approximation of the law of $T_n$ by the bootstrap law of 
+$$
+\left.\frac{\sqrt{n}(\hat{\theta}^*-\hat{\theta})}{v^*_n}\right|\mathcal{S}_n
+$$ 
+is more direct and hence more accurate ($v^*_n$ depends on the bootstrap sample --- not the original sample) than by the bootstrap law of 
+$$
+\left.\sqrt{n}(\hat{\theta}^*-\hat{\theta})\right|\mathcal{S}_n.
+$$
 
 
 The use of pivotal statistics and the corresponding construction of bootstrap-$t$ confidence intervals is motivated by theoretical results which show that under mild conditions the bootstrap-$t$ methods are  **second order accurate**.
@@ -1167,9 +1209,11 @@ If the distribution of $\hat\theta$ is asymptotically normal and the bootstrap i
 
 The difference between first and second-order accuracy is not just a theoretical nicety. In many practically important situations second-order accurate intervals lead to *much* better approximations. If possible, bootstrap confidence intervals as well as tests should thus be based on pivotal statistics.
 
+::: {.callout-note}
+Proofs required for this type of results is technically difficult since Edgeworth expansions are involved. The investigation of the accuracy of the bootstrap estimators is still an active field. 
+:::
 
-
-## Regression Analysis: Bootstrapping pairs
+## Regression Analysis: Bootstrapping Pairs
 
 Consider the linear regression model 
 $$
@@ -1181,27 +1225,29 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p
 $$
 denotes the vector of predictor variables. In the following, we differentiate between a **random design** and a **fixed design**. 
 
+::: {.callout-note icon=false} 
+## 
 ::: {#def-RandomFixedDesign}
 
 ## Random and fixed design 
 <br>
 
-***Random design:**
+***Random Design:**
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
 are i.i.d. random variables and $\mathbb{E}(\varepsilon_i|X_i)=0$ with either*
 
-* ***homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a fixed $\sigma^2<\infty$ or* 
+* ***homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a constant $\sigma^2<\infty$ or* 
 * ***heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n.$*
 
-***Fixed design:** 
+***Fixed Design:** 
 $$
 X_1, X_2, \dots, X_n
 $$
 are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. random variables with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic errors** $\mathbb{E}(\varepsilon_i^2)=\sigma^2$ for all $i=1,\dots,n.$*
 :::
-
+:::
 
 We additionally assume that there exists a positive definite (thus invertible) matrix $M$ 
 $$
@@ -1211,8 +1257,17 @@ and a positive semi-definite matrix $Q$ such that
 $$
 Q=\mathbb{E}(\varepsilon_i^2X_iX_i^T)=\mathbb{E}(\sigma^2(X_i)X_iX_i^T)
 $$
-**Note:** For homoscedastic errors we have $Q=\sigma^2 M.$
 
+::: {.callout-tip}
+For homoscedastic errors we have 
+$$
+\begin{align*}
+Q
+&=\mathbb{E}(\sigma^2(X_i)X_iX_i^T)\\
+&=\sigma^2\mathbb{E}(X_iX_i^T)\, =\sigma^2 M.
+\end{align*}
+$$
+:::
 
 
 
@@ -1231,14 +1286,15 @@ $$
 $$
 
 
-### Bootstrapping pairs: Bootstrap under random design
+### Bootstrapping Pairs: Bootstrap under Random Design
 
-Bootstrapping regression estimates $\hat\beta$ is straightforward under a **random design** (@def-RandomFixedDesign). Assuming a random design, $(Y_i,X_i)$ are i.i.d. and one may apply the nonparametric bootstrap in order to approximate the distribution of 
+Bootstrapping regression estimates $\hat\beta$ is straightforward under a **random design** (@def-RandomFixedDesign). Assuming a random design, $(Y_i,X_i)$ are i.i.d. and one may apply the nonparametric bootstrap in order to approximate the distribution of the estimation errors
 $$
 \hat\beta-\beta.
 $$ 
 In the literature this procedure is usually called **bootstrapping pairs**, namely, $(Y_i, X_i)$-pairs.
 
+**Algorithm:**
 
 * Original data: i.i.d. sample ${\cal S}_n:=\{(Y_1,X_1),\dots,(Y_n,X_n)\}$
 * Generate bootstrap samples
@@ -1292,15 +1348,19 @@ In the following we will formally assume a regression model
 $$
 Y_i=X_i^T\beta+ \varepsilon_i, \quad i=1,\dots,n,
 $$
+with 
+$$
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p,
+$$
 under **fixed design** (@def-RandomFixedDesign), i.e., where $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic** errors
 $$
 \mathbb{E}(\varepsilon_i^2)=\sigma^2.
 $$ 
 
 
-::: {.callout-note}
+::: {.callout-tip}
 
-## Remark
+## Applicability of the Residual Bootstrap 
 
 Though we will formally rely on a fixed design assumption, the residual bootstrap is also applicable for random designs or stochastic, but correlated $X$-variables (time-series). In these cases all arguments are meant conditionally on the given $X_1,\dots,X_n$. The above assumptions on the error terms then of course have to be satisfied conditionally on $X_1,\dots,X_n$.
 :::
@@ -1331,7 +1391,7 @@ $$
 $$
 
 
-#### The residual bootstrap algorithm {-}
+#### The Residual Bootstrap Algorithm {-}
 
 Based on the original data $(Y_i,X_i)$, $i=1,\dots,n$, and the least squares estimate $\hat\beta$, calculate the residuals $\hat\varepsilon_1,\dots,\hat \varepsilon_n$.
 
@@ -1349,14 +1409,14 @@ $$
 \hat\beta^*=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i^*
 $$
 
-Repeating Steps 1-3 $m$ many times yields $m$ bootstrap estimators 
+Repeating Steps 1-3 $m$ many times yields $m$ (e.g. $m=100,000$) bootstrap estimators 
 $$
 \hat\beta^*_1,\hat\beta^*_2,\dots,\hat\beta^*_m
 $$
-which allow us to approximate the bootstrap distribution $\hat\beta^*-\hat\beta|\mathcal{S}_n.$
+which allow us to approximate the bootstrap distribution $\hat\beta^*-\hat\beta|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
 
 
-#### Motivating the residual bootstrap {-}
+#### Motivating the Residual Bootstrap {-}
 
 It is not difficult to understand why the residual bootstrap generally works for *homoscedastic* (!) errors. We have
 $$
@@ -1386,7 +1446,11 @@ $$
 $$
 for $n\to\infty.$
 
-Since  $\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2\rightarrow_P \sigma^2$ as $n\rightarrow\infty$, the bootstrap is consistent. That is, for large $n$, we have approximately
+Since  
+$$
+\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2\rightarrow_p \sigma^2
+$$ 
+as $n\rightarrow\infty$, the bootstrap is consistent. That is, for large $n$, we have approximately
 $$
 \text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta) |{\cal S}_n)
 \approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta-\beta))}_{\mathcal{N}\left(0,\sigma^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right)}
@@ -1417,15 +1481,15 @@ $$
 
 **Bootstrap-$t$** confidence intervals for the regression coefficients $\beta_j$, $j=1,\dots,p,$ can be constructed as following: 
 
-Let $\gamma_{jj}$ denote the $j$-th diagonal element of the matrix $(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$, 
+Let $\gamma_{jj}$ denote the $j$-th diagonal element of the matrix $(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$, i.e.,
 $$
-\gamma_{jj}:=\left[(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\right]_{jj}.
+\gamma_{jj}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}.
 $$
 Then
 $$
 \frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}
 $$ 
-is an asymptotically pivotal statistics, since
+is an asymptotically pivotal statistic, since
 $$
 \frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 $$
@@ -1448,12 +1512,16 @@ $$
 Compute the $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval as in @eq-Boot_tCI:
 $$
 \left[
-  \hat\beta_j-\hat \tau_{1-\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}},
+  \hat\beta_j-\hat \tau_{1-\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}},\; 
   \hat\beta_j-\hat \tau_{\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}}
 \right]
 $$
 
+::: {.callout-tip}
+There are many more bootstrap procedures. In case of heteroscedastic errors, for instance, there's also the "Wild Bootstrap." 
 
+For high-dimensional problems ($p$ as large as $n$ or larger), one can use (under certain regularity assumptions) the "Multiplier Bootstrap".
+:::
 
 ## Exercises {-}
 
