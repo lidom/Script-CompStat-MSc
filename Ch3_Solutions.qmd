@@ -2,25 +2,31 @@
 
 #### Exercise 1. {-} 
 
-##### (a) Part 1. {-}
+##### (a) 
 
 The exact point-wise distribution of $nF_n(x)$ for a given $x\in\mathbb{R}.$  
 $$
 \begin{align*}
 F_n(x) 
-& = \frac{1}{n} 1_{(X_i\leq x)}\\
+& = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
 \Rightarrow nF_n(x) 
-& = 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
+& = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
 \end{align*}
 $$
 since $1_{(X_i\leq x)}$ is a Bernoulli random variable with parameter 
 $$
-p=P(1_{(X_i\leq x)} = 1) = P(X_i \leq x) = F(x).
+\begin{align*}
+p 
+& = P(1_{(X_i\leq x)} = 1) 
+& = P(X_i \leq x) 
+& = F(x).
+\end{align*}
 $$
 
-##### (a) Part 2. {-}
+##### (b) 
 
-The asymptotic  point-wise distribution of $F_n(x)$ for a given $x\in\mathbb{R}.$  From part 1, we have that 
+<!-- The asymptotic  point-wise distribution of $F_n(x)$ for a given $x\in\mathbb{R}.$   -->
+From (a), we have that 
 $$
 \begin{align*}
 \mathbb{E}(nF_n(x)) &= nF(x)\\ 
@@ -35,14 +41,51 @@ $$
 \end{align*}
 $$
 
-Moreover, since $F_n(x)  = \frac{1}{n} 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT implies 
+Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT implies 
 $$
 \frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1).
 $$
-Or 
+Or with a slight abuse of notation: 
 $$
 F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
 $$
+
+
+##### (c)
+
+
+The mean squared error between $F_n(x)$ and $F(x)$ is given by
+$$
+\begin{align*}
+\operatorname{MSE}(F_n(x)) 
+&= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
+&= \mathbb{V}(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
+\end{align*}
+$$
+It follows from our previous results that for each $x\in\mathbb{R}$
+$$
+\mathbb{V}(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
+$$
+as $n\to\infty,$ and that 
+$$
+\mathbb{E}(F_n(x)) -F(x) = 0 
+$$
+for all $n.$ Therefore, 
+$$
+\operatorname{MSE}(F_n(x)) = \mathbb{V}(F_n(x)) \to 0
+$$
+as $n\to\infty.$ Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
+$$
+F_n(x)\to_{ms} F(x)
+$$
+as $n\to\infty.$ 
+
+Since convergence in the mean square sense implies convergence in probability, we also have that for each $x\in\mathbb{R}$
+$$
+F_n(x)\to_{p} F(x)
+$$
+as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
+
 
 
 #### Exercise 2. {-} 
@@ -55,7 +98,9 @@ $$
 |g_n(x) - g(x)| < \varepsilon 
 $$ 
 for all $n\geq N$ and **for all** $x\in\mathcal{X}.$ 
-I.e., if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains all of the graphs of $g_n(x)$ for large enough $n.$
+
+
+I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n.$
 ::: 
 
 **Example 1:** $\mathcal{X}=\mathbb{R}$<br>
@@ -118,7 +163,7 @@ Setup:
 *  $\mathbb{V}(X_i)=\sigma^2<\infty$
 *  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
 
-If $F$ is a Normal distribution:
+If $F$ is a normal distribution:
 
 
 $$
@@ -127,7 +172,7 @@ $$
 \end{array}
 $$
 
-For Non-Normal distributions $F$ we have by the Central [Limit Theorem](https://www.statlect.com/asymptotic-theory/central-limit-theorem):
+For non-normal distributions $F$ we have by the classic CLT:
 $$
 \begin{array}{rlc}
 \sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
@@ -149,24 +194,24 @@ The **classic confidence interval** is then based on the above (asymptotic) norm
 $$
 \operatorname{CI}_{\operatorname{classic},n}=\left[\bar{X}_n\,-\,z_{1-\alpha/2}\frac{s}{\sqrt{n}},\bar{X}_n\,+\,z_{1-\alpha/2}\frac{s}{\sqrt{n}}\right],
 $$
-where $z_{1-\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard normal distribution. Alternatively, one can apply a small-sample correction by using the $(1-\alpha/2)$-quantile $t_{n-1, 1-\alpha/2}$ of the $t$-distribution with $n-1$ degrees of freedom.  
+where $z_{1-\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard normal distribution. Alternatively, one can apply a "small-sample correction" by using the $(1-\alpha/2)$-quantile $t_{n-1, 1-\alpha/2}$ of the $t$-distribution with $n-1$ degrees of freedom.  
 
 
 From the above arguments it follows that:
 $$
-\mathbb{P}\left(\mu\in \operatorname{CI}_{\operatorname{classic},n}\right)\to 1-\alpha\quad\text{as}\quad n\to\infty.
+P\left(\mu\in \operatorname{CI}_{\operatorname{classic},n}\right)\to 1-\alpha\quad\text{as}\quad n\to\infty.
 $$
 
-Let us consider the finite-$n$ (with $n=30$) performance of the classic confidence interval for the case where $F$ is a **normal distribution** with mean $\mu=1$ and standard deviation $\sigma=2$:
+Let us consider the finite-$n$ (with $n=20$) performance of the classic confidence interval for the case where $F$ is a **normal distribution** with mean $\mu=1$ and standard deviation $\sigma=2$:
 ```{r}
 ##  Setup:
-n     <-   30 # Sample Size
+n     <-   20 # Sample Size
 mean  <-    1 # Mean
 sdev  <-    2 # Standard Deviation
 alpha <- 0.05 # Level
 
 set.seed(123)
-B          <- 1000 # MC repetitions
+B          <- 1500 # MC repetitions
 CI.lo.vec  <- rep(NA, B)
 CI.up.vec  <- rep(NA, B)
   
@@ -212,18 +257,18 @@ abline(v=mean,col="blue", lwd=1.5)
 ```
 
 
-##### (a) Part 2: Classic Confidence Interval ($n=30$ and $X_i\sim \chi^2_1$) {-}
+##### (a) Part 2: Classic Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 Now, we consider the  finite-$n$ performance of the classic confidence interval under the same setup as above, but for the case where $F$ is a **non-normal distribution**, namely, a $\chi^2_1$-distribution with $1$ degree of freedom:
 ```{r}
 ## Setup:
-n     <-   30  # Sample Size
+n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 alpha <- 0.05 # Level
 
 set.seed(123)
-B          <- 1000 # MC repetitions
+B          <- 1500 # MC repetitions
 CI.lo.vec  <- rep(NA, B)
 CI.up.vec  <- rep(NA, B)
   
@@ -269,13 +314,13 @@ abline(v=mean,col="blue", lwd=1.5)
 ```
 
 
-##### (b) Standard bootstrap confidence interval ($n=30$ and $X_i\sim \chi^2_1$) {-}
+##### (b) Standard bootstrap confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 Let's generate an iid random sample $S_n$ with $X_i\sim\chi^2_1$ and the corresponding estimate $\bar X_n$:
 ```{r}
 ## Setup:
-n     <-   30  # Sample Size
+n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 
 ## IID random sample:
@@ -337,7 +382,7 @@ c(CI.Basic.Bootstr.lo, CI.Basic.Bootstr.up)
 Now, we can investigate the finite-$n$ performance of the standard bootstrap confidence interval:
 ```{r}
 ## Setup:
-n     <-   30  # Sample Size
+n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
@@ -345,7 +390,7 @@ n.Bootsrap.draws <- 1500
 
 ## MC-Setup:
 set.seed(123)
-B          <- 1000 # MC repetitions
+B          <- 1500 # MC repetitions
 CI.Basic.Bstr.lo.vec <- rep(NA, B)
 CI.Basic.Bstr.up.vec <- rep(NA, B)
 
@@ -396,7 +441,7 @@ abline(v=mean,col="blue", lwd=1.5)
 ```
 
 
-##### (c) Bootstrap-$t$ confidence interval ($n=30$ and $X_i\sim \chi^2_1$) {-}
+##### (c) Bootstrap-$t$ confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 The bootstrap-t confidence interval is given by (see lecture script):
@@ -409,11 +454,11 @@ $$
 $$
 
 
-In the following we generate the bootrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$, and plot all of this:
+In the following we approximate the bootstrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$, and plot all of this:
 
 ```{r, fig.margin = TRUE, fig.width=4.5, fig.height=3.5}
 ## Setup:
-n     <-   30  # Sample Size
+n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 
 ## IID random sample:
@@ -469,7 +514,7 @@ c(CI.Bstr.t.lo, CI.Bstr.t.up)
 Let us investigate the finite-$n$ performance of the bootstrap-t confidence interval:
 ```{r}
 ## Setup:
-n     <-   30  # Sample Size
+n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
@@ -477,7 +522,7 @@ n.Bootsrap.draws <- 1500
 
 ## MC-Setup:
 set.seed(123)
-B          <- 1000 # MC repetitions
+B          <- 1500 # MC repetitions
 CI.Bstr.t.lo.vec <- rep(NA, B)
 CI.Bstr.t.up.vec <- rep(NA, B)
 
