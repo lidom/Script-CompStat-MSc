@@ -18,7 +18,11 @@ Thus, maximum likelihood estimators can be very appealing.
 
 #### Example: Coin Flipping (Bernoulli Trial) {-}
 
-To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment. Let $\theta$ denote the probability that we get a head $H$ 
+To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a possibly unfair $\text{Coin}$ can take the value $H$ (Head) or $T$ (Tail),
+$$
+\text{Coin}\in\{H,T\}.
+$$ 
+Let $\theta$ denote the probability that we get a head $H$ 
 $$
 \theta=P(\text{Coin}=H)
 $$ 
@@ -42,9 +46,9 @@ X_i=\left\{
 $$ 
 such that 
 $$
-X_i\sim\mathcal{B}(\theta),\quad i=1,\dots,n,
+X_i\sim\mathcal{Bern}(\theta),\quad i=1,\dots,n,
 $$
-where $\mathcal{B}(\theta)$ denotes the Bernoulli distribution with unknown parameter $\theta.$ 
+where $\mathcal{Bern}(\theta)$ denotes the Bernoulli distribution with unknown probability of success parameter $\theta.$ 
 
 A given realization of the random sample 
 $$
@@ -52,17 +56,22 @@ $$
 $$ 
 consists of 
 $$
-0\leq h\leq n
+h=\sum_{i=1}^n1_{(x_i=1)}
 $$ 
-many heads $H$ and 
+many heads and $n-h$ many tails, where  
 $$
-0\leq n-h\leq n
-$$ many tails $T.$
+0\leq h\leq n\quad\text{and}\quad 0\leq n-h\leq n.
+$$ 
+
 
 
 ### The (Log-)Likelihood Function
 
-How do we combine the information from the $n$ observations to estimate $\theta$?
+How do we combine the information from the $n$ observations 
+$$
+\{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
+$$ 
+to estimate $\theta$?
 
 If the observations are realizations of an i.i.d. sample, then the joint probability of observing $h$ heads $H$ and $n-h$ tails $T$ in  $n$ coin flips is:
 $$
@@ -73,7 +82,9 @@ $$
 &= \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i} 
 \end{align*} 
 $$
-where $x_i=1$ stands for $\text{Coin}=H$ in $i$th coin flip and $x_i=0$ for $\text{Coin}=T$ in $i$th coin flip. The function $\mathcal{L}$ is called the **likelihood function**. 
+where $x_i=1$ stands for $\text{Coin}=H$ in $i$th coin flip and $x_i=0$ for $\text{Coin}=T$ in $i$th coin flip. 
+
+The function $\mathcal{L}$ is called the **likelihood function**. 
 
 In general, when the observations $\{x_1,\dots,n\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
 $$
@@ -91,7 +102,7 @@ Examples:
 * $f$ being the probability mass function of $\mathcal{B}(\theta)$ with $f(x_i|\theta)=\theta$ if $x_i=1$ and $f(x_i|\theta)=1-\theta$ if $x_i=0,$ but unknown propability parameter $\theta.$
 * $f$ is the normal density $f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)$ with unknown parameter vector $\theta=(\mu,\sigma^2)^T.$
 
-This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To adress this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified.   
+This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To address this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified (see @White1982).   
 :::
 
 

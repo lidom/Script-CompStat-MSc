@@ -20,6 +20,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -109,7 +128,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch2_MonteCarlo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Method</span></a>
+  <a href="./Ch2_MonteCarlo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Monte Carlo Integration</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -125,11 +144,6 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Ch6_NonparametricRegression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonparametric Regression Analysis</span></a>
   </div>
 </li>
     </ul>
@@ -190,7 +204,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Thus, maximum likelihood estimators can be very appealing.</p>
 <section id="example-coin-flipping-bernoulli-trial" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="example-coin-flipping-bernoulli-trial">Example: Coin Flipping (Bernoulli Trial)</h4>
-<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment. Let <span class="math inline">\(\theta\)</span> denote the probability that we get a head <span class="math inline">\(H\)</span> <span class="math display">\[
+<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a possibly unfair <span class="math inline">\(\text{Coin}\)</span> can take the value <span class="math inline">\(H\)</span> (Head) or <span class="math inline">\(T\)</span> (Tail), <span class="math display">\[
+\text{Coin}\in\{H,T\}.
+\]</span> Let <span class="math inline">\(\theta\)</span> denote the probability that we get a head <span class="math inline">\(H\)</span> <span class="math display">\[
 \theta=P(\text{Coin}=H)
 \]</span> which implies that the probability that we get a tail <span class="math inline">\(T\)</span> is <span class="math display">\[
 1-\theta=P(\text{Coin}=T).
@@ -205,20 +221,23 @@ X_i=\left\{
     \end{matrix}
     \right.
 \]</span> such that <span class="math display">\[
-X_i\sim\mathcal{B}(\theta),\quad i=1,\dots,n,
-\]</span> where <span class="math inline">\(\mathcal{B}(\theta)\)</span> denotes the Bernoulli distribution with unknown parameter <span class="math inline">\(\theta.\)</span></p>
+X_i\sim\mathcal{Bern}(\theta),\quad i=1,\dots,n,
+\]</span> where <span class="math inline">\(\mathcal{Bern}(\theta)\)</span> denotes the Bernoulli distribution with unknown probability of success parameter <span class="math inline">\(\theta.\)</span></p>
 <p>A given realization of the random sample <span class="math display">\[
 \{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
 \]</span> consists of <span class="math display">\[
-0\leq h\leq n
-\]</span> many heads <span class="math inline">\(H\)</span> and <span class="math display">\[
-0\leq n-h\leq n
-\]</span> many tails <span class="math inline">\(T.\)</span></p>
+h=\sum_{i=1}^n1_{(x_i=1)}
+\]</span> many heads and <span class="math inline">\(n-h\)</span> many tails, where<br>
+<span class="math display">\[
+0\leq h\leq n\quad\text{and}\quad 0\leq n-h\leq n.
+\]</span></p>
 </section>
 </section>
 <section id="the-log-likelihood-function" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="the-log-likelihood-function"><span class="header-section-number">4.1.2</span> The (Log-)Likelihood Function</h3>
-<p>How do we combine the information from the <span class="math inline">\(n\)</span> observations to estimate <span class="math inline">\(\theta\)</span>?</p>
+<p>How do we combine the information from the <span class="math inline">\(n\)</span> observations <span class="math display">\[
+\{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
+\]</span> to estimate <span class="math inline">\(\theta\)</span>?</p>
 <p>If the observations are realizations of an i.i.d. sample, then the joint probability of observing <span class="math inline">\(h\)</span> heads <span class="math inline">\(H\)</span> and <span class="math inline">\(n-h\)</span> tails <span class="math inline">\(T\)</span> in <span class="math inline">\(n\)</span> coin flips is: <span class="math display">\[
 \begin{align*}
 \mathcal{L}(\theta)
@@ -226,7 +245,8 @@ X_i\sim\mathcal{B}(\theta),\quad i=1,\dots,n,
 &amp;= \theta^h(1-\theta)^{n-h}  \\
 &amp;= \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i}
 \end{align*}
-\]</span> where <span class="math inline">\(x_i=1\)</span> stands for <span class="math inline">\(\text{Coin}=H\)</span> in <span class="math inline">\(i\)</span>th coin flip and <span class="math inline">\(x_i=0\)</span> for <span class="math inline">\(\text{Coin}=T\)</span> in <span class="math inline">\(i\)</span>th coin flip. The function <span class="math inline">\(\mathcal{L}\)</span> is called the <strong>likelihood function</strong>.</p>
+\]</span> where <span class="math inline">\(x_i=1\)</span> stands for <span class="math inline">\(\text{Coin}=H\)</span> in <span class="math inline">\(i\)</span>th coin flip and <span class="math inline">\(x_i=0\)</span> for <span class="math inline">\(\text{Coin}=T\)</span> in <span class="math inline">\(i\)</span>th coin flip.</p>
+<p>The function <span class="math inline">\(\mathcal{L}\)</span> is called the <strong>likelihood function</strong>.</p>
 <p>In general, when the observations <span class="math inline">\(\{x_1,\dots,n\}\)</span> are a realization of an i.i.d. sample <span class="math inline">\(\{X_1,\dots,X_n\}\)</span> with <span class="math inline">\(X_i\sim f\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span>, we have that <span class="math display">\[
 \mathcal{L}(\theta)=\prod_{i=1}^n f(x_i|\theta),
 \]</span> where <span class="math inline">\(f(x_i | \theta)\)</span> is the density function of the random variable <span class="math inline">\(X_i\)</span> evaluated at the realization <span class="math inline">\(X_i=x_i\)</span>, and where <span class="math inline">\(\theta\)</span> denotes the (unknown) parameter (vector) of the density function.</p>
@@ -246,7 +266,7 @@ ML-estimation requires to fix the family of distributions <span class="math inli
 <li><span class="math inline">\(f\)</span> being the probability mass function of <span class="math inline">\(\mathcal{B}(\theta)\)</span> with <span class="math inline">\(f(x_i|\theta)=\theta\)</span> if <span class="math inline">\(x_i=1\)</span> and <span class="math inline">\(f(x_i|\theta)=1-\theta\)</span> if <span class="math inline">\(x_i=0,\)</span> but unknown propability parameter <span class="math inline">\(\theta.\)</span></li>
 <li><span class="math inline">\(f\)</span> is the normal density <span class="math inline">\(f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)\)</span> with unknown parameter vector <span class="math inline">\(\theta=(\mu,\sigma^2)^T.\)</span></li>
 </ul>
-<p>This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of <span class="math inline">\(f.\)</span> To adress this issue, the <strong>quasi maximum likelihood method</strong> generalizes classic ML estimation to cases where <span class="math inline">\(f\)</span> is misspecified.</p>
+<p>This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of <span class="math inline">\(f.\)</span> To address this issue, the <strong>quasi maximum likelihood method</strong> generalizes classic ML estimation to cases where <span class="math inline">\(f\)</span> is misspecified (see <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span>).</p>
 </div>
 </div>
 <p><strong>Estimation idea:</strong> We estimate the unknown <span class="math inline">\(\theta\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{x_1,\dots,x_n\}.\)</span> The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong> <span class="math display">\[
@@ -1100,6 +1120,11 @@ Note
 <!-- %\end{frame} -->
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-White1982" class="csl-entry" role="doc-biblioentry">
+White, Halbert. 1982. <span>“Maximum Likelihood Estimation of Misspecified Models.”</span> <em>Econometrica</em>, 1–25.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
