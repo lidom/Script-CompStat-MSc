@@ -409,22 +409,6 @@ we can use the simulated distribution of $\bar{X}^*_k,$ $k=1,\dots,m.$
 Under H$_0,$ we know that the true (unknown) mean equals the hypothetical mean $\mu = \mu_0,$ and we know that $\bar{X}\approx \mu$ if $n$ is large.   -->
 
 
-<!-- 
-```{r}
-m         <- 10000 # number of bootstrap samples
-Xbar_boot <- vector(model = "double", length = m)
-
-for(k in 1:m){
-  bootSample   <- sample(x       = observedSample, 
-                         size    = length(observedSample), 
-                         replace = TRUE)
-  Xbar_boot[k] <- mean(bootSample)
-}
-
-## Some (approximate) quantiles of the bootstrap distribution 
-quantile(Xbar_boot, probs = seq(from = 0, to = 1,  by = 0.25))
-``` -->
-
 
 
 #### Theory: The Bootstrap Distribution of $\bar X^*- \bar{X}$ {-}
@@ -1638,7 +1622,620 @@ $$
 Computational Statistics, James E. Gentle,  Exercise 13.6. 
 -->
 
-{{< include Ch3_Solutions.qmd >}}
+<!-- {{< include Ch3_Solutions.qmd >}} -->
+
+
+## Solutions {-}
+
+#### Exercise 1. {-} 
+
+##### (a) {-}
+
+The exact point-wise distribution of $nF_n(x)$ for a given $x\in\mathbb{R}.$  
+$$
+\begin{align*}
+F_n(x) 
+& = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
+\Rightarrow nF_n(x) 
+& = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
+\end{align*}
+$$
+since $1_{(X_i\leq x)}$ is a Bernoulli random variable with parameter 
+$$
+\begin{align*}
+p 
+& = P(1_{(X_i\leq x)} = 1) 
+& = P(X_i \leq x) 
+& = F(x).
+\end{align*}
+$$
+
+##### (b) {-}
+
+<!-- The asymptotic  point-wise distribution of $F_n(x)$ for a given $x\in\mathbb{R}.$   -->
+From (a), we have that 
+$$
+\begin{align*}
+\mathbb{E}(nF_n(x)) &= nF(x)\\ 
+\Leftrightarrow\quad  \mathbb{E}(F_n(x)) &= F(x)
+\end{align*}
+$$
+and that 
+$$
+\begin{align*}
+\mathbb{V}(nF_n(x)) &= nF(x)(1-F(x))\\
+\Leftrightarrow \quad \mathbb{V}(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
+\end{align*}
+$$
+
+Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT implies 
+$$
+\frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1).
+$$
+Or with a slight abuse of notation: 
+$$
+F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
+$$
+
+
+##### (c) {-}
+
+
+The mean squared error between $F_n(x)$ and $F(x)$ is given by
+$$
+\begin{align*}
+\operatorname{MSE}(F_n(x)) 
+&= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
+&= \mathbb{V}(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
+\end{align*}
+$$
+It follows from our previous results that for each $x\in\mathbb{R}$
+$$
+\mathbb{V}(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
+$$
+as $n\to\infty,$ and that 
+$$
+\mathbb{E}(F_n(x)) -F(x) = 0 
+$$
+for all $n.$ Therefore, 
+$$
+\operatorname{MSE}(F_n(x)) = \mathbb{V}(F_n(x)) \to 0
+$$
+as $n\to\infty.$ Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
+$$
+F_n(x)\to_{ms} F(x)
+$$
+as $n\to\infty.$ 
+
+Since convergence in the mean square sense implies convergence in probability, we also have that for each $x\in\mathbb{R}$
+$$
+F_n(x)\to_{p} F(x)
+$$
+as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
+
+
+
+#### Exercise 2. {-} 
+
+::: {.callout-tip}
+Another, equivalent way to define uniform convergence: 
+
+$g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$ there exists an $N$ such that 
+$$
+|g_n(x) - g(x)| < \varepsilon 
+$$ 
+for all $n\geq N$ and **for all** $x\in\mathcal{X}.$ 
+
+
+I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n.$
+::: 
+
+**Example 1:** $\mathcal{X}=\mathbb{R}$<br>
+The function 
+$$
+g_n(x) = x\left(1+\frac{1}{n}\right)
+$$ 
+converges point-wise to 
+$$
+g(x)=x,
+$$ 
+since 
+$$
+|g_n(x)-g(x)|=\frac{|x|}{n}%\to 0\quad \text{as}\quad n\to\infty.
+$$
+converges to zero as $n\to\infty$ for each given $x\in\mathcal{X}.$
+
+However, $g_n$ does not converge uniformly to $g$ since
+$$
+\sup_{x\in\mathbb{R}}|g_n(x)-g(x)|=\sup_{x\in\mathbb{R}}\frac{|x|}{n}=\infty\neq 0
+$$
+for each $n.$ 
+
+Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n).$ 
+
+
+**Example 2:** $\mathcal{X}=(0,1)$<br>
+The function 
+$$
+g_n(x) = x^n
+$$ 
+converges point-wise to 
+$$
+g(x)=0,
+$$ 
+since 
+$$
+|g_n(x)-g(x)|=x^n
+$$
+converges to zero as $n\to\infty$ for each given $x\in(0,1).$
+
+However, $g_n$ does not converge uniformly to $g$ since
+$$
+\sup_{x\in(0,1)}|g_n(x)-g(x)|=\sup_{x\in(0,1)}x^n=1\neq 0
+$$
+for each $n.$ 
+
+Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n.$ 
+
+
+
+#### Exercise 3. {-}
+
+##### (a) Part 1: {-}
+
+Setup:
+
+*  iid data $X_1,\dots,X_n$ with $X_i\sim F$
+*  $\mathbb{E}(X_i)=\mu$
+*  $\mathbb{V}(X_i)=\sigma^2<\infty$
+*  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
+
+If $F$ is a normal distribution:
+
+
+$$
+\begin{array}{rlc}
+\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{for all}\;n.
+\end{array}
+$$
+
+For non-normal distributions $F$ we have by the classic CLT:
+$$
+\begin{array}{rlc}
+\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
+\end{array}
+$$
+
+Usually, we do not know $\sigma$ and have to estimate this parameter using a consistent estimator such as $s^2=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, where $s\to_p\sigma$ as $n\to\infty$.
+
+
+Then by Slusky's Theorem (allows to combine "$\to_d$" and "$\to_p$" statements) we have that: 
+$$
+\begin{array}{rlc}
+\sqrt{n}\left(\frac{\bar{X}_n-\mu}{s}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
+\end{array}
+$$
+
+
+The **classic confidence interval** is then based on the above (asymptotic) normality result:
+$$
+\operatorname{CI}_{\operatorname{classic},n}=\left[\bar{X}_n\,-\,z_{1-\alpha/2}\frac{s}{\sqrt{n}},\bar{X}_n\,+\,z_{1-\alpha/2}\frac{s}{\sqrt{n}}\right],
+$$
+where $z_{1-\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard normal distribution. Alternatively, one can apply a "small-sample correction" by using the $(1-\alpha/2)$-quantile $t_{n-1, 1-\alpha/2}$ of the $t$-distribution with $n-1$ degrees of freedom.  
+
+
+From the above arguments it follows that:
+$$
+P\left(\mu\in \operatorname{CI}_{\operatorname{classic},n}\right)\to 1-\alpha\quad\text{as}\quad n\to\infty.
+$$
+
+Let us consider the finite-$n$ (with $n=20$) performance of the classic confidence interval for the case where $F$ is a **normal distribution** with mean $\mu=1$ and standard deviation $\sigma=2$:
+```{r}
+##  Setup:
+n     <-   20 # Sample Size
+mean  <-    1 # Mean
+sdev  <-    2 # Standard Deviation
+alpha <- 0.05 # Level
+
+set.seed(123)
+B          <- 1500 # MC repetitions
+CI.lo.vec  <- rep(NA, B)
+CI.up.vec  <- rep(NA, B)
+  
+## MC-Simulation:
+for(b in 1:B){
+  ## Data Generating Process:
+  X.sample     <- rnorm(n=n, mean = mean, sd = sdev) 
+  ## Estimates:
+  X.bar.MC     <- mean(X.sample)
+  sd.hat.MC    <- sd(X.sample)
+  ## Classic CIs:
+  
+  CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
+  CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
+
+  #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
+  #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
+}
+
+## How often does the classic CI cover the true mean?
+CI.checks      <- CI.lo.vec <= mean  &  mean <= CI.up.vec
+freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
+
+## Plot
+plot(x=0,y=0,xlim=range(CI.lo.vec, CI.up.vec), ylim=c(1,B), type="n", 
+     ylab="MC Repetitions", xlab="", axes = FALSE, 
+     main="Classic 95% Confidence Intervals\n(Normal DGP)")
+axis(1, at=c(1), labels ="True Mean = 1")
+axis(2); box()
+mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
+      round(freq.non.cover,digits = 2),")"), line = 2.5)
+## Covering CIs:
+arrows(x0=CI.lo.vec[CI.checks==TRUE], 
+       x1=CI.up.vec[CI.checks==TRUE], 
+       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
+       angle=90, code = 3, length = .1, col="black")
+## Non-Covering CIs:
+arrows(x0=CI.lo.vec[CI.checks==FALSE], 
+       x1=CI.up.vec[CI.checks==FALSE], 
+       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
+       angle=90, code = 3, length = .05, col="red")
+abline(v=mean,col="blue", lwd=1.5)
+```
+
+
+##### (a) Part 2: Classic Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
+
+
+Now, we consider the  finite-$n$ performance of the classic confidence interval under the same setup as above, but for the case where $F$ is a **non-normal distribution**, namely, a $\chi^2_1$-distribution with $1$ degree of freedom:
+```{r}
+## Setup:
+n     <-   20  # Sample Size
+df    <-    1  # (=> mean==1)
+alpha <- 0.05 # Level
+
+set.seed(123)
+B          <- 1500 # MC repetitions
+CI.lo.vec  <- rep(NA, B)
+CI.up.vec  <- rep(NA, B)
+  
+## MC-Simulation:
+for(b in 1:B){
+  ## Data Generating Process:
+  X.sample     <- rchisq(n, df=df)
+  ## Estimates:
+  X.bar.MC     <- mean(X.sample)
+  sd.hat.MC    <- sd(X.sample)
+  ## Classic CIs:
+  
+  CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
+  CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
+  
+  #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
+  #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
+}
+
+## How often does the classic CI cover the true mean?
+CI.checks      <- CI.lo.vec <= mean  &  mean <= CI.up.vec
+freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
+
+## Plot
+plot(x=0,y=0,xlim=range(CI.lo.vec, CI.up.vec), ylim=c(1,B), type="n", 
+     ylab="MC Repetitions", xlab="", axes = FALSE, 
+     main="Classic 95% Confidence Intervals\n(Non-Normal DGP)")
+axis(1, at=c(1), labels ="True Mean = 1")
+axis(2); box()
+mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
+      round(freq.non.cover,digits = 2),")"), line = 2.5)
+## Covering CIs:
+arrows(x0=CI.lo.vec[CI.checks==TRUE], 
+       x1=CI.up.vec[CI.checks==TRUE], 
+       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
+       angle=90, code = 3, length = .1, col="black")
+## Non-Covering CIs:
+arrows(x0=CI.lo.vec[CI.checks==FALSE], 
+       x1=CI.up.vec[CI.checks==FALSE], 
+       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
+       angle=90, code = 3, length = .05, col="red")
+abline(v=mean,col="blue", lwd=1.5)
+```
+
+
+##### (b) Standard bootstrap confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
+
+
+Let's generate an iid random sample $S_n$ with $X_i\sim\chi^2_1$ and the corresponding estimate $\bar X_n$:
+```{r}
+## Setup:
+n     <-   20  # Sample Size
+df    <-    1  # (=> mean==1)
+
+## IID random sample:
+set.seed(123)
+S_n  <- rchisq(n, df=df)
+
+## Empirical mean:
+(X.bar <- mean(S_n))
+```
+
+
+
+The **standard bootstrap confidence interval** is given by (see lecture script):
+$$
+\left[2\bar{X}_n - \hat{t}_{1-\alpha/2}, 2\bar{X}_n - \hat{t}_{\alpha/2}\right],
+$$
+where $\hat{t}_{\alpha/2}$ and $\hat{t}_{1-\alpha/2}$ denote the $(\alpha/2)$ and $(1-\alpha/2)$-quantiles of the conditional distribution of $\bar{X}_n^\ast$ given $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}$, i.e., of the **bootrap distribution** of $\bar{X}_n^\ast$. 
+
+In the following we approximate the bootstrap distribution of $\bar{X}_n^\ast$ using $m=1500$ boostrap resamplings, compute the quantiles $\hat{t}_{\alpha/2}$ and $\hat{t}_{1-\alpha/2}$, and plot all of this:
+
+```{r, fig.margin = TRUE,fig.width=4.5, fig.height=3.5}
+## Bootstr-Setup:
+alpha            <- 0.05
+n.Bootsrap.draws <- 1500
+
+## Generate bootstap samples:
+Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
+
+for(j in 1:n.Bootsrap.draws){
+  Bootstr.Samples[,j] <- sample(x=S_n, size=n, replace = TRUE)
+}
+## Boostrap draws of \bar{X}_n^*:
+X.bar.bootstr.vec <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
+
+## Quantile of the bootstr.-distribution of \bar{X}_n^*:
+t.1 <- quantile(X.bar.bootstr.vec, probs = 1-alpha/2)
+t.2 <- quantile(X.bar.bootstr.vec, probs = alpha/2)
+## plot
+plot(ecdf(X.bar.bootstr.vec), xlab="", ylab="",
+     main=expression(paste("Bootstr.-Distr. of ",bar(X)[n]^{" *"})))
+abline(v=c(t.1,t.2),col="red")
+```
+
+
+Using our preparatory work above, the standard bootstrap confidence interval can be computed as following:
+```{r}
+## Basic Bootstrap Confidence Interval:
+CI.Basic.Bootstr.lo <- 2*X.bar - t.1
+CI.Basic.Bootstr.up <- 2*X.bar - t.2
+
+## Re-labeling of otherwise false names:
+attr(CI.Basic.Bootstr.lo, "names") <- c("2.5%")
+attr(CI.Basic.Bootstr.up, "names") <- c("97.5%")
+##
+c(CI.Basic.Bootstr.lo, CI.Basic.Bootstr.up)
+```
+
+
+Now, we can investigate the finite-$n$ performance of the standard bootstrap confidence interval:
+```{r}
+## Setup:
+n     <-   20  # Sample Size
+df    <-    1  # (=> mean==1)
+mean  <-   df
+alpha <- 0.05 # Level
+n.Bootsrap.draws <- 1500
+
+## MC-Setup:
+set.seed(123)
+B          <- 1500 # MC repetitions
+CI.Basic.Bstr.lo.vec <- rep(NA, B)
+CI.Basic.Bstr.up.vec <- rep(NA, B)
+
+## MC-Simulation:
+for(b in 1:B){
+  ## Data Generating Process:
+  S_n.MC        <- rchisq(n, df=df)
+  ## Estimate:
+  X.bar.MC      <- mean(S_n.MC)
+  ## 
+  Bootstr.Samples.MC  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
+  for(j in 1:n.Bootsrap.draws){
+    Bootstr.Samples.MC[,j] <- sample(x=S_n.MC, size=n, replace = TRUE)
+  }
+  X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
+  ## (1-alpha/2)-quantile:
+  t.1.MC <- quantile(X.bar.bootstr.MC.vec, probs = 1-alpha/2)
+  t.2.MC <- quantile(X.bar.bootstr.MC.vec, probs = alpha/2)
+  ## Basic Bootstrap CIs:
+  CI.Basic.Bstr.lo.vec[b] <- 2*X.bar.MC - t.1.MC
+  CI.Basic.Bstr.up.vec[b] <- 2*X.bar.MC - t.2.MC
+}
+
+## How often does the classic CI cover the true mean?
+CI.checks      <- CI.Basic.Bstr.lo.vec<=mean & mean<=CI.Basic.Bstr.up.vec
+freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
+
+## Plot
+plot(x=0,y=0,xlim=range(CI.Basic.Bstr.lo.vec, CI.Basic.Bstr.up.vec), 
+     ylim=c(1,B), type="n", 
+     ylab="MC Repetitions", xlab="", axes = FALSE, 
+     main="Basic Bootrap 95% Confidence Intervals\n(Non-Normal DGP)")
+axis(1, at=c(1), labels ="True Mean = 1")
+axis(2); box()
+mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
+      round(freq.non.cover,digits = 2),")"), line = 2.5)
+## Covering CIs:
+arrows(x0=CI.Basic.Bstr.lo.vec[CI.checks==TRUE], 
+       x1=CI.Basic.Bstr.up.vec[CI.checks==TRUE], 
+       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
+       angle=90, code = 3, length = .1, col="black")
+## Non-Covering CIs:
+arrows(x0=CI.Basic.Bstr.lo.vec[CI.checks==FALSE], 
+       x1=CI.Basic.Bstr.up.vec[CI.checks==FALSE], 
+       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
+       angle=90, code = 3, length = .05, col="red")
+abline(v=mean,col="blue", lwd=1.5)
+```
+
+
+##### (c) Bootstrap-$t$ confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
+
+
+The bootstrap-t confidence interval is given by (see lecture script):
+$$
+\left[\bar{X}_n-\hat{\tau}_{1-\alpha/2}\hat\sigma,  \bar{X}_n-\hat{\tau}_{\alpha/2}\hat\sigma\right],
+$$
+where $\hat\sigma=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, and where $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$ denote the $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles of the bootstrap distribution of: 
+$$
+\frac{\bar{X}_n^\ast-\bar{X}_n}{\hat\sigma^\ast}.
+$$
+
+
+In the following we approximate the bootstrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$, and plot all of this:
+
+```{r, fig.margin = TRUE, fig.width=4.5, fig.height=3.5}
+## Setup:
+n     <-   20  # Sample Size
+df    <-    1  # (=> mean==1)
+
+## IID random sample:
+set.seed(123)
+S_n  <- rchisq(n, df=df)
+
+## Empirical mean and sd:
+X.bar   <- mean(S_n)
+sd.hat  <- sd(S_n)
+
+## Bootstr-Setup:
+alpha            <- 0.05
+n.Bootsrap.draws <- 1500
+
+## Generate bootstap samples:
+Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
+
+for(j in 1:n.Bootsrap.draws){
+  Bootstr.Samples[,j] <- sample(x=S_n, size=n, replace = TRUE)
+}
+## Compute boostrap draws of (\bar{X}_n^*-\bar{X}_n)/\hat{\sigma}^\ast:
+X.bar.bootstr.vec    <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
+sd.bootstr.vec       <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = sd)
+##
+Bootstr.t.sample.vec <- (X.bar.bootstr.vec - X.bar)/sd.bootstr.vec
+## Quantile of the bootstr.-distribution of \bar{X}_n^*:
+tau.1 <- quantile(Bootstr.t.sample.vec, probs = 1-alpha/2)
+tau.2 <- quantile(Bootstr.t.sample.vec, probs = alpha/2)
+## plot
+plot(ecdf(Bootstr.t.sample.vec), xlab="", ylab="",
+     main=expression(paste("Bootstr.-t-Distr. of ",
+          (bar(X)[n]^{" *"}-bar(X)[n])/hat(sigma)^{"*"})))
+abline(v=c(tau.1,tau.2),col="red")
+```
+
+
+
+Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:
+```{r}
+## Basic Bootstrap Confidence Interval:
+CI.Bstr.t.lo <- X.bar - tau.1 * sd.hat
+CI.Bstr.t.up <- X.bar - tau.2 * sd.hat
+
+## Re-labeling of otherwise false names:
+attr(CI.Bstr.t.lo, "names") <- c("2.5%")
+attr(CI.Bstr.t.up, "names") <- c("97.5%")
+##
+c(CI.Bstr.t.lo, CI.Bstr.t.up)
+```
+
+
+
+Let us investigate the finite-$n$ performance of the bootstrap-t confidence interval:
+```{r}
+## Setup:
+n     <-   20  # Sample Size
+df    <-    1  # (=> mean==1)
+mean  <-   df
+alpha <- 0.05 # Level
+n.Bootsrap.draws <- 1500
+
+## MC-Setup:
+set.seed(123)
+B          <- 1500 # MC repetitions
+CI.Bstr.t.lo.vec <- rep(NA, B)
+CI.Bstr.t.up.vec <- rep(NA, B)
+
+## MC-Simulation:
+for(b in 1:B){
+  ## Data Generating Process:
+  S_n.MC        <- rchisq(n, df=df)
+  ## Estimates:
+  X.bar.MC      <- mean(S_n.MC)
+  sd.MC         <- sd(S_n.MC)
+  ## 
+  Bootstr.Samples.MC  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
+  for(j in 1:n.Bootsrap.draws){
+    Bootstr.Samples.MC[,j] <- sample(x=S_n.MC, size=n, replace = TRUE)
+  }
+  X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
+  sd.bootstr.MC.vec    <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = sd)
+  ## Make it a "Bootstrap-t" sample:
+  Bootstr.t.MC.vec <- (X.bar.bootstr.MC.vec - X.bar.MC)/sd.bootstr.MC.vec
+  ## (1-alpha/2)-quantile:
+  tau.1.MC <- quantile(Bootstr.t.MC.vec, probs = 1-alpha/2)
+  tau.2.MC <- quantile(Bootstr.t.MC.vec, probs = alpha/2)
+  ## Basic Bootstrap CIs:
+  CI.Bstr.t.lo.vec[b] <- X.bar.MC - tau.1.MC * sd.MC
+  CI.Bstr.t.up.vec[b] <- X.bar.MC - tau.2.MC * sd.MC
+}
+
+## How often does the classic CI cover the true mean?
+CI.checks      <- CI.Bstr.t.lo.vec<=mean & mean<=CI.Bstr.t.up.vec
+freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
+
+## Plot
+plot(x=0,y=0,xlim=range(CI.Bstr.t.lo.vec, CI.Bstr.t.up.vec), 
+     ylim=c(1,B), type="n", 
+     ylab="MC Repetitions", xlab="", axes = FALSE, 
+     main="Bootrap-t 95% Confidence Intervals\n(Non-Normal DGP)")
+axis(1, at=c(1), labels ="True Mean = 1")
+axis(2); box()
+mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
+      round(freq.non.cover,digits = 2),")"), line = 2.5)
+## Covering CIs:
+arrows(x0=CI.Bstr.t.lo.vec[CI.checks==TRUE], 
+       x1=CI.Bstr.t.up.vec[CI.checks==TRUE], 
+       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
+       angle=90, code = 3, length = .1, col="black")
+## Non-Covering CIs:
+arrows(x0=CI.Bstr.t.lo.vec[CI.checks==FALSE], 
+       x1=CI.Bstr.t.up.vec[CI.checks==FALSE], 
+       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
+       angle=90, code = 3, length = .05, col="red")
+abline(v=mean,col="blue", lwd=1.5)
+```
+
+
+
+#### Exercise 4. {-}
+
+##### (a)  {-}
+
+$$
+\begin{align*}
+\mathbb{E}^*(\bar{Y}^*) 
+& = \mathbb{E}(\left.\bar{Y}^*\right|\mathcal{S}_n)\\[2ex]
+& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*|\mathcal{S}_n\right)\\[2ex]
+& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*|\mathcal{S}_n\right)\\[2ex]
+& = \mathbb{E}\left(Y_i^*|\mathcal{S}_n\right)\\[2ex]
+& = \sum_{i=1}^n \frac{1}{n} Y_i
+ = \bar{Y}
+\end{align*}
+$$
+since $(Y_i^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}$ and $P(Y_j^*=Y_i|\mathcal{S}_n)=\frac{1}{n}$ for each $i,j\in 1,\dots,n.$
+
+
+##### (b)  {-}
+
+
+$$
+\begin{align*}
+\mathbb{E}(\bar{Y}^*) 
+& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
+& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
+& = \mathbb{E}\left(Y_i^*\right)\\[2ex]
+& = \mu
+\end{align*}
+$$
+since $Y_i^*\sim Y_i\sim F.$ 
 
 
 ## References {-}
