@@ -2,33 +2,59 @@
 
 #### Exercise 1. {-} 
 
-The integral 
+We can write 
 $$
-\int_3^{10} \int_1^7 \sin(x-y) dxdy
+\begin{align*}
+&\int_3^{10} \int_1^7 \sin(x-y) dxdy\\[2ex] 
+=& \int_3^{10} \int_1^7 \sin(x-y) \cdot  42\cdot f_{(X,Y)}(x,y) dx dy\\[2ex]
+=& \mathbb{E}\left(h( (X,Y) )\right)
+\end{align*}
 $$
-can be written as 
+where 
 $$
-\mathbb{E}\left(h( (X,Y) )\right),
+f_{(X,Y)}(x,y) = \left\{
+    \begin{array}{ll}
+    \frac{1}{(10-3)}\cdot\frac{1}{(7-1)} = \frac{1}{42}&\text{for all }(x,y)\in[3,10]\times[1,7]\\[2ex]
+    0&\text{else}
+    \end{array}
+    \right.
 $$
-with $X$ and $Y$ being two independent uniformly distributed random variables
+is the bi-variate density function of $(X,Y)$ with $X$ and $Y$ being two *independent* uniformly distributed random variables
 $$
-X\sim\mathcal{U}[3,10]
-$$ 
-$$
-Y\sim\mathcal{U}[1,7],
+X\sim\mathcal{U}[1,7]\quad\text{and}\quad Y\sim\mathcal{U}[3,10], 
 $$ 
 and where 
 $$
 h(x,y) = \sin(x-y).
 $$
-Thus, we can write 
+
+Thus, we can approximate the two-dimensional integral 
 $$
-\int_3^{10} \int_1^7 \sin(x-y) dxdy 
-&= \mathbb{E}\left(h( Z )\right)\\
-&= \int_3^{10} \int_1^7 \sin(x-y) f_{(X,Y)}(x,y) dx dy,
+\int_3^{10} \int_1^7 \sin(x-y) dxdy
+$$ 
+using sample averages of $\sin(X-Y)$.
+
+```{r}
+set.seed(321)
+
+X   <-  runif(1000000, min = 1, max =  7)
+Y   <-  runif(1000000, min = 3, max = 10) 
+
+mean(sin(X -Y)) * 42
+```
+
+#### Exercise 2. {-} 
+
+If the density of $X$ is $f(x),$ then 
 $$
-where 
+\begin{align*}
+\mathbb{E}\left(g(X)/f(X)\right)
+&=\int \left(g(x)/f(x)\right) f(x) dx\\[2ex]
+&=\int g(x)dx
+\end{align*}
 $$
-f_{(X,Y)}(x,y) = \frac{1}{(10-3)(7-1)} = \frac{1}{42}
+
+
 $$
-for all $(x,y)\in[3,10]\times[1,7]$ and zero else. 
+\int_1^\infty \exp\left(-x^2\right) dx
+$$
