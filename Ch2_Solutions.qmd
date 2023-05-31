@@ -102,7 +102,7 @@ mean( exp(-(X + 1)^2) / dexp(X))
 
 #### Solution of Exercise 3. {-} 
 
-##### (a) {-}
+##### (a) Function $h$ {-}
 
 $$
 \begin{align}
@@ -112,18 +112,15 @@ P(X\geq 3)
 & = \int 1_{(x\geq 3)} f(x) dx,
 \end{align}
 $$
-where $X\sim f$ with $f$ denoting the density function of the standard normal distribution. 
-
-I.e. 
+where $X\sim f$ with $f$ denoting the density function of the standard normal distribution. That is, 
 $$
-h(x) = 1_{(x\geq 3)}
+h(x) = 1_{(x\geq 3)}.
 $$
 
 
-##### (b) {-}
+##### (b) Classical Monte Carlo integration estimator {-}
 
-Classic Monte Carlo integration estimator, 
-
+The classical Monte Carlo integration estimator is given by
 $$
 \begin{align}
 \hat{\theta} & = \frac{1}{n}\sum_{i=1}^n h(X_i), 
@@ -146,7 +143,7 @@ mean(h(X))
 
 Obviously, not a good estimation result. We know that $\theta = P(X\geq 3)$ is some small number, but certainly larger than zero. 
 
-##### (c) {-}
+##### (c) Approximate the mean and the variance of $\hat{\theta}$ using a simulation. {-}
 
 Approximating the mean, $\mathbb{E}(\hat{\theta}),$ and the variance, $\mathbb{V}(\hat{\theta}),$ of $\hat{\theta}$ via a Monte Carlo simulation:   
 
@@ -171,11 +168,11 @@ mean(theta_hat_estim_vec)
 var(theta_hat_estim_vec) 
 ```
 
-##### (d) {-}
+##### (d) Why is $\hat{\theta}$ not efficient? {-}
 
 Most observations are wasted in the sense that most are not near the right tail ($X\geq 3$). 
 
-##### (e) {-}
+##### (e) Importance sampling approach {-}
 
 The importance function $g$ is a good/resonable choice since 
 
@@ -195,7 +192,7 @@ legend("topright", legend = c("|h|f", "g"),
 col=c("black", "red"), lty=c(1,1))
 ```
 
-##### (f) {-}
+##### (f) Importance sampling estimator {-}
 
 
 Importance sampling integration estimator, 
@@ -228,7 +225,7 @@ mean(hfg(X))
 ```
 
 
-##### (g) {-}
+##### (g) Approximate the mean and the variance of $\hat{\theta}_{IS}$ using a simulation. {-}
 
 Approximating the mean, $\mathbb{E}(\hat{\theta}_{IS}),$ and the variance, $\mathbb{V}(\hat{\theta}_{IS}),$ of $\hat{\theta}_{IS}$ via a Monte Carlo simulation:   
 

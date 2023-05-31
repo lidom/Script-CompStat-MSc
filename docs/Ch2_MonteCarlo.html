@@ -1418,16 +1418,12 @@ LL_fun <- function(beta0, beta1, sigma) {
 <li><p>Write the parameter <span class="math inline">\(\theta\)</span> as <span class="math display">\[
 \theta = \int h(x) f(x) dx = \mathbb{E}_f(h(X))
 \]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution. What is the function <span class="math inline">\(h\)</span>? <!-- {{< include Ch2_Solutions.qmd >}} --></p></li>
-<li><p>What is the classic Monte Carlo integration estimator, <span class="math inline">\(\hat{\theta},\)</span> of <span class="math inline">\(\theta\)</span>? Compute one estimate of <span class="math inline">\(\theta\)</span> using a sample size of <span class="math inline">\(n=100.\)</span></p></li>
+<li><p>What is the classical Monte Carlo integration estimator, <span class="math inline">\(\hat{\theta},\)</span> of <span class="math inline">\(\theta\)</span>? Compute one estimate of <span class="math inline">\(\theta\)</span> using a sample size of <span class="math inline">\(n=100.\)</span></p></li>
 <li><p>Repeat the simulation many times (e.g.&nbsp;<span class="math inline">\(10,000\)</span> times) to get an estimate of the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}.\)</span></p></li>
 <li><p>Why is the classic Monte Carlo integration approach here not very efficient?</p></li>
-<li><p>Take now an importance sampling approach and write the parameter <span class="math inline">\(\theta\)</span> as</p></li>
-</ol>
-<p><span class="math display">\[
+<li><p>Take now an importance sampling approach and write the parameter <span class="math inline">\(\theta\)</span> as <span class="math display">\[
 \theta = \int \frac{h(x)f(x)}{g(x)} g(x) dx = \mathbb{E}_g(Y),
-\]</span> where <span class="math inline">\(Y=\frac{h(X)f(X)}{g(X)}\)</span> and <span class="math inline">\(X\sim g.\)</span></p>
-<p>Why is the density function <span class="math inline">\(g\sim\mathcal{N}(4,1)\)</span> potentially good choice?</p>
-<ol start="6" type="a">
+\]</span> where <span class="math inline">\(Y=\frac{h(X)f(X)}{g(X)}\)</span> and <span class="math inline">\(X\sim g.\)</span> <br> Why is the density function <span class="math inline">\(g\sim\mathcal{N}(4,1)\)</span> potentially a good choice?</p></li>
 <li><p>What is the importance sampling estimator, <span class="math inline">\(\hat{\theta}_{IS},\)</span> of <span class="math inline">\(\theta\)</span>? Compute one estimate of <span class="math inline">\(\theta\)</span> using a sample size of <span class="math inline">\(n=100.\)</span></p></li>
 <li><p>Repeat the simulation many times (e.g.&nbsp;<span class="math inline">\(10,000\)</span> times) to get an estimate of the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}.\)</span></p></li>
 </ol>
@@ -1442,7 +1438,7 @@ LL_fun <- function(beta0, beta1, sigma) {
 <li><p>Derive the variance of the classical Monte Carlo integration estimator.</p></li>
 <li><p>It turns out that the tail probabilities of <span class="math inline">\(f\)</span> are <em>very</em> low and when simulating, e.g., <span class="math inline">\(B=10,000\)</span> realizations from <span class="math inline">\(f\)</span> usually no single realization is greater or equal to <span class="math inline">\(4.5\)</span>.<br> Derive the importance sampling estimator using an appropriately shifted version of the exponential density function with <span class="math inline">\(\lambda=1\)</span> as the importance function <span class="math inline">\(g\)</span> such that all of the <span class="math inline">\(B=10,000\)</span> realizations are used for the estimation of the probability <span class="math inline">\(P(X\geq 4.5).\)</span></p></li>
 <li><p>Show that the importance sampling estimator is unbiased.</p></li>
-<li><p>Compare the variance of the importance sampling estimator with the variance of the classical Monte Carlo integration estimator of the probability <span class="math inline">\(P(X\geq 4.5).\)</span><br> <strong>Hint:</strong> You can assume and should use that <span class="math inline">\(g(x) &gt; f(x)\)</span> for all <span class="math inline">\(x\geq 4.5.\)</span></p></li>
+<li><p>Show (mathematically) that the variance of the importance sampling estimator of the probability <span class="math inline">\(P(X\geq 4.5)\)</span> is strictly smaller than the variance of the classical Monte Carlo integration estimator.<br> <strong>Hint:</strong> You can assume and should use that <span class="math inline">\(g(x) &gt; f(x)\)</span> for all <span class="math inline">\(x\geq 4.5.\)</span></p></li>
 </ol>
 </section>
 </section>
@@ -1532,8 +1528,8 @@ with $X\sim f.$
 </section>
 <section id="solution-of-exercise-3." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-3.">Solution of Exercise 3.</h4>
-<section id="a" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="a">(a)</h5>
+<section id="a-function-h" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-function-h">(a) Function <span class="math inline">\(h\)</span></h5>
 <p><span class="math display">\[
 \begin{align}
 P(X\geq 3)
@@ -1541,15 +1537,13 @@ P(X\geq 3)
 &amp; = \int h(x) f(x) dx\\[2ex]
 &amp; = \int 1_{(x\geq 3)} f(x) dx,
 \end{align}
-\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution.</p>
-<p>I.e. <span class="math display">\[
-h(x) = 1_{(x\geq 3)}
+\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution. That is, <span class="math display">\[
+h(x) = 1_{(x\geq 3)}.
 \]</span></p>
 </section>
-<section id="b" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="b">(b)</h5>
-<p>Classic Monte Carlo integration estimator,</p>
-<p><span class="math display">\[
+<section id="b-classical-monte-carlo-integration-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-classical-monte-carlo-integration-estimator">(b) Classical Monte Carlo integration estimator</h5>
+<p>The classical Monte Carlo integration estimator is given by <span class="math display">\[
 \begin{align}
 \hat{\theta} &amp; = \frac{1}{n}\sum_{i=1}^n h(X_i),
 \end{align}
@@ -1571,8 +1565,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 <p>Obviously, not a good estimation result. We know that <span class="math inline">\(\theta = P(X\geq 3)\)</span> is some small number, but certainly larger than zero.</p>
 </section>
-<section id="c" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="c">(c)</h5>
+<section id="c-approximate-the-mean-and-the-variance-of-hattheta-using-a-simulation." class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-approximate-the-mean-and-the-variance-of-hattheta-using-a-simulation.">(c) Approximate the mean and the variance of <span class="math inline">\(\hat{\theta}\)</span> using a simulation.</h5>
 <p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}\)</span> via a Monte Carlo simulation:</p>
 <div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-15_6a75fc38027a56377778fc3ad9fbe5de">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
@@ -1601,12 +1595,12 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="d" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="d">(d)</h5>
+<section id="d-why-is-hattheta-not-efficient" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d-why-is-hattheta-not-efficient">(d) Why is <span class="math inline">\(\hat{\theta}\)</span> not efficient?</h5>
 <p>Most observations are wasted in the sense that most are not near the right tail (<span class="math inline">\(X\geq 3\)</span>).</p>
 </section>
-<section id="e" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="e">(e)</h5>
+<section id="e-importance-sampling-approach" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e-importance-sampling-approach">(e) Importance sampling approach</h5>
 <p>The importance function <span class="math inline">\(g\)</span> is a good/resonable choice since</p>
 <ul>
 <li><span class="math inline">\(g\)</span> has a more or less similar shape as <span class="math inline">\(|h|f\)</span></li>
@@ -1628,8 +1622,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="f" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="f">(f)</h5>
+<section id="f-importance-sampling-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-importance-sampling-estimator">(f) Importance sampling estimator</h5>
 <p>Importance sampling integration estimator,</p>
 <p><span class="math display">\[
 \begin{align}
@@ -1660,8 +1654,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="g" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="g">(g)</h5>
+<section id="g-approximate-the-mean-and-the-variance-of-hattheta_is-using-a-simulation." class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g-approximate-the-mean-and-the-variance-of-hattheta_is-using-a-simulation.">(g) Approximate the mean and the variance of <span class="math inline">\(\hat{\theta}_{IS}\)</span> using a simulation.</h5>
 <p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}_{IS}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}_{IS}),\)</span> of <span class="math inline">\(\hat{\theta}_{IS}\)</span> via a Monte Carlo simulation:</p>
 <div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-18_ab46892f6a019d7f546869fc11fef5cf">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
