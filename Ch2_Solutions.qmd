@@ -1,6 +1,6 @@
 ## Solutions {-}
 
-#### Exercise 1. {-} 
+#### Solution of Exercise 1. {-} 
 
 We can write 
 $$
@@ -10,7 +10,7 @@ $$
 =& \mathbb{E}\left(h( (X,Y) )\right)
 \end{align*}
 $$
-where 
+where $h(x,y) = \sin(x-y),$ and where 
 $$
 f_{(X,Y)}(x,y) = \left\{
     \begin{array}{ll}
@@ -23,16 +23,18 @@ is the bi-variate density function of $(X,Y)$ with $X$ and $Y$ being two *indepe
 $$
 X\sim\mathcal{U}[1,7]\quad\text{and}\quad Y\sim\mathcal{U}[3,10], 
 $$ 
-and where 
-$$
-h(x,y) = \sin(x-y).
-$$
+
 
 Thus, we can approximate the two-dimensional integral 
 $$
 \int_3^{10} \int_1^7 \sin(x-y) dxdy
 $$ 
-using sample averages of $\sin(X-Y)$.
+using sample averages of $\sin(X-Y),$
+$$
+\frac{1}{n}\sum_{i=1}^n \sin(X_i - Y_i),
+$$
+where 
+$X_1,\dots,X_n\overset{\text{i.i.d.}}\sim\mathcal{U}[1,7]$ and $Y_1,\dots,Y_n\overset{\text{i.i.d.}}\sim\mathcal{U}[3,10].$ 
 
 ```{r}
 set.seed(321)
@@ -43,18 +45,376 @@ Y   <-  runif(1000000, min = 3, max = 10)
 mean(sin(X -Y)) * 42
 ```
 
-#### Exercise 2. {-} 
+#### Solution of Exercise 2. {-} 
 
-If the density of $X$ is $f(x),$ then 
+<!-- ::: {.callout-note}
+##
+The uniform density (as in Exercise 1) is by no means the only density that can be used in Monte Carlo integration. An integral of interest, say, 
+$$
+\int g(x)dx
+$$
+can be written as
 $$
 \begin{align*}
-\mathbb{E}\left(g(X)/f(X)\right)
-&=\int \left(g(x)/f(x)\right) f(x) dx\\[2ex]
-&=\int g(x)dx
+\int g(x)dx
+&=\int \left(\frac{g(x)}{f(x)}\right) f(x) dx\\[2ex]
+&=\mathbb{E}\left(\frac{g(X)}{f(X)}\right)
 \end{align*}
 $$
+for $X\sim f.$
 
+Thus, we can approximate an integral $\int g(x)dx$ using the sample mean of 
+$$
+\frac{g(X)}{f(X)}
+$$
+with $X\sim f.$
+::: -->
 
+To approximate 
 $$
 \int_1^\infty \exp\left(-x^2\right) dx
 $$
+we can use that 
+$$
+\begin{align*}
+\int_1^\infty \exp\left(-x^2\right) dx
+&=\int_0^\infty \exp\left(-(x+1)^2\right) dx\\[2ex]
+&=\int_0^\infty \underbrace{\frac{\exp\left(-(x+1)^2\right)}{\exp\left(- x\right)}}_{=h(x)} \underbrace{\exp\left(-x\right)}_{=f(x)} dx\\[2ex]
+&=\mathbb{E}\left(\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)}\right) = \mathbb{E}\left(h(X)\right)
+\end{align*}
+$$
+with $X\sim\mathcal{Exp}(\lambda = 1).$
+
+Thus, we can approximate an integral $\int_1^\infty \exp\left(-x^2\right) dx$ using the sample mean of 
+$$
+\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)},
+$$
+where $X\sim f.$
+
+
+```{r}
+set.seed(321)
+
+X <- rexp(100000)
+mean( exp(-(X + 1)^2) / dexp(X))
+```
+
+
+#### Solution of Exercise 3. {-} 
+
+##### (a) {-}
+
+$$
+\begin{align}
+P(X\geq 3) 
+& = \theta \\[2ex]
+& = \int h(x) f(x) dx\\[2ex]
+& = \int 1_{(x\geq 3)} f(x) dx,
+\end{align}
+$$
+where $X\sim f$ with $f$ denoting the density function of the standard normal distribution. 
+
+I.e. 
+$$
+h(x) = 1_{(x\geq 3)}
+$$
+
+
+##### (b) {-}
+
+Classic Monte Carlo integration estimator, 
+
+$$
+\begin{align}
+\hat{\theta} & = \frac{1}{n}\sum_{i=1}^n h(X_i), 
+\end{align}
+$$
+where $X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(0,1)$ and $h(x) = 1_{(x\geq 3)}.$
+
+```{r}
+set.seed(321)
+
+n <- 100 
+X <- rnorm(n)
+h <- function(x){
+    x[x < 3] <- 0
+    return(x)
+}
+
+mean(h(X))
+```
+
+Obviously, not a good estimation result. We know that $\theta = P(X\geq 3)$ is some small number, but certainly larger than zero. 
+
+##### (c) {-}
+
+Approximating the mean, $\mathbb{E}(\hat{\theta}),$ and the variance, $\mathbb{V}(\hat{\theta}),$ of $\hat{\theta}$ via a Monte Carlo simulation:   
+
+```{r}
+set.seed(321)
+
+n                   <- 100 
+B                   <- 10000
+theta_hat_estim_vec <- vector(mode = "double", length = B)
+
+h <- function(x){
+    x[x < 3] <- 0
+    return(x)
+}
+
+for(b in 1:B){
+    X                      <- rnorm(n)    
+    theta_hat_estim_vec[b] <- mean(h(X))
+}
+
+mean(theta_hat_estim_vec)
+var(theta_hat_estim_vec) 
+```
+
+##### (d) {-}
+
+Most observations are wasted in the sense that most are not near the right tail ($X\geq 3$). 
+
+##### (e) {-}
+
+The importance function $g$ is a good/resonable choice since 
+
+* $g$ has a more or less similar shape as $|h|f$ 
+* $g$ has thicker tails than $|h|f$
+* it is very simple to sample from $g$
+
+```{r}
+x_vec  <- seq(3, 8, len = 50)
+hf_vec <- dnorm(x_vec, mean = 0, sd = 1)
+g_vec  <- dnorm(x_vec, mean = 4, sd = 1)
+
+plot(x = x_vec, y = hf_vec, type = "l", 
+ylim = range(hf_vec, g_vec), xlab = "x", ylab = "")
+lines(x = x_vec, y = g_vec, col = "red")
+legend("topright", legend = c("|h|f", "g"), 
+col=c("black", "red"), lty=c(1,1))
+```
+
+##### (f) {-}
+
+
+Importance sampling integration estimator, 
+
+$$
+\begin{align}
+\hat{\theta}_{IS} & = \frac{1}{n}\sum_{i=1}^n \frac{h(X_i)f(X_i)}{g(X_i)}, 
+\end{align}
+$$
+where 
+
+* $X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1),$ 
+* $f$ is the density function of the standard normal distribution 
+* $h(x) = 1_{(x\geq 3)}$
+
+```{r}
+set.seed(321)
+
+n   <- 100 
+X   <- rnorm(n, mean = 4, sd = 1)
+
+hfg <- function(x){
+    tmp    <- dnorm(x, mean = 0, sd = 1)/dnorm(x, mean = 4, sd = 1) 
+    tmp[x < 3] <- 0
+    result <- tmp
+    return(result)
+}
+
+mean(hfg(X))
+```
+
+
+##### (g) {-}
+
+Approximating the mean, $\mathbb{E}(\hat{\theta}_{IS}),$ and the variance, $\mathbb{V}(\hat{\theta}_{IS}),$ of $\hat{\theta}_{IS}$ via a Monte Carlo simulation:   
+
+```{r}
+set.seed(321)
+
+n                      <- 100 
+B                      <- 10000
+theta_hat_IS_estim_vec <- vector(mode = "double", length = B)
+
+hfg <- function(x){
+    tmp    <- dnorm(x, mean = 0, sd = 1)/dnorm(x, mean = 4, sd = 1) 
+    tmp[x < 3] <- 0
+    result <- tmp
+    return(result)
+}
+
+for(b in 1:B){
+    X                         <- rnorm(n, mean = 4, sd = 1)    
+    theta_hat_IS_estim_vec[b] <- mean(hfg(X))
+}
+
+mean(theta_hat_IS_estim_vec)
+var(theta_hat_IS_estim_vec) 
+```
+
+
+The importance sampling estimator, $\hat{\theta}_{IS},$ is a *much* lower variance than the classical Monte Carlo integration estimator, $\hat{\theta}.$
+
+
+#### Solution of Exercise 4. {-} 
+
+##### (a) Classical Monte Carlo integration estimator {-}
+
+Classical Monte Carlo integration estimates 
+$$
+\begin{align}
+p=P(X\geq 4.5) 
+& = \int \underbrace{1_{(x\geq 4.5)}}_{=h(x)} f(x) dx = \int_{4.5}^\infty f(x)dx
+\end{align}
+$${#eq-Ch2-Ex4_1}
+by
+$$
+\begin{align}
+\hat{p}
+& = \frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}, 
+\end{align}
+$$
+where $X\sim f.$
+
+##### (b) Unbiasedness of $\hat{p}$ {-}
+
+$$
+\begin{align}
+\mathbb{E}\left(\hat{p}\right)
+& = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
+& = \mathbb{E}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \int 1_{(x\geq 4.5)} f(x) dx\\[2ex] 
+& = \int_{4.5}^\infty f(x) dx\\[2ex] 
+& = p, 
+\end{align}
+$$
+where the latter follows from @eq-Ch2-Ex4_1. Thus, the classical Monte Carlo integration estimator, $\hat{p},$ is an unbiased estimator. 
+
+##### (c) Variance of $\hat{p}$ {-}
+
+$$
+\begin{align}
+\mathbb{V}\left(\hat{p}\right)
+& = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
+& = \frac{1}{B} \mathbb{V}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \frac{p(1-p)}{B} \qquad [1_{(X\geq 4.5)}\sim\mathcal{Bern}(p)]
+\end{align}
+$$
+Thus 
+$$
+\mathbb{V}\left(\hat{p}\right) = \frac{1}{B}(p-p^2)
+$${#eq-Ch2Ex4-2}
+
+##### (d) Deriving the importance sampling estimator $\hat{p}_{IS}$ {-}
+
+Importance sampling makes use of the importance function $g$ 
+$$
+\begin{align}
+p=P(X\geq 4.5) 
+& = \int \frac{h(x) f(x)}{g(x)} g(x) dx
+\end{align}
+$$
+where here
+$$
+g(x) = \left\{\begin{array}{ll}f_{\mathcal{Exp}\text{(1)}}(x-4.5),& x \geq 4.5\\0,&\text{else.}\end{array}\right.
+$$
+Since $g(x)=0$ for all $x<4.5,$ we can simplify the integral by removing $h,$
+$$
+\begin{align}
+p=P(X\geq 4.5) 
+& = \int \frac{h(x) f(x)}{g(x)} g(x) dx 
+  = \int \frac{f(x)}{g(x)} g(x) dx.
+\end{align}
+$$
+Thus, $p$ can be estimated by 
+$$
+\begin{align}
+\hat{p}_{IS}
+& = \frac{1}{B}\sum_{i=1}^B \frac{f(X_i)}{g(X_i)}, 
+\end{align}
+$$
+where $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}g.$ 
+
+
+![](images/Ch2_Exercise_Screenshot1.png)
+
+
+Note that $g$ equals the density function of $\mathcal{Exp}(\lambda=1),$ but with a location-shift of $+4.5.$ Therefore,  
+$$
+X_i \overset{d}{=} Y_i + 4.5,
+$$
+where $Y_i\sim \mathcal{Exp}(\lambda=1).$ 
+
+Thus, an alternative, equivalent way to define $\hat{p}_{IS}$ is 
+$$
+\begin{align}
+\hat{p}_{IS}
+& = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
+& = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}, 
+\end{align}
+$$
+where $Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.$ 
+
+##### (e) Unbiasedness of $\hat{p}_{IS}$  {-}
+
+The following shows that $\hat{p}_{IS}$ is an unbiased estimator of $p:$
+
+$$
+\begin{align}
+\mathbb{E}\left(\hat{p}_{IS}\right)
+& = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+& = \mathbb{E}\left(\frac{f(Y_1 + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_1)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \int \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex] 
+& = \int_0^\infty \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\qquad [\text{support of }f_{\mathcal{Exp}\text{(1)}}]\\[2ex] 
+& = \int_0^\infty f(y + 4.5)  dy\\[2ex] 
+& = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=x+4.5]\\[2ex] 
+& = p, 
+\end{align}
+$$
+where the latter follows from @eq-Ch2-Ex4_1. Thus $\hat{p}_{IS}$ is an unbiased estimator. 
+
+##### (f) Comparing the variance of $\hat{p}$ with that of $\hat{p}_{IS}$  {-}
+
+$$
+\begin{align}
+\mathbb{V}\left(\hat{p}_{IS}\right)
+& = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+& = \frac{1}{B}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex] 
+& = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
+$$
+
+Next, we focus on $\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)$
+$$
+\begin{align}
+\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)
+& = \int_0^\infty \frac{f^2(y + 4.5)}{f^2_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
+& = \int_0^\infty \frac{f^2(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)}  dy\\[2ex]
+& = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dy\qquad [\text{subst.~}x=y+4.5]\\[2ex]
+& = \int_{4.5}^\infty \frac{f^2(y)}{g(y)} dy\qquad [\text{by definition of }g]\\[2ex]
+& = \int_{4.5}^\infty \left(\frac{f(y)}{g(y)}\right) f(y) dy\\[2ex]
+& < c_{\max}\; \int_{4.5}^\infty   f(y)\;  dy = c_{\max}\; p
+\end{align}
+$$
+where 
+$$
+c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) < 1 
+$$
+since $g(x) > f(x)$ for all $x\geq 4.5.$
+
+Thus, we have that 
+$$
+\begin{align}
+\mathbb{V}\left(\hat{p}_{IS}\right)
+& < \frac{1}{B}\left[c_{\max}\; p - p^2\right] < \frac{1}{B}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
+\end{align}
+$$
+where the latter follows from the result in @eq-Ch2Ex4-2.
+
+::: {.callout-tip}
+## 
+Note: Using importance sampling there's no need to sample directly from $f.$ This is a further advantage of importance sampling over classical Monte Carlo integration. 
+::: 

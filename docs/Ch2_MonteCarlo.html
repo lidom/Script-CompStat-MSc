@@ -233,6 +233,7 @@ div.csl-indent {
   <li><a href="#a-more-general-point-of-view" id="toc-a-more-general-point-of-view" class="nav-link" data-scroll-target="#a-more-general-point-of-view"><span class="toc-section-number">2.3.1</span>  A More General Point of View</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -256,6 +257,8 @@ div.csl-indent {
 
 </header>
 
+<!-- ToDo: Rewrite Importance Sampling according to Wasserman All of Statistics 
+25.3 Importance Sampling -->
 <section id="literature" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="literature">Literature</h3>
 <p>In principle, it is sufficient to read this script, but I can recommend the following books for further self-studies:</p>
@@ -967,6 +970,7 @@ The inverse weight re-scales these 'too often' chosen rare events.
 \mathbb{V}_g(\hat{\theta}_g)
 &amp;=\mathbb{V}_g\left(\frac{1}{n}\sum_{i=1}^n\psi(X_i)\right) \\[2ex]
 &amp;=\frac{1}{n}\mathbb{V}_g(\psi(X_i))\quad\text{(since i.i.d. random sample)}\\[2ex]
+&amp;=\frac{1}{n}\mathbb{E}_g\Big(\psi(X_i)-\underbrace{\mathbb{E}_g(\psi(X_i))}_{=\theta}\Big)^2\;dx\\[2ex]
 &amp;=\frac{1}{n}\int\left(\psi(x)-\theta\right)^2g(x)\;dx\\[2ex]
 &amp;=\frac{1}{n}\int\left(\frac{h(x)\,f(x)}{g(x)}-\theta\right)^2g(x)\;dx,
 \end{align*}
@@ -1385,7 +1389,7 @@ LL_fun <- function(beta0, beta1, sigma) {
 <section id="exercise-1." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
 <!-- Example 6.19 p. 178, A First Course in Statistical Programming with R (2021) -->
-<p>Approximate the integral <span class="math display">\[
+<p>Approximate the bi-variate integral <span class="math display">\[
 \int_3^{10} \int_1^7 \sin(x-y) dxdy
 \]</span> using classical Monte Carlo integration.</p>
 </section>
@@ -1394,8 +1398,437 @@ LL_fun <- function(beta0, beta1, sigma) {
 <!-- Example 6.20 p. 178, A First Course in Statistical Programming with R (2021) -->
 <p>Approximate the integral <span class="math display">\[
 \int_1^\infty \exp\left(-x^2\right) dx
-\]</span> using Monte Carlo integration and by making use of the exponential distribution.</p>
-<!-- {{< include Ch2_Solutions.qmd >}} -->
+\]</span> using Monte Carlo integration. Hint: Use of the density of the exponential distribution with rate parameter <span class="math inline">\(\lambda=1\)</span>.</p>
+</section>
+<section id="exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-3.">Exercise 3.</h4>
+<!-- Tail probability example of Wasserman All of Statistics 
+25.3 Importance Sampling -->
+<p>Let us estimate <span class="math display">\[
+\theta = P(X\geq 3),
+\]</span> where <span class="math inline">\(X\sim\mathcal{0,1},\)</span> using Monte Carlo integration.</p>
+<p>By the way, the true value is about this one:</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-11_7590d1898a7585bbbfe0b3bbdc5e12dd">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">pnorm</span>(<span class="dv">3</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>), <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00135</code></pre>
+</div>
+</div>
+<ol type="a">
+<li><p>Write the parameter <span class="math inline">\(\theta\)</span> as <span class="math display">\[
+\theta = \int h(x) f(x) dx = \mathbb{E}_f(h(X))
+\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution. What is the function <span class="math inline">\(h\)</span>? <!-- {{< include Ch2_Solutions.qmd >}} --></p></li>
+<li><p>What is the classic Monte Carlo integration estimator, <span class="math inline">\(\hat{\theta},\)</span> of <span class="math inline">\(\theta\)</span>? Compute one estimate of <span class="math inline">\(\theta\)</span> using a sample size of <span class="math inline">\(n=100.\)</span></p></li>
+<li><p>Repeat the simulation many times (e.g.&nbsp;<span class="math inline">\(10,000\)</span> times) to get an estimate of the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}.\)</span></p></li>
+<li><p>Why is the classic Monte Carlo integration approach here not very efficient?</p></li>
+<li><p>Take now an importance sampling approach and write the parameter <span class="math inline">\(\theta\)</span> as</p></li>
+</ol>
+<p><span class="math display">\[
+\theta = \int \frac{h(x)f(x)}{g(x)} g(x) dx = \mathbb{E}_g(Y),
+\]</span> where <span class="math inline">\(Y=\frac{h(X)f(X)}{g(X)}\)</span> and <span class="math inline">\(X\sim g.\)</span></p>
+<p>Why is the density function <span class="math inline">\(g\sim\mathcal{N}(4,1)\)</span> potentially good choice?</p>
+<ol start="6" type="a">
+<li><p>What is the importance sampling estimator, <span class="math inline">\(\hat{\theta}_{IS},\)</span> of <span class="math inline">\(\theta\)</span>? Compute one estimate of <span class="math inline">\(\theta\)</span> using a sample size of <span class="math inline">\(n=100.\)</span></p></li>
+<li><p>Repeat the simulation many times (e.g.&nbsp;<span class="math inline">\(10,000\)</span> times) to get an estimate of the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}.\)</span></p></li>
+</ol>
+</section>
+<section id="exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
+<p>The Bavarian city <a href="http://regiowiki.pnp.de/images/Hochwasser-Luftbild-Binder.jpg">Passau</a> needs to know tomorrows probability of facing a <a href="http://regiowiki.pnp.de/images/Wasserstand_Rathausturm_2014.jpg">flood catastrophy</a>. They received a density function <span class="math inline">\(f\)</span> from some experts which describes tomorrows distribution of standardized water levels <span class="math inline">\(X\)</span>. The city is particularly interested in the probability of observing water levels above of 11 meters, which in standardized water levels is equivalent to the event <span class="math inline">\(X\geq 4.5\)</span>, where <span class="math inline">\(X\sim f\)</span>.</p>
+<p>Unfortunately, <span class="math inline">\(f\)</span> is a very complicated function such that they cannot compute the probability analytically. Therefore, they tried to approximate the probability <span class="math inline">\(P(X\geq 4.5)\)</span> using classical Monte Carlo integration.<br></p>
+<ol type="a">
+<li><p>Derive the classical Monte Carlo integration estimator.<br> <strong>Hint:</strong> You can assume that it is possible to sample from <span class="math inline">\(f.\)</span> (This is not a restrictive assumption, since one could use, for instance, the very general Accept-Reject-Algorithm.)</p></li>
+<li><p>Show that the classical Monte Carlo integration estimator is unbiased.</p></li>
+<li><p>Derive the variance of the classical Monte Carlo integration estimator.</p></li>
+<li><p>It turns out that the tail probabilities of <span class="math inline">\(f\)</span> are <em>very</em> low and when simulating, e.g., <span class="math inline">\(B=10,000\)</span> realizations from <span class="math inline">\(f\)</span> usually no single realization is greater or equal to <span class="math inline">\(4.5\)</span>.<br> Derive the importance sampling estimator using an appropriately shifted version of the exponential density function with <span class="math inline">\(\lambda=1\)</span> as the importance function <span class="math inline">\(g\)</span> such that all of the <span class="math inline">\(B=10,000\)</span> realizations are used for the estimation of the probability <span class="math inline">\(P(X\geq 4.5).\)</span></p></li>
+<li><p>Show that the importance sampling estimator is unbiased.</p></li>
+<li><p>Compare the variance of the importance sampling estimator with the variance of the classical Monte Carlo integration estimator of the probability <span class="math inline">\(P(X\geq 4.5).\)</span><br> <strong>Hint:</strong> You can assume and should use that <span class="math inline">\(g(x) &gt; f(x)\)</span> for all <span class="math inline">\(x\geq 4.5.\)</span></p></li>
+</ol>
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solution-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-1.">Solution of Exercise 1.</h4>
+<p>We can write <span class="math display">\[
+\begin{align*}
+&amp;\int_3^{10} \int_1^7 \sin(x-y) dxdy\\[2ex]
+=&amp; \int_3^{10} \int_1^7 \sin(x-y) \cdot  42\cdot f_{(X,Y)}(x,y) dx dy\\[2ex]
+=&amp; \mathbb{E}\left(h( (X,Y) )\right)
+\end{align*}
+\]</span> where <span class="math inline">\(h(x,y) = \sin(x-y),\)</span> and where <span class="math display">\[
+f_{(X,Y)}(x,y) = \left\{
+    \begin{array}{ll}
+    \frac{1}{(10-3)}\cdot\frac{1}{(7-1)} = \frac{1}{42}&amp;\text{for all }(x,y)\in[3,10]\times[1,7]\\[2ex]
+    0&amp;\text{else}
+    \end{array}
+    \right.
+\]</span> is the bi-variate density function of <span class="math inline">\((X,Y)\)</span> with <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> being two <em>independent</em> uniformly distributed random variables <span class="math display">\[
+X\sim\mathcal{U}[1,7]\quad\text{and}\quad Y\sim\mathcal{U}[3,10],
+\]</span></p>
+<p>Thus, we can approximate the two-dimensional integral <span class="math display">\[
+\int_3^{10} \int_1^7 \sin(x-y) dxdy
+\]</span> using sample averages of <span class="math inline">\(\sin(X-Y),\)</span> <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n \sin(X_i - Y_i),
+\]</span> where <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}\sim\mathcal{U}[1,7]\)</span> and <span class="math inline">\(Y_1,\dots,Y_n\overset{\text{i.i.d.}}\sim\mathcal{U}[3,10].\)</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-12_0363ed7be906f29ab49b999de8d11601">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>X   <span class="ot">&lt;-</span>  <span class="fu">runif</span>(<span class="dv">1000000</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span>  <span class="dv">7</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>Y   <span class="ot">&lt;-</span>  <span class="fu">runif</span>(<span class="dv">1000000</span>, <span class="at">min =</span> <span class="dv">3</span>, <span class="at">max =</span> <span class="dv">10</span>) </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">sin</span>(X <span class="sc">-</span>Y)) <span class="sc">*</span> <span class="dv">42</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09818893</code></pre>
+</div>
+</div>
+</section>
+<section id="solution-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-2.">Solution of Exercise 2.</h4>
+<!-- ::: {.callout-note}
+##
+The uniform density (as in Exercise 1) is by no means the only density that can be used in Monte Carlo integration. An integral of interest, say, 
+$$
+\int g(x)dx
+$$
+can be written as
+$$
+\begin{align*}
+\int g(x)dx
+&=\int \left(\frac{g(x)}{f(x)}\right) f(x) dx\\[2ex]
+&=\mathbb{E}\left(\frac{g(X)}{f(X)}\right)
+\end{align*}
+$$
+for $X\sim f.$
+
+Thus, we can approximate an integral $\int g(x)dx$ using the sample mean of 
+$$
+\frac{g(X)}{f(X)}
+$$
+with $X\sim f.$
+::: -->
+<p>To approximate <span class="math display">\[
+\int_1^\infty \exp\left(-x^2\right) dx
+\]</span> we can use that <span class="math display">\[
+\begin{align*}
+\int_1^\infty \exp\left(-x^2\right) dx
+&amp;=\int_0^\infty \exp\left(-(x+1)^2\right) dx\\[2ex]
+&amp;=\int_0^\infty \underbrace{\frac{\exp\left(-(x+1)^2\right)}{\exp\left(- x\right)}}_{=h(x)} \underbrace{\exp\left(-x\right)}_{=f(x)} dx\\[2ex]
+&amp;=\mathbb{E}\left(\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)}\right) = \mathbb{E}\left(h(X)\right)
+\end{align*}
+\]</span> with <span class="math inline">\(X\sim\mathcal{Exp}(\lambda = 1).\)</span></p>
+<p>Thus, we can approximate an integral <span class="math inline">\(\int_1^\infty \exp\left(-x^2\right) dx\)</span> using the sample mean of <span class="math display">\[
+\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)},
+\]</span> where <span class="math inline">\(X\sim f.\)</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-13_5d19b3f5c2abd5cdf7a716a2ba3a4150">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100000</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( <span class="fu">exp</span>(<span class="sc">-</span>(X <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">dexp</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1398062</code></pre>
+</div>
+</div>
+</section>
+<section id="solution-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-3.">Solution of Exercise 3.</h4>
+<section id="a" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a">(a)</h5>
+<p><span class="math display">\[
+\begin{align}
+P(X\geq 3)
+&amp; = \theta \\[2ex]
+&amp; = \int h(x) f(x) dx\\[2ex]
+&amp; = \int 1_{(x\geq 3)} f(x) dx,
+\end{align}
+\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution.</p>
+<p>I.e. <span class="math display">\[
+h(x) = 1_{(x\geq 3)}
+\]</span></p>
+</section>
+<section id="b" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b">(b)</h5>
+<p>Classic Monte Carlo integration estimator,</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{\theta} &amp; = \frac{1}{n}\sum_{i=1}^n h(X_i),
+\end{align}
+\]</span> where <span class="math inline">\(X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(0,1)\)</span> and <span class="math inline">\(h(x) = 1_{(x\geq 3)}.\)</span></p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-14_eb303755baab256d3d31d8a7db4846d3">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">h</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Obviously, not a good estimation result. We know that <span class="math inline">\(\theta = P(X\geq 3)\)</span> is some small number, but certainly larger than zero.</p>
+</section>
+<section id="c" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c">(c)</h5>
+<p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}\)</span> via a Monte Carlo simulation:</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-15_6a75fc38027a56377778fc3ad9fbe5de">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>n                   <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>B                   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>theta_hat_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> B)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    X                      <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)    </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    theta_hat_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">h</span>(X))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00448615</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(theta_hat_estim_vec) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0001480003</code></pre>
+</div>
+</div>
+</section>
+<section id="d" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d">(d)</h5>
+<p>Most observations are wasted in the sense that most are not near the right tail (<span class="math inline">\(X\geq 3\)</span>).</p>
+</section>
+<section id="e" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e">(e)</h5>
+<p>The importance function <span class="math inline">\(g\)</span> is a good/resonable choice since</p>
+<ul>
+<li><span class="math inline">\(g\)</span> has a more or less similar shape as <span class="math inline">\(|h|f\)</span></li>
+<li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(|h|f\)</span></li>
+<li>it is very simple to sample from <span class="math inline">\(g\)</span></li>
+</ul>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-16_ece25e3f17ce800d5b893aa5de5fb8df">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">8</span>, <span class="at">len =</span> <span class="dv">50</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>hf_vec <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x_vec, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>g_vec  <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x_vec, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> x_vec, <span class="at">y =</span> hf_vec, <span class="at">type =</span> <span class="st">"l"</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="at">ylim =</span> <span class="fu">range</span>(hf_vec, g_vec), <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> x_vec, <span class="at">y =</span> g_vec, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"|h|f"</span>, <span class="st">"g"</span>), </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="at">col=</span><span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>), <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch2_MonteCarlo_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="f" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f">(f)</h5>
+<p>Importance sampling integration estimator,</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{\theta}_{IS} &amp; = \frac{1}{n}\sum_{i=1}^n \frac{h(X_i)f(X_i)}{g(X_i)},
+\end{align}
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1),\)</span></li>
+<li><span class="math inline">\(f\)</span> is the density function of the standard normal distribution</li>
+<li><span class="math inline">\(h(x) = 1_{(x\geq 3)}\)</span></li>
+</ul>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-17_727af0c3122d483d9288244775efdbaf">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>n   <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>X   <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>hfg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span><span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001567801</code></pre>
+</div>
+</div>
+</section>
+<section id="g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g">(g)</h5>
+<p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}_{IS}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}_{IS}),\)</span> of <span class="math inline">\(\hat{\theta}_{IS}\)</span> via a Monte Carlo simulation:</p>
+<div class="cell" data-hash="Ch2_MonteCarlo_cache/html/unnamed-chunk-18_ab46892f6a019d7f546869fc11fef5cf">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>n                      <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>B                      <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>theta_hat_IS_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> B)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>hfg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span><span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    X                         <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>)    </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    theta_hat_IS_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_IS_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00135138</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(theta_hat_IS_estim_vec) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.617291e-08</code></pre>
+</div>
+</div>
+<p>The importance sampling estimator, <span class="math inline">\(\hat{\theta}_{IS},\)</span> is a <em>much</em> lower variance than the classical Monte Carlo integration estimator, <span class="math inline">\(\hat{\theta}.\)</span></p>
+</section>
+</section>
+<section id="solution-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-4.">Solution of Exercise 4.</h4>
+<section id="a-classical-monte-carlo-integration-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-classical-monte-carlo-integration-estimator">(a) Classical Monte Carlo integration estimator</h5>
+<p>Classical Monte Carlo integration estimates <span id="eq-Ch2-Ex4_1"><span class="math display">\[
+\begin{align}
+p=P(X\geq 4.5)
+&amp; = \int \underbrace{1_{(x\geq 4.5)}}_{=h(x)} f(x) dx = \int_{4.5}^\infty f(x)dx
+\end{align}
+\tag{2.7}\]</span></span> by <span class="math display">\[
+\begin{align}
+\hat{p}
+&amp; = \frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)},
+\end{align}
+\]</span> where <span class="math inline">\(X\sim f.\)</span></p>
+</section>
+<section id="b-unbiasedness-of-hatp" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-unbiasedness-of-hatp">(b) Unbiasedness of <span class="math inline">\(\hat{p}\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}\left(\hat{p}\right)
+&amp; = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
+&amp; = \mathbb{E}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \int 1_{(x\geq 4.5)} f(x) dx\\[2ex]
+&amp; = \int_{4.5}^\infty f(x) dx\\[2ex]
+&amp; = p,
+\end{align}
+\]</span> where the latter follows from <a href="#eq-Ch2-Ex4_1">Equation&nbsp;<span>2.7</span></a>. Thus, the classical Monte Carlo integration estimator, <span class="math inline">\(\hat{p},\)</span> is an unbiased estimator.</p>
+</section>
+<section id="c-variance-of-hatp" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-variance-of-hatp">(c) Variance of <span class="math inline">\(\hat{p}\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{V}\left(\hat{p}\right)
+&amp; = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
+&amp; = \frac{1}{B} \mathbb{V}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \frac{p(1-p)}{B} \qquad [1_{(X\geq 4.5)}\sim\mathcal{Bern}(p)]
+\end{align}
+\]</span> Thus <span id="eq-Ch2Ex4-2"><span class="math display">\[
+\mathbb{V}\left(\hat{p}\right) = \frac{1}{B}(p-p^2)
+\tag{2.8}\]</span></span></p>
+</section>
+<section id="d-deriving-the-importance-sampling-estimator-hatp_is" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d-deriving-the-importance-sampling-estimator-hatp_is">(d) Deriving the importance sampling estimator <span class="math inline">\(\hat{p}_{IS}\)</span></h5>
+<p>Importance sampling makes use of the importance function <span class="math inline">\(g\)</span> <span class="math display">\[
+\begin{align}
+p=P(X\geq 4.5)
+&amp; = \int \frac{h(x) f(x)}{g(x)} g(x) dx
+\end{align}
+\]</span> where here <span class="math display">\[
+g(x) = \left\{\begin{array}{ll}f_{\mathcal{Exp}\text{(1)}}(x-4.5),&amp; x \geq 4.5\\0,&amp;\text{else.}\end{array}\right.
+\]</span> Since <span class="math inline">\(g(x)=0\)</span> for all <span class="math inline">\(x&lt;4.5,\)</span> we can simplify the integral by removing <span class="math inline">\(h,\)</span> <span class="math display">\[
+\begin{align}
+p=P(X\geq 4.5)
+&amp; = \int \frac{h(x) f(x)}{g(x)} g(x) dx
+  = \int \frac{f(x)}{g(x)} g(x) dx.
+\end{align}
+\]</span> Thus, <span class="math inline">\(p\)</span> can be estimated by <span class="math display">\[
+\begin{align}
+\hat{p}_{IS}
+&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(X_i)}{g(X_i)},
+\end{align}
+\]</span> where <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}g.\)</span></p>
+<p><img src="images/Ch2_Exercise_Screenshot1.png" class="img-fluid"></p>
+<p>Note that <span class="math inline">\(g\)</span> equals the density function of <span class="math inline">\(\mathcal{Exp}(\lambda=1),\)</span> but with a location-shift of <span class="math inline">\(+4.5.\)</span> Therefore,<br>
+<span class="math display">\[
+X_i \overset{d}{=} Y_i + 4.5,
+\]</span> where <span class="math inline">\(Y_i\sim \mathcal{Exp}(\lambda=1).\)</span></p>
+<p>Thus, an alternative, equivalent way to define <span class="math inline">\(\hat{p}_{IS}\)</span> is <span class="math display">\[
+\begin{align}
+\hat{p}_{IS}
+&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
+&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )},
+\end{align}
+\]</span> where <span class="math inline">\(Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.\)</span></p>
+</section>
+<section id="e-unbiasedness-of-hatp_is" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e-unbiasedness-of-hatp_is">(e) Unbiasedness of <span class="math inline">\(\hat{p}_{IS}\)</span></h5>
+<p>The following shows that <span class="math inline">\(\hat{p}_{IS}\)</span> is an unbiased estimator of <span class="math inline">\(p:\)</span></p>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{E}\left(\hat{p}_{IS}\right)
+&amp; = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+&amp; = \mathbb{E}\left(\frac{f(Y_1 + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_1)}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \int \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
+&amp; = \int_0^\infty \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\qquad [\text{support of }f_{\mathcal{Exp}\text{(1)}}]\\[2ex]
+&amp; = \int_0^\infty f(y + 4.5)  dy\\[2ex]
+&amp; = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=x+4.5]\\[2ex]
+&amp; = p,
+\end{align}
+\]</span> where the latter follows from <a href="#eq-Ch2-Ex4_1">Equation&nbsp;<span>2.7</span></a>. Thus <span class="math inline">\(\hat{p}_{IS}\)</span> is an unbiased estimator.</p>
+</section>
+<section id="f-comparing-the-variance-of-hatp-with-that-of-hatp_is" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-comparing-the-variance-of-hatp-with-that-of-hatp_is">(f) Comparing the variance of <span class="math inline">\(\hat{p}\)</span> with that of <span class="math inline">\(\hat{p}_{IS}\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+\mathbb{V}\left(\hat{p}_{IS}\right)
+&amp; = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+&amp; = \frac{1}{B}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex]
+&amp; = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
+\]</span></p>
+<p>Next, we focus on <span class="math inline">\(\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)\)</span> <span class="math display">\[
+\begin{align}
+\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)
+&amp; = \int_0^\infty \frac{f^2(y + 4.5)}{f^2_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
+&amp; = \int_0^\infty \frac{f^2(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)}  dy\\[2ex]
+&amp; = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dy\qquad [\text{subst.~}x=y+4.5]\\[2ex]
+&amp; = \int_{4.5}^\infty \frac{f^2(y)}{g(y)} dy\qquad [\text{by definition of }g]\\[2ex]
+&amp; = \int_{4.5}^\infty \left(\frac{f(y)}{g(y)}\right) f(y) dy\\[2ex]
+&amp; &lt; c_{\max}\; \int_{4.5}^\infty   f(y)\;  dy = c_{\max}\; p
+\end{align}
+\]</span> where <span class="math display">\[
+c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) &lt; 1
+\]</span> since <span class="math inline">\(g(x) &gt; f(x)\)</span> for all <span class="math inline">\(x\geq 4.5.\)</span></p>
+<p>Thus, we have that <span class="math display">\[
+\begin{align}
+\mathbb{V}\left(\hat{p}_{IS}\right)
+&amp; &lt; \frac{1}{B}\left[c_{\max}\; p - p^2\right] &lt; \frac{1}{B}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
+\end{align}
+\]</span> where the latter follows from the result in <a href="#eq-Ch2Ex4-2">Equation&nbsp;<span>2.8</span></a>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note: Using importance sampling there’s no need to sample directly from <span class="math inline">\(f.\)</span> This is a further advantage of importance sampling over classical Monte Carlo integration.</p>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
