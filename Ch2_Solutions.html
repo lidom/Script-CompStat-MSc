@@ -111,8 +111,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="solutions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
-<section id="exercise-1." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
+<section id="solutions-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-1.">Solutions of Exercise 1.</h4>
 <p>We can write <span class="math display">\[
 \begin{align*}
 &amp;\int_3^{10} \int_1^7 \sin(x-y) dxdy\\[2ex]
@@ -146,8 +146,8 @@ X\sim\mathcal{U}[1,7]\quad\text{and}\quad Y\sim\mathcal{U}[3,10],
 </div>
 </div>
 </section>
-<section id="exercise-2." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
+<section id="solutions-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-2.">Solutions of Exercise 2.</h4>
 <!-- ::: {.callout-note}
 ##
 The uniform density (as in Exercise 1) is by no means the only density that can be used in Monte Carlo integration. An integral of interest, say, 
@@ -193,10 +193,10 @@ with $X\sim f.$
 </div>
 </div>
 </section>
-<section id="exercise-3." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="exercise-3.">Exercise 3.</h4>
-<section id="a" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="a">(a)</h5>
+<section id="solutions-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-3.">Solutions of Exercise 3.</h4>
+<section id="a-function-h" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-function-h">(a) Function <span class="math inline">\(h\)</span></h5>
 <p><span class="math display">\[
 \begin{align}
 P(X\geq 3)
@@ -204,15 +204,13 @@ P(X\geq 3)
 &amp; = \int h(x) f(x) dx\\[2ex]
 &amp; = \int 1_{(x\geq 3)} f(x) dx,
 \end{align}
-\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution.</p>
-<p>I.e. <span class="math display">\[
-h(x) = 1_{(x\geq 3)}
+\]</span> where <span class="math inline">\(X\sim f\)</span> with <span class="math inline">\(f\)</span> denoting the density function of the standard normal distribution. That is, <span class="math display">\[
+h(x) = 1_{(x\geq 3)}.
 \]</span></p>
 </section>
-<section id="b" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="b">(b)</h5>
-<p>Classic Monte Carlo integration estimator,</p>
-<p><span class="math display">\[
+<section id="b-classical-monte-carlo-integration-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-classical-monte-carlo-integration-estimator">(b) Classical Monte Carlo integration estimator</h5>
+<p>The classical Monte Carlo integration estimator is given by <span class="math display">\[
 \begin{align}
 \hat{\theta} &amp; = \frac{1}{n}\sum_{i=1}^n h(X_i),
 \end{align}
@@ -234,8 +232,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 <p>Obviously, not a good estimation result. We know that <span class="math inline">\(\theta = P(X\geq 3)\)</span> is some small number, but certainly larger than zero.</p>
 </section>
-<section id="c" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="c">(c)</h5>
+<section id="c-approximate-the-mean-and-the-variance-of-hattheta-using-a-simulation." class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-approximate-the-mean-and-the-variance-of-hattheta-using-a-simulation.">(c) Approximate the mean and the variance of <span class="math inline">\(\hat{\theta}\)</span> using a simulation.</h5>
 <p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}),\)</span> of <span class="math inline">\(\hat{\theta}\)</span> via a Monte Carlo simulation:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
@@ -264,12 +262,12 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="d" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="d">(d)</h5>
+<section id="d-why-is-hattheta-not-efficient" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d-why-is-hattheta-not-efficient">(d) Why is <span class="math inline">\(\hat{\theta}\)</span> not efficient?</h5>
 <p>Most observations are wasted in the sense that most are not near the right tail (<span class="math inline">\(X\geq 3\)</span>).</p>
 </section>
-<section id="e" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="e">(e)</h5>
+<section id="e-importance-sampling-approach" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e-importance-sampling-approach">(e) Importance sampling approach</h5>
 <p>The importance function <span class="math inline">\(g\)</span> is a good/resonable choice since</p>
 <ul>
 <li><span class="math inline">\(g\)</span> has a more or less similar shape as <span class="math inline">\(|h|f\)</span></li>
@@ -291,8 +289,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="f" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="f">(f)</h5>
+<section id="f-importance-sampling-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-importance-sampling-estimator">(f) Importance sampling estimator</h5>
 <p>Importance sampling integration estimator,</p>
 <p><span class="math display">\[
 \begin{align}
@@ -323,8 +321,8 @@ h(x) = 1_{(x\geq 3)}
 </div>
 </div>
 </section>
-<section id="g" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="g">(g)</h5>
+<section id="g-approximate-the-mean-and-the-variance-of-hattheta_is-using-a-simulation." class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g-approximate-the-mean-and-the-variance-of-hattheta_is-using-a-simulation.">(g) Approximate the mean and the variance of <span class="math inline">\(\hat{\theta}_{IS}\)</span> using a simulation.</h5>
 <p>Approximating the mean, <span class="math inline">\(\mathbb{E}(\hat{\theta}_{IS}),\)</span> and the variance, <span class="math inline">\(\mathbb{V}(\hat{\theta}_{IS}),\)</span> of <span class="math inline">\(\hat{\theta}_{IS}\)</span> via a Monte Carlo simulation:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
@@ -357,8 +355,8 @@ h(x) = 1_{(x\geq 3)}
 <p>The importance sampling estimator, <span class="math inline">\(\hat{\theta}_{IS},\)</span> is a <em>much</em> lower variance than the classical Monte Carlo integration estimator, <span class="math inline">\(\hat{\theta}.\)</span></p>
 </section>
 </section>
-<section id="exercise-4." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
+<section id="solutions-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-4.">Solutions of Exercise 4.</h4>
 <section id="a-classical-monte-carlo-integration-estimator" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="a-classical-monte-carlo-integration-estimator">(a) Classical Monte Carlo integration estimator</h5>
 <p>Classical Monte Carlo integration estimates <span id="eq-Ch2-Ex4_1"><span class="math display">\[
@@ -478,6 +476,19 @@ c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) &lt; 1
 &amp; &lt; \frac{1}{B}\left[c_{\max}\; p - p^2\right] &lt; \frac{1}{B}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
 \end{align}
 \]</span> where the latter follows from the result in <a href="#eq-Ch2Ex4-2">Equation&nbsp;2</a>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note: Using importance sampling there’s no need to sample directly from <span class="math inline">\(f.\)</span> This is a further advantage of importance sampling over classical Monte Carlo integration.</p>
+</div>
+</div>
 </section>
 </section>
 </section>
