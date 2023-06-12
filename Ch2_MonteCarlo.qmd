@@ -1342,9 +1342,9 @@ Let us estimate
 $$
 \theta = P(X\geq 3),
 $$
-where $X\sim\mathcal{0,1},$ using Monte Carlo integration. 
+where $X\sim\mathcal{N}{0,1},$ using Monte Carlo integration. 
 
-By the way, the true value is about this one: 
+For a reference, this is the integral value computed in `R`: 
 ```{r}
 round(pnorm(3, mean = 0, sd = 1, lower.tail = FALSE), 5)
 ```
@@ -1375,19 +1375,20 @@ where $Y=\frac{h(X)f(X)}{g(X)}$ and $X\sim g.$ <br> Why is the density function 
 
 #### Exercise 4. {-} 
 
-The Bavarian city [Passau](http://regiowiki.pnp.de/images/Hochwasser-Luftbild-Binder.jpg) needs to know tomorrows probability of facing a [flood catastrophy](http://regiowiki.pnp.de/images/Wasserstand_Rathausturm_2014.jpg). They received a density function $f$ from some experts which describes tomorrows distribution of standardized water levels $X$. The city is particularly interested in the probability of observing water levels above of 11 meters, which in standardized water levels is equivalent to the event $X\geq 4.5$, where $X\sim f$. 
+The Bavarian city Passau needs to know tomorrows probability of facing a [flood catastrophy](https://www.hochwasser-passau.de/#bilder). They received a density function $f$ from some experts which describes tomorrows distribution of standardized water levels $X$. The city is particularly interested in the probability of observing water levels above of 11 meters, which in standardized water levels is equivalent to the event $X\geq 4.5$, where $X\sim f$. 
 
 Unfortunately, $f$ is a very complicated function such that they cannot compute the probability analytically. Therefore, they tried to approximate the probability $P(X\geq 4.5)$ using classical Monte Carlo integration.<br>
 
 (a) Derive the classical Monte Carlo integration estimator.<br>
-**Hint:** You can assume that it is possible to sample from $f.$ (This is not a restrictive assumption, since one could use, for instance, the very general  Accept-Reject-Algorithm.)
+**Hint:** You can assume that it is possible to sample from $f.$ (This is not a restrictive assumption, since one could use, for instance, the very general, but quite inefficient, Accept-Reject-Algorithm.)
 
 (b) Show that the classical Monte Carlo integration estimator is unbiased. 
 
 (c) Derive the variance of the classical Monte Carlo integration estimator.  
 
 (d) It turns out that the tail probabilities of $f$ are *very* low and when simulating, e.g., $B=10,000$ realizations from $f$ usually no single realization is greater or equal to $4.5$.<br>
-Derive the importance sampling estimator using an appropriately shifted version of the exponential density function with $\lambda=1$ as the importance function $g$ such that all of the $B=10,000$ realizations are used for the estimation of the probability $P(X\geq 4.5).$  
+Derive the importance sampling estimator using an appropriately shifted version of the exponential density function with $\lambda=1$ as the importance function $g$ such that all of the $B=10,000$ realizations are used for the estimation of the probability $P(X\geq 4.5).$ <br>
+**Hint:** You can assume that $g(x) > f(x)$ for all $x\geq 4.5.$  
 
 (e) Show that the importance sampling estimator is unbiased. 
 

@@ -7,7 +7,7 @@ $$
 \begin{align*}
 &\int_3^{10} \int_1^7 \sin(x-y) dxdy\\[2ex] 
 =& \int_3^{10} \int_1^7 \sin(x-y) \cdot  42\cdot f_{(X,Y)}(x,y) dx dy\\[2ex]
-=& \mathbb{E}\left(h( (X,Y) )\right)
+=& \mathbb{E}_f\left(h( (X,Y) )\right)
 \end{align*}
 $$
 where $h(x,y) = \sin(x-y),$ and where 
@@ -83,7 +83,7 @@ $$
 &=\mathbb{E}\left(\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)}\right) = \mathbb{E}\left(h(X)\right)
 \end{align*}
 $$
-with $X\sim\mathcal{Exp}(\lambda = 1).$
+with $X\sim f,$ where $f$ is the density function of the Exponential distribution $\mathcal{Exp}(\lambda = 1).$
 
 Thus, we can approximate an integral $\int_1^\infty \exp\left(-x^2\right) dx$ using the sample mean of 
 $$
@@ -95,7 +95,7 @@ where $X\sim f.$
 ```{r}
 set.seed(321)
 
-X <- rexp(100000)
+X <- rexp(100000, rate = 1)
 mean( exp(-(X + 1)^2) / dexp(X))
 ```
 
@@ -134,7 +134,8 @@ set.seed(321)
 n <- 100 
 X <- rnorm(n)
 h <- function(x){
-    x[x < 3] <- 0
+    x[x < 3]  <- 0
+    x[x >= 3] <- 1
     return(x)
 }
 
@@ -152,10 +153,12 @@ set.seed(321)
 
 n                   <- 100 
 B                   <- 10000
-theta_hat_estim_vec <- vector(mode = "double", length = B)
+theta_hat_estim_vec <- vector(mode   = "double", 
+                              length = B)
 
 h <- function(x){
-    x[x < 3] <- 0
+    x[x <  3] <- 0
+    x[x >= 3] <- 1
     return(x)
 }
 
@@ -174,7 +177,25 @@ Most observations are wasted in the sense that most are not near the right tail 
 
 ##### (e) Importance sampling approach {-}
 
-The importance function $g$ is a good/resonable choice since 
+$$
+\begin{align}
+P(X\geq 3) 
+& = \theta \\[2ex]
+& = \int h(x) f(x) dx\\[2ex]
+& = \int \frac{h(x) f(x)}{g(x)} g(x) dx
+\end{align}
+$$
+where $h(x) = 1_{(x\geq 3)},$ $f$ is the density function of $\mathcal{N}(0,1),$ and $g$ is the density function of $\mathcal{N}(4,1).$
+
+<!-- Thus, we can approximate $\theta$ using the sample mean 
+$$
+\begin{align}
+\hat{\theta}_{IS} & = \frac{1}{n}\sum_{i=1}^n \frac{h(X_i) f(X_i)}{g(X_i)}, 
+\end{align}
+$$
+where $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}g.$ -->
+
+The importance function $g\sim\mathcal{N}(4,1)$ is potentially a good choice since 
 
 * $g$ has a more or less similar shape as $|h|f$ 
 * $g$ has thicker tails than $|h|f$
@@ -204,8 +225,8 @@ $$
 $$
 where 
 
-* $X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1),$ 
-* $f$ is the density function of the standard normal distribution 
+* $X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1)$ 
+* $f$ is the density function of $\mathcal{N}(4,1)$
 * $h(x) = 1_{(x\geq 3)}$
 
 ```{r}
@@ -215,7 +236,8 @@ n   <- 100
 X   <- rnorm(n, mean = 4, sd = 1)
 
 hfg <- function(x){
-    tmp    <- dnorm(x, mean = 0, sd = 1)/dnorm(x, mean = 4, sd = 1) 
+    tmp    <- dnorm(x, mean = 0, sd = 1)/
+              dnorm(x, mean = 4, sd = 1) 
     tmp[x < 3] <- 0
     result <- tmp
     return(result)
@@ -234,17 +256,21 @@ set.seed(321)
 
 n                      <- 100 
 B                      <- 10000
-theta_hat_IS_estim_vec <- vector(mode = "double", length = B)
+theta_hat_IS_estim_vec <- vector(mode   = "double", 
+                                 length = B)
 
 hfg <- function(x){
-    tmp    <- dnorm(x, mean = 0, sd = 1)/dnorm(x, mean = 4, sd = 1) 
+    tmp    <- dnorm(x, mean = 0, sd = 1)/
+              dnorm(x, mean = 4, sd = 1) 
     tmp[x < 3] <- 0
     result <- tmp
     return(result)
 }
 
 for(b in 1:B){
-    X                         <- rnorm(n, mean = 4, sd = 1)    
+    X                         <- rnorm(n    = n, 
+                                       mean = 4, 
+                                       sd   = 1)    
     theta_hat_IS_estim_vec[b] <- mean(hfg(X))
 }
 
@@ -271,18 +297,18 @@ by
 $$
 \begin{align}
 \hat{p}
-& = \frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}, 
+& = \frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)}, 
 \end{align}
 $$
-where $X\sim f.$
+where $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim} f.$
 
 ##### (b) Unbiasedness of $\hat{p}$ {-}
 
 $$
 \begin{align}
 \mathbb{E}\left(\hat{p}\right)
-& = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
-& = \mathbb{E}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)}\right)\\[2ex]
+& = \mathbb{E}\left(1_{(X_1\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
 & = \int 1_{(x\geq 4.5)} f(x) dx\\[2ex] 
 & = \int_{4.5}^\infty f(x) dx\\[2ex] 
 & = p, 
@@ -295,14 +321,14 @@ where the latter follows from @eq-Ch2-Ex4_1. Thus, the classical Monte Carlo int
 $$
 \begin{align}
 \mathbb{V}\left(\hat{p}\right)
-& = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
-& = \frac{1}{B} \mathbb{V}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
-& = \frac{p(1-p)}{B} \qquad [1_{(X\geq 4.5)}\sim\mathcal{Bern}(p)]
+& = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)}\right)\\[2ex]
+& = \frac{1}{n} \mathbb{V}\left(1_{(X_1\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \frac{p(1-p)}{n} \qquad [1_{(X_1\geq 4.5)}\sim\mathcal{Bern}(p)]
 \end{align}
 $$
 Thus 
 $$
-\mathbb{V}\left(\hat{p}\right) = \frac{1}{B}(p-p^2)
+\mathbb{V}\left(\hat{p}\right) = \frac{1}{n}(p-p^2)
 $${#eq-Ch2Ex4-2}
 
 ##### (d) Deriving the importance sampling estimator $\hat{p}_{IS}$ {-}
@@ -322,15 +348,15 @@ Since $g(x)=0$ for all $x<4.5,$ we can simplify the integral by removing $h,$
 $$
 \begin{align}
 p=P(X\geq 4.5) 
-& = \int \frac{h(x) f(x)}{g(x)} g(x) dx 
-  = \int \frac{f(x)}{g(x)} g(x) dx.
+& = \int \frac{h(x) f(x)}{g(x)} g(x) dx \\[2ex]
+& = \int \frac{f(x)}{g(x)} g(x) dx.
 \end{align}
 $$
 Thus, $p$ can be estimated by 
 $$
 \begin{align}
 \hat{p}_{IS}
-& = \frac{1}{B}\sum_{i=1}^B \frac{f(X_i)}{g(X_i)}, 
+& = \frac{1}{n}\sum_{i=1}^n \frac{f(X_i)}{g(X_i)}, 
 \end{align}
 $$
 where $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}g.$ 
@@ -349,11 +375,12 @@ Thus, an alternative, equivalent way to define $\hat{p}_{IS}$ is
 $$
 \begin{align}
 \hat{p}_{IS}
-& = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
-& = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}, 
+& = \frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
+& = \frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}, 
 \end{align}
 $$
-where $Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.$ 
+where $Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.$ This version is very convenient since it is very simple to sample from $f_{\mathcal{Exp}\text{(1)}}.$
+
 
 ##### (e) Unbiasedness of $\hat{p}_{IS}$  {-}
 
@@ -362,12 +389,12 @@ The following shows that $\hat{p}_{IS}$ is an unbiased estimator of $p:$
 $$
 \begin{align}
 \mathbb{E}\left(\hat{p}_{IS}\right)
-& = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
 & = \mathbb{E}\left(\frac{f(Y_1 + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_1)}\right)\qquad [\text{i.i.d.}]\\[2ex] 
 & = \int \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex] 
 & = \int_0^\infty \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\qquad [\text{support of }f_{\mathcal{Exp}\text{(1)}}]\\[2ex] 
 & = \int_0^\infty f(y + 4.5)  dy\\[2ex] 
-& = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=x+4.5]\\[2ex] 
+& = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=y+4.5]\\[2ex] 
 & = p, 
 \end{align}
 $$
@@ -378,10 +405,10 @@ where the latter follows from @eq-Ch2-Ex4_1. Thus $\hat{p}_{IS}$ is an unbiased 
 $$
 \begin{align}
 \mathbb{V}\left(\hat{p}_{IS}\right)
-& = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
-& = \frac{1}{B}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex] 
-& = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex] 
-& = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
+& = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+& = \frac{1}{n}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex] 
+& = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex] 
+& = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
 $$
 
 Next, we focus on $\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)$
@@ -390,10 +417,10 @@ $$
 \mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)
 & = \int_0^\infty \frac{f^2(y + 4.5)}{f^2_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
 & = \int_0^\infty \frac{f^2(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)}  dy\\[2ex]
-& = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dy\qquad [\text{subst.~}x=y+4.5]\\[2ex]
-& = \int_{4.5}^\infty \frac{f^2(y)}{g(y)} dy\qquad [\text{by definition of }g]\\[2ex]
-& = \int_{4.5}^\infty \left(\frac{f(y)}{g(y)}\right) f(y) dy\\[2ex]
-& < c_{\max}\; \int_{4.5}^\infty   f(y)\;  dy = c_{\max}\; p
+& = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dx\qquad [\text{subst.~}x=y+4.5]\\[2ex]
+& = \int_{4.5}^\infty \frac{f^2(x)}{g(x)} dx\qquad [\text{by definition of }g]\\[2ex]
+& = \int_{4.5}^\infty \left(\frac{f(x)}{g(x)}\right) f(x) dx\\[2ex]
+& < c_{\max}\; \int_{4.5}^\infty   f(x)\;  dy = c_{\max}\; p < p
 \end{align}
 $$
 where 
@@ -406,12 +433,12 @@ Thus, we have that
 $$
 \begin{align}
 \mathbb{V}\left(\hat{p}_{IS}\right)
-& < \frac{1}{B}\left[c_{\max}\; p - p^2\right] < \frac{1}{B}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
+& < \frac{1}{n}\left[c_{\max}\; p - p^2\right] < \frac{1}{n}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
 \end{align}
 $$
 where the latter follows from the result in @eq-Ch2Ex4-2.
 
 ::: {.callout-tip}
 ## 
-Note: Using importance sampling there's no need to sample directly from $f.$ This is a further advantage of importance sampling over classical Monte Carlo integration. 
+Note: Using importance sampling there's no need to sample directly from $f,$ which may be difficult. This is a further advantage of importance sampling over classical Monte Carlo integration. 
 ::: 
