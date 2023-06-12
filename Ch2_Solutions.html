@@ -117,7 +117,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \begin{align*}
 &amp;\int_3^{10} \int_1^7 \sin(x-y) dxdy\\[2ex]
 =&amp; \int_3^{10} \int_1^7 \sin(x-y) \cdot  42\cdot f_{(X,Y)}(x,y) dx dy\\[2ex]
-=&amp; \mathbb{E}\left(h( (X,Y) )\right)
+=&amp; \mathbb{E}_f\left(h( (X,Y) )\right)
 \end{align*}
 \]</span> where <span class="math inline">\(h(x,y) = \sin(x-y),\)</span> and where <span class="math display">\[
 f_{(X,Y)}(x,y) = \left\{
@@ -179,14 +179,14 @@ with $X\sim f.$
 &amp;=\int_0^\infty \underbrace{\frac{\exp\left(-(x+1)^2\right)}{\exp\left(- x\right)}}_{=h(x)} \underbrace{\exp\left(-x\right)}_{=f(x)} dx\\[2ex]
 &amp;=\mathbb{E}\left(\frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)}\right) = \mathbb{E}\left(h(X)\right)
 \end{align*}
-\]</span> with <span class="math inline">\(X\sim\mathcal{Exp}(\lambda = 1).\)</span></p>
+\]</span> with <span class="math inline">\(X\sim f,\)</span> where <span class="math inline">\(f\)</span> is the density function of the Exponential distribution <span class="math inline">\(\mathcal{Exp}(\lambda = 1).\)</span></p>
 <p>Thus, we can approximate an integral <span class="math inline">\(\int_1^\infty \exp\left(-x^2\right) dx\)</span> using the sample mean of <span class="math display">\[
 \frac{\exp\left(-(X+1)^2\right)}{\exp\left(- X \right)},
 \]</span> where <span class="math inline">\(X\sim f.\)</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100000</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100000</span>, <span class="at">rate =</span> <span class="dv">1</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( <span class="fu">exp</span>(<span class="sc">-</span>(X <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">dexp</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1398062</code></pre>
@@ -221,11 +221,12 @@ h(x) = 1_{(x\geq 3)}.
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">h</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span> <span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&gt;=</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">h</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
@@ -240,25 +241,27 @@ h(x) = 1_{(x\geq 3)}.
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n                   <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>B                   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>theta_hat_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> B)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    X                      <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)    </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    theta_hat_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">h</span>(X))</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>theta_hat_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode   =</span> <span class="st">"double"</span>, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">length =</span> B)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&lt;</span>  <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    x[x <span class="sc">&gt;=</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    X                      <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)    </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    theta_hat_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">h</span>(X))</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.00448615</code></pre>
+<pre><code>[1] 0.001363</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(theta_hat_estim_vec) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0001480003</code></pre>
+<pre><code>[1] 1.357359e-05</code></pre>
 </div>
 </div>
 </section>
@@ -268,7 +271,22 @@ h(x) = 1_{(x\geq 3)}.
 </section>
 <section id="e-importance-sampling-approach" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="e-importance-sampling-approach">(e) Importance sampling approach</h5>
-<p>The importance function <span class="math inline">\(g\)</span> is a good/resonable choice since</p>
+<p><span class="math display">\[
+\begin{align}
+P(X\geq 3)
+&amp; = \theta \\[2ex]
+&amp; = \int h(x) f(x) dx\\[2ex]
+&amp; = \int \frac{h(x) f(x)}{g(x)} g(x) dx
+\end{align}
+\]</span> where <span class="math inline">\(h(x) = 1_{(x\geq 3)},\)</span> <span class="math inline">\(f\)</span> is the density function of <span class="math inline">\(\mathcal{N}(0,1),\)</span> and <span class="math inline">\(g\)</span> is the density function of <span class="math inline">\(\mathcal{N}(4,1).\)</span></p>
+<!-- Thus, we can approximate $\theta$ using the sample mean 
+$$
+\begin{align}
+\hat{\theta}_{IS} & = \frac{1}{n}\sum_{i=1}^n \frac{h(X_i) f(X_i)}{g(X_i)}, 
+\end{align}
+$$
+where $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}g.$ -->
+<p>The importance function <span class="math inline">\(g\sim\mathcal{N}(4,1)\)</span> is potentially a good choice since</p>
 <ul>
 <li><span class="math inline">\(g\)</span> has a more or less similar shape as <span class="math inline">\(|h|f\)</span></li>
 <li><span class="math inline">\(g\)</span> has thicker tails than <span class="math inline">\(|h|f\)</span></li>
@@ -291,15 +309,15 @@ h(x) = 1_{(x\geq 3)}.
 </section>
 <section id="f-importance-sampling-estimator" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="f-importance-sampling-estimator">(f) Importance sampling estimator</h5>
-<p>Importance sampling integration estimator,</p>
+<p>The importance sampling integration estimator is given by</p>
 <p><span class="math display">\[
 \begin{align}
 \hat{\theta}_{IS} &amp; = \frac{1}{n}\sum_{i=1}^n \frac{h(X_i)f(X_i)}{g(X_i)},
 \end{align}
 \]</span> where</p>
 <ul>
-<li><span class="math inline">\(X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1),\)</span></li>
-<li><span class="math inline">\(f\)</span> is the density function of the standard normal distribution</li>
+<li><span class="math inline">\(X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1)\)</span></li>
+<li><span class="math inline">\(f\)</span> is the density function of <span class="math inline">\(\mathcal{N}(0,1)\)</span></li>
 <li><span class="math inline">\(h(x) = 1_{(x\geq 3)}\)</span></li>
 </ul>
 <div class="cell">
@@ -309,13 +327,14 @@ h(x) = 1_{(x\geq 3)}.
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>X   <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>hfg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span><span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.001567801</code></pre>
 </div>
@@ -329,21 +348,25 @@ h(x) = 1_{(x\geq 3)}.
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>n                      <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>B                      <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>theta_hat_IS_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> B)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>hfg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span><span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    X                         <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>)    </span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    theta_hat_IS_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_IS_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>theta_hat_IS_estim_vec <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode   =</span> <span class="st">"double"</span>, </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">length =</span> B)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>hfg <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    tmp    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)<span class="sc">/</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="dv">1</span>) </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    tmp[x <span class="sc">&lt;</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> tmp</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    X                         <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n    =</span> n, </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">mean =</span> <span class="dv">4</span>, </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">sd   =</span> <span class="dv">1</span>)    </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    theta_hat_IS_estim_vec[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">hfg</span>(X))</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(theta_hat_IS_estim_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.00135138</code></pre>
 </div>
@@ -367,17 +390,17 @@ p=P(X\geq 4.5)
 \tag{1}\]</span></span> by <span class="math display">\[
 \begin{align}
 \hat{p}
-&amp; = \frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)},
+&amp; = \frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)},
 \end{align}
-\]</span> where <span class="math inline">\(X\sim f.\)</span></p>
+\]</span> where <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d}}{\sim} f.\)</span></p>
 </section>
 <section id="b-unbiasedness-of-hatp" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="b-unbiasedness-of-hatp">(b) Unbiasedness of <span class="math inline">\(\hat{p}\)</span></h5>
 <p><span class="math display">\[
 \begin{align}
 \mathbb{E}\left(\hat{p}\right)
-&amp; = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
-&amp; = \mathbb{E}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)}\right)\\[2ex]
+&amp; = \mathbb{E}\left(1_{(X_1\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
 &amp; = \int 1_{(x\geq 4.5)} f(x) dx\\[2ex]
 &amp; = \int_{4.5}^\infty f(x) dx\\[2ex]
 &amp; = p,
@@ -389,12 +412,12 @@ p=P(X\geq 4.5)
 <p><span class="math display">\[
 \begin{align}
 \mathbb{V}\left(\hat{p}\right)
-&amp; = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B 1_{(X\geq 4.5)}\right)\\[2ex]
-&amp; = \frac{1}{B} \mathbb{V}\left(1_{(X\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
-&amp; = \frac{p(1-p)}{B} \qquad [1_{(X\geq 4.5)}\sim\mathcal{Bern}(p)]
+&amp; = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n 1_{(X_i\geq 4.5)}\right)\\[2ex]
+&amp; = \frac{1}{n} \mathbb{V}\left(1_{(X_1\geq 4.5)}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \frac{p(1-p)}{n} \qquad [1_{(X_1\geq 4.5)}\sim\mathcal{Bern}(p)]
 \end{align}
 \]</span> Thus <span id="eq-Ch2Ex4-2"><span class="math display">\[
-\mathbb{V}\left(\hat{p}\right) = \frac{1}{B}(p-p^2)
+\mathbb{V}\left(\hat{p}\right) = \frac{1}{n}(p-p^2)
 \tag{2}\]</span></span></p>
 </section>
 <section id="d-deriving-the-importance-sampling-estimator-hatp_is" class="level5 unnumbered">
@@ -409,13 +432,13 @@ g(x) = \left\{\begin{array}{ll}f_{\mathcal{Exp}\text{(1)}}(x-4.5),&amp; x \geq 4
 \]</span> Since <span class="math inline">\(g(x)=0\)</span> for all <span class="math inline">\(x&lt;4.5,\)</span> we can simplify the integral by removing <span class="math inline">\(h,\)</span> <span class="math display">\[
 \begin{align}
 p=P(X\geq 4.5)
-&amp; = \int \frac{h(x) f(x)}{g(x)} g(x) dx
-  = \int \frac{f(x)}{g(x)} g(x) dx.
+&amp; = \int \frac{h(x) f(x)}{g(x)} g(x) dx \\[2ex]
+&amp; = \int \frac{f(x)}{g(x)} g(x) dx.
 \end{align}
 \]</span> Thus, <span class="math inline">\(p\)</span> can be estimated by <span class="math display">\[
 \begin{align}
 \hat{p}_{IS}
-&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(X_i)}{g(X_i)},
+&amp; = \frac{1}{n}\sum_{i=1}^n \frac{f(X_i)}{g(X_i)},
 \end{align}
 \]</span> where <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}g.\)</span></p>
 <p><img src="images/Ch2_Exercise_Screenshot1.png" class="img-fluid"></p>
@@ -426,10 +449,10 @@ X_i \overset{d}{=} Y_i + 4.5,
 <p>Thus, an alternative, equivalent way to define <span class="math inline">\(\hat{p}_{IS}\)</span> is <span class="math display">\[
 \begin{align}
 \hat{p}_{IS}
-&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
-&amp; = \frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )},
+&amp; = \frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{g(Y_i + 4.5)}\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )},
 \end{align}
-\]</span> where <span class="math inline">\(Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.\)</span></p>
+\]</span> where <span class="math inline">\(Y_1,\dots,Y_n\overset{\text{i.i.d.}}{\sim}f_{\mathcal{Exp}\text{(1)}}.\)</span> This version is very convenient since it is very simple to sample from <span class="math inline">\(f_{\mathcal{Exp}\text{(1)}}.\)</span></p>
 </section>
 <section id="e-unbiasedness-of-hatp_is" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="e-unbiasedness-of-hatp_is">(e) Unbiasedness of <span class="math inline">\(\hat{p}_{IS}\)</span></h5>
@@ -437,12 +460,12 @@ X_i \overset{d}{=} Y_i + 4.5,
 <p><span class="math display">\[
 \begin{align}
 \mathbb{E}\left(\hat{p}_{IS}\right)
-&amp; = \mathbb{E}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
 &amp; = \mathbb{E}\left(\frac{f(Y_1 + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_1)}\right)\qquad [\text{i.i.d.}]\\[2ex]
 &amp; = \int \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
 &amp; = \int_0^\infty \frac{f(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\qquad [\text{support of }f_{\mathcal{Exp}\text{(1)}}]\\[2ex]
 &amp; = \int_0^\infty f(y + 4.5)  dy\\[2ex]
-&amp; = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=x+4.5]\\[2ex]
+&amp; = \int_{4.5}^\infty f(z)  dz\qquad[\text{subst.~}z=y+4.5]\\[2ex]
 &amp; = p,
 \end{align}
 \]</span> where the latter follows from <a href="#eq-Ch2-Ex4_1">Equation&nbsp;1</a>. Thus <span class="math inline">\(\hat{p}_{IS}\)</span> is an unbiased estimator.</p>
@@ -452,20 +475,20 @@ X_i \overset{d}{=} Y_i + 4.5,
 <p><span class="math display">\[
 \begin{align}
 \mathbb{V}\left(\hat{p}_{IS}\right)
-&amp; = \mathbb{V}\left(\frac{1}{B}\sum_{i=1}^B \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
-&amp; = \frac{1}{B}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex]
-&amp; = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex]
-&amp; = \frac{1}{B}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
+&amp; = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
+&amp; = \frac{1}{n}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex]
+&amp; = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex]
+&amp; = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
 \]</span></p>
 <p>Next, we focus on <span class="math inline">\(\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)\)</span> <span class="math display">\[
 \begin{align}
 \mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)
 &amp; = \int_0^\infty \frac{f^2(y + 4.5)}{f^2_{\mathcal{Exp}\text{(1)}}(y)} f_{\mathcal{Exp}\text{(1)}}(y) dy\\[2ex]
 &amp; = \int_0^\infty \frac{f^2(y + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(y)}  dy\\[2ex]
-&amp; = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dy\qquad [\text{subst.~}x=y+4.5]\\[2ex]
-&amp; = \int_{4.5}^\infty \frac{f^2(y)}{g(y)} dy\qquad [\text{by definition of }g]\\[2ex]
-&amp; = \int_{4.5}^\infty \left(\frac{f(y)}{g(y)}\right) f(y) dy\\[2ex]
-&amp; &lt; c_{\max}\; \int_{4.5}^\infty   f(y)\;  dy = c_{\max}\; p
+&amp; = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dx\qquad [\text{subst.~}x=y+4.5]\\[2ex]
+&amp; = \int_{4.5}^\infty \frac{f^2(x)}{g(x)} dx\qquad [\text{by definition of }g]\\[2ex]
+&amp; = \int_{4.5}^\infty \left(\frac{f(x)}{g(x)}\right) f(x) dx\\[2ex]
+&amp; &lt; c_{\max}\; \int_{4.5}^\infty   f(x)\;  dy = c_{\max}\; p &lt; p
 \end{align}
 \]</span> where <span class="math display">\[
 c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) &lt; 1
@@ -473,7 +496,7 @@ c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) &lt; 1
 <p>Thus, we have that <span class="math display">\[
 \begin{align}
 \mathbb{V}\left(\hat{p}_{IS}\right)
-&amp; &lt; \frac{1}{B}\left[c_{\max}\; p - p^2\right] &lt; \frac{1}{B}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
+&amp; &lt; \frac{1}{n}\left[c_{\max}\; p - p^2\right] &lt; \frac{1}{n}\left[p - p^2\right] = \mathbb{V}\left(\hat{p}\right)
 \end{align}
 \]</span> where the latter follows from the result in <a href="#eq-Ch2Ex4-2">Equation&nbsp;2</a>.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
@@ -486,7 +509,7 @@ c_{\max}=\max_{y\geq 4.5}\left(\frac{f(y)}{g(y)}\right) &lt; 1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note: Using importance sampling there’s no need to sample directly from <span class="math inline">\(f.\)</span> This is a further advantage of importance sampling over classical Monte Carlo integration.</p>
+<p>Note: Using importance sampling there’s no need to sample directly from <span class="math inline">\(f,\)</span> which may be difficult. This is a further advantage of importance sampling over classical Monte Carlo integration.</p>
 </div>
 </div>
 </section>

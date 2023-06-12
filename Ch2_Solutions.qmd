@@ -216,7 +216,7 @@ col=c("black", "red"), lty=c(1,1))
 ##### (f) Importance sampling estimator {-}
 
 
-Importance sampling integration estimator, 
+The importance sampling integration estimator is given by
 
 $$
 \begin{align}
@@ -226,7 +226,7 @@ $$
 where 
 
 * $X_1,\dots,X_n\overset{i.i.d.}{\sim}\mathcal{N}(4,1)$ 
-* $f$ is the density function of $\mathcal{N}(4,1)$
+* $f$ is the density function of $\mathcal{N}(0,1)$
 * $h(x) = 1_{(x\geq 3)}$
 
 ```{r}
@@ -408,7 +408,8 @@ $$
 & = \mathbb{V}\left(\frac{1}{n}\sum_{i=1}^n \frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\\[2ex]
 & = \frac{1}{n}\mathbb{V}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\qquad [\text{i.i.d.}]\\[2ex] 
 & = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- \left(\mathbb{E}\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)\right)^2\right]\qquad [\text{variance formula}]\\[2ex] 
-& = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]\end{align}
+& = \frac{1}{n}\left[\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)- p^2\right]\qquad [\text{using unbiasedness}]
+\end{align}
 $$
 
 Next, we focus on $\mathbb{E}\left(\left(\frac{f(Y_i + 4.5)}{f_{\mathcal{Exp}\text{(1)}}(Y_i )}\right)^2\right)$
@@ -420,7 +421,8 @@ $$
 & = \int_{4.5}^\infty \frac{f^2(x)}{f_{\mathcal{Exp}\text{(1)}}(x-4.5)}  dx\qquad [\text{subst.~}x=y+4.5]\\[2ex]
 & = \int_{4.5}^\infty \frac{f^2(x)}{g(x)} dx\qquad [\text{by definition of }g]\\[2ex]
 & = \int_{4.5}^\infty \left(\frac{f(x)}{g(x)}\right) f(x) dx\\[2ex]
-& < c_{\max}\; \int_{4.5}^\infty   f(x)\;  dy = c_{\max}\; p < p
+& < c_{\max}\; \int_{4.5}^\infty   f(x)\;  dx 
+  = c_{\max}\; p < p
 \end{align}
 $$
 where 

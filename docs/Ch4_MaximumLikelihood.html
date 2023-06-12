@@ -307,12 +307,12 @@ x_i=\left\{
 \]</span></p>
 <p>In the coin flip example, <span class="math inline">\(\ell(\theta)\)</span> is so simple that we can maximize <span class="math inline">\(\ell(\theta)\)</span> analytically: <span class="math display">\[
 \begin{align*}
-\dfrac{d \ell(\theta)}{d \theta}&amp;=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\[2ex]
+\ell'(\theta)&amp;=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\[2ex]
 &amp;=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta}
 \end{align*}
 \]</span> Setting the above expression to zero and solving gives us our maximum likelihood estimator (MLE): <span class="math display">\[
 \begin{array}{rrcl}
-&amp;\dfrac{d \ell(\hat\theta_{ML})}{d \theta}&amp;\overset{!}{=}&amp;0\\[2ex]
+&amp;\ell'(\hat\theta_{ML})&amp;\overset{!}{=}&amp;0\\[2ex]
 \Leftrightarrow&amp;\dfrac{h}{\hat\theta_{ML}} &amp;=&amp; \dfrac{n-h}{1-\hat\theta_{ML}} \\[2ex]
 \Leftrightarrow&amp;h-h\hat\theta_{ML}  &amp;=&amp; n\hat\theta_{ML}-h\hat\theta_{ML}\\[2ex]
 \Leftrightarrow&amp;\hat\theta_{ML}&amp;=&amp;\dfrac{h}{n}
@@ -343,20 +343,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>By strange convention Newton usually shares credit for this algorithm when it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.</p>
-</div>
-</div>
-<div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Note that minimization and maximization are essentially the same problem since minimizing a function <span class="math inline">\(f(x)\)</span> with respect to <span class="math inline">\(x\)</span> is equivalent to maximizing <span class="math inline">\(-f(x)\)</span> with respect to <span class="math inline">\(x.\)</span></p>
+<ul>
+<li><p>By strange convention Newton usually shares credit for this algorithm when it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.</p></li>
+<li><p>Note that minimization and maximization are essentially the same problems since minimizing a function <span class="math inline">\(f(x)\)</span> with respect to <span class="math inline">\(x\)</span> is equivalent to maximizing <span class="math inline">\(-f(x)\)</span> with respect to <span class="math inline">\(x.\)</span></p></li>
+</ul>
 </div>
 </div>
 <p>Let <span class="math inline">\(f\)</span> be a two times differentiable function to be optimized (maximized). The first- and second-order Taylor-series approximations of <span class="math inline">\(f\)</span> around the point <span class="math inline">\(\theta\)</span> are: <span class="math display">\[
@@ -364,8 +354,8 @@ Note
 \text{First-order:}\quad &amp;f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial (Order 1)}} \\
 \text{Second-order:}\quad&amp; f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial (Order 2)}},
 \end{align*}
-\]</span> Locally, i.e.&nbsp;in a neighborhood around <span class="math inline">\(\theta,\)</span> the Taylor polynomials are good approximations of <span class="math inline">\(f\)</span> provided that <span class="math inline">\(h\)</span> is relatively small (see <a href="#fig-taylorApprox">Figure&nbsp;<span>4.1</span></a>).</p>
-<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-taylorApprox_53a58ca023e5578d1753e2e9135a942a">
+\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span>4.1</span></a>.</p>
+<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-taylorApprox_a6e048ca93028d48c27ca9690f552e70">
 <div class="cell-output-display">
 <div id="fig-taylorApprox" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -375,66 +365,86 @@ Note
 </div>
 </div>
 </div>
-<p><strong>Idea:</strong> To optimize a function <span class="math inline">\(f,\)</span> find <span class="math inline">\(\theta\)</span> such that <span class="math display">\[
-f'(\theta)=0,
-\]</span> i.e., we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order conidtion of the optimaization problem. We do so using a step-wise (<span class="math inline">\(h\)</span> steps) optimization approach:</p>
-<ol type="1">
-<li>We select some starting value <span class="math inline">\(\theta_0.\)</span></li>
-<li>Optimize the second-order Taylor polynomial of <span class="math inline">\(f\)</span> around <span class="math inline">\(\theta_0\)</span> with respect to <span class="math inline">\(h.\)</span></li>
-<li>In each of the following steps, we optimize new second-order Taylor polynomials of <span class="math inline">\(f\)</span> at those values <span class="math inline">\(\theta,\)</span> for which the previous second-order Taylor polynomial was maximal.</li>
-</ol>
-<div class="callout-important callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The first-order and the second-order Taylor polynomial can both (separately) be used to approximate <span class="math inline">\(f.\)</span></p>
-<p>The second-order Taylor polynomial can be used to apprixmate <span class="math inline">\(f'.\)</span></p>
-</div>
-</div>
-<p><strong>Implementation-Idea:</strong> The second-order Taylor-series approximation gives <span class="math display">\[
+<!-- ::: {.callout-important}
+The first-order and the second-order Taylor polynomial can both be used to approximate $f.$
+
+The second-order Taylor polynomial can be used to apprixmate $f'.$
+::: -->
+<section id="optimization-idea" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="optimization-idea">Optimization Idea</h4>
+<p>Let <span class="math inline">\(\ell\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell',\)</span> and second, <span class="math inline">\(\ell''',\)</span> derivative.</p>
+<p>To optimize the log-likelihood function <span class="math inline">\(\ell,\)</span> we try to find the root of <span class="math inline">\(\ell',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\)</span> such that <span class="math display">\[
+\ell'(\theta)=0.
+\]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order conidtion of the optimaization problem. We do so using a step-wise (<span class="math inline">\(h\)</span> steps) optimization approach.</p>
+<p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_0\)</span> be our first guess of the root <span class="math inline">\(\theta.\)</span></p>
+<p>Typically, <span class="math inline">\(\theta_0\neq\theta\)</span> and thus <span class="math inline">\(\ell'(\theta_0)\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_0\)</span> to a new root-candidate <span class="math inline">\(\theta_1\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
+\theta_1 = \theta_0 + h.
+\]</span></p>
+<!-- 1. We select some starting value $\theta_0.$ 
+2. Optimize the second-order Taylor polynomial of $f$ around $\theta_0$ with respect to $h.$ 
+3. In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta,$ for which the previous second-order Taylor polynomial was maximal.  -->
+<!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
+<p>The first-order Taylor-series approximation of <span class="math inline">\(\ell'\)</span> around our first guess <span class="math inline">\(\theta_0\)</span> gives <span class="math display">\[
 \begin{align*}
-f(\theta+h) &amp; \approx f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2\\
-\Leftrightarrow \frac{f(\theta+h)-f(\theta)}{h}&amp;\approx f'(\theta) + \frac{1}{2} f''(\theta)h,
+\ell'(\theta_0 + h) &amp; \approx \ell'(\theta_0) + \ell''(\theta_0)h
 \end{align*}
-\]</span> where <span class="math display">\[
-f'(\theta) = \lim_{h\to\infty}\frac{f(\theta+h)-f(\theta)}{h}.
-\]</span> Thus, we can use the approximation <span class="math display">\[
-f'(\theta) \approx f'(\theta) + f''(\theta)h.
-\]</span></p>
-<p>Therefore, the first-order condition for the value of <span class="math inline">\(h\)</span> that maximizes the Taylor-series expansion <span class="math inline">\(f(\theta)+f'(\theta)h + (1/2) f''(\theta)h^2\)</span> is <span class="math display">\[
-0=f'(\theta)+f''(\theta)\hat h,
-\]</span> giving <span class="math display">\[
-\hat h = -\frac{f'(\theta)}{f''(\theta)}.
+\]</span> Thus, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
+\begin{align*}
+\ell'(\theta_0) + \ell''(\theta_0)h = 0\\[2ex]
+\Rightarrow h = \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\end{align*}
+\]</span> Based on this <span class="math inline">\(h\)</span>-step, the new root-candidate is <span class="math display">\[
+\theta_1 = \theta_0 - \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\]</span> Likewise, the <span class="math inline">\(n\)</span>th root-candidate is <span class="math display">\[
+\theta_n = \theta_{n-1} + \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
+\]</span> see also <a href="#fig-NR">Figure&nbsp;<span>4.2</span></a>.</p>
+<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-NR_887290387f5562229b24ebc8b6d8569f">
+<div class="cell-output-display">
+<div id="fig-NR" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch4_MaximumLikelihood_files/figure-html/fig-NR-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.2: A step in the Newton-Raphson root-finding method.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One can shown that if <span class="math inline">\(\ell'\)</span> is “well behaved” at its root <span class="math inline">\(\theta\)</span> (i.e.&nbsp;if <span class="math inline">\(\ell''(\theta)\neq 0\)</span> and if <span class="math inline">\(\ell'''(\theta)\)</span> is finite and continuous at <span class="math inline">\(\theta\)</span>) and you start with <span class="math inline">\(\theta_0\)</span> “close enough” to the root <span class="math inline">\(\theta,\)</span> then <span class="math inline">\(\theta_n\)</span> will fastly converge to <span class="math inline">\(\theta.\)</span> Unfortunately, we don’t know if <span class="math inline">\(\ell'\)</span> is well behaved at <span class="math inline">\(\theta\)</span> until we know <span class="math inline">\(\theta,\)</span> and we don’t know beforehand how close is “close enough”. So, we cannot guarantee convergence of the Newton-Raphson algorithm.</p>
+<p>However, if <span class="math inline">\(\theta_n\to\theta\)</span> then, since <span class="math inline">\(\ell'\)</span> and <span class="math inline">\(\ell''\)</span> are continuous, we have <span class="math display">\[
+\begin{align*}
+\theta = \lim_{n\to\infty}\theta_{n+1}
+&amp;=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell'(\theta_{n})}{\ell''(\theta_{n})}\right)\\[2ex]
+&amp;=\lim_{n\to\infty}\theta_{n} + \frac{\ell'(\lim_{n\to\infty}\theta_{n})}{\ell''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
+&amp;=\theta + \frac{\ell'(\theta)}{\ell''(\theta)}.
+\end{align*}
 \]</span><br>
-That is, in order to increase the value of <span class="math inline">\(f(\theta)\)</span> one shall substitute <span class="math inline">\(\theta\)</span> by <span class="math display">\[
-\theta + \hat h = \theta- \dfrac{f'(\theta)}{f''(\theta)}
-\]</span></p>
-<p>The Newton Raphson optimization algorithm uses this insight as following. We first must provide a starting value, <span class="math inline">\(s\)</span>, for <span class="math inline">\(\theta_0=s\)</span> and, second, decide on some (small) convergence criterion, <span class="math inline">\(t\)</span>, e.g.&nbsp;<span class="math inline">\(t=10^{-10}\)</span>, for the first derivative. Then the Newton Raphson optimization algorithm is given by: <span class="math display">\[
+Therefore, provided that <span class="math inline">\(\ell''(\theta)\neq \pm\infty,\)</span> we must have that <span class="math inline">\(\ell'(\theta) = 0.\)</span></p>
+<p>Since we are expecting that <span class="math inline">\(\ell'(\theta_n)\to 0,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math inline">\(|\ell'(\theta_n)|\leq \varepsilon\)</span> for some (small) tolerance <span class="math inline">\(\varepsilon.\)</span></p>
+<p>Then the Newton Raphson optimization algorithm is given by: <span class="math display">\[
 \begin{array}{ll}
 \texttt{\textbf{let }} \theta_0=s  &amp;  \\
-\texttt{\textbf{let }} i=0                &amp;  \\
-\texttt{\textbf{while }}  | f'(\theta_i) | &gt;t &amp; \texttt{\textbf{do}}\\
+\texttt{\textbf{let }} n=0                &amp;  \\
+\texttt{\textbf{while }}  | \ell'(\theta_i) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
 &amp;\left[
-                                    \begin{array}{l}\texttt{\textbf{let }} i = i+1 \\
-                                    \texttt{\textbf{let }} \theta_i = \theta_{i-1} - \frac{f'(\theta_{i-1})}{f''(\theta_{i-1})} \\
+                                    \begin{array}{l}\texttt{\textbf{let }} n = n+1 \\
+                                    \texttt{\textbf{let }} \theta_n = \theta_{n-1} - \frac{\ell'(\theta_{i-1})}{\ell''(\theta_{n-1})} \\
                                     \end{array} \right.\\
-\texttt{\textbf{let }}\hat\theta=\theta_i &amp; \\
+\texttt{\textbf{let }}\hat\theta=\theta_n &amp; \\
 \texttt{\textbf{return }} \hat\theta &amp;  \\
 \end{array}
 \]</span></p>
 <p><strong>Note:</strong> For problems that are globally concave, the starting value <span class="math inline">\(s\)</span> doesn’t matter. For more complex problems, however, the Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to try multiple starting values.</p>
-<p><strong>Newton-Raphson Algorithm: Example:</strong> Let’s return to our earlier coin-flipping example, with only one head <span class="math inline">\(h=1\)</span> for a sample size of <span class="math inline">\(n=5\)</span>. We already know that <span class="math inline">\(\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2\)</span>, but let’s apply the Newton-Raphson Algorithm. Recall that <span class="math display">\[
+</section>
+<section id="newton-raphson-algorithm-coin-flipping-example" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example">Newton-Raphson Algorithm: Coin-Flipping Example</h4>
+<p>Let’s return to our earlier coin-flipping example.</p>
+<p>If we observe, for instance, only one head <span class="math inline">\(h=1\)</span> for a sample size of <span class="math inline">\(n=5,\)</span> we already know that <span class="math inline">\(\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2,\)</span> but let’s apply the Newton-Raphson Algorithm.</p>
+<p>Recall that <span class="math display">\[
 \begin{align*}
-\dfrac{d \ell}{d \theta}&amp;=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\
-\dfrac{d^2 \ell}{d \theta^2} &amp;= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}
+\ell'(\theta)&amp;=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\[2ex]
+\ell''(\theta) &amp;= -\dfrac{h}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{h}{(1-\theta)^2}(-1)\\[2ex]
+&amp;= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}
 \end{align*}
-\]</span> We have <span class="math inline">\(h=1\)</span> and <span class="math inline">\(n=5\)</span>. Choosing <span class="math inline">\(t=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_0=0.4\)</span> as the starting value, allows us to run the algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span>4.1</span></a>.</p>
+\]</span> We have <span class="math inline">\(h=1\)</span> and <span class="math inline">\(n=5\)</span>. Choosing <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_0=0.4\)</span> as the starting value, allows us to run the Newton-Raphson algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span>4.1</span></a>.</p>
 <div id="tbl-NR" class="anchored">
 <table class="table">
 <caption>Table&nbsp;4.1: Result of applying the Newton Raphson optimaization algorithm to our coin flipping example for given data <span class="math inline">\(h=1\)</span> with sample size <span class="math inline">\(n=5\)</span>.</caption>
@@ -446,10 +456,10 @@ That is, in order to increase the value of <span class="math inline">\(f(\theta)
 </colgroup>
 <thead>
 <tr class="header">
-<th>Repetition <span class="math inline">\(i\)</span></th>
-<th><span class="math inline">\(\hat\theta_i\)</span></th>
-<th><span class="math inline">\(\ell'(\hat\theta_i)\)</span></th>
-<th><span class="math inline">\(\ell'(\hat\theta_i)/\ell''(\hat\theta_i)\)</span></th>
+<th><span class="math inline">\(n\)</span></th>
+<th><span class="math inline">\(\hat\theta_n\)</span></th>
+<th><span class="math inline">\(\ell'(\hat\theta_n)\)</span></th>
+<th><span class="math inline">\(\ell'(\hat\theta_n)/\ell''(\hat\theta_n)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -492,6 +502,7 @@ That is, in order to increase the value of <span class="math inline">\(f(\theta)
 </tbody>
 </table>
 </div>
+</section>
 </section>
 </section>
 <section id="ols-estimation-as-ml-estimation" class="level2" data-number="4.3">
