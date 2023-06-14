@@ -359,11 +359,11 @@ for(i in 1:length(sd_v)){
 🤓 **Analytic solution:** It is a bit tedious, but you can try to maximize the log-likelihood analytically. If you do this, you will get the following expressions:
 $$
 \begin{align*}
-\hat\pi_g&=\frac{1}{n}\sum_{i=1}^np_{ig}\\
-\hat\mu_g&=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\
+\hat\pi_g&=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
+\hat\mu_g=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\[2ex]
 \hat\sigma_g&=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2}
 \end{align*}
-$$
+$${#eq-AnalyticSol1}
 for $g=1,\dots,G.$
 
 ::: {.callout-note}
@@ -375,7 +375,7 @@ Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi
 🙈 <span style="color:#FF5733">**However:**</span> The above expressions for $\hat\pi_g$, $\hat\mu_g$ and $\hat\sigma_g$ depend themselves on the <span style="color: #FF5733">**unknown**</span> parameters $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ and $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$, because:
 $$
 p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
-$$
+$${#eq-AnalyticSol2}
 for $i=1,\dots,n$ and $g=1,\dots,G$. <br>
 Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
@@ -394,6 +394,12 @@ and
 $$
 (\hat\pi_g, \hat\mu_g,\hat\sigma_g).
 $$
+
+::: {.callout-tip}
+Once you know $p_{ig},$ you can compute $(\hat\pi_g, \hat\mu_g,\hat\sigma_g)$ using @eq-AnalyticSol1. 
+
+Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ using @eq-AnalyticSol2. 
+:::
 
 **The EM Algorithm:**
 
@@ -586,9 +592,9 @@ The final estimation result replicates @fig-GMM-plot1.
 
 
 
-## The Alternative / True View on the EM Algorithm
+## The True View on the EM Algorithm: Adding Unobserved Variables
 
-The EM algorithm allows maximum likelihood problems to be simplified by adding unobserved ("latent") variables to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.
+The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.
 
 ::: {.callout-note}
 
