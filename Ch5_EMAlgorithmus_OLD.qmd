@@ -285,6 +285,7 @@ X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol
 $$
 
 Die dazugehörige Dichtefunktion einer Gaußschen Mischverteilung ist folgendermaßen definiert:
+
 \begin{equation}
 f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g) (\#eq:GMMdens)
 \end{equation}
@@ -423,24 +424,24 @@ Die Ausdrücke für $\hat\pi_g$, $\hat\mu_g$ und $\hat\sigma_g$ legen jedoch ein
 
 3. Prüfe Konvergenz: 
     
-    - Stoppe, falls sich der Wert der maximierten Log-Likelihood Funktion, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{z})$, nicht mehr ändert.
+    - Stoppe, falls sich der Wert der maximierten Log-Likelihood Funktion, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})$, nicht mehr ändert.
 
 
 <br>
 
-Der obige pseudo-Code wird im Folgenden Code-Chunck umgesetzt:
+The above pseudo code is implemented in the following code chunck:
 
 ```{r, echo=TRUE}
 library("MASS")
 library("mclust")
 
-## Daten:
-x <- cbind(Penguine_Flosse) # Daten [n x d]-Dimensional. 
-d <- ncol(x)                # Dimension (d=1: univariat)
-n <- nrow(x)                # Stichprobenumfang
-G <- 2                      # Anzahl Gruppen
+## data:
+x <- cbind(penguin_flipper) # data [n x d]-dimensional. 
+d <- ncol(x)                # dimension (d=1: univariat)
+n <- nrow(x)                # sample size
+G <- 2                      # number of groups
 
-## Weitere Deklarationen:
+## further stuff 
 llk       <- matrix(NA, n, G)
 p         <- matrix(NA, n, G)  
 loglikOld <- 1e07
@@ -448,61 +449,63 @@ tol       <- 1e-05
 it        <- 0
 check     <- TRUE 
 
+## EM Algorithm
 
-## EM Algorithmus
-
-## 1. Startwerte für pi, mu und sigma:
-pi    <- rep(1/G, G)              # Naive pi
-sigma <- array(diag(d), c(d,d,G)) # Varianz = 1
+## 1. Starting values for pi, mu and sigma:
+pi    <- rep(1/G, G)              # naive pi
+sigma <- array(diag(d), c(d,d,G)) # varianz = 1
 mu    <- t(MASS::mvrnorm(G, colMeans(x), sigma[,,1]*4) )
 
 while(check){
   
-  ## 2.a Expectation-Schritt 
+  ## 2.a Expectation step
   for(g in 1:G){
     p[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
   }
   p <- sweep(p, 1, STATS = rowSums(p), FUN = "/")
   
-  ## 2.b Maximization-Schritt
+  ## 2.b Maximization step 
   par   <- mclust::covw(x, p, normalize = FALSE)
   mu    <- par$mean
   sigma <- par$S
   pi    <- colMeans(p)
   
-  ## 3. Prüfung der Konvergenz
+  ## 3. Check convergence 
   for(g in 1:G) {
     llk[,g] <- pi[g] * mclust:::dmvnorm(x, mu[,g], sigma[,,g])
   }
-  loglik <- sum(log(rowSums(llk))) # aktueller max. Log-Likelihood Wert
+  loglik <- sum(log(rowSums(llk))) # current max. log-likelihood value
   ##
-  diff      <- abs(loglik - loglikOld)/abs(loglik) # Änderungsrate
+  diff      <- abs(loglik - loglikOld)/abs(loglik) # rate of change
   loglikOld <- loglik
   it        <- it + 1
-  ## Änderungsrate noch groß genug (> tol)?
+  ## Check whether rate of change is still large enough (> tol)?
   check     <- diff > tol
 }
 
-## Schätz-Resultate:
+## Estimation results:
 results <- matrix(c(pi, mu, sqrt(sigma)), 
                   nrow = 3, ncol = 2, byrow = TRUE,
                   dimnames = list(
-            c("Gewichte", "Mittelwerte", "Standardabweichungen"),
-            c("Gruppe 1", "Gruppe 2"))) 
+            c("weights", "means", "standard-deviations"),
+            c("group 1", "group 2"))) 
 ##
 results %>% round(., 2)
 ```
 
-<br>
 
-**Das Clusterverfahren basierend auf Gaußschen Mischverteilungen:**
 
-1. Gaußsche Mischverteilung (**per EM Algorithmus**) schätzen
-2. Die Datenpunkte $x_i$ derjenigen Gruppe $g$ zuordnen, welche die **a-posteriori-Wahrscheinlichkeit** $p_{ig}$ maximiert. 
+#### Clustering using Gaussian Mixture Distributions {-}
 
-`r if(knitr::is_html_output()) 'Abbildung \\@ref(fig:EMGif) visualisiert den Fortschritt der iterativen Schätzung mit Hilfe des EM Algorithmuses.'`
+1. Estimate the Gaussian mixture distribution using the **EM algorithm**
+2. Assign the data points $x_i$ to the group that maximizes the **"posterior probability"**
 
-```{r EMGif, include=knitr::is_html_output(), animation.hook="gifski", interval=0.15, fig.align="center", echo=FALSE, fig.cap="Iterative Schätzung mit Hilfe des EM Algorithmuses."}
+@fig-EMGif shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm. 
+
+```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.15}
+#| label: fig-EMGif
+#| fig-cap: Iterative estimation of the Gaussian mixture distribution using the EM alorighm.
+#| echo: false
 library("MASS")
 library("mclust")
 
