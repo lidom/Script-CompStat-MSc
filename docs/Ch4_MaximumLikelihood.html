@@ -169,7 +169,7 @@ div.csl-indent {
   <li><a href="#sec-varMLE" id="toc-sec-varMLE" class="nav-link" data-scroll-target="#sec-varMLE"><span class="toc-section-number">4.3.1</span>  Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></a></li>
   <li><a href="#consistency-of-hatbeta_ml-and-s_ml2" id="toc-consistency-of-hatbeta_ml-and-s_ml2" class="nav-link" data-scroll-target="#consistency-of-hatbeta_ml-and-s_ml2"><span class="toc-section-number">4.3.2</span>  Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></a></li>
   </ul></li>
-  <li><a href="#asymptotic-theory-of-maximum-likelihood-estimators" id="toc-asymptotic-theory-of-maximum-likelihood-estimators" class="nav-link" data-scroll-target="#asymptotic-theory-of-maximum-likelihood-estimators"><span class="toc-section-number">4.4</span>  Asymptotic Theory of Maximum-Likelihood Estimators</a></li>
+  <li><a href="#sec-MLAsymp" id="toc-sec-MLAsymp" class="nav-link" data-scroll-target="#sec-MLAsymp"><span class="toc-section-number">4.4</span>  Asymptotic Theory of Maximum-Likelihood Estimators</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -396,12 +396,12 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 \]</span> Thus, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
 \begin{align*}
 \ell'(\theta_0) + \ell''(\theta_0)h = 0\\[2ex]
-\Rightarrow h = \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\Rightarrow h = -\frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
 \end{align*}
 \]</span> Based on this <span class="math inline">\(h\)</span>-step, the new root-candidate is <span class="math display">\[
 \theta_1 = \theta_0 - \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
 \]</span> Likewise, the <span class="math inline">\(n\)</span>th root-candidate is <span class="math display">\[
-\theta_n = \theta_{n-1} + \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
+\theta_n = \theta_{n-1} - \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
 \]</span> see also <a href="#fig-NR">Figure&nbsp;<span>4.2</span></a>.</p>
 <div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-NR_e30058ccfebf76b6c1a1c5fa06da8878">
 <div class="cell-output-display">
@@ -441,7 +441,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 \begin{array}{ll}
 \texttt{\textbf{let }} \theta_0=s  &amp;  \\
 \texttt{\textbf{let }} n=0                &amp;  \\
-\texttt{\textbf{while }}  | \ell'(\theta_i) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
+\texttt{\textbf{while }}  | \ell'(\theta_n) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
 &amp;\left[
                                     \begin{array}{l}\texttt{\textbf{let }} n = n+1 \\
                                     \texttt{\textbf{let }} \theta_n = \theta_{n-1} - \frac{\ell'(\theta_{i-1})}{\ell''(\theta_{n-1})} \\
@@ -628,7 +628,7 @@ Score Function
   \right),
 \]</span> is called the <strong>score-function</strong>. The score function is random, since it depends on the random sample. The score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell}{\partial \theta_j}(\theta)\right)=0
-\]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span></p>
+\]</span> for all <span class="math inline">\(j=1,\dots,p\)</span> and all parameter values (not only the maximizing arguments). We’ll show this below in <a href="#sec-MLAsymp"><span>Section&nbsp;4.4</span></a>.</p>
 </div>
 </div>
 <p>So, we have a system of <span class="math inline">\(K+1\)</span> equations and <span class="math inline">\(K+1\)</span> unknowns. Setting equal to zero and solving gives: <span class="math display">\[
@@ -777,8 +777,8 @@ s^2_{ML}\to_p \sigma^2\quad\text{as}\quad n\to\infty.
 <!-- In practice, however, one usually works with the unbiased (and consistent) alternative $s_{UB}^2=\dfrac{1}{n-K}\sum_{i=1}^n \hat{\varepsilon}_i^2$ even though one can show that $\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(\hat\sigma^2_{UB})$ for sufficiently large $n$. -->
 </section>
 </section>
-<section id="asymptotic-theory-of-maximum-likelihood-estimators" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="asymptotic-theory-of-maximum-likelihood-estimators"><span class="header-section-number">4.4</span> Asymptotic Theory of Maximum-Likelihood Estimators</h2>
+<section id="sec-MLAsymp" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="sec-MLAsymp"><span class="header-section-number">4.4</span> Asymptotic Theory of Maximum-Likelihood Estimators</h2>
 <p>In the following, we consider the asymptotic distribution of ML-estimators.</p>
 <p>We only consider the simplest situation: Assume a random sample<br>
 <span class="math display">\[

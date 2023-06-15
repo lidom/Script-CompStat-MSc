@@ -293,7 +293,7 @@ Thus, to find the $h$-step that brings us closer to the root of $\ell',$ we can 
 $$
 \begin{align*}
 \ell'(\theta_0) + \ell''(\theta_0)h = 0\\[2ex]
-\Rightarrow h = \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\Rightarrow h = -\frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
 \end{align*}
 $$
 Based on this $h$-step, the new root-candidate is 
@@ -302,7 +302,7 @@ $$
 $$
 Likewise, the $n$th root-candidate is 
 $$
-\theta_n = \theta_{n-1} + \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
+\theta_n = \theta_{n-1} - \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
 $$
 see also @fig-NR.
 
@@ -386,7 +386,7 @@ $$
 \begin{array}{ll}
 \texttt{\textbf{let }} \theta_0=s  &  \\
 \texttt{\textbf{let }} n=0                &  \\
-\texttt{\textbf{while }}  | \ell'(\theta_i) | >\varepsilon & \texttt{\textbf{do}}\\
+\texttt{\textbf{while }}  | \ell'(\theta_n) | >\varepsilon & \texttt{\textbf{do}}\\
 &\left[
                                     \begin{array}{l}\texttt{\textbf{let }} n = n+1 \\
                                     \texttt{\textbf{let }} \theta_n = \theta_{n-1} - \frac{\ell'(\theta_{i-1})}{\ell''(\theta_{n-1})} \\
@@ -550,7 +550,7 @@ is called the **score-function**.  The score function is random, since it depend
 $$
 \mathbb{E}\left(\dfrac{\partial \ell}{\partial \theta_j}(\theta)\right)=0
 $$ 
-for all $j=1,\dots,p.$
+for all $j=1,\dots,p$ and all parameter values (not only the maximizing arguments). We'll show this below in @sec-MLAsymp.
 :::
 
 So, we have a system of $K+1$ equations and $K+1$ unknowns. Setting equal to zero and solving gives:
@@ -744,7 +744,7 @@ $$
 
 
 
-## Asymptotic Theory of Maximum-Likelihood Estimators 
+## Asymptotic Theory of Maximum-Likelihood Estimators {#sec-MLAsymp}
 
 In the following, we consider the asymptotic distribution of ML-estimators. 
 
