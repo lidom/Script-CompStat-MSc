@@ -158,7 +158,7 @@ $$
 \end{align*}
 $$
 
-In the coin flip example, $\ell(\theta)$ is so simple that we can maximize $\ell(\theta)$ analytically:
+The coin flip example is actually so simple that we can maximize $\ell(\theta)$ analytically:
 $$
 \begin{align*}
 \ell'(\theta)&=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\[2ex]
@@ -175,17 +175,19 @@ $$
 \end{array}
 $$
 
-Often, however, the log-likelihood function is so complicated that there is no analytic solution and one needs to apply numeric optimization algorithms. 
+Usually, however, the log-likelihood function is way more complicated and one needs to apply numeric optimization algorithms to find the MLE.  
 
 
-## Optimization: Non-Analytical Solutions
+## Numeric Optimization
 
 Usually we are not so fortunate as to have a closed-form analytical solution for the MLE and must rely on the computer to find the maximizing arguments of the log-likelihood function. Various methods exist for finding the maximum (or minimum) of a function. 
+
+<!-- [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html) -->
 
 **General idea:** 
 
 1. Start at some value for parameters in the parameter space (i.e., in the space of all possible parameter-values)
-2. Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or arbitrarily close to zero).
+2. Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero, smaller than some convergence criterion.).
 
 
 ### Newton-Raphson Optimization
@@ -201,7 +203,7 @@ it is applied to root-finding, but not when it is used for optimization. However
 :::
 
 
-Let $f$ be a two times differentiable function to be optimized (maximized). The first- and second-order Taylor-series approximations of $f$ around the point $\theta$ are:
+Let $f$ be a two times differentiable function to be optimized (here maximized). The first- and second-order Taylor-series approximations of $f$ around the point $\theta$ are:
 $$
 \begin{align*}
 \text{First-order:}\quad &f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial (Order 1)}} \\
@@ -231,7 +233,8 @@ taylor_poly_1   <- taylor(f = myFun, x0 = x0, n = 1)
 taylor_poly_2   <- taylor(f = myFun, x0 = x0, n = 2)
 
 ## Plot
-x_seq           <- seq(from = x0 -2, to = x0 + 5, length.out=100)
+#x_seq           <- seq(from = x0 -2, to = x0 + 5, length.out=100)
+x_seq           <- seq(from = -.5, to = 4, length.out=100)
 y_myFun         <- myFun(x_seq)
 y_taylor_poly_1 <- polyval(taylor_poly_1, x_seq)
 y_taylor_poly_2 <- polyval(taylor_poly_2, x_seq)
@@ -260,17 +263,17 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 
 #### Optimization Idea {-}
 
-Let $\ell$ be a log-likelihood function with continuous first, $\ell',$ and second, $\ell''',$ derivative. 
+Let $\ell$ be a log-likelihood function with continuous first, $\ell',$ and second, $\ell'',$ derivative. 
 
 To optimize the log-likelihood function $\ell,$ we try to find the root of $\ell',$ i.e. the value of $\theta$ such that 
 $$
 \ell'(\theta)=0.
 $$ 
-That is, we try to find the value of $\theta$ that fulfills the first order conidtion of the optimaization problem. We do so using a step-wise ($h$ steps) optimization approach. 
+That is, we try to find the value of $\theta$ that fulfills the first order condition of the optimization problem. We do so using a step-wise ($h$ steps) optimization approach. 
 
 **Initialization:** Let $\theta_0$ be our first guess of the root $\theta.$ 
 
-Typically, $\theta_0\neq\theta$ and thus $\ell'(\theta_0)\neq 0.$ Therefore, we want to move from $\theta_0$ to a new root-candidate $\theta_1$ by doing an $h$-step update 
+**$h$-Steps:** Typically, $\theta_0\neq\theta$ and thus $\ell'(\theta_0)\neq 0.$ Therefore, we want to move from $\theta_0$ to a new root-candidate $\theta_1$ by doing an $h$-step update 
 $$
 \theta_1 = \theta_0 + h.
 $$
@@ -331,7 +334,7 @@ theta_0         <- 1.5
 taylor_poly_1   <- taylor(f = my_ell_prime, x0 = theta_0, n = 1)
 
 ## Plot
-theta_seq       <- seq(from       = 1, 
+theta_seq       <- seq(from       = .75, 
                        to         = 4, 
                        length.out = 100)
 y_my_ell_prime  <- my_ell_prime(theta_seq)
@@ -360,7 +363,7 @@ box()
 
 One can shown that if $\ell'$ is "well behaved" at its root $\theta$ (i.e. if $\ell''(\theta)\neq 0$ and if $\ell'''(\theta)$ is finite and continuous at $\theta$) and you start with $\theta_0$ "close enough" to the root $\theta,$ then $\theta_n$ will fastly converge to $\theta.$ Unfortunately, we don't know if $\ell'$ is well behaved at $\theta$ until we know $\theta,$ and we don't know beforehand how close is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
 
-However, if $\theta_n\to\theta$ then, since $\ell'$ and $\ell''$ are continuous, we have
+<!-- However, if $\theta_n\to\theta$ then, since $\ell'$ and $\ell''$ are continuous, we have
 $$
 \begin{align*}
 \theta = \lim_{n\to\infty}\theta_{n+1} 
@@ -369,18 +372,16 @@ $$
 &=\theta + \frac{\ell'(\theta)}{\ell''(\theta)}.
 \end{align*}
 $$  
-Therefore, provided that $\ell''(\theta)\neq \pm\infty,$ we must have that $\ell'(\theta) = 0.$
+Therefore, provided that $\ell''(\theta)\neq \pm\infty,$ we must have that $\ell'(\theta) = 0.$ -->
 
-Since we are expecting that $\ell'(\theta_n)\to 0,$ a good stopping condition for the Newton-Raphson algorithm is 
+**Checking convergence:** Since we are expecting that $\ell'(\theta_n)\to 0,$ a good stopping condition for the Newton-Raphson algorithm is 
 $$
 |\ell'(\theta_n)|\leq \varepsilon
 $$ 
 for some (small) tolerance $\varepsilon>0.$ 
 
 ::: {.callout-note}
-# Pseudo-Code
-
-The Newton-Raphson algorithm is given by:
+# Pseudo-Code: Newton-Raphson Algorithm
 $$
 \begin{array}{ll}
 \texttt{\textbf{let }} \theta_0=s  &  \\
@@ -396,8 +397,21 @@ $$
 $$
 ::: 
 
-**Note:** For problems that are globally concave, the starting value $s$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
+::: {.callout-tip}
+* For problems that are globally concave, the starting value $s$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
 
+* In actual practice, implementation of the Newton-Raphson algorithm can be tricky.
+We may have $\ell''(\theta_n)=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
+$$
+\begin{align*}
+\ell'(\theta_n + h) & \approx \ell'(\theta_n) + \ell''(\theta_n)h. 
+\end{align*}
+$$
+In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell'(\theta_n).$
+
+
+* In other cases where $\theta_n$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell(\theta_{n+1})$ is actually smaller than $\ell(\theta_{n}).$ When this happens one may replace $\theta_{n+1}$ with $(\theta_{n+1}+\theta_{n})/2$ (or some other value between $\theta_{n}$ and $\theta_{n+1}$) in the hope that a smaller step will produce better results.
+:::
 
 #### Newton-Raphson Algorithm: Coin-Flipping Example {-} 
 

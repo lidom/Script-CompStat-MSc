@@ -160,7 +160,7 @@ div.csl-indent {
   <li><a href="#properties-of-maximum-likelihood-estimators" id="toc-properties-of-maximum-likelihood-estimators" class="nav-link" data-scroll-target="#properties-of-maximum-likelihood-estimators">Properties of Maximum Likelihood Estimators</a></li>
   <li><a href="#example-coin-flipping-bernoulli-trial" id="toc-example-coin-flipping-bernoulli-trial" class="nav-link" data-scroll-target="#example-coin-flipping-bernoulli-trial"><span class="toc-section-number">4.1.1</span>  Example: Coin Flipping (Bernoulli Trial)</a></li>
   </ul></li>
-  <li><a href="#optimization-non-analytical-solutions" id="toc-optimization-non-analytical-solutions" class="nav-link" data-scroll-target="#optimization-non-analytical-solutions"><span class="toc-section-number">4.2</span>  Optimization: Non-Analytical Solutions</a>
+  <li><a href="#numeric-optimization" id="toc-numeric-optimization" class="nav-link" data-scroll-target="#numeric-optimization"><span class="toc-section-number">4.2</span>  Numeric Optimization</a>
   <ul class="collapse">
   <li><a href="#newton-raphson-optimization" id="toc-newton-raphson-optimization" class="nav-link" data-scroll-target="#newton-raphson-optimization"><span class="toc-section-number">4.2.1</span>  Newton-Raphson Optimization</a></li>
   </ul></li>
@@ -309,7 +309,7 @@ x_i=\left\{
 \Rightarrow\quad \ell(\theta)&amp;=\sum_{i=1}^n\left( x_i \ln(\theta) + (1-x_i)\ln(1-\theta)\right)
 \end{align*}
 \]</span></p>
-<p>In the coin flip example, <span class="math inline">\(\ell(\theta)\)</span> is so simple that we can maximize <span class="math inline">\(\ell(\theta)\)</span> analytically: <span class="math display">\[
+<p>The coin flip example is actually so simple that we can maximize <span class="math inline">\(\ell(\theta)\)</span> analytically: <span class="math display">\[
 \begin{align*}
 \ell'(\theta)&amp;=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\[2ex]
 &amp;=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta}
@@ -322,17 +322,18 @@ x_i=\left\{
 \Leftrightarrow&amp;\hat\theta_{ML}&amp;=&amp;\dfrac{h}{n}
 \end{array}
 \]</span></p>
-<p>Often, however, the log-likelihood function is so complicated that there is no analytic solution and one needs to apply numeric optimization algorithms.</p>
+<p>Usually, however, the log-likelihood function is way more complicated and one needs to apply numeric optimization algorithms to find the MLE.</p>
 </section>
 </section>
 </section>
-<section id="optimization-non-analytical-solutions" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="optimization-non-analytical-solutions"><span class="header-section-number">4.2</span> Optimization: Non-Analytical Solutions</h2>
+<section id="numeric-optimization" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="numeric-optimization"><span class="header-section-number">4.2</span> Numeric Optimization</h2>
 <p>Usually we are not so fortunate as to have a closed-form analytical solution for the MLE and must rely on the computer to find the maximizing arguments of the log-likelihood function. Various methods exist for finding the maximum (or minimum) of a function.</p>
+<!-- [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html) -->
 <p><strong>General idea:</strong></p>
 <ol type="1">
 <li>Start at some value for parameters in the parameter space (i.e., in the space of all possible parameter-values)</li>
-<li>Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or arbitrarily close to zero).</li>
+<li>Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero, smaller than some convergence criterion.).</li>
 </ol>
 <section id="newton-raphson-optimization" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="newton-raphson-optimization"><span class="header-section-number">4.2.1</span> Newton-Raphson Optimization</h3>
@@ -353,13 +354,13 @@ Note
 </ul>
 </div>
 </div>
-<p>Let <span class="math inline">\(f\)</span> be a two times differentiable function to be optimized (maximized). The first- and second-order Taylor-series approximations of <span class="math inline">\(f\)</span> around the point <span class="math inline">\(\theta\)</span> are: <span class="math display">\[
+<p>Let <span class="math inline">\(f\)</span> be a two times differentiable function to be optimized (here maximized). The first- and second-order Taylor-series approximations of <span class="math inline">\(f\)</span> around the point <span class="math inline">\(\theta\)</span> are: <span class="math display">\[
 \begin{align*}
 \text{First-order:}\quad &amp;f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial (Order 1)}} \\
 \text{Second-order:}\quad&amp; f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial (Order 2)}},
 \end{align*}
 \]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span>4.1</span></a>.</p>
-<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-taylorApprox_a6e048ca93028d48c27ca9690f552e70">
+<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-taylorApprox_28e8cb83cf1c2bfbfd594e2884769d3f">
 <div class="cell-output-display">
 <div id="fig-taylorApprox" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -376,12 +377,12 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 ::: -->
 <section id="optimization-idea" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="optimization-idea">Optimization Idea</h4>
-<p>Let <span class="math inline">\(\ell\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell',\)</span> and second, <span class="math inline">\(\ell''',\)</span> derivative.</p>
+<p>Let <span class="math inline">\(\ell\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell',\)</span> and second, <span class="math inline">\(\ell'',\)</span> derivative.</p>
 <p>To optimize the log-likelihood function <span class="math inline">\(\ell,\)</span> we try to find the root of <span class="math inline">\(\ell',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\)</span> such that <span class="math display">\[
 \ell'(\theta)=0.
-\]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order conidtion of the optimaization problem. We do so using a step-wise (<span class="math inline">\(h\)</span> steps) optimization approach.</p>
+\]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order condition of the optimization problem. We do so using a step-wise (<span class="math inline">\(h\)</span> steps) optimization approach.</p>
 <p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_0\)</span> be our first guess of the root <span class="math inline">\(\theta.\)</span></p>
-<p>Typically, <span class="math inline">\(\theta_0\neq\theta\)</span> and thus <span class="math inline">\(\ell'(\theta_0)\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_0\)</span> to a new root-candidate <span class="math inline">\(\theta_1\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
+<p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, <span class="math inline">\(\theta_0\neq\theta\)</span> and thus <span class="math inline">\(\ell'(\theta_0)\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_0\)</span> to a new root-candidate <span class="math inline">\(\theta_1\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
 \theta_1 = \theta_0 + h.
 \]</span></p>
 <!-- 1. We select some starting value $\theta_0.$ 
@@ -402,7 +403,7 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 \]</span> Likewise, the <span class="math inline">\(n\)</span>th root-candidate is <span class="math display">\[
 \theta_n = \theta_{n-1} + \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
 \]</span> see also <a href="#fig-NR">Figure&nbsp;<span>4.2</span></a>.</p>
-<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-NR_887290387f5562229b24ebc8b6d8569f">
+<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-NR_e30058ccfebf76b6c1a1c5fa06da8878">
 <div class="cell-output-display">
 <div id="fig-NR" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -413,16 +414,17 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 </div>
 </div>
 <p>One can shown that if <span class="math inline">\(\ell'\)</span> is “well behaved” at its root <span class="math inline">\(\theta\)</span> (i.e.&nbsp;if <span class="math inline">\(\ell''(\theta)\neq 0\)</span> and if <span class="math inline">\(\ell'''(\theta)\)</span> is finite and continuous at <span class="math inline">\(\theta\)</span>) and you start with <span class="math inline">\(\theta_0\)</span> “close enough” to the root <span class="math inline">\(\theta,\)</span> then <span class="math inline">\(\theta_n\)</span> will fastly converge to <span class="math inline">\(\theta.\)</span> Unfortunately, we don’t know if <span class="math inline">\(\ell'\)</span> is well behaved at <span class="math inline">\(\theta\)</span> until we know <span class="math inline">\(\theta,\)</span> and we don’t know beforehand how close is “close enough”. So, we cannot guarantee convergence of the Newton-Raphson algorithm.</p>
-<p>However, if <span class="math inline">\(\theta_n\to\theta\)</span> then, since <span class="math inline">\(\ell'\)</span> and <span class="math inline">\(\ell''\)</span> are continuous, we have <span class="math display">\[
+<!-- However, if $\theta_n\to\theta$ then, since $\ell'$ and $\ell''$ are continuous, we have
+$$
 \begin{align*}
-\theta = \lim_{n\to\infty}\theta_{n+1}
-&amp;=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell'(\theta_{n})}{\ell''(\theta_{n})}\right)\\[2ex]
-&amp;=\lim_{n\to\infty}\theta_{n} + \frac{\ell'(\lim_{n\to\infty}\theta_{n})}{\ell''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
-&amp;=\theta + \frac{\ell'(\theta)}{\ell''(\theta)}.
+\theta = \lim_{n\to\infty}\theta_{n+1} 
+&=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell'(\theta_{n})}{\ell''(\theta_{n})}\right)\\[2ex]
+&=\lim_{n\to\infty}\theta_{n} + \frac{\ell'(\lim_{n\to\infty}\theta_{n})}{\ell''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
+&=\theta + \frac{\ell'(\theta)}{\ell''(\theta)}.
 \end{align*}
-\]</span><br>
-Therefore, provided that <span class="math inline">\(\ell''(\theta)\neq \pm\infty,\)</span> we must have that <span class="math inline">\(\ell'(\theta) = 0.\)</span></p>
-<p>Since we are expecting that <span class="math inline">\(\ell'(\theta_n)\to 0,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
+$$  
+Therefore, provided that $\ell''(\theta)\neq \pm\infty,$ we must have that $\ell'(\theta) = 0.$ -->
+<p><strong>Checking convergence:</strong> Since we are expecting that <span class="math inline">\(\ell'(\theta_n)\to 0,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
 |\ell'(\theta_n)|\leq \varepsilon
 \]</span> for some (small) tolerance <span class="math inline">\(\varepsilon&gt;0.\)</span></p>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -431,11 +433,11 @@ Therefore, provided that <span class="math inline">\(\ell''(\theta)\neq \pm\inft
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Pseudo-Code
+Pseudo-Code: Newton-Raphson Algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The Newton-Raphson algorithm is given by: <span class="math display">\[
+<p><span class="math display">\[
 \begin{array}{ll}
 \texttt{\textbf{let }} \theta_0=s  &amp;  \\
 \texttt{\textbf{let }} n=0                &amp;  \\
@@ -450,7 +452,27 @@ Pseudo-Code
 \]</span></p>
 </div>
 </div>
-<p><strong>Note:</strong> For problems that are globally concave, the starting value <span class="math inline">\(s\)</span> doesn’t matter. For more complex problems, however, the Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to <strong>try multiple starting values</strong>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>For problems that are globally concave, the starting value <span class="math inline">\(s\)</span> doesn’t matter. For more complex problems, however, the Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to <strong>try multiple starting values</strong>.</p></li>
+<li><p>In actual practice, implementation of the Newton-Raphson algorithm can be tricky. We may have <span class="math inline">\(\ell''(\theta_n)=0,\)</span> in which case the function looks locally like a straight line, with no solution to the Taylor series approximation <span class="math display">\[
+\begin{align*}
+\ell'(\theta_n + h) &amp; \approx \ell'(\theta_n) + \ell''(\theta_n)h.
+\end{align*}
+\]</span> In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on <span class="math inline">\(\ell'(\theta_n).\)</span></p></li>
+<li><p>In other cases where <span class="math inline">\(\theta_n\)</span> is too far from the true maximizer <span class="math inline">\(\theta\)</span>, the Taylor approximation may be so inaccurate that <span class="math inline">\(\ell(\theta_{n+1})\)</span> is actually smaller than <span class="math inline">\(\ell(\theta_{n}).\)</span> When this happens one may replace <span class="math inline">\(\theta_{n+1}\)</span> with <span class="math inline">\((\theta_{n+1}+\theta_{n})/2\)</span> (or some other value between <span class="math inline">\(\theta_{n}\)</span> and <span class="math inline">\(\theta_{n+1}\)</span>) in the hope that a smaller step will produce better results.</p></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="newton-raphson-algorithm-coin-flipping-example" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example">Newton-Raphson Algorithm: Coin-Flipping Example</h4>
@@ -795,7 +817,7 @@ f(x|\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 </div>
 <p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
-\]</span> around <span class="math inline">\(\theta\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>4.2</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT">Theorem&nbsp;<span>4.1</span></a>).</p>
+\]</span> around <span class="math inline">\(\theta\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>4.2</span></a>). To derive this expression, we use the mean value theorem (<a href="Ch5_EMAlgorithmus.html#thm-MVT">Theorem&nbsp;<span>5.1</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -815,7 +837,7 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 </div>
 </div>
-<p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span>4.1</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
+<p>By the Mean Value Theorem (<a href="Ch5_EMAlgorithmus.html#thm-MVT">Theorem&nbsp;<span>5.1</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
 \tag{4.2}\]</span></span> for some <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n).\)</span></p>
 <p>Since <span class="math inline">\(\hat{\theta}_n\)</span> maximizes the log-Likelihood function it follows that <span class="math display">\[
