@@ -417,18 +417,24 @@ In this case a simple strategy is to move a small step in the direction which de
 
 Let's return to our earlier coin-flipping example. 
 
-If we observe, for instance, only one head $h=1$ for a sample size of $n=5,$ we already know that $\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2,$ but let's apply the Newton-Raphson Algorithm.  
+If we observe, for instance, only one head $h=1$ for a sample size of $n=5,$ we already know that 
+$$
+\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2,
+$$
+but let us, nevertheless, apply the Newton-Raphson algorithm.  
 
-Recall that
+First and second derivatives of $\ell$ are 
 $$
 \begin{align*}
 \ell'(\theta)&=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\[2ex]
 \ell''(\theta) &= -\dfrac{h}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{h}{(1-\theta)^2}(-1)\\[2ex]
-&= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}
+&= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}.
 \end{align*}
 $$
 
-Let's consider a sample size of $n=5,$ where one coin-flip resulted in H, i.e. $h=1,$ and four coin-flips resulted in T, i.e. $n-h=4.$ Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_0=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
+We consider a sample size of $n=5,$ where one coin-flip resulted in H and the remaining four coin-flips resulted in T, i.e. $h=1$ and $n-h=4.$ 
+
+Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_0=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
 |$n$ 	|	$\hat\theta_n$	|	$\ell'(\hat\theta_n)$	 |  $\ell'(\hat\theta_n)/\ell''(\hat\theta_n)$ |
@@ -440,7 +446,7 @@ Let's consider a sample size of $n=5,$ where one coin-flip resulted in H, i.e. $
 |$4$| $0.19$| $\phantom{-}3.53\cdot 10^{-6}$ |$-1.13\cdot 10^{-7}$|
 |$5$| $0.20$| $\phantom{-}1.50\cdot 10^{-12}$|$-4.81\cdot 10^{-14}$|
 
-: Result of applying the Newton Raphson optimaization algorithm to our coin flipping example for given data $h=1$ with sample size $n=5$. {#tbl-NR}
+: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data ($h=1,$ sample size $n=5$). {#tbl-NR}
 
 
 
@@ -489,8 +495,11 @@ $$
 \varepsilon \sim \mathcal{N}\left(0, \sigma^2I_n\right).
 \end{equation*}
 $$
-We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution.  This requirement is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, taking into account specific distributional assumptions allows us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
+We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution.  
 
+::: {.callout-note}
+The requirement to make a (correct) distributional assumption is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, taking into account specific distributional assumptions allows us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
+:::
 
 <!-- \begin{itemize} -->
 <!-- \item The $\varepsilon$'s are jointly normally distributed. -->
@@ -502,7 +511,7 @@ We could also choose another distributional assumption for $\varepsilon,$ but th
 The multivariate density for $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'$ is then
 $$
 \begin{equation*}
-f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} e^{-\left(\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)}.
+f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right).
 \end{equation*}
 $$
 Noting that $\varepsilon=Y-X\beta$, we get the log likelihood
@@ -511,15 +520,16 @@ $$
 \ell(\beta,\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
 \end{align*}
 $$
-with $K$ unknown parameters $\beta=(\beta_1,\dots,\beta_K)'\in\mathbb{R}^K$ and $\sigma^2\in\mathbb{R}_{>0}.$
+with $K+1$ unknown parameters: $\beta=(\beta_1,\dots,\beta_K)'\in\mathbb{R}^K$ and $\sigma^2\in\mathbb{R}_{>0}.$
 
 Taking derivatives gives 
 $$
 \begin{align*}
-\dfrac{\partial \ell}{\partial \beta}(\beta,\sigma^2)    &= \underset{(K\times 1)}{- \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)} \\[2ex]
-\dfrac{\partial \ell}{\partial \sigma^2}(\beta,\sigma^2) 
+\underset{(K\times 1)}{\dfrac{\partial \ell}{\partial \beta}(\beta,\sigma^2)}    
+&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+\underset{(1\times 1)}{\dfrac{\partial \ell}{\partial \sigma^2}(\beta,\sigma^2)} 
 %&= -\dfrac{n}{2\sigma^2}+ \dfrac{1}{2\sigma^4}(Y-X\beta)'(Y-X\beta)
-&=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}} \\
+&=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}}\\
 %&=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)'(Y-X\beta)-n\right]
 \end{align*}
 $$
@@ -536,9 +546,7 @@ $$\left(
   \dfrac{\partial \ell}{\partial \theta_p}(\theta)
   \right),
 $$ 
-is called the **score-function**.  
-
-The score function is random, since it depend on the random sample. The score function satisfies 
+is called the **score-function**.  The score function is random, since it depends on the random sample. The score function satisfies 
 $$
 \mathbb{E}\left(\dfrac{\partial \ell}{\partial \theta_j}(\theta)\right)=0
 $$ 
@@ -625,7 +633,8 @@ $$
 &=0,
 \end{align*}
 $$
-since $\mathbb{E}(\varepsilon_i|X_i)=0.$
+since $\mathbb{E}(\varepsilon|X)=0$ is an $(n\times 1)$ zero vector. 
+
 
 ### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
 
@@ -660,7 +669,7 @@ $$
 <!-- While the upper left element of the Fisher information matrix is easily seen, the derivation of the lower right element is rather tedious and thus omitted.
 [^1]: See [https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood) for more details. -->
 
-Taking the inverse of the Fisher information matrix gives the variance-covariance matrix of the vector of estimators $(\hat\beta_{ML}, s_{ML}^2)$
+Taking the inverse of the Fisher information matrix $\mathcal{I}\left(\beta, \sigma^2\right)$ gives the variance-covariance matrix of the vector of estimators $(\hat\beta_{ML}, s_{ML}^2)$
 $$
 \begin{align*}
 Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
