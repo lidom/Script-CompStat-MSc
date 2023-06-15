@@ -638,7 +638,7 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 <ol type="1">
 <li><p>First and second derivative with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}(\beta,\sigma^2)
+\underset{(K\times K)}{\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}(\beta,\sigma^2)}
 &amp;= - \dfrac{1}{\sigma^2}(X'X)
 \end{align*}
 \]</span> <span class="math display">\[
@@ -656,7 +656,7 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \]</span></p></li>
 <li><p>First and second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2)
+\underset{(1\times 1)}{\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2)}
 &amp;=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
 &amp;=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
 \end{align*}
@@ -671,16 +671,16 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \]</span></p></li>
 <li><p>First derivative with respect to <span class="math inline">\(\beta,\)</span> second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \beta \partial \sigma^2}(\beta,\sigma^2)
-=   \dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)
+\underset{(K\times 1)}{\dfrac{\partial^2 \ell}{\partial \beta \partial \sigma^2}(\beta,\sigma^2)}
+=   \left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)^T
 &amp;= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
 &amp; = \frac{X'\varepsilon}{\sigma^4}\\
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
-&amp;(-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\\[2ex]
 &amp;(-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \beta\partial \sigma^2}(\beta,\sigma^2)\right)\\[2ex]
+&amp;\left((-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\right)^T\\[2ex]
 &amp;=\frac{\mathbb{E}(X'\varepsilon)}{\sigma^4}\\[2ex]
 &amp;=\frac{\mathbb{E}(\mathbb{E}(X'\varepsilon|X))}{\sigma^4}\\[2ex]
 &amp;=\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
@@ -719,18 +719,18 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 <p>Taking the inverse of the Fisher information matrix <span class="math inline">\(\mathcal{I}\left(\beta, \sigma^2\right)\)</span> gives the variance-covariance matrix of the vector of estimators <span class="math inline">\((\hat\beta_{ML}, s_{ML}^2)\)</span> <span class="math display">\[
 \begin{align*}
 Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-&amp; = \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
+&amp; \approx \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
 &amp; =
 \left[\begin{array}{cc}
 \dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1} &amp; 0 \\
 0 &amp; \ \dfrac{2\sigma^4}{n}
-\end{array}\right].
+\end{array}\right],
 \end{align*}
-\]</span> That is, <span class="math display">\[
-Var\left(\hat\beta_{ML}\right) = \dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1}
+\]</span> where the approximation error becomes small as <span class="math inline">\(n\to\infty.\)</span> That is, <span class="math display">\[
+n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
 \]</span> and <span class="math display">\[
-Var\left(s_{ML}^2\right) = \dfrac{2\sigma^4}{n}.
-\]</span> Note that these are not “finite <span class="math inline">\(n\)</span>,” but</p>
+n Var\left(s_{ML}^2\right) \to \dfrac{2\sigma^4}{n}\quad\text{as}\quad n\to\infty.
+\]</span></p>
 <p>Given this result, it is easy to see that <span class="math display">\[
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 \]</span> as <span class="math inline">\(n\to\infty\)</span>.</p>

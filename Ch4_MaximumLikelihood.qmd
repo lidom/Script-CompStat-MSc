@@ -577,7 +577,7 @@ Since needed for the next chapter, we also give here the second derivatives of t
 1. First and second derivative with respect to $\beta:$
 $$
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}(\beta,\sigma^2)
+\underset{(K\times K)}{\dfrac{\partial^2 \ell}{\partial \beta\partial \beta}(\beta,\sigma^2)}
 &= - \dfrac{1}{\sigma^2}(X'X)
 \end{align*}
 $$
@@ -599,7 +599,7 @@ $$
 2. First and second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2) 
+\underset{(1\times 1)}{\dfrac{\partial^2 \ell}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2)}
 &=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
 &=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
 \end{align*}
@@ -616,8 +616,8 @@ $$
 3. First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
-\dfrac{\partial^2 \ell}{\partial \beta \partial \sigma^2}(\beta,\sigma^2)
-=   \dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)
+\underset{(K\times 1)}{\dfrac{\partial^2 \ell}{\partial \beta \partial \sigma^2}(\beta,\sigma^2)}
+=   \left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)^T
 &= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
 & = \frac{X'\varepsilon}{\sigma^4}\\
 \end{align*}
@@ -625,8 +625,8 @@ $$
 $$
 \begin{align*}
 \Rightarrow\quad 
-&(-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\\[2ex]
 &(-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \beta\partial \sigma^2}(\beta,\sigma^2)\right)\\[2ex]
+&\left((-1)\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\right)^T\\[2ex]
 &=\frac{\mathbb{E}(X'\varepsilon)}{\sigma^4}\\[2ex]
 &=\frac{\mathbb{E}(\mathbb{E}(X'\varepsilon|X))}{\sigma^4}\\[2ex]
 &=\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
@@ -673,23 +673,23 @@ Taking the inverse of the Fisher information matrix $\mathcal{I}\left(\beta, \si
 $$
 \begin{align*}
 Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
-& = \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
+& \approx \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
 & =
 \left[\begin{array}{cc}
 \dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1} & 0 \\
 0 & \ \dfrac{2\sigma^4}{n}
-\end{array}\right].
+\end{array}\right],
 \end{align*}
 $$
-That is, 
+where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
-Var\left(\hat\beta_{ML}\right) = \dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1}
+n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
 $$
 and
 $$
-Var\left(s_{ML}^2\right) = \dfrac{2\sigma^4}{n}.
+n Var\left(s_{ML}^2\right) \to \dfrac{2\sigma^4}{n}\quad\text{as}\quad n\to\infty.
 $$
-Note that these are not "finite $n$," but  
+
 
 Given this result, it is easy to see that 
 $$
