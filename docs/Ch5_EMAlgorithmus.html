@@ -223,17 +223,19 @@ div.csl-indent {
   <li><a href="#gaussian-mixture-models-gmm" id="toc-gaussian-mixture-models-gmm" class="nav-link" data-scroll-target="#gaussian-mixture-models-gmm"><span class="toc-section-number">5.2.1</span>  Gaussian Mixture Models (GMM)</a></li>
   <li><a href="#maximum-likelihood-ml-estimation" id="toc-maximum-likelihood-ml-estimation" class="nav-link" data-scroll-target="#maximum-likelihood-ml-estimation"><span class="toc-section-number">5.2.2</span>  Maximum Likelihood (ML) Estimation</a></li>
   <li><a href="#sec-EM1" id="toc-sec-EM1" class="nav-link" data-scroll-target="#sec-EM1"><span class="toc-section-number">5.2.3</span>  The EM Algorithm for GMMs</a></li>
-  <li><a href="#clustering-using-gaussian-mixture-distributions-1" id="toc-clustering-using-gaussian-mixture-distributions-1" class="nav-link" data-scroll-target="#clustering-using-gaussian-mixture-distributions-1"><span class="toc-section-number">5.2.4</span>  Clustering using Gaussian Mixture Distributions</a></li>
   </ul></li>
   <li><a href="#the-true-view-on-the-em-algorithm-adding-unobserved-variables" id="toc-the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="nav-link" data-scroll-target="#the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="toc-section-number">5.3</span>  The True View on the EM Algorithm: Adding Unobserved Variables</a>
   <ul class="collapse">
   <li><a href="#completion-of-the-data" id="toc-completion-of-the-data" class="nav-link" data-scroll-target="#completion-of-the-data"><span class="toc-section-number">5.3.1</span>  Completion of the Data</a></li>
   <li><a href="#prior-and-posterior-probabilities" id="toc-prior-and-posterior-probabilities" class="nav-link" data-scroll-target="#prior-and-posterior-probabilities"><span class="toc-section-number">5.3.2</span>  Prior and Posterior Probabilities</a></li>
+  <li><a href="#the-abstract-version-of-the-em-algorithm" id="toc-the-abstract-version-of-the-em-algorithm" class="nav-link" data-scroll-target="#the-abstract-version-of-the-em-algorithm"><span class="toc-section-number">5.3.3</span>  The Abstract Version of the EM-Algorithm</a></li>
   </ul></li>
-  <li><a href="#the-big-picture" id="toc-the-big-picture" class="nav-link" data-scroll-target="#the-big-picture"><span class="toc-section-number">5.4</span>  The Big Picture</a>
+  <li><a href="#bayes-classifier-clustering-using-gaussian-mixture-distributions" id="toc-bayes-classifier-clustering-using-gaussian-mixture-distributions" class="nav-link" data-scroll-target="#bayes-classifier-clustering-using-gaussian-mixture-distributions"><span class="toc-section-number">5.4</span>  Bayes Classifier: Clustering using Gaussian Mixture Distributions</a>
   <ul class="collapse">
-  <li><a href="#synopsis" id="toc-synopsis" class="nav-link" data-scroll-target="#synopsis">Synopsis</a></li>
+  <li><a href="#cluster-analysis-unsupervised-classification" id="toc-cluster-analysis-unsupervised-classification" class="nav-link" data-scroll-target="#cluster-analysis-unsupervised-classification"><span class="toc-section-number">5.4.1</span>  Cluster Analysis: Unsupervised Classification</a></li>
+  <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">5.4.2</span>  Bayes Classifier</a></li>
   </ul></li>
+  <li><a href="#synopsis" id="toc-synopsis" class="nav-link" data-scroll-target="#synopsis">Synopsis</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -653,25 +655,6 @@ Tip
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>results <span class="sc">%&gt;%</span> <span class="fu">round</span>(., <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="clustering-using-gaussian-mixture-distributions-1" class="level3" data-number="5.2.4">
-<h3 data-number="5.2.4" class="anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions-1"><span class="header-section-number">5.2.4</span> Clustering using Gaussian Mixture Distributions</h3>
-<ol type="1">
-<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
-</ol>
-<p><a href="#fig-EMGif">Figure&nbsp;<span>5.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm.</p>
-<div class="cell" data-animation.hook="gifski" data-hash="Ch5_EMAlgorithmus_cache/html/fig-EMGif_59094b0a6a659980c49104cf4807f516">
-<div class="cell-output-display">
-<div id="fig-EMGif" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Ch5_EMAlgorithmus_files/figure-html/fig-EMGif-.gif" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;5.4: Iterative estimation of the Gaussian mixture distribution using the EM alorighm.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>.</p>
-</section>
 </section>
 <section id="the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="header-section-number">5.3</span> The True View on the EM Algorithm: Adding Unobserved Variables</h2>
@@ -816,10 +799,9 @@ p_{ig}
 </div>
 </div>
 </section>
-</section>
-<section id="the-big-picture" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="the-big-picture"><span class="header-section-number">5.4</span> The Big Picture</h2>
-<p>If, in addition to the data points, <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n),\)</span> we had also observed the group assignments, <span class="math inline">\(\mathbf{z}=(z_{11},\dots,z_{nG}),\)</span> then we could establish the following <strong>likelihood (<span class="math inline">\(\tilde{\mathcal{L}}\)</span>) or log-likelihood (<span class="math inline">\(\tilde{\ell}\)</span>) function</strong>: <span class="math display">\[
+<section id="the-abstract-version-of-the-em-algorithm" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="the-abstract-version-of-the-em-algorithm"><span class="header-section-number">5.3.3</span> The Abstract Version of the EM-Algorithm</h3>
+<p>If, in addition to the data points, <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n),\)</span> we had also observed the group assignments, <span class="math inline">\(\mathbf{z}=(z_{11},\dots,z_{nG}),\)</span> then we could establish the following <strong>likelihood (<span class="math inline">\(\tilde{\mathcal{L}}\)</span>)</strong> and <strong>log-likelihood (<span class="math inline">\(\tilde{\ell}\)</span>) functions</strong>: <span class="math display">\[
 \begin{align*}
 \tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
 &amp;=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_gf(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
@@ -858,8 +840,42 @@ p_{ig}
 </ul></li>
 <li><p>Check Convergence:<br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})\)</span>, does not change anymore substantially.</p></li>
 </ol>
-<section id="synopsis" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="synopsis">Synopsis</h3>
+</section>
+</section>
+<section id="bayes-classifier-clustering-using-gaussian-mixture-distributions" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="bayes-classifier-clustering-using-gaussian-mixture-distributions"><span class="header-section-number">5.4</span> Bayes Classifier: Clustering using Gaussian Mixture Distributions</h2>
+<section id="cluster-analysis-unsupervised-classification" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="cluster-analysis-unsupervised-classification"><span class="header-section-number">5.4.1</span> Cluster Analysis: Unsupervised Classification</h3>
+</section>
+<section id="bayes-classifier" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">5.4.2</span> Bayes Classifier</h3>
+<p><strong>Bayes Classifier</strong><br> The Bayes classifier assigns each observation <span class="math inline">\(i\)</span> to the group with the largest posterior probability <span class="math inline">\(p_{ig}\)</span> <span class="math display">\[
+\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} p_{ig}.
+\]</span></p>
+<p>If</p>
+<p>Here <span class="math display">\[
+\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} \frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}.
+\]</span></p>
+<ol type="1">
+<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
+<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
+</ol>
+<p><a href="#fig-EMGif">Figure&nbsp;<span>5.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm.</p>
+<div class="cell" data-animation.hook="gifski" data-hash="Ch5_EMAlgorithmus_cache/html/fig-EMGif_59094b0a6a659980c49104cf4807f516">
+<div class="cell-output-display">
+<div id="fig-EMGif" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch5_EMAlgorithmus_files/figure-html/fig-EMGif-.gif" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.4: Iterative estimation of the Gaussian mixture distribution using the EM alorighm.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>.</p>
+</section>
+</section>
+<section id="synopsis" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="synopsis">Synopsis</h2>
 <p>The average penguin doesn’t care about the EM Algorithm.</p>
 <div id="fig-agressivepenguin" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -867,7 +883,6 @@ p_{ig}
 <p></p><figcaption class="figure-caption">Figure&nbsp;5.5: Penguin research on the limit.</figcaption><p></p>
 </figure>
 </div>
-</section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>

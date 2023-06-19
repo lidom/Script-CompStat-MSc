@@ -583,15 +583,31 @@ The requirement to make a (correct) distributional assumption is much more restr
 <!-- \item The $\varepsilon$'s are independent of one another. -->
 <!-- \item The $\varepsilon$'s are identically distributed, i.e. homoskedastic. -->
 <!-- \end{itemize} -->
-<p>The multivariate density for <span class="math inline">\(\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'\)</span> is then <span class="math display">\[
+<p>Let <span class="math display">\[
+\varphi_{\mu,\sigma^2}(x) = \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\]</span> denote the univariate density function of the normal distribution with mean <span class="math inline">\(\mu\in\mathbb{R}\)</span> and variance <span class="math inline">\(\sigma^2\in\mathbb{R}.\)</span></p>
+<p>Likelihood function: <span class="math display">\[
+\begin{align*}
+\mathcal{L}_n(\beta,\sigma^2)
+&amp; =\prod_{i=1}^n \varphi_{\mu=0,\sigma^2}(\varepsilon_i)\\
+&amp; =\prod_{i=1}^n \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{\varepsilon_i^2}{2\sigma^2}\right)\\[2ex]
+&amp; =\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)\\[2ex]
+&amp; =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right)\\[2ex]
+\end{align*}
+\]</span> <!-- The multivariate density for $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'$ is then
+$$
 \begin{equation*}
 f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right).
 \end{equation*}
-\]</span> Noting that <span class="math inline">\(\varepsilon=Y-X\beta\)</span>, we get the log likelihood <span class="math display">\[
+$$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> Log-likelihood function: <span class="math display">\[
 \begin{align*}
 \ell(\beta,\sigma^2)&amp; =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
 \end{align*}
-\]</span> with <span class="math inline">\(K+1\)</span> unknown parameters: <span class="math inline">\(\beta=(\beta_1,\dots,\beta_K)'\in\mathbb{R}^K\)</span> and <span class="math inline">\(\sigma^2\in\mathbb{R}_{&gt;0}.\)</span></p>
+\]</span> with <span class="math inline">\(K+1\)</span> unknown parameters:</p>
+<ul>
+<li><span class="math inline">\(\beta=(\beta_1,\dots,\beta_K)'\in\mathbb{R}^K\)</span> and</li>
+<li><span class="math inline">\(\sigma^2\in\mathbb{R}_{&gt;0}.\)</span></li>
+</ul>
 <p>Taking derivatives gives <span class="math display">\[
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell}{\partial \beta}(\beta,\sigma^2)}    
@@ -1091,29 +1107,23 @@ Machine learning
 <section id="exercise-1." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
 <p>Program the Newton-Raphson algorithm for a numerical computation of the ML estimate <span class="math inline">\(\hat\theta\)</span> of the parameter <span class="math inline">\(\theta=P(\text{Coin}=\texttt{HEAD})\)</span> in our coin toss example of this chapter. Replicate the results shown in <a href="#tbl-NR">Table&nbsp;<span>4.1</span></a>.</p>
-<!-- #### Exercise 2. {-} 
-
-Consider the maximum likelihood variance estimator 
-$$
-s^2_{ML}=\frac{1}{n}\sum_{i=1}^n\hat\eps_i^2
-$$ 
-and the unbiased variance estimator 
-$$
-s^2_{UB}=\frac{1}{n-K}\sum_{i=1}^n\hat\eps_i^2
-$$ 
-for which it holds true that $\mathbb{E}(s_{UB})=\sigma^2=Var(\eps_i)$; assuming that $n\neq K$. 
-
-(a) Show that 
-$$
-\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(s^2_{UB})
-$$
-for any fixed and finite $K$ and for sufficiently large $n$.<br> 
-**Hint:** $Var(s_{UB}^2)=\frac{n}{(n-K)^2}2\sigma^4$.
-
-(b) Is the difference in the mean squared error of any practical relevance or not? 
-
-
-#### Exercise 3. {-}  -->
+</section>
+<section id="exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
+<p>Assume an i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> from an exponential distribution, i.e.&nbsp;the underlying density of <span class="math inline">\(X_i\)</span> is given by <span class="math display">\[
+f(x|\theta)=\theta\exp(-\theta x).
+\]</span> We then have <span class="math display">\[
+\mu:=\mathbb{E}(X_i)=\frac{1}{\theta}
+\]</span> as well as <span class="math display">\[
+Var(X_i)=\frac{1}{\theta^2}.
+\]</span></p>
+<ol type="a">
+<li>What is the log-likelihood function for the i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span>?</li>
+<li>Derive the maximum likelihood (ML) estimator <span class="math inline">\(\hat\theta_n\)</span> of <span class="math inline">\(\theta\)</span>.</li>
+<li>From maximum likelihood theory we know that <span class="math display">\[
+(\hat\theta_n-\theta)\to_d \mathcal{N}\left(0,\frac{1}{n \mathcal{J}(\theta)}\right)
+\]</span> Derive the expression for the Fischer information <span class="math inline">\(\mathcal{I}(\theta)=n\mathcal{J}(\theta)\)</span>. Use the Fisher information to give the <em>explicit</em> formula for the asymptotic distribution of <span class="math inline">\(\hat\theta_n\)</span>.</li>
+</ol>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">

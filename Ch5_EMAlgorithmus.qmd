@@ -488,7 +488,226 @@ results %>% round(., 2)
 ```
 
 
-### Clustering using Gaussian Mixture Distributions
+
+
+## The True View on the EM Algorithm: Adding Unobserved Variables
+
+The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.
+
+::: {.callout-note}
+
+# Remember: 
+
+We were note able to maximize the log-likelihood function
+$$
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+=\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
+$$
+directly. 
+
+The $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
+:::
+
+
+### Completion of the Data
+
+In our penguin data there are two groups $g\in\{1,2\}.$ 
+
+Thus, in principle there are $G=2$ dimensional assignment vectors $(z_{i1},z_{i2})$ with  
+$$
+(z_{i1},z_{i2})=
+\left\{\begin{array}{ll}
+(1,0)&\text{if penguin }i\text{ belongs to group }g=1\\
+(0,1)&\text{if penguin }i\text{ belongs to group }g=2\\
+\end{array}\right.
+$$
+
+::: {.callout-tip}
+
+Case of $G>2$ groups:  
+$$
+\begin{align*}
+&(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
+&=\left\{\begin{array}{ll}
+(1,0,\dots,0)&\text{if data point }i\text{ belongs to group }g=1\\
+(0,1,\dots,0)&\text{if data point }i\text{ belongs to group }g=2\\
+\quad\quad\vdots&\\
+(0,0,\dots,1)&\text{if data point }i\text{ belongs to group }g=G\\
+\end{array}\right.
+\end{align*}
+$$
+:::
+
+The assignments $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ where, however, it must hold true that 
+$$
+\sum_{g=1}^Gz_{ig}=1.
+$$
+
+::: {.callout-note}
+For each data point $x_i$ (each penguin $i$) there is only **one** group (hence $\sum_{g=1}^Gz_{ig}=1$). This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
+:::
+
+Unfortunately, the assignments $z_{ig}$ are unknown (latent). However, we nevertheless know something about these assignments. The weights $\pi_1,\dots,\pi_G$ of the Gaussian mixture distribution 
+$$
+f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g),
+$$
+give us the proportions of the individual distributions $f(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_G$. 
+
+
+On average, $\pi_g\cdot 100\%$ of the data points come from group $g.$ Thus, we can consider the (latent) assignment $z_{ig}$ as a realization of a discrete (binary) random variable $Z_{ig}\in\{0,1\}$ with probability mass function
+$$
+\begin{align*}
+P(Z_{ig}=1)&=\pi_g\\[2ex]
+P(Z_{ig}=0)&=(1-\pi_g)\\[2ex]
+\end{align*}
+$$
+for each $i=1,\dots,n.$
+
+
+The condition 
+$$
+\sum_{g=1}^Gz_{ig}=1
+$$ 
+implies that if
+<!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  -->
+$$
+Z_{ig}=1
+$$ 
+then
+$$
+Z_{ij}=0\quad \text{for all }j\neq g.
+%\quad \Rightarrow\quad Z_{i1}=0,\dots,Z_{ig-1}=0,Z_{ig+1}=0,\dots,Z_{iG}=0.
+$$
+
+### Prior and Posterior Probabilities
+
+**Prior Probability $\pi_g$**<br>
+If we know nothing about the flipper length of penguin $i$ then we are left with the prior probability: <br>
+<center>"With probability $\pi_g=P(Z_{ig}=1)$ penguin $i$ belongs to group $g$."</center> 
+<br>
+
+
+**Posterior Probability $p_{ig}$**<br> 
+If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** which leads to the posterior probability: <br>
+<center>"With probability $p_{ig}=P(Z_{ig=1}|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$.</center>
+<br>
+
+
+::: {.callout-note icon=false} 
+## 
+::: {#thm-MVT}
+
+# Bayes' Theorem
+$$
+\begin{align*}
+p_{ig}
+=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
+&=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
+&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+\end{align*}
+$$
+:::
+:::
+
+
+::: {.callout-tip}
+The posterior probabilities $p_{ig}$ are conditional means:
+$$
+\begin{align*}
+p_{ig}
+&= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex] 
+&= \mathbb{E}(Z_{ig}|X_i=x_i)\\
+\end{align*}
+$$
+Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorithm (@sec-EM1) is indeed a computation of an expectation. 
+::: 
+
+
+### The Abstract Version of the EM-Algorithm
+
+
+If, in addition to the data points, $\mathbf{x}=(x_1,\dots,x_n),$ we had also observed the group assignments, $\mathbf{z}=(z_{11},\dots,z_{nG}),$ then we could establish the following **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
+$$
+\begin{align*}
+\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_gf(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
+$$
+
+Unlike the original log-likelihood function ($\ell$), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**. Since there is no sum inside the logarithm function, we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family.
+
+**However**, we do not observe the realizations 
+$$
+\mathbf{z}=(z_{11},\dots,z_{nG}),
+$$ 
+but only know the distribution of the random variables 
+$$
+\mathbf{Z}=(Z_{11},\dots,Z_{nG}).
+$$ 
+This leads to a stochastic version of the log-likelihood function:
+$$
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+$$
+From this, however, can calculate the conditional expected value:
+$$
+\mathbb{E}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+$$
+
+
+
+The following EM algorithm differs only in notation from the version already discussed in @sec-EM1. The notation chosen here clarifies that the **Expectation**-step *updates the log-likelihood function* to be maximized in the **Maximization**-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. 
+
+In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ will be denoted as $\boldsymbol{\theta}$ for simplicity.
+<br>
+
+1. Set starting values $\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})$
+
+2. For $r=1,2,\dots$
+
+    - <span style="color:#FF5733">**(Expectation)** </span> Compute:
+    $$
+    \begin{align*}
+    \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
+    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+    \end{align*}
+    $$
+
+    - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
+    $$
+    \begin{align*}
+    \boldsymbol{\theta}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+    \end{align*}
+    $$
+
+3. Check Convergence:<br> 
+   Stop if the value of the maximized log-likelihood function, $\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})$, does not change anymore substantially. 
+
+
+
+## Bayes Classifier: Clustering using Gaussian Mixture Distributions
+
+
+### Cluster Analysis: Unsupervised Classification
+
+
+### Bayes Classifier 
+
+**Bayes Classifier**<br>
+The Bayes classifier assigns each observation $i$ to the group with the largest posterior probability $p_{ig}$
+$$
+\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} p_{ig}.
+$$
+
+If 
+
+Here 
+$$
+\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} \frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}.
+$$
+
 
 1. Estimate the Gaussian mixture distribution using the **EM algorithm**
 2. Assign the data points $x_i$ to the group that maximizes the **"posterior probability"**
@@ -592,201 +811,10 @@ The final estimation result replicates @fig-GMM-plot1.
 
 
 
-## The True View on the EM Algorithm: Adding Unobserved Variables
-
-The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.
-
-::: {.callout-note}
-
-# Remember: 
-
-We were note able to maximize the log-likelihood function
-$$
-\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
-=\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
-$$
-directly. 
-
-The $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
-:::
-
-
-### Completion of the Data
-
-In our penguin data there are two groups $g\in\{1,2\}.$ 
-
-Thus, in principle there are $G=2$ dimensional assignment vectors $(z_{i1},z_{i2})$ with  
-$$
-(z_{i1},z_{i2})=
-\left\{\begin{array}{ll}
-(1,0)&\text{if penguin }i\text{ belongs to group }g=1\\
-(0,1)&\text{if penguin }i\text{ belongs to group }g=2\\
-\end{array}\right.
-$$
-
-::: {.callout-tip}
-
-Case of $G>2$ groups:  
-$$
-\begin{align*}
-&(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
-&=\left\{\begin{array}{ll}
-(1,0,\dots,0)&\text{if data point }i\text{ belongs to group }g=1\\
-(0,1,\dots,0)&\text{if data point }i\text{ belongs to group }g=2\\
-\quad\quad\vdots&\\
-(0,0,\dots,1)&\text{if data point }i\text{ belongs to group }g=G\\
-\end{array}\right.
-\end{align*}
-$$
-:::
-
-The assignments $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ where, however, it must hold true that 
-$$
-\sum_{g=1}^Gz_{ig}=1.
-$$
-
-::: {.callout-note}
-For each data point $x_i$ (each penguin $i$) there is only **one** group (hence $\sum_{g=1}^Gz_{ig}=1$). This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
-:::
-
-Unfortunately, the assignments $z_{ig}$ are unknown (latent). However, we nevertheless know something about these assignments. The weights $\pi_1,\dots,\pi_G$ of the Gaussian mixture distribution 
-$$
-f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g),
-$$
-give us the proportions of the individual distributions $f(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_G$. 
-
-
-On average, $\pi_g\cdot 100\%$ of the data points come from group $g.$ Thus, we can consider the (latent) assignment $z_{ig}$ as a realization of a discrete (binary) random variable $Z_{ig}\in\{0,1\}$ with probability mass function
-$$
-\begin{align*}
-P(Z_{ig}=1)&=\pi_g\\[2ex]
-P(Z_{ig}=0)&=(1-\pi_g)\\[2ex]
-\end{align*}
-$$
-for each $i=1,\dots,n.$
-
-
-The condition 
-$$
-\sum_{g=1}^Gz_{ig}=1
-$$ 
-implies that if
-<!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  -->
-$$
-Z_{ig}=1
-$$ 
-then
-$$
-Z_{ij}=0\quad \text{for all }j\neq g.
-%\quad \Rightarrow\quad Z_{i1}=0,\dots,Z_{ig-1}=0,Z_{ig+1}=0,\dots,Z_{iG}=0.
-$$
-
-### Prior and Posterior Probabilities 
-
-**Prior Probability $\pi_g$**<br>
-If we know nothing about the flipper length of penguin $i$ then we are left with the prior probability: <br>
-<center>"With probability $\pi_g=P(Z_{ig}=1)$ penguin $i$ belongs to group $g$."</center> 
-<br>
-
-
-**Posterior Probability $p_{ig}$**<br> 
-If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** which leads to the posterior probability: <br>
-<center>"With probability $p_{ig}=P(Z_{ig=1}|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$.</center>
-<br>
-
-
-::: {.callout-note icon=false} 
-## 
-::: {#thm-MVT}
-
-# Bayes' Theorem
-$$
-\begin{align*}
-p_{ig}
-=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
-&=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
-&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
-\end{align*}
-$$
-:::
-:::
-
-
-::: {.callout-tip}
-The posterior probabilities $p_{ig}$ are conditional means:
-$$
-\begin{align*}
-p_{ig}
-&= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex] 
-&= \mathbb{E}(Z_{ig}|X_i=x_i)\\
-\end{align*}
-$$
-Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorithm (@sec-EM1) is indeed a computation of an expectation. 
-::: 
-
-## The Big Picture
-
-
-If, in addition to the data points, $\mathbf{x}=(x_1,\dots,x_n),$ we had also observed the group assignments, $\mathbf{z}=(z_{11},\dots,z_{nG}),$ then we could establish the following **likelihood ($\tilde{\mathcal{L}}$) or log-likelihood ($\tilde{\ell}$) function**:
-$$
-\begin{align*}
-\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_gf(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
-\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
-\end{align*}
-$$
-
-Unlike the original log-likelihood function ($\ell$), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**. Since there is no sum inside the logarithm function, we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family.
-
-**However**, we do not observe the realizations 
-$$
-\mathbf{z}=(z_{11},\dots,z_{nG}),
-$$ 
-but only know the distribution of the random variables 
-$$
-\mathbf{Z}=(Z_{11},\dots,Z_{nG}).
-$$ 
-This leads to a stochastic version of the log-likelihood function:
-$$
-\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
-$$
-From this, however, can calculate the conditional expected value:
-$$
-\mathbb{E}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
-$$
 
 
 
-The following EM algorithm differs only in notation from the version already discussed in @sec-EM1. The notation chosen here clarifies that the **Expectation**-step *updates the log-likelihood function* to be maximized in the **Maximization**-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. 
-
-In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ will be denoted as $\boldsymbol{\theta}$ for simplicity.
-<br>
-
-1. Set starting values $\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})$
-
-2. For $r=1,2,\dots$
-
-    - <span style="color:#FF5733">**(Expectation)** </span> Compute:
-    $$
-    \begin{align*}
-    \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
-    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
-    \end{align*}
-    $$
-
-    - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
-    $$
-    \begin{align*}
-    \boldsymbol{\theta}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-    \end{align*}
-    $$
-
-3. Check Convergence:<br> 
-   Stop if the value of the maximized log-likelihood function, $\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})$, does not change anymore substantially. 
-
-### Synopsis {-}
+## Synopsis {-}
 
 The average penguin doesn't care about the EM Algorithm.
 
