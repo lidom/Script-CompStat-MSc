@@ -196,8 +196,8 @@ One of the most-used methods for optimization is the Newton-Raphson method (or a
 
 ::: {.callout-note}
 
-* By strange convention Newton usually shares credit for this algorithm when
-it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization. 
+<!-- * By strange convention Newton usually shares credit for this algorithm when
+it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.  -->
 
 * Note that minimization and maximization are essentially the same problems since minimizing a function $f(x)$ with respect to $x$ is equivalent to maximizing $-f(x)$ with respect to $x.$
 :::
@@ -495,7 +495,7 @@ $$
 \varepsilon \sim \mathcal{N}\left(0, \sigma^2I_n\right).
 \end{equation*}
 $$
-We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. (Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic.)
+We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic.
 
 <!-- ::: {.callout-note}
 The requirement to make a (correct) distributional assumption is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, taking into account specific distributional assumptions allows us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
@@ -546,11 +546,11 @@ $$\left(
   \dfrac{\partial \ell}{\partial \theta_p}(\theta)
   \right),
 $$ 
-is called the **score-function**.  The score function is random, since it depends on the random sample. The score function satisfies 
+is called the **score-function**.  The score function is random, since it depends on the random sample. At the **true parameter** vector $\theta,$ the score function satisfies 
 $$
 \mathbb{E}\left(\dfrac{\partial \ell}{\partial \theta_j}(\theta)\right)=0
 $$ 
-for all $j=1,\dots,p$ and all parameter values (not only the maximizing arguments). We'll show this below in @sec-MLAsymp.
+for all $j=1,\dots,p.$ We show this below in @sec-MLAsymp.
 :::
 
 So, we have a system of $K+1$ equations and $K+1$ unknowns. Setting equal to zero and solving gives:
@@ -572,7 +572,9 @@ $$
 Thus, the MLE of the linear model, $\hat\beta_{ML}$, is the same as the OLS estimator, $\hat\beta$. Moreover, since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
 
 
-Since needed for the next chapter, we also give here the second derivatives of the log-likelihood function $\ell$ as well as the expressions of minus one times the mean of the second derivatives of the log-likelihood function $\ell$:
+### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
+
+To derive the variance of the ML-estimators, we need the second derivatives of the log-likelihood function $\ell$ as well as their expressions of minus one times the mean of the second derivatives of the log-likelihood function $\ell$:
 
 1. First and second derivative with respect to $\beta:$
 $$
@@ -636,7 +638,7 @@ $$
 since $\mathbb{E}(\varepsilon|X)=0$ is an $(n\times 1)$ zero vector. 
 
 
-### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
+#### Fisher Information Matrix {-}
 
 The variance of an MLE is given by the inverse of the **Fisher information matrix**. 
 
@@ -680,7 +682,7 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 0 & \ \dfrac{2\sigma^4}{n}
 \end{array}\right],
 \end{align*}
-$$
+$${#eq-FIMVar}
 where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
 n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
@@ -696,6 +698,14 @@ $$
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$.
+
+Of course, the variance expressions in @eq-FIMVar contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: 
+$$
+\begin{align}
+s_{ML}^2                         &\approx \sigma^2\\
+\frac{1}{n}\sum_{i=1}^nX_i X_i^T &\approx \Sigma_{X'X}.
+\end{align}
+$$
 
 
 ### Consistency of $\hat\beta_{ML}$ and $s_{ML}^2$
@@ -1116,6 +1126,36 @@ Fisher information can be used as an alternative to the Hessian of the loss func
 :::
 
 ## Exercises {-}
+
+#### Exercise 1. {-} 
+
+Program the Newton-Raphson algorithm for a numerical computation of the ML estimate $\hat\theta$ of the parameter $\theta=P(\text{Coin}=\texttt{HEAD})$ in our coin toss example of this chapter. Replicate the results shown in @tbl-NR.  
+
+
+
+<!-- #### Exercise 2. {-} 
+
+Consider the maximum likelihood variance estimator 
+$$
+s^2_{ML}=\frac{1}{n}\sum_{i=1}^n\hat\eps_i^2
+$$ 
+and the unbiased variance estimator 
+$$
+s^2_{UB}=\frac{1}{n-K}\sum_{i=1}^n\hat\eps_i^2
+$$ 
+for which it holds true that $\mathbb{E}(s_{UB})=\sigma^2=Var(\eps_i)$; assuming that $n\neq K$. 
+
+(a) Show that 
+$$
+\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(s^2_{UB})
+$$
+for any fixed and finite $K$ and for sufficiently large $n$.<br> 
+**Hint:** $Var(s_{UB}^2)=\frac{n}{(n-K)^2}2\sigma^4$.
+
+(b) Is the difference in the mean squared error of any practical relevance or not? 
+
+
+#### Exercise 3. {-}  -->
 
 ## References {-}
 

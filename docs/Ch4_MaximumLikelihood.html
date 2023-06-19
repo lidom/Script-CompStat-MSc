@@ -348,9 +348,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<!-- * By strange convention Newton usually shares credit for this algorithm when
+it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.  -->
 <ul>
-<li><p>By strange convention Newton usually shares credit for this algorithm when it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.</p></li>
-<li><p>Note that minimization and maximization are essentially the same problems since minimizing a function <span class="math inline">\(f(x)\)</span> with respect to <span class="math inline">\(x\)</span> is equivalent to maximizing <span class="math inline">\(-f(x)\)</span> with respect to <span class="math inline">\(x.\)</span></p></li>
+<li>Note that minimization and maximization are essentially the same problems since minimizing a function <span class="math inline">\(f(x)\)</span> with respect to <span class="math inline">\(x\)</span> is equivalent to maximizing <span class="math inline">\(-f(x)\)</span> with respect to <span class="math inline">\(x.\)</span></li>
 </ul>
 </div>
 </div>
@@ -573,7 +574,7 @@ Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{
 \begin{equation*}
 \varepsilon \sim \mathcal{N}\left(0, \sigma^2I_n\right).
 \end{equation*}
-\]</span> We could also choose another distributional assumption for <span class="math inline">\(\varepsilon,\)</span> but the classical ML estimation theory requires us to assumed the correct error distribution. (Luckily, the quasi maximum likelihood theory of <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span> shows that false distributional assumptions are typically not problematic.)</p>
+\]</span> We could also choose another distributional assumption for <span class="math inline">\(\varepsilon,\)</span> but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span> shows that false distributional assumptions are typically not problematic.</p>
 <!-- ::: {.callout-note}
 The requirement to make a (correct) distributional assumption is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, taking into account specific distributional assumptions allows us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
 :::pe -->
@@ -616,9 +617,9 @@ Score Function
   \dfrac{\partial \ell}{\partial \theta_1}(\theta), \dots,
   \dfrac{\partial \ell}{\partial \theta_p}(\theta)
   \right),
-\]</span> is called the <strong>score-function</strong>. The score function is random, since it depends on the random sample. The score function satisfies <span class="math display">\[
+\]</span> is called the <strong>score-function</strong>. The score function is random, since it depends on the random sample. At the <strong>true parameter</strong> vector <span class="math inline">\(\theta,\)</span> the score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell}{\partial \theta_j}(\theta)\right)=0
-\]</span> for all <span class="math inline">\(j=1,\dots,p\)</span> and all parameter values (not only the maximizing arguments). We’ll show this below in <a href="#sec-MLAsymp"><span>Section&nbsp;4.4</span></a>.</p>
+\]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span> We show this below in <a href="#sec-MLAsymp"><span>Section&nbsp;4.4</span></a>.</p>
 </div>
 </div>
 <p>So, we have a system of <span class="math inline">\(K+1\)</span> equations and <span class="math inline">\(K+1\)</span> unknowns. Setting equal to zero and solving gives: <span class="math display">\[
@@ -634,7 +635,9 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 &amp; =\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2.
 \end{align*}
 \]</span> Thus, the MLE of the linear model, <span class="math inline">\(\hat\beta_{ML}\)</span>, is the same as the OLS estimator, <span class="math inline">\(\hat\beta\)</span>. Moreover, since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p>
-<p>Since needed for the next chapter, we also give here the second derivatives of the log-likelihood function <span class="math inline">\(\ell\)</span> as well as the expressions of minus one times the mean of the second derivatives of the log-likelihood function <span class="math inline">\(\ell\)</span>:</p>
+<section id="sec-varMLE" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="sec-varMLE"><span class="header-section-number">4.3.1</span> Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></h3>
+<p>To derive the variance of the ML-estimators, we need the second derivatives of the log-likelihood function <span class="math inline">\(\ell\)</span> as well as their expressions of minus one times the mean of the second derivatives of the log-likelihood function <span class="math inline">\(\ell\)</span>:</p>
 <ol type="1">
 <li><p>First and second derivative with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
@@ -688,8 +691,8 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \end{align*}
 \]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p></li>
 </ol>
-<section id="sec-varMLE" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="sec-varMLE"><span class="header-section-number">4.3.1</span> Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></h3>
+<section id="fisher-information-matrix" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="fisher-information-matrix">Fisher Information Matrix</h4>
 <p>The variance of an MLE is given by the inverse of the <strong>Fisher information matrix</strong>.</p>
 <p>The Fisher information matrix is defined as minus one times the expected value matrix of second derivatives of the log-likelihood function.</p>
 <p>For the case of the multiple linear regression model (<a href="#eq-LinMod">Equation&nbsp;<span>4.1</span></a>), the Fisher information matrix is <span class="math display">\[
@@ -716,7 +719,7 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \]</span></p>
 <!-- While the upper left element of the Fisher information matrix is easily seen, the derivation of the lower right element is rather tedious and thus omitted.
 [^1]: See [https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood) for more details. -->
-<p>Taking the inverse of the Fisher information matrix <span class="math inline">\(\mathcal{I}\left(\beta, \sigma^2\right)\)</span> gives the variance-covariance matrix of the vector of estimators <span class="math inline">\((\hat\beta_{ML}, s_{ML}^2)\)</span> <span class="math display">\[
+<p>Taking the inverse of the Fisher information matrix <span class="math inline">\(\mathcal{I}\left(\beta, \sigma^2\right)\)</span> gives the variance-covariance matrix of the vector of estimators <span class="math inline">\((\hat\beta_{ML}, s_{ML}^2)\)</span> <span id="eq-FIMVar"><span class="math display">\[
 \begin{align*}
 Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 &amp; \approx \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
@@ -726,7 +729,7 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 0 &amp; \ \dfrac{2\sigma^4}{n}
 \end{array}\right],
 \end{align*}
-\]</span> where the approximation error becomes small as <span class="math inline">\(n\to\infty.\)</span> That is, <span class="math display">\[
+\tag{4.2}\]</span></span> where the approximation error becomes small as <span class="math inline">\(n\to\infty.\)</span> That is, <span class="math display">\[
 n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
 \]</span> and <span class="math display">\[
 n Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
@@ -734,6 +737,13 @@ n Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
 <p>Given this result, it is easy to see that <span class="math display">\[
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 \]</span> as <span class="math inline">\(n\to\infty\)</span>.</p>
+<p>Of course, the variance expressions in <a href="#eq-FIMVar">Equation&nbsp;<span>4.2</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: <span class="math display">\[
+\begin{align}
+s_{ML}^2                         &amp;\approx \sigma^2\\
+\frac{1}{n}\sum_{i=1}^nX_i X_i^T &amp;\approx \Sigma_{X'X}.
+\end{align}
+\]</span></p>
+</section>
 </section>
 <section id="consistency-of-hatbeta_ml-and-s_ml2" class="level3" data-number="4.3.2">
 <h3 data-number="4.3.2" class="anchored" data-anchor-id="consistency-of-hatbeta_ml-and-s_ml2"><span class="header-section-number">4.3.2</span> Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></h3>
@@ -824,7 +834,7 @@ f(x|\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 </div>
 <p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
-\]</span> around <span class="math inline">\(\theta\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>4.2</span></a>). To derive this expression, we use the mean value theorem (<a href="Ch5_EMAlgorithmus.html#thm-MVT">Theorem&nbsp;<span>5.1</span></a>).</p>
+\]</span> around <span class="math inline">\(\theta\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>4.3</span></a>). To derive this expression, we use the mean value theorem (<a href="Ch5_EMAlgorithmus.html#thm-MVT">Theorem&nbsp;<span>5.1</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -846,14 +856,14 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 <p>By the Mean Value Theorem (<a href="Ch5_EMAlgorithmus.html#thm-MVT">Theorem&nbsp;<span>5.1</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
-\tag{4.2}\]</span></span> for some <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n).\)</span></p>
+\tag{4.3}\]</span></span> for some <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n).\)</span></p>
 <p>Since <span class="math inline">\(\hat{\theta}_n\)</span> maximizes the log-Likelihood function it follows that <span class="math display">\[
 \ell_n'(\hat{\theta}_n)=0.
-\]</span> Together with <a href="#eq-MVT">Equation&nbsp;<span>4.2</span></a>, this implies that <span class="math display">\[
+\]</span> Together with <a href="#eq-MVT">Equation&nbsp;<span>4.3</span></a>, this implies that <span class="math display">\[
 \overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
 \]</span> <span id="eq-ml2"><span class="math display">\[
 \Rightarrow\quad \ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta).
-\tag{4.3}\]</span></span> Now, note that necessarily <span class="math display">\[
+\tag{4.4}\]</span></span> Now, note that necessarily <span class="math display">\[
 \int_{-\infty}^{\infty} f(x|\theta)dx=1
 \]</span> for <em>all possible values</em> of <span class="math inline">\(\theta,\)</span> since <span class="math inline">\(f\)</span> is a density function.</p>
 <p>Therefore, <span class="math display">\[
@@ -862,14 +872,14 @@ f(b)=f(a) + f'(c)(b-a).
 \end{align*}
 \]</span> Using that we can here pass the partial derivative under the integral sign, we have thus <span id="eq-zero1"><span class="math display">\[
 \int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x|\theta)dx=0.
-\tag{4.4}\]</span></span> And similarly, <span class="math display">\[
+\tag{4.5}\]</span></span> And similarly, <span class="math display">\[
 \begin{align*}
 \frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x|\theta)dx&amp;=\frac{\partial^2}{\partial \theta^2}1 = 0.
 \end{align*}
 \]</span> Using again that we can here pass the partial derivative under the integral sign, we have thus <span id="eq-zero2"><span class="math display">\[
 \int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x|\theta)dx=0.
-\tag{4.5}\]</span></span></p>
-<p>Using <a href="#eq-zero1">Equation&nbsp;<span>4.4</span></a> and <a href="#eq-zero2">Equation&nbsp;<span>4.5</span></a>, we can now show that the average <span class="math display">\[
+\tag{4.6}\]</span></span></p>
+<p>Using <a href="#eq-zero1">Equation&nbsp;<span>4.5</span></a> and <a href="#eq-zero2">Equation&nbsp;<span>4.6</span></a>, we can now show that the average <span class="math display">\[
 \frac{1}{n}\ell_n'(\theta)=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)
 \]</span> is asymptotically normal.</p>
 <p>Firstly, for the mean one gets: <span class="math display">\[
@@ -883,7 +893,7 @@ f(b)=f(a) + f'(c)(b-a).
 &amp;=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x|\theta)dx\\[2ex]
 &amp;=0,
 \end{align*}
-\]</span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span>4.4</span></a>.</p>
+\]</span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span>4.5</span></a>.</p>
 <p>Secondly, for the variance one gets: <span class="math display">\[
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta)\right)
@@ -900,11 +910,11 @@ Var\left(\frac{1}{n}\ell_n'(\theta)\right)
 \frac{\partial}{\partial \theta} \ln f(X_i|\theta),\quad i=1,\dots,n.
 \]</span> Thus, we can apply the Lindeberg-Lévy central limit theorem from which it follows that <span class="math display">\[
 \frac{\frac{1}{n}\ell_n'(\hat{\theta}_n)-\mathbb{E}(\frac{\partial}{\partial \theta} \ln f(X_i|\theta))}{\sqrt{\frac{1}{n}\mathcal{J}(\theta)} }=\frac{\ell_n'(\hat{\theta}_n)}{\sqrt{n\mathcal{J}(\theta)} } \to_d \mathcal{N}(0,1)
-\]</span> Thus using our mean value expression (<a href="#eq-ml2">Equation&nbsp;<span>4.3</span></a>), we also have <span class="math display">\[
+\]</span> Thus using our mean value expression (<a href="#eq-ml2">Equation&nbsp;<span>4.4</span></a>), we also have <span class="math display">\[
 \frac{-\ell_n''(\psi_n)}{\sqrt{n \cdot \mathcal{J}(\theta)}}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1),
 \]</span> which is equivalent to <span id="eq-MLNorm"><span class="math display">\[
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1).
-\tag{4.6}\]</span></span></p>
+\tag{4.7}\]</span></span></p>
 <p>Further analysis requires us to study the statistic <span class="math display">\[
 \frac{1}{n}\ell_n''(\psi_n).
 \]</span></p>
@@ -947,7 +957,7 @@ Important
 {f(X_i|\theta)}\right)^2\right)\\[2ex]
 &amp;=-\mathcal{J}(\theta),
 \end{align*}
-\tag{4.7}\]</span></span> which implies that <span class="math inline">\(\frac{1}{n}\ell_n''(\theta)\)</span> is an <strong>unbiased estimator</strong> of <span class="math inline">\(-\mathcal{J}(\theta)\)</span>, i.e. <span class="math display">\[
+\tag{4.8}\]</span></span> which implies that <span class="math inline">\(\frac{1}{n}\ell_n''(\theta)\)</span> is an <strong>unbiased estimator</strong> of <span class="math inline">\(-\mathcal{J}(\theta)\)</span>, i.e. <span class="math display">\[
 \begin{align*}
 \operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)
 &amp;=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\mathcal{J}(\theta)\\[2ex]
@@ -964,7 +974,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We have now gathered different equivalent expressions for <span class="math inline">\(\mathcal{J}(\theta).\)</span> The last one (<a href="#eq-AsymFI">Equation&nbsp;<span>4.7</span></a>) shows that <span class="math inline">\(\mathcal{J}(\theta)\)</span> is nothing but the <strong>Fischer information</strong> scaled by <span class="math inline">\(\frac{1}{n}\)</span>: <span class="math display">\[
+<p>We have now gathered different equivalent expressions for <span class="math inline">\(\mathcal{J}(\theta).\)</span> The last one (<a href="#eq-AsymFI">Equation&nbsp;<span>4.8</span></a>) shows that <span class="math inline">\(\mathcal{J}(\theta)\)</span> is nothing but the <strong>Fischer information</strong> scaled by <span class="math inline">\(\frac{1}{n}\)</span>: <span class="math display">\[
 \begin{align*}
 \mathcal{J}(\theta)
 %&amp; = Var\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\[2ex]
@@ -1013,14 +1023,14 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>🤔 Remember, we wanted to study <span class="math inline">\(\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>4.6</span></a> <strong>not</strong> <span class="math inline">\(\frac{1}{n}\ell_n''(\theta).\)</span></p>
+<p>🤔 Remember, we wanted to study <span class="math inline">\(\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>4.7</span></a> <strong>not</strong> <span class="math inline">\(\frac{1}{n}\ell_n''(\theta).\)</span></p>
 <p>Luckily, we are actually close now.</p>
 </div>
 </div>
 <p>We know that the ML estimator <span class="math inline">\(\hat\theta_n\)</span> is (weakly) consistent, i.e., <span class="math display">\[
 \hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span></p>
-<p>Since <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n)\)</span> is a value between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>4.2</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
+<p>Since <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n)\)</span> is a value between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>4.3</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
 \psi_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span></p>
 <p>Therefore, we have (by the continuos mapping theorem) that also <span class="math display">\[
@@ -1035,7 +1045,7 @@ $$
 \to_p \frac{-\mathcal{J}}{-\sqrt{ \mathcal{J}(\theta)}} 
 =\sqrt{ \mathcal{J}(\theta)}
 $$ --></p>
-<p>Now, using Slutsky’s theorem, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span>4.6</span></a> such that <span class="math display">\[
+<p>Now, using Slutsky’s theorem, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span>4.7</span></a> such that <span class="math display">\[
 \begin{align*}
 \underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\right)}_{\to_p \sqrt{\mathcal{J}(\theta)} }\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d\mathcal{N}(0,1)
 \end{align*}
@@ -1043,9 +1053,9 @@ $$ --></p>
 \begin{align*}
 \sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d N\left(0,\frac{1}{\mathcal{J}(\theta)}\right),
 \end{align*}
-\tag{4.8}\]</span></span> where <span class="math display">\[
+\tag{4.9}\]</span></span> where <span class="math display">\[
 \mathcal{J}(\theta)=\frac{1}{n}(-1)\cdot E(\ell_n''(\theta))=\frac{1}{n}\mathcal{I}(\theta).
-\]</span> <a href="#eq-AsymNormMLE">Equation&nbsp;<span>4.8</span></a> is the asymptotic normality result we aimed for.</p>
+\]</span> <a href="#eq-AsymNormMLE">Equation&nbsp;<span>4.9</span></a> is the asymptotic normality result we aimed for.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1078,6 +1088,33 @@ Machine learning
 </section>
 <section id="exercises" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
+<p>Program the Newton-Raphson algorithm for a numerical computation of the ML estimate <span class="math inline">\(\hat\theta\)</span> of the parameter <span class="math inline">\(\theta=P(\text{Coin}=\texttt{HEAD})\)</span> in our coin toss example of this chapter. Replicate the results shown in <a href="#tbl-NR">Table&nbsp;<span>4.1</span></a>.</p>
+<!-- #### Exercise 2. {-} 
+
+Consider the maximum likelihood variance estimator 
+$$
+s^2_{ML}=\frac{1}{n}\sum_{i=1}^n\hat\eps_i^2
+$$ 
+and the unbiased variance estimator 
+$$
+s^2_{UB}=\frac{1}{n-K}\sum_{i=1}^n\hat\eps_i^2
+$$ 
+for which it holds true that $\mathbb{E}(s_{UB})=\sigma^2=Var(\eps_i)$; assuming that $n\neq K$. 
+
+(a) Show that 
+$$
+\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(s^2_{UB})
+$$
+for any fixed and finite $K$ and for sufficiently large $n$.<br> 
+**Hint:** $Var(s_{UB}^2)=\frac{n}{(n-K)^2}2\sigma^4$.
+
+(b) Is the difference in the mean squared error of any practical relevance or not? 
+
+
+#### Exercise 3. {-}  -->
+</section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
