@@ -227,7 +227,7 @@ div.csl-indent {
   <li><a href="#the-true-view-on-the-em-algorithm-adding-unobserved-variables" id="toc-the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="nav-link" data-scroll-target="#the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="toc-section-number">5.3</span>  The True View on the EM Algorithm: Adding Unobserved Variables</a>
   <ul class="collapse">
   <li><a href="#completion-of-the-data" id="toc-completion-of-the-data" class="nav-link" data-scroll-target="#completion-of-the-data"><span class="toc-section-number">5.3.1</span>  Completion of the Data</a></li>
-  <li><a href="#prior-and-posterior-probabilities" id="toc-prior-and-posterior-probabilities" class="nav-link" data-scroll-target="#prior-and-posterior-probabilities"><span class="toc-section-number">5.3.2</span>  Prior and Posterior Probabilities</a></li>
+  <li><a href="#sec-PriorPosterior" id="toc-sec-PriorPosterior" class="nav-link" data-scroll-target="#sec-PriorPosterior"><span class="toc-section-number">5.3.2</span>  Prior and Posterior Probabilities</a></li>
   <li><a href="#the-abstract-version-of-the-em-algorithm" id="toc-the-abstract-version-of-the-em-algorithm" class="nav-link" data-scroll-target="#the-abstract-version-of-the-em-algorithm"><span class="toc-section-number">5.3.3</span>  The Abstract Version of the EM-Algorithm</a></li>
   </ul></li>
   <li><a href="#bayes-classifier-clustering-using-gaussian-mixture-distributions" id="toc-bayes-classifier-clustering-using-gaussian-mixture-distributions" class="nav-link" data-scroll-target="#bayes-classifier-clustering-using-gaussian-mixture-distributions"><span class="toc-section-number">5.4</span>  Bayes Classifier: Clustering using Gaussian Mixture Distributions</a>
@@ -363,7 +363,7 @@ Caution
 <h4 class="unnumbered anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions">Clustering using Gaussian Mixture Distributions</h4>
 <ol type="1">
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong> (<a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>)</li>
+<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a> and <a href="#sec-PriorPosterior"><span>Section&nbsp;5.3.2</span></a>)</li>
 </ol>
 <div class="cell" data-hash="Ch5_EMAlgorithmus_cache/html/fig-GMM-plot1_00ba2928b23deb71fc97c21708ed71db">
 <div class="cell-output-display">
@@ -376,7 +376,7 @@ Caution
 </div>
 </div>
 <p>Figure <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
-<p>The following <code>R</code> codes can be used to replicate the above cluster analysis and <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>:</p>
+<p>The following <code>R</code> codes can be used to replicate the above cluster analysis and <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>. We’ll learn everything about it in this chapter:</p>
 <div class="cell" data-hash="Ch5_EMAlgorithmus_cache/html/unnamed-chunk-4_0f2155a1988fc95de0e353a91e39186a">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
@@ -745,8 +745,8 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 %\quad \Rightarrow\quad Z_{i1}=0,\dots,Z_{ig-1}=0,Z_{ig+1}=0,\dots,Z_{iG}=0.
 \]</span></p>
 </section>
-<section id="prior-and-posterior-probabilities" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="prior-and-posterior-probabilities"><span class="header-section-number">5.3.2</span> Prior and Posterior Probabilities</h3>
+<section id="sec-PriorPosterior" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="sec-PriorPosterior"><span class="header-section-number">5.3.2</span> Prior and Posterior Probabilities</h3>
 <strong>Prior Probability <span class="math inline">\(\pi_g\)</span></strong><br> If we know nothing about the flipper length of penguin <span class="math inline">\(i\)</span> then we are left with the prior probability: <br>
 <center>
 “With probability <span class="math inline">\(\pi_g=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
