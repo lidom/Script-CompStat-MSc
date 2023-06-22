@@ -726,7 +726,7 @@ s_{ML}^2                         &\approx \sigma^2\\
 $$
 
 
-### Consistency of $\hat\beta_{ML}$ and $s_{ML}^2$
+### Consistency of $\hat\beta_{ML}$ and $s_{ML}^2$ {#sec-MLconsistency}
 
 If $E[\varepsilon|X]=0$ (strict exogeneity, follows from the random design (@def-RandomFixedDesign) assumption), then the bias of $\hat\beta$ is zero since $E[\hat\beta_{ML}]=\beta$
 $$
@@ -1014,7 +1014,7 @@ which implies that $\frac{1}{n}\ell_n''(\theta)$ is an **unbiased estimator** of
 $$
 \begin{align*}
 \operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)
-&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\mathcal{J}(\theta)\\[2ex]
+&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\left(-\mathcal{J}(\theta)\right)\\[2ex]
 &=0. 
 \end{align*}
 $$
@@ -1033,7 +1033,7 @@ $$
 \end{align*}
 $$
 
-**Note:** For multivariate ($p$-dimensional) parameters $\theta,$ the Fisher information $(-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)$  becomes the ($p\times p$) Fisher information matrix (see @sec-varMLE). 
+**Note:** For multivariate ($p$-dimensional) parameters $\theta,$ the Fisher information $(-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)$  becomes the ($p\times p$) Fisher information matrix (see @sec-varMLE); i.e. a special version of a Hesse matrix.
 :::
 
 Second, the variance of variance of $\frac{1}{n}\ell_n''(\theta):$
@@ -1081,8 +1081,9 @@ Luckily, we are actually close now.
 
 We know that the ML estimator $\hat\theta_n$ is (weakly) consistent, i.e., 
 $$
-\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
+\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty;
 $$
+see, for instance, @sec-MLconsistency for the case of ML estimation in the linear regression model. 
 
 
 Since $\psi_n\in(\theta,\hat{\theta}_n)$ is a value between $\theta$ and $\hat{\theta}_n$ (@eq-MVT), the consistency of $\hat{\theta}_n$ implies that also
@@ -1090,7 +1091,7 @@ $$
 \psi_n\to_p\theta\quad\text{as}\quad n\to\infty.
 $$
 
-Therefore, we have (by the continuos mapping theorem) that also
+Therefore, we have (by the continuous mapping theorem) that also
 $$
 \begin{align}
 \frac{1}{n}\ell_n''(\psi_n)&\to_p -\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty\\
@@ -1124,14 +1125,12 @@ $$
 @eq-AsymNormMLE is the asymptotic normality result we aimed for. 
 
 ::: {.callout-note} 
-The above arguments can easily be generalized to multivariate ($p$-dimensional) parameter vectors $\theta\in\mathbb{R}^p$. In this case, $\mathcal{J}(\theta)$ becomes a $p\times p$ matrix, and
+The above arguments can easily be generalized to multivariate ($p$-dimensional) parameter vectors $\theta\in\mathbb{R}^p$. In this case, $\mathcal{J}(\theta)$ becomes a $p\times p$ Hesse matrix, and
 $$
-\hat{\theta}_n-\theta\to_d \mathcal{N}_p\left(0,\frac{1}{n} \mathcal{J}(\theta)^{-1}\right),
+\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d \mathcal{N}_p\left(0, \mathcal{J}(\theta)^{-1}\right),
 $$
 where $n\mathcal{J}(\theta)=-E(\ell_n''(\theta))=\mathcal{I}(\theta),$ with $\mathcal{I}(\theta)$ being the $(p\times p)$ Fisher information matrix. 
 :::
-
-
 
 
 ::: {.callout-tip}
@@ -1142,6 +1141,72 @@ The Fisher information is used in machine learning techniques such as elastic we
 
 Fisher information can be used as an alternative to the Hessian of the loss function in second-order gradient descent network training (@Martens_2020).
 :::
+
+
+## Equivariance (or Invariance) Property of the ML-Estimator 
+
+::: {.callout-note icon=false} 
+## 
+::: {#thm-EVP}
+
+# Equivariance (or Invariance) Property of the ML-Estimator
+
+Let 
+$$
+\tau=g(\theta),
+$$ 
+where $g$ is a **one-to-one function** of $\theta,$ i.e. $g$ maps every element of its range to exactly one element of its domain --- that is, the outputs never repeat. 
+
+Let $\hat{\theta}_{n}$ be the maximum likelihood estimator of $\theta.$ 
+
+Then 
+$$
+\hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
+$$
+is the maximum likelihood estimator of $\tau.$
+:::
+:::
+
+
+**Proof of @thm-EVP:**
+
+Since $g$ is a one-to-one function, it posses an inverse $h=g^{-1}.$ 
+
+Thus 
+$$
+\hat{\theta}_{n} = h(\hat{\tau}_{n})
+$$
+and 
+$$
+\theta = h(\tau).
+$$
+This allows us to express the likelihood problem for $\tau$ in terms of the likelihood problem for $\theta = h(\tau).$ Thus, the likelihood with respect to $\tau$ can be expressed the likelihood with respect to $\theta = h(\tau),$ i.e. 
+$$
+\begin{align*}
+\tilde{\mathcal{L}}(\tau) := \mathcal{L}(h(\tau)) 
+& = \prod_{i=1}^n f(x_i|h(\tau))\\[2ex]
+& = \prod_{i=1}^n f(x_i|\theta)  = \mathcal{L}(\theta).
+\end{align*}
+$$
+Thus
+$$
+\begin{align*}
+\tilde{\mathcal{L}}(\hat{\tau}_{n})
+%&= \mathcal{L}(h(\hat{\tau}_{n}))\\[2ex]
+&= \mathcal{L}(\hat{\theta}_n)
+\end{align*}
+$$
+and for any $\tau$
+$$
+\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta) 
+\leq 
+\mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
+$$
+which shows the statement of @thm-EVP:
+$$
+\tilde{\mathcal{L}}(\hat{\tau}_n)=\arg\max_\tau\tilde{\mathcal{L}}(\tau).
+$$
+
 
 ## Exercises {-}
 
@@ -1171,6 +1236,31 @@ $$
 (\hat\theta_n-\theta)\to_d \mathcal{N}\left(0,\frac{1}{n \mathcal{J}(\theta)}\right)
 $$
 Derive the expression for the Fischer information $\mathcal{I}(\theta)=n\mathcal{J}(\theta)$. Use the Fisher information to give the *explicit* formula for the asymptotic distribution of $\hat\theta_n$.
+
+
+
+#### Exercise 3. {-} 
+
+<!-- From All of Statistics p 151 -->
+
+Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Unif}(0,\theta).$
+
+(a) What is the likelihood function? 
+
+(b) What is the maximum likelihood estimator of $\theta$? 
+
+
+#### Exercise 4. {-}
+
+
+Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Poisson}(\lambda).$ That is $X\sim f$ with density function 
+$$
+f(x|\lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}.
+$$
+ 
+(a) Find the maximum likelihood estimator, $\hat{\lambda},$ of $\lambda.$
+
+(b) Find the maximum likelihood estimator, $\hat{P}(X=4),$ of $P(X=4).$
 
 
 ## References {-}

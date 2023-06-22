@@ -216,6 +216,119 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \]</span></p>
 </section>
 </section>
+<section id="solutions-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-3.">Solutions of Exercise 3.</h4>
+<section id="a-likelihood-function" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-likelihood-function">(a) Likelihood function</h5>
+<p>Recall that the density function of <span class="math inline">\(\mathcal{Unif}(0,\theta)\)</span> is <span class="math display">\[
+f(x|\theta)
+=\left\{
+\begin{array}{ll}
+\frac{1}{\theta} &amp; 0\leq x\leq \theta\\
+0                &amp; \text{otherwise}\\
+\end{array}
+\right.
+\]</span></p>
+<p>Thus the likelihood function is <span class="math display">\[
+\mathcal{L}_n(\theta) = \prod_{i=1}^n f(X_i|\theta)
+\]</span> If any <span class="math inline">\(X_i&gt;\theta,\)</span> we have that <span class="math inline">\(\mathcal{L}_n(\theta)=0.\)</span> Putting it differently, let <span class="math inline">\(X_{(n)}=\max\{X_1,\dots,X_n\}\)</span> (<span class="math inline">\(n\)</span>th order-statistic), then <span class="math inline">\(\mathcal{L}_n(\theta)=0\)</span> for all <span class="math inline">\(\theta&lt;X_{(n)}.\)</span></p>
+<p>However, for all <span class="math inline">\(\theta \geq X_{(n)}\)</span> we have that <span class="math inline">\(f(X_i|\theta)=1/\theta\)</span> such that <span class="math inline">\(\mathcal{L}_n(\theta)=(1/\theta)^n\)</span>. Summing up, <span id="eq-MLMaxestim"><span class="math display">\[
+\mathcal{L}_n(\theta)
+=\left\{
+\begin{array}{ll}
+\left(\frac{1}{\theta}\right)^n &amp; \theta \geq  X_{(n)}\\
+0                               &amp; \theta &lt; X_{(n)}\\
+\end{array}
+\right.
+\tag{1}\]</span></span></p>
+</section>
+</section>
+<section id="b-maximum-likelihood-estimator-of-theta" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="b-maximum-likelihood-estimator-of-theta">(b) Maximum likelihood estimator of <span class="math inline">\(\theta\)</span></h4>
+<p><span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is strictly decreasing over the interval <span class="math inline">\([X_{(n)},\infty);\)</span> see <a href="#fig-MLMaxestim">Figure&nbsp;1</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n          <span class="ot">&lt;-</span> <span class="dv">20</span>   <span class="co"># sample size</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_max      <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>theta_vec  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">to   =</span> X_max <span class="sc">*</span> <span class="fl">1.5</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">len  =</span> <span class="dv">100</span>) </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>likelihood_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, X_max, n){ </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    likelihood              <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(theta<span class="sc">^</span>n)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    likelihood[theta <span class="sc">&lt;</span> X_max] <span class="ot">&lt;-</span> <span class="dv">0</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(likelihood) </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>likelihood_vec <span class="ot">&lt;-</span> <span class="fu">likelihood_fun</span>(<span class="at">theta =</span> theta_vec,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">X_max =</span> X_max, </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">n     =</span> n)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> likelihood_vec, </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> theta_vec, </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Likelihood"</span>, </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">""</span>)            </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> X_max, <span class="at">labels =</span> <span class="fu">expression</span>(X[(n)]))                  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-MLMaxestim" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch4_Solutions_files/figure-html/fig-MLMaxestim-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Graph of the likelihood function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> given in <a href="#eq-MLMaxestim">Equation&nbsp;1</a>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Thus, the maximum likelihood estimator is <span class="math display">\[
+\begin{align}
+\hat{\theta}_{ML}
+&amp; =\arg\max_{\theta&gt;0}\mathcal{L}_n(\theta)\\
+&amp; = X_{(n)}.
+\end{align}
+\]</span></p>
+</section>
+<section id="solutions-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-4.">Solutions of Exercise 4.</h4>
+<section id="a-maximum-likelihood-estimator-hatlambda" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-maximum-likelihood-estimator-hatlambda">(a) Maximum likelihood estimator <span class="math inline">\(\hat{\lambda}\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+\mathcal{L}(\lambda)
+&amp; = \prod_{i=1}^n f(x_i|\lambda)\\[2ex]
+&amp; = \prod_{i=1}^n \frac{\lambda^{x_i} \exp(-\lambda)}{x_i!} \\[2ex]
+&amp; = \frac{\lambda^{\sum_{i=1}^n x_i}  \exp(-n \lambda)}{\prod_{i=1}^n (x_i!)} \\[4ex]
+\ell(\lambda)
+&amp;= \left(\sum_{i=1}^n x_i\right) \ln(\lambda) -n\lambda\cdot 1 - \sum_{i=1}^n (x_i!)
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\ell'(\lambda)
+&amp;= \frac{\left(\sum_{i=1}^n x_i\right)}{\lambda}  - n
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\ell''(\lambda)
+&amp;= -\frac{\left(\sum_{i=1}^n x_i\right)}{\lambda^2} &lt; 0  
+\end{align}
+\]</span> since by the properties of the Poisson distribution <span class="math inline">\(x_1,\dots,x_n&gt;0\)</span> and <span class="math inline">\(\lambda&gt;0.\)</span></p>
+<p><span class="math display">\[
+\begin{align}
+&amp;\frac{\left(\sum_{i=1}^n x_i\right)}{\hat\lambda}  - n \overset{!}{=} 0\\[2ex]
+\Rightarrow &amp; \hat \lambda = \frac{1}{n}\sum_{i=1}^n x_i.
+\end{align}
+\]</span></p>
+</section>
+<section id="a-maximum-likelihood-estimator-hatpx4" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-maximum-likelihood-estimator-hatpx4">(a) Maximum likelihood estimator <span class="math inline">\(\hat{P}(X=4)\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+P(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!}
+\end{align}
+\]</span></p>
+</section>
+</section>
 </section>
 
 </main>

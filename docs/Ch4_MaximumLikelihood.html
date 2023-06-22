@@ -167,9 +167,10 @@ div.csl-indent {
   <li><a href="#ols-estimation-as-ml-estimation" id="toc-ols-estimation-as-ml-estimation" class="nav-link" data-scroll-target="#ols-estimation-as-ml-estimation"><span class="toc-section-number">4.3</span>  OLS-Estimation as ML-Estimation</a>
   <ul class="collapse">
   <li><a href="#sec-varMLE" id="toc-sec-varMLE" class="nav-link" data-scroll-target="#sec-varMLE"><span class="toc-section-number">4.3.1</span>  Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></a></li>
-  <li><a href="#consistency-of-hatbeta_ml-and-s_ml2" id="toc-consistency-of-hatbeta_ml-and-s_ml2" class="nav-link" data-scroll-target="#consistency-of-hatbeta_ml-and-s_ml2"><span class="toc-section-number">4.3.2</span>  Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></a></li>
+  <li><a href="#sec-MLconsistency" id="toc-sec-MLconsistency" class="nav-link" data-scroll-target="#sec-MLconsistency"><span class="toc-section-number">4.3.2</span>  Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></a></li>
   </ul></li>
   <li><a href="#sec-MLAsymp" id="toc-sec-MLAsymp" class="nav-link" data-scroll-target="#sec-MLAsymp"><span class="toc-section-number">4.4</span>  Asymptotic Theory of Maximum-Likelihood Estimators</a></li>
+  <li><a href="#equivariance-or-invariance-property-of-the-ml-estimator" id="toc-equivariance-or-invariance-property-of-the-ml-estimator" class="nav-link" data-scroll-target="#equivariance-or-invariance-property-of-the-ml-estimator"><span class="toc-section-number">4.5</span>  Equivariance (or Invariance) Property of the ML-Estimator</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -761,8 +762,8 @@ s_{ML}^2                         &amp;\approx \sigma^2\\
 \]</span></p>
 </section>
 </section>
-<section id="consistency-of-hatbeta_ml-and-s_ml2" class="level3" data-number="4.3.2">
-<h3 data-number="4.3.2" class="anchored" data-anchor-id="consistency-of-hatbeta_ml-and-s_ml2"><span class="header-section-number">4.3.2</span> Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></h3>
+<section id="sec-MLconsistency" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="sec-MLconsistency"><span class="header-section-number">4.3.2</span> Consistency of <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2\)</span></h3>
 <p>If <span class="math inline">\(E[\varepsilon|X]=0\)</span> (strict exogeneity, follows from the random design (<a href="Ch3_Bootstrap.html#def-RandomFixedDesign">Definition&nbsp;<span>3.4</span></a>) assumption), then the bias of <span class="math inline">\(\hat\beta\)</span> is zero since <span class="math inline">\(E[\hat\beta_{ML}]=\beta\)</span> <span class="math display">\[
 \begin{align*}
 E[\hat\beta_{ML}]&amp;=E[(X'X)^{-1}X'(X\beta + \varepsilon)] \\
@@ -976,7 +977,7 @@ Important
 \tag{4.8}\]</span></span> which implies that <span class="math inline">\(\frac{1}{n}\ell_n''(\theta)\)</span> is an <strong>unbiased estimator</strong> of <span class="math inline">\(-\mathcal{J}(\theta)\)</span>, i.e. <span class="math display">\[
 \begin{align*}
 \operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)
-&amp;=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\mathcal{J}(\theta)\\[2ex]
+&amp;=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\left(-\mathcal{J}(\theta)\right)\\[2ex]
 &amp;=0.
 \end{align*}
 \]</span></p>
@@ -1001,7 +1002,7 @@ Tip
 &amp;=\frac{1}{n}\mathcal{I}(\theta)
 \end{align*}
 \]</span></p>
-<p><strong>Note:</strong> For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta,\)</span> the Fisher information <span class="math inline">\((-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span>Section&nbsp;4.3.1</span></a>).</p>
+<p><strong>Note:</strong> For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta,\)</span> the Fisher information <span class="math inline">\((-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span>Section&nbsp;4.3.1</span></a>); i.e.&nbsp;a special version of a Hesse matrix.</p>
 </div>
 </div>
 <p>Second, the variance of variance of <span class="math inline">\(\frac{1}{n}\ell_n''(\theta):\)</span> <span class="math display">\[
@@ -1044,12 +1045,12 @@ Important
 </div>
 </div>
 <p>We know that the ML estimator <span class="math inline">\(\hat\theta_n\)</span> is (weakly) consistent, i.e., <span class="math display">\[
-\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
-\]</span></p>
+\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty;
+\]</span> see, for instance, <a href="#sec-MLconsistency"><span>Section&nbsp;4.3.2</span></a> for the case of ML estimation in the linear regression model.</p>
 <p>Since <span class="math inline">\(\psi_n\in(\theta,\hat{\theta}_n)\)</span> is a value between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>4.3</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
 \psi_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span></p>
-<p>Therefore, we have (by the continuos mapping theorem) that also <span class="math display">\[
+<p>Therefore, we have (by the continuous mapping theorem) that also <span class="math display">\[
 \begin{align}
 \frac{1}{n}\ell_n''(\psi_n)&amp;\to_p -\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty\\
 \Leftrightarrow\quad -\frac{1}{n}\ell_n''(\psi_n)&amp;\to_p \phantom{-}\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty.
@@ -1082,8 +1083,8 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The above arguments can easily be generalized to multivariate (<span class="math inline">\(p\)</span>-dimensional) parameter vectors <span class="math inline">\(\theta\in\mathbb{R}^p\)</span>. In this case, <span class="math inline">\(\mathcal{J}(\theta)\)</span> becomes a <span class="math inline">\(p\times p\)</span> matrix, and <span class="math display">\[
-\hat{\theta}_n-\theta\to_d \mathcal{N}_p\left(0,\frac{1}{n} \mathcal{J}(\theta)^{-1}\right),
+<p>The above arguments can easily be generalized to multivariate (<span class="math inline">\(p\)</span>-dimensional) parameter vectors <span class="math inline">\(\theta\in\mathbb{R}^p\)</span>. In this case, <span class="math inline">\(\mathcal{J}(\theta)\)</span> becomes a <span class="math inline">\(p\times p\)</span> Hesse matrix, and <span class="math display">\[
+\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d \mathcal{N}_p\left(0, \mathcal{J}(\theta)^{-1}\right),
 \]</span> where <span class="math inline">\(n\mathcal{J}(\theta)=-E(\ell_n''(\theta))=\mathcal{I}(\theta),\)</span> with <span class="math inline">\(\mathcal{I}(\theta)\)</span> being the <span class="math inline">\((p\times p)\)</span> Fisher information matrix.</p>
 </div>
 </div>
@@ -1101,6 +1102,55 @@ Machine learning
 <p>Fisher information can be used as an alternative to the Hessian of the loss function in second-order gradient descent network training (<span class="citation" data-cites="Martens_2020">Martens (<a href="#ref-Martens_2020" role="doc-biblioref">2020</a>)</span>).</p>
 </div>
 </div>
+</section>
+<section id="equivariance-or-invariance-property-of-the-ml-estimator" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="equivariance-or-invariance-property-of-the-ml-estimator"><span class="header-section-number">4.5</span> Equivariance (or Invariance) Property of the ML-Estimator</h2>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-EVP" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 4.2 (Equivariance (or Invariance) Property of the ML-Estimator) </strong></span>Let <span class="math display">\[
+\tau=g(\theta),
+\]</span> where <span class="math inline">\(g\)</span> is a <strong>one-to-one function</strong> of <span class="math inline">\(\theta,\)</span> i.e.&nbsp;<span class="math inline">\(g\)</span> maps every element of its range to exactly one element of its domain — that is, the outputs never repeat.</p>
+<p>Let <span class="math inline">\(\hat{\theta}_{n}\)</span> be the maximum likelihood estimator of <span class="math inline">\(\theta.\)</span></p>
+<p>Then <span class="math display">\[
+\hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
+\]</span> is the maximum likelihood estimator of <span class="math inline">\(\tau.\)</span></p>
+</div>
+</div>
+</div>
+<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>4.2</span></a>:</strong></p>
+<p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it posses an inverse <span class="math inline">\(h=g^{-1}.\)</span></p>
+<p>Thus <span class="math display">\[
+\hat{\theta}_{n} = h(\hat{\tau}_{n})
+\]</span> and <span class="math display">\[
+\theta = h(\tau).
+\]</span> This allows us to express the likelihood problem for <span class="math inline">\(\tau\)</span> in terms of the likelihood problem for <span class="math inline">\(\theta = h(\tau).\)</span> Thus, the likelihood with respect to <span class="math inline">\(\tau\)</span> can be expressed the likelihood with respect to <span class="math inline">\(\theta = h(\tau),\)</span> i.e.&nbsp; <span class="math display">\[
+\begin{align*}
+\tilde{\mathcal{L}}(\tau) := \mathcal{L}(h(\tau))
+&amp; = \prod_{i=1}^n f(x_i|h(\tau))\\[2ex]
+&amp; = \prod_{i=1}^n f(x_i|\theta)  = \mathcal{L}(\theta).
+\end{align*}
+\]</span> Thus <span class="math display">\[
+\begin{align*}
+\tilde{\mathcal{L}}(\hat{\tau}_{n})
+%&amp;= \mathcal{L}(h(\hat{\tau}_{n}))\\[2ex]
+&amp;= \mathcal{L}(\hat{\theta}_n)
+\end{align*}
+\]</span> and for any <span class="math inline">\(\tau\)</span> <span class="math display">\[
+\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta)
+\leq
+\mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
+\]</span> which shows the statement of <a href="#thm-EVP">Theorem&nbsp;<span>4.2</span></a>: <span class="math display">\[
+\tilde{\mathcal{L}}(\hat{\tau}_n)=\arg\max_\tau\tilde{\mathcal{L}}(\tau).
+\]</span></p>
 </section>
 <section id="exercises" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
@@ -1123,6 +1173,25 @@ Var(X_i)=\frac{1}{\theta^2}.
 <li>From maximum likelihood theory we know that <span class="math display">\[
 (\hat\theta_n-\theta)\to_d \mathcal{N}\left(0,\frac{1}{n \mathcal{J}(\theta)}\right)
 \]</span> Derive the expression for the Fischer information <span class="math inline">\(\mathcal{I}(\theta)=n\mathcal{J}(\theta)\)</span>. Use the Fisher information to give the <em>explicit</em> formula for the asymptotic distribution of <span class="math inline">\(\hat\theta_n\)</span>.</li>
+</ol>
+</section>
+<section id="exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-3.">Exercise 3.</h4>
+<!-- From All of Statistics p 151 -->
+<p>Let <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\)</span> with <span class="math inline">\(X\sim\mathcal{Unif}(0,\theta).\)</span></p>
+<ol type="a">
+<li><p>What is the likelihood function?</p></li>
+<li><p>What is the maximum likelihood estimator of <span class="math inline">\(\theta\)</span>?</p></li>
+</ol>
+</section>
+<section id="exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
+<p>Let <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\)</span> with <span class="math inline">\(X\sim\mathcal{Poisson}(\lambda).\)</span> That is <span class="math inline">\(X\sim f\)</span> with density function <span class="math display">\[
+f(x|\lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}.
+\]</span></p>
+<ol type="a">
+<li><p>Find the maximum likelihood estimator, <span class="math inline">\(\hat{\lambda},\)</span> of <span class="math inline">\(\lambda.\)</span></p></li>
+<li><p>Find the maximum likelihood estimator, <span class="math inline">\(\hat{P}(X=4),\)</span> of <span class="math inline">\(P(X=4).\)</span></p></li>
 </ol>
 </section>
 </section>
