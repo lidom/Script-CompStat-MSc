@@ -242,7 +242,29 @@ $$
 Thus $P(X=4)$ is a function of $\lambda$
 $$
 \begin{align}
-P(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
+P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
 \end{align}
 $$
+
+
+```{r}
+lambda_vec <- seq(from = .0001, to = 15, len = 100)
+g_vec      <- (lambda_vec^4 * exp(-1*lambda_vec))/( factorial(4) )
+
+plot(x = lambda_vec, y = g_vec, 
+     type = "l", xlab=expression(lambda), ylab="g")
+abline(v = 4)
+axis(1, at = 4)
+```
+
+Thus, for $0<\lambda\leq 4,$ $g(\lambda)$ is one-to-one. 
+
+Therefore, by the equivariance property of the maximum likelihood estimator,
+
+$$
+\begin{align}
+\hat{P}(X=4)\equiv \hat{P}(X=4|\hat{\lambda}) = \frac{\hat{\lambda}^4 \exp(-\hat{\lambda})}{4!}
+\end{align}
+$$
+with $\hat{\lambda}=\frac{1}{n}\sum_{i=1}^n x_i.$
 

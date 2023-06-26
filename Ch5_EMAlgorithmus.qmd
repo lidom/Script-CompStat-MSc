@@ -175,7 +175,7 @@ stripchart(penguin_flipper[class==2],
 Figure @fig-GMM-plot1 shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: `r round(sum(class == as.numeric(penguin_species))/n, 2)*100`% of the penguins could be correctly assigned - based only on their flipper lengths.
 
 
-The following `R` codes can be used to replicate the above cluster analysis and @fig-GMM-plot1. We'll learn everything about it in this chapter:
+The following `R` codes can be used to reproduce the above cluster analysis (using the `R` package `mclust`) and @fig-GMM-plot1. We'll learn everything about it in this chapter:
 
 ```{r}
 #| echo: true
@@ -328,15 +328,15 @@ $$
 
 😒 **Problems with singularities in numerical solutions:** If one tries to solve the above maximization problem [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html), one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities. 
 
-For real GMMs ($G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one of the normal distribution components tries to describe the whole data set $\mathbf{x}$ and the other(s) normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point $x_i,$ i.e. 
+For real GMMs (i.e. $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one or more of the normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point $x_i,$ i.e. 
 $$
 \mu_g=x_i\quad\text{and}\quad  \sigma_g\to 0
 $$ 
-will thereby assume very large values, 
+will thereby assume **very large** density function values, 
 $$
-f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0
+f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
-and thus maximize the log-likelihood in an undesirable way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** usually lead to implausible estimation results.
+and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** usually lead to implausible estimation results.
 
 
 ```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.1, fig.align="center"}
@@ -376,7 +376,13 @@ Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi
 $$
 p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 $${#eq-AnalyticSol2}
-for $i=1,\dots,n$ and $g=1,\dots,G$. <br>
+for $i=1,\dots,n$ and $g=1,\dots,G$. 
+
+* The probability $p_{ig}$ in @eq-AnalyticSol2 is called the **posterior probability**. The posterior probability $p_{ig}$ is the probability that penguine $i$ with flipper length $x_i$ belongs to group $g$. 
+* The probability $\pi_g$  in @eq-AnalyticSol2 is called the **prior probability**. The prior probability $\pi_g$ is the probability that a penguine $i$, from which we know nothing about its flipper length, belongs to group $g$.
+
+We'll discuss the prior and the posterior probability in more detail in @sec-PriorPosterior.
+
 Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
 
@@ -589,7 +595,7 @@ If we know nothing about the flipper length of penguin $i$ then we are left with
 
 **Posterior Probability $p_{ig}$**<br> 
 If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** which leads to the posterior probability: <br>
-<center>"With probability $p_{ig}=P(Z_{ig=1}|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$.</center>
+<center>"With probability $p_{ig}=P(Z_{ig}=1|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$.</center>
 <br>
 
 

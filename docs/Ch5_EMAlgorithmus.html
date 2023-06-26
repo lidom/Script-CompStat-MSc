@@ -376,7 +376,7 @@ Caution
 </div>
 </div>
 <p>Figure <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
-<p>The following <code>R</code> codes can be used to replicate the above cluster analysis and <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>. We’ll learn everything about it in this chapter:</p>
+<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>. We’ll learn everything about it in this chapter:</p>
 <div class="cell" data-hash="Ch5_EMAlgorithmus_cache/html/unnamed-chunk-4_0f2155a1988fc95de0e353a91e39186a">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
@@ -509,11 +509,11 @@ Note
 (\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
 \]</span></p>
 <p>😒 <strong>Problems with singularities in numerical solutions:</strong> If one tries to solve the above maximization problem <a href="https://jaimemosg.github.io/EstimationTools/index.html">numerically with the help of the computer</a>, one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities.</p>
-<p>For real GMMs (<span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens whenever one of the normal distribution components tries to describe the whole data set <span class="math inline">\(\mathbf{x}\)</span> and the other(s) normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point <span class="math inline">\(x_i,\)</span> i.e.&nbsp; <span class="math display">\[
+<p>For real GMMs (i.e.&nbsp;<span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens whenever one or more of the normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point <span class="math inline">\(x_i,\)</span> i.e.&nbsp; <span class="math display">\[
 \mu_g=x_i\quad\text{and}\quad  \sigma_g\to 0
-\]</span> will thereby assume very large values, <span class="math display">\[
-f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0
-\]</span> and thus maximize the log-likelihood in an undesirable way (see <a href="#fig-dirac1">Figure&nbsp;<span>5.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> usually lead to implausible estimation results.</p>
+\]</span> will thereby assume <strong>very large</strong> density function values, <span class="math display">\[
+f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
+\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>5.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> usually lead to implausible estimation results.</p>
 <div class="cell" data-layout-align="center" data-animation.hook="gifski" data-hash="Ch5_EMAlgorithmus_cache/html/fig-dirac1_968d709dd8782581f3dffa2289e48934">
 <div class="cell-output-display">
 <div id="fig-dirac1" class="quarto-figure quarto-figure-center anchored">
@@ -547,7 +547,13 @@ Note
 </div>
 <p>🙈 <span style="color:#FF5733"><strong>However:</strong></span> The above expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span> and <span class="math inline">\(\hat\sigma_g\)</span> depend themselves on the <span style="color: #FF5733"><strong>unknown</strong></span> parameters <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>, <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span>, because: <span id="eq-AnalyticSol2"><span class="math display">\[
 p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
-\tag{5.3}\]</span></span> for <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G\)</span>. <br> Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
+\tag{5.3}\]</span></span> for <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G\)</span>.</p>
+<ul>
+<li>The probability <span class="math inline">\(p_{ig}\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>5.3</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.</li>
+<li>The probability <span class="math inline">\(\pi_g\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>5.3</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
+</ul>
+<p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior"><span>Section&nbsp;5.3.2</span></a>.</p>
+<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
 <p>🥳 <span style="color:#138D75"><strong>Solution: The EM Algorithm</strong></span></p>
 </section>
 </section>
@@ -754,7 +760,7 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 <p><br></p>
 <strong>Posterior Probability <span class="math inline">\(p_{ig}\)</span></strong><br> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> which leads to the posterior probability: <br>
 <center>
-“With probability <span class="math inline">\(p_{ig}=P(Z_{ig=1}|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.
+“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.
 </center>
 <p><br></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">

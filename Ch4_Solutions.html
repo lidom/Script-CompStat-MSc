@@ -320,13 +320,37 @@ f(x|\theta)
 \end{align}
 \]</span></p>
 </section>
-<section id="a-maximum-likelihood-estimator-hatpx4" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="a-maximum-likelihood-estimator-hatpx4">(a) Maximum likelihood estimator <span class="math inline">\(\hat{P}(X=4)\)</span></h5>
+<section id="b-maximum-likelihood-estimator-hatpx4" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-maximum-likelihood-estimator-hatpx4">(b) Maximum likelihood estimator <span class="math inline">\(\hat{P}(X=4)\)</span></h5>
 <p><span class="math display">\[
 \begin{align}
 P(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!}
 \end{align}
 \]</span></p>
+<p>Thus <span class="math inline">\(P(X=4)\)</span> is a function of <span class="math inline">\(\lambda\)</span> <span class="math display">\[
+\begin{align}
+P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
+\end{align}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lambda_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> .<span class="dv">0001</span>, <span class="at">to =</span> <span class="dv">15</span>, <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>g_vec      <span class="ot">&lt;-</span> (lambda_vec<span class="sc">^</span><span class="dv">4</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span>lambda_vec))<span class="sc">/</span>( <span class="fu">factorial</span>(<span class="dv">4</span>) )</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> lambda_vec, <span class="at">y =</span> g_vec, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab=</span><span class="fu">expression</span>(lambda), <span class="at">ylab=</span><span class="st">"g"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">4</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch4_Solutions_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Thus, for <span class="math inline">\(0&lt;\lambda\leq 4,\)</span> <span class="math inline">\(g(\lambda)\)</span> is one-to-one.</p>
+<p>Therefore, by the equivariance property of the ML-Estimator</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{P}(X=4)\equiv \hat{P}(X=4|\hat{\lambda}) = \frac{\hat{\lambda}^4 \exp(-\hat{\lambda})}{4!}
+\end{align}
+\]</span> with <span class="math inline">\(\hat{\lambda}=\frac{1}{n}\sum_{i=1}^n x_i.\)</span></p>
 </section>
 </section>
 </section>
