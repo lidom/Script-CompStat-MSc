@@ -1362,10 +1362,13 @@ f(x|\lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}.
 \mathcal{J}(\theta)=-\frac{1}{n}E(\ell''(\theta))=-\frac{1}{n}\left(-n\frac{1}{\theta^2}\right)=\frac{1}{\theta^2}
 \]</span> That is, the Fisher information is <span class="math inline">\(\mathcal{I}(\theta)=n\mathcal{J}(\theta)=n/\theta^2\)</span>. Therefore, the asymptotic distribution of <span class="math inline">\(\hat\theta_n\)</span> is <span class="math display">\[
 \begin{align*}
-(\hat\theta_n-\theta)&amp;\to_d \mathcal{N}\left(0,\frac{\theta^2}{n}\right)\\
-\Leftrightarrow\quad \sqrt{n}(\hat\theta_n-\theta)&amp;\to_d \mathcal{N}\left(0,\theta^2\right)
+\sqrt{n}(\hat\theta_n-\theta)&amp;\to_d \mathcal{N}\left(0,\theta^2\right),
 \end{align*}
-\]</span></p>
+\]</span> <span class="math inline">\(n\to\infty.\)</span></p>
+<p>So, in practice one would use the approximate distribution <span class="math display">\[
+\begin{align*}
+\hat\theta_n&amp;\overset{a}{\sim}\mathcal{N}\left(\theta,\frac{\hat{\theta}^2}{n}\right)\end{align*}
+\]</span> to construct statistical hypothesis tests and confidence intervals, etc.</p>
 </section>
 </section>
 <section id="solutions-of-exercise-3." class="level4 unnumbered">
@@ -1384,7 +1387,7 @@ f(x|\theta)
 <p>Thus the likelihood function is <span class="math display">\[
 \mathcal{L}_n(\theta) = \prod_{i=1}^n f(X_i|\theta)
 \]</span> If any <span class="math inline">\(X_i&gt;\theta,\)</span> we have that <span class="math inline">\(\mathcal{L}_n(\theta)=0.\)</span> Putting it differently, let <span class="math inline">\(X_{(n)}=\max\{X_1,\dots,X_n\}\)</span> (<span class="math inline">\(n\)</span>th order-statistic), then <span class="math inline">\(\mathcal{L}_n(\theta)=0\)</span> for all <span class="math inline">\(\theta&lt;X_{(n)}.\)</span></p>
-<p>However, for all <span class="math inline">\(\theta \geq X_{(n)}\)</span> we have that <span class="math inline">\(f(X_i|\theta)=1/\theta\)</span> such that <span class="math inline">\(\mathcal{L}_n(\theta)=(1/\theta)^n\)</span>. Summing up, <span id="eq-MLMaxestim"><span class="math display">\[
+<p>However, for all <span class="math inline">\(\theta \geq X_{(n)}\)</span> we have that <span class="math inline">\(f(X_i|\theta)=1/\theta\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span>, such that <span class="math inline">\(\mathcal{L}_n(\theta)=(1/\theta)^n\)</span>. Summing up, <span id="eq-MLMaxestim"><span class="math display">\[
 \mathcal{L}_n(\theta)
 =\left\{
 \begin{array}{ll}
