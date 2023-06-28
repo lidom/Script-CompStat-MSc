@@ -230,10 +230,9 @@ div.csl-indent {
   <li><a href="#sec-PriorPosterior" id="toc-sec-PriorPosterior" class="nav-link" data-scroll-target="#sec-PriorPosterior"><span class="toc-section-number">5.3.2</span>  Prior and Posterior Probabilities</a></li>
   <li><a href="#the-abstract-version-of-the-em-algorithm" id="toc-the-abstract-version-of-the-em-algorithm" class="nav-link" data-scroll-target="#the-abstract-version-of-the-em-algorithm"><span class="toc-section-number">5.3.3</span>  The Abstract Version of the EM-Algorithm</a></li>
   </ul></li>
-  <li><a href="#bayes-classifier-clustering-using-gaussian-mixture-distributions" id="toc-bayes-classifier-clustering-using-gaussian-mixture-distributions" class="nav-link" data-scroll-target="#bayes-classifier-clustering-using-gaussian-mixture-distributions"><span class="toc-section-number">5.4</span>  Bayes Classifier: Clustering using Gaussian Mixture Distributions</a>
+  <li><a href="#unsupervised-classification" id="toc-unsupervised-classification" class="nav-link" data-scroll-target="#unsupervised-classification"><span class="toc-section-number">5.4</span>  (Unsupervised) Classification</a>
   <ul class="collapse">
-  <li><a href="#cluster-analysis-unsupervised-classification" id="toc-cluster-analysis-unsupervised-classification" class="nav-link" data-scroll-target="#cluster-analysis-unsupervised-classification"><span class="toc-section-number">5.4.1</span>  Cluster Analysis: Unsupervised Classification</a></li>
-  <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">5.4.2</span>  Bayes Classifier</a></li>
+  <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">5.4.1</span>  Bayes Classifier</a></li>
   </ul></li>
   <li><a href="#synopsis" id="toc-synopsis" class="nav-link" data-scroll-target="#synopsis">Synopsis</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -513,7 +512,7 @@ Note
 \mu_g=x_i\quad\text{and}\quad  \sigma_g\to 0
 \]</span> will thereby assume <strong>very large</strong> density function values, <span class="math display">\[
 f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
-\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>5.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> usually lead to implausible estimation results.</p>
+\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>5.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible estimation results.</p>
 <div class="cell" data-layout-align="center" data-animation.hook="gifski" data-hash="Ch5_EMAlgorithmus_cache/html/fig-dirac1_968d709dd8782581f3dffa2289e48934">
 <div class="cell-output-display">
 <div id="fig-dirac1" class="quarto-figure quarto-figure-center anchored">
@@ -559,11 +558,15 @@ p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\m
 </section>
 <section id="sec-EM1" class="level3" data-number="5.2.3">
 <h3 data-number="5.2.3" class="anchored" data-anchor-id="sec-EM1"><span class="header-section-number">5.2.3</span> The EM Algorithm for GMMs</h3>
-<p>However, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> suggest a simple iterative ML estimation procedure: An <strong>alternating estimation</strong> of <span class="math display">\[
+<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>5.2</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
+<ul>
+<li><p>the (unknown) posterior probability <span class="math display">\[
 p_{ig}
-\]</span> and <span class="math display">\[
-(\hat\pi_g, \hat\mu_g,\hat\sigma_g).
-\]</span></p>
+\]</span> and</p></li>
+<li><p>the (unknown) parameters <span class="math display">\[
+(\pi_g,\mu_g,\sigma_g).
+\]</span></p></li>
+</ul>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -664,7 +667,7 @@ Tip
 </section>
 <section id="the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="header-section-number">5.3</span> The True View on the EM Algorithm: Adding Unobserved Variables</h2>
-<p>The EM algorithm allows maximum likelihood problems to be simplified by <strong>adding unobserved (“latent”) variables</strong> to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.</p>
+<p>The EM algorithm allows maximum likelihood problems to be simplified by <strong>adding unobserved (“latent”) variables</strong> to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems; however, we keep focusing on the estimation of GMMs.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -730,7 +733,9 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For each data point <span class="math inline">\(x_i\)</span> (each penguin <span class="math inline">\(i\)</span>) there is only <strong>one</strong> group (hence <span class="math inline">\(\sum_{g=1}^Gz_{ig}=1\)</span>). This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.</p>
+<p>Requiring that <span class="math display">\[
+\sum_{g=1}^Gz_{ig}=1
+\]</span> means that for each (penguin) <span class="math inline">\(i\)</span> there is only <strong>one</strong> group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.</p>
 </div>
 </div>
 <p>Unfortunately, the assignments <span class="math inline">\(z_{ig}\)</span> are unknown (latent). However, we nevertheless know something about these assignments. The weights <span class="math inline">\(\pi_1,\dots,\pi_G\)</span> of the Gaussian mixture distribution <span class="math display">\[
@@ -758,50 +763,48 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 “With probability <span class="math inline">\(\pi_g=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
 </center>
 <p><br></p>
-<strong>Posterior Probability <span class="math inline">\(p_{ig}\)</span></strong><br> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> which leads to the posterior probability: <br>
+<strong>Posterior Probability <span class="math inline">\(p_{ig}\)</span></strong><br> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD">Equation&nbsp;<span>5.4</span></a>) which leads to the posterior probability: <br>
 <center>
-“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.
+“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
 </center>
 <p><br></p>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-
+Bayes’ Theorem applied to the Gaussian mixture distribution
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div id="thm-MVT" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 5.1 (Bayes’ Theorem) </strong></span><span class="math display">\[
+<p><span id="eq-posteriorGMD"><span class="math display">\[
 \begin{align*}
 p_{ig}
 =\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
 &amp;=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
 &amp;=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 \end{align*}
-\]</span></p>
+\tag{5.4}\]</span></span></p>
 </div>
 </div>
-</div>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Tip
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The posterior probabilities <span class="math inline">\(p_{ig}\)</span> are conditional means: <span class="math display">\[
+<p>The posterior probabilities <span class="math inline">\(p_{ig}\)</span> are conditional means: <span id="eq-posteriorMean"><span class="math display">\[
 \begin{align*}
 p_{ig}
 &amp;= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex]
 &amp;= \mathbb{E}(Z_{ig}|X_i=x_i)\\
 \end{align*}
-\]</span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> in the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1"><span>Section&nbsp;5.2.3</span></a>) is indeed a computation of an expectation.</p>
+\tag{5.5}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> in the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1"><span>Section&nbsp;5.2.3</span></a>) is indeed a computation of an expectation.</p>
 </div>
 </div>
 </section>
@@ -815,15 +818,15 @@ p_{ig}
 &amp;=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span></p>
-<p>Unlike the original log-likelihood function (<span class="math inline">\(\ell\)</span>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>. Since there is no sum inside the logarithm function, we can directly calculate the logarithm of the normal distribution. This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family.</p>
-<p><strong>However</strong>, we do not observe the realizations <span class="math display">\[
+<p>Unlike the original log-likelihood function (<span class="math inline">\(\ell\)</span>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>: we can directly calculate the logarithm of the normal distribution. This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see <a href="Ch4_MaximumLikelihood.html#sec-MLAsymp"><span>Section&nbsp;4.4</span></a>) which is not the case for the normal mixture distribution.</p>
+<p>We do not observe the realizations <span class="math display">\[
 \mathbf{z}=(z_{11},\dots,z_{nG}),
-\]</span> but only know the distribution of the random variables <span class="math display">\[
+\]</span> but we know the distribution of the random variables <span class="math display">\[
 \mathbf{Z}=(Z_{11},\dots,Z_{nG}).
-\]</span> This leads to a stochastic version of the log-likelihood function: <span class="math display">\[
+\]</span> This leads to a <strong>stochastic version</strong> of the log-likelihood function: <span class="math display">\[
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
-\]</span> From this, however, can calculate the conditional expected value: <span class="math display">\[
-\mathbb{E}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\]</span> From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean">Equation&nbsp;<span>5.5</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
+\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
 \]</span></p>
 <p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1"><span>Section&nbsp;5.2.3</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems.</p>
 <p>In the following, the parameter vector <span class="math inline">\((\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> will be denoted as <span class="math inline">\(\boldsymbol{\theta}\)</span> for simplicity. <br></p>
@@ -837,6 +840,8 @@ p_{ig}
 &amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
 &amp;=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
+\]</span> where <span class="math display">\[
+p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} f(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
 \]</span></p></li>
 <li><p><span style="color:#2471A3"><strong>(Maximization)</strong></span> Compute: <span class="math display">\[
 \begin{align*}
@@ -844,27 +849,167 @@ p_{ig}
 \end{align*}
 \]</span></p></li>
 </ul></li>
-<li><p>Check Convergence:<br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})\)</span>, does not change anymore substantially.</p></li>
+<li><p>Check Convergence:<br> Stop if the value of the maximized log-likelihood function, <span class="math display">\[
+\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
+\]</span> does not change anymore substantially.</p></li>
 </ol>
 </section>
 </section>
-<section id="bayes-classifier-clustering-using-gaussian-mixture-distributions" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="bayes-classifier-clustering-using-gaussian-mixture-distributions"><span class="header-section-number">5.4</span> Bayes Classifier: Clustering using Gaussian Mixture Distributions</h2>
-<section id="cluster-analysis-unsupervised-classification" class="level3" data-number="5.4.1">
-<h3 data-number="5.4.1" class="anchored" data-anchor-id="cluster-analysis-unsupervised-classification"><span class="header-section-number">5.4.1</span> Cluster Analysis: Unsupervised Classification</h3>
-</section>
-<section id="bayes-classifier" class="level3" data-number="5.4.2">
-<h3 data-number="5.4.2" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">5.4.2</span> Bayes Classifier</h3>
+<section id="unsupervised-classification" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="unsupervised-classification"><span class="header-section-number">5.4</span> (Unsupervised) Classification</h2>
+<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group labels) from a random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
+<p>A <strong>classification rule</strong> is a function <span class="math display">\[
+h: X \to Y.
+\]</span> That is, when we observe a new <span class="math inline">\(X,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X).\)</span></p>
+<p>If there are learning/training data <strong>with</strong> group-labels <span class="math display">\[
+(Y_1,X_1),\dots,(Y_n,X_n)
+\]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p>
+<p>If there are learning/training data <strong>without</strong> group-labels <span class="math display">\[
+X_1,\dots,X_n,
+\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) or clustering problem.</p>
+<section id="bayes-classifier" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">5.4.1</span> Bayes Classifier</h3>
+<p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. To measure accuracy, we need a accuracy-criterion. The most often used one is the <strong>error rate</strong>.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-errorRate" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.1 (Error rate) </strong></span>The <strong>true error rate</strong> of the classifier <span class="math inline">\(h\)</span> is the loss function <span class="math display">\[
+L(h) = P(h(X)\neq Y).
+\]</span> The <strong>empirical/training error rate</strong> is <span class="math display">\[
+\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)}.
+\]</span></p>
+</div>
+</div>
+</div>
+<p>That is, we try to find a classifier <span class="math inline">\(h\)</span> that minimizes <span class="math inline">\(L(h)\)</span> and <span class="math inline">\(\hat{L}_n(h)\)</span> respectively.</p>
+<p>Let us focus on the special case of only two groups which can be coded, without loss of generality as <span class="math display">\[
+Y\in\{0,1\}
+\]</span> For instance, <span class="math display">\[
+Y_i=\left\{\begin{array}{ll}
+1&amp;\text{if penguin $i$ belongs to species Chinstrap}\\
+0&amp;\text{if penguin $i$ belongs to species Gentoo}
+\end{array}\right..
+\]</span></p>
+<p>The <strong>regression function</strong> (i.e.&nbsp;the conditional mean function) is then given by <span class="math display">\[
+m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
+\]</span> From Bayes’s theorem it follows that <span class="math display">\[
+m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
+\]</span> where</p>
 <ul>
-<li>Bayes decision boundary</li>
+<li><span class="math inline">\(f_0(x) = f(x|Y=0)\)</span></li>
+<li><span class="math inline">\(f_1(x) = f(x|Y=1)\)</span></li>
+<li><span class="math inline">\(\pi_0 = P(Y=0)\)</span></li>
+<li><span class="math inline">\(\pi_1 = P(Y=1)\)</span> where <span class="math inline">\(\pi_0 + \pi_1 = 1\)</span></li>
 </ul>
-<p><strong>Bayes Classifier</strong><br> The Bayes classifier assigns each observation <span class="math inline">\(i\)</span> to the group with the largest posterior probability <span class="math inline">\(p_{ig}\)</span> <span class="math display">\[
-\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} p_{ig}.
+<p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
+<p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-BayesCR" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 5.2 (Bayes Classification Rule and Decision Boundary) </strong></span><br> The <strong>Bayes classification rule</strong> <span class="math inline">\(h^\ast\)</span> is given by <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }m(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> The <strong>decision boundary</strong> is given by the set <span class="math display">\[
+\mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
 \]</span></p>
-<p>If</p>
-<p>Here <span class="math display">\[
-\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} \frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}.
+</div>
+</div>
+</div>
+<p>Equivalent forms of the Bayes’ classification rule: <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }P(Y=1|X=x)&gt;P(Y=0|X=x)\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> and <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\pi f_1(x)+(1-\pi)f_0(x)\\
+0&amp;\text{otherwise}.
+\end{array}\right.
 \]</span></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-BayesOptimal" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 5.1 (Optimality of the Bayes decision rule) </strong></span><br> The Bayes decision rule is optimal. That is, if <span class="math inline">\(h\)</span> is any other classification rule then <span class="math display">\[
+L(h^\ast)\leq L(h).
+\]</span></p>
+</div>
+</div>
+</div>
+<p>The Bayes decision rule depends on unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
+<p><strong>Very roughly</strong>, there are three main approaches:</p>
+<ol type="1">
+<li><p><strong>Empirical Risk Minimization:</strong> Choose a set of classifiers <span class="math inline">\(\mathcal{H}\)</span> and try to find <span class="math inline">\(\hat{h}\in\mathcal{H}\)</span> such that <span class="math display">\[
+\hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
+\]</span></p></li>
+<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> and then use <span class="math display">\[
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span></p></li>
+<li><p><strong>Density Estimation:</strong> Find density and probability estimates <span class="math inline">\(\hat{f}_0,\)</span> <span class="math inline">\(\hat{f}_1,\)</span> <span class="math inline">\(\hat{\pi}_0=\hat{P}(Y=0),\)</span> and <span class="math inline">\(\hat{\pi}_1=\hat{P}(Y=1)\)</span> and define <span class="math display">\[
+\hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
+\]</span> Then use <span class="math display">\[
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span></p></li>
+</ol>
+<section id="more-than-two-group-labels" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="more-than-two-group-labels">More than two group labels</h4>
+<p>Of course, we can generalize all this to the case where the discrete random variables <span class="math inline">\(Y\)</span> takes on more than only two group-labels.</p>
+<p>Let <span class="math display">\[
+Y\in\{1,\dots,G\}
+\]</span> with <span class="math inline">\(G&gt;1.\)</span></p>
+<p>Then, the (error rate optimal) Bayes classification rule is <span class="math display">\[
+\begin{align*}
+h^\ast(x)
+&amp; = \arg\max_{g}P(Y=g|X=x) \\[2ex]
+&amp; = \arg\max_{g}\pi_g f_g(x),\\[2ex]
+\end{align*}
+\]</span> where <span class="math inline">\(P(Y=g|X=x)\)</span> is the <strong>posterior probability</strong> <span class="math display">\[
+P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
+\]</span> <span class="math inline">\(\pi_g\)</span> is the <strong>prior probability</strong> <span class="math display">\[
+\pi_g = P(Y=g),
+\]</span> and where <span class="math inline">\(f_g\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g\)</span> <span class="math display">\[
+f_g(x) = f(x|Y=g)
+\]</span></p>
+</section>
+<section id="penguin-example" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="penguin-example">Penguin Example</h4>
+<p>In our penguin example, we use the <strong>density estimation</strong> approach.</p>
+<p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain assumptions such as <span class="math inline">\(f\)</span> being a Gaussian density.</p>
+<p>In our penguin example, we assume that the conditional density function of flipper length <span class="math inline">\(X\)</span> given species <span class="math inline">\(Y=g\)</span> can be modelled reasonably well using a Gaussian density, <span class="math display">\[
+f(x|Y=g) = f(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+\]</span> which leads to a Gaussian Mixture distribution.</p>
+<p>The unknown parameters <span class="math inline">\(\pi_g,\)</span> <span class="math inline">\(\mu_g,\)</span> and <span class="math inline">\(\sigma_g,\)</span> <span class="math inline">\(g=1,\dots,G,\)</span> are estimated using the <strong>EM algorithm</strong></p>
 <ol type="1">
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
 <li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
@@ -881,6 +1026,7 @@ p_{ig}
 </div>
 </div>
 <p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>.</p>
+</section>
 </section>
 </section>
 <section id="synopsis" class="level2 unnumbered">

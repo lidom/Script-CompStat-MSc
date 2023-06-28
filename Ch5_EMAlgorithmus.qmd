@@ -336,7 +336,7 @@ will thereby assume **very large** density function values,
 $$
 f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
-and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** usually lead to implausible estimation results.
+and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** typically lead to implausible estimation results.
 
 
 ```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.1, fig.align="center"}
@@ -392,13 +392,17 @@ Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not al
 ### The EM Algorithm for GMMs {#sec-EM1}
 
 
-However, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ suggest a simple iterative ML estimation procedure: An **alternating estimation** of 
+The expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-AnalyticSol1, however, suggest a simple iterative maximum likelihood estimation procedure: An **alternating estimation** of 
+
+* the (unknown) posterior probability
 $$
 p_{ig}
 $$ 
 and 
+
+* the (unknown) parameters 
 $$
-(\hat\pi_g, \hat\mu_g,\hat\sigma_g).
+(\pi_g,\mu_g,\sigma_g).
 $$
 
 ::: {.callout-tip}
@@ -498,7 +502,7 @@ results %>% round(., 2)
 
 ## The True View on the EM Algorithm: Adding Unobserved Variables
 
-The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems - but we stay here with the estimation of GMMs.
+The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems; however, we keep focusing on the estimation of GMMs.
 
 ::: {.callout-note}
 
@@ -550,7 +554,11 @@ $$
 $$
 
 ::: {.callout-note}
-For each data point $x_i$ (each penguin $i$) there is only **one** group (hence $\sum_{g=1}^Gz_{ig}=1$). This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
+Requiring that
+$$
+\sum_{g=1}^Gz_{ig}=1
+$$
+means that for each (penguin) $i$ there is only **one** group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
 :::
 
 Unfortunately, the assignments $z_{ig}$ are unknown (latent). However, we nevertheless know something about these assignments. The weights $\pi_1,\dots,\pi_G$ of the Gaussian mixture distribution 
@@ -594,16 +602,14 @@ If we know nothing about the flipper length of penguin $i$ then we are left with
 
 
 **Posterior Probability $p_{ig}$**<br> 
-If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** which leads to the posterior probability: <br>
-<center>"With probability $p_{ig}=P(Z_{ig}=1|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$.</center>
+If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** (see @eq-posteriorGMD) which leads to the posterior probability: <br>
+<center>"With probability $p_{ig}=P(Z_{ig}=1|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$."</center>
 <br>
 
 
-::: {.callout-note icon=false} 
-## 
-::: {#thm-MVT}
+::: {.callout-note} 
 
-# Bayes' Theorem
+# Bayes' Theorem applied to the Gaussian mixture distribution
 $$
 \begin{align*}
 p_{ig}
@@ -611,12 +617,11 @@ p_{ig}
 &=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
 &=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 \end{align*}
-$$
-:::
+$${#eq-posteriorGMD}
 :::
 
 
-::: {.callout-tip}
+::: {.callout-important}
 The posterior probabilities $p_{ig}$ are conditional means:
 $$
 \begin{align*}
@@ -624,7 +629,7 @@ p_{ig}
 &= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex] 
 &= \mathbb{E}(Z_{ig}|X_i=x_i)\\
 \end{align*}
-$$
+$${#eq-posteriorMean}
 Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorithm (@sec-EM1) is indeed a computation of an expectation. 
 ::: 
 
@@ -642,23 +647,23 @@ $$
 \end{align*}
 $$
 
-Unlike the original log-likelihood function ($\ell$), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**. Since there is no sum inside the logarithm function, we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family.
+Unlike the original log-likelihood function ($\ell$), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**: we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see @sec-MLAsymp) which is not the case for the normal mixture distribution.
 
-**However**, we do not observe the realizations 
+We do not observe the realizations 
 $$
 \mathbf{z}=(z_{11},\dots,z_{nG}),
 $$ 
-but only know the distribution of the random variables 
+but we know the distribution of the random variables 
 $$
 \mathbf{Z}=(Z_{11},\dots,Z_{nG}).
 $$ 
-This leads to a stochastic version of the log-likelihood function:
+This leads to a **stochastic version** of the log-likelihood function:
 $$
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
 $$
-From this, however, can calculate the conditional expected value:
+From this, we can calculate the conditional expected value (using @eq-posteriorMean), which motivates the "Expectation"-Step in the EM-algorithm:
 $$
-\mathbb{E}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
 $$
 
 
@@ -680,6 +685,10 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
     &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
     \end{align*}
     $$
+    where
+    $$
+    p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} f(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
+    $$
 
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
     $$
@@ -689,32 +698,220 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
     $$
 
 3. Check Convergence:<br> 
-   Stop if the value of the maximized log-likelihood function, $\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})$, does not change anymore substantially. 
+   Stop if the value of the maximized log-likelihood function, 
+   $$
+   \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
+   $$ 
+   does not change anymore substantially. 
 
 
 
-## Bayes Classifier: Clustering using Gaussian Mixture Distributions
+## (Unsupervised) Classification
 
+The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from  a random variable $X$ is called **classification**. 
 
-### Cluster Analysis: Unsupervised Classification
+A **classification rule** is a function 
+$$
+h: X \to Y.
+$$
+That is, when we observe a new $X,$ we predict $Y$ to be $h(X).$
+
+If there are learning/training data **with** group-labels
+$$
+(Y_1,X_1),\dots,(Y_n,X_n)
+$$
+that can be used to estimate $h,$ it's called a **supervised classification** (computer science: supervised learning) problem. 
+
+If there are learning/training data **without** group-labels
+$$
+X_1,\dots,X_n,
+$$
+it's called a **unsupervised classification** (computer science: unsupervised learning) or clustering problem.
 
 
 ### Bayes Classifier 
 
-* Bayes decision boundary 
+We would like to find a classification rule $h$ that makes accurate
+predictions. To measure accuracy, we need a accuracy-criterion. The most often used one is the **error rate**.
 
-**Bayes Classifier**<br>
-The Bayes classifier assigns each observation $i$ to the group with the largest posterior probability $p_{ig}$
+::: {.callout-note icon=false} 
+
+## 
+::: {#def-errorRate}
+
+## Error rate
+The **true error rate** of the classifier $h$ is the loss function
 $$
-\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} p_{ig}.
+L(h) = P(h(X)\neq Y).
+$$ 
+The **empirical/training error rate** is
+$$
+\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)}.
+$$
+:::
+:::
+
+That is, we try to find a classifier $h$ that minimizes $L(h)$ and $\hat{L}_n(h)$ respectively. 
+
+
+Let us focus on the special case of only two groups which can be coded, without loss of generality as 
+$$
+Y\in\{0,1\}
+$$
+For instance, 
+$$
+Y_i=\left\{\begin{array}{ll}
+1&\text{if penguin $i$ belongs to species Chinstrap}\\
+0&\text{if penguin $i$ belongs to species Gentoo}
+\end{array}\right..
 $$
 
-If 
+The **regression function** (i.e. the conditional mean function) is then given by 
+$$
+m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
+$$
+From Bayes's theorem it follows that 
+$$
+m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
+$$
+where 
 
-Here 
+* $f_0(x) = f(x|Y=0)$
+* $f_1(x) = f(x|Y=1)$
+* $\pi_0  = P(Y=0)$
+* $\pi_1  = P(Y=1)$ where $\pi_0 + \pi_1 = 1$
+
+**Note:** Here $f$ denotes here some (unknown) density function, not necessarily the Gaussian density. 
+
+
+
+The **Bayes classifier**, $h^\ast,$ classifies data according to the **Bayes classification rule**
+
+
+::: {.callout-note icon=false} 
+## 
+::: {#def-BayesCR}
+
+## Bayes Classification Rule and Decision Boundary
+<br>
+The **Bayes classification rule** $h^\ast$ is given by
 $$
-\hat{g}^{Bayes}_i = \arg\max_{g=1,\dots,G} \frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}.
+h^\ast(x) = \left\{\begin{array}{ll}
+1&\text{if }m(x)>\frac{1}{2}\\
+0&\text{otherwise}.
+\end{array}\right.
 $$
+The **decision boundary** is given by the set 
+$$
+\mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
+$$
+:::
+:::
+
+Equivalent forms of the Bayes' classification rule:
+$$
+h^\ast(x) = \left\{\begin{array}{ll}
+1&\text{if }P(Y=1|X=x)>P(Y=0|X=x)\\
+0&\text{otherwise}.
+\end{array}\right.
+$$
+and
+$$
+h^\ast(x) = \left\{\begin{array}{ll}
+1&\text{if }\pi f_1(x)+(1-\pi)f_0(x)\\
+0&\text{otherwise}.
+\end{array}\right.
+$$
+
+::: {.callout-note icon=false} 
+## 
+::: {#thm-BayesOptimal}
+
+## Optimality of the Bayes decision rule
+<br>
+The Bayes decision rule is optimal. That is, if $h$ is any
+other classification rule then 
+$$
+L(h^\ast)\leq L(h).
+$$
+:::
+:::
+
+
+The Bayes decision rule depends on unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule. 
+
+**Very roughly**, there are three main approaches:
+
+1. **Empirical Risk Minimization:** Choose a set of classifiers $\mathcal{H}$ and try to find $\hat{h}\in\mathcal{H}$ such that 
+$$
+\hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
+$$
+
+2. **Regression:** Find an estimate $\hat{m}(x)$ of the regression function $m(x)=\mathbb{E}(Y|X=x)$ and then use 
+$$
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&\text{if }\hat{m}(x)>\frac{1}{2}\\
+0&\text{otherwise}.
+\end{array}\right.
+$$
+
+3. **Density Estimation:** Find density and probability estimates $\hat{f}_0,$ $\hat{f}_1,$ $\hat{\pi}_0=\hat{P}(Y=0),$ and $\hat{\pi}_1=\hat{P}(Y=1)$ and define 
+$$
+\hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
+$$
+Then use
+$$
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&\text{if }\hat{m}(x)>\frac{1}{2}\\
+0&\text{otherwise}.
+\end{array}\right.
+$$
+
+#### More than two group labels {-}
+
+Of course, we can generalize all this to the case where the discrete random variables $Y$ takes on more than only two group-labels.
+
+Let 
+$$
+Y\in\{1,\dots,G\}
+$$
+with $G>1.$
+
+Then, the (error rate optimal) Bayes classification rule is 
+$$
+\begin{align*}
+h^\ast(x) 
+& = \arg\max_{g}P(Y=g|X=x) \\[2ex]
+& = \arg\max_{g}\pi_g f_g(x),\\[2ex]
+\end{align*}
+$$
+where $P(Y=g|X=x)$ is the **posterior probability** 
+$$
+P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
+$$
+$\pi_g$ is the **prior probability**
+$$
+\pi_g = P(Y=g),
+$$
+and where $f_g$ denotes the conditional density function of $X$ given $Y=g$
+$$
+f_g(x) = f(x|Y=g)
+$$
+
+
+####  Penguin Example {-}
+
+In our penguin example, we use the **density estimation** approach. 
+
+Estimating general densities $f$ is hard --- particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as $f$ being a Gaussian density. 
+
+In our penguin example, we assume that the conditional density function of flipper length $X$ given species $Y=g$ can be modelled reasonably well using a Gaussian density,
+$$
+f(x|Y=g) = f(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+$$
+which leads to a Gaussian Mixture distribution. 
+
+The unknown parameters $\pi_g,$ $\mu_g,$ and $\sigma_g,$ $g=1,\dots,G,$ are estimated using the **EM algorithm**
 
 
 1. Estimate the Gaussian mixture distribution using the **EM algorithm**
