@@ -256,7 +256,7 @@ $$
 
 The corresponding density function of a Gaussian mixture distribution is defined as follows:
 $$
-f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g) 
+f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g \varphi(x|\mu_g,\sigma_g) 
 $${#eq-GMMdens}
 
 * **Weights:** $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$ with $\pi_g>0$ and $\sum_{g=1}^G\pi_g=1$
@@ -264,7 +264,7 @@ $${#eq-GMMdens}
 * **Standard deviations:** $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$ with $\sigma_g>0$ 
 * **Normal density of group $g=1,\dots,G$:** 
 $$
-f(x|\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
+\varphi(x|\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
 $$
 * **Unknown parameters:** <span style="color:#FF5733">$\boldsymbol{\pi}$</span>, <span style="color:#FF5733">$\boldsymbol{\mu}$</span> und <span style="color:#FF5733">$\boldsymbol{\sigma}$</span>
 
@@ -294,21 +294,21 @@ $$
 
 
 * **Estimation Idea:** 
-Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such that $f_G(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **"optimally"** fits the observed data $\mathbf{x}$.
+Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such that $f_{GMM}(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **"optimally"** fits the observed data $\mathbf{x}$.
 
 * **Implementation of the Estimation Idea:** Maximize (with respect to $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$) the likelihood function
 $$
-\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
 $$
 Or maximize the log-likelihood function (simpler maximization)
 $$
 \begin{align*}
 %\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
 \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
-=&\sum_{i=1}^n\ln\left(f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
-=&\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
+=&\sum_{i=1}^n\ln\left(f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
+=&\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
 \end{align*}
-$$
+$${#eq-logLikGMM}
 
 ::: {.callout-note}
 The maximization must take into account the parameter constraints in @eq-GMMdens; namely, $\sigma_g>0$ and $\pi_g>0$ for all $g=1,\dots,G$ and $\sum_{g=1}^G\pi_g=1$.
@@ -334,7 +334,7 @@ $$
 $$ 
 will thereby assume **very large** density function values, 
 $$
-f(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
+\varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
 and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** typically lead to implausible estimation results.
 
@@ -356,7 +356,7 @@ for(i in 1:length(sd_v)){
 ```
 
 
-🤓 **Analytic solution:** It is a bit tedious, but you can try to maximize the log-likelihood analytically. If you do this, you will get the following expressions:
+🤓 **Analytic solution:** It is a bit tedious, but one can maximize the log-likelihood analytically. If you do this, you will get the following expressions:
 $$
 \begin{align*}
 \hat\pi_g&=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
@@ -374,14 +374,17 @@ Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi
 
 🙈 <span style="color:#FF5733">**However:**</span> The above expressions for $\hat\pi_g$, $\hat\mu_g$ and $\hat\sigma_g$ depend themselves on the <span style="color: #FF5733">**unknown**</span> parameters $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ and $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$, because:
 $$
-p_{ig}=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+p_{ig}=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 $${#eq-AnalyticSol2}
 for $i=1,\dots,n$ and $g=1,\dots,G$. 
 
 * The probability $p_{ig}$ in @eq-AnalyticSol2 is called the **posterior probability**. The posterior probability $p_{ig}$ is the probability that penguine $i$ with flipper length $x_i$ belongs to group $g$. 
 * The probability $\pi_g$  in @eq-AnalyticSol2 is called the **prior probability**. The prior probability $\pi_g$ is the probability that a penguine $i$, from which we know nothing about its flipper length, belongs to group $g$.
 
-We'll discuss the prior and the posterior probability in more detail in @sec-PriorPosterior.
+::: {.callout-note}
+Still, we cannot properly define what we mean by "prior probability" and "posterior probability". We'll discuss the prior and the posterior probability in more detail in @sec-PriorPosterior.
+:::
+
 
 Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
@@ -418,7 +421,7 @@ Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ us
 2. For $r=1,2,\dots$
 
     - <span style="color:#FF5733">**(Expectation)**</span> Compute: 
-     $$p_{ig}^{(r)}=\frac{\pi_g^{(r-1)}f(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
+     $$p_{ig}^{(r)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
     
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute: 
     <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}x_i$</center> 
@@ -429,9 +432,9 @@ Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ us
 
 The above pseudo code is implemented in the following code chunk:
 
-```{r, echo=TRUE}
+```{r}
 #| echo: true 
-#| eval: false
+#| eval: true
 library("MASS")
 library("mclust")
 
@@ -502,20 +505,23 @@ results %>% round(., 2)
 
 ## The True View on the EM Algorithm: Adding Unobserved Variables
 
-The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This principle is the real true contribution of the EM Algorithm. It allows the solution of various maximum likelihood problems; however, we keep focusing on the estimation of GMMs.
+The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This idea is the actually original contribution of the EM Algorithm (@Dempster_1977). While this idea can be applied for solving various maximum likelihood problems, we keep focusing on estimating GMMs.
 
 ::: {.callout-note}
 
-# Remember: 
+# Remember:
 
-We were note able to maximize the log-likelihood function
-$$
-\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
-=\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_gf(x_i|\mu_g,\sigma_g)\right)
-$$
-directly. 
+* We were note able to maximize the log-likelihood function
+  $$
+  \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+  =\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
+  $$
+  directly. In fact, the $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
 
-The $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
+
+* Moreover, so far, we were not able to propertly state what we mean by prior and posterior probability. 
+
+All this can be solved my adding unobserved group labels as missing variables. 
 :::
 
 
@@ -523,7 +529,7 @@ The $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
 
 In our penguin data there are two groups $g\in\{1,2\}.$ 
 
-Thus, in principle there are $G=2$ dimensional assignment vectors $(z_{i1},z_{i2})$ with  
+Thus, in principle (albeit unobserved) there are $G=2$ dimensional dummy variable, also called group-label, vectors $(z_{i1},z_{i2}),$ $i=1,\dots,n,$ with  
 $$
 (z_{i1},z_{i2})=
 \left\{\begin{array}{ll}
@@ -534,7 +540,7 @@ $$
 
 ::: {.callout-tip}
 
-Case of $G>2$ groups:  
+Case of more than two $G>2$ groups:  
 $$
 \begin{align*}
 &(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
@@ -548,7 +554,7 @@ $$
 $$
 :::
 
-The assignments $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ where, however, it must hold true that 
+The group labels $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ where, however, it must hold true that 
 $$
 \sum_{g=1}^Gz_{ig}=1.
 $$
@@ -561,14 +567,24 @@ $$
 means that for each (penguin) $i$ there is only **one** group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
 :::
 
-Unfortunately, the assignments $z_{ig}$ are unknown (latent). However, we nevertheless know something about these assignments. The weights $\pi_1,\dots,\pi_G$ of the Gaussian mixture distribution 
+Unfortunately, the true group labels $z_{ig}$ are unknown. However, we nevertheless know something about these assignments. The weights 
 $$
-f_G(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_gf(x|\mu_g,\sigma_g),
+\pi_1,\dots,\pi_G
+$$ 
+of the Gaussian mixture distribution 
 $$
-give us the proportions of the individual distributions $f(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_G$. 
+f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x|\mu_g,\sigma_g),
+$$
+give us the proportions of the individual distributions $\varphi(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_{GMM}$. 
 
 
-On average, $\pi_g\cdot 100\%$ of the data points come from group $g.$ Thus, we can consider the (latent) assignment $z_{ig}$ as a realization of a discrete (binary) random variable $Z_{ig}\in\{0,1\}$ with probability mass function
+That is, on average, 
+$$
+\pi_g\cdot 100\%
+$$ 
+of the data points $i=1,\dots,n$ come from group $g.$ 
+
+Thus, we can consider the unobserved group label $z_{ig}$ as a (unobserved) realization of a binary random variable $Z_{ig}\in\{0,1\}$ with probability mass function
 $$
 \begin{align*}
 P(Z_{ig}=1)&=\pi_g\\[2ex]
@@ -580,7 +596,7 @@ for each $i=1,\dots,n.$
 
 The condition 
 $$
-\sum_{g=1}^Gz_{ig}=1
+\sum_{g=1}^GZ_{ig}=1
 $$ 
 implies that if
 <!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  -->
@@ -614,8 +630,8 @@ $$
 \begin{align*}
 p_{ig}
 =\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
-&=\frac{\pi_gf(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
-&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}f(x_i|\mu_g,\sigma_g)}{f_G(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+&=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
+&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 \end{align*}
 $${#eq-posteriorGMD}
 :::
@@ -637,17 +653,17 @@ Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorith
 ### The Abstract Version of the EM-Algorithm
 
 
-If, in addition to the data points, $\mathbf{x}=(x_1,\dots,x_n),$ we had also observed the group assignments, $\mathbf{z}=(z_{11},\dots,z_{nG}),$ then we could establish the following **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
+If, in addition to the data points, $\mathbf{x}=(x_1,\dots,x_n),$ we had also observed the group assignments, $\mathbf{z}=(z_{11},\dots,z_{nG}),$ then we could establish the following alternative **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
 $$
 \begin{align*}
 \tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_gf(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
+&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 $$
 
-Unlike the original log-likelihood function ($\ell$), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**: we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see @sec-MLAsymp) which is not the case for the normal mixture distribution.
+Unlike the original log-likelihood function (@eq-logLikGMM), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**: we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see @sec-MLAsymp) which is not the case for the normal mixture distribution.
 
 We do not observe the realizations 
 $$
@@ -659,11 +675,14 @@ $$
 $$ 
 This leads to a **stochastic version** of the log-likelihood function:
 $$
-\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 $$
 From this, we can calculate the conditional expected value (using @eq-posteriorMean), which motivates the "Expectation"-Step in the EM-algorithm:
 $$
-\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)=\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+\begin{align*}
+&\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\[2ex]
+&\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
 $$
 
 
@@ -682,12 +701,12 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
     \begin{align*}
     \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
     &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
-    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(f(x_i|\mu_g,\sigma_g)\right)\right\}
+    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
     \end{align*}
     $$
     where
     $$
-    p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} f(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_G(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
+    p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
     $$
 
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
@@ -709,6 +728,8 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
 ## (Unsupervised) Classification
 
 The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from  a random variable $X$ is called **classification**. 
+
+(Above, we had $Z$,  here we use $Y$ to denote the (unknown) group labels.)
 
 A **classification rule** is a function 
 $$
@@ -905,7 +926,7 @@ Estimating general densities $f$ is hard --- particularly in multivariate cases.
 
 In our penguin example, we assume that the conditional density function of flipper length $X$ given species $Y=g$ can be modelled reasonably well using a Gaussian density,
 $$
-f(x|Y=g) = f(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
 $$
 which leads to a Gaussian Mixture distribution. 
 
