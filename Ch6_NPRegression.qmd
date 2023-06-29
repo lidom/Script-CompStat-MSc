@@ -1,0 +1,271 @@
+# Nonparametric Regression
+
+
+Let us consider the case of univariate nonparametric regression, i.e., with one single explanatory variable $X\in\mathbb{R}$.
+
+**Data:** 
+$$
+(Y_{1},X_{1}),\dots,(Y_{n},X_{n})\overset{\text{i.i.d}}{\sim}(Y,X)
+$$
+
+* $Y_{i}$ response variable
+* $X_{i}\in [a,b]\subset \mathbb{R}$ explanatory  variable
+* $n$ sufficiently large (e.g., $n\geq 40$)
+
+
+#### The Nonparametric Regression Model {-}
+
+$$
+Y_i=m(X_i)+\varepsilon_i
+$$
+
+* $m(X_i)=\mathbb{E}(Y_i|X=X_i)$ regression function
+* $\mathbb{E}(\varepsilon_i)=0$, $Var(\varepsilon_i)=\sigma^2$
+* $\varepsilon_i$  independent of $X_i$.
+
+Special cases of **parametric**  regression models:
+
+* Linear regression: $m(x)$ is a straight line
+$$
+m(X)=\beta_0+\beta_1 X
+$$
+
+* Possible generalizations: $m(x)$ quadratic or cubic polynomial
+$$
+\begin{align*}
+                m(X)&=\beta_0 +\beta_1 X+\beta_2 X^2\\
+\text{or} \quad m(X)&=\beta_0+\beta_1 X+\beta_2 X^2+\beta_3 X^3
+\end{align*}
+$$
+
+Many important applications lead to regression functions possessing a complicated structure. Standard models then are "too simple" and do not provide useful approximations of $m(x)$.
+
+::: {.callout-tip}
+# As George Box is saying it:
+"All models are false, but some are useful" (G. Box)
+:::
+
+**Example:**
+
+Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13). 
+
+```{r}
+suppressPackageStartupMessages(library("np"))
+data("cps71")
+plot(cps71$age, cps71$logwage, xlab="Age", ylab="log(wage)")
+```
+
+
+
+#### Nonparametric Regression {-} 
+
+There are no specific assumptions about the structure of the regression function. It is only assumed that $m$ is **smooth**.
+
+
+An important point in theoretical analysis is the way how the observations $X_1,\dots,X_n$ have been generated. One distinguishes between "fixed" and "random design".
+
+* **Fixed design:** The observation points $X_1,\dots,X_n$ are fixed  (non stochastic) values.
+   * **Example:** Crop yield ($Y$) in dependence of the amount of fertilizer ($X$) used.
+* **Equidistant Design:**  (Most important special case of fixed design)  
+   $$
+   X_{i+1}-X_i=\frac{b-a}{n}.
+   $$
+* **Random design:** The observation points $X_1,\dots,X_n$ are (realizations of) i.i.d. random variables with density $f$. The density $f$ is called "design density". Throughout this chapter it will be assumed that $f(x)>0$ for all $x\in [a,b]$.
+   * **Example:** Sample $(Y_1,X_1),\dots,(Y_n,X_n)$ of log-wages ($Y$) and age ($X$) of randomly selected individuals.
+
+
+In the case of random design, $m(x)$ is the *conditional* expectation of $Y$ given $X=x$,
+$$
+m(x)=\mathbb{E}(Y|\ X=x)
+$$
+
+and $Var(\varepsilon_i|X_i)=\sigma^2$.
+
+::: {.callout-note}
+For random design all expectations (as well as variances) have to be interpreted as *conditional* expectations (variances) given $X_1,\dots,X_n$.
+:::
+
+## Basis function expansions
+
+Some frequently used approaches to nonparametric regression rely on expansions of the form
+$$
+m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
+$$
+where $b_1(x),b_2(x),\dots$ are suitable basis functions. 
+
+
+The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the approximation error 
+$$
+\min_\beta |m(x)-\sum_{j=1}^p \beta_j b_j(x)|$$ 
+tends to zero as $p\rightarrow\infty$ (approximation theory).
+
+
+For a fixed value $p$ an estimator $\hat m_p$ is determined by
+$$
+\hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
+$$
+where the coefficients  $\hat\beta_j$ are obtained by ordinary least squares
+$$
+\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j b_j(X_i)\right)^2
+=\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
+$$
+
+
+Examples are approximations by polynomials, spline functions, wavelets or Fourier expansions (for periodic functions).
+
+
+### Polynomial Regression
+
+**Theoretical Justification:** Every smooth function can be well approximated by a polynomial of sufficiently high degree.
+
+**Approach:**
+
+* Choose $p$ and fit a polynomial of degree $p$:
+  $$
+  \min_{\beta_1,\dots,\beta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p {\beta}_{j} X^{j-1}\right)^2
+  $$
+  $$
+  \Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p-1}
+  {\hat \beta}_{j} X_i^{j-1}
+  $$
+* This corresponds to an approximation with basis functions
+  $$
+  b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
+$$
+
+**Note:** It is only assumed that $m$ is well approximated by a polynomial of degree $p$. That is, there will usually still exist an **approximation error** (i.e., bias of $\hat{m}_p \neq 0$).
+
+
+**R-Code to compute polynomial regressions:**
+
+Generate some data:
+
+```{r}
+#| eval: true
+#| echo: true
+set.seed(1)
+# Generate some data: 
+n      <- 100     # Sample Size
+x_vec  <- (1:n)/n # Equidistant X 
+# Gaussian iid error term 
+e_vec  <- rnorm(n = n, mean = 0, sd = .5)
+# Dependent variable Y
+y_vec  <-  sin(x_vec * 5) + e_vec
+# Save all in a dataframe
+db     <-  data.frame(x=x_vec,y=y_vec)
+```
+
+Compute the ordinary least squares regressions of different polynomial regression models:
+
+```{r}
+#| eval: true
+#| echo: true
+# Fitting of polynomials to the data (parametric models):
+# Constant line fit: (Basis function x^0)
+reg_p1 <- lm(y ~ 1, data=db)
+# Basis functions: x^0 + ... + x^3
+reg_p3 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
+# Basis functions: x^0 + ... + x^6
+reg_p6 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
+```
+
+Take a look at the fits:
+
+```{r}
+par(mfrow=c(2,2), mar=c(4.1,4.1,3.1,2.1))
+plot(db, main="Truth")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
+##
+plot(db, main="Degree 0")
+lines(y = predict(reg_p1, newdata = db), 
+      x = x_vec, col="red", lwd=1.5)
+plot(db, main="Degree 3")
+lines(y = predict(reg_p3, newdata = db), 
+      x = x_vec, col="red", lwd=1.5)
+plot(db, main="Degree 6")
+lines(y = predict(reg_p6, newdata = db), 
+      x = x_vec, col="red", lwd=1.5)
+```
+
+
+The quality of the approximation obviously depends on the choice of $p$ which serves as a "smoothing parameter"
+
+
+* $p$ small: variability of the estimator is small, but there may exist a high systematic error (bias).
+* $p$ large: bias is small, but variability of the estimator is high.
+
+
+
+```{r}
+m_true    <- sin(x_vec * 5)
+
+n_MCrepl  <- 200 # MC-replications
+
+m_hat_p1  <- matrix(NA, n, n_MCrepl)
+m_hat_p3  <- matrix(NA, n, n_MCrepl)
+m_hat_p6  <- matrix(NA, n, n_MCrepl)
+
+for(r in 1:n_MCrepl){
+    # Generate some data: 
+    e_vec  <- rnorm(n = n, mean = 0, sd = .5)
+    y_vec  <-  sin(x_vec * 5) + e_vec
+    db     <-  data.frame(x = x_vec,y = y_vec)
+    # Estimations
+    reg_p1 <- lm(y ~ 1, data=db)
+    reg_p3 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
+    reg_p6 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
+    # Save predictions (y hat)
+    m_hat_p1[,r] <- predict(reg_p1, newdata = db)
+    m_hat_p3[,r] <- predict(reg_p3, newdata = db)
+    m_hat_p6[,r] <- predict(reg_p6, newdata = db)
+}
+
+par(mfrow=c(2,2), mar=c(4.1,4.1,3.1,2.1))
+plot(db, main="Truth")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
+##
+subSelect <- 25
+matplot(y = m_hat_p1[,1:subSelect], 
+        x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",  
+        ylim = range(m_hat_p1[,1:subSelect], sin(x_vec * 5)), 
+        col=rep("red",n), lwd=0.5, main = "Degree 0")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
+##
+matplot(y = m_hat_p3[,1:subSelect], 
+        x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
+        ylim = range(m_hat_p3[,1:subSelect], sin(x_vec * 5)), 
+        col=rep("red",n), lwd=.5, main = "Degree 3")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
+##
+matplot(y = m_hat_p6[,1:subSelect], 
+        x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
+        ylim = range(m_hat_p6[,1:subSelect], sin(x_vec * 5)), 
+        col=rep("red",n), lwd=.5, main = "Degree 6")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
+```
+
+
+
+```{r}
+## Pointwise (for each x) biases of \hat{m}(x): 
+Pt_Bias_p1 <- rowMeans(m_hat_p1) - m_true
+Pt_Bias_p3 <- rowMeans(m_hat_p3) - m_true
+Pt_Bias_p6 <- rowMeans(m_hat_p6) - m_true
+
+## Pointwise (for each x) variances \hat{m}(x):
+Pt_Var_p1  <- apply(m_hat_p1, 1, var)
+Pt_Var_p3  <- apply(m_hat_p3, 1, var)
+Pt_Var_p6  <- apply(m_hat_p6, 1, var)
+
+par(mfrow=c(1,2))
+matplot(y = cbind(Pt_Bias_p1, Pt_Bias_p3, Pt_Bias_p6), 
+        x = x_vec, type = "l", 
+        main = "Pointwise Bias", ylab="", xlab="x")
+legend("topleft", col = c(1,2,3), lty = c(1,2,3), 
+legend = c("Degree 0", "Degree 3", "Degree 6"))
+matplot(y = cbind(Pt_Var_p1, Pt_Var_p3, Pt_Var_p6), 
+        x = x_vec, type = "l", 
+        main = "Pointwise Variance", ylab="", xlab="x")
+legend("top", col = c(1,2,3), lty = c(1,2,3), 
+legend = c("Degree 0", "Degree 3", "Degree 6"))
+```
