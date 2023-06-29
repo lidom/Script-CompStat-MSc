@@ -206,6 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link active" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">6.1</span>  Basis function expansions</a>
   <ul class="collapse">
   <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="toc-section-number">6.1.1</span>  Polynomial Regression</a></li>
+  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">6.1.2</span>  Regression Splines</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -327,7 +328,8 @@ Note
 m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 \]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions.</p>
 <p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the approximation error <span class="math display">\[
-\min_\beta |m(x)-\sum_{j=1}^p \beta_j b_j(x)|\]</span> tends to zero as <span class="math inline">\(p\rightarrow\infty\)</span> (approximation theory).</p>
+\min_\beta |m(x)-\sum_{j=1}^p \beta_j b_j(x)|
+\]</span> tends to zero as <span class="math inline">\(p\rightarrow\infty\)</span> (approximation theory).</p>
 <p>For a fixed value <span class="math inline">\(p\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> is determined by <span class="math display">\[
 \hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 \]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are obtained by ordinary least squares <span class="math display">\[
@@ -395,11 +397,7 @@ b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
 </div>
 </div>
 <p>The quality of the approximation obviously depends on the choice of <span class="math inline">\(p\)</span> which serves as a “smoothing parameter”</p>
-<ul>
-<li><span class="math inline">\(p\)</span> small: variability of the estimator is small, but there may exist a high systematic error (bias).</li>
-<li><span class="math inline">\(p\)</span> large: bias is small, but variability of the estimator is high.</li>
-</ul>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-5_69f0632cd05a897339dc9bcba861d266">
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-5_6a4f2dde235b6bca33b4ff321839192c">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_true    <span class="ot">&lt;-</span> <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n_MCrepl  <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># MC-replications</span></span>
@@ -431,25 +429,25 @@ b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p1[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,  </span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p1[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span><span class="fl">0.5</span>, <span class="at">main =</span> <span class="st">"Degree 0"</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span><span class="fl">0.5</span>, <span class="at">main =</span> <span class="st">"Degree p=0"</span>)</span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p3[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p3[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree 3"</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree p=3"</span>)</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p6[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,</span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p6[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree 6"</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree p=6"</span>)</span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-6_c80f6ebb8d02bb5fe1ed3ff59a69b7de">
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-6_cf8ffb660d130835ec8ce1f76ec78a0a">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) biases of \hat{m}(x): </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p1) <span class="sc">-</span> m_true</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p3 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p3) <span class="sc">-</span> m_true</span>
@@ -465,19 +463,95 @@ b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, </span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Pointwise Bias"</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">"x"</span>)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree 0"</span>, <span class="st">"Degree 3"</span>, <span class="st">"Degree 6"</span>))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree p=0"</span>, <span class="st">"Degree p=3"</span>, <span class="st">"Degree p=6"</span>))</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> <span class="fu">cbind</span>(Pt_Var_p1, Pt_Var_p3, Pt_Var_p6), </span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, </span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Pointwise Variance"</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">"x"</span>)</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"top"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), </span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree 0"</span>, <span class="st">"Degree 3"</span>, <span class="st">"Degree 6"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree p=0"</span>, <span class="st">"Degree p=3"</span>, <span class="st">"Degree p=6"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<ul>
+<li><span class="math inline">\(p\)</span> small: variability of the estimator is small, but there may exist a high systematic error (bias).</li>
+<li><span class="math inline">\(p\)</span> large: bias is small, but variability of the estimator is high.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Remark
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Polynomial regression is not very popular in practice. Reasons are numerical problems in fitting high dimensional polynomials. Furthermore, high order polynomials often posses an erratic, difficult to interpret behavior at the boundaries.</p>
+</div>
+</div>
+</section>
+<section id="regression-splines" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">6.1.2</span> Regression Splines</h3>
+<p>The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called “spline functions”.</p>
+<p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> “knots” <span class="math display">\[
+a= \tau_1&lt;\tau_2&lt;\dots&lt;\tau_q=b.
+\]</span> Different specifications of the knot sequence lead to different splines.</p>
+<p>More precisely, for a given knot sequence a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
+<ul>
+<li><p><span class="math inline">\(s(x)\)</span> is a polynomial of degree <span class="math inline">\(k\)</span> in every interval <span class="math inline">\([\tau_j,\tau_{j+1}]\)</span>, i.e. <span class="math display">\[
+s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
+\]</span> with <span class="math inline">\(s_0,\dots,s_k\in\mathbb{R}.\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is <span class="math inline">\(k-1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.</p>
+<ul>
+<li><p><span class="math inline">\(s(x)\)</span> is called a <em>linear spline</em> if <span class="math inline">\(k=1\)</span>,</p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <em>quadratic spline</em> if <span class="math inline">\(k=2\)</span>, and</p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <em>cubic spline</em> if <span class="math inline">\(k=3\)</span>.</p></li>
+</ul></li>
+</ul>
+<p>In practice, the most frequently used splines are <strong>cubic</strong> spline functions based on an equidistant sequence of <span class="math inline">\(q\)</span> knots, i.e., <span class="math display">\[
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j.
+\]</span></p>
+<p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math inline">\(a=\tau_1,\dots,\tau_q=b\)</span> is a <span class="math display">\[
+p:=q+k-1
+\]</span> dimensional linear function space <span class="math display">\[
+{\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
+\]</span> where <span class="math inline">\(b_{1,k},\dots,b_{p,k}\)</span> are <strong>basis-functions</strong>.</p>
+
+<!-- Possible basis functions are
+$\tilde{b}_1(x)=1,\tilde{b}_2(x)=x,\dots,\tilde{b}_{k}=x^{k-1},\tilde{b}_{k+1}=(x-\tau_1)^k_+,\dots,
+\tilde{b}_{k+q-1}=(x-\tau_{q-1})^k_+$, where
+$$
+(x-\tau_j)^k_+=
+\left\{ \begin{matrix}  (x-\tau_j)^k & \text{ if } x\geq  \tau_j\\
+0 & \text{ else} \end{matrix}\right.
+$$
+Each spline function $s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}$ can then be written as
+$$
+s(x)=\sum_{j=1}^{k} \beta_{j} x^{j-1} +\sum_{j=1}^{q-1}\beta_{j+k}(x-\tau_j)^k_+\quad\text{ for } x\in[a,b]
+$$
+and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
+<section id="b-spline-basis-functions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="b-spline-basis-functions">B-Spline Basis Functions</h4>
+<p>The so-called <strong>B-spline</strong> basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.</p>
+<p>The B-Spline basis functions <span class="math inline">\(b_{j,k}\)</span>, <span class="math inline">\(j=1,\dots,p=k+q-2\)</span>, for splines of order <span class="math inline">\(k\)</span> based on a knot sequence <span class="math display">\[
+a\le \tau_1,\dots,\tau_q\le b
+\]</span> are calculated by a recursive procedure: <span class="math display">\[
+b_{j,0}(x)=\left\{ \begin{matrix}  1 &amp; \text{ if } x\in[\tau_{j}^*,\tau_{j+1}^*]\\
+0 &amp; \text{ else} \end{matrix}\right., \quad j=1,\dots,p=q+2k-1
+\]</span> and <span class="math display">\[
+b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
+\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
+\]</span> for <span class="math inline">\(l=1,\dots,k\)</span>, <span class="math inline">\(j=1,\dots,q+k-1\)</span>, and <span class="math inline">\(x\in [a,b]\)</span>.</p>
+<p>Here,</p>
+<ul>
+<li><span class="math inline">\(\tau_1^*=\dots=\tau_{k+1}^*=\tau_1\)</span>,</li>
+<li><span class="math inline">\(\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q\)</span> and</li>
+<li><span class="math inline">\(\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q\)</span>.</li>
+</ul>
 
 
+</section>
 </section>
 </section>
 

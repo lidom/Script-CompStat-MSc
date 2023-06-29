@@ -112,6 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./Ch6_NPRegression.html" rel="next">
 <link href="./Ch4_MaximumLikelihood.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -206,6 +207,11 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch6_NPRegression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a>
   </div>
 </li>
     </ul>
@@ -598,13 +604,13 @@ Tip
 <li><p>Set starting values <span class="math inline">\(\boldsymbol{\pi}^{(0)}\)</span>, <span class="math inline">\(\boldsymbol{\mu}^{(0)}\)</span> und <span class="math inline">\(\boldsymbol{\sigma}^{(0)}\)</span></p></li>
 <li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
 <ul>
-<li><p><span style="color:#FF5733"><strong>(Expectation)</strong></span> Compute: <span class="math display">\[p_{ig}^{(r)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}\]</span></p></li>
+<li><p><span style="color:#FF5733"><strong>(Expectation)</strong></span> Compute: <span class="math display">\[p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}\]</span></p></li>
 <li><p><span style="color:#2471A3"><strong>(Maximization)</strong></span> Compute:</p>
 <center>
-<p><span class="math inline">\(\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}x_i\)</span></p>
+<p><span class="math inline">\(\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r-1)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}x_i\)</span></p>
 </center>
 <center>
-<p><span class="math inline">\(\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}\)</span></p>
+<p><span class="math inline">\(\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}\)</span></p>
 </center></li>
 </ul></li>
 <li><p>Check Convergence: <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})\)</span>, does not change anymore substantially.</p></li>
@@ -1195,6 +1201,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./Ch6_NPRegression.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

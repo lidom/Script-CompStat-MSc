@@ -421,11 +421,11 @@ Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ us
 2. For $r=1,2,\dots$
 
     - <span style="color:#FF5733">**(Expectation)**</span> Compute: 
-     $$p_{ig}^{(r)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
+     $$p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
     
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute: 
-    <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}x_i$</center> 
-    <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r)}}{\left(\sum_{j=1}^np_{jg}^{(r)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center> 
+    <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r-1)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}x_i$</center> 
+    <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center> 
 
 3. Check Convergence: <br>
     Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})$, does not change anymore substantially.

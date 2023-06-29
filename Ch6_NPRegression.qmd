@@ -96,7 +96,8 @@ where $b_1(x),b_2(x),\dots$ are suitable basis functions.
 
 The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the approximation error 
 $$
-\min_\beta |m(x)-\sum_{j=1}^p \beta_j b_j(x)|$$ 
+\min_\beta |m(x)-\sum_{j=1}^p \beta_j b_j(x)|
+$$ 
 tends to zero as $p\rightarrow\infty$ (approximation theory).
 
 
@@ -131,7 +132,7 @@ Examples are approximations by polynomials, spline functions, wavelets or Fourie
 * This corresponds to an approximation with basis functions
   $$
   b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
-$$
+  $$
 
 **Note:** It is only assumed that $m$ is well approximated by a polynomial of degree $p$. That is, there will usually still exist an **approximation error** (i.e., bias of $\hat{m}_p \neq 0$).
 
@@ -191,11 +192,6 @@ lines(y = predict(reg_p6, newdata = db),
 The quality of the approximation obviously depends on the choice of $p$ which serves as a "smoothing parameter"
 
 
-* $p$ small: variability of the estimator is small, but there may exist a high systematic error (bias).
-* $p$ large: bias is small, but variability of the estimator is high.
-
-
-
 ```{r}
 m_true    <- sin(x_vec * 5)
 
@@ -228,19 +224,19 @@ subSelect <- 25
 matplot(y = m_hat_p1[,1:subSelect], 
         x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",  
         ylim = range(m_hat_p1[,1:subSelect], sin(x_vec * 5)), 
-        col=rep("red",n), lwd=0.5, main = "Degree 0")
+        col=rep("red",n), lwd=0.5, main = "Degree p=0")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ##
 matplot(y = m_hat_p3[,1:subSelect], 
         x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
         ylim = range(m_hat_p3[,1:subSelect], sin(x_vec * 5)), 
-        col=rep("red",n), lwd=.5, main = "Degree 3")
+        col=rep("red",n), lwd=.5, main = "Degree p=3")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ##
 matplot(y = m_hat_p6[,1:subSelect], 
         x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
         ylim = range(m_hat_p6[,1:subSelect], sin(x_vec * 5)), 
-        col=rep("red",n), lwd=.5, main = "Degree 6")
+        col=rep("red",n), lwd=.5, main = "Degree p=6")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ```
 
@@ -262,10 +258,107 @@ matplot(y = cbind(Pt_Bias_p1, Pt_Bias_p3, Pt_Bias_p6),
         x = x_vec, type = "l", 
         main = "Pointwise Bias", ylab="", xlab="x")
 legend("topleft", col = c(1,2,3), lty = c(1,2,3), 
-legend = c("Degree 0", "Degree 3", "Degree 6"))
+legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
 matplot(y = cbind(Pt_Var_p1, Pt_Var_p3, Pt_Var_p6), 
         x = x_vec, type = "l", 
         main = "Pointwise Variance", ylab="", xlab="x")
 legend("top", col = c(1,2,3), lty = c(1,2,3), 
-legend = c("Degree 0", "Degree 3", "Degree 6"))
+legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
 ```
+
+* $p$ small: variability of the estimator is small, but there may exist a high systematic error (bias).
+* $p$ large: bias is small, but variability of the estimator is high.
+
+::: {.callout-note}
+# Remark
+
+Polynomial regression is not very popular in practice. Reasons are numerical problems in fitting high dimensional polynomials. Furthermore, high order polynomials often posses an erratic, difficult to interpret behavior at the boundaries.
+:::
+
+### Regression Splines
+
+
+The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are **local polynomials**, i.e., so-called "spline functions".  
+
+
+A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ "knots" 
+$$
+a= \tau_1<\tau_2<\dots<\tau_q=b.
+$$ 
+Different specifications of the knot sequence lead to different splines.
+
+
+More precisely, for a given knot sequence a spline function $s(x)$ of degree $k$ is defined by the following properties:
+
+* $s(x)$ is a polynomial of degree $k$ in every interval $[\tau_j,\tau_{j+1}]$, i.e.
+$$
+s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
+$$
+with $s_0,\dots,s_k\in\mathbb{R}.$
+* $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
+
+   * $s(x)$ is called a *linear spline* if $k=1$, 
+
+   * $s(x)$ is a *quadratic spline* if $k=2$, and
+
+   * $s(x)$ is a *cubic spline*  if $k=3$.
+
+In practice, the most frequently used splines are **cubic** spline functions based on an equidistant sequence of $q$ knots, i.e.,
+$$
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j.
+$$
+
+
+The space of all spline functions of degree $k$ defined with respect to a given knot sequence
+$a=\tau_1,\dots,\tau_q=b$ is a 
+$$
+p:=q+k-1
+$$ 
+dimensional linear function space
+$$
+{\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
+$$
+where $b_{1,k},\dots,b_{p,k}$ are **basis-functions**.
+
+
+<!-- Possible basis functions are
+$\tilde{b}_1(x)=1,\tilde{b}_2(x)=x,\dots,\tilde{b}_{k}=x^{k-1},\tilde{b}_{k+1}=(x-\tau_1)^k_+,\dots,
+\tilde{b}_{k+q-1}=(x-\tau_{q-1})^k_+$, where
+$$
+(x-\tau_j)^k_+=
+\left\{ \begin{matrix}  (x-\tau_j)^k & \text{ if } x\geq  \tau_j\\
+0 & \text{ else} \end{matrix}\right.
+$$
+Each spline function $s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}$ can then be written as
+$$
+s(x)=\sum_{j=1}^{k} \beta_{j} x^{j-1} +\sum_{j=1}^{q-1}\beta_{j+k}(x-\tau_j)^k_+\quad\text{ for } x\in[a,b]
+$$
+and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
+
+
+#### B-Spline Basis Functions {-} 
+
+The so-called **B-spline** basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.
+
+
+The B-Spline basis functions $b_{j,k}$, $j=1,\dots,p=k+q-2$, for splines of order $k$ based on a knot sequence 
+$$
+a\le \tau_1,\dots,\tau_q\le b
+$$ 
+are calculated by a recursive procedure:
+$$
+b_{j,0}(x)=\left\{ \begin{matrix}  1 & \text{ if } x\in[\tau_{j}^*,\tau_{j+1}^*]\\
+0 & \text{ else} \end{matrix}\right., \quad j=1,\dots,p=q+2k-1 
+$$
+and
+$$
+b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
+\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
+$$
+for $l=1,\dots,k$, $j=1,\dots,q+k-1$, and $x\in [a,b]$. 
+
+Here, 
+
+* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$,
+* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ and 
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$.
