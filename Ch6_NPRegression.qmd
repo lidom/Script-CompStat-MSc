@@ -1,5 +1,6 @@
 # Nonparametric Regression
 
+## Introduction
 
 Let us consider the case of univariate nonparametric regression, i.e., with one single explanatory variable $X\in\mathbb{R}$.
 
@@ -283,7 +284,7 @@ The practical disadvantages of global basis functions (like polynomials), explai
 
 A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ "knots" 
 $$
-a= \tau_1<\tau_2<\dots<\tau_q=b.
+a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b.
 $$ 
 Different specifications of the knot sequence lead to different splines.
 
@@ -310,7 +311,10 @@ $$
 
 
 The space of all spline functions of degree $k$ defined with respect to a given knot sequence
-$a=\tau_1,\dots,\tau_q=b$ is a 
+$$
+a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b
+$$ 
+is a 
 $$
 p:=q+k-1
 $$ 
@@ -341,24 +345,265 @@ and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
 The so-called **B-spline** basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.
 
 
-The B-Spline basis functions $b_{j,k}$, $j=1,\dots,p=k+q-2$, for splines of order $k$ based on a knot sequence 
+The B-Spline basis functions 
 $$
-a\le \tau_1,\dots,\tau_q\le b
+b_{j,k},\quad j=1,\dots,p=q+k-1,
+$$ 
+for splines of order $k$ based on a knot sequence 
+$$
+a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b
 $$ 
 are calculated by a recursive procedure:
 $$
-b_{j,0}(x)=\left\{ \begin{matrix}  1 & \text{ if } x\in[\tau_{j}^*,\tau_{j+1}^*]\\
-0 & \text{ else} \end{matrix}\right., \quad j=1,\dots,p=q+2k-1 
+b_{j,0}(x)=\left\{ \begin{matrix}  1 & \text{ if } \tau_{j}^*\leq x <\tau_{j+1}^*\\
+0 & \text{ else} \end{matrix}\right., 
 $$
-and
+for $j=1,\dots,p=q+2k-1.$
+
+
+And for $l=1,\dots,k$
 $$
 b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 \frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
 $$
-for $l=1,\dots,k$, $j=1,\dots,q+k-1$, and $x\in [a,b]$. 
+$j=1,\dots,q+k-1$, and $x\in [a,b],$
 
-Here, 
+where
 
-* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$,
-* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ and 
-* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$.
+* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ (One left boundary knot $+$ $k$ replications), 
+* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) and 
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ (One right boundary knot $+$ $k$ replications).
+
+
+The following `R` code generates  
+$$
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
+$$ 
+cubic B-spline basis functions. Let's take a look at them:
+
+```{r}
+library("splines2")
+
+degree         <- 3
+ord            <- degree + 1
+internal_knots <- seq(from = 0.1, to = 0.9, by = 0.2)
+boundary_knots <- c(0, 1)
+all_knots      <- sort(c(rep(boundary_knots[1], ord), 
+                         internal_knots, 
+                         rep(boundary_knots[2], ord)))
+
+## evaluation points
+x_vec <- seq(from = boundary_knots[1], 
+             to   = boundary_knots[2], len = 100)
+
+B_mat_degree3 <- splines2::bSpline(
+        x              = x_vec, 
+        knots          = internal_knots, 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = boundary_knots
+    )
+
+matplot(x = x_vec, 
+        y = B_mat_degree3, 
+        type = "l", main = "B-Spline Basis Functions \nDegree 3",
+        ylab = "", xlab = "x")
+
+dim(B_mat_degree3)
+```
+
+
+#### Regression Splines:{-}
+
+
+The so-called "regression spline" (or "B-spline") approach to estimating a regression function $m(x)$ is based on fitting a set of spline basis functions to the data. 
+
+Frequently, cubic splines ($k=3$) with equidistant knots are applied. 
+
+* $\tau_1=a$ 
+* $\tau_{j+1}=\tau_j + (b-a)/(q-1),\quad j=1,\dots,q-1$  
+* such that $\tau_q=b$
+
+
+In this case the number of knots $q,$ or more precisely the total number of basis functions 
+$$
+p=q+k-1
+$$ 
+with $k=3$ in the case of cubic B-splines serves as the **smoothing parameter** which has to be selected by the statistician.
+
+
+An estimator $\hat{m}_p(x)$ is then given by
+$$
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
+$$
+and the coefficients $\hat\beta_j$ are determined by ordinary least squares.
+
+
+
+Let 
+$$
+Y=(Y_1,\dots,Y_n)^\top 
+$$ 
+denote the vector of response variables and let 
+$$
+\mathbf{X}
+$$ 
+denote the $n\times p$ matrix with elements 
+$$
+X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p.
+$$
+
+
+Then the OLS estimator
+$$
+\hat \beta=(\hat\beta_1,\dots,\hat\beta_p)^\top
+$$ 
+can be written as
+$$
+\hat\beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y.
+$$
+The fitted values are given by
+$$
+% \left(\begin{array}{c}
+% {\hat Y}_1\\
+% \vdots%\\ \cdot\\ \cdot
+% \\ {\hat Y}_n
+% \end{array}\right)=
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=\mathbf{X}\hat\beta=\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top }_{=:S_p}Y
+$$
+
+The matrix $S_p$ is referred to as the **smoothing matrix** and the number of B-spline basis function $p$ is referred to as the **smoothing parameter**. 
+
+
+::: {.callout-note}
+# Remark
+
+Quite generally, the most important nonparametric regression procedures are **linear smoothing methods**. This means that in dependence of some smoothing parameter (here $p$), estimates of the vector
+$$
+(m(X_1),\dots,m(X_n))^\top
+$$ 
+are obtained by multiplying a **smoother matrix** $S_p$ with $Y$. 
+
+That is, 
+$$
+\left(\begin{array}{c}
+m(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ m(X_n)
+\end{array}\right)\approx
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=S_p Y
+$$
+:::
+
+
+`R` code to compute regression splines:
+
+First, we generate some data.
+```{r}
+set.seed(1)
+# Generate some data: #################
+n      <- 100     # Sample Size
+x_vec  <- (1:n)/n # Equidistant X 
+# Gaussian iid error term 
+e_vec  <- rnorm(n = n, mean = 0, sd = .5)
+# Dependent variable Y
+y_vec  <-  sin(x_vec * 5) + e_vec
+```
+
+Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at `x\_vec`: 
+
+```{r}
+degree      <- 3 # piecewise cubic splines
+
+knot_seq_5  <- seq(from = 0, to = 1, len = 5)# knots
+B_mat_p7    <- splines2::bSpline(
+        x              = x_vec, # evaluation points
+        knots          = knot_seq_5[-c(1, length(knot_seq_5))], 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = knot_seq_5[ c(1, length(knot_seq_5))]
+    )
+
+knot_seq_15  <- seq(from = 0, to = 1, len = 15)# knots
+B_mat_p17    <- splines2::bSpline(
+        x              = x_vec, # evaluation points
+        knots          = knot_seq_15[-c(1, length(knot_seq_15))], 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = knot_seq_15[ c(1, length(knot_seq_15))]
+    )    
+```
+
+Compute the smoothing matrices $S_p$ for $p=7$ and $p=17$:
+
+```{r}
+S_p7  <- B_mat_p7  %*% solve(t(B_mat_p7)  %*% B_mat_p7)  %*% t(B_mat_p7) 
+S_p17 <- B_mat_p17 %*% solve(t(B_mat_p17) %*% B_mat_p17) %*% t(B_mat_p17) 
+```
+
+Compute the estimates $\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)$ for $p=7$ and $p=17$:
+
+```{r}
+m_hat_p7  <- S_p7  %*% y_vec
+m_hat_p17 <- S_p17 %*% y_vec
+```
+
+Let's plot the results:
+
+```{r}
+plot(y=y_vec, x=x_vec, xlab="X", ylab="Y", 
+     main="Regression Splines")
+lines(y=sin(x_vec * 5), x=x_vec, col="red", lty=2, lwd=1.5)
+lines(y=m_hat_p7, x=x_vec, col="blue", lwd=1.5)
+lines(y=m_hat_p17, x=x_vec, col="darkorange", lwd=1.5)
+legend("bottomleft", 
+       c("(Unknown) Regression Function m", 
+         "Regr.-Spline Fit with p=7", 
+         "Regr.-Spline Fit with p=17"), 
+       col=c("red","blue", "darkorange"), 
+       lty=c(2,1,1), lwd=c(2,2,2))
+
+```
+
+
+### Mean Average Squared Error of Regression Splines
+
+In a nonparametric regression context we do **not** assume that the unknown true regression function $m(x)$ exactly corresponds to a spline function. Thus, 
+$$
+\hat m_p=(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n))^\top
+$$ 
+possesses a systematic estimation error (bias). That is, 
+$$
+\mathbb{E}_\varepsilon(\hat{m}_p(X_i))\neq m(X_i).
+$$
+
+To simplify notation, we will in the following write 
+$$
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+$$ 
+to denote expectation and variance "with respect to the random variable $\varepsilon$, only". 
+
+
+In the case of random design,
+$$
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+$$
+thus denote the conditional expectation 
+$$
+\mathbb{E}(\cdot|X_1,\dots,X_n)
+$$ 
+and the conditional variance 
+$$
+Var(\cdot|X_1,\dots,X_n)
+$$ 
+given the observed $X$-values. 
+
+For random design, these conditional expectations depend on the observed sample, and thus are random. For fixed design, such expectations are of course fixed values.

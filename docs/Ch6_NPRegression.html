@@ -203,10 +203,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link active" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">6.1</span>  Basis function expansions</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">6.2</span>  Basis function expansions</a>
   <ul class="collapse">
-  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="toc-section-number">6.1.1</span>  Polynomial Regression</a></li>
-  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">6.1.2</span>  Regression Splines</a></li>
+  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="toc-section-number">6.2.1</span>  Polynomial Regression</a></li>
+  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">6.2.2</span>  Regression Splines</a></li>
+  <li><a href="#mean-average-squared-error-of-regression-splines" id="toc-mean-average-squared-error-of-regression-splines" class="nav-link" data-scroll-target="#mean-average-squared-error-of-regression-splines"><span class="toc-section-number">6.2.3</span>  Mean Average Squared Error of Regression Splines</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -230,6 +232,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<section id="introduction" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">6.1</span> Introduction</h2>
 <p>Let us consider the case of univariate nonparametric regression, i.e., with one single explanatory variable <span class="math inline">\(X\in\mathbb{R}\)</span>.</p>
 <p><strong>Data:</strong> <span class="math display">\[
 (Y_{1},X_{1}),\dots,(Y_{n},X_{n})\overset{\text{i.i.d}}{\sim}(Y,X)
@@ -322,8 +326,9 @@ Note
 </div>
 </div>
 </section>
-<section id="basis-function-expansions" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">6.1</span> Basis function expansions</h2>
+</section>
+<section id="basis-function-expansions" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">6.2</span> Basis function expansions</h2>
 <p>Some frequently used approaches to nonparametric regression rely on expansions of the form <span class="math display">\[
 m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 \]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions.</p>
@@ -337,8 +342,8 @@ m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 \]</span></p>
 <p>Examples are approximations by polynomials, spline functions, wavelets or Fourier expansions (for periodic functions).</p>
-<section id="polynomial-regression" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="polynomial-regression"><span class="header-section-number">6.1.1</span> Polynomial Regression</h3>
+<section id="polynomial-regression" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="polynomial-regression"><span class="header-section-number">6.2.1</span> Polynomial Regression</h3>
 <p><strong>Theoretical Justification:</strong> Every smooth function can be well approximated by a polynomial of sufficiently high degree.</p>
 <p><strong>Approach:</strong></p>
 <ul>
@@ -491,11 +496,11 @@ Remark
 </div>
 </div>
 </section>
-<section id="regression-splines" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">6.1.2</span> Regression Splines</h3>
+<section id="regression-splines" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">6.2.2</span> Regression Splines</h3>
 <p>The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called “spline functions”.</p>
 <p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> “knots” <span class="math display">\[
-a= \tau_1&lt;\tau_2&lt;\dots&lt;\tau_q=b.
+a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b.
 \]</span> Different specifications of the knot sequence lead to different splines.</p>
 <p>More precisely, for a given knot sequence a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
 <ul>
@@ -512,7 +517,9 @@ s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 <p>In practice, the most frequently used splines are <strong>cubic</strong> spline functions based on an equidistant sequence of <span class="math inline">\(q\)</span> knots, i.e., <span class="math display">\[
 \tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j.
 \]</span></p>
-<p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math inline">\(a=\tau_1,\dots,\tau_q=b\)</span> is a <span class="math display">\[
+<p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math display">\[
+a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
+\]</span> is a <span class="math display">\[
 p:=q+k-1
 \]</span> dimensional linear function space <span class="math display">\[
 {\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
@@ -534,24 +541,214 @@ and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
 <section id="b-spline-basis-functions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="b-spline-basis-functions">B-Spline Basis Functions</h4>
 <p>The so-called <strong>B-spline</strong> basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.</p>
-<p>The B-Spline basis functions <span class="math inline">\(b_{j,k}\)</span>, <span class="math inline">\(j=1,\dots,p=k+q-2\)</span>, for splines of order <span class="math inline">\(k\)</span> based on a knot sequence <span class="math display">\[
-a\le \tau_1,\dots,\tau_q\le b
+<p>The B-Spline basis functions <span class="math display">\[
+b_{j,k},\quad j=1,\dots,p=q+k-1,
+\]</span> for splines of order <span class="math inline">\(k\)</span> based on a knot sequence <span class="math display">\[
+a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
 \]</span> are calculated by a recursive procedure: <span class="math display">\[
-b_{j,0}(x)=\left\{ \begin{matrix}  1 &amp; \text{ if } x\in[\tau_{j}^*,\tau_{j+1}^*]\\
-0 &amp; \text{ else} \end{matrix}\right., \quad j=1,\dots,p=q+2k-1
-\]</span> and <span class="math display">\[
+b_{j,0}(x)=\left\{ \begin{matrix}  1 &amp; \text{ if } \tau_{j}^*\leq x &lt;\tau_{j+1}^*\\
+0 &amp; \text{ else} \end{matrix}\right.,
+\]</span> for <span class="math inline">\(j=1,\dots,p=q+2k-1.\)</span></p>
+<p>And for <span class="math inline">\(l=1,\dots,k\)</span> <span class="math display">\[
 b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 \frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
-\]</span> for <span class="math inline">\(l=1,\dots,k\)</span>, <span class="math inline">\(j=1,\dots,q+k-1\)</span>, and <span class="math inline">\(x\in [a,b]\)</span>.</p>
-<p>Here,</p>
+\]</span> <span class="math inline">\(j=1,\dots,q+k-1\)</span>, and <span class="math inline">\(x\in [a,b],\)</span></p>
+<p>where</p>
 <ul>
-<li><span class="math inline">\(\tau_1^*=\dots=\tau_{k+1}^*=\tau_1\)</span>,</li>
-<li><span class="math inline">\(\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q\)</span> and</li>
-<li><span class="math inline">\(\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q\)</span>.</li>
+<li><span class="math inline">\(\tau_1^*=\dots=\tau_{k+1}^*=\tau_1\)</span> (One left boundary knot <span class="math inline">\(+\)</span> <span class="math inline">\(k\)</span> replications),</li>
+<li><span class="math inline">\(\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q\)</span> (<span class="math inline">\(q-2\)</span> interior knots) and</li>
+<li><span class="math inline">\(\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q\)</span> (One right boundary knot <span class="math inline">\(+\)</span> <span class="math inline">\(k\)</span> replications).</li>
 </ul>
-
-
+<p>The following <code>R</code> code generates<br>
+<span class="math display">\[
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
+\]</span> cubic B-spline basis functions. Let’s take a look at them:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-7_57f86837feb26a9dc70b939b9419cc40">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ord            <span class="ot">&lt;-</span> degree <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>internal_knots <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.1</span>, <span class="at">to =</span> <span class="fl">0.9</span>, <span class="at">by =</span> <span class="fl">0.2</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>boundary_knots <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>all_knots      <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">c</span>(<span class="fu">rep</span>(boundary_knots[<span class="dv">1</span>], ord), </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                         internal_knots, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">rep</span>(boundary_knots[<span class="dv">2</span>], ord)))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="do">## evaluation points</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>x_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> boundary_knots[<span class="dv">1</span>], </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">to   =</span> boundary_knots[<span class="dv">2</span>], <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>B_mat_degree3 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> internal_knots, </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> boundary_knots</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">x =</span> x_vec, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> B_mat_degree3, </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">main =</span> <span class="st">"B-Spline Basis Functions </span><span class="sc">\n</span><span class="st">Degree 3"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B_mat_degree3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100   9</code></pre>
+</div>
+</div>
 </section>
+<section id="regression-splines-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="regression-splines-1">Regression Splines:</h4>
+<p>The so-called “regression spline” (or “B-spline”) approach to estimating a regression function <span class="math inline">\(m(x)\)</span> is based on fitting a set of spline basis functions to the data.</p>
+<p>Frequently, cubic splines (<span class="math inline">\(k=3\)</span>) with equidistant knots are applied.</p>
+<ul>
+<li><span class="math inline">\(\tau_1=a\)</span></li>
+<li><span class="math inline">\(\tau_{j+1}=\tau_j + (b-a)/(q-1),\quad j=1,\dots,q-1\)</span><br>
+</li>
+<li>such that <span class="math inline">\(\tau_q=b\)</span></li>
+</ul>
+<p>In this case the number of knots <span class="math inline">\(q,\)</span> or more precisely the total number of basis functions <span class="math display">\[
+p=q+k-1
+\]</span> with <span class="math inline">\(k=3\)</span> in the case of cubic B-splines serves as the <strong>smoothing parameter</strong> which has to be selected by the statistician.</p>
+<p>An estimator <span class="math inline">\(\hat{m}_p(x)\)</span> is then given by <span class="math display">\[
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
+\]</span> and the coefficients <span class="math inline">\(\hat\beta_j\)</span> are determined by ordinary least squares.</p>
+<p>Let <span class="math display">\[
+Y=(Y_1,\dots,Y_n)^\top
+\]</span> denote the vector of response variables and let <span class="math display">\[
+\mathbf{X}
+\]</span> denote the <span class="math inline">\(n\times p\)</span> matrix with elements <span class="math display">\[
+X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p.
+\]</span></p>
+<p>Then the OLS estimator <span class="math display">\[
+\hat \beta=(\hat\beta_1,\dots,\hat\beta_p)^\top
+\]</span> can be written as <span class="math display">\[
+\hat\beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y.
+\]</span> The fitted values are given by <span class="math display">\[
+% \left(\begin{array}{c}
+% {\hat Y}_1\\
+% \vdots%\\ \cdot\\ \cdot
+% \\ {\hat Y}_n
+% \end{array}\right)=
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=\mathbf{X}\hat\beta=\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top }_{=:S_p}Y
+\]</span></p>
+<p>The matrix <span class="math inline">\(S_p\)</span> is referred to as the <strong>smoothing matrix</strong> and the number of B-spline basis function <span class="math inline">\(p\)</span> is referred to as the <strong>smoothing parameter</strong>.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Remark
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Quite generally, the most important nonparametric regression procedures are <strong>linear smoothing methods</strong>. This means that in dependence of some smoothing parameter (here <span class="math inline">\(p\)</span>), estimates of the vector <span class="math display">\[
+(m(X_1),\dots,m(X_n))^\top
+\]</span> are obtained by multiplying a <strong>smoother matrix</strong> <span class="math inline">\(S_p\)</span> with <span class="math inline">\(Y\)</span>.</p>
+<p>That is, <span class="math display">\[
+\left(\begin{array}{c}
+m(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ m(X_n)
+\end{array}\right)\approx
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=S_p Y
+\]</span></p>
+</div>
+</div>
+<p><code>R</code> code to compute regression splines:</p>
+<p>First, we generate some data.</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-8_ba9f4b17556d24aa1b4b53428778143f">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at <code>x\_vec</code>:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-9_93ac7178780893883f0feff401175254">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>degree      <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># piecewise cubic splines</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>knot_seq_5  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">5</span>)<span class="co"># knots</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>B_mat_p7    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_5[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_5))], </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq_5[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_5))]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>knot_seq_15  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">15</span>)<span class="co"># knots</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>B_mat_p17    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_15[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_15))], </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq_15[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_15))]</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    )    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compute the smoothing matrices <span class="math inline">\(S_p\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-10_1c3eef300e7dfb248b3cc3750c162fc4">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_p7  <span class="ot">&lt;-</span> B_mat_p7  <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(B_mat_p7)  <span class="sc">%*%</span> B_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(B_mat_p7) </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S_p17 <span class="ot">&lt;-</span> B_mat_p17 <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(B_mat_p17) <span class="sc">%*%</span> B_mat_p17) <span class="sc">%*%</span> <span class="fu">t</span>(B_mat_p17) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compute the estimates <span class="math inline">\(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-11_d909d048ca6534c9f554dd8f17ae902c">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>m_hat_p7  <span class="ot">&lt;-</span> S_p7  <span class="sc">%*%</span> y_vec</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>m_hat_p17 <span class="ot">&lt;-</span> S_p17 <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the results:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-12_8f7cdb64ff7c7af5cadbdd092db7bc89">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p7, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p17, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"darkorange"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with p=7"</span>, </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with p=17"</span>), </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>, <span class="st">"darkorange"</span>), </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="mean-average-squared-error-of-regression-splines" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="mean-average-squared-error-of-regression-splines"><span class="header-section-number">6.2.3</span> Mean Average Squared Error of Regression Splines</h3>
+<p>In a nonparametric regression context we do <strong>not</strong> assume that the unknown true regression function <span class="math inline">\(m(x)\)</span> exactly corresponds to a spline function. Thus, <span class="math display">\[
+\hat m_p=(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n))^\top
+\]</span> possesses a systematic estimation error (bias). That is, <span class="math display">\[
+\mathbb{E}_\varepsilon(\hat{m}_p(X_i))\neq m(X_i).
+\]</span></p>
+<p>To simplify notation, we will in the following write <span class="math display">\[
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+\]</span> to denote expectation and variance “with respect to the random variable <span class="math inline">\(\varepsilon\)</span>, only”.</p>
+<p>In the case of random design, <span class="math display">\[
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+\]</span> thus denote the conditional expectation <span class="math display">\[
+\mathbb{E}(\cdot|X_1,\dots,X_n)
+\]</span> and the conditional variance <span class="math display">\[
+Var(\cdot|X_1,\dots,X_n)
+\]</span> given the observed <span class="math inline">\(X\)</span>-values.</p>
+<p>For random design, these conditional expectations depend on the observed sample, and thus are random. For fixed design, such expectations are of course fixed values.</p>
+
+
 </section>
 </section>
 
