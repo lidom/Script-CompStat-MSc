@@ -239,8 +239,8 @@ div.csl-indent {
   <li><a href="#unsupervised-classification" id="toc-unsupervised-classification" class="nav-link" data-scroll-target="#unsupervised-classification"><span class="toc-section-number">5.4</span>  (Unsupervised) Classification</a>
   <ul class="collapse">
   <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">5.4.1</span>  Bayes Classifier</a></li>
+  <li><a href="#synopsis-penguin-example" id="toc-synopsis-penguin-example" class="nav-link" data-scroll-target="#synopsis-penguin-example"><span class="toc-section-number">5.4.2</span>  Synopsis: Penguin Example</a></li>
   </ul></li>
-  <li><a href="#synopsis" id="toc-synopsis" class="nav-link" data-scroll-target="#synopsis">Synopsis</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -893,7 +893,7 @@ p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})
 <section id="unsupervised-classification" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="unsupervised-classification"><span class="header-section-number">5.4</span> (Unsupervised) Classification</h2>
 <p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group labels) from a random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
-<p>(Above, we had <span class="math inline">\(Z\)</span>, here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.)</p>
+<p><strong>Note:</strong> Above, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
 <p>A <strong>classification rule</strong> is a function <span class="math display">\[
 h: X \to Y.
 \]</span> That is, when we observe a new <span class="math inline">\(X,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X).\)</span></p>
@@ -902,10 +902,10 @@ h: X \to Y.
 \]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p>
 <p>If there are learning/training data <strong>without</strong> group-labels <span class="math display">\[
 X_1,\dots,X_n
-\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) or <strong>cluster analysis</strong>.</p>
+\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) problem or <strong>cluster analysis</strong>.</p>
 <section id="bayes-classifier" class="level3" data-number="5.4.1">
 <h3 data-number="5.4.1" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">5.4.1</span> Bayes Classifier</h3>
-<p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. To most often used quantity to measure the accuracy of classification methods is the <strong>error rate</strong>.</p>
+<p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. The most often used quantity to measure the accuracy of classification methods is the <strong>error rate</strong>.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -940,10 +940,11 @@ m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
 m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
 \]</span> where</p>
 <ul>
-<li><span class="math inline">\(f_0(x) = f(x|Y=0)\)</span></li>
-<li><span class="math inline">\(f_1(x) = f(x|Y=1)\)</span></li>
+<li><span class="math inline">\(f_0(x) = f(x|Y=0);\)</span> conditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span></li>
+<li><span class="math inline">\(f_1(x) = f(x|Y=1);\)</span> cconditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=1\)</span></li>
 <li><span class="math inline">\(\pi_0 = P(Y=0)\)</span></li>
-<li><span class="math inline">\(\pi_1 = P(Y=1)\)</span> where <span class="math inline">\(\pi_0 + \pi_1 = 1\)</span></li>
+<li><span class="math inline">\(\pi_1 = P(Y=1)\)</span></li>
+<li><span class="math inline">\(\pi_0 + \pi_1 = 1\)</span></li>
 </ul>
 <p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
 <p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
@@ -1008,7 +1009,7 @@ L(h^\ast)\leq L(h).
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
-\]</span></p></li>
+\]</span> Example: Linear regression, logistic regression, etc.</p></li>
 <li><p><strong>Density Estimation:</strong> Find density and probability estimates <span class="math inline">\(\hat{f}_0,\)</span> <span class="math inline">\(\hat{f}_1,\)</span> <span class="math inline">\(\hat{\pi}_0=\hat{P}(Y=0),\)</span> and <span class="math inline">\(\hat{\pi}_1=\hat{P}(Y=1)\)</span> and define <span class="math display">\[
 \hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
 \]</span> Then use <span class="math display">\[
@@ -1016,14 +1017,14 @@ L(h^\ast)\leq L(h).
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
-\]</span></p></li>
+\]</span> Example: Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions</p></li>
 </ol>
 <section id="more-than-two-group-labels" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="more-than-two-group-labels">More than two group labels</h4>
 <p>Of course, we can generalize all this to the case where the discrete random variables <span class="math inline">\(Y\)</span> takes on more than only two group-labels.</p>
 <p>Let <span class="math display">\[
 Y\in\{1,\dots,G\}
-\]</span> with <span class="math inline">\(G&gt;1.\)</span></p>
+\]</span> for any <span class="math inline">\(G&gt;1.\)</span></p>
 <p>Then, the (error rate optimal) Bayes classification rule is <span class="math display">\[
 \begin{align*}
 h^\ast(x)
@@ -1032,14 +1033,15 @@ h^\ast(x)
 \end{align*}
 \]</span> where <span class="math inline">\(P(Y=g|X=x)\)</span> is the <strong>posterior probability</strong> <span class="math display">\[
 P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
-\]</span> <span class="math inline">\(\pi_g\)</span> is the <strong>prior probability</strong> <span class="math display">\[
+\]</span> where <span class="math inline">\(\pi_g\)</span> is the <strong>prior probability</strong> <span class="math display">\[
 \pi_g = P(Y=g),
 \]</span> and where <span class="math inline">\(f_g\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g\)</span> <span class="math display">\[
 f_g(x) = f(x|Y=g)
 \]</span></p>
 </section>
-<section id="penguin-example" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="penguin-example">Penguin Example</h4>
+</section>
+<section id="synopsis-penguin-example" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="synopsis-penguin-example"><span class="header-section-number">5.4.2</span> Synopsis: Penguin Example</h3>
 <p>In our penguin example, we use the <strong>density estimation</strong> approach.</p>
 <p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as <span class="math inline">\(f\)</span> being a Gaussian density.</p>
 <p>In our penguin example, we assume that the conditional density function of flipper length <span class="math inline">\(X\)</span> given species <span class="math inline">\(Y=g\)</span> can be modelled reasonably well using a Gaussian density, <span class="math display">\[
@@ -1050,7 +1052,12 @@ f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
 <li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
 </ol>
-<p><a href="#fig-EMGif">Figure&nbsp;<span>5.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm.</p>
+<p><a href="#fig-EMGif">Figure&nbsp;<span>5.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
+<ul>
+<li>The vertical line shows the decision boundary</li>
+<li>The two Gaussian density functins (dashed lines) show the conditional densities <span class="math inline">\(\varphi(x|\mu_g,\sigma_g),\)</span> <span class="math inline">\(g=1,2.\)</span></li>
+<li>The orange and green dots show the (unsupervised) classification results</li>
+</ul>
 <div class="cell" data-animation.hook="gifski" data-hash="Ch5_EMAlgorithmus_cache/html/fig-EMGif_59094b0a6a659980c49104cf4807f516">
 <div class="cell-output-display">
 <div id="fig-EMGif" class="quarto-figure quarto-figure-center anchored">
@@ -1062,18 +1069,14 @@ f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\
 </div>
 </div>
 <p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>5.2</span></a>.</p>
-</section>
-</section>
-</section>
-<section id="synopsis" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="synopsis">Synopsis</h2>
-<p>The average penguin doesn’t care about the EM Algorithm.</p>
+<p>But well, the average penguin probably doesn’t care about the EM Algorithm.</p>
 <div id="fig-agressivepenguin" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/penguin_attack.gif" class="img-fluid figure-img" style="width:80.0%"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;5.5: Penguin research on the limit.</figcaption><p></p>
 </figure>
 </div>
+</section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>

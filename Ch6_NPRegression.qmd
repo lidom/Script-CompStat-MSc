@@ -20,9 +20,10 @@ $$
 Y_i=m(X_i)+\varepsilon_i
 $$
 
-* $m(X_i)=\mathbb{E}(Y_i|X=X_i)$ regression function
+* $m(X)=\mathbb{E}(Y_i|X=X_i)$ regression function
 * $\mathbb{E}(\varepsilon_i)=0$, $Var(\varepsilon_i)=\sigma^2$
-* $\varepsilon_i$  independent of $X_i$.
+* $\varepsilon_i$  independent of $X_i$ or at least $\mathbb{E}(\varepsilon_i|X_i)=0$
+
 
 Special cases of **parametric**  regression models:
 
@@ -46,21 +47,6 @@ Many important applications lead to regression functions possessing a complicate
 "All models are false, but some are useful" (G. Box)
 :::
 
-**Example:**
-
-Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13). 
-
-```{r}
-suppressPackageStartupMessages(library("np"))
-data("cps71")
-plot(cps71$age, cps71$logwage, xlab="Age", ylab="log(wage)")
-```
-
-
-
-#### Nonparametric Regression {-} 
-
-There are no specific assumptions about the structure of the regression function. It is only assumed that $m$ is **smooth**.
 
 
 An important point in theoretical analysis is the way how the observations $X_1,\dots,X_n$ have been generated. One distinguishes between "fixed" and "random design".
@@ -85,6 +71,28 @@ and $Var(\varepsilon_i|X_i)=\sigma^2$.
 ::: {.callout-note}
 For random design all expectations (as well as variances) have to be interpreted as *conditional* expectations (variances) given $X_1,\dots,X_n$.
 :::
+
+
+**Example:** Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13); see @fig-CanadianIncome. 
+
+```{r}
+#| label: fig-CanadianIncome
+#| fig-cap: Canadian cross-section wage data.
+suppressPackageStartupMessages(library("np"))
+data("cps71")
+plot(cps71$age, cps71$logwage, xlab="Age", ylab="log(wage)")
+```
+
+What would be a good/reasonable model assumption for $m(x)$ to estimate the conditional mean function for the data shown in @fig-CanadianIncome?
+
+
+::: {.callout-important}
+
+# No specific model assumption
+
+There are no specific assumptions about the structure of the regression function. It is only assumed that $m$ is **smooth** (sufficiently often differentiable).
+:::
+
 
 ## Basis function expansions
 

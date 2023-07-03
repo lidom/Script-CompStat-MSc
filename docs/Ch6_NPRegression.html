@@ -249,9 +249,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Y_i=m(X_i)+\varepsilon_i
 \]</span></p>
 <ul>
-<li><span class="math inline">\(m(X_i)=\mathbb{E}(Y_i|X=X_i)\)</span> regression function</li>
+<li><span class="math inline">\(m(X)=\mathbb{E}(Y_i|X=X_i)\)</span> regression function</li>
 <li><span class="math inline">\(\mathbb{E}(\varepsilon_i)=0\)</span>, <span class="math inline">\(Var(\varepsilon_i)=\sigma^2\)</span></li>
-<li><span class="math inline">\(\varepsilon_i\)</span> independent of <span class="math inline">\(X_i\)</span>.</li>
+<li><span class="math inline">\(\varepsilon_i\)</span> independent of <span class="math inline">\(X_i\)</span> or at least <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span></li>
 </ul>
 <p>Special cases of <strong>parametric</strong> regression models:</p>
 <ul>
@@ -279,20 +279,6 @@ As George Box is saying it:
 <p>“All models are false, but some are useful” (G. Box)</p>
 </div>
 </div>
-<p><strong>Example:</strong></p>
-<p>Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13).</p>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-1_6d53ebb28b14134483f12e59056cc418">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"np"</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"cps71"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cps71<span class="sc">$</span>age, cps71<span class="sc">$</span>logwage, <span class="at">xlab=</span><span class="st">"Age"</span>, <span class="at">ylab=</span><span class="st">"log(wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="nonparametric-regression" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="nonparametric-regression">Nonparametric Regression</h4>
-<p>There are no specific assumptions about the structure of the regression function. It is only assumed that <span class="math inline">\(m\)</span> is <strong>smooth</strong>.</p>
 <p>An important point in theoretical analysis is the way how the observations <span class="math inline">\(X_1,\dots,X_n\)</span> have been generated. One distinguishes between “fixed” and “random design”.</p>
 <ul>
 <li><strong>Fixed design:</strong> The observation points <span class="math inline">\(X_1,\dots,X_n\)</span> are fixed (non stochastic) values.
@@ -323,6 +309,34 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>For random design all expectations (as well as variances) have to be interpreted as <em>conditional</em> expectations (variances) given <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
+</div>
+</div>
+<p><strong>Example:</strong> Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13); see <a href="#fig-CanadianIncome">Figure&nbsp;<span>6.1</span></a>.</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/fig-CanadianIncome_c91caa54f4741886ce937a9c3accb5ce">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"np"</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"cps71"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cps71<span class="sc">$</span>age, cps71<span class="sc">$</span>logwage, <span class="at">xlab=</span><span class="st">"Age"</span>, <span class="at">ylab=</span><span class="st">"log(wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-CanadianIncome" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch6_NPRegression_files/figure-html/fig-CanadianIncome-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6.1: Canadian cross-section wage data.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What would be a good/reasonable model assumption for <span class="math inline">\(m(x)\)</span> to estimate the conditional mean function for the data shown in <a href="#fig-CanadianIncome">Figure&nbsp;<span>6.1</span></a>?</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+No specific model assumption
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are no specific assumptions about the structure of the regression function. It is only assumed that <span class="math inline">\(m\)</span> is <strong>smooth</strong> (sufficiently often differentiable).</p>
 </div>
 </div>
 </section>

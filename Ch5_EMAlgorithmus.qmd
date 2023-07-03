@@ -729,7 +729,7 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
 
 The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from  a random variable $X$ is called **classification**. 
 
-(Above, we had $Z$,  here we use $Y$ to denote the (unknown) group labels.)
+**Note:** Above, we used $Z,$ here we use $Y$ to denote the (unknown) group labels.
 
 A **classification rule** is a function 
 $$
@@ -747,13 +747,13 @@ If there are learning/training data **without** group-labels
 $$
 X_1,\dots,X_n
 $$
-it's called a **unsupervised classification** (computer science: unsupervised learning) or **cluster analysis**.
+it's called a **unsupervised classification** (computer science: unsupervised learning) problem or **cluster analysis**.
 
 
 ### Bayes Classifier 
 
 We would like to find a classification rule $h$ that makes accurate
-predictions. To most often used quantity to measure the accuracy of classification methods is the **error rate**.
+predictions. The most often used quantity to measure the accuracy of classification methods is the **error rate**.
 
 ::: {.callout-note icon=false} 
 ## 
@@ -795,10 +795,11 @@ m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
 $$
 where 
 
-* $f_0(x) = f(x|Y=0)$
-* $f_1(x) = f(x|Y=1)$
+* $f_0(x) = f(x|Y=0);$ conditional density of $X$ given $Y=0$
+* $f_1(x) = f(x|Y=1);$ cconditional density of $X$ given $Y=1$
 * $\pi_0  = P(Y=0)$
-* $\pi_1  = P(Y=1)$ where $\pi_0 + \pi_1 = 1$
+* $\pi_1  = P(Y=1)$ 
+* $\pi_0 + \pi_1 = 1$
 
 **Note:** Here $f$ denotes here some (unknown) density function, not necessarily the Gaussian density. 
 
@@ -873,6 +874,7 @@ $$
 0&\text{otherwise}.
 \end{array}\right.
 $$
+Example: Linear regression, logistic regression, etc. 
 
 3. **Density Estimation:** Find density and probability estimates $\hat{f}_0,$ $\hat{f}_1,$ $\hat{\pi}_0=\hat{P}(Y=0),$ and $\hat{\pi}_1=\hat{P}(Y=1)$ and define 
 $$
@@ -885,6 +887,7 @@ $$
 0&\text{otherwise}.
 \end{array}\right.
 $$
+Example: Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions
 
 #### More than two group labels {-}
 
@@ -894,7 +897,7 @@ Let
 $$
 Y\in\{1,\dots,G\}
 $$
-with $G>1.$
+for any $G>1.$
 
 Then, the (error rate optimal) Bayes classification rule is 
 $$
@@ -908,7 +911,7 @@ where $P(Y=g|X=x)$ is the **posterior probability**
 $$
 P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
 $$
-$\pi_g$ is the **prior probability**
+where $\pi_g$ is the **prior probability**
 $$
 \pi_g = P(Y=g),
 $$
@@ -918,7 +921,7 @@ f_g(x) = f(x|Y=g)
 $$
 
 
-####  Penguin Example {-}
+### Synopsis: Penguin Example 
 
 In our penguin example, we use the **density estimation** approach. 
 
@@ -936,7 +939,12 @@ The unknown parameters $\pi_g,$ $\mu_g,$ and $\sigma_g,$ $g=1,\dots,G,$ are esti
 1. Estimate the Gaussian mixture distribution using the **EM algorithm**
 2. Assign the data points $x_i$ to the group that maximizes the **"posterior probability"**
 
-@fig-EMGif shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm. 
+@fig-EMGif shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:
+
+* The vertical line shows the decision boundary
+* The two Gaussian density functins (dashed lines) show the conditional densities $\varphi(x|\mu_g,\sigma_g),$ $g=1,2.$
+* The orange and green dots show the (unsupervised) classification results  
+
 
 ```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.15}
 #| label: fig-EMGif
@@ -1035,12 +1043,7 @@ The final estimation result replicates @fig-GMM-plot1.
 
 
 
-
-
-
-## Synopsis {-}
-
-The average penguin doesn't care about the EM Algorithm.
+But well, the average penguin probably doesn't care about the EM Algorithm.
 
 ![Penguin research on the limit.](images/penguin_attack.gif){width=80%  #fig-agressivepenguin}
 
