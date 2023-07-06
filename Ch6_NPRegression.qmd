@@ -116,7 +116,7 @@ $$
 $$
 where the coefficients  $\hat\beta_j$ are obtained by ordinary least squares
 $$
-\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j b_j(X_i)\right)^2
+\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 $$
 
@@ -275,6 +275,8 @@ legend("top", col = c(1,2,3), lty = c(1,2,3),
 legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
 ```
 
+**The Bias-Variance Trade-Off:**
+
 * $p$ small: variability of the estimator is small, but there may exist a high systematic error (bias).
 * $p$ large: bias is small, but variability of the estimator is high.
 
@@ -306,9 +308,9 @@ $$
 with $s_0,\dots,s_k\in\mathbb{R}.$
 * $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
 
-   * $s(x)$ is called a *linear spline* if $k=1$, 
+   * $s(x)$ is called a *linear spline* if $k=1$
 
-   * $s(x)$ is a *quadratic spline* if $k=2$, and
+   * $s(x)$ is a *quadratic spline* if $k=2$
 
    * $s(x)$ is a *cubic spline*  if $k=3$.
 

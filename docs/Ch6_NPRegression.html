@@ -373,7 +373,7 @@ m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 <p>For a fixed value <span class="math inline">\(p\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> is determined by <span class="math display">\[
 \hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 \]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are obtained by ordinary least squares <span class="math display">\[
-\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j b_j(X_i)\right)^2
+\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 \]</span></p>
 <p>Examples are approximations by polynomials, spline functions, wavelets or Fourier expansions (for periodic functions).</p>
@@ -513,6 +513,7 @@ b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
 <p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>The Bias-Variance Trade-Off:</strong></p>
 <ul>
 <li><span class="math inline">\(p\)</span> small: variability of the estimator is small, but there may exist a high systematic error (bias).</li>
 <li><span class="math inline">\(p\)</span> large: bias is small, but variability of the estimator is high.</li>
@@ -544,8 +545,8 @@ s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 \]</span> with <span class="math inline">\(s_0,\dots,s_k\in\mathbb{R}.\)</span></p></li>
 <li><p><span class="math inline">\(s(x)\)</span> is <span class="math inline">\(k-1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.</p>
 <ul>
-<li><p><span class="math inline">\(s(x)\)</span> is called a <em>linear spline</em> if <span class="math inline">\(k=1\)</span>,</p></li>
-<li><p><span class="math inline">\(s(x)\)</span> is a <em>quadratic spline</em> if <span class="math inline">\(k=2\)</span>, and</p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is called a <em>linear spline</em> if <span class="math inline">\(k=1\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <em>quadratic spline</em> if <span class="math inline">\(k=2\)</span></p></li>
 <li><p><span class="math inline">\(s(x)\)</span> is a <em>cubic spline</em> if <span class="math inline">\(k=3\)</span>.</p></li>
 </ul></li>
 </ul>
