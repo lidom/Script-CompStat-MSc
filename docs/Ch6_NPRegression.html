@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -210,6 +229,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">6.2.2</span>  Regression Splines</a></li>
   <li><a href="#mean-average-squared-error-of-regression-splines" id="toc-mean-average-squared-error-of-regression-splines" class="nav-link" data-scroll-target="#mean-average-squared-error-of-regression-splines"><span class="toc-section-number">6.2.3</span>  Mean Average Squared Error of Regression Splines</a></li>
   </ul></li>
+  <li><a href="#selecting-the-smoothing-parameter-p" id="toc-selecting-the-smoothing-parameter-p" class="nav-link" data-scroll-target="#selecting-the-smoothing-parameter-p"><span class="toc-section-number">6.3</span>  Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -614,7 +635,7 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3
 </div>
 </section>
 <section id="regression-splines-1" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="regression-splines-1">Regression Splines:</h4>
+<h4 class="unnumbered anchored" data-anchor-id="regression-splines-1">Regression Splines</h4>
 <p>The so-called “regression spline” (or “B-spline”) approach to estimating a regression function <span class="math inline">\(m(x)\)</span> is based on fitting a set of spline basis functions to the data.</p>
 <p>Frequently, cubic splines (<span class="math inline">\(k=3\)</span>) with equidistant knots are applied.</p>
 <ul>
@@ -692,7 +713,7 @@ m(X_1)\\
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at <code>x\_vec</code>:</p>
+<p>Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at <code>x_vec</code>:</p>
 <div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-9_93ac7178780893883f0feff401175254">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>degree      <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># piecewise cubic splines</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -761,9 +782,524 @@ m(X_1)\\
 Var(\cdot|X_1,\dots,X_n)
 \]</span> given the observed <span class="math inline">\(X\)</span>-values.</p>
 <p>For random design, these conditional expectations depend on the observed sample, and thus are random. For fixed design, such expectations are of course fixed values.</p>
-
-
+<p>It will always be assumed that the matrix <span class="math display">\[
+\mathbf{X}^\top \mathbf{X},
+\]</span> with <span class="math inline">\(\mathbf{X}=(b_{j,k}(X_i))_{i,j}\)</span>, is invertible (under our conditions on the design density this holds with probability 1 for the random design).</p>
+<p>The behavior of nonparametric function estimates is usually evaluated with respect to <strong>quadratic risk</strong>.</p>
+<p>A commonly used measure of accuracy of a spline estimator <span class="math inline">\(\hat m_p\)</span> is the <strong>Mean Average Squared Error (MASE):</strong> <span class="math display">\[
+\begin{align*}
+&amp;\operatorname{MASE}(\hat m_p):=\frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left(m(X_i)-\hat{m}_p(X_i)\right)^2\\
+= &amp;\frac{1}{n}\sum_{i=1}^n \underbrace{\left(\mathbb{E}_\varepsilon(\hat{m}_p(X_i))-m(X_i)\right)^2}_{(\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i)))^2} + \\[2ex]
+&amp;\frac{1}{n}\sum_{i=1}^n \underbrace{\mathbb{E}_\varepsilon\left((\hat{m}_p(X_i)-\mathbb{E}_\varepsilon(\hat{m}_p(X_i))\right)^2}_{Var_\varepsilon(\hat{m}_p(X_i))}
+\end{align*}
+\]</span></p>
+<p>Another frequently used measure is the <strong>Mean Integrated Squared Error (MISE):</strong> <span class="math display">\[
+\begin{align*}
+\operatorname{MISE}(\hat m_p):=\int_a^b \mathbb{E}_\varepsilon\left(m(x)-\hat m_p(x)\right)^2dx
+\end{align*}
+\]</span></p>
+<section id="mase-versus-mise" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="mase-versus-mise">MASE versus MISE:</h5>
+<ul>
+<li>Equidistant design: <span class="math display">\[
+\operatorname{MISE}(\hat m_p)=\operatorname{MASE}(\hat m_p) + O(n^{-1})
+\]</span></li>
+<li>MISE and MASE are generally not asymptotically equivalent in the case of random design <span class="math display">\[
+\operatorname{MASE}(\hat m_p)=\int_a^b \mathbb{E}_\varepsilon\left(m(x)-\hat m_p(x)\right)^2 f(x)dx + O_P(n^{-1}).
+\]</span></li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Landau symbol “Big Oh” <span class="math inline">\(O(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all sequences <span class="math inline">\(x_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\dfrac{|x_n|}{r_n}\to c\)</span> as <span class="math inline">\(n\to\infty,\)</span> where <span class="math inline">\(c\)</span> is a constant with <span class="math inline">\(0\leq c &lt; \infty\)</span>.</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(-\dfrac{1}{n}=O(n^{-1})\)</span></li>
+<li><span class="math inline">\(\dfrac{1}{n^2}=O(n^{-1})\)</span></li>
+<li><span class="math inline">\(\displaystyle\frac{1}{m}\sum_{j=1}^{m-1} g\left(x_j\right)(x_{j+1}-x_j) = \int_a^b g(x)dx + O(m^{-1})\)</span>, <br> where <span class="math inline">\(x_j=a+\dfrac{j-1}{m-1}(b-a)\)</span> for sufficiently smooth (continuously differentiable over <span class="math inline">\((a,b)\)</span>) <span class="math inline">\(g\)</span>.</li>
+</ul>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Landau symbol “Small oh” <span class="math inline">\(o(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+o(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all sequences <span class="math inline">\(x_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\dfrac{|x_n|}{r_n}\to 0\)</span> as <span class="math inline">\(n\to\infty.\)</span></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(\dfrac{1}{n^2}=o(n^{-1})\)</span></li>
+<li><span class="math inline">\(n^{-a}=o(n^{-b})\)</span> for all <span class="math inline">\(a&gt;b&gt;0.\)</span></li>
+</ul>
+<p><strong>Note:</strong> For every sequence <span class="math inline">\(x_n=o(r_n)\)</span> it holds that <span class="math inline">\(x_n=O(r_n),\)</span> but not the other way round.</p>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Special Cases <span class="math inline">\(O(1)\)</span> and <span class="math inline">\(o(1)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O(1)\quad \text{and}\quad o(1)
+\]</span></p>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(1 + \dfrac{1}{n} = O(1)\)</span></li>
+<li><span class="math inline">\(\dfrac{1}{n^2}=o(1)\)</span></li>
+</ul>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Stochastic Landau symbol “Big Oh Pee” <span class="math inline">\(O_P(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\displaystyle P\left(\frac{|X_n|}{r_n}&gt;\delta\right)&lt;\epsilon\)</span> for all sufficiently large <span class="math inline">\(n\)</span> and all <span class="math inline">\(\delta&gt;0\)</span> and <span class="math inline">\(\epsilon&gt;0\)</span>. <br> Plain English: “such that <span class="math inline">\(\frac{|X_n|}{r_n}\)</span> is <strong>bounded in probability</strong> for all large enough <span class="math inline">\(n\)</span>”</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>If <span class="math inline">\(\displaystyle \sqrt{n}(\bar{X}_n-\mu)\to_d\mathcal{N}(0,\sigma^2),\)</span> then <span class="math display">\[
+\begin{align*}
+\sqrt{n}(\bar{X}_n-\mu) &amp;= O_P(1)\\[2ex]
+(\bar{X}_n-\mu) &amp;= O_P(n^{-1/2})
+\end{align*}
+\]</span></li>
+</ul>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Stochastic Landau symbol “Small oh Pee” <span class="math inline">\(o_P(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+o_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\displaystyle \frac{|X_n|}{r_n}\to_P 0\quad\)</span> as <span class="math inline">\(\quad n\to\infty\)</span></li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>If <span class="math inline">\(\displaystyle \sqrt{n}(\bar{X}_n-\mu)\to_d\mathcal{N}(0,\sigma^2),\)</span> then <span class="math display">\[
+\begin{align*}
+(\bar{X}_n-\mu)         &amp;= o_P(1)
+\end{align*}
+\]</span></li>
+</ul>
+</div>
+</div>
+<p>In the following we focus on the <strong>MASE</strong> which has the advantage that we can use matrix algebra.</p>
+<p><span class="math inline">\(\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m_p(X_i)\)</span>: <span class="math display">\[
+\begin{align*}
+  \mathbb{E}_\varepsilon(\hat m_p(X_i))&amp;=\mathbb{E}_\varepsilon\Big(\sum_{j=1}^p \hat{\beta}_j b_{j,k}(X_i)\Big)\\
+&amp;=\sum_{j=1}^p\mathbb{E}_\varepsilon(\hat{\beta}_j) b_{j,k}(X_i),
+\end{align*}
+\]</span> where <span class="math inline">\(\hat{\beta}=(\hat{\beta}_1,\dots,\hat{\beta}_p)^\top=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top Y\)</span>.</p>
+<p>Then <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\hat\beta)
+&amp;=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  (\underbrace{m+\varepsilon}_{=Y})\Big)\\
+&amp;=\underbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m}_{=:(\beta_1,\dots,\beta_p)^\top=\beta}+0,%\\
+%&amp;=:(\beta_1,\dots,\beta_p)^\top=\beta
+\end{align*}
+\]</span> where <span class="math inline">\(m=(m(X_1),\dots, m(X_n))^\top\)</span> and <span class="math inline">\(\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)^\top\)</span>.</p>
+<p>Note that <span class="math display">\[
+\beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
+\]</span> is a lest squares solution; namely of the following least squares problem that tries to approximate the unknown <span class="math inline">\(m\)</span> using a spline function <span class="math inline">\(s\)</span>: <span class="math display">\[
+\begin{align*}
+\sum_i (m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i))^2
+&amp;=\min_{\vartheta_1,\dots,\vartheta_p}\sum_i (m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i))^2\\
+&amp;=\min_{s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}} \sum_i (m(X_i)-s(X_i))^2.
+\end{align*}
+\]</span></p>
+<p>That is, the mean of our spline regression estimator <span class="math display">\[
+\mathbb{E}_\varepsilon(\hat m_p(x))=\sum_{j=1}^p \beta_j b_j(x)=:\tilde m_p(x)
+\]</span> is the best (<span class="math inline">\(L_2\)</span>) approximation of the true, but unknown, regression function <span class="math inline">\(m(x)\)</span> by means of spline functions in <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_q}\)</span>.</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the true, but unknown, regression function <span class="math inline">\(m\)</span> happens to be an element of the space of spline functions <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_q},\)</span> then <span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) = 0
+\]</span> However, generally we do not expect that <span class="math inline">\(m\)</span> is actually an element of <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_q},\)</span> such that<br>
+<span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \neq 0.
+\]</span> We rather hope that <span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \to 0
+\]</span> as the number of knots <span class="math inline">\(p\to\infty.\)</span></p>
+</div>
+</div>
+<p>By the general approximation properties of cubic splines (<span class="math inline">\(k=3\)</span>) with <span class="math inline">\(q=p-2\)</span> equidistant knots, we will thus expect that (<span class="citation" data-cites="DeBoor_1978">De Boor and De Boor (<a href="#ref-DeBoor_1978" role="doc-biblioref">1978</a>)</span> or <span class="citation" data-cites="Eubank_1999">Eubank (<a href="#ref-Eubank_1999" role="doc-biblioref">1999</a>)</span>):</p>
+<ul>
+<li><p>If <span class="math inline">\(m\)</span> is twice continuously differentiable over <span class="math inline">\((a,b)\)</span>, then <span class="math display">\[
+(\operatorname{Bias}_\varepsilon(\hat m_p))^2=\frac{1}{n}\sum_{i=1}^n \left(m(X_i)-\tilde m_p(X_i))\right)^2=O_p(p^{-4})
+\]</span></p></li>
+<li><p>If <span class="math inline">\(m\)</span> is four times continuously differentiable, then <span class="math display">\[
+(\operatorname{Bias}_\varepsilon(\hat m_p))^2=\frac{1}{n}\sum_{i=1}^n \left(m(X_i)-\tilde m_p(X_i))\right)^2=O_p(p^{-8})
+\]</span></p></li>
+</ul>
+<p>The next step is to compute the (average) <strong>variance</strong> of the estimator, which can be obtained by the usual type of arguments applied in parametric regression: <!-- % Let
+% $\tilde m_p=(\tilde m(X_1),\dots,\tilde m(X_n))^\top $ and $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)^\top $. Then
+%{\small --> <span class="math display">\[
+\begin{align*}
+%\V_\varepsilon(\hat m_p)&amp;=:
+\frac{1}{n}\sum_{i=1}Var_\varepsilon(\hat{m}_p(X_i))&amp;=
+% \frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+% \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \tilde m_p\Vert_2^2\right)\\
+\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
+&amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)=\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
+&amp;=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
+&amp;=\frac{1}{n} \sigma^2 \text{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbf{X}\right)\\[2ex]
+&amp;=\frac{1}{n} \sigma^2 \text{trace}\left(I_n\right)\\[2ex]
+&amp;=\sigma^2  \frac{p}{n}=:Var_\varepsilon(\hat{m}_p)
+\end{align*}
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Trace-Trick
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For any <span class="math inline">\(j\times l\)</span> matrix <span class="math inline">\(A\)</span> and any <span class="math inline">\(l\times j\)</span> matrix <span class="math inline">\(B\)</span> we have the identity <span class="math display">\[\text{trace}(AB)=\text{trace}(BA)\]</span></p>
+</div>
+</div>
 </section>
+<section id="summary" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="summary">Summary</h4>
+<p>For cubic (<span class="math inline">\(k=3\)</span>) splines with <span class="math inline">\(q\)</span> equidistant knots and a twice differentiable function <span class="math inline">\(m\)</span> we will expect that:</p>
+<ul>
+<li><p><span class="math inline">\(\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2=O_p(p^{-4})\)</span></p></li>
+<li><p><span class="math inline">\(\displaystyle Var_\varepsilon(\hat m_p)= \sigma^2\frac{p}{n}\)</span></p></li>
+</ul>
+<p>where <span class="math inline">\(p=q+2\)</span> is the number of basis functions.</p>
+<p>This leads to the classical <strong>trade-off between (average) squared bias and (average) variance</strong> that is typical for nonparametric statistics:</p>
+<ul>
+<li><span class="math inline">\(\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2\)</span> <strong>decreases</strong> as <span class="math inline">\(p\)</span> increases.</li>
+<li><span class="math inline">\(\displaystyle Var_\varepsilon(\hat m_p)\)</span> <strong>increases</strong> as <span class="math inline">\(p\)</span> increases.</li>
+</ul>
+<!-- p^-4 = p/n
+     p^-5 = 1/n
+     p    = (1/n)^-1/5  -->
+<p>Thus if</p>
+<ul>
+<li><span class="math inline">\(p\to\infty\)</span> as <span class="math inline">\(n\to\infty\)</span> such that <span class="math inline">\(\dfrac{p}{n}\to\infty\)</span></li>
+</ul>
+<p>then</p>
+<p><span class="math display">\[
+\operatorname{MASE}(\hat m_{p}) = (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p) \to 0
+\]</span> as <span class="math inline">\(n\to 0.\)</span></p>
+<p>An <strong>optimal smoothing parameter</strong> <span class="math inline">\(p,\)</span> balancing bias and variance, will be of order <span class="math display">\[
+\begin{align}
+p_{opt}^{-4} &amp; \sim \frac{p_{opt}}{n}\\[2ex]
+%p_{opt}^{-5} &amp; \sim \frac{1}{n}\\[2ex]
+\Leftrightarrow\;p_{opt}      &amp; \sim n^{1/5},
+\end{align}
+\]</span> i.e., <span class="math inline">\(p_{opt}=\texttt{const} \cdot n^{1/5}\)</span> for some finite and positive constant <span class="math inline">\(0 &lt;\texttt{const}&lt;\infty.\)</span></p>
+<p>Then <span class="math display">\[
+\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-4/5}).
+\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For an estimator <span class="math inline">\(\hat m\)</span> based on a <strong>valid</strong> (!) parametric model we have <span class="math display">\[
+\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-1}).
+\]</span></p>
+</div>
+</div>
+<p>Similar results can be obtained for the mean integrated squared error (MISE): If <span class="math inline">\(m\)</span> is twice continuously differentiable, and <span class="math inline">\(p_{opt} \sim n^{1/5}\)</span>, then <span class="math display">\[
+\operatorname{MISE}(\hat m_{p_{opt}})=\mathbb{E}_\varepsilon\left(\int_a^b(m(x)-\hat m_{p_{opt}}(x))^2dx\right)=O_p(n^{-4/5}).
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="selecting-the-smoothing-parameter-p" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="selecting-the-smoothing-parameter-p"><span class="header-section-number">6.3</span> Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></h2>
+<p><strong>Problem:</strong> Since <span class="math inline">\(m\)</span> is unknown, we cannot directly compute <span class="math inline">\(\operatorname{MASE}\)</span> and <span class="math inline">\(p_{opt}\)</span>. However, we need to choose the smoothing parameter <span class="math inline">\(p\)</span> in an (somehow) optimal and objective manner.</p>
+<p><strong>Approach:</strong> Determine an estimate <span class="math inline">\(\hat p_{opt}\)</span> of the unknown “optimal” number <span class="math inline">\(p_{opt}\)</span> of basis functions by minimizing a suitable error criterion with the following properties:</p>
+<ul>
+<li>For every possible <span class="math inline">\(p\)</span> the corresponding criterion function can be calculated from the <em>data</em>.</li>
+<li>For any <span class="math inline">\(p\)</span> the error criterion provides “information” about the respective <span class="math inline">\(\operatorname{MASE}\)</span></li>
+</ul>
+<p>Recall: With <span class="math display">\[
+\hat m_p=(\hat m_p(X_1),\dots,\hat m_p(X_n))^\top
+\]</span> we have <span class="math display">\[
+\hat m_p=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY,
+\]</span> where <span class="math display">\[
+p=\operatorname{trace}(S_p).
+\]</span></p>
+<p>That is, for given <span class="math inline">\(p\)</span>, the number of parameters to estimate by the spline method (one also speaks of the “degrees of freedom” of the smoothing procedure) is equal to <span class="math inline">\(p\)</span> which corresponds to the trace of the <strong>smoother matrix</strong> <span class="math display">\[
+S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.
+\]</span></p>
+<p>Most frequently used error criteria are <strong>Cross-Validation (CV)</strong> and <strong>Generalized Cross-Validation (GCV)</strong>:</p>
+<ul>
+<li><p><strong>Cross-Validation (CV):</strong> <br> For a given value <span class="math inline">\(p,\)</span> cross-validation tries to approximate the corresponding prediction error. <span class="math display">\[
+\operatorname{CV}(p)=\frac{1}{n} \sum_{i=1}^n\biggl( Y_i-
+{\hat m}_{p,-i}(X_i)\biggr)^2.
+\]</span> Here, for any <span class="math inline">\(i=1,\dots,n\)</span>, <span class="math inline">\({\hat m}_{p,-i}\)</span> is the “leave-one-out” estimator of <span class="math inline">\(m\)</span> to be obtained when a spline function is fitted to the <span class="math inline">\(n-1\)</span> observations: <span class="math display">\[
+(Y_1,X_1),\dots,(Y_{i-1},X_{i-1}),(Y_{i+1},X_{i+1}),\dots,(Y_{n},X_{n}).
+\]</span> <strong>Motivation:</strong> We have <span class="math display">\[
+\begin{align*}
+&amp;\mathbb{E}_\varepsilon(\operatorname{CV}(p))
+= \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\biggl( \overbrace{m(X_i)+\varepsilon_i}^{=Y_i}-
+{\hat m}_{p,-i}(X_i)\biggr)^2\right]\\[2ex]
+= &amp; \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\left(\left( m(X_i)-
+{\hat m}_{p,-i}(X_i) \right)^2 +2\left( m(X_i)-
+{\hat m}_{p,-i}(X_i) \right)\varepsilon_i +\varepsilon_i^2\right)\right]\\[2ex]
+= &amp;\underbrace{\frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\left(m(X_i)-
+{\hat m}_{p,-i}(X_i)\right)^2\right]}_{\operatorname{MASE}(\hat m_p)} \\[2ex]
+&amp;+ 2\frac{1}{n} \sum_{i=1}^n
+\underbrace{\mathbb{E}_\varepsilon\left[( m(X_i)-
+{\hat m}_{p,-i}(X_i))\varepsilon_i\right]}_{=0}+\sigma^2
+\end{align*}
+\]</span> Thus, <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{CV}(p)) = \operatorname{MASE}(\hat m_p) + \sigma^2,
+\end{align*}
+\]</span> such that <span class="math display">\[
+\begin{align*}
+p_{opt}
+&amp;= \arg\min_p\mathbb{E}_\varepsilon(\operatorname{CV}(p))\\[2ex]
+&amp;= \arg\min_p\operatorname{MASE}(\hat m_p).
+\end{align*}
+\]</span> That is, at least on average, minimizing <span class="math inline">\(CV(p)\)</span> is equivalent to minimizing <span class="math inline">\(\operatorname{MASE}(\hat m_p)\)</span>.</p></li>
+<li><p><strong><span class="math inline">\(k\)</span>-fold Cross-Validation (CV):</strong> <br> In practice, one usually works with <span class="math inline">\(k\)</span>-fold CV (<span class="math inline">\(k=5\)</span> or <span class="math inline">\(k=10\)</span>). For this the index set <span class="math inline">\(I=\{1,\dots,n\}\)</span> is partitioned into <span class="math inline">\(k\)</span> disjoint index sets <span class="math inline">\(I_1,\dots,I_k\)</span> of (roughly) equal sizes, i.e.&nbsp;<span class="math inline">\(|I_1|\approx|I_2|\approx\dots\approx|I_k|\)</span>, such that <span class="math inline">\(I_1\cup I_1\cup \dots \cup I_k=I\)</span> and <span class="math inline">\(I_j\cap I_k=\emptyset\)</span> for all <span class="math inline">\(j\neq k\)</span>. <span class="math display">\[
+\operatorname{CV}_k(p)=\frac{1}{k}\sum_{k=1}^K\frac{1}{|I_k|} \sum_{i\in I_k}\left( Y_i-
+{\hat m}_{p,-I_k}(X_i)\right)^2.
+\]</span></p></li>
+<li><p><strong>Generalized Cross-Validation (GCV):</strong> <span class="math display">\[
+\operatorname{GCV}(p)=\frac{1}{n\left(1-\frac{p}{n}\right)^2}\sum_{i=1}^n \left( Y_i-
+{\hat m}_p(X_i)\right)^2
+\]</span> <strong>Motivation:</strong> The average residual sum of squares are given by <span id="eq-ARSS"><span class="math display">\[
+\operatorname{ARSS}(p):=\frac{1}{n}\sum_{i=1}^n\biggl( Y_i-
+\hat{m}_{p}(X_i)\biggr)^2
+\tag{6.1}\]</span></span> which allows us to rewrite <span class="math inline">\(\operatorname{GCV}(p)\)</span> as <span class="math display">\[
+\operatorname{GCV}(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\operatorname{ARSS}(p)
+\]</span> If <span class="math inline">\(p\rightarrow\infty\)</span> such that <span class="math inline">\(p/n\rightarrow 0\)</span>, a Taylor expansion yields <span class="math display">\[
+\begin{align*}
+\operatorname{GCV}(p)=
+&amp;\operatorname{ARSS}(p)+2\frac{p}{n}\overbrace{\text{ARSS}(p)}^{=\sigma^2+o_p(1)}+O_p\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+&amp;\operatorname{ARSS}(p)+2\sigma^2\frac{p}{n}+o_p(1)
+\end{align*}
+\]</span> Some lengthy derivations show that the expected value of <span class="math inline">\(\operatorname{ARSS}(p)\)</span> is <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+\]</span> Thus <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{GCV}(p))\approx \operatorname{MASE}(\hat m_p) +\sigma^2
+\end{align*}
+\]</span></p></li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Over-fitting
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that in econometrics (where we assumed to know the model apart from the model parameters) we used <a href="#eq-ARSS">Equation&nbsp;<span>6.1</span></a> as an estimator for <span class="math inline">\(\sigma^2.\)</span></p>
+<p>In non-parametrics, where we do not assume to know the model, but try to learn the model form the data, <a href="#eq-ARSS">Equation&nbsp;<span>6.1</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased for each <span class="math inline">\(p\)</span>.</p>
+<p>In fact, for a large enough <span class="math inline">\(p,\)</span> the regression function <span class="math inline">\(\hat{m}_{p}\)</span> becomes so flexible that <span class="math inline">\(Y_i\approx \hat{m}_{p}(X_i)\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span> such that <span class="math inline">\(\operatorname{ARSS}(p)\approx 0.\)</span></p>
+<p>However, an estimate <span class="math inline">\(\hat{m}_{p}\)</span> for which <span class="math inline">\(\operatorname{ARSS}(p)\approx 0\)</span> typically has fitted the noise component <span class="math inline">\(\varepsilon\)</span>—additionally to the signal component <span class="math inline">\(m\)</span>. Such an over-fitted estimate <span class="math inline">\(\hat{m}_{p}\)</span> will typically perform very poorly when used to predict a <em>new</em> <span class="math inline">\(Y_{new}\)</span> for a given new <span class="math inline">\(X_{new}\)</span> by <span class="math inline">\(\hat{Y}_{new} = \hat{m}_{p}(X_{new}),\)</span> i.e. <span class="math display">\[
+Y_{new}\not\approx \hat{m}_{p}(X_{new}).
+\]</span></p>
+<p>The term <span class="math inline">\(2\sigma^2\frac{p}{n}\)</span> in <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+\]</span> is called the <strong>optimism</strong> of the model and quantifies the amount by which the in-sample average residual sum of squares (ARSS) systematically under-estimates the true mean average squared error (MASE) of <span class="math inline">\(\hat m_p.\)</span></p>
+</div>
+</div>
+<!-- $$
+\begin{align*}
+&\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))
+=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left( Y_i - \hat{m}_{p}(X_i)\right)^2\right]\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left[Y_i - \hat{m}_{p}(X_i)\right] + \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n \underbrace{Var_\varepsilon\left(Y_i\right)}_{=\sigma^2} + \frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left(\hat{m}_{p}(X_i)\right)\\[2ex] 
+&\phantom{=}-2\frac{1}{n}\sum_{i=1}^n Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right)\\[2ex] 
+&\phantom{=}+ \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2\\[2ex]
+\end{align*}
+$$
+Using that $\hat{m}_{p}(X_i)=[S_pY]_{ii}$, one can show that 
+$$
+Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right) = \sigma^2[S_p]_{ii}
+$$
+such that
+$$
+\begin{align*}
+2\frac{1}{n}\sum_{i=1}^n Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right)
+&=2\sigma^2\frac{1}{n}\operatorname{trace}(S_p)\\[2ex]
+&=2\sigma^2\frac{p}{n}.
+\end{align*}
+$$
+Thus
+$$
+\begin{align*}
+&\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))= \sigma^2 - 2\sigma^2\frac{p}{n} +\\[2ex]
+&\underbrace{\frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left(\hat{m}_{p}(X_i)\right) + \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2}_{test}  
+\end{align*}
+$$
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\Big[\big( \overbrace{m(X_i) +\varepsilon_i}^{=Y_i} - \hat{m}_{p}(X_i)\big)^2\Big]\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left(\varepsilon_i - \left( \hat{m}_{p}(X_i) - m(X_i) \right) \right)^2\right]\\[2ex] 
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left(\hat{m}_{p}(X_i) - m(X_i)\right)^2\right]\\[2ex] 
+&\phantom{=} - \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[2\varepsilon_i (\hat{m}_{p}(X_i)  - m(X_i) ) \right] \\[2ex] 
+&\phantom{=} + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\varepsilon_i^2\right]\\[2ex]
+&=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$ -->
+<p><code>R</code> code to compute an estimate of the optimal smoothing parameter</p>
+<p>First, we generate some data.</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-13_ea2bb108f5f6f93c77c6857c6fb9003e">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, compute the GCV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-14_db407f0390b839a8ef9eb1179d49abd6">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>GCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> p_vec[j] <span class="co"># number of basis functions</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>ARSS     <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(y_vec <span class="sc">-</span> m_hat_p)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>GCV_p[j] <span class="ot">&lt;-</span> ARSS<span class="sc">/</span>((<span class="dv">1</span><span class="sc">-</span>p<span class="sc">/</span>n)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> GCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Compute the nonparametric regression estimate using the GCV optimal smoothing parameter <span class="math inline">\(p=8.\)</span></p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-15_9f64135e469f873b954a491d0504bf61">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the results:</p>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-16_91eb94075a1c5faf1523481219829f92">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with GCV optimal p=8"</span>), </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-DeBoor_1978" class="csl-entry" role="doc-biblioentry">
+De Boor, Carl, and Carl De Boor. 1978. <em>A Practical Guide to Splines</em>. Vol. 27. springer.
+</div>
+<div id="ref-Eubank_1999" class="csl-entry" role="doc-biblioentry">
+Eubank, Randall L. 1999. <em>Nonparametric Regression and Spline Smoothing</em>. CRC press.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
