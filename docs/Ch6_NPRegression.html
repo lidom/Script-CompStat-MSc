@@ -599,7 +599,7 @@ b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 <span class="math display">\[
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
 \]</span> cubic B-spline basis functions. Let’s take a look at them:</p>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-7_57f86837feb26a9dc70b939b9419cc40">
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-7_863a7a3bda8205b0a12219768e27a0bd">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">3</span></span>
@@ -614,7 +614,7 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>x_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> boundary_knots[<span class="dv">1</span>], </span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">to   =</span> boundary_knots[<span class="dv">2</span>], <span class="at">len =</span> <span class="dv">100</span>)</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>B_mat_degree3 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>X_mat_degree3 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, </span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> internal_knots, </span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
@@ -623,13 +623,17 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">x =</span> x_vec, </span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> B_mat_degree3, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> X_mat_degree3, </span>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">main =</span> <span class="st">"B-Spline Basis Functions </span><span class="sc">\n</span><span class="st">Degree 3"</span>,</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch6_NPRegression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B_mat_degree3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X_mat_degree3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 100   9</code></pre>
 </div>
@@ -715,11 +719,11 @@ m(X_1)\\
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at <code>x_vec</code>:</p>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-9_93ac7178780893883f0feff401175254">
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-9_d0937431c3e11c0113a3e0df7cc82cb4">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>degree      <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># piecewise cubic splines</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>knot_seq_5  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">5</span>)<span class="co"># knots</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>B_mat_p7    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X_mat_p7    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_5[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_5))], </span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
@@ -728,7 +732,7 @@ m(X_1)\\
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>knot_seq_15  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">15</span>)<span class="co"># knots</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>B_mat_p17    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>X_mat_p17    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_15[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_15))], </span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
@@ -737,9 +741,9 @@ m(X_1)\\
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    )    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Compute the smoothing matrices <span class="math inline">\(S_p\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
-<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-10_1c3eef300e7dfb248b3cc3750c162fc4">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_p7  <span class="ot">&lt;-</span> B_mat_p7  <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(B_mat_p7)  <span class="sc">%*%</span> B_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(B_mat_p7) </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S_p17 <span class="ot">&lt;-</span> B_mat_p17 <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(B_mat_p17) <span class="sc">%*%</span> B_mat_p17) <span class="sc">%*%</span> <span class="fu">t</span>(B_mat_p17) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-10_a369429824efbd9d2250dfda15f12ea9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_p7  <span class="ot">&lt;-</span> X_mat_p7  <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p7)  <span class="sc">%*%</span> X_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p7) </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S_p17 <span class="ot">&lt;-</span> X_mat_p17 <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p17) <span class="sc">%*%</span> X_mat_p17) <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p17) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Compute the estimates <span class="math inline">\(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
 <div class="cell" data-hash="Ch6_NPRegression_cache/html/unnamed-chunk-11_d909d048ca6534c9f554dd8f17ae902c">

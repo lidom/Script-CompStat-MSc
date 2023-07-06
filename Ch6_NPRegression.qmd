@@ -406,7 +406,7 @@ all_knots      <- sort(c(rep(boundary_knots[1], ord),
 x_vec <- seq(from = boundary_knots[1], 
              to   = boundary_knots[2], len = 100)
 
-B_mat_degree3 <- splines2::bSpline(
+X_mat_degree3 <- splines2::bSpline(
         x              = x_vec, 
         knots          = internal_knots, 
         degree         = degree,
@@ -415,11 +415,14 @@ B_mat_degree3 <- splines2::bSpline(
     )
 
 matplot(x = x_vec, 
-        y = B_mat_degree3, 
+        y = X_mat_degree3, 
         type = "l", main = "B-Spline Basis Functions \nDegree 3",
-        ylab = "", xlab = "x")
-
-dim(B_mat_degree3)
+        ylab = "", xlab = "x", axes = FALSE)
+axis(1)
+axis(2)
+abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]), 
+       col = "gray")
+dim(X_mat_degree3)
 ```
 
 
@@ -534,7 +537,7 @@ Then, we generate cubic B-spline basis functions with (different) equidistant kn
 degree      <- 3 # piecewise cubic splines
 
 knot_seq_5  <- seq(from = 0, to = 1, len = 5)# knots
-B_mat_p7    <- splines2::bSpline(
+X_mat_p7    <- splines2::bSpline(
         x              = x_vec, # evaluation points
         knots          = knot_seq_5[-c(1, length(knot_seq_5))], 
         degree         = degree,
@@ -543,7 +546,7 @@ B_mat_p7    <- splines2::bSpline(
     )
 
 knot_seq_15  <- seq(from = 0, to = 1, len = 15)# knots
-B_mat_p17    <- splines2::bSpline(
+X_mat_p17    <- splines2::bSpline(
         x              = x_vec, # evaluation points
         knots          = knot_seq_15[-c(1, length(knot_seq_15))], 
         degree         = degree,
@@ -555,8 +558,8 @@ B_mat_p17    <- splines2::bSpline(
 Compute the smoothing matrices $S_p$ for $p=7$ and $p=17$:
 
 ```{r}
-S_p7  <- B_mat_p7  %*% solve(t(B_mat_p7)  %*% B_mat_p7)  %*% t(B_mat_p7) 
-S_p17 <- B_mat_p17 %*% solve(t(B_mat_p17) %*% B_mat_p17) %*% t(B_mat_p17) 
+S_p7  <- X_mat_p7  %*% solve(t(X_mat_p7)  %*% X_mat_p7)  %*% t(X_mat_p7) 
+S_p17 <- X_mat_p17 %*% solve(t(X_mat_p17) %*% X_mat_p17) %*% t(X_mat_p17) 
 ```
 
 Compute the estimates $\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)$ for $p=7$ and $p=17$:
