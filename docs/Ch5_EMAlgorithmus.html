@@ -241,7 +241,8 @@ div.csl-indent {
   <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">5.4.1</span>  Bayes Classifier</a></li>
   <li><a href="#synopsis-penguin-example" id="toc-synopsis-penguin-example" class="nav-link" data-scroll-target="#synopsis-penguin-example"><span class="toc-section-number">5.4.2</span>  Synopsis: Penguin Example</a></li>
   </ul></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">5.5</span>  Exercises</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -860,7 +861,7 @@ p_{ig}
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \]</span> From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean">Equation&nbsp;<span>5.6</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
 \begin{align*}
-&amp;\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\[2ex]
+&amp;\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\[2ex]
 &amp;\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span></p>
@@ -873,7 +874,7 @@ p_{ig}
 <li><p><span style="color:#FF5733"><strong>(Expectation)</strong> </span> Compute: <span class="math display">\[
 \begin{align*}
 \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-&amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})|X_i=x_i)\\
+&amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\
 &amp;=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span> where <span class="math display">\[
@@ -1079,18 +1080,218 @@ f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\
 </div>
 </section>
 </section>
-<section id="exercises" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">5.5</span> Exercises</h2>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
 <section id="exercise-1." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
 <ol type="a">
 <li><p>Consider <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
-\]</span> where <span class="math inline">\(X\text{Bernoulli}(p).\)</span> Write the expression of the likelihood function.</p></li>
+\]</span> where <span class="math inline">\(X\sim\text{Bernoulli}(p).\)</span> Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
 <li><p>Now let <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
-\]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_g\)</span> and prior probabilities <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expression of the likelihood function.</p></li>
+\]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_g\)</span> and prior probabilities <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
+<li><p>Let <span class="math inline">\((Z_{i1},\dots,Z_{iG})\in\{0,1\}^G\)</span> be the vector of latent group indicator random variables with <span class="math inline">\(Z_{i1}+\dots + Z_{iG}=1\)</span> and <span class="math inline">\(P(Z_{ig}=1)=\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Thus, the realization <span class="math inline">\(z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}\)</span> and <span class="math inline">\(\tilde{\ell}\)</span> that take into account the latend group indicator random variables.</p></li>
+<li><p>Write down the expression for the posterior probability <span class="math display">\[
+\mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i).
+\]</span></p></li>
+<li><p>Derive the expectation of <span class="math inline">\(\tilde\ell,\)</span> <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span>.</p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
+<li><p>Sketch the EM-Algorithm</p></li>
 </ol>
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solutions-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-1.">Solutions of Exercise 1.</h4>
+<section id="a-likelihood-function" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-likelihood-function">(a) Likelihood function</h5>
+<p>The probability mass function of <span class="math inline">\(X\sim\text{Bernoulli}(p)\)</span> is <span class="math display">\[
+f(x)=p^{x}(1-p)^{1-x},\quad\text{with}\quad x\in\{0,1\}.
+\]</span> Thus the likelihood function is <span class="math display">\[
+\begin{align*}
+\mathcal{L}(p|\mathbf{x})   &amp; = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
+\mathcal{\ell}(p|\mathbf{x}) &amp; = \sum_{i=1}^n \ln\left(p^{x_i}(1-p)^{1-x_i}\right),
+\end{align*}
+\]</span> where <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> denotes the vector of observed data points.</p>
+</section>
+<section id="b-likelihood-function-for-a-bernoulli-mixture-distribution" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-likelihood-function-for-a-bernoulli-mixture-distribution">(b) Likelihood function for a Bernoulli mixture distribution</h5>
+<p>The probability mass function of a Bernoulli mixture distribution is <span class="math display">\[
+\begin{align*}
+f_G(x)
+&amp; =\sum_{g=1}^G f_g(x)\\[2ex]
+&amp; =\sum_{g=1}^G \pi_g\; p_g^{x}(1-p_g)^{1-x}\quad\text{with}\quad x\in\{0,1\}.
+\end{align*}
+\]</span> Thus the likelihood function is <span class="math display">\[
+\begin{align*}
+\mathcal{L}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})    &amp; = \prod_{i=1}^n\left(\sum_{g=1}^G \pi_g\; p_g^{x_i}(1-p_g)^{1-x_i}\right)\\[2ex]
+\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}) &amp; = \sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\; p_g^{x_i}(1-p_g)^{1-x_i}\right)
+\end{align*}
+\]</span> where <span class="math inline">\(\mathbf{p}=(p_1,\dots,p_G)\)</span> and <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>.</p>
+</section>
+<section id="c-likelihood-function-with-group-indicator-random-variables" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-likelihood-function-with-group-indicator-random-variables">(c) Likelihood function with group indicator random variables</h5>
+<p><span class="math display">\[
+\begin{align*}
+\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})
+&amp; = \prod_{i=1}^n \prod_{g=1}^G\left(\pi_g p_g^{x_i}(1-p_g)^{1-x_i}\right)^{Z_{ig}}\\[2ex]
+\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})    
+&amp; = \sum_{i=1}^n \sum_{g=1}^G Z_{ig}\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
+\end{align*}
+\]</span></p>
+</section>
+<section id="d-posterior-probability" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d-posterior-probability">(d) Posterior probability</h5>
+<p><span class="math display">\[
+\begin{align*}
+\mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i)
+&amp;=\frac{ P(Z_{ig}=1) f(x_i|Z_{ig}=1)}{f_G(x_i)} \\[2ex]
+&amp;=\frac{ P(Z_{ig}=1) f_g(x_i)}{f_G(x_i)} \\[2ex]
+&amp;=\frac{\pi_g\; p_g^{x_i} (1-p_g)^{1-x_i}}{\sum_{g=1}^G \pi_g\; p_g^{x_i} (1-p_g)^{1-x_i}}
+\end{align*}
+\]</span></p>
+</section>
+<section id="e-expectation-of-tildeell" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e-expectation-of-tildeell">(e) Expectation of <span class="math inline">\(\tilde\ell\)</span></h5>
+<p><span class="math display">\[
+\begin{align*}
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right)\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right),
+\end{align*}
+\]</span> since <span class="math display">\[
+\begin{align*}
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right) = P(Z_{ig}=1 | X_i = x_i)
+\end{align*}
+\]</span></p>
+</section>
+<section id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-p_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-p_g">(f) Maximizing <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span></h5>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+&amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
+&amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\right)\\[2ex]
+%&amp; = \sum_{i=1}^n \mathfrak{p}_{ig} \frac{\partial}{\partial p_g} \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\\[2ex]
+&amp; = \sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i}{p_g} - \frac{(1-x_i)}{(1-p_g)}\right)\\[2ex]
+\end{align*}
+\]</span> First order condition <span class="math display">\[
+\begin{align*}
+\sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i}{p_g} - \frac{(1-x_i)}{(1-p_g)}\right)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i(1-p_g)}{p_g(1-p_g)} - \frac{(1-x_i)p_g}{p_g(1-p_g)}\right)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig} \left(x_i(1-p_g) - (1-x_i)p_g\right)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig} \left(x_i - p_g \right)&amp;=0\\[2ex]
+p_g\sum_{i=1}^n \mathfrak{p}_{ig} &amp;= \sum_{i=1}^n \mathfrak{p}_{ig}x_i \\[2ex]
+p_g &amp; = \frac{\left(\sum_{i=1}^n \mathfrak{p}_{ig}x_i \right)}{\sum_{i=1}^n \mathfrak{p}_{ig}}
+\end{align*}
+\]</span></p>
+</section>
+<section id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-pi_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-pi_g">(g) Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span></h5>
+<p><span class="math display">\[
+\begin{align*}
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
+\end{align*}
+\]</span></p>
+<p>We only need to focus on the <span class="math inline">\(\pi_g\)</span> terms since the other terms are no functions of <span class="math inline">\(\pi_g\)</span>. However, we need to do maximization under the side constraint that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span> So, we use Lagrange multipliers.</p>
+<p><span class="math display">\[
+\begin{align*}
+L(\boldsymbol{\pi},\lambda)=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln(\pi_g) - \lambda \left(\sum_{g=1}^G\pi_g-1\right)
+\end{align*}
+\]</span> First order condition with respect to <span class="math inline">\(\pi_g\)</span>: <span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial \pi_g} L(\boldsymbol{\pi},\lambda)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig}\frac{1}{\pi_g}  - \lambda  &amp;=0 \\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig}   &amp;=\lambda \pi_g\\[2ex]
+\pi_g &amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}  \\[2ex]
+\end{align*}
+\]</span> Plugging <span class="math inline">\(\pi_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\)</span> into <span class="math inline">\(L(\boldsymbol{\pi},\lambda)\)</span>: <span class="math display">\[
+\begin{align*}
+L(\lambda)&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}-1\right) \\[2ex]
+&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-1\right) \\[2ex]
+\end{align*}
+\]</span> First order condition with respect to <span class="math inline">\(\lambda\)</span>: <span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial \lambda} L(\lambda)&amp;=0\\[2ex]
+\frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} &amp; = 0\\[2ex]
+\lambda &amp;= \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \\[2ex]
+\end{align*}
+\]</span> So, we have that <span class="math display">\[
+\begin{align*}
+\pi_g &amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig}}  \\[2ex]
+\end{align*}
+\]</span></p>
+</section>
+<section id="h-sketch-of-the-em-algorithm" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="h-sketch-of-the-em-algorithm">(h) Sketch of the EM-Algorithm</h5>
+<ol type="1">
+<li><p>Initial guesses for <span class="math inline">\(p_g^{(0)}\)</span> and <span class="math inline">\(\pi_g^{(0)}\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>.</p></li>
+<li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
+<ul>
+<li>Expectation-Step: <span class="math display">\[
+\begin{align*}
+\mathfrak{p}_{ig}^{(r-1)}
+&amp;=\frac{\pi_g^{(r-1)}\; \left(p_g^{(r-1)}\right)^{x_i} \left(1-p_g^{(r-1)}\right)^{1-x_i}}{\sum_{g=1}^G \pi_g^{(r-1)}\; \left(p_g^{(r-1)}\right)^{x_i} \left(1-p_g^{(r-1)}\right)^{1-x_i}}
+\end{align*}
+\]</span></li>
+<li>Maximization-Step: <span class="math display">\[
+\begin{align*}
+p_g^{(r)} &amp; = \frac{\left(\sum_{i=1}^n \mathfrak{p}_{ig}^{(r-1)}x_i \right)}{\sum_{i=1}^n \mathfrak{p}_{ig}^{(r-1)}}
+\end{align*}
+\]</span> <span class="math display">\[
+\begin{align*}
+\pi_g^{(r)} &amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}^{(r-1)}}{\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig}^{(r-1)}}  \\[2ex]
+\end{align*}
+\]</span></li>
+</ul></li>
+<li><p>Check convergence (no relevant change of the maximized log-likelihood function).</p></li>
+</ol>
+<!-- 
+
+#### Exercise 2. {-} 
+
+
+The famouse minst data set.
+
+
+
+::: {.cell hash='Ch5_EMAlgorithmus_cache/html/unnamed-chunk-8_a44525f20f833c0550b03ab8ba9d74e6'}
+
+```{.r .cell-code}
+suppressMessages(library("tidyverse"))
+suppressMessages(
+mnist_raw <- read_csv("https://pjreddie.com/media/files/mnist_train.csv", col_names = FALSE)
+)
+
+pixels_gathered <- mnist_raw %>%  
+head(10000)        %>%  # only the first 10000 cases (one case = one handwritten figure picture (28x28 pixels))
+rename(label = X1) %>%  # "label = 5" means a handwritten 5 
+mutate(instance = row_number()) %>%  
+gather(pixel, value, -label, -instance) %>%  
+tidyr::extract(pixel, "pixel", "(\\d+)", convert = TRUE) %>%  
+mutate(pixel = pixel - 2,         
+       x     = pixel %% 28,         
+       y     = 28 - pixel %/% 28)
+
+
+theme_set(theme_light())
+
+pixels_gathered %>%  
+filter(instance <= 12) %>%  
+ggplot(aes(x, y, fill = value)) +  geom_tile() +  facet_wrap(~ instance + label)
+```
+
+::: {.cell-output-display}
+![](Ch5_EMAlgorithmus_files/figure-html/unnamed-chunk-8-1.png){width=672}
+:::
+:::
+
+ -->
+</section>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
