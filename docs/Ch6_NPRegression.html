@@ -951,7 +951,7 @@ o_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
 \]</span> where <span class="math inline">\(m=(m(X_1),\dots, m(X_n))^\top\)</span> and <span class="math inline">\(\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)^\top\)</span>.</p>
 <p>Note that <span class="math display">\[
 \beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
-\]</span> is a lest squares solution; namely of the following least squares problem that tries to approximate the unknown <span class="math inline">\(m\)</span> using a spline function <span class="math inline">\(s\)</span>: <span class="math display">\[
+\]</span> is a least squares solution; namely of the following least squares problem that tries to approximate the unknown <span class="math inline">\(m\)</span> using a spline function <span class="math inline">\(s\)</span>: <span class="math display">\[
 \begin{align*}
 \sum_i (m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i))^2
 &amp;=\min_{\vartheta_1,\dots,\vartheta_p}\sum_i (m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i))^2\\
@@ -978,7 +978,7 @@ Important
 \operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \neq 0.
 \]</span> We rather hope that <span class="math display">\[
 \operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \to 0
-\]</span> as the number of knots <span class="math inline">\(p\to\infty.\)</span></p>
+\]</span> as <span class="math inline">\(n\to\infty\)</span> and <span class="math inline">\(p\to\infty.\)</span></p>
 </div>
 </div>
 <p>By the general approximation properties of cubic splines (<span class="math inline">\(k=3\)</span>) with <span class="math inline">\(q=p-2\)</span> equidistant knots, we will thus expect that (<span class="citation" data-cites="DeBoor_1978">De Boor and De Boor (<a href="#ref-DeBoor_1978" role="doc-biblioref">1978</a>)</span> or <span class="citation" data-cites="Eubank_1999">Eubank (<a href="#ref-Eubank_1999" role="doc-biblioref">1999</a>)</span>):</p>
@@ -1001,8 +1001,9 @@ Important
 \frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
 &amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
-&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)=\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
 &amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\right)\\[2ex]
 &amp;=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
 &amp;=\frac{1}{n} \sigma^2 \text{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbf{X}\right)\\[2ex]
 &amp;=\frac{1}{n} \sigma^2 \text{trace}\left(I_n\right)\\[2ex]
@@ -1047,7 +1048,7 @@ Trace-Trick
 <p><span class="math display">\[
 \operatorname{MASE}(\hat m_{p}) = (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p) \to 0
 \]</span> as <span class="math inline">\(n\to 0.\)</span></p>
-<p>An <strong>optimal smoothing parameter</strong> <span class="math inline">\(p,\)</span> balancing bias and variance, will be of order <span class="math display">\[
+<p>An <strong>optimal smoothing parameter</strong> <span class="math inline">\(p_{opt}\)</span> that minimizes <span class="math inline">\(\operatorname{MASE}(\hat m_{p})\)</span> will balance the squared bias and variance <span class="math display">\[
 \begin{align}
 p_{opt}^{-4} &amp; \sim \frac{p_{opt}}{n}\\[2ex]
 %p_{opt}^{-5} &amp; \sim \frac{1}{n}\\[2ex]

@@ -778,7 +778,7 @@ Note that
 $$
 \beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
 $$ 
-is a lest squares solution; namely of the following least squares problem that tries to approximate the unknown $m$ using a spline function $s$:
+is a least squares solution; namely of the following least squares problem that tries to approximate the unknown $m$ using a spline function $s$:
 $$
 \begin{align*}
 \sum_i (m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i))^2 
@@ -806,7 +806,7 @@ We rather hope that
 $$
 \operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \to 0
 $$
-as the number of knots $p\to\infty.$ 
+as $n\to\infty$ and $p\to\infty.$ 
 :::
 
 By the general approximation properties of cubic splines ($k=3$) with $q=p-2$ equidistant knots, we will thus expect that (@DeBoor_1978 or @Eubank_1999):
@@ -836,8 +836,9 @@ $$
 \frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
 &=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
-&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)=\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\right)\\[2ex]
 &=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
 &=\frac{1}{n} \sigma^2 \text{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbf{X}\right)\\[2ex]
 &=\frac{1}{n} \sigma^2 \text{trace}\left(I_n\right)\\[2ex]
@@ -883,7 +884,7 @@ $$
 $$
 as $n\to 0.$
 
-An **optimal smoothing parameter** $p,$ balancing bias and variance, will be of order 
+An **optimal smoothing parameter** $p_{opt}$ that minimizes $\operatorname{MASE}(\hat m_{p})$ will balance the squared bias and variance 
 $$
 \begin{align}
 p_{opt}^{-4} & \sim \frac{p_{opt}}{n}\\[2ex]
