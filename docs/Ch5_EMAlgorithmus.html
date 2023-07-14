@@ -857,11 +857,11 @@ p_{ig}
 \mathbf{z}=(z_{11},\dots,z_{nG}),
 \]</span> but we know the distribution of the random variables <span class="math display">\[
 \mathbf{Z}=(Z_{11},\dots,Z_{nG}).
-\]</span> This leads to a <strong>stochastic version</strong> of the log-likelihood function: <span class="math display">\[
+\]</span> This leads to a <strong>stochastic version</strong> (in <span class="math inline">\(\mathbf{Z}\)</span>) of the log-likelihood function: <span class="math display">\[
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \]</span> From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean">Equation&nbsp;<span>5.6</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
 \begin{align*}
-&amp;\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\[2ex]
+&amp;\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\[2ex]
 &amp;\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span></p>
@@ -874,7 +874,7 @@ p_{ig}
 <li><p><span style="color:#FF5733"><strong>(Expectation)</strong> </span> Compute: <span class="math display">\[
 \begin{align*}
 \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-&amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\
+&amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\
 &amp;=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span> where <span class="math display">\[
@@ -1091,13 +1091,13 @@ X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
 <li><p>Now let <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
 \]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_g\)</span> and prior probabilities <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
-<li><p>Let <span class="math inline">\((Z_{i1},\dots,Z_{iG})\in\{0,1\}^G\)</span> be the vector of latent group indicator random variables with <span class="math inline">\(Z_{i1}+\dots + Z_{iG}=1\)</span> and <span class="math inline">\(P(Z_{ig}=1)=\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Thus, the realization <span class="math inline">\(z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}\)</span> and <span class="math inline">\(\tilde{\ell}\)</span> that take into account the latend group indicator random variables.</p></li>
+<li><p>Let <span class="math inline">\((Z_{i1},\dots,Z_{iG})\in\{0,1\}^G\)</span> be the vector of latent group indicator random variables with <span class="math inline">\(Z_{i1}+\dots + Z_{iG}=1\)</span> and <span class="math inline">\(P(Z_{ig}=1)=\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Thus, the realization <span class="math inline">\(z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\)</span> that take into account the latend group indicator random variables.</p></li>
 <li><p>Write down the expression for the posterior probability <span class="math display">\[
 \mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i).
 \]</span></p></li>
-<li><p>Derive the expectation of <span class="math inline">\(\tilde\ell,\)</span> <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span>.</p></li>
-<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
-<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
+<li><p>Derive the expectation of <span class="math inline">\(\tilde\ell,\)</span> <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span>.</p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
 <li><p>Sketch the EM-Algorithm</p></li>
 </ol>
 </section>
@@ -1112,7 +1112,7 @@ X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
 f(x)=p^{x}(1-p)^{1-x},\quad\text{with}\quad x\in\{0,1\}.
 \]</span> Thus the likelihood function is <span class="math display">\[
 \begin{align*}
-\mathcal{L}(p|\mathbf{x})   &amp; = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
+\mathcal{L}(p|\mathbf{x})    &amp; = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
 \mathcal{\ell}(p|\mathbf{x}) &amp; = \sum_{i=1}^n \ln\left(p^{x_i}(1-p)^{1-x_i}\right),
 \end{align*}
 \]</span> where <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> denotes the vector of observed data points.</p>
@@ -1212,12 +1212,12 @@ L(\boldsymbol{\pi},\lambda)=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln(\pi_
 \]</span> Plugging <span class="math inline">\(\pi_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\)</span> into <span class="math inline">\(L(\boldsymbol{\pi},\lambda)\)</span>: <span class="math display">\[
 \begin{align*}
 L(\lambda)&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}-1\right) \\[2ex]
-&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-1\right) \\[2ex]
+&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-\lambda \right) \\[2ex]
 \end{align*}
 \]</span> First order condition with respect to <span class="math inline">\(\lambda\)</span>: <span class="math display">\[
 \begin{align*}
 \frac{\partial}{\partial \lambda} L(\lambda)&amp;=0\\[2ex]
-\frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} &amp; = 0\\[2ex]
+- \frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} +1 &amp; = 0\\[2ex]
 \lambda &amp;= \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \\[2ex]
 \end{align*}
 \]</span> So, we have that <span class="math display">\[

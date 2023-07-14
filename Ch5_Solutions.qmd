@@ -11,7 +11,7 @@ $$
 Thus the likelihood function is
 $$
 \begin{align*}
-\mathcal{L}(p|\mathbf{x})   & = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
+\mathcal{L}(p|\mathbf{x})    & = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
 \mathcal{\ell}(p|\mathbf{x}) & = \sum_{i=1}^n \ln\left(p^{x_i}(1-p)^{1-x_i}\right),
 \end{align*}
 $$
@@ -40,9 +40,9 @@ where $\mathbf{p}=(p_1,\dots,p_G)$ and $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$.
 
 $$
 \begin{align*}
-\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}) 
+\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z}) 
 & = \prod_{i=1}^n \prod_{g=1}^G\left(\pi_g p_g^{x_i}(1-p_g)^{1-x_i}\right)^{Z_{ig}}\\[2ex]
-\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})    
+\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})    
 & = \sum_{i=1}^n \sum_{g=1}^G Z_{ig}\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
 \end{align*}
 $$
@@ -65,7 +65,7 @@ $$
 
 $$
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right) 
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right) 
 & = \sum_{i=1}^n \sum_{g=1}^G \mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right)\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
 & = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right),
 \end{align*}
@@ -73,16 +73,18 @@ $$
 since 
 $$
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right) = P(Z_{ig}=1 | X_i = x_i) 
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right) 
+= P(Z_{ig}=1 | X_i = x_i) 
+= \mathfrak{p}_{ig} 
 \end{align*}
 $$
 
 
-##### (f) Maximizing $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)$ with respect to $p_g$ {-}
+##### (f) Maximizing $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)$ with respect to $p_g$ {-}
 
 $$
 \begin{align*}
-\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right) 
+\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right) 
 & = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
 & = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\right)\\[2ex]
 %& = \sum_{i=1}^n \mathfrak{p}_{ig} \frac{\partial}{\partial p_g} \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\\[2ex]
@@ -102,12 +104,12 @@ p_g & = \frac{\left(\sum_{i=1}^n \mathfrak{p}_{ig}x_i \right)}{\sum_{i=1}^n \mat
 $$
 
 
-##### (g) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)$ with respect to $\pi_g$ {-}
+##### (g) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)$ with respect to $\pi_g$ {-}
 
 
 $$
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right) 
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right) 
 & = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
 \end{align*}
 $$
@@ -133,14 +135,14 @@ Plugging $\pi_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}$ into $L(\bolds
 $$
 \begin{align*}
 L(\lambda)&=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}-1\right) \\[2ex]
-&=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-1\right) \\[2ex]
+&=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-\lambda \right) \\[2ex]
 \end{align*}
 $$
 First order condition with respect to $\lambda$:
 $$
 \begin{align*}
 \frac{\partial}{\partial \lambda} L(\lambda)&=0\\[2ex]
-\frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} & = 0\\[2ex]
+- \frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} +1 & = 0\\[2ex]
 \lambda &= \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \\[2ex]
 \end{align*}
 $$

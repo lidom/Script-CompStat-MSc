@@ -673,14 +673,14 @@ but we know the distribution of the random variables
 $$
 \mathbf{Z}=(Z_{11},\dots,Z_{nG}).
 $$ 
-This leads to a **stochastic version** of the log-likelihood function:
+This leads to a **stochastic version** (in $\mathbf{Z}$) of the log-likelihood function:
 $$
 \tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 $$
 From this, we can calculate the conditional expected value (using @eq-posteriorMean), which motivates the "Expectation"-Step in the EM-algorithm:
 $$
 \begin{align*}
-&\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\[2ex]
+&\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\[2ex]
 &\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 $$
@@ -700,7 +700,7 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
     $$
     \begin{align*}
     \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z}))\\
+    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\
     &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
     \end{align*}
     $$
@@ -1067,7 +1067,7 @@ $$
 where $X$ is a Bernoulli mixture random variable with parameters $p_g$ and prior probabilities $\pi_g$, $g=1,\dots,G$. Write the expressions of the (log) likelihood functions $\mathcal{L}$ and $\ell$.  
 
 
-(c) Let $(Z_{i1},\dots,Z_{iG})\in\{0,1\}^G$ be the vector of latent group indicator random variables with $Z_{i1}+\dots + Z_{iG}=1$ and $P(Z_{ig}=1)=\pi_g$, $g=1,\dots,G$. Thus, the realization $z_i=(0,1,0,\dots,0)$ means that the $i$th observation comes from the $2$nd Bernoulli distribution $\text{Bernoulli}(p_2)$. Write the expressions of the (log) likelihood functions $\tilde{\mathcal{L}}$ and $\tilde{\ell}$ that take into account the latend group indicator random variables.  
+(c) Let $(Z_{i1},\dots,Z_{iG})\in\{0,1\}^G$ be the vector of latent group indicator random variables with $Z_{i1}+\dots + Z_{iG}=1$ and $P(Z_{ig}=1)=\pi_g$, $g=1,\dots,G$. Thus, the realization $z_i=(0,1,0,\dots,0)$ means that the $i$th observation comes from the $2$nd Bernoulli distribution $\text{Bernoulli}(p_2)$. Write the expressions of the (log) likelihood functions $\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})$ and $\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})$ that take into account the latend group indicator random variables.  
 
 
 (d) Write down the expression for the posterior probability 
@@ -1076,11 +1076,11 @@ $$
 $$
 
 
-(e) Derive the expectation of $\tilde\ell,$ $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)$.
+(e) Derive the expectation of $\tilde\ell,$ $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)$.
 
-(f) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)$ with respect to $p_g$ for $g=1,\dots,G.$
+(f) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)$ with respect to $p_g$ for $g=1,\dots,G.$
 
-(g) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)$ with respect to $\pi_g$ for $g=1,\dots,G$ such that $\sum_{g=1}^G\pi_g=1.$
+(g) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)$ with respect to $\pi_g$ for $g=1,\dots,G$ such that $\sum_{g=1}^G\pi_g=1.$
 
 (h) Sketch the EM-Algorithm
 

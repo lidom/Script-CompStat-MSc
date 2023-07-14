@@ -56,7 +56,7 @@ ul.task-list li input[type="checkbox"] {
 f(x)=p^{x}(1-p)^{1-x},\quad\text{with}\quad x\in\{0,1\}.
 \]</span> Thus the likelihood function is <span class="math display">\[
 \begin{align*}
-\mathcal{L}(p|\mathbf{x})   &amp; = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
+\mathcal{L}(p|\mathbf{x})    &amp; = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
 \mathcal{\ell}(p|\mathbf{x}) &amp; = \sum_{i=1}^n \ln\left(p^{x_i}(1-p)^{1-x_i}\right),
 \end{align*}
 \]</span> where <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> denotes the vector of observed data points.</p>
@@ -80,9 +80,9 @@ f_G(x)
 <h5 class="unnumbered anchored" data-anchor-id="c-likelihood-function-with-group-indicator-random-variables">(c) Likelihood function with group indicator random variables</h5>
 <p><span class="math display">\[
 \begin{align*}
-\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})
+\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})
 &amp; = \prod_{i=1}^n \prod_{g=1}^G\left(\pi_g p_g^{x_i}(1-p_g)^{1-x_i}\right)^{Z_{ig}}\\[2ex]
-\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})    
+\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})    
 &amp; = \sum_{i=1}^n \sum_{g=1}^G Z_{ig}\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
 \end{align*}
 \]</span></p>
@@ -102,21 +102,23 @@ f_G(x)
 <h5 class="unnumbered anchored" data-anchor-id="e-expectation-of-tildeell">(e) Expectation of <span class="math inline">\(\tilde\ell\)</span></h5>
 <p><span class="math display">\[
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)
 &amp; = \sum_{i=1}^n \sum_{g=1}^G \mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right)\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
 &amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right),
 \end{align*}
 \]</span> since <span class="math display">\[
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right) = P(Z_{ig}=1 | X_i = x_i)
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\right)
+= P(Z_{ig}=1 | X_i = x_i)
+= \mathfrak{p}_{ig}
 \end{align*}
 \]</span></p>
 </section>
-<section id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-p_g" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-p_g">(f) Maximizing <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span></h5>
+<section id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfx-mathbfzright-with-respect-to-p_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-maximizing-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfx-mathbfzright-with-respect-to-p_g">(f) Maximizing <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span></h5>
 <p><span class="math display">\[
 \begin{align*}
-\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)
 &amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
 &amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\right)\\[2ex]
 %&amp; = \sum_{i=1}^n \mathfrak{p}_{ig} \frac{\partial}{\partial p_g} \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\\[2ex]
@@ -133,11 +135,11 @@ p_g &amp; = \frac{\left(\sum_{i=1}^n \mathfrak{p}_{ig}x_i \right)}{\sum_{i=1}^n 
 \end{align*}
 \]</span></p>
 </section>
-<section id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-pi_g" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfxright-with-respect-to-pi_g">(g) Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span></h5>
+<section id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfx-mathbfzright-with-respect-to-pi_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g-maximize-mathbbe_mathbfpboldsymbolpileftellmathbfpboldsymbolpimathbfx-mathbfzright-with-respect-to-pi_g">(g) Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span></h5>
 <p><span class="math display">\[
 \begin{align*}
-\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x})\right)
+\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\right)
 &amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
 \end{align*}
 \]</span></p>
@@ -156,12 +158,12 @@ L(\boldsymbol{\pi},\lambda)=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln(\pi_
 \]</span> Plugging <span class="math inline">\(\pi_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\)</span> into <span class="math inline">\(L(\boldsymbol{\pi},\lambda)\)</span>: <span class="math display">\[
 \begin{align*}
 L(\lambda)&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}-1\right) \\[2ex]
-&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-1\right) \\[2ex]
+&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-\lambda \right) \\[2ex]
 \end{align*}
 \]</span> First order condition with respect to <span class="math inline">\(\lambda\)</span>: <span class="math display">\[
 \begin{align*}
 \frac{\partial}{\partial \lambda} L(\lambda)&amp;=0\\[2ex]
-\frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} &amp; = 0\\[2ex]
+- \frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} +1 &amp; = 0\\[2ex]
 \lambda &amp;= \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \\[2ex]
 \end{align*}
 \]</span> So, we have that <span class="math display">\[
