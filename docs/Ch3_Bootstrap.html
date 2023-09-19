@@ -1217,59 +1217,67 @@ Good news: Bootstrap-<span class="math inline">\(t\)</span> consistency follows 
 </section>
 <section id="bootstrap-t-confidence-interval" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="bootstrap-t-confidence-interval"><span class="header-section-number">3.4.1</span> Bootstrap-t Confidence Interval</h3>
-<p>Let <span class="math inline">\({\cal S}_n:=\{X_1,\dots,X_n\}\)</span> be an i.i.d. random sample from <span class="math inline">\(X\sim F\)</span> with unknown parameter (vector) <span class="math inline">\(\theta.\)</span> Assume that the bootstrap is consistent and that the estimator <span class="math inline">\(\hat{\theta}\)</span> of <span class="math inline">\(\theta\)</span> is asymptotically normal. Furthermore, suppose that a <strong>consistent</strong> estimator <span class="math display">\[
-\hat v\equiv \hat v(X_1,\dots,X_n)
-\]</span> of the asymptotic standard error, <span class="math inline">\(v,\)</span> of <span class="math inline">\(\hat{\theta}\)</span> is available.</p>
+<p>Let <span class="math inline">\({\cal S}_n:=\{X_1,\dots,X_n\}\)</span> be an i.i.d. random sample from <span class="math inline">\(X\sim F\)</span> with unknown parameter (vector) <span class="math inline">\(\theta.\)</span></p>
+<p>Assume that the bootstrap is consistent and that the estimator <span class="math inline">\(\hat{\theta}\)</span> of <span class="math inline">\(\theta\)</span> is asymptotically normal.</p>
+<p>Furthermore, suppose that a <strong>consistent</strong> estimator <span class="math display">\[
+\hat\sigma^2\equiv \hat\sigma^2(X_1,\dots,X_n)
+\]</span> of the variance of the estimator <span class="math inline">\(\hat{\theta}\)</span> is available. (A typicall connection between <span class="math inline">\(\hat\sigma^2\)</span> and <span class="math inline">\(\hat{v}^2\)</span> is <span class="math inline">\(\hat\sigma^2=\hat{v}^2/n\)</span>.)</p>
+<p>Thus, <span class="math inline">\(\hat\sigma\)</span> denotes the estimator of the standard error of <span class="math inline">\(\hat{\theta}\)</span>.</p>
 <p><strong>Derivation of the bootstrap-<span class="math inline">\(t\)</span> confidence interval:</strong></p>
 <ul>
 <li><p>Based on an i.i.d. re-sample <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\},\)</span> calculate the bootstrap estimates <span class="math display">\[
 \hat{\theta}^*\equiv \hat{\theta}^*(X_1^*,\dots,X_n^*)
 \]</span> and <span class="math display">\[
-v^*\equiv v^*(X_1^*,\dots,X_n^*)
+\hat\sigma^*\equiv \hat\sigma^*(X_1^*,\dots,X_n^*)
 \]</span> and the bootstrap statistic <span class="math display">\[
 \begin{align*}
 T^*&amp;=T^*(X_1^*,\dots,X_n^*)\\
-&amp;=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.
+&amp;=\frac{\hat{\theta}^*-\hat{\theta}}{\hat\sigma^*}.
 \end{align*}
 \]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) many bootstrap statistics <span class="math display">\[
 T_1^*,T_2^*, \dots, T_m^*
-\]</span> which allow us to approximate the bootstrap distribution of <span class="math inline">\(T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*},\)</span> conditionally on <span class="math inline">\(\mathcal{S}_n,\)</span> arbitrarily precise as <span class="math inline">\(m\to\infty.\)</span></p></li>
+\]</span> which allow us to approximate the bootstrap distribution of <span class="math inline">\(T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*},\)</span> conditionally on <span class="math inline">\(\mathcal{S}_n,\)</span> arbitrarily precise as <span class="math inline">\(m\to\infty.\)</span></p></li>
 <li><p>Approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat \tau_\frac{\alpha}{2}\)</span> and <span class="math inline">\(\hat \tau_{1-\frac{\alpha}{2}}\)</span> of the bootstrap distribution of <span class="math display">\[
-\left.\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}\right|\mathcal{S}_n
+\left.\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}\right|\mathcal{S}_n
 \]</span> using the empirical quantiles based on <span class="math inline">\(T_1^*,T_2^*, \dots, T_m^*\)</span> (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.1</span></a>).</p></li>
 </ul>
 <p>This implies, for large <span class="math inline">\(m,\)</span> <span class="math display">\[
 \begin{align*}
-&amp;P^*\left(\hat \tau_\frac{\alpha}{2}\leq {\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
+&amp;P^*\left(\hat \tau_\frac{\alpha}{2}\leq {\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha
 \end{align*}
 \]</span> Due to the assumed consistency of the bootstrap, we have that for large <span class="math inline">\(n\)</span> that <span class="math display">\[
-\left.{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}}\right|\mathcal{S}_n\overset{d}{\approx}
-{\color{blue}\frac{\hat{\theta}-\theta}{\hat v}}.
+\left.{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}}\right|\mathcal{S}_n\overset{d}{\approx}
+{\color{blue}\frac{\hat{\theta}-\theta}{\hat \sigma}}.
 \]</span> Therefore, for lage <span class="math inline">\(n,\)</span> <span class="math display">\[
 \begin{align*}
-&amp; P\left(\hat \tau_\frac{\alpha}{2}\leq {\color{blue}\frac{\hat{\theta}-\theta}{\hat v}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
+&amp; P\left(\hat \tau_\frac{\alpha}{2}\leq {\color{blue}\frac{\hat{\theta}-\theta}{\hat \sigma}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\
-\Rightarrow &amp; P\left(-\hat v \hat \tau_{1-\frac{\alpha}{2}}\leq \theta-\hat{\theta} \leq -\hat v\hat\tau_\frac{\alpha}{2}\right)
+\Rightarrow &amp; P\left(-\hat \sigma \hat \tau_{1-\frac{\alpha}{2}}\leq \theta-\hat{\theta} \leq -\hat \sigma\hat\tau_\frac{\alpha}{2}\right)
 \approx 1-\alpha\\
-\Rightarrow &amp; P\left(\hat{\theta}-\hat v \hat \tau_{1-\frac{\alpha}{2}}\leq \theta \leq \hat{\theta} -\hat v\hat\tau_\frac{\alpha}{2}\right)
+\Rightarrow &amp; P\left(\hat{\theta}-\hat \sigma \hat \tau_{1-\frac{\alpha}{2}}\leq \theta \leq \hat{\theta} -\hat \sigma\hat\tau_\frac{\alpha}{2}\right)
 \approx 1-\alpha
 \end{align*}
 \]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) bootstrap-<span class="math inline">\(t\)</span> confidence interval is given by <span id="eq-Boot_tCI"><span class="math display">\[
-\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat v,\;
-      \hat{\theta}-\hat \tau_{  \frac{\alpha}{2}}\hat v\right]
+\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat \sigma,\;
+      \hat{\theta}-\hat \tau_{  \frac{\alpha}{2}}\hat \sigma\right]
 \tag{3.3}\]</span></span></p>
+<p>Note that the above confidence interval get tight (with of the borders goes to zero) as <span class="math inline">\(n\to\infty\)</span> since <span class="math inline">\(\hat{\sigma}\)</span> converges to zero proportionally to <span class="math inline">\(1/\sqrt{n}\)</span>.</p>
 <section id="example-bootstrap-t-confidence-interval-for-the-mean" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="example-bootstrap-t-confidence-interval-for-the-mean">Example: Bootstrap-<span class="math inline">\(t\)</span> Confidence Interval for the Mean</h4>
+<p>Here <span class="math inline">\(\hat\theta = \bar{X}\)</span> and the estimator of the variance of <span class="math inline">\(\bar{X}\)</span> is <span class="math inline">\(\hat\sigma^2=s^2/n\)</span>, where <span class="math inline">\(s^2\)</span> denotes the sample variance <span class="math display">\[
+s^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2.
+\]</span></p>
 <p><strong>Algorithm:</strong></p>
 <ul>
 <li>Draw i.i.d. random samples <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> from <span class="math inline">\({\cal S}_n\)</span> and calculate <span class="math inline">\(\bar X^*\)</span> as well as <span class="math inline">\(s^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2}\)</span> to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) bootstrap realizations <span class="math display">\[
-\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}
+\frac{\bar X^*_1-\bar X}{s^*_1/\sqrt{n}},\dots,\frac{\bar X^*_m-\bar X}{s^*_m/\sqrt{n}}
 \]</span></li>
-<li>Determine <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat \tau_\frac{\alpha}{2}\)</span> and <span class="math inline">\(\hat \tau_{1-\frac{\alpha}{2}}\)</span> from <span class="math inline">\(\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}\)</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.1</span></a>.</li>
+<li>Determine <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat \tau_\frac{\alpha}{2}\)</span> and <span class="math inline">\(\hat \tau_{1-\frac{\alpha}{2}}\)</span> from <span class="math display">\[
+\frac{\bar X^*_1-\bar X}{s^*_1/\sqrt{n}},\dots,\frac{\bar X^*_m-\bar X}{s^*_m/\sqrt{n}}\]</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.1</span></a>.</li>
 <li>This yields the <span class="math inline">\(1-\alpha\)</span> confidence interval (using <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.3</span></a>): <span class="math display">\[
-\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}s,
-    \bar X-\hat \tau_{\frac{\alpha}{2}}s\right],
+\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}},
+    \bar X-\hat \tau_{\frac{\alpha}{2}}  \frac{s}{\sqrt{n}}\right],
 \]</span> where <span class="math inline">\(s\)</span> is computed from the original sample, i.e., <span class="math display">\[
 s=\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2}.
 \]</span></li>

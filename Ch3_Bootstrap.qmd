@@ -1061,11 +1061,18 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 
 ### Bootstrap-t Confidence Interval 
 
-Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter (vector) $\theta.$ Assume that the bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. Furthermore, suppose that a **consistent** estimator 
+Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter (vector) $\theta.$ 
+
+Assume that the bootstrap is consistent and that the estimator $\hat{\theta}$ of $\theta$ is asymptotically normal. 
+
+Furthermore, suppose that a **consistent** estimator 
 $$
-\hat v\equiv \hat v(X_1,\dots,X_n)
+\hat\sigma^2\equiv \hat\sigma^2(X_1,\dots,X_n)
 $$ 
-of the asymptotic standard error,  $v,$ of $\hat{\theta}$ is available.
+of the variance of the estimator $\hat{\theta}$ is available. (A typicall connection between $\hat\sigma^2$ and $\hat{v}^2$ is $\hat\sigma^2=\hat{v}^2/n$.) 
+
+
+Thus, $\hat\sigma$ denotes the estimator of the standard error of $\hat{\theta}$.
 
 
 **Derivation of the bootstrap-$t$ confidence interval:**
@@ -1076,13 +1083,13 @@ $$
 $$ 
 and
 $$
-v^*\equiv v^*(X_1^*,\dots,X_n^*)
+\hat\sigma^*\equiv \hat\sigma^*(X_1^*,\dots,X_n^*)
 $$ 
 and the bootstrap statistic 
 $$
 \begin{align*}
 T^*&=T^*(X_1^*,\dots,X_n^*)\\
-   &=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}.
+   &=\frac{\hat{\theta}^*-\hat{\theta}}{\hat\sigma^*}.
 \end{align*}
 $$ 
 Repeating this yields $m$ (e.g. $m=100,000$) many bootstrap statistics 
@@ -1090,59 +1097,67 @@ $$
 T_1^*,T_2^*, \dots, T_m^*
 $$
 which allow us to approximate the bootstrap distribution 
-of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*},$ conditionally on $\mathcal{S}_n,$ arbitrarily precise as $m\to\infty.$ 
+of $T^*=\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*},$ conditionally on $\mathcal{S}_n,$ arbitrarily precise as $m\to\infty.$ 
 
 * Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ of the bootstrap distribution of 
 $$
-\left.\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}\right|\mathcal{S}_n
+\left.\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}\right|\mathcal{S}_n
 $$ 
 using the empirical quantiles based on $T_1^*,T_2^*, \dots, T_m^*$ (see @eq-empiricalQuantile).
 
 This implies, for large $m,$
 $$
 \begin{align*}
-&P^*\left(\hat \tau_\frac{\alpha}{2}\leq {\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
+&P^*\left(\hat \tau_\frac{\alpha}{2}\leq {\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha
 \end{align*}
 $$
 Due to the assumed consistency of the bootstrap, we have that for large $n$ that 
 $$
-\left.{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v^*}}\right|\mathcal{S}_n\overset{d}{\approx}
-{\color{blue}\frac{\hat{\theta}-\theta}{\hat v}}.
+\left.{\color{red}\frac{\hat{\theta}^*-\hat{\theta}}{\hat \sigma^*}}\right|\mathcal{S}_n\overset{d}{\approx}
+{\color{blue}\frac{\hat{\theta}-\theta}{\hat \sigma}}.
 $$
 Therefore, for lage $n,$ 
 $$
 \begin{align*}
-& P\left(\hat \tau_\frac{\alpha}{2}\leq {\color{blue}\frac{\hat{\theta}-\theta}{\hat v}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
+& P\left(\hat \tau_\frac{\alpha}{2}\leq {\color{blue}\frac{\hat{\theta}-\theta}{\hat \sigma}} \leq \hat \tau_{1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\
-\Rightarrow & P\left(-\hat v \hat \tau_{1-\frac{\alpha}{2}}\leq \theta-\hat{\theta} \leq -\hat v\hat\tau_\frac{\alpha}{2}\right)
+\Rightarrow & P\left(-\hat \sigma \hat \tau_{1-\frac{\alpha}{2}}\leq \theta-\hat{\theta} \leq -\hat \sigma\hat\tau_\frac{\alpha}{2}\right)
 \approx 1-\alpha\\
-\Rightarrow & P\left(\hat{\theta}-\hat v \hat \tau_{1-\frac{\alpha}{2}}\leq \theta \leq \hat{\theta} -\hat v\hat\tau_\frac{\alpha}{2}\right)
+\Rightarrow & P\left(\hat{\theta}-\hat \sigma \hat \tau_{1-\frac{\alpha}{2}}\leq \theta \leq \hat{\theta} -\hat \sigma\hat\tau_\frac{\alpha}{2}\right)
 \approx 1-\alpha
 \end{align*}
 $$
 Thus, the approximate $(1-\alpha)\times 100\%$ (symmetric) bootstrap-$t$ confidence interval is given by 
 $$
-\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat v,\;
-      \hat{\theta}-\hat \tau_{  \frac{\alpha}{2}}\hat v\right]
+\left[\hat{\theta}-\hat \tau_{1-\frac{\alpha}{2}}\hat \sigma,\;
+      \hat{\theta}-\hat \tau_{  \frac{\alpha}{2}}\hat \sigma\right]
 $${#eq-Boot_tCI}
 
+Note that the above confidence interval get tight (with of the borders goes to zero) as $n\to\infty$ since $\hat{\sigma}$ converges to zero proportionally to $1/\sqrt{n}$. 
 
 #### Example: Bootstrap-$t$ Confidence Interval for the Mean {-}
 
+Here $\hat\theta = \bar{X}$ and the estimator of the variance of $\bar{X}$ is $\hat\sigma^2=s^2/n$, where $s^2$ denotes the sample variance 
+$$
+s^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2.
+$$
 
 **Algorithm:**
 
 * Draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
 $\bar X^*$ as well as $s^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*)^2}$ to generate $m$ (e.g. $m=100,000$) bootstrap realizations
 $$
-\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}
+\frac{\bar X^*_1-\bar X}{s^*_1/\sqrt{n}},\dots,\frac{\bar X^*_m-\bar X}{s^*_m/\sqrt{n}}
 $$ 
-* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ from $\frac{\bar X^*_1-\bar X}{s^*_1},\dots,\frac{\bar X^*_m-\bar X}{s^*_m}$ using @eq-empiricalQuantile.
+* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_\frac{\alpha}{2}$ and $\hat \tau_{1-\frac{\alpha}{2}}$ from 
+$$
+\frac{\bar X^*_1-\bar X}{s^*_1/\sqrt{n}},\dots,\frac{\bar X^*_m-\bar X}{s^*_m/\sqrt{n}}$$ 
+using @eq-empiricalQuantile.
 * This yields the $1-\alpha$ confidence interval (using @eq-Boot_tCI):
 $$
-\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}s,
-      \bar X-\hat \tau_{\frac{\alpha}{2}}s\right],
+\left[\bar X-\hat \tau_{1-\frac{\alpha}{2}}\frac{s}{\sqrt{n}},
+      \bar X-\hat \tau_{\frac{\alpha}{2}}  \frac{s}{\sqrt{n}}\right],
 $$
 where $s$ is computed from the original sample, i.e., 
 $$
