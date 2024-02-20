@@ -22,14 +22,28 @@ Thus, maximum likelihood estimators can be very appealing, provided that the ass
 ::: {.callout-important}
 ## ML-estimation requires to fix the family of distributions $f(\cdot|\theta)$
 
-Classic ML-estimation requires us to fix the general family of density functions $f$ of the i.i.d. sample variables $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to the parameter (vector) $\theta.$  
+Classic ML-estimation requires us to fix the general family of density functions $f$ of the i.i.d. sample variables $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to a parameter $\theta,$ where $\theta$ is allowed to be a *finite* dimensional vector.  
 
 Examples: 
 
-* $f$ being the probability mass function of $\mathcal{Bern}(\theta)$ with $f(x_i|\theta)=\theta$ if $x_i=1$ and $f(x_i|\theta)=1-\theta$ if $x_i=0,$ but unknown propability parameter $\theta.$
-* $f$ is the normal density $f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)$ with unknown parameter vector $\theta=(\mu,\sigma^2)^T.$
+* $f$ being the probability mass function of the Bernoulli distribution $\mathcal{Bern}(\theta)$ with 
+$$
+f(x_i|\theta)=
+\left\{
+  \begin{array}{ll}
+  \theta,&\text{if } x_i=1\\
+  1-\theta, & \text{if } x_i=0
+  \end{array}
+\right.
+$$ 
+and **unknown** parameter $0\leq \theta\leq 1.$
+* $f$ is the normal density 
+$$
+f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)
+$$ 
+with **unknown** parameter vector $\theta=(\mu,\sigma^2)^T.$
 
-This requirement can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To address this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified (see @White1982).   
+This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To address this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified (see @White1982).   
 :::
 
 ### Example: Coin Flipping (Bernoulli Trial) 
@@ -38,158 +52,162 @@ To introduce the main idea of maximum likelihood estimation, we use the simple e
 $$
 \text{Coin}\in\{H,T\}.
 $$ 
-Let $\theta$ denote the probability that we get a head $H$ 
+Such coin-flipps can be modeled using Bernoulli random variables 
 $$
-\theta=P(\text{Coin}=H)
+X\sim\mathcal{Bern}(\theta)
 $$ 
+where
+$$
+X=\left\{
+    \begin{matrix}
+    1 & \text{if } \text{Coin}=H\\[2ex]
+    0 & \text{if } \text{Coin}=T 
+    \end{matrix}
+    \right.
+$$ 
+with **unknown** probability of success parameter $0<\theta<1,$ 
+$$
+\theta = P(X=1) = P(\text{Coin}=H),
+$$
 which implies that the probability that we get a tail $T$ is 
 $$
-1-\theta=P(\text{Coin}=T).
+1-\theta = P(X=0) = P(\text{Coin}=T).
 $$ 
 
-We don't know the probability $\theta$ and our goal is to estimate $\theta$ using an i.i.d. sample of size $n$
+
+
+Our goal is to estimate the unknown $\theta$ using a random (i.i.d.) sample of size $n$
 $$
-\{X_1,\dots,X_n\}%\in\{0,1\}^n
+\{X_1,\dots,X_n\}
 $$ 
 with 
 $$
 X_i=\left\{
     \begin{matrix}
-    0 & \text{if $i$th Coinflip}=T\\[2ex]
-    1 & \text{if $i$th Coinflip}=H 
+    1 & \text{if } \text{Coin}=H\text{ in $i$th coin flip}\\[2ex]
+    0 & \text{if } \text{Coin}=T\text{ in $i$th coin flip} 
     \end{matrix}
     \right.
 $$ 
 such that 
 $$
-X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}\mathcal{Bern}(\theta),\quad i=1,\dots,n,
+X_i\overset{\text{i.i.d.}}{\sim}\mathcal{Bern}(\theta),\quad i=1,\dots,n.
 $$
-where $\mathcal{Bern}(\theta)$ denotes the Bernoulli distribution with unknown probability of success parameter $\theta.$ 
+<!-- where $\mathcal{Bern}(\theta)$ denotes the Bernoulli distribution with unknown probability of success parameter $\theta.$  -->
 
-A given realization of the random sample 
+A **given realization** of the random sample 
 $$
-\{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
+\{X_{1,obs},X_{2,obs},\dots,X_{n,obs}\}=\{0,1,\dots,0\}
 $$ 
-consists of 
+consists of $0\leq N_{H,obs}\leq n$
 $$
-h=\sum_{i=1}^n1_{(x_i=1)}
+N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 $$ 
-many heads and $n-h$ many tails, where  
+many heads, and of 
 $$
-0\leq h\leq n\quad\text{and}\quad 0\leq n-h\leq n.
+0\leq n-N_{H,obs} \leq n
 $$ 
+many tails.
 
 
 #### The (Log-)Likelihood Function {-}
 
 How do we combine the information from the $n$ observations 
 $$
-\{X_1,\dots,X_n\}=\{x_1,\dots,x_n\}
+\{X_{1,obs},\dots,X_{n,obs}\}
 $$ 
 to estimate $\theta$?
 
 If the observations are realizations of an i.i.d. sample, then the joint probability of observing $h$ heads $H$ and $n-h$ tails $T$ in  $n$ coin flips is:
 $$
 \begin{align*}
-\mathcal{L}(\theta)
-&= \left(P(\text{Coin}=H)\right)^h\left(P(\text{Coin}=T)\right)^{n-h}\\[2ex]
-&= \theta^h(1-\theta)^{n-h}  \\[2ex]
-&= \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i} 
+\mathcal{L}_n(\theta)
+&=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
+&= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
+&= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}. 
 \end{align*} 
 $$
-where 
-$$
-x_i=\left\{
-    \begin{matrix}
-    0 & \text{if $i$th Coinflip}=T\\[2ex]
-    1 & \text{if $i$th Coinflip}=H 
-    \end{matrix}
-    \right.
-$$ 
-is the observed realization of $X_i.$ 
 
+The function $\mathcal{L}_n$ is called the **likelihood function**. 
 
-The function $\mathcal{L}$ is called the **likelihood function**. 
-
-In general, when the observations $\{x_1,\dots,n\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
+In general, when the observations $\{X_{1,obs},\dots,X_{n,obs}\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
 $$
-\mathcal{L}(\theta)=\prod_{i=1}^n f(x_i|\theta),
+\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
 $$
-where $f(x_i | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_i=x_i$, and where $\theta$ denotes the (unknown) parameter (vector) of the density function. 
+where $f(X_{i,obs} | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_{i,obs},$ and where $\theta$ denotes the unknown finite dimensional parameter vector of the density function. 
 
 
 #### Estimation Idea {-}
 
-We estimate the unknown $\theta$ by maximizing the likelihood of the observed data $\{x_1,\dots,x_n\}.$ The value $\hat\theta$ at which the likelihood function $\mathcal{L}(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+We estimate the unknown $\theta$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}.$ The value $\hat\theta$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
 $$
 \begin{align*}
 \hat\theta
-&=\arg\max_\theta \mathcal{L}(\theta)\\[2ex]
-&=\arg\max_\theta \prod_{i=1}^n f(x_i|\theta)
+&=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
+&=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
 \end{align*}
 $$
+where $\Theta$ denotes the **parameter space**.
 
 
-In our coin flip example this means to estimate the unknown $\theta$ by the value $\hat\theta$ at which the likelihood of the observed $0$ and $1$ outcomes $\{x_1,\dots,x_n\}$ is maximal 
+In our coin flip example this means to estimate the unknown $\theta$ by the value $\hat\theta$ at which the likelihood of the observed $0$ and $1$ outcomes $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal 
 $$
-\hat\theta_{ML} = \arg\max_\theta \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i}.
+\hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 $$
 
 
-Usually it's easier to work with sums rather than products, so we can apply a monotonic transformation by taking the logarithm of the likelihood which leads to the **log-likelihood function**:
+Usually it's easier to work with sums rather than products - also for doing the asymptotics in @sec-MLAsymp. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the **log-likelihood function**:
 $$
-\ell(\theta)=\ln\mathcal{L}(\theta)=\sum_{i=1}^n \ln f(x_i|\theta).
+\ell_n(\theta)=\ln\mathcal{L}_n(\theta)=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
 $$
-Since this is only a monotonic transformation we have that
+Since this is only a monotonic transformation, we have that
 $$
 \begin{align*}
 \hat\theta_{ML}
-&=\arg\max_\theta \mathcal{L}(\theta)\\[2ex]
-&=\arg\max_\theta \ell(\theta),
+&=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
+&=\arg\max_{\theta\in\Theta} \ell_n(\theta).
 \end{align*}
 $$
-but $\ell(\theta)$ gives a more simple structure simplifying the maximization problem. 
+<!-- but $\ell_n(\theta)$ gives a more simple structure simplifying the maximization problem.  -->
 
 In our coin flipping example:
-
-
 $$
 \begin{align*}
-\mathcal{L}(\theta) &= \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i} \\[2ex]
-\Rightarrow\quad \ell(\theta)&=\sum_{i=1}^n\left( x_i \ln(\theta) + (1-x_i)\ln(1-\theta)\right)
+\mathcal{L}_n(\theta) &= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
+\Rightarrow\quad \ell_n(\theta)&=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
 \end{align*}
 $$
 
-The coin flip example is actually so simple that we can maximize $\ell(\theta)$ analytically:
+The coin flip example is actually so simple that we can maximize $\ell_n(\theta)$ analytically. Computing the first derivative yields
 $$
 \begin{align*}
-\ell'(\theta)&=\sum_{i=1}^n \left(x_i\dfrac{1}{\theta} - (1-x_i)\dfrac{1}{1-\theta}\right)\\[2ex]
-&=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} 
+\ell'_n(\theta)&=\sum_{i=1}^n \left(X_{i,obs}\dfrac{1}{\theta} - (1-X_{i,obs})\dfrac{1}{1-\theta}\right)\\[2ex]
+&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} 
 \end{align*}
 $$
-Setting the above expression to zero and solving gives us our maximum likelihood estimator (MLE):
+Setting the first derivative to zero determines the maximum likelihood estimator (MLE):
 $$
 \begin{array}{rrcl}
 &\ell'(\hat\theta_{ML})&\overset{!}{=}&0\\[2ex]
-\Leftrightarrow&\dfrac{h}{\hat\theta_{ML}} &=& \dfrac{n-h}{1-\hat\theta_{ML}} \\[2ex]
-\Leftrightarrow&h-h\hat\theta_{ML}  &=& n\hat\theta_{ML}-h\hat\theta_{ML}\\[2ex]
-\Leftrightarrow&\hat\theta_{ML}&=&\dfrac{h}{n}
+\Leftrightarrow&\dfrac{N_{H,obs}}{\hat\theta_{ML}} &=& \dfrac{n-N_{H,obs}}{1-\hat\theta_{ML}} \\[2ex]
+\Leftrightarrow&N_{H,obs}-N_{H,obs}\hat\theta_{ML}  &=& n\hat\theta_{ML}-N_{H,obs}\hat\theta_{ML}\\[2ex]
+\Leftrightarrow&\hat\theta_{ML}&=&\dfrac{N_{H,obs}}{n}
 \end{array}
-$$
+$${#eq-MLECoinFlipp}
 
 Usually, however, the log-likelihood function is way more complicated and one needs to apply numeric optimization algorithms to find the MLE.  
 
 
 ## Numeric Optimization
 
-Usually we are not so fortunate as to have a closed-form analytical solution for the MLE and must rely on the computer to find the maximizing arguments of the log-likelihood function. Various methods exist for finding the maximum (or minimum) of a function. 
+Usually we are not so fortunate as to have an analytical solution for the MLE, and must rely on the computer to find the maximizing arguments of the log-likelihood function. Various methods exist for finding the maximum (or minimum) of a function. 
 
 <!-- [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html) -->
 
 **General idea:** 
 
-1. Start at some value for parameters in the parameter space (i.e., in the space of all possible parameter-values)
-2. Search across that space until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero, smaller than some convergence criterion.).
+1. Start at some value for parameters in the parameter space $\Theta.$
+2. Search across the parameter space $\Theta$ until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero; i.e. smaller than some convergence criterion.).
 
 
 ### Newton-Raphson Optimization
@@ -201,15 +219,15 @@ One of the most-used methods for optimization is the Newton-Raphson method (or a
 <!-- * By strange convention Newton usually shares credit for this algorithm when
 it is applied to root-finding, but not when it is used for optimization. However, root-finding can be used for finding the root of the first-derivative function and thus can be used for optimization.  -->
 
-* Note that minimization and maximization are essentially the same problems since minimizing a function $f(x)$ with respect to $x$ is equivalent to maximizing $-f(x)$ with respect to $x.$
+Minimization and maximization are essentially the same problems since minimizing a function $f(x)$ with respect to $x$ is equivalent to maximizing $-f(x)$ with respect to $x.$
 :::
 
 
-Let $f$ be a two times differentiable function to be optimized (here maximized). The first- and second-order Taylor-series approximations of $f$ around the point $\theta$ are:
+Let $f$ be a two times differentiable function to be optimized (here maximized). The **first- and second-order Taylor-series approximations** of $f$ around the point $\theta$ are:
 $$
 \begin{align*}
-\text{First-order:}\quad &f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial (Order 1)}} \\
-\text{Second-order:}\quad& f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial (Order 2)}},
+\text{First-order:}\quad &f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial of order 1}} \\
+\text{Second-order:}\quad& f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial of order 2}},
 \end{align*}
 $$
 Locally, i.e. for $h\approx 0,$ the Taylor polynomials are very good approximations of $f(\theta + h);$ see @fig-taylorApprox.
@@ -252,7 +270,7 @@ points(x=1, y=myFun(1), col="black", pch=19)
 lines(x=rep(x0, 2), y=c(par("usr")[3], myFun(1)), lty=2)
 # lines(x=rep(x_seq[which.max(y_taylor_poly_2)],2), 
 #       y=c(0,max(y_taylor_poly_2)), lty=2)
-legend(x="topleft", legend=c("Function f", "Taylor Polynomial (Order 1)", "Taylor Polynomial (Order 2)"), col=c("black", "red", "blue"), lty=c(1,1,1), box.lwd=0)
+legend(x="topleft", legend=c("Function f", "Taylor Polynomial of Order 1", "Taylor Polynomial of Order 2"), col=c("black", "red", "blue"), lty=c(1,1,1), box.lwd=0)
 box()
 ```
 
@@ -265,17 +283,17 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 
 #### Optimization Idea {-}
 
-Let $\ell$ be a log-likelihood function with continuous first, $\ell',$ and second, $\ell'',$ derivative. 
+Let $\ell_n$ be a log-likelihood function with continuous first, $\ell_n',$ and second, $\ell_n'',$ derivative. 
 
-To optimize the log-likelihood function $\ell,$ we try to find the root of $\ell',$ i.e. the value of $\theta$ such that 
+To optimize the log-likelihood function $\ell_n,$ we try to find the root of $\ell_n',$ i.e. the value of $\theta$ such that 
 $$
-\ell'(\theta)=0.
+\ell_n'(\theta)=0.
 $$ 
-That is, we try to find the value of $\theta$ that fulfills the first order condition of the optimization problem. We do so using a step-wise ($h$ steps) optimization approach. 
+That is, we try to find the value of $\theta$ that fulfills the first order condition of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size $h.$ 
 
 **Initialization:** Let $\theta_0$ be our first guess of the root $\theta.$ 
 
-**$h$-Steps:** Typically, $\theta_0\neq\theta$ and thus $\ell'(\theta_0)\neq 0.$ Therefore, we want to move from $\theta_0$ to a new root-candidate $\theta_1$ by doing an $h$-step update 
+**$h$-Steps:** Typically, $\theta_0\neq\theta$ and thus $\ell_n'(\theta_0)\neq 0.$ Therefore, we want to move from $\theta_0$ to a new root-candidate $\theta_1$ by doing an $h$-step update 
 $$
 \theta_1 = \theta_0 + h.
 $$
@@ -285,33 +303,33 @@ $$
 3. In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta,$ for which the previous second-order Taylor polynomial was maximal.  -->
 
 <!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
-The first-order Taylor-series approximation of $\ell'$ around our first guess $\theta_0$ gives 
+The first-order Taylor-series approximation of $\ell_n'$ around our first guess $\theta_0$ gives 
 $$
 \begin{align*}
-\ell'(\theta_0 + h) & \approx \ell'(\theta_0) + \ell''(\theta_0)h 
+\ell_n'(\theta_0 + h) & \approx \ell_n'(\theta_0) + \ell_n''(\theta_0)h 
 \end{align*}
 $$
-Thus, to find the $h$-step that brings us closer to the root of $\ell',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
+Thus, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
 $$
 \begin{align*}
-\ell'(\theta_0) + \ell''(\theta_0)h = 0\\[2ex]
-\Rightarrow h = -\frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\ell_n'(\theta_0) + \ell_n''(\theta_0)h = 0\\[2ex]
+\Rightarrow h = -\frac{\ell_n'(\theta_0)}{\ell_n''(\theta_0)}.
 \end{align*}
 $$
 Based on this $h$-step, the new root-candidate is 
 $$
-\theta_1 = \theta_0 - \frac{\ell'(\theta_0)}{\ell''(\theta_0)}.
+\theta_1 = \theta_0 - \frac{\ell_n'(\theta_0)}{\ell_n''(\theta_0)}.
 $$
-Likewise, the $n$th root-candidate is 
+Likewise, the $m$th root-candidate is 
 $$
-\theta_n = \theta_{n-1} - \frac{\ell'(\theta_{n-1})}{\ell''(\theta_{n-1})};
+\theta_m = \theta_{m-1} - \frac{\ell_n'(\theta_{m-1})}{\ell_n''(\theta_{m-1})};
 $$
 see also @fig-NR.
 
 
 ```{r, echo = FALSE}
 #| label: fig-NR
-#| fig-cap:  A step in the Newton-Raphson root-finding method.
+#| fig-cap:  The $m$th update step in the Newton-Raphson root-finding algorithm.
 
 ## #######################
 ## Taylor Approximation
@@ -352,33 +370,33 @@ abline(h=0)
 points(x=theta_0, y=my_ell_prime(theta_0), col="black", pch=19)
 lines(x = theta_seq, y = y_taylor_poly_1, col = "red", lty=1)
 lines(x=rep(theta_0, 2), y=c(par("usr")[3], my_ell_prime(theta_0)), lty=2)
-axis(1, at=theta_0, line=2, labels = expression(theta['n-1']), tick=FALSE)
+axis(1, at=theta_0, line=2, labels = expression(theta['m-1']), tick=FALSE)
 points(x=root_taylor_poly_1, y= 0, col="red", pch=19)
 lines(x=rep(root_taylor_poly_1, 2), y=c(par("usr")[3], 0), lty=2)
-axis(1, at=root_taylor_poly_1, line=2, labels = expression(theta['n']), tick=FALSE)
-legend(x="topright", legend=c("1st Deriv. of Log-Likelihoodfunc.", expression("Taylor Polynomial (Order 1) around"~theta[n-1])), 
+axis(1, at=root_taylor_poly_1, line=2, labels = expression(theta['m']), tick=FALSE)
+legend(x="topright", legend=c("1st Deriv. of Log-Likelihoodfunc.", expression("Taylor Polynomial of Order 1 around"~theta[m-1])), 
 col=c("black", "red"), lty=c(1,1), box.lwd=0)
 box()
 ```
 
 
 
-One can shown that if $\ell'$ is "well behaved" at its root $\theta$ (i.e. if $\ell''(\theta)\neq 0$ and if $\ell'''(\theta)$ is finite and continuous at $\theta$) and you start with $\theta_0$ "close enough" to the root $\theta,$ then $\theta_n$ will fastly converge to $\theta.$ Unfortunately, we don't know if $\ell'$ is well behaved at $\theta$ until we know $\theta,$ and we don't know beforehand how close is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
+One can shown that if $\ell_n'$ is "well behaved" at its root $\theta$ (i.e. if $\ell_n''(\theta)\neq 0$ and if $\ell_n'''(\theta)$ is finite and continuous at $\theta$) and you start with $\theta_0$ "close enough" to the root $\theta,$ then $\theta_n$ will fastly converge to $\theta.$ Unfortunately, we don't know if $\ell_n'$ is well behaved at $\theta$ until we know $\theta,$ and we don't know beforehand how close is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
 
-<!-- However, if $\theta_n\to\theta$ then, since $\ell'$ and $\ell''$ are continuous, we have
+<!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
 $$
 \begin{align*}
 \theta = \lim_{n\to\infty}\theta_{n+1} 
-&=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell'(\theta_{n})}{\ell''(\theta_{n})}\right)\\[2ex]
-&=\lim_{n\to\infty}\theta_{n} + \frac{\ell'(\lim_{n\to\infty}\theta_{n})}{\ell''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
-&=\theta + \frac{\ell'(\theta)}{\ell''(\theta)}.
+&=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell_n'(\theta_{n})}{\ell_n''(\theta_{n})}\right)\\[2ex]
+&=\lim_{n\to\infty}\theta_{n} + \frac{\ell_n'(\lim_{n\to\infty}\theta_{n})}{\ell_n''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
+&=\theta + \frac{\ell_n'(\theta)}{\ell_n''(\theta)}.
 \end{align*}
 $$  
-Therefore, provided that $\ell''(\theta)\neq \pm\infty,$ we must have that $\ell'(\theta) = 0.$ -->
+Therefore, provided that $\ell_n''(\theta)\neq \pm\infty,$ we must have that $\ell_n'(\theta) = 0.$ -->
 
-**Checking convergence:** Since we are expecting that $\ell'(\theta_n)\to 0,$ a good stopping condition for the Newton-Raphson algorithm is 
+**Checking convergence:** Since we are expecting that $\ell_n'(\theta_m)\to 0,$ a good stopping condition for the Newton-Raphson algorithm is 
 $$
-|\ell'(\theta_n)|\leq \varepsilon
+|\ell_n'(\theta_m)|\leq \varepsilon
 $$ 
 for some (small) tolerance $\varepsilon>0.$ 
 
@@ -386,60 +404,66 @@ for some (small) tolerance $\varepsilon>0.$
 # Pseudo-Code: Newton-Raphson Algorithm
 $$
 \begin{array}{ll}
-\texttt{\textbf{let }} \theta_0=s  &  \\
-\texttt{\textbf{let }} n=0                &  \\
-\texttt{\textbf{while }}  | \ell'(\theta_n) | >\varepsilon & \texttt{\textbf{do}}\\
+\texttt{\textbf{let }} \theta_0\in\Theta\qquad&\\
+\texttt{\textbf{let }} m=0         &  \\
+\texttt{\textbf{while }}  | \ell_n'(\theta_m) | >\varepsilon & \texttt{\textbf{do}}\\
 &\left[
-                                    \begin{array}{l}\texttt{\textbf{let }} n = n+1 \\
-                                    \texttt{\textbf{let }} \theta_n = \theta_{n-1} - \frac{\ell'(\theta_{i-1})}{\ell''(\theta_{n-1})} \\
+                                    \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
+                                    \texttt{\textbf{let }} \theta_m = \theta_{m-1} - \frac{\ell_n'(\theta_{m-1})}{\ell_n''(\theta_{m-1})} \\
                                     \end{array} \right.\\
-\texttt{\textbf{let }}\hat\theta=\theta_n & \\
+\texttt{\textbf{let }}\hat\theta=\theta_m & \\
 \texttt{\textbf{return }} \hat\theta &  \\
 \end{array}
 $$
 ::: 
 
 ::: {.callout-tip}
-* For problems that are globally concave, the starting value $s$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
+* For problems that are globally concave, the starting value $\theta_0$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
 
-* In actual practice, implementation of the Newton-Raphson algorithm can be tricky.
-We may have $\ell''(\theta_n)=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
+* In actual practice, implementation of the Newton-Raphson algorithm can be tricky. We may have $\ell_n''(\theta_m)=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
 $$
 \begin{align*}
-\ell'(\theta_n + h) & \approx \ell'(\theta_n) + \ell''(\theta_n)h. 
+\ell_n'(\theta_m + h) & \approx \ell_n'(\theta_m) + \ell_n''(\theta_m)h. 
 \end{align*}
 $$
-In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell'(\theta_n).$
+In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell_n'(\theta_m).$
 
 
-* In other cases where $\theta_n$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell(\theta_{n+1})$ is actually smaller than $\ell(\theta_{n}).$ When this happens one may replace $\theta_{n+1}$ with $(\theta_{n+1}+\theta_{n})/2$ (or some other value between $\theta_{n}$ and $\theta_{n+1}$) in the hope that a smaller step will produce better results.
+* In other cases where $\theta_m$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell_n(\theta_{m+1})$ is actually *smaller* than $\ell_n(\theta_{m}).$ When this happens one may replace $\theta_{m+1}$ with $(\theta_{m+1}+\theta_{m})/2$ (or some other value between $\theta_{m}$ and $\theta_{m+1}$) in the hope that a smaller step will produce better results.
 :::
 
 #### Newton-Raphson Algorithm: Coin-Flipping Example {-} 
 
-Let's return to our earlier coin-flipping example. 
+Let's return to our earlier coin flipping example. 
 
-If we observe, for instance, only one head $h=1$ for a sample size of $n=5,$ we already know that 
+If we observe, for instance, only one head $N_{H,obs}=1$ for a sample size of $n=5,$ we already know from @eq-MLECoinFlipp that 
 $$
-\hat\theta_{ML}=\frac{h}{n}=\frac{1}{5}=0.2,
+\hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 $$
 but let us, nevertheless, apply the Newton-Raphson algorithm.  
 
-First and second derivatives of $\ell$ are 
+First and second derivatives of 
+$$
+\ell_n(\theta)=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
+$$ 
+are 
 $$
 \begin{align*}
-\ell'(\theta)&=\dfrac{h}{\theta} - \dfrac{n-h}{1-\theta} \\[2ex]
-\ell''(\theta) &= -\dfrac{h}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{h}{(1-\theta)^2}(-1)\\[2ex]
-&= -\dfrac{h}{\theta^2} - \dfrac{n-h}{(1-\theta)^2}.
+\ell_n'(\theta)&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
+\ell_n''(\theta) &= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
+&= -\dfrac{N_{H,obs}}{\theta^2} - \dfrac{n-N_{H,obs}}{(1-\theta)^2}.
 \end{align*}
 $$
 
-We consider a sample size of $n=5,$ where one coin-flip resulted in H and the remaining four coin-flips resulted in T, i.e. $h=1$ and $n-h=4.$ 
+We consider a sample size of $n=5$ with the following observed outcome: 
+
+* One Head; i.e., $N_{H,obs}=1$ 
+* Four Tails; i.e., $n-N_{H,obs}=4$
 
 Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_0=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
-|$n$ 	|	$\hat\theta_n$	|	$\ell'(\hat\theta_n)$	 |  $\ell'(\hat\theta_n)/\ell''(\hat\theta_n)$ |
+|$m$ 	|	$\hat\theta_m$	|	$\ell_n'(\hat\theta_m)$	 |  $\ell_n'(\hat\theta_m)/\ell_n''(\hat\theta_m)$ |
 |-------------------|-------------------|----------------------------|---------------------------------------------|
 |$0$| $0.40$| $-4.16$                        |$\phantom{-}2.40\cdot 10^{-1}$|
 |$1$| $0.16$| $\phantom{-}1.48$              |$-3.32\cdot 10^{-2}$|
@@ -448,7 +472,7 @@ Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion 
 |$4$| $0.19$| $\phantom{-}3.53\cdot 10^{-6}$ |$-1.13\cdot 10^{-7}$|
 |$5$| $0.20$| $\phantom{-}1.50\cdot 10^{-12}$|$-4.81\cdot 10^{-14}$|
 
-: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data ($h=1,$ sample size $n=5$). {#tbl-NR}
+: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_0=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
 
 
 
@@ -534,7 +558,7 @@ $$ -->
 Log-likelihood function:
 $$
 \begin{align*}
-\ell(\beta,\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
+\ell_n(\beta,\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
 \end{align*}
 $$
 with $K+1$ unknown parameters: 
@@ -558,7 +582,7 @@ $$
 
 # Score Function
 
-More generally, let $\ell(\theta)$ denote the log-likelihood function of a $p$-dimensional parameter vector $\theta=(\theta_1,\dots,\theta_p).$ 
+More generally, let $\ell_n(\theta)$ denote the log-likelihood function of a $p$-dimensional parameter vector $\theta=(\theta_1,\dots,\theta_p).$ 
 
 Then the gradient vector 
 $$\left(
@@ -1186,8 +1210,8 @@ This allows us to express the likelihood problem for $\tau$ in terms of the like
 $$
 \begin{align*}
 \tilde{\mathcal{L}}(\tau) := \mathcal{L}(h(\tau)) 
-& = \prod_{i=1}^n f(x_i|h(\tau))\\[2ex]
-& = \prod_{i=1}^n f(x_i|\theta)  = \mathcal{L}(\theta).
+& = \prod_{i=1}^n f(X_{i,obs}|h(\tau))\\[2ex]
+& = \prod_{i=1}^n f(X_{i,obs}|\theta)  = \mathcal{L}(\theta).
 \end{align*}
 $$
 Thus
