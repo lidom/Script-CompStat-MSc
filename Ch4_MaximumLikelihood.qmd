@@ -10,10 +10,10 @@ In (classical) maximum likelihood estimation we must be rather specific about th
 
 ### Properties of Maximum Likelihood Estimators {-}
 
-Why do we like maximum likelihood as an estimation method? The answer is that: A maximum likelihood estimator $\hat\theta$ of some parameter $\theta\in\mathbb{R}$ is
+Why do we like maximum likelihood as an estimation method? The answer is that: A maximum likelihood estimator $\hat\theta_n$ of some parameter $\theta_0\in\mathbb{R}$ is
 
-* **Consistent:**  $\hat\theta_n\rightarrow_p\theta$ as $n\to\infty$
-* **Asymptotically normal:** $\sqrt{n}(\hat\theta_n-\theta) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)$
+* **Consistent:**  $\hat\theta_n\rightarrow_p\theta_0$ as $n\to\infty$
+* **Asymptotically normal:** $\sqrt{n}(\hat\theta_n-\theta_0) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)$
 * **Asymptotically efficient:** This means that no consistent estimator has lower asymptotic mean squared error than the maximum likelihood estimator. 
 
 Thus, maximum likelihood estimators can be very appealing, provided that the assumption on the general distribution family is correct.
@@ -54,7 +54,7 @@ $$
 $$ 
 Such coin-flipps can be modeled using Bernoulli random variables 
 $$
-X\sim\mathcal{Bern}(\theta)
+X\sim\mathcal{Bern}(\theta_0)
 $$ 
 where
 $$
@@ -65,18 +65,18 @@ X=\left\{
     \end{matrix}
     \right.
 $$ 
-with **unknown** probability of success parameter $0<\theta<1,$ 
+with **unknown** probability of success parameter $0<\theta_0<1,$ 
 $$
-\theta = P(X=1) = P(\text{Coin}=H),
+\theta_0 = P(X=1) = P(\text{Coin}=H),
 $$
 which implies that the probability that we get a tail $T$ is 
 $$
-1-\theta = P(X=0) = P(\text{Coin}=T).
+1-\theta_0 = P(X=0) = P(\text{Coin}=T).
 $$ 
 
 
 
-Our goal is to estimate the unknown $\theta$ using a random (i.i.d.) sample of size $n$
+Our goal is to estimate the unknown $\theta_0$ using a random (i.i.d.) sample of size $n$
 $$
 \{X_1,\dots,X_n\}
 $$ 
@@ -91,11 +91,11 @@ X_i=\left\{
 $$ 
 such that 
 $$
-X_i\overset{\text{i.i.d.}}{\sim}\mathcal{Bern}(\theta),\quad i=1,\dots,n.
+X_i\sim\mathcal{Bern}(\theta_0),\quad i=1,\dots,n.
 $$
 <!-- where $\mathcal{Bern}(\theta)$ denotes the Bernoulli distribution with unknown probability of success parameter $\theta.$  -->
 
-A **given realization** of the random sample 
+A **given observed realization** of the random sample 
 $$
 \{X_{1,obs},X_{2,obs},\dots,X_{n,obs}\}=\{0,1,\dots,0\}
 $$ 
@@ -116,7 +116,7 @@ How do we combine the information from the $n$ observations
 $$
 \{X_{1,obs},\dots,X_{n,obs}\}
 $$ 
-to estimate $\theta$?
+to estimate the unknown $\theta_0$?
 
 If the observations are realizations of an i.i.d. sample, then the joint probability of observing $h$ heads $H$ and $n-h$ tails $T$ in  $n$ coin flips is:
 $$
@@ -128,14 +128,16 @@ $$
 \end{align*} 
 $$
 
-The function $\mathcal{L}_n$ is called the **likelihood function**. 
+The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. 
 
-In general, when the observations $\{X_{1,obs},\dots,X_{n,obs}\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
+::: {.callout-tip}
+# Likelihood Function
+More generally, when the observations $\{X_{1,obs},\dots,X_{n,obs}\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
 $$
 \mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
 $$
 where $f(X_{i,obs} | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_{i,obs},$ and where $\theta$ denotes the unknown finite dimensional parameter vector of the density function. 
-
+:::
 
 #### Estimation Idea {-}
 
@@ -150,7 +152,7 @@ $$
 where $\Theta$ denotes the **parameter space**.
 
 
-In our coin flip example this means to estimate the unknown $\theta$ by the value $\hat\theta$ at which the likelihood of the observed $0$ and $1$ outcomes $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal 
+In our coin flip example this means to estimate the unknown $\theta_0$ by the value $\hat\theta$ at which the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal 
 $$
 \hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 $$
@@ -188,7 +190,7 @@ $$
 Setting the first derivative to zero determines the maximum likelihood estimator (MLE):
 $$
 \begin{array}{rrcl}
-&\ell'(\hat\theta_{ML})&\overset{!}{=}&0\\[2ex]
+&\ell_n'(\hat\theta_{ML})&\overset{!}{=}&0\\[2ex]
 \Leftrightarrow&\dfrac{N_{H,obs}}{\hat\theta_{ML}} &=& \dfrac{n-N_{H,obs}}{1-\hat\theta_{ML}} \\[2ex]
 \Leftrightarrow&N_{H,obs}-N_{H,obs}\hat\theta_{ML}  &=& n\hat\theta_{ML}-N_{H,obs}\hat\theta_{ML}\\[2ex]
 \Leftrightarrow&\hat\theta_{ML}&=&\dfrac{N_{H,obs}}{n}
@@ -285,17 +287,17 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 
 Let $\ell_n$ be a log-likelihood function with continuous first, $\ell_n',$ and second, $\ell_n'',$ derivative. 
 
-To optimize the log-likelihood function $\ell_n,$ we try to find the root of $\ell_n',$ i.e. the value of $\theta$ such that 
+To optimize the log-likelihood function $\ell_n,$ we try to find the root of $\ell_n',$ i.e. the value of $\theta\in\Theta$ such that 
 $$
 \ell_n'(\theta)=0.
 $$ 
 That is, we try to find the value of $\theta$ that fulfills the first order condition of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size $h.$ 
 
-**Initialization:** Let $\theta_0$ be our first guess of the root $\theta.$ 
+**Initialization:** Let $\theta_{(0)}\in\Theta$ be our first guess of the root of $\ell'_n.$ 
 
-**$h$-Steps:** Typically, $\theta_0\neq\theta$ and thus $\ell_n'(\theta_0)\neq 0.$ Therefore, we want to move from $\theta_0$ to a new root-candidate $\theta_1$ by doing an $h$-step update 
+**$h$-Steps:** Typically, $\theta_{(0)}$ and thus $\ell_n'(\theta_{(0)})\neq 0.$ Therefore, we want to move from $\theta_{(0)}$ to a new root-candidate $\theta_{(1)}$ by doing an $h$-step update 
 $$
-\theta_1 = \theta_0 + h.
+\theta_{(1)} = \theta_{(0)} + h.
 $$
 
 <!-- 1. We select some starting value $\theta_0.$ 
@@ -303,26 +305,26 @@ $$
 3. In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta,$ for which the previous second-order Taylor polynomial was maximal.  -->
 
 <!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
-The first-order Taylor-series approximation of $\ell_n'$ around our first guess $\theta_0$ gives 
+The first-order Taylor-series approximation of $\ell_n'$ around our first guess $\theta_{(0)}$ gives 
 $$
 \begin{align*}
-\ell_n'(\theta_0 + h) & \approx \ell_n'(\theta_0) + \ell_n''(\theta_0)h 
+\ell_n'(\theta_{(0)} + h) & \approx \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h 
 \end{align*}
 $$
 Thus, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
 $$
 \begin{align*}
-\ell_n'(\theta_0) + \ell_n''(\theta_0)h = 0\\[2ex]
-\Rightarrow h = -\frac{\ell_n'(\theta_0)}{\ell_n''(\theta_0)}.
+\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h = 0\\[2ex]
+\Rightarrow h = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
 \end{align*}
 $$
 Based on this $h$-step, the new root-candidate is 
 $$
-\theta_1 = \theta_0 - \frac{\ell_n'(\theta_0)}{\ell_n''(\theta_0)}.
+\theta_{(1)} = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
 $$
 Likewise, the $m$th root-candidate is 
 $$
-\theta_m = \theta_{m-1} - \frac{\ell_n'(\theta_{m-1})}{\ell_n''(\theta_{m-1})};
+\theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
 $$
 see also @fig-NR.
 
@@ -370,18 +372,19 @@ abline(h=0)
 points(x=theta_0, y=my_ell_prime(theta_0), col="black", pch=19)
 lines(x = theta_seq, y = y_taylor_poly_1, col = "red", lty=1)
 lines(x=rep(theta_0, 2), y=c(par("usr")[3], my_ell_prime(theta_0)), lty=2)
-axis(1, at=theta_0, line=2, labels = expression(theta['m-1']), tick=FALSE)
+axis(1, at=theta_0, line=2, labels = expression(theta['(m-1)']), tick=FALSE)
 points(x=root_taylor_poly_1, y= 0, col="red", pch=19)
 lines(x=rep(root_taylor_poly_1, 2), y=c(par("usr")[3], 0), lty=2)
-axis(1, at=root_taylor_poly_1, line=2, labels = expression(theta['m']), tick=FALSE)
-legend(x="topright", legend=c("1st Deriv. of Log-Likelihoodfunc.", expression("Taylor Polynomial of Order 1 around"~theta[m-1])), 
+axis(1, at=root_taylor_poly_1, line=2, labels = expression(theta['(m)']), tick=FALSE)
+legend(x="topright", legend=c("1st Deriv. of Log-Likelihoodfunc.", expression("Taylor Polynomial of Order 1 around"~theta[(m-1)])), 
 col=c("black", "red"), lty=c(1,1), box.lwd=0)
 box()
 ```
 
 
-
+::: {.callout-warning}
 One can shown that if $\ell_n'$ is "well behaved" at its root $\theta$ (i.e. if $\ell_n''(\theta)\neq 0$ and if $\ell_n'''(\theta)$ is finite and continuous at $\theta$) and you start with $\theta_0$ "close enough" to the root $\theta,$ then $\theta_n$ will fastly converge to $\theta.$ Unfortunately, we don't know if $\ell_n'$ is well behaved at $\theta$ until we know $\theta,$ and we don't know beforehand how close is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
+:::
 
 <!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
 $$
@@ -394,9 +397,9 @@ $$
 $$  
 Therefore, provided that $\ell_n''(\theta)\neq \pm\infty,$ we must have that $\ell_n'(\theta) = 0.$ -->
 
-**Checking convergence:** Since we are expecting that $\ell_n'(\theta_m)\to 0,$ a good stopping condition for the Newton-Raphson algorithm is 
+**Checking convergence:** Since we are expecting that $\ell_n'(\theta_{(m)})\to 0,$ as $m\to\infty,$ a good stopping condition for the Newton-Raphson algorithm is 
 $$
-|\ell_n'(\theta_m)|\leq \varepsilon
+|\ell_n'(\theta_{(m)})|\leq \varepsilon
 $$ 
 for some (small) tolerance $\varepsilon>0.$ 
 
@@ -404,15 +407,15 @@ for some (small) tolerance $\varepsilon>0.$
 # Pseudo-Code: Newton-Raphson Algorithm
 $$
 \begin{array}{ll}
-\texttt{\textbf{let }} \theta_0\in\Theta\qquad&\\
+\texttt{\textbf{let }} \theta_{(0)}\in\Theta\qquad&\\
 \texttt{\textbf{let }} m=0         &  \\
-\texttt{\textbf{while }}  | \ell_n'(\theta_m) | >\varepsilon & \texttt{\textbf{do}}\\
+\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | >\varepsilon & \texttt{\textbf{do}}\\
 &\left[
                                     \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
-                                    \texttt{\textbf{let }} \theta_m = \theta_{m-1} - \frac{\ell_n'(\theta_{m-1})}{\ell_n''(\theta_{m-1})} \\
+                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
                                     \end{array} \right.\\
-\texttt{\textbf{let }}\hat\theta=\theta_m & \\
-\texttt{\textbf{return }} \hat\theta &  \\
+\texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} & \\
+\texttt{\textbf{return }} \hat\theta_{ML} &  \\
 \end{array}
 $$
 ::: 
@@ -420,16 +423,16 @@ $$
 ::: {.callout-tip}
 * For problems that are globally concave, the starting value $\theta_0$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
 
-* In actual practice, implementation of the Newton-Raphson algorithm can be tricky. We may have $\ell_n''(\theta_m)=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
+* In actual practice, implementation of the Newton-Raphson algorithm can be tricky. We may have $\ell_n''(\theta_{(m)})=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
 $$
 \begin{align*}
-\ell_n'(\theta_m + h) & \approx \ell_n'(\theta_m) + \ell_n''(\theta_m)h. 
+\ell_n'(\theta_{(m)} + h) & \approx \ell_n'(\theta_{(m)}) + \ell_n''(\theta_{(m)})h. 
 \end{align*}
 $$
 In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell_n'(\theta_m).$
 
 
-* In other cases where $\theta_m$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell_n(\theta_{m+1})$ is actually *smaller* than $\ell_n(\theta_{m}).$ When this happens one may replace $\theta_{m+1}$ with $(\theta_{m+1}+\theta_{m})/2$ (or some other value between $\theta_{m}$ and $\theta_{m+1}$) in the hope that a smaller step will produce better results.
+* In other cases where $\theta_{(m)}$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell_n(\theta_{(m+1)})$ is actually *smaller* than $\ell_n(\theta_{(m)}).$ When this happens one may replace $\theta_{(m+1)}$ with $(\theta_{(m+1)}+\theta_{(m)})/2$ (or some other value between $\theta_{(m)}$ and $\theta_{(m+1)}$) in the hope that a smaller step will produce better results.
 :::
 
 #### Newton-Raphson Algorithm: Coin-Flipping Example {-} 
@@ -460,10 +463,10 @@ We consider a sample size of $n=5$ with the following observed outcome:
 * One Head; i.e., $N_{H,obs}=1$ 
 * Four Tails; i.e., $n-N_{H,obs}=4$
 
-Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_0=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
+Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
-|$m$ 	|	$\hat\theta_m$	|	$\ell_n'(\hat\theta_m)$	 |  $\ell_n'(\hat\theta_m)/\ell_n''(\hat\theta_m)$ |
+|$m$ 	|	$\hat\theta_{(m)}$	|	$\ell_n'(\hat\theta_{(m)})$	 |  $\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})$ |
 |-------------------|-------------------|----------------------------|---------------------------------------------|
 |$0$| $0.40$| $-4.16$                        |$\phantom{-}2.40\cdot 10^{-1}$|
 |$1$| $0.16$| $\phantom{-}1.48$              |$-3.32\cdot 10^{-2}$|
@@ -472,32 +475,31 @@ Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion 
 |$4$| $0.19$| $\phantom{-}3.53\cdot 10^{-6}$ |$-1.13\cdot 10^{-7}$|
 |$5$| $0.20$| $\phantom{-}1.50\cdot 10^{-12}$|$-4.81\cdot 10^{-14}$|
 
-: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_0=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
+: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_{(0)}=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
 
 
 
 
 
-## Linear Regression as ML-Estimation
+## Linear Regression under Normality {#sec-LinRegNorm}
 
 Now let's return to the linear regression model 
 $$
-Y_i=X_i^T\beta+ \varepsilon_i,\quad  i=1,\dots,n,
+Y_i=X_i'\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 $${#eq-LinMod}
 where $Y_i\in\mathbb{R}$ denotes the response (or "dependent") variable, 
 $$
-\beta=(\beta_1,\dots,\beta_p)^T\in\mathbb{R}^p
+\beta_0\in\mathbb{R}^p
 $$ 
-denotes the vector of unknown parameter values, and 
+denotes the vector of unknown slope parametes, and 
 $$
-X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 $$
 denotes the vector of predictor variables, where the i.i.d. sample 
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
 follows a **random design** (@def-RandomFixedDesign), which includes the exogeneity assumption $\mathbb{E}(\varepsilon_i|X_i)=0,$ for all $i=1,\dots,n.$ 
-
 
 
 For the following, it is convenient to write @eq-LinMod using matrix notation
@@ -514,12 +516,16 @@ Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{
 $$
 
 
-
-To apply classical ML-estimation, we must make a distributional assumption about $\varepsilon_i$ such as, for instance,
+Under normally distributed error terms, $\varepsilon_i,$ we have that 
 $$
-\varepsilon \sim \mathcal{N}\left(0, \sigma^2I_n\right).
+\begin{align}
+\varepsilon &\sim \mathcal{N}\left(0, \sigma_0^2I_n\right)\\[2ex]
+\Rightarrow\quad 
+Y|X &\sim \mathcal{N}\left(X\beta_0, \sigma^2_0I_n\right)
+\end{align}
 $${#eq-OLSnormAss}
-We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic.
+
+<!-- We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic. -->
 
 <!-- ::: {.callout-note}
 The requirement to make a (correct) distributional assumption is much more restrictive than requirements for analyzing the OLS estimator under standard large sample inference. However, taking into account specific distributional assumptions allows us to consider also more complicated non-linear regression models such as, for instance, logistic regression. 
@@ -531,22 +537,21 @@ The requirement to make a (correct) distributional assumption is much more restr
 <!-- \item The $\varepsilon$'s are identically distributed, i.e. homoskedastic. -->
 <!-- \end{itemize} -->
 
-Let 
+Under @eq-OLSnormAss, we have
 $$
-\varphi_{\mu,\sigma^2}(x) = \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
-$$ denote the univariate density function of the normal distribution with mean $\mu\in\mathbb{R}$ and variance $\sigma^2\in\mathbb{R}.$
+f(Y_i|X_i;\beta_0',\sigma_0^2)=
+\frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
+$$
+where $\theta_0=(\beta_0',\sigma_0^2)$ denotes the unknown parameter vector. 
 
-Taking into account the normality assumption on the error terms $\varepsilon$ (@eq-OLSnormAss) and using that 
-$$
-\varepsilon = Y - X\beta 
-$$
-we can setup the likelihood function 
+This allows us to setup the likelihood function: 
 $$
 \begin{align*}
-\mathcal{L}_n(\beta,\sigma^2)
-& =\prod_{i=1}^n \varphi_{\mu=0,\sigma^2}(\varepsilon_i)\\
-& =\prod_{i=1}^n \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{\varepsilon_i^2}{2\sigma^2}\right)\\[2ex]
-& =\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)\\[2ex]
+\mathcal{L}_n(\beta',\sigma^2)
+& =\prod_{i=1}^n f(Y_i|X_i;\beta',\sigma^2)\\[2ex]
+& =\prod_{i=1}^n \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
+& =\frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{\sum_{i=1}^n (Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
+%& =\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)\\[2ex]
 & =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right)\\[2ex]
 \end{align*}
 $$
@@ -560,20 +565,20 @@ $$ -->
 Log-likelihood function:
 $$
 \begin{align*}
-\ell_n(\beta,\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
+\ell_n(\beta',\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
 \end{align*}
 $$
-with $K+1$ unknown parameters: 
+<!-- with $K+1$ unknown parameters: 
 
 * $\beta=(\beta_1,\dots,\beta_K)'\in\mathbb{R}^K$ and 
-* $\sigma^2\in\mathbb{R}_{>0}.$
+* $\sigma^2\in\mathbb{R}_{>0}.$ -->
 
 Taking first derivatives gives 
 $$
 \begin{align*}
-\underset{(K\times 1)}{\dfrac{\partial \ell}{\partial \beta}(\beta,\sigma^2)}    
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
 &= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
-\underset{(1\times 1)}{\dfrac{\partial \ell}{\partial \sigma^2}(\beta,\sigma^2)} 
+\underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)} 
 %&= -\dfrac{n}{2\sigma^2}+ \dfrac{1}{2\sigma^4}(Y-X\beta)'(Y-X\beta)
 &=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}}\\
 %&=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)'(Y-X\beta)-n\right]
@@ -582,21 +587,21 @@ $$
 Putting the above derivative functions into one column vector yields the $((K+1)\times 1)$-dimensional gradient called **score function** in ML-theory:
 $$
 \left(\begin{matrix}
-\dfrac{\partial \ell}{\partial \beta}(\beta,\sigma^2)\\
-\dfrac{\partial \ell}{\partial \sigma^2}(\beta,\sigma^2)
+\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)\\
+\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)
 \end{matrix}\right)
-$$
+$${#eq-LinRegScoreFun}
 
 ::: {.callout-tip}
 
 # Score Function
 
-More generally, let $\ell_n(\theta)$ denote the log-likelihood function of a $p$-dimensional parameter vector $\theta=(\theta_1,\dots,\theta_p)'.$ 
+More generally, let $\ell_n(\theta)$ denote the log-likelihood function evaluated at a $p$-dimensional parameter vector $\theta=(\theta_1,\dots,\theta_p)'.$ 
 
 Then the gradient vector 
-$$\left(\begin{matrix}
-  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta)\\ \vdots\\ 
-  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta)
+$$\nabla\ell_n(\theta')=\left(\begin{matrix}
+  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\ 
+  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
   \end{matrix}
   \right)
 $$ 
@@ -604,51 +609,55 @@ is called the **score-function**.
 
 The score function is **random**, since it depends on the random sample. 
 
-At the **true parameter** vector $\theta,$ the score function satisfies 
+At the **true parameter** vector $\theta_0\in\mathbb{R}^p,$ the score function satisfies 
 $$
-\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta)\right)=0
+\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
 $$ 
 for all $j=1,\dots,p.$ We show this below in @sec-MLAsymp.
 :::
 
-So, we have a system of $K+1$ equations and $K+1$ unknowns. Setting equal to zero and solving gives:
+Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, and we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}:$
+
+Solving for $\hat\beta_{ML}:$
 $$
 \begin{align*}
-& - \dfrac{1}{\sigma^2}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
+& \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
+& - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
 \Rightarrow\quad & \hat\beta_{ML}=(X'X)^{-1}X'Y\\[2ex]
 \end{align*}
 $$
-and 
+Solving for $s^2_{ML}:$
 $$
 \begin{align*}
-&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
+& \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
+&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
 \Rightarrow\quad  &
 s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
-& =\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2.
+&\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2.
 \end{align*}
 $$
-Thus, the MLE $\hat\beta_{ML}$ for $\beta$ equals the OLS estimator $\hat\beta.$  Thus, since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
+Thus, $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta.$  Since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
 
 However, the MLE $S_{ML}^2$ for $\sigma^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
 
 
 ### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
 
-To compute the variance of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need all partial second derivatives of $\ell_n$ and the expressions of **$(1/n)$ times the mean** of these partial second derivatives. 
+To compute the (asymptotic) variance of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need all partial second derivatives of $\ell_n$ and the expressions of **$-1/n$ times the mean of these partial second derivatives**. 
 
 Let's do this preliminary work in the following:
 
 1. Partial second derivatives with respect to $\beta:$
 $$
 \begin{align*}
-\underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta,\sigma^2)}
+\underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)}
 &= - \dfrac{1}{\sigma^2}(X'X)
 \end{align*}
 $$
 $$
 \begin{align*}
 \Rightarrow\quad 
-&-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta,\sigma^2)\right)\\[2ex]
+&-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)\right)\\[2ex]
 &=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X'X)\right)\\[2ex]
 &=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X'X}\right)\\[2ex]
 &=  \dfrac{1}{\sigma^2} \Sigma_{X'X},
@@ -664,7 +673,7 @@ $$
 2. Second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
-\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2)}
+\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)}
 &=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
 &=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
 \end{align*}
@@ -672,7 +681,7 @@ $$
 $$
 \begin{align*}
 \Rightarrow\quad 
-&-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2)\right)\\[2ex]
+&-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)\right)\\[2ex]
 &=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma^{4}}-\frac{\mathbb{E}\left(\sum_{i=1}^n\varepsilon_i^2\right)}{\sigma^{6}} \right)\\[2ex]
 &=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma^{4}}-\frac{n\sigma^2}{\sigma^{6}}\right)\\[2ex]
 &=\left(-\frac{1}{2\sigma^{4}}+\frac{1}{\sigma^{4}}\right)\\[2ex]
@@ -682,8 +691,8 @@ $$
 3. First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
-\underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta,\sigma^2)}
-=   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)'
+\underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta',\sigma^2)}
+=   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)'
 &= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
 & = \frac{X'\varepsilon}{\sigma^4}\\
 \end{align*}
@@ -691,8 +700,8 @@ $$
 $$
 \begin{align*}
 \Rightarrow\quad 
-&-\frac{1}{n}\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta,\sigma^2)\right)\\[2ex]
-&=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\right)'\\[2ex]
+&-\frac{1}{n}\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta',\sigma^2)\right)\\[2ex]
+&=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)\right)'\\[2ex]
 &=-\frac{1}{n}\cdot\frac{\mathbb{E}(X'\varepsilon)}{\sigma^4}\\[2ex]
 &=-\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X'\varepsilon|X))}{\sigma^4}\\[2ex]
 &=-\frac{1}{n}\cdot\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
@@ -705,12 +714,14 @@ Collecting the above results, allows us to write down the expression for $(-1/n)
 
 $$
 \begin{align*}
--\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}\right) 
-&=\left[\begin{array}{cc}
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta,\sigma^2)\right) & 
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\\
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right) & 
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2) \right)
+&\mathcal{I}(\theta) :=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta',\sigma^2)\right)\\[2ex] 
+&=
+-\frac{1}{n}\cdot \mathbb{E}
+\left[\begin{array}{cc}
+\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)\right) & 
+\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)\\
+\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right) & 
+\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2) \right)
 \end{array}\right]\\[2ex]
 &=\left[\begin{array}{cc}
 \underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X'X}}
@@ -722,12 +733,14 @@ $$
 \end{align*}
 $$
 
+::: {.callout-tip}
+# Fisher Information Matrix
 The matrix 
 $$
-\mathcal{I}(\beta,\sigma) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}\right)
+\mathcal{I}(\theta) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta)\right)
 $$
 is called **Fisher Information Matrix**.
-
+:::
 
 #### Asymptotic Variance and Fisher Information Matrix {-}
 
@@ -735,38 +748,38 @@ The asymptotic variance of the MLE
 $$
 \hat{\theta}_{ML}=\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 $$ 
-is given by the **inverse of the Fisher information matrix** 
+is given by the **inverse of the Fisher information matrix** evaluated at the true parameter values $\beta_0$ and $\sigma^2_0.$
 $$
 \begin{align*}
 &AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
 =\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
-&=\left(\mathcal{I}(\beta,\sigma^2)\right)^{-1}\\[2ex]
-&=\left(-\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}\right)\right)^{-1}\\[2ex] 
+&=\left(\mathcal{I}(\beta'_0,\sigma^2_0)\right)^{-1}\\[2ex]
+&=\left(-\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta'_0,\sigma^2_0)\right)\right)^{-1}\\[2ex] 
 &=
 \left[\begin{array}{cc}
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta,\sigma^2)\right) & 
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\\
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right) & 
--\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2) \right)
+-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta'_0,\sigma^2_0)\right) & 
+-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta'_0,\sigma^2_0)\right)\\
+-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta'_0,\sigma^2_0)\right) & 
+-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta'_0,\sigma^2_0) \right)
 \end{array}\right]^{-1}\\[2ex]
 &=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X'X}}
+\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X'X}}
 & 
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} & 
-\underset{(1\times 1)}{\frac{1}{2\sigma^4}}
+\underset{(1\times 1)}{\frac{1}{2\sigma^4_0}}
 \end{array}\right]^{-1}\\[2ex]
 &=\left[\begin{array}{cc}
-\underset{(K\times K)}{\sigma^2\Sigma_{X'X}^{-1}}
+\underset{(K\times K)}{\sigma^2_0\Sigma_{X'X}^{-1}}
 & 
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} & 
-\underset{(1\times 1)}{2\sigma^4}
+\underset{(1\times 1)}{2\sigma^4_0}
 \end{array}\right]
 \end{align*}
 $$
 
-<!-- where $\mathcal{I}(\beta,\sigma^2)$ is called the **Fisher information matrix**. 
+<!-- where $\mathcal{I}(\beta',\sigma^2)$ is called the **Fisher information matrix**. 
 
 From our above derivations we know that
 $$
@@ -774,10 +787,10 @@ $$
 &\mathcal{I}\left(\beta, \sigma^2\right)\\[2ex]
 &=
 \left[\begin{array}{cc}
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta,\sigma^2)\right) & 
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right)\\
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta,\sigma^2)\right) & 
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta,\sigma^2) \right)
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)\right) & 
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)\\
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right) & 
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2) \right)
 \end{array}\right]\\[2ex]
 % &=
 % \left[\begin{array}{cc}
@@ -796,12 +809,13 @@ That is,
 $$
 \begin{align*}
 &AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
-=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex] 
-&=
+=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)%\\[2ex] 
+%&=
+=
 \left[\begin{array}{cc}
-\sigma^2\Sigma_{X'X}^{-1} & 0 \\[2ex]
-0 & \ 2\sigma^4
-\end{array}\right],
+\sigma^2_0\Sigma_{X'X}^{-1} & 0 \\[2ex]
+0 & \ 2\sigma^4_0
+\end{array}\right].
 \end{align*}
 $${#eq-FIMVar}
 
@@ -839,10 +853,11 @@ as $n\to\infty$. -->
 
 Of course, the variance expressions in @eq-FIMVar contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: 
 $$
-\begin{align}
-s_{ML}^2                         \quad&\text{for}\quad \sigma^2\\[2ex]
-S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad &\text{for}\quad \Sigma_{X'X}^{-1}.
-\end{align}
+s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
+$$
+and
+$$
+S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\quad \Sigma_{X'X}^{-1}.
 $$
 
 This leads to estimators of the asymptotic variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$
@@ -920,28 +935,31 @@ $$ -->
 
 In the following, we consider the asymptotic distribution of ML-estimators. 
 
-
 We only consider the simplest situation: Assume a random sample  
 $$
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 $$ 
 where $X\in\mathbb{R}$ is a univariate random variable with density function 
-$$f(x|\theta),
+$$f(x;\theta_0),
 $$ 
-where the true (unknown, univariate) parameter $\theta\in\mathbb{R}$ is an interior point of a compact parameter interval 
+where the true (unknown, univariate) parameter $\theta_0\in\Theta$ is an interior point of a compact parameter interval 
 $$\Theta=[\theta_l,\theta_u]\subset\mathbb{R}.
 $$ 
-**Note:** $\theta$ is an "interior point" of $\Theta$ if $\theta_l<\theta<\theta_u.$
+**Note:** $\theta_0$ is an "interior point" of $\Theta$ if $\theta_l<\theta_0<\theta_u.$
 
-Moreover let
+Moreover, we consider the following setup.
 
 * Likelihood function:
 $$
-\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_i|\theta)
+\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_i;\theta)
 $$
 * Log-likelihood function:
 $$
-\ell_n(\theta)=\ln\mathcal{L}(\theta)=\sum_{i=1}^n \ln f(X_i|\theta)
+\ell_n(\theta)=\ln\mathcal{L}(\theta)=\sum_{i=1}^n \ln f(X_i;\theta)
+$$
+* Maximum-likelihood estimator $\hat{\theta}_n$
+$$
+\hat{\theta}_n=\arg\max_{\theta\in\Theta}\ell_n(\theta)
 $$
 * The maximum-likelihood estimator $\hat{\theta}_n$ maximizes $\ell_n(\theta)$ uniquely such that 
 $$
@@ -949,24 +967,24 @@ $$
 $$
 * It is assumed that the partial derivatives 
 $$
-\frac{\partial}{\partial\theta}f(x|\theta)\quad\text{and}\quad \frac{\partial^2}{\partial\theta^2}f(x|\theta)
+\frac{\partial}{\partial\theta}f(x;\theta)\quad\text{and}\quad \frac{\partial^2}{\partial\theta^2}f(x;\theta)
 $$
 exist and that these partial derivatives can be passed under the integral such that
 $$
 \begin{align*}
-\frac{\partial}{\partial\theta}\int f(x|\theta)dx 
-&=\int\frac{\partial}{\partial\theta} f(x|\theta)dx\\
-\frac{\partial^2}{\partial\theta^2}\int f(x|\theta)dx 
-&=\int\frac{\partial^2}{\partial\theta^2} f(x|\theta)dx
+\frac{\partial}{\partial\theta}\int f(x;\theta)dx 
+&=\int\frac{\partial}{\partial\theta} f(x;\theta)dx\\
+\frac{\partial^2}{\partial\theta^2}\int f(x;\theta)dx 
+&=\int\frac{\partial^2}{\partial\theta^2} f(x;\theta)dx
 \end{align*}
 $$
-
+for all $\theta\in\Theta.$
 
 ::: {.callout-note}
 
 A possible **example** that fits into the above setup is the density of the exponential distribution 
 $$
-f(x|\theta)=\left\{
+f(x;\theta)=\left\{
     \begin{matrix}
     \theta\exp(- \theta x)& \text{for }x\geq 0\\
     0                     & \text{for }x < 0\\
@@ -977,7 +995,7 @@ with unknown "rate" parameter $\theta>0.$
 
 Or, more generally, the densities of the one-parameter, $\theta\in\Theta\subset\mathbb{R},$ exponential family  
 $$
-f(x|\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
+f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 $$
 where $h:$ $\mathbb{R}\to\mathbb{R},$ $T:$ $\mathbb{R}\to\mathbb{R},$ $\eta:$ $\Theta\to\mathbb{R},$ and $B:$ $\Theta\to\mathbb{R}.$
 :::
@@ -988,7 +1006,7 @@ The derivation of the asymptotic distribution of the ML estimator, $\hat\theta_n
 $$
 \ell_n'(\cdot),
 $$ 
-around $\theta$ (see @eq-MVT). To derive this expression, we use the mean value theorem (@thm-MVT).
+around $\theta_0$ (see @eq-MVT). To derive this expression, we use the mean value theorem (@thm-MVT).
 
 
 ::: {.callout-note icon=false} 
@@ -1011,9 +1029,12 @@ $$
 
 By the Mean Value Theorem (@thm-MVT), we know that 
 $$
-\ell_n'(\hat{\theta}_n)=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
+\ell_n'(\hat{\theta}_n)=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 $${#eq-MVT}
-for some $\psi_n\in(\theta,\hat{\theta}_n).$
+for some 
+
+* $\psi_n\in(\theta_0,\hat{\theta}_n)\quad$ if $\quad\theta_0<\hat{\theta}_n$
+* $\psi_n\in(\hat{\theta}_n,\theta_0)\quad$ if $\quad\hat{\theta}_n<\theta_0$
 
 
 Since $\hat{\theta}_n$ maximizes the log-Likelihood function it follows that 
@@ -1022,56 +1043,56 @@ $$
 $$ 
 Together with @eq-MVT, this implies that 
 $$
-\overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta)
+\overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 $$
 $$
-\Rightarrow\quad \ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta).
+\Rightarrow\quad \ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
 $${#eq-ml2}
 Now, note that necessarily
 $$
-\int_{-\infty}^{\infty} f(x|\theta)dx=1
+\int_{-\infty}^{\infty} f(x;\theta)dx=1
 $$ 
-for *all possible values* of $\theta,$ since $f$ is a density function. 
+for *all possible values* of $\theta\in\Theta,$ since $f$ is a density function. 
 
 Therefore,
 $$
 \begin{align*}
-\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x|\theta)dx&=\frac{\partial}{\partial \theta}1 = 0.
+\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx&=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$
 Using that we can here pass the partial derivative under the integral sign, we have thus
 $$
-\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x|\theta)dx=0.
+\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
 $${#eq-zero1} 
-And similarly, 
+And likewise, 
 $$
 \begin{align*}
-\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x|\theta)dx&=\frac{\partial^2}{\partial \theta^2}1 = 0.
+\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx&=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$ 
 Using again that we can here pass the partial derivative under the integral sign, we have thus
 $$
-\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x|\theta)dx=0.
+\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
 $${#eq-zero2} 
 
 
 Using @eq-zero1 and @eq-zero2, we can now show that the average 
 $$
-\frac{1}{n}\ell_n'(\theta)=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)
+\frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 $$ 
-is asymptotically normal. 
+is asymptotically normal. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem. 
 
 
 Firstly, for the mean one gets:
 $$
 \begin{align*}
-\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta)\right)
-&=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\[2ex]
-&=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\quad[\text{i.i.d.}]\\[2ex]
-&=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\[2ex]
-&=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x|\theta)}
-{f(x|\theta)}f(x|\theta)dx\\[2ex] 
-&=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x|\theta)dx\\[2ex] 
+\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)
+&=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\[2ex]
+&=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\quad[\text{i.i.d.}]\\[2ex]
+&=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)\quad[\text{chain rule}]\\[2ex]
+&=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
+{f(x;\theta_0)}f(x;\theta_0)dx\quad[\text{Def. of $\mathbb{E}$}]\\[2ex] 
+&=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex] 
 &=0,
 \end{align*}
 $$
@@ -1080,198 +1101,191 @@ where the last step follows from @eq-zero1.
 Secondly, for the variance one gets:
 $$
 \begin{align*}
-Var\left(\frac{1}{n}\ell_n'(\theta)\right)
-&=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\
-&=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\quad[\text{i.i.d.}]\\
-&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\
-&=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}{f(X_i|\theta)}\right)^2\right)\quad[\text{above mean zero result}]\\
-&=:\frac{1}{n}\mathcal{J}(\theta)
+Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
+&=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\
+&=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\quad[\text{i.i.d.}]\\
+&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X_i;\theta_0)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\
+&=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\
+&=:\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
 $$
+where the simplification of the variance expression (i.e. that here the variance equals the second moment) follows from @eq-zero2, and where $\mathcal{I}$ is the Fisher information (here a scalar) evaluated at $\theta_0.$ 
 
-Moreover, the average 
+Thirdly, the average 
 $$
-\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i|\theta)
+\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)
 $$ 
-is taken over i.i.d. random variables 
+is taken over i.i.d. random variables: 
 $$
-\frac{\partial}{\partial \theta} \ln f(X_i|\theta),\quad i=1,\dots,n.
+\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0),\quad i=1,\dots,n.
 $$ 
 Thus, we can apply the Lindeberg-Lévy central limit theorem from which it follows that
 $$
-\frac{\frac{1}{n}\ell_n'(\theta)-\mathbb{E}(\frac{\partial}{\partial \theta} \ln f(X_i|\theta))}{\sqrt{\frac{1}{n}\mathcal{J}(\theta)} } = \frac{\ell_n'(\theta)}{\sqrt{n\mathcal{J}(\theta)} } \to_d \mathcal{N}(0,1)
+\frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 $$
-Thus using our mean value expression (@eq-ml2), we also have
+as $n\to\infty.$
+
+Thus, using our mean value expression (@eq-ml2) for $\ell_n'(\theta_0),$ we also have
 $$
-\frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{J}(\theta)}}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1),
+\frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{I}(\theta_0)}}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1),
 $$
 which is equivalent to 
 $$
-\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta\right) \to_d \mathcal{N}(0,1).
+\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1).
 $${#eq-MLNorm}
 
-Further analysis requires us to study the statistic 
+
+The $\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)$-part in @eq-MLNorm is our object of interest. The further analysis requires us to study the statistic 
 $$
-\frac{1}{n}\ell_n''(\psi_n).
+-\frac{1}{n}\ell_n''(\psi_n)
 $$ 
+which will help us to understand the behavior of $\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)$ in @eq-MLNorm.
 
 ::: {.callout-important}
-Before we consider $\frac{1}{n}\ell_n''(\psi_n),$ with $\psi_n\in(\theta,\hat\theta_n),$ we begin this with studying the mean and the variance of the simpler statistic 
+Before we consider $-\frac{1}{n}\ell_n''(\psi_n),$ we begin with studying the mean and the variance of the simpler statistic 
 $$
-\frac{1}{n}\ell_n''(\theta).
+-\frac{1}{n}\ell_n''(\theta_0).
 $$
 ::: 
 
-First, the mean of $\frac{1}{n}\ell_n''(\theta):$
+First, the mean of $-\frac{1}{n}\ell_n''(\theta_0):$
 $$
 \begin{align*}
-\frac{1}{n}\ell_n''(\theta)
-&=\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i|\theta)\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\partial}{\partial\theta}\ln f(X_i|\theta)\right)\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\frac{\partial}{\partial \theta}f(X_i|\theta)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]
+-\frac{1}{n}\ell_n''(\theta_0)
+&=-\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i;\theta_0)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\partial}{\partial\theta}\ln f(X_i;\theta_0)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta}\left(\frac{\frac{\partial}{\partial \theta}f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)\quad[\text{chain rule}]
 \end{align*}
 $$
 Applying the quotient rule yields
 $$
 \begin{align*}
-\frac{1}{n}\ell_n''(\theta)
-&=\frac{1}{n}\sum_{i=1}^n
+-\frac{1}{n}\ell_n''(\theta_0)
+&=-\frac{1}{n}\sum_{i=1}^n
 \left(
-\frac{\left(\frac{\partial^2}{\partial \theta\partial \theta}f(X_i|\theta)\right) f(X_i|\theta)-\frac{\partial}{\partial\theta}f(X_i|\theta)\frac{\partial}{\partial\theta} f(X_i|\theta)}{\left(f(X_i|\theta)\right)^2}\right).
+\frac{\left(\frac{\partial^2}{\partial \theta\partial \theta}f(X_i;\theta_0)\right) f(X_i;\theta_0)-\frac{\partial}{\partial\theta}f(X_i;\theta_0)\frac{\partial}{\partial\theta} f(X_i;\theta_0)}{\left(f(X_i;\theta_0)\right)^2}\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n
+\left(
+\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}
+{f(X_i;\theta_0)}-\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
+{f(X_i;\theta_0)}\right)^2  
+\right).
 \end{align*}
 $$
-Taking the mean of $\frac{1}{n}\ell_n''(\theta)$ yields that 
+Taking the mean of $-\frac{1}{n}\ell_n''(\theta_0)$ yields that 
 $$
 \begin{align*}
-\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)
-&=\frac{n}{n}\mathbb{E}\left( \frac{\frac{\partial^2}{\partial \theta^2}  f(X_i|\theta)}
-{f(X_i|\theta)}-\left( \frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}
-{f(X_i|\theta)}\right)^2\right)\quad[\text{i.i.d.}]\\[2ex]
-&=0 - \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}
-{f(X_i|\theta)}\right)^2\right)\\[2ex]
-&=-\mathcal{J}(\theta),
+\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
+&=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}
+{f(X_i;\theta_0)}+\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
+{f(X_i;\theta_0)}\right)^2\right)\quad[\text{i.i.d.}]\\[2ex]
+&=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\[2ex]
+&=\mathcal{I}(\theta_0),
 \end{align*}
-$${#eq-AsymFI}
-which implies that $\frac{1}{n}\ell_n''(\theta)$ is an **unbiased estimator** of $-\mathcal{J}(\theta)$, i.e.
 $$
+$$
+\Rightarrow \qquad \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)=\mathcal{I}(\theta_0)\qquad
+$$
+
+This means that $-\frac{1}{n}\ell_n''(\theta_0)$ is an **unbiased estimator** of the Fisher information $\mathcal{I}(\theta_0).$
+<!-- $$
 \begin{align*}
-\operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)
-&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta)\right)-\left(-\mathcal{J}(\theta)\right)\\[2ex]
+\operatorname{Bias}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
+&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta_0)\right)-\left(\mathcal{I}(\theta_0)\right)\\[2ex]
 &=0. 
 \end{align*}
-$$
+$$ -->
 
 ::: {.callout-tip}
-We have now gathered different equivalent expressions for $\mathcal{J}(\theta).$ The last one (@eq-AsymFI) shows that $\mathcal{J}(\theta)$ is nothing but the  **Fisher information** scaled by $\frac{1}{n}$: 
-$$
-\begin{align*}
-\mathcal{J}(\theta)
-%& = Var\left(\frac{\partial}{\partial \theta} \ln f(X_i|\theta)\right)\\[2ex]
-%& = Var\left(\frac{\frac{\partial}{\partial \theta} f(X_i|\theta)}{f(X_i|\theta)}\right)\\[2ex]
-%&=\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i|\theta)}{f(X_i|\theta)}\right)^2\right)\\[2ex]
-&=-E\left(\frac{1}{n}\ell_n''(\theta)\right)\\[2ex]
-&=\frac{1}{n} (-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)\\[2ex]
-&=\frac{1}{n}\mathcal{I}(\theta)
-\end{align*}
-$$
-
-**Note:** For multivariate ($p$-dimensional) parameters $\theta,$ the Fisher information $(-1)\cdot \mathbb{E}\left(\ell_n''(\theta)\right)$  becomes the ($p\times p$) Fisher information matrix (see @sec-varMLE); i.e. a special version of a Hesse matrix.
+For multivariate ($p$-dimensional) parameters $\theta_0,$ the Fisher information $\mathcal{I}(\theta_0)=(-1)\cdot \mathbb{E}\left(\ell_n''(\theta_0)\right)$  becomes the ($p\times p$) Fisher information matrix (see @sec-varMLE); i.e. a special version of a Hesse matrix.
 :::
 
-Second, the variance of variance of $\frac{1}{n}\ell_n''(\theta):$
+Second, the variance of variance of $-\frac{1}{n}\ell_n''(\theta_0):$
 $$
 \begin{align*}
-Var\left(\frac{1}{n}\ell_n''(\theta)\right)
-&=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i|\theta)\right)\\[2ex]
+Var\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
+&=Var\left(-\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i;\theta_0)\right)\\[2ex]
 &=\frac{n}{n^2}
-\underbrace{Var\left(\frac{\partial^2}{\partial \theta \partial \theta}  \ln f(X_i|\theta)\right)}_{=\text{some fixed, deterministic figure}}\\[2ex]
+\underbrace{Var\left(\frac{\partial^2}{\partial \theta \partial \theta}  \ln f(X_i;\theta_0)\right)}_{=\texttt{constant}}\\[2ex]
 &=\frac{1}{n}\texttt{constant},
 \end{align*}
 $$
 which implies that
 $$
-Var\left(\frac{1}{n}\ell_n''(\theta)\right)\to 0\quad\text{as}\quad n\to\infty.
+Var\left(-\frac{1}{n}\ell_n''(\theta_0)\right)\to 0\quad\text{as}\quad n\to\infty.
 $$
 
-With these mean and variance results we can write down the Mean Squared Error (MSE) of the estimator $\frac{1}{n}\ell_n''(\theta)$ of $-\mathcal{J}(\theta):$
+With these mean and variance results for $-\frac{1}{n}\ell_n''(\theta_0),$ we can write down the Mean Squared Error (MSE) of the estimator $-\frac{1}{n}\ell_n''(\theta_0)$ of $\mathcal{I}(\theta_0):$
 $$
 \begin{align*}
-&\operatorname{MSE}\left(\frac{1}{n}\ell_n''(\theta)\right)\\[2ex]
+&\operatorname{MSE}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)\\[2ex]
 &=
-\mathbb{E}\left(\left(\frac{1}{n}\ell_n''(\theta) -\left(-\mathcal{J}(\theta)\right)\right)^2\right)\\[2ex]
-&=\left(\operatorname{Bias}\left(\frac{1}{n}\ell_n''(\theta)\right)\right)^2+Var\left(\frac{1}{n}\ell_n''(\theta)\right)\\[2ex]
-&=Var\left(\frac{1}{n}\ell_n''(\theta)\right)\to 0\quad\text{as}\quad n\to\infty.
+\mathbb{E}\left(\left(-\frac{1}{n}\ell_n''(\theta_0) -\mathcal{I}(\theta_0)\right)^2\right)\\[2ex]
+&=\underbrace{\left(\operatorname{Bias}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)\right)^2}_{=0}+Var\left(-\frac{1}{n}\ell_n''(\theta_0)\right)\\[3ex]
+&=Var\left(-\frac{1}{n}\ell_n''(\theta_0)\right)\to 0\quad\text{as}\quad n\to\infty.
 \end{align*}
 $$
 
-That is, the estimator $\frac{1}{n}\ell_n''(\theta)$ is a **mean square consistent** estimator, i.e.
+That is, the estimator $-\frac{1}{n}\ell_n''(\theta_0)$ is a **mean square consistent** estimator, i.e.
 $$
-\frac{1}{n}\ell_n''(\theta)\to_{m.s.} -\mathcal{J}(\theta)\quad \hbox{as}\quad n\to\infty,
+-\frac{1}{n}\ell_n''(\theta_0)\to_{m.s.} \mathcal{I}(\theta_0)\quad \hbox{as}\quad n\to\infty,
 $$
-which implies that $\frac{1}{n}\ell_n''(\theta)$ is also a **(weakly) consistent** estimator, i.e. 
+which implies that $\frac{1}{n}\ell_n''(\theta_0)$ is also a **(weakly) consistent** estimator, i.e. 
 $$
-\frac{1}{n}\ell_n''(\theta)\to_p -\mathcal{J}(\theta)\quad \hbox{as}\quad n\to\infty, 
+-\frac{1}{n}\ell_n''(\theta_0)\to_p \mathcal{I}(\theta_0)\quad \hbox{as}\quad n\to\infty, 
 $$
 since mean square convergence implies convergence in probability.
 
 
 ::: {.callout-important}
-🤔 Remember, we wanted to study $\frac{1}{n}\ell_n''(\psi_n)$ in @eq-MLNorm **not** $\frac{1}{n}\ell_n''(\theta).$
+🤔 Remember, we wanted to study $-\frac{1}{n}\ell_n''(\psi_n)$ in @eq-MLNorm **not** $-\frac{1}{n}\ell_n''(\theta_0).$
 
 Luckily, we are actually close now. 
 :::
 
-We know that the ML estimator $\hat\theta_n$ is (weakly) consistent, i.e., 
+Next, we use that ML estimators $\hat\theta_n$ are (weakly) consistent, i.e., 
 $$
-\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty;
+\hat\theta_n\to_p\theta_0\quad\text{as}\quad n\to\infty;
 $$
-see, for instance, @sec-MLconsistency for the case of ML estimation in the linear regression model. 
+this is, for instance, implied by our results in @sec-LinRegNorm for the case of ML estimation in linear regression under normality.  
 
 
-Since $\psi_n\in(\theta,\hat{\theta}_n)$ is a value between $\theta$ and $\hat{\theta}_n$ (@eq-MVT), the consistency of $\hat{\theta}_n$ implies that also
+Since $\psi_n$ is a value between $\theta_0$ and $\hat{\theta}_n$ (@eq-MVT), the consistency of $\hat{\theta}_n$ implies that also
 $$
-\psi_n\to_p\theta\quad\text{as}\quad n\to\infty.
+\psi_n\to_p\theta_0\quad\text{as}\quad n\to\infty.
 $$
 
-Therefore, we have (by the continuous mapping theorem) that also
+Therefore, we have by the **continuous mapping theorem** that also
 $$
 \begin{align}
-\frac{1}{n}\ell_n''(\psi_n)&\to_p -\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty\\
-\Leftrightarrow\quad -\frac{1}{n}\ell_n''(\psi_n)&\to_p \phantom{-}\mathcal{J}(\theta)\quad \hbox{ as }\quad n\to\infty.
+-\frac{1}{n}\ell_n''(\psi_n) & \to_p \phantom{-}\mathcal{I}(\theta_0)\quad \hbox{ as }\quad n\to\infty\\[2ex]
+\Rightarrow\qquad 
+\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)&\to_p \sqrt{\mathcal{I}(\theta_0)} \quad \hbox{ as }\quad n\to\infty.
 \end{align}
 $$
-<!-- Multiplying by $(-\sqrt{ \mathcal{J}(\theta)})^{-1}$ yields
-$$
-\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{ \mathcal{J}(\theta)}}
-%=n^{-1/2}\frac{-\ell_n''(\psi_n)}{\sqrt{n \cdot \mathcal{J}(\theta)}}
-\to_p \frac{-\mathcal{J}}{-\sqrt{ \mathcal{J}(\theta)}} 
-=\sqrt{ \mathcal{J}(\theta)}
-$$ -->
 
-Now, using Slutsky's theorem, we can connect the above consistency result with the asymptotic normality result in @eq-MLNorm such that 
+Now, using **Slutsky's theorem**, we can connect the above consistency result with the asymptotic normality result in @eq-MLNorm such that 
 $$
 \begin{align*}
-\underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{J}(\theta)}}\right)}_{\to_p \sqrt{\mathcal{J}(\theta)} }\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d\mathcal{N}(0,1)
+\underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)}_{\to_p \sqrt{\mathcal{I}(\theta_0)} }\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d\mathcal{N}(0,1)
 \end{align*}
 $$
 or equivalently
 $$
 \begin{align*}
-\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d N\left(0,\frac{1}{\mathcal{J}(\theta)}\right),
+\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d N\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
 $${#eq-AsymNormMLE}
-where 
-$$
-\mathcal{J}(\theta)=\frac{1}{n}(-1)\cdot E(\ell_n''(\theta))=\frac{1}{n}\mathcal{I}(\theta).
-$$ 
+where $1/\mathcal{I}(\theta_0)$ is the asymptotic variance of the ML estimator $\hat{\theta}_n$ and equals the inverse of the (here scalar valued) Fisher information $\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).$ 
+
 @eq-AsymNormMLE is the asymptotic normality result we aimed for. 
 
 ::: {.callout-note} 
-The above arguments can easily be generalized to multivariate ($p$-dimensional) parameter vectors $\theta\in\mathbb{R}^p$. In this case, $\mathcal{J}(\theta)$ becomes a $p\times p$ Hesse matrix, and
+The above arguments can easily be generalized to multivariate ($p$-dimensional) parameter vectors $\theta\in\mathbb{R}^p$. In this case, $\mathcal{I}(\theta_0)$ becomes a $p\times p$ Hesse matrix, and
 $$
-\sqrt{n}\left(\hat{\theta}_n-\theta\right)\to_d \mathcal{N}_p\left(0, \mathcal{J}(\theta)^{-1}\right),
+\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d \mathcal{N}_p\left(0, \mathcal{I}(\theta_0)^{-1}\right),
 $$
-where $n\mathcal{J}(\theta)=-E(\ell_n''(\theta))=\mathcal{I}(\theta),$ with $\mathcal{I}(\theta)$ being the $(p\times p)$ Fisher information matrix. 
+where $\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}\left(H_{\ell_n}(\theta_0)\right)$ is the $(p\times p)$ Fisher information matrix. 
 :::
 
 
@@ -1295,37 +1309,57 @@ Fisher information can be used as an alternative to the Hessian of the loss func
 
 Let 
 $$
-\tau=g(\theta),
+\tau_0=g(\theta_0),
 $$ 
-where $g$ is a **one-to-one (or injective) function** of $\theta,$ i.e. $g$ maps distinct elements of its domain to distinct elements---that is, the outputs never repeat. (One-to-one functions are invertible.)
+where $g(\theta)$ is a **one-to-one (or injective) function** of $\theta\in\Theta;$ i.e. $g$ maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)
 
-Let $\hat{\theta}_{n}$ be the maximum likelihood estimator of $\theta.$ 
+Let $\hat{\theta}_{n}$ be the maximum likelihood estimator of $\theta_0.$ 
 
 Then 
 $$
 \hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
 $$
-is the maximum likelihood estimator of $\tau.$
+is the maximum likelihood estimator of $\tau_0.$
 :::
 :::
 
 
 **Proof of @thm-EVP:**
 
-Since $g$ is a one-to-one function, it posses an inverse $h=g^{-1}.$ 
+Since $g$ is a one-to-one function, it posses an inverse $g^{-1}.$ 
 
 Thus 
 $$
-\hat{\theta}_{n} = h(\hat{\tau}_{n})
+\hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
 $$
 and 
 $$
-\theta = h(\tau).
+\theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
 $$
-This allows us to express the likelihood problem for $\tau$ in terms of the likelihood problem for $\theta = h(\tau).$ Thus, the likelihood with respect to $\tau$ can be expressed the likelihood with respect to $\theta = h(\tau),$ i.e. 
+This allows us to express the likelihood function $\tilde{\mathcal{L}}(\tau)$ used for estimating $\tau_0$ in terms of the likelihood function used for estimating $\theta_0 = g^{-1}(\tau_0):$ 
+$$
+\tilde{\mathcal{L}}_n(\tau) = \mathcal{L}_n(g^{-1}(\tau))=\mathcal{L}_n(\theta). 
+$$
+Since $\hat\theta_n$ denotes the ML estimator of $\theta_0,$ we know that 
+$$
+\mathcal{L}_n(\theta)\leq\mathcal{L}_n(\hat\theta_n)\quad\text{for all}\quad\theta\in\Theta.
+$$
+But since and for any $\tau=g(\theta)$
+$$
+\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta) 
+\leq 
+\mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
+$$
+we know also that 
+$$
+\tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau;
+$$
+i.e., $\hat{\tau}_n$ is indeed a maximum likelihood estimator of $\tau_0.$ 
+
+<!-- The likelihood function with respect to $\tau$ can be expressed the likelihood function with respect to $\theta = h(\tau)\in\Theta,$ i.e. 
 $$
 \begin{align*}
-\tilde{\mathcal{L}}(\tau) := \mathcal{L}(h(\tau)) 
+\tilde{\mathcal{L}}(\tau) = \mathcal{L}(h(\tau)) 
 & = \prod_{i=1}^n f(X_{i,obs}|h(\tau))\\[2ex]
 & = \prod_{i=1}^n f(X_{i,obs}|\theta)  = \mathcal{L}(\theta).
 \end{align*}
@@ -1347,7 +1381,7 @@ $$
 which shows the statement of @thm-EVP:
 $$
 \hat{\tau}_n=\arg\max_\tau\tilde{\mathcal{L}}(\tau).
-$$
+$$ -->
 
 
 ## Exercises {-}
@@ -1360,25 +1394,25 @@ Program the Newton-Raphson algorithm for a numerical computation of the ML estim
 
 Assume an i.i.d. random sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by 
 $$
-f(x|\theta)=
-\left\{\begin{array}{ll}\theta\exp(-\theta x),&x\geq 0\\0,&x<0\end{array}\right.
+f(x;\theta_0)=
+\left\{\begin{array}{ll}\theta_0\exp(-\theta_0 x),&x\geq 0\\0,&x<0\end{array}\right.
 $$ 
-with $\theta>0,$ where
+with $\theta_0>0,$ where
 $$
-\mu:=\mathbb{E}(X_i)=\frac{1}{\theta}
+\mu:=\mathbb{E}(X_i)=\frac{1}{\theta_0}
 $$ 
 and
 $$
-Var(X_i)=\frac{1}{\theta^2}.
+Var(X_i)=\frac{1}{\theta_0^2}.
 $$ 
 
 (a) What is the log-likelihood function for the i.i.d. random sample $X_1,\dots,X_n$?
-(b) Derive the maximum likelihood (ML) estimator $\hat\theta_n$ of $\theta$.
+(b) Derive the maximum likelihood (ML) estimator $\hat\theta_n$ of $\theta_0.$
 (c) From maximum likelihood theory we know that 
 $$
-\sqrt{n}(\hat\theta_n-\theta)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{J}(\theta)}\right).
+\sqrt{n}(\hat\theta_n-\theta_0)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right).
 $$
-Derive the expression for the Fischer information $\mathcal{I}(\theta)=n\mathcal{J}(\theta)$. Use the Fisher information to give the *explicit* formula for the asymptotic distribution of $\hat\theta_n$.
+Derive the expression for the Fischer information $\mathcal{I}(\theta_0).$ Use the Fisher information to give the *explicit* formula for the asymptotic distribution of $\hat\theta_n$.
 
 
 
@@ -1386,28 +1420,28 @@ Derive the expression for the Fischer information $\mathcal{I}(\theta)=n\mathcal
 
 <!-- From All of Statistics p 151 -->
 
-Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Unif}(0,\theta).$
+Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Unif}(0,\theta_0).$
 
 (a) What is the likelihood function? 
 
-(b) What is the maximum likelihood estimator of $\theta$? 
+(b) What is the maximum likelihood estimator of $\theta_0$? 
 
 
 #### Exercise 4. {-}
 
 
-Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Poisson}(\lambda).$ That is $X\sim f$ with density function 
+Let $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim\mathcal{Poisson}(\lambda_0).$ That is $X\sim f$ with density function 
 $$
-f(x|\lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}.
+f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 $$
  
-(a) Find the maximum likelihood estimator, $\hat{\lambda},$ of $\lambda.$
+(a) Find the maximum likelihood estimator, $\hat{\lambda},$ of $\lambda_0.$
 
-(b) Let $0<\lambda\leq 4.$ Find the maximum likelihood estimator, $\hat{P}(X=4),$ of $P(X=4).$
+(b) Let $0<\lambda_0\leq 4.$ Find the maximum likelihood estimator, $\hat{P}(X=4),$ of $P(X=4).$
 
 
 
-{{< include Ch4_Solutions.qmd >}}
+<!-- {{< include Ch4_Solutions.qmd >}} -->
 
 
 
@@ -1463,7 +1497,7 @@ $$
 
 
 
-<!-- **Example::** Assume an i.i.d. sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by $f(x|\theta)=\theta\exp(-\theta x)$. We then have $\mu:=E(X_i)=\frac{1}{\theta}$ as well as $\sigma^2_X:=\textrm{var}(X_i)=\frac{1}{\theta^2}$. The -->
+<!-- **Example::** Assume an i.i.d. sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by $f(x;\theta)=\theta\exp(-\theta x)$. We then have $\mu:=E(X_i)=\frac{1}{\theta}$ as well as $\sigma^2_X:=\textrm{var}(X_i)=\frac{1}{\theta^2}$. The -->
 <!-- log-likelihood functions is given by  -->
 <!-- $$l(\theta)=\sum_{i=1}^n \ln (\theta\exp(-\theta X_i)))=n \ln \theta -\sum_{i=1}^n \theta X_i$$ -->
 <!-- $$\Rightarrow \quad \ell_n'(\theta)=n\frac{1}{\theta} + \sum_{i=1}^n X_i.$$ -->
