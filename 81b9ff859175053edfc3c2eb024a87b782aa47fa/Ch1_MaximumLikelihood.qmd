@@ -22,7 +22,7 @@ Thus, maximum likelihood estimators can be very appealing, provided that the ass
 ::: {.callout-important}
 ## ML-estimation requires to fix the family of distributions $f(\cdot|\theta)$
 
-Classic ML-estimation requires us to fix the general family of density functions $f$ of the i.i.d. sample variables $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to a parameter $\theta,$ where $\theta$ is allowed to be a *finite* dimensional vector.  
+Classic ML-estimation requires us to fix the general family of density functions $f$ of the random variables in the (i.i.d.) random sample $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to an unknown parameter $\theta,$ where $\theta$ is allowed to be a *finite* dimensional vector.  
 
 Examples: 
 
@@ -48,11 +48,11 @@ This requirement (fixing the family of density functions) can be overly restrict
 
 ### Example: Coin Flipping (Bernoulli Trial) 
 
-To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a possibly unfair $\text{Coin}$ can take the value $H$ (Head) or $T$ (Tail),
+To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a *possibly unfair* $\text{Coin}$ can take the value $H$ (Head) or $T$ (Tail),
 $$
 \text{Coin}\in\{H,T\}.
 $$ 
-Such coin-flipps can be modeled using Bernoulli random variables 
+Such coin-flips can be modeled using Bernoulli random variables 
 $$
 X\sim\mathcal{Bern}(\theta_0)
 $$ 
@@ -73,7 +73,6 @@ which implies that the probability that we get a tail $T$ is
 $$
 1-\theta_0 = P(X=0) = P(\text{Coin}=T).
 $$ 
-
 
 
 Our goal is to estimate the unknown $\theta_0$ using a random (i.i.d.) sample of size $n$
@@ -144,7 +143,7 @@ where $f(X_{i,obs} | \theta)$ is the density function of the random variable $X_
 We estimate the unknown $\theta$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}.$ The value $\hat\theta$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
 $$
 \begin{align*}
-\hat\theta
+\hat{\theta}_{ML}
 &=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
 &=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
 \end{align*}
@@ -160,7 +159,12 @@ $$
 
 Usually it's easier to work with sums rather than products - also for doing the asymptotics in @sec-MLAsymp. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the **log-likelihood function**:
 $$
-\ell_n(\theta)=\ln\mathcal{L}_n(\theta)=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+\begin{align*}
+\ell_n(\theta)
+&=\ln\mathcal{L}_n(\theta)\\[2ex]
+&=\ln\prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
+&=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+\end{align*}
 $$
 Since this is only a monotonic transformation, we have that
 $$
@@ -232,7 +236,7 @@ $$
 \text{Second-order:}\quad& f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial of order 2}},
 \end{align*}
 $$
-Locally, i.e. for $h\approx 0,$ the Taylor polynomials are very good approximations of $f(\theta + h);$ see @fig-taylorApprox.
+Locally, i.e. for $h\approx 0,$ (e.g. $h=\pm 0.04$) the Taylor polynomials are very good approximations of $f(\theta + h);$ see @fig-taylorApprox.
 
 ```{r, echo = FALSE}
 #| label: fig-taylorApprox
@@ -295,7 +299,7 @@ That is, we try to find the value of $\theta$ that fulfills the first order cond
 
 **Initialization:** Let $\theta_{(0)}\in\Theta$ be our first guess of the root of $\ell'_n.$ 
 
-**$h$-Steps:** Typically, $\theta_{(0)}$ and thus $\ell_n'(\theta_{(0)})\neq 0.$ Therefore, we want to move from $\theta_{(0)}$ to a new root-candidate $\theta_{(1)}$ by doing an $h$-step update 
+**$h$-Steps:** Typically, our guess is not perfect and thus $\ell_n'(\theta_{(0)})\neq 0.$ Therefore, we want to move from $\theta_{(0)}$ to a new root-candidate $\theta_{(1)}$ by doing an $h$-step update 
 $$
 \theta_{(1)} = \theta_{(0)} + h.
 $$
@@ -383,7 +387,15 @@ box()
 
 
 ::: {.callout-warning}
-One can shown that if $\ell_n'$ is "well behaved" at its root $\theta$ (i.e. if $\ell_n''(\theta)\neq 0$ and if $\ell_n'''(\theta)$ is finite and continuous at $\theta$) and you start with $\theta_0$ "close enough" to the root $\theta,$ then $\theta_n$ will fastly converge to $\theta.$ Unfortunately, we don't know if $\ell_n'$ is well behaved at $\theta$ until we know $\theta,$ and we don't know beforehand how close is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
+One can shown that if $\ell_n'$ is "well behaved" at its root $\theta;$ i.e. 
+
+* if $\ell_n''(\hat{\theta}_{ML})\neq 0$ and 
+* if $\ell_n'''(\cdot)$ is finite and continuous at $\hat{\theta}_{ML}$ and 
+* if you start with $\theta_{(0)}$ "close enough" to the root $\hat{\theta}_{ML},$ 
+
+then $\theta_{(m)}$ will fast converge to $\theta.$ 
+
+Unfortunately, we often don't know if $\ell_n'$ is well behaved and we usually don't know whether our first guess is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
 :::
 
 <!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have

@@ -203,7 +203,7 @@ ML-estimation requires to fix the family of distributions <span class="math inli
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Classic ML-estimation requires us to fix the general family of density functions <span class="math inline">\(f\)</span> of the i.i.d. sample variables <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> such that <span class="math inline">\(f\)</span> is known up to a parameter <span class="math inline">\(\theta,\)</span> where <span class="math inline">\(\theta\)</span> is allowed to be a <em>finite</em> dimensional vector.</p>
+<p>Classic ML-estimation requires us to fix the general family of density functions <span class="math inline">\(f\)</span> of the random variables in the (i.i.d.) random sample <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> such that <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> where <span class="math inline">\(\theta\)</span> is allowed to be a <em>finite</em> dimensional vector.</p>
 <p>Examples:</p>
 <ul>
 <li><span class="math inline">\(f\)</span> being the probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta)\)</span> with <span class="math display">\[
@@ -225,9 +225,9 @@ f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\
 </section>
 <section id="example-coin-flipping-bernoulli-trial" class="level3" data-number="1.1.1">
 <h3 data-number="1.1.1" class="anchored" data-anchor-id="example-coin-flipping-bernoulli-trial"><span class="header-section-number">1.1.1</span> Example: Coin Flipping (Bernoulli Trial)</h3>
-<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a possibly unfair <span class="math inline">\(\text{Coin}\)</span> can take the value <span class="math inline">\(H\)</span> (Head) or <span class="math inline">\(T\)</span> (Tail), <span class="math display">\[
+<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a <em>possibly unfair</em> <span class="math inline">\(\text{Coin}\)</span> can take the value <span class="math inline">\(H\)</span> (Head) or <span class="math inline">\(T\)</span> (Tail), <span class="math display">\[
 \text{Coin}\in\{H,T\}.
-\]</span> Such coin-flipps can be modeled using Bernoulli random variables <span class="math display">\[
+\]</span> Such coin-flips can be modeled using Bernoulli random variables <span class="math display">\[
 X\sim\mathcal{Bern}(\theta_0)
 \]</span> where <span class="math display">\[
 X=\left\{
@@ -294,7 +294,7 @@ Likelihood Function
 <h4 class="unnumbered anchored" data-anchor-id="estimation-idea">Estimation Idea</h4>
 <p>We estimate the unknown <span class="math inline">\(\theta\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}.\)</span> The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong> <span class="math display">\[
 \begin{align*}
-\hat\theta
+\hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
 &amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
 \end{align*}
@@ -303,7 +303,12 @@ Likelihood Function
 \hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 \]</span></p>
 <p>Usually it’s easier to work with sums rather than products - also for doing the asymptotics in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
-\ell_n(\theta)=\ln\mathcal{L}_n(\theta)=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+\begin{align*}
+\ell_n(\theta)
+&amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
+&amp;=\ln\prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
+&amp;=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+\end{align*}
 \]</span> Since this is only a monotonic transformation, we have that <span class="math display">\[
 \begin{align*}
 \hat\theta_{ML}
@@ -366,7 +371,7 @@ it is applied to root-finding, but not when it is used for optimization. However
 \text{First-order:}\quad &amp;f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial of order 1}} \\
 \text{Second-order:}\quad&amp; f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial of order 2}},
 \end{align*}
-\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span>1.1</span></a>.</p>
+\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> (e.g.&nbsp;<span class="math inline">\(h=\pm 0.04\)</span>) the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span>1.1</span></a>.</p>
 <div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/fig-taylorApprox_a0c2f0ea084585095207b1b19468dd01">
 <div class="cell-output-display">
 <div id="fig-taylorApprox" class="quarto-figure quarto-figure-center anchored">
@@ -389,7 +394,7 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 \ell_n'(\theta)=0.
 \]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order condition of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size <span class="math inline">\(h.\)</span></p>
 <p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_{(0)}\in\Theta\)</span> be our first guess of the root of <span class="math inline">\(\ell'_n.\)</span></p>
-<p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, <span class="math inline">\(\theta_{(0)}\)</span> and thus <span class="math inline">\(\ell_n'(\theta_{(0)})\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_{(0)}\)</span> to a new root-candidate <span class="math inline">\(\theta_{(1)}\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
+<p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, our guess is not perfect and thus <span class="math inline">\(\ell_n'(\theta_{(0)})\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_{(0)}\)</span> to a new root-candidate <span class="math inline">\(\theta_{(1)}\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
 \theta_{(1)} = \theta_{(0)} + h.
 \]</span></p>
 <!-- 1. We select some starting value $\theta_0.$ 
@@ -430,7 +435,14 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” at its root <span class="math inline">\(\theta\)</span> (i.e.&nbsp;if <span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> and if <span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous at <span class="math inline">\(\theta\)</span>) and you start with <span class="math inline">\(\theta_0\)</span> “close enough” to the root <span class="math inline">\(\theta,\)</span> then <span class="math inline">\(\theta_n\)</span> will fastly converge to <span class="math inline">\(\theta.\)</span> Unfortunately, we don’t know if <span class="math inline">\(\ell_n'\)</span> is well behaved at <span class="math inline">\(\theta\)</span> until we know <span class="math inline">\(\theta,\)</span> and we don’t know beforehand how close is “close enough”. So, we cannot guarantee convergence of the Newton-Raphson algorithm.</p>
+<p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” at its root <span class="math inline">\(\theta;\)</span> i.e.&nbsp;</p>
+<ul>
+<li>if <span class="math inline">\(\ell_n''(\hat{\theta}_{ML})\neq 0\)</span> and</li>
+<li>if <span class="math inline">\(\ell_n'''(\cdot)\)</span> is finite and continuous at <span class="math inline">\(\hat{\theta}_{ML}\)</span> and</li>
+<li>if you start with <span class="math inline">\(\theta_{(0)}\)</span> “close enough” to the root <span class="math inline">\(\hat{\theta}_{ML},\)</span></li>
+</ul>
+<p>then <span class="math inline">\(\theta_{(m)}\)</span> will fast converge to <span class="math inline">\(\theta.\)</span></p>
+<p>Unfortunately, we often don’t know if <span class="math inline">\(\ell_n'\)</span> is well behaved and we usually don’t know whether our first guess is “close enough”. So, we cannot guarantee convergence of the Newton-Raphson algorithm.</p>
 </div>
 </div>
 <!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
