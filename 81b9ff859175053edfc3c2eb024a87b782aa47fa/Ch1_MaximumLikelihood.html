@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Ch5_EMAlgorithmus.html" rel="next">
+<link href="./Ch2_EMAlgorithmus.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -123,12 +123,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch4_MaximumLikelihood.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></a>
+  <a href="./Ch1_MaximumLikelihood.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch5_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
   </div>
 </li>
     </ul>
@@ -302,7 +302,7 @@ Likelihood Function
 <p>In our coin flip example this means to estimate the unknown <span class="math inline">\(\theta_0\)</span> by the value <span class="math inline">\(\hat\theta\)</span> at which the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> is maximal <span class="math display">\[
 \hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 \]</span></p>
-<p>Usually it’s easier to work with sums rather than products - also for doing the asymptotics in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
+<p>Usually it’s easier to work with sums rather than products - also for doing the asymptotics in <a href="#sec-MLAsymp"><span class="quarto-unresolved-ref">sec-MLAsymp</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
 \ell_n(\theta)=\ln\mathcal{L}_n(\theta)=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
 \]</span> Since this is only a monotonic transformation, we have that <span class="math display">\[
 \begin{align*}
@@ -366,12 +366,12 @@ it is applied to root-finding, but not when it is used for optimization. However
 \text{First-order:}\quad &amp;f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial of order 1}} \\
 \text{Second-order:}\quad&amp; f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial of order 2}},
 \end{align*}
-\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span>1.1</span></a>.</p>
-<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-taylorApprox_61e42ade113cb00e6349c9c19efa29ab">
+\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(h\approx 0,\)</span> the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox">Figure&nbsp;<span class="quarto-unresolved-ref">fig-taylorApprox</span></a>.</p>
+<div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/fig-taylorApprox_a0c2f0ea084585095207b1b19468dd01">
 <div class="cell-output-display">
 <div id="fig-taylorApprox" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="Ch4_MaximumLikelihood_files/figure-html/fig-taylorApprox-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch1_MaximumLikelihood_files/figure-html/fig-taylorApprox-1.png" class="img-fluid figure-img" width="672"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.1: First- and second-order Taylor approximations of a function <span class="math inline">\(f\)</span> around <span class="math inline">\(\theta=1.\)</span></figcaption><p></p>
 </figure>
 </div>
@@ -409,12 +409,12 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 \theta_{(1)} = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
 \]</span> Likewise, the <span class="math inline">\(m\)</span>th root-candidate is <span class="math display">\[
 \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
-\]</span> see also <a href="#fig-NR">Figure&nbsp;<span>1.2</span></a>.</p>
-<div class="cell" data-hash="Ch4_MaximumLikelihood_cache/html/fig-NR_09cb3e854629673fb699765c49441b09">
+\]</span> see also <a href="#fig-NR">Figure&nbsp;<span class="quarto-unresolved-ref">fig-NR</span></a>.</p>
+<div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/fig-NR_3e37eb79dd90aa55545172f4be78103a">
 <div class="cell-output-display">
 <div id="fig-NR" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="Ch4_MaximumLikelihood_files/figure-html/fig-NR-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Ch1_MaximumLikelihood_files/figure-html/fig-NR-1.png" class="img-fluid figure-img" width="672"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1.2: The <span class="math inline">\(m\)</span>th update step in the Newton-Raphson root-finding algorithm.</figcaption><p></p>
 </figure>
 </div>
@@ -496,7 +496,7 @@ Tip
 <section id="newton-raphson-algorithm-coin-flipping-example" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example">Newton-Raphson Algorithm: Coin-Flipping Example</h4>
 <p>Let’s return to our earlier coin flipping example.</p>
-<p>If we observe, for instance, only one head <span class="math inline">\(N_{H,obs}=1\)</span> for a sample size of <span class="math inline">\(n=5,\)</span> we already know from <a href="#eq-MLECoinFlipp">Equation&nbsp;<span>1.1</span></a> that <span class="math display">\[
+<p>If we observe, for instance, only one head <span class="math inline">\(N_{H,obs}=1\)</span> for a sample size of <span class="math inline">\(n=5,\)</span> we already know from <a href="#eq-MLECoinFlipp">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MLECoinFlipp</span></a> that <span class="math display">\[
 \hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 \]</span> but let us, nevertheless, apply the Newton-Raphson algorithm.</p>
 <p>First and second derivatives of <span class="math display">\[
@@ -513,7 +513,7 @@ Tip
 <li>One Head; i.e., <span class="math inline">\(N_{H,obs}=1\)</span></li>
 <li>Four Tails; i.e., <span class="math inline">\(n-N_{H,obs}=4\)</span></li>
 </ul>
-<p>Setting the tolerance level <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution is <span class="math inline">\(\hat\theta_{ML} = 0.2\)</span> which equals the analytic solution.</p>
+<p>Setting the tolerance level <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span class="quarto-unresolved-ref">tbl-NR</span></a>. The numeric optimization solution is <span class="math inline">\(\hat\theta_{ML} = 0.2\)</span> which equals the analytic solution.</p>
 <div id="tbl-NR" class="anchored">
 <table class="table">
 <caption>Table&nbsp;1.1: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with <span class="math inline">\(N_{H,obs}=1,\)</span> sample size <span class="math inline">\(n=5,\)</span> starting value <span class="math inline">\(\theta_{(0)}=0.4,\)</span> and convergence criterion <span class="math inline">\(\varepsilon=10^{-10}.\)</span></caption>
@@ -584,8 +584,8 @@ Y_i=X_i'\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 \]</span> denotes the vector of predictor variables, where the i.i.d. sample <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
-\]</span> follows a <strong>random design</strong> (<span class="quarto-unresolved-ref">?def-RandomFixedDesign</span>), which includes the exogeneity assumption <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0,\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></p>
-<p>For the following, it is convenient to write <a href="#eq-LinMod">Equation&nbsp;<span>1.2</span></a> using matrix notation <span class="math display">\[
+\]</span> follows a <strong>random design</strong> (<a href="#def-RandomFixedDesign">Definition&nbsp;<span class="quarto-unresolved-ref">def-RandomFixedDesign</span></a>), which includes the exogeneity assumption <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0,\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></p>
+<p>For the following, it is convenient to write <a href="#eq-LinMod">Equation&nbsp;<span class="quarto-unresolved-ref">eq-LinMod</span></a> using matrix notation <span class="math display">\[
 \begin{eqnarray*}
   \underset{(n\times 1)}{Y}&amp;=&amp;\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta} + \underset{(n\times 1)}{\varepsilon},
 \end{eqnarray*}
@@ -610,7 +610,7 @@ The requirement to make a (correct) distributional assumption is much more restr
 <!-- \item The $\varepsilon$'s are independent of one another. -->
 <!-- \item The $\varepsilon$'s are identically distributed, i.e. homoskedastic. -->
 <!-- \end{itemize} -->
-<p>Under <a href="#eq-OLSnormAss">Equation&nbsp;<span>1.3</span></a>, we have <span class="math display">\[
+<p>Under <a href="#eq-OLSnormAss">Equation&nbsp;<span class="quarto-unresolved-ref">eq-OLSnormAss</span></a>, we have <span class="math display">\[
 f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
 \]</span> where <span class="math inline">\(\theta_0=(\beta_0',\sigma_0^2)\)</span> denotes the unknown parameter vector.</p>
@@ -671,10 +671,10 @@ Score Function
 <p>The score function is <strong>random</strong>, since it depends on the random sample.</p>
 <p>At the <strong>true parameter</strong> vector <span class="math inline">\(\theta_0\in\mathbb{R}^p,\)</span> the score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
-\]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span> We show this below in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>.</p>
+\]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span> We show this below in <a href="#sec-MLAsymp"><span class="quarto-unresolved-ref">sec-MLAsymp</span></a>.</p>
 </div>
 </div>
-<p>Setting the score function in <a href="#eq-LinRegScoreFun">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, and we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
+<p>Setting the score function in <a href="#eq-LinRegScoreFun">Equation&nbsp;<span class="quarto-unresolved-ref">eq-LinRegScoreFun</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, and we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
 <p>Solving for <span class="math inline">\(\hat\beta_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
 &amp; \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
@@ -885,7 +885,7 @@ $$
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$. -->
-<p>Of course, the variance expressions in <a href="#eq-FIMVar">Equation&nbsp;<span>1.5</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: <span class="math display">\[
+<p>Of course, the variance expressions in <a href="#eq-FIMVar">Equation&nbsp;<span class="quarto-unresolved-ref">eq-FIMVar</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: <span class="math display">\[
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 \]</span> and <span class="math display">\[
 S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\quad \Sigma_{X'X}^{-1}.
@@ -1014,7 +1014,7 @@ f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 </div>
 <p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
-\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>).</p>
+\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MVT</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-MVT</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1034,7 +1034,7 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 </div>
 </div>
-<p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
+<p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-MVT</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \tag{1.6}\]</span></span> for some</p>
 <ul>
@@ -1043,7 +1043,7 @@ f(b)=f(a) + f'(c)(b-a).
 </ul>
 <p>Since <span class="math inline">\(\hat{\theta}_n\)</span> maximizes the log-Likelihood function it follows that <span class="math display">\[
 \ell_n'(\hat{\theta}_n)=0.
-\]</span> Together with <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>, this implies that <span class="math display">\[
+\]</span> Together with <a href="#eq-MVT">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MVT</span></a>, this implies that <span class="math display">\[
 \overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \]</span> <span id="eq-ml2"><span class="math display">\[
 \Rightarrow\quad \ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
@@ -1063,7 +1063,7 @@ f(b)=f(a) + f'(c)(b-a).
 \]</span> Using again that we can here pass the partial derivative under the integral sign, we have thus <span id="eq-zero2"><span class="math display">\[
 \int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
 \tag{1.9}\]</span></span></p>
-<p>Using <a href="#eq-zero1">Equation&nbsp;<span>1.8</span></a> and <a href="#eq-zero2">Equation&nbsp;<span>1.9</span></a>, we can now show that the average <span class="math display">\[
+<p>Using <a href="#eq-zero1">Equation&nbsp;<span class="quarto-unresolved-ref">eq-zero1</span></a> and <a href="#eq-zero2">Equation&nbsp;<span class="quarto-unresolved-ref">eq-zero2</span></a>, we can now show that the average <span class="math display">\[
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 \]</span> is asymptotically normal. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem.</p>
 <p>Firstly, for the mean one gets: <span class="math display">\[
@@ -1077,7 +1077,7 @@ f(b)=f(a) + f'(c)(b-a).
 &amp;=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex]
 &amp;=0,
 \end{align*}
-\]</span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span>1.8</span></a>.</p>
+\]</span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span class="quarto-unresolved-ref">eq-zero1</span></a>.</p>
 <p>Secondly, for the variance one gets: <span class="math display">\[
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
@@ -1087,7 +1087,7 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\
 &amp;=:\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
-\]</span> where the simplification of the variance expression (i.e.&nbsp;that here the variance equals the second moment) follows from <a href="#eq-zero2">Equation&nbsp;<span>1.9</span></a>, and where <span class="math inline">\(\mathcal{I}\)</span> is the Fisher information (here a scalar) evaluated at <span class="math inline">\(\theta_0.\)</span></p>
+\]</span> where the simplification of the variance expression (i.e.&nbsp;that here the variance equals the second moment) follows from <a href="#eq-zero2">Equation&nbsp;<span class="quarto-unresolved-ref">eq-zero2</span></a>, and where <span class="math inline">\(\mathcal{I}\)</span> is the Fisher information (here a scalar) evaluated at <span class="math inline">\(\theta_0.\)</span></p>
 <p>Thirdly, the average <span class="math display">\[
 \frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)
 \]</span> is taken over i.i.d. random variables: <span class="math display">\[
@@ -1095,14 +1095,14 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 \]</span> Thus, we can apply the Lindeberg-Lévy central limit theorem from which it follows that <span class="math display">\[
 \frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 \]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
-<p>Thus, using our mean value expression (<a href="#eq-ml2">Equation&nbsp;<span>1.7</span></a>) for <span class="math inline">\(\ell_n'(\theta_0),\)</span> we also have <span class="math display">\[
+<p>Thus, using our mean value expression (<a href="#eq-ml2">Equation&nbsp;<span class="quarto-unresolved-ref">eq-ml2</span></a>) for <span class="math inline">\(\ell_n'(\theta_0),\)</span> we also have <span class="math display">\[
 \frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{I}(\theta_0)}}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1),
 \]</span> which is equivalent to <span id="eq-MLNorm"><span class="math display">\[
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1).
 \tag{1.10}\]</span></span></p>
-<p>The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> is our object of interest. The further analysis requires us to study the statistic <span class="math display">\[
+<p>The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MLNorm</span></a> is our object of interest. The further analysis requires us to study the statistic <span class="math display">\[
 -\frac{1}{n}\ell_n''(\psi_n)
-\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a>.</p>
+\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MLNorm</span></a>.</p>
 <div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1167,7 +1167,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta_0,\)</span> the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=(-1)\cdot \mathbb{E}\left(\ell_n''(\theta_0)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span>Section&nbsp;1.3.1</span></a>); i.e.&nbsp;a special version of a Hesse matrix.</p>
+<p>For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta_0,\)</span> the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=(-1)\cdot \mathbb{E}\left(\ell_n''(\theta_0)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span class="quarto-unresolved-ref">sec-varMLE</span></a>); i.e.&nbsp;a special version of a Hesse matrix.</p>
 </div>
 </div>
 <p>Second, the variance of variance of <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0):\)</span> <span class="math display">\[
@@ -1205,14 +1205,14 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span></p>
+<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MLNorm</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span></p>
 <p>Luckily, we are actually close now.</p>
 </div>
 </div>
 <p>Next, we use that ML estimators <span class="math inline">\(\hat\theta_n\)</span> are (weakly) consistent, i.e., <span class="math display">\[
 \hat\theta_n\to_p\theta_0\quad\text{as}\quad n\to\infty;
-\]</span> this is, for instance, implied by our results in <a href="#sec-LinRegNorm"><span>Section&nbsp;1.3</span></a> for the case of ML estimation in linear regression under normality.</p>
-<p>Since <span class="math inline">\(\psi_n\)</span> is a value between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
+\]</span> this is, for instance, implied by our results in <a href="#sec-LinRegNorm"><span class="quarto-unresolved-ref">sec-LinRegNorm</span></a> for the case of ML estimation in linear regression under normality.</p>
+<p>Since <span class="math inline">\(\psi_n\)</span> is a value between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MVT</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
 \psi_n\to_p\theta_0\quad\text{as}\quad n\to\infty.
 \]</span></p>
 <p>Therefore, we have by the <strong>continuous mapping theorem</strong> that also <span class="math display">\[
@@ -1222,7 +1222,7 @@ Important
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)&amp;\to_p \sqrt{\mathcal{I}(\theta_0)} \quad \hbox{ as }\quad n\to\infty.
 \end{align}
 \]</span></p>
-<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> such that <span class="math display">\[
+<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span class="quarto-unresolved-ref">eq-MLNorm</span></a> such that <span class="math display">\[
 \begin{align*}
 \underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)}_{\to_p \sqrt{\mathcal{I}(\theta_0)} }\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d\mathcal{N}(0,1)
 \end{align*}
@@ -1231,7 +1231,7 @@ Important
 \sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d N\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
 \tag{1.11}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the asymptotic variance of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).\)</span></p>
-<p><a href="#eq-AsymNormMLE">Equation&nbsp;<span>1.11</span></a> is the asymptotic normality result we aimed for.</p>
+<p><a href="#eq-AsymNormMLE">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AsymNormMLE</span></a> is the asymptotic normality result we aimed for.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1285,7 +1285,7 @@ Machine learning
 </div>
 </div>
 </div>
-<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.2</span></a>:</strong></p>
+<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-EVP</span></a>:</strong></p>
 <p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it posses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
 <p>Thus <span class="math display">\[
 \hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
@@ -1333,7 +1333,7 @@ $$ -->
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
 <section id="exercise-1." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
-<p>Program the Newton-Raphson algorithm for a numerical computation of the ML estimate <span class="math inline">\(\hat\theta\)</span> of the parameter <span class="math inline">\(\theta=P(\text{Coin}=\texttt{HEAD})\)</span> in our coin toss example of this chapter. Replicate the results shown in <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a>.</p>
+<p>Program the Newton-Raphson algorithm for a numerical computation of the ML estimate <span class="math inline">\(\hat\theta\)</span> of the parameter <span class="math inline">\(\theta=P(\text{Coin}=\texttt{HEAD})\)</span> in our coin toss example of this chapter. Replicate the results shown in <a href="#tbl-NR">Table&nbsp;<span class="quarto-unresolved-ref">tbl-NR</span></a>.</p>
 </section>
 <section id="exercise-2." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
@@ -1371,7 +1371,7 @@ f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 <li><p>Find the maximum likelihood estimator, <span class="math inline">\(\hat{\lambda},\)</span> of <span class="math inline">\(\lambda_0.\)</span></p></li>
 <li><p>Let <span class="math inline">\(0&lt;\lambda_0\leq 4.\)</span> Find the maximum likelihood estimator, <span class="math inline">\(\hat{P}(X=4),\)</span> of <span class="math inline">\(P(X=4).\)</span></p></li>
 </ol>
-<!-- {{< include Ch4_Solutions.qmd >}} -->
+<!-- {{< include Ch1_MaximumLikelihood_Solutions.qmd >}} -->
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
@@ -1782,7 +1782,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Ch5_EMAlgorithmus.html" class="pagination-link">
+      <a href="./Ch2_EMAlgorithmus.html" class="pagination-link">
         <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
