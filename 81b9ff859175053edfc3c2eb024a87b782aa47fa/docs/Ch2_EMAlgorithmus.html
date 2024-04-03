@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computational Statistics (M.Sc.) - 2&nbsp; The Expectation Maximization (EM) Algorithm</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Ch1_MaximumLikelihood.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./" class="sidebar-logo-link">
+      <img src="./images/Uni_Bonn_Logo.jpeg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Computational Statistics (M.Sc.)</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Organization of the Course</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch1_MaximumLikelihood.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#motivation-cluster-analysis-using-gaussian-mixture-models" id="toc-motivation-cluster-analysis-using-gaussian-mixture-models" class="nav-link active" data-scroll-target="#motivation-cluster-analysis-using-gaussian-mixture-models"><span class="toc-section-number">2.1</span>  Motivation: Cluster Analysis using Gaussian Mixture Models</a></li>
+  <li><a href="#the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions" id="toc-the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions" class="nav-link" data-scroll-target="#the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions"><span class="toc-section-number">2.2</span>  The EM Algorithm for Maximum Likelihood Estimation of Gaussian Mixture Distributions</a>
+  <ul class="collapse">
+  <li><a href="#gaussian-mixture-models-gmm" id="toc-gaussian-mixture-models-gmm" class="nav-link" data-scroll-target="#gaussian-mixture-models-gmm"><span class="toc-section-number">2.2.1</span>  Gaussian Mixture Models (GMM)</a></li>
+  <li><a href="#maximum-likelihood-ml-estimation" id="toc-maximum-likelihood-ml-estimation" class="nav-link" data-scroll-target="#maximum-likelihood-ml-estimation"><span class="toc-section-number">2.2.2</span>  Maximum Likelihood (ML) Estimation</a></li>
+  <li><a href="#sec-EM1" id="toc-sec-EM1" class="nav-link" data-scroll-target="#sec-EM1"><span class="toc-section-number">2.2.3</span>  The EM Algorithm for GMMs</a></li>
+  </ul></li>
+  <li><a href="#the-true-view-on-the-em-algorithm-adding-unobserved-variables" id="toc-the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="nav-link" data-scroll-target="#the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="toc-section-number">2.3</span>  The True View on the EM Algorithm: Adding Unobserved Variables</a>
+  <ul class="collapse">
+  <li><a href="#completion-of-the-data" id="toc-completion-of-the-data" class="nav-link" data-scroll-target="#completion-of-the-data"><span class="toc-section-number">2.3.1</span>  Completion of the Data</a></li>
+  <li><a href="#sec-PriorPosterior" id="toc-sec-PriorPosterior" class="nav-link" data-scroll-target="#sec-PriorPosterior"><span class="toc-section-number">2.3.2</span>  Prior and Posterior Probabilities</a></li>
+  <li><a href="#the-abstract-version-of-the-em-algorithm" id="toc-the-abstract-version-of-the-em-algorithm" class="nav-link" data-scroll-target="#the-abstract-version-of-the-em-algorithm"><span class="toc-section-number">2.3.3</span>  The Abstract Version of the EM-Algorithm</a></li>
+  </ul></li>
+  <li><a href="#unsupervised-classification" id="toc-unsupervised-classification" class="nav-link" data-scroll-target="#unsupervised-classification"><span class="toc-section-number">2.4</span>  (Unsupervised) Classification</a>
+  <ul class="collapse">
+  <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">2.4.1</span>  Bayes Classifier</a></li>
+  <li><a href="#synopsis-penguin-example" id="toc-synopsis-penguin-example" class="nav-link" data-scroll-target="#synopsis-penguin-example"><span class="toc-section-number">2.4.2</span>  Synopsis: Penguin Example</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>The EM algorithm is often used to simplify, or make possible, complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating Gaussian mixture distributions, as this is probably its most well-known application. Even the original work on the EM algorithm <span class="citation" data-cites="Dempster_1977">(<a href="#ref-Dempster_1977" role="doc-biblioref">Dempster, Laird, and Rubin 1977</a>)</span> already dealt with the estimation of Gaussian mixture distributions.</p>
+<section id="possible-applications-of-gaussian-mixture-distributions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="possible-applications-of-gaussian-mixture-distributions">Possible Applications of Gaussian mixture distributions</h4>
+<ul>
+<li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>).</li>
+<li>For instance: Automatic video editing (e.g., separation of back- and foreground)</li>
+</ul>
+</section>
+<section id="some-literature" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="some-literature">Some literature</h4>
+<ul>
+<li><p>Chapter 9 of <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"><strong>Pattern Recognition and Machine Learning</strong></a> <span class="citation" data-cites="Bishop_2006">(<a href="#ref-Bishop_2006" role="doc-biblioref">Bishop 2006</a>)</span>. Free PDF version: <a href="https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"><strong>PDF-Version</strong></a></p></li>
+<li><p>Chapter 8.5 of <a href="https://web.stanford.edu/~hastie/ElemStatLearn/"><strong>Elements of Statistical Learning: Data Mining, Inference and Prediction</strong></a> <span class="citation" data-cites="Hastie_2009">(<a href="#ref-Hastie_2009" role="doc-biblioref">Hastie et al. 2009</a>)</span>. Free PDF version: <a href="https://web.stanford.edu/~hastie/ElemStatLearn/"><strong>PDF-Version</strong></a></p></li>
+</ul>
+</section>
+<section id="r-packages-for-this-chapter" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="r-packages-for-this-chapter"><code>R</code>-Packages for this Chapter</h4>
+<p>The following <code>R</code>-packages are used in this chapter:</p>
+<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-1_592d14ea947eb78ac0cf78c2bb0a8293">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tidyverse"</span>,      <span class="co"># Tidyverse packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">"palmerpenguins"</span>, <span class="co"># Penguins data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"scales"</span>,         <span class="co"># Transparent colors: alpha()</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">"RColorBrewer"</span>,   <span class="co"># Nice colors</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>          <span class="st">"mclust"</span>,         <span class="co"># Gaussian mixture models for clustering</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="st">"MASS"</span>)           <span class="co"># Used to generate multivariate </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            <span class="co"># random normal variables</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(pkgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="motivation-cluster-analysis-using-gaussian-mixture-models" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="motivation-cluster-analysis-using-gaussian-mixture-models"><span class="header-section-number">2.1</span> Motivation: Cluster Analysis using Gaussian Mixture Models</h2>
+<p>As a data example we use the <a href="https://allisonhorst.github.io/palmerpenguins/articles/intro.html"><code>palmerpenguins</code></a> data (<span class="citation" data-cites="palmerpenguins">Horst, Hill, and Gorman (<a href="#ref-palmerpenguins" role="doc-biblioref">2020</a>)</span>).</p>
+<p>These data are from surveys of penguin populations on the Palmer Archipelago (Antarctic Peninsula). Penguins are often difficult to distinguish from one another (<a href="#fig-cheekypenguin">Figure&nbsp;<span>2.1</span></a>). We will try to find groupings in the penguin data (fin length) using a Gaussian mixture distribution. To be able to estimate such mixing distributions, we introduce the EM algorithm.</p>
+<div id="fig-cheekypenguin" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/penguins.gif" class="img-fluid figure-img" style="width:80.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Cheeky penguin in action.</figcaption><p></p>
+</figure>
+</div>
+<p>The following code chunk prepares the data</p>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We have the information about the different penguin species (<code>penguin_species</code>) but in the following we pretend not to know this information.</p>
+<p>We want to determine the group memberships (species) by cluster analysis on the basis of the fin lengths (<code>penguin_flipper</code>) alone.</p>
+<p>Afterwards we can use the data in <code>penguin_species</code> to check how good our cluster analysis is.</p>
+</div>
+</div>
+<div class="cell" data-layout-align="center" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-2_39058679334c0e27d93638f52fdbce9a">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.0     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"palmerpenguins"</span>) <span class="co"># Penguin data </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RColorBrewer"</span>)   <span class="co"># nice colors</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"scales"</span>)         <span class="co"># transparent colors: alpha()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'scales'
+
+The following object is masked from 'package:purrr':
+
+    discard
+
+The following object is masked from 'package:readr':
+
+    col_factor</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>col_v <span class="ot">&lt;-</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">name =</span> <span class="st">"Set2"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Vorbereitung der Daten:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> palmerpenguins<span class="sc">::</span>penguins <span class="sc">%&gt;%</span>  <span class="co"># penguin data</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span>                  <span class="co"># 'tibble'-dataframe</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(species<span class="sc">!=</span><span class="st">"Adelie"</span>) <span class="sc">%&gt;%</span>    <span class="co"># remove penguin species 'Adelie' </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">droplevels</span>() <span class="sc">%&gt;%</span>                        <span class="co"># remove the non-used factor level</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span>                    <span class="co"># remove NAs</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">species =</span> species,        <span class="co"># rename variables </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">flipper =</span> flipper_length_mm) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(species, flipper)         <span class="co"># select variables </span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="fu">nrow</span>(penguins)                  <span class="co"># sample size</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Variable 'Penguine_Art' aus penguins-Daten "herausziehen"</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>penguin_species    <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(penguins, species)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Variable 'penguin_flipper' aus penguins-Daten "herausziehen"</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>penguin_flipper <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(penguins, flipper)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Histogramm:</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="at">x =</span> penguin_flipper, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"Flipper-Length (mm)"</span>, <span class="at">main=</span><span class="st">"Penguins</span><span class="sc">\n</span><span class="st">(Two Groups)"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">gray</span>(.<span class="dv">65</span>,.<span class="dv">5</span>), <span class="at">border=</span><span class="fu">gray</span>(.<span class="dv">35</span>,.<span class="dv">5</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">0.0003</span>, <span class="fl">0.039</span>))</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Stipchart hinzufügen:</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(<span class="at">x =</span> penguin_flipper, <span class="at">method =</span> <span class="st">"jitter"</span>, </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">jitter =</span> .<span class="dv">0005</span>, <span class="at">at =</span> .<span class="dv">001</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">col=</span><span class="fu">alpha</span>(col_v[<span class="dv">3</span>],.<span class="dv">5</span>), </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">bg=</span><span class="fu">alpha</span>(col_v[<span class="dv">3</span>],.<span class="dv">5</span>), <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ch2_EMAlgorithmus_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="clustering-using-gaussian-mixture-distributions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions">Clustering using Gaussian Mixture Distributions</h4>
+<ol type="1">
+<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
+<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a> and <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>)</li>
+</ol>
+<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/fig-GMM-plot1_66cda2530514f8fcee482f6898134767">
+<div class="cell-output-display">
+<div id="fig-GMM-plot1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch2_EMAlgorithmus_files/figure-html/fig-GMM-plot1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.2: Cluster analysis based on a mixture distribution with two weighted normal distributions.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
+<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a>. We’ll learn everything about it in this chapter:</p>
+<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-4_238e1e9326dfc22ccdfd719a4dda6273">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(<span class="st">"mclust"</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Number of Groups</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="dv">2</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Schätzung des Gaußschen Mischmodells (per EM Algorithmus)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="do">## und Clusteranalyse</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>mclust_obj <span class="ot">&lt;-</span> mclust<span class="sc">::</span><span class="fu">Mclust</span>(<span class="at">data       =</span> penguin_flipper, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">G          =</span> G, </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">modelNames =</span> <span class="st">"V"</span>, </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">verbose    =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(mclust_obj)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># str(mclust_obj)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="do">## estimated group assignment </span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>class <span class="ot">&lt;-</span> mclust_obj<span class="sc">$</span>classification</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Fraction of correct group assignments:</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># cbind(class, penguin_species)</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sum</span>(class <span class="sc">==</span> <span class="fu">as.numeric</span>(penguin_species))<span class="sc">/</span>n, <span class="dv">2</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="do">## estimated means of the two Gaussian distributions</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>mean_m <span class="ot">&lt;-</span> <span class="fu">t</span>(mclust_obj<span class="sc">$</span>parameters<span class="sc">$</span>mean)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="do">## estimated variances (and possibly covariances) </span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>cov_l  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"Cov1"</span> <span class="ot">=</span> mclust_obj<span class="sc">$</span>parameters<span class="sc">$</span>variance<span class="sc">$</span>sigmasq[<span class="dv">1</span>], </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Cov2"</span> <span class="ot">=</span> mclust_obj<span class="sc">$</span>parameters<span class="sc">$</span>variance<span class="sc">$</span>sigmasq[<span class="dv">2</span>])</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="do">## estimated mixture weights (prior-probabilities) </span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>prop_v <span class="ot">&lt;-</span> mclust_obj<span class="sc">$</span>parameters<span class="sc">$</span>pro</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="do">## evaluating the Gaussian mixture density function </span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>np      <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># number of evaluation points</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>xxd     <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(penguin_flipper)<span class="sc">-</span><span class="dv">3</span>, </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>               <span class="fu">max</span>(penguin_flipper)<span class="sc">+</span><span class="dv">5</span>, </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>               <span class="at">length.out =</span> np)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="do">## mixture density</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>yyd     <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(xxd, mean_m[<span class="dv">1</span>], <span class="fu">sqrt</span>(cov_l[[<span class="dv">1</span>]]))<span class="sc">*</span>prop_v[<span class="dv">1</span>] <span class="sc">+</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>           <span class="fu">dnorm</span>(xxd, mean_m[<span class="dv">2</span>], <span class="fu">sqrt</span>(cov_l[[<span class="dv">2</span>]]))<span class="sc">*</span>prop_v[<span class="dv">2</span>]</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="do">## single densities</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>yyd1    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(xxd, mean_m[<span class="dv">1</span>], <span class="fu">sqrt</span>(cov_l[[<span class="dv">1</span>]]))<span class="sc">*</span>prop_v[<span class="dv">1</span>]</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>yyd2    <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(xxd, mean_m[<span class="dv">2</span>], <span class="fu">sqrt</span>(cov_l[[<span class="dv">2</span>]]))<span class="sc">*</span>prop_v[<span class="dv">2</span>]</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="at">x =</span> penguin_flipper, <span class="at">xlab=</span><span class="st">"Flipper length (mm)"</span>, <span class="at">main=</span><span class="st">"Penguins</span><span class="sc">\n</span><span class="st">(Two Groups)"</span>,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">gray</span>(.<span class="dv">65</span>,.<span class="dv">5</span>), <span class="at">border=</span><span class="fu">gray</span>(.<span class="dv">35</span>,.<span class="dv">5</span>), <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.04</span>))</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> xxd, <span class="at">y=</span>yyd, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">gray</span>(.<span class="dv">35</span>,.<span class="dv">75</span>))</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> xxd, <span class="at">y=</span>yyd1, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">gray</span>(.<span class="dv">35</span>,.<span class="dv">75</span>), <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x =</span> xxd, <span class="at">y=</span>yyd2, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="fu">gray</span>(.<span class="dv">35</span>,.<span class="dv">75</span>), <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fl">203.1</span>, <span class="at">lty=</span><span class="dv">3</span>)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(penguin_flipper[class<span class="sc">==</span><span class="dv">1</span>], </span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"jitter"</span>, <span class="at">jitter =</span> .<span class="dv">0005</span>, <span class="at">at =</span> .<span class="dv">001</span>,</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>           <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">col=</span><span class="fu">alpha</span>(col_v[<span class="dv">1</span>],.<span class="dv">5</span>), <span class="at">bg=</span><span class="fu">alpha</span>(col_v[<span class="dv">1</span>],.<span class="dv">5</span>), <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(penguin_flipper[class<span class="sc">==</span><span class="dv">2</span>], </span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"jitter"</span>, <span class="at">jitter =</span> .<span class="dv">0005</span>, <span class="at">at =</span> .<span class="dv">001</span>,</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>           <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">col=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">bg=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions"><span class="header-section-number">2.2</span> The EM Algorithm for Maximum Likelihood Estimation of Gaussian Mixture Distributions</h2>
+<section id="gaussian-mixture-models-gmm" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="gaussian-mixture-models-gmm"><span class="header-section-number">2.2.1</span> Gaussian Mixture Models (GMM)</h3>
+<p>We denote a random variable <span class="math inline">\(X\)</span> that follows a Gaussian mixed distribution as <span class="math display">\[
+X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+\]</span></p>
+<p>The corresponding density function of a Gaussian mixture distribution is defined as follows: <span id="eq-GMMdens"><span class="math display">\[
+f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g \varphi(x|\mu_g,\sigma_g)
+\tag{2.1}\]</span></span></p>
+<ul>
+<li><strong>Weights:</strong> <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span> with <span class="math inline">\(\pi_g&gt;0\)</span> and <span class="math inline">\(\sum_{g=1}^G\pi_g=1\)</span></li>
+<li><strong>Means:</strong> <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> with <span class="math inline">\(\mu_g\in\mathbb{R}\)</span></li>
+<li><strong>Standard deviations:</strong> <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span> with <span class="math inline">\(\sigma_g&gt;0\)</span></li>
+<li><strong>Normal density of group <span class="math inline">\(g=1,\dots,G\)</span>:</strong> <span class="math display">\[
+\varphi(x|\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
+\]</span></li>
+<li><strong>Unknown parameters:</strong> <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\pi}\)</span></span>, <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\mu}\)</span></span> und <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\sigma}\)</span></span></li>
+</ul>
+</section>
+<section id="maximum-likelihood-ml-estimation" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="maximum-likelihood-ml-estimation"><span class="header-section-number">2.2.2</span> Maximum Likelihood (ML) Estimation</h3>
+<p>We could try to estimate the unknown parameters <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>, <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span> using the maximum likelihood method.</p>
+<blockquote class="blockquote">
+<p>I’ll say it right away: The attempt will fail.</p>
+</blockquote>
+<section id="basic-idea-of-ml-estimation" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="basic-idea-of-ml-estimation">Basic Idea of ML Estimation</h4>
+<ul>
+<li><strong>Assumption:</strong> The data <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> is a realization of a random sample <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X
+\]</span> with <span class="math display">\[
+X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}).
+\]</span></li>
+</ul>
+<blockquote class="blockquote">
+<p>That is, in a certain sense, the observed data <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> “know” the unknown parameters <span class="math inline">\(\boldsymbol{\pi},\)</span> <span class="math inline">\(\boldsymbol{\mu}\)</span> und <span class="math inline">\(\boldsymbol{\sigma}\)</span> and we “only” have to elicit this information from them.</p>
+</blockquote>
+<ul>
+<li><p><strong>Estimation Idea:</strong> Choose <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> such that <span class="math inline">\(f_{GMM}(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> <strong>“optimally”</strong> fits the observed data <span class="math inline">\(\mathbf{x}\)</span>.</p></li>
+<li><p><strong>Implementation of the Estimation Idea:</strong> Maximize (with respect to <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span>) the likelihood function <span class="math display">\[
+\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+\]</span> Or maximize the log-likelihood function (simpler maximization) <span id="eq-logLikGMM"><span class="math display">\[
+\begin{align*}
+%\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+=&amp;\sum_{i=1}^n\ln\left(f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
+=&amp;\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
+\end{align*}
+\tag{2.2}\]</span></span></p></li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The maximization must take into account the parameter constraints in <a href="#eq-GMMdens">Equation&nbsp;<span>2.1</span></a>; namely, <span class="math inline">\(\sigma_g&gt;0\)</span> and <span class="math inline">\(\pi_g&gt;0\)</span> for all <span class="math inline">\(g=1,\dots,G\)</span> and <span class="math inline">\(\sum_{g=1}^G\pi_g=1\)</span>.</p>
+</div>
+</div>
+<p>The maximizing parameter values <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\pi}}\)</span></span>, <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\mu}}\)</span></span> and <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\sigma}}\)</span></span> are the <span style="color:#FF5733"><strong>ML-Estimators</strong></span>:</p>
+<p><span class="math display">\[
+(\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+\]</span></p>
+<p>😒 <strong>Problems with singularities in numerical solutions:</strong> If one tries to solve the above maximization problem <a href="https://jaimemosg.github.io/EstimationTools/index.html">numerically with the help of the computer</a>, one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities.</p>
+<p>For real GMMs (i.e.&nbsp;<span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens whenever one or more of the normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point <span class="math inline">\(x_i,\)</span> i.e.&nbsp; <span class="math display">\[
+\mu_g=x_i\quad\text{and}\quad  \sigma_g\to 0
+\]</span> will thereby assume <strong>very large</strong> density function values, <span class="math display">\[
+\varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
+\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>2.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible estimation results.</p>
+<div class="cell" data-layout-align="center" data-animation.hook="gifski" data-hash="Ch2_EMAlgorithmus_cache/html/fig-dirac1_f1fb5dbf386614d9df20d8ae75b1c733">
+<div class="cell-output-display">
+<div id="fig-dirac1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch2_EMAlgorithmus_files/figure-html/fig-dirac1-.gif" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.3: Gaussian density with <span class="math inline">\(\mu_g=x_i\)</span> for <span class="math inline">\(\sigma_g\to 0\)</span>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>🤓 <strong>Analytic solution:</strong> It is a bit tedious, but one can maximize the log-likelihood analytically. If you do this, you will get the following expressions: <span id="eq-AnalyticSol1"><span class="math display">\[
+\begin{align*}
+\hat\pi_g&amp;=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
+\hat\mu_g=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\[2ex]
+\hat\sigma_g&amp;=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2}
+\end{align*}
+\tag{2.3}\]</span></span> for <span class="math inline">\(g=1,\dots,G.\)</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Deriving the above expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
+<!-- In one of the exercises, you may derive the expression for $\hat\mu_g$. --></p>
+</div>
+</div>
+<p>🙈 <span style="color:#FF5733"><strong>However:</strong></span> The above expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span> and <span class="math inline">\(\hat\sigma_g\)</span> depend themselves on the <span style="color: #FF5733"><strong>unknown</strong></span> parameters <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>, <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span>, because: <span id="eq-AnalyticSol2"><span class="math display">\[
+p_{ig}=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+\tag{2.4}\]</span></span> for <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G\)</span>.</p>
+<ul>
+<li>The probability <span class="math inline">\(p_{ig}\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.</li>
+<li>The probability <span class="math inline">\(\pi_g\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
+</ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Still, we cannot properly define what we mean by “prior probability” and “posterior probability”. We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>.</p>
+</div>
+</div>
+<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
+<p>🥳 <span style="color:#138D75"><strong>Solution: The EM Algorithm</strong></span></p>
+</section>
+</section>
+<section id="sec-EM1" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-EM1"><span class="header-section-number">2.2.3</span> The EM Algorithm for GMMs</h3>
+<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
+<ul>
+<li><p>the (unknown) posterior probability <span class="math display">\[
+p_{ig}
+\]</span> and</p></li>
+<li><p>the (unknown) parameters <span class="math display">\[
+(\pi_g,\mu_g,\sigma_g).
+\]</span></p></li>
+</ul>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Once you know <span class="math inline">\(p_{ig},\)</span> you can compute <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g)\)</span> using <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a>.</p>
+<p>Once you know <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g),\)</span> you can compute <span class="math inline">\(p_{ig}\)</span> using <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a>.</p>
+</div>
+</div>
+<p><strong>The EM Algorithm:</strong></p>
+<ol type="1">
+<li><p>Set starting values <span class="math inline">\(\boldsymbol{\pi}^{(0)}\)</span>, <span class="math inline">\(\boldsymbol{\mu}^{(0)}\)</span> und <span class="math inline">\(\boldsymbol{\sigma}^{(0)}\)</span></p></li>
+<li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
+<ul>
+<li><p><span style="color:#FF5733"><strong>(Expectation)</strong></span> Compute: <span class="math display">\[p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}\]</span></p></li>
+<li><p><span style="color:#2471A3"><strong>(Maximization)</strong></span> Compute:</p>
+<center>
+<p><span class="math inline">\(\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r-1)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}x_i\)</span></p>
+</center>
+<center>
+<p><span class="math inline">\(\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}\)</span></p>
+</center></li>
+</ul></li>
+<li><p>Check Convergence: <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})\)</span>, does not change anymore substantially.</p></li>
+</ol>
+<p>The above pseudo code is implemented in the following code chunk:</p>
+<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-6_fe3339c081625b2f2c1bbce63ec8824d">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"MASS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    select</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"mclust"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="do">## data:</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(penguin_flipper) <span class="co"># data [n x d]-dimensional. </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(x)                <span class="co"># dimension (d=1: univariat)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(x)                <span class="co"># sample size</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="dv">2</span>                      <span class="co"># number of groups</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="do">## further stuff </span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>llk       <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, G)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, G)  </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>loglikOld <span class="ot">&lt;-</span> <span class="fl">1e07</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>tol       <span class="ot">&lt;-</span> <span class="fl">1e-05</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>it        <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>check     <span class="ot">&lt;-</span> <span class="cn">TRUE</span> </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="do">## EM Algorithm</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 1. Starting values for pi, mu and sigma:</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>pi    <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span>G, G)              <span class="co"># naive pi </span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">diag</span>(d), <span class="fu">c</span>(d,d,G)) <span class="co"># varianz = 1</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>mu    <span class="ot">&lt;-</span> <span class="fu">t</span>(MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(G, <span class="fu">colMeans</span>(x), sigma[,,<span class="dv">1</span>]<span class="sc">*</span><span class="dv">4</span>) )</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(check){</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## 2.a Expectation step</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>G){</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    p[,g] <span class="ot">&lt;-</span> pi[g] <span class="sc">*</span> mclust<span class="sc">:::</span><span class="fu">dmvnorm</span>(x, mu[,g], sigma[,,g])</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">sweep</span>(p, <span class="dv">1</span>, <span class="at">STATS =</span> <span class="fu">rowSums</span>(p), <span class="at">FUN =</span> <span class="st">"/"</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="do">## 2.b Maximization step </span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  par   <span class="ot">&lt;-</span> mclust<span class="sc">::</span><span class="fu">covw</span>(x, p, <span class="at">normalize =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  mu    <span class="ot">&lt;-</span> par<span class="sc">$</span>mean</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> par<span class="sc">$</span>S</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  pi    <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(p)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  <span class="do">## 3. Check convergence </span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>G) {</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    llk[,g] <span class="ot">&lt;-</span> pi[g] <span class="sc">*</span> mclust<span class="sc">:::</span><span class="fu">dmvnorm</span>(x, mu[,g], sigma[,,g])</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  loglik <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="fu">rowSums</span>(llk))) <span class="co"># current max. log-likelihood value</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  <span class="do">##</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  diff      <span class="ot">&lt;-</span> <span class="fu">abs</span>(loglik <span class="sc">-</span> loglikOld)<span class="sc">/</span><span class="fu">abs</span>(loglik) <span class="co"># rate of change</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  loglikOld <span class="ot">&lt;-</span> loglik</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  it        <span class="ot">&lt;-</span> it <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Check whether rate of change is still large enough (&gt; tol)?</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  check     <span class="ot">&lt;-</span> diff <span class="sc">&gt;</span> tol</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimation results:</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(pi, mu, <span class="fu">sqrt</span>(sigma)), </span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nrow =</span> <span class="dv">3</span>, </span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ncol =</span> <span class="dv">2</span>, </span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>                  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"weights"</span>, </span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"means"</span>, </span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"standard-deviations"</span>),</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">c</span>(<span class="st">"group 1"</span>, </span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"group 2"</span>))) </span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>results <span class="sc">%&gt;%</span> <span class="fu">round</span>(., <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    group 1 group 2
+weights                0.69    0.31
+means                216.19  194.24
+standard-deviations    7.32    6.25</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="header-section-number">2.3</span> The True View on the EM Algorithm: Adding Unobserved Variables</h2>
+<p>The EM algorithm allows maximum likelihood problems to be simplified by <strong>adding unobserved (“latent”) variables</strong> to the data. This idea is the actually original contribution of the EM Algorithm (<span class="citation" data-cites="Dempster_1977">Dempster, Laird, and Rubin (<a href="#ref-Dempster_1977" role="doc-biblioref">1977</a>)</span>). While this idea can be applied for solving various maximum likelihood problems, we keep focusing on estimating GMMs.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Remember:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>We were note able to maximize the log-likelihood function <span class="math display">\[
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+=\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
+\]</span> directly. In fact, the <span class="math inline">\(\ln(\sum_{g=1}^G[\dots])\)</span>-construction makes life difficult here.</p></li>
+<li><p>Moreover, so far, we were not able to propertly state what we mean by prior and posterior probability.</p></li>
+</ul>
+<p>All this can be solved my adding unobserved group labels as missing variables.</p>
+</div>
+</div>
+<section id="completion-of-the-data" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="completion-of-the-data"><span class="header-section-number">2.3.1</span> Completion of the Data</h3>
+<p>In our penguin data there are two groups <span class="math inline">\(g\in\{1,2\}.\)</span></p>
+<p>Thus, in principle (albeit unobserved) there are <span class="math inline">\(G=2\)</span> dimensional dummy variable, also called group-label, vectors <span class="math inline">\((z_{i1},z_{i2}),\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> with<br>
+<span class="math display">\[
+(z_{i1},z_{i2})=
+\left\{\begin{array}{ll}
+(1,0)&amp;\text{if penguin }i\text{ belongs to group }g=1\\
+(0,1)&amp;\text{if penguin }i\text{ belongs to group }g=2\\
+\end{array}\right.
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Case of more than two <span class="math inline">\(G&gt;2\)</span> groups:<br>
+<span class="math display">\[
+\begin{align*}
+&amp;(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
+&amp;=\left\{\begin{array}{ll}
+(1,0,\dots,0)&amp;\text{if data point }i\text{ belongs to group }g=1\\
+(0,1,\dots,0)&amp;\text{if data point }i\text{ belongs to group }g=2\\
+\quad\quad\vdots&amp;\\
+(0,0,\dots,1)&amp;\text{if data point }i\text{ belongs to group }g=G\\
+\end{array}\right.
+\end{align*}
+\]</span></p>
+</div>
+</div>
+<p>The group labels <span class="math inline">\(z_{ig}\)</span> can take values <span class="math inline">\(z_{ig}\in\{0,1\},\)</span> where, however, it must hold true that <span class="math display">\[
+\sum_{g=1}^Gz_{ig}=1.
+\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Requiring that <span class="math display">\[
+\sum_{g=1}^Gz_{ig}=1
+\]</span> means that for each (penguin) <span class="math inline">\(i\)</span> there is only <strong>one</strong> group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.</p>
+</div>
+</div>
+<p>Unfortunately, the true group labels <span class="math inline">\(z_{ig}\)</span> are unknown. However, we nevertheless know something about these assignments. The weights <span class="math display">\[
+\pi_1,\dots,\pi_G
+\]</span> of the Gaussian mixture distribution <span class="math display">\[
+f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x|\mu_g,\sigma_g),
+\]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot|\mu_g,\sigma_g)\)</span> in the total distribution <span class="math inline">\(f_{GMM}\)</span>.</p>
+<p>That is, on average, <span class="math display">\[
+\pi_g\cdot 100\%
+\]</span> of the data points <span class="math inline">\(i=1,\dots,n\)</span> come from group <span class="math inline">\(g.\)</span></p>
+<p>Thus, we can consider the unobserved group label <span class="math inline">\(z_{ig}\)</span> as a (unobserved) realization of a binary random variable <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probability mass function <span class="math display">\[
+\begin{align*}
+P(Z_{ig}=1)&amp;=\pi_g\\[2ex]
+P(Z_{ig}=0)&amp;=(1-\pi_g)\\[2ex]
+\end{align*}
+\]</span> for each <span class="math inline">\(i=1,\dots,n.\)</span></p>
+<p>The condition <span class="math display">\[
+\sum_{g=1}^GZ_{ig}=1
+\]</span> implies that if <!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  --> <span class="math display">\[
+Z_{ig}=1
+\]</span> then <span class="math display">\[
+Z_{ij}=0\quad \text{for all }j\neq g.
+%\quad \Rightarrow\quad Z_{i1}=0,\dots,Z_{ig-1}=0,Z_{ig+1}=0,\dots,Z_{iG}=0.
+\]</span></p>
+</section>
+<section id="sec-PriorPosterior" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="sec-PriorPosterior"><span class="header-section-number">2.3.2</span> Prior and Posterior Probabilities</h3>
+<strong>Prior Probability <span class="math inline">\(\pi_g\)</span></strong><br> If we know nothing about the flipper length of penguin <span class="math inline">\(i\)</span> then we are left with the prior probability: <br>
+<center>
+“With probability <span class="math inline">\(\pi_g=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
+</center>
+<p><br></p>
+<strong>Posterior Probability <span class="math inline">\(p_{ig}\)</span></strong><br> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD">Equation&nbsp;<span>2.5</span></a>) which leads to the posterior probability: <br>
+<center>
+“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
+</center>
+<p><br></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Bayes’ Theorem applied to the Gaussian mixture distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span id="eq-posteriorGMD"><span class="math display">\[
+\begin{align*}
+p_{ig}
+=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
+&amp;=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
+&amp;=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+\end{align*}
+\tag{2.5}\]</span></span></p>
+</div>
+</div>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The posterior probabilities <span class="math inline">\(p_{ig}\)</span> are conditional means: <span id="eq-posteriorMean"><span class="math display">\[
+\begin{align*}
+p_{ig}
+&amp;= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex]
+&amp;= \mathbb{E}(Z_{ig}|X_i=x_i)\\
+\end{align*}
+\tag{2.6}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> in the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1"><span>Section&nbsp;2.2.3</span></a>) is indeed a computation of an expectation.</p>
+</div>
+</div>
+</section>
+<section id="the-abstract-version-of-the-em-algorithm" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="the-abstract-version-of-the-em-algorithm"><span class="header-section-number">2.3.3</span> The Abstract Version of the EM-Algorithm</h3>
+<p>If, in addition to the data points, <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n),\)</span> we had also observed the group assignments, <span class="math inline">\(\mathbf{z}=(z_{11},\dots,z_{nG}),\)</span> then we could establish the following alternative <strong>likelihood (<span class="math inline">\(\tilde{\mathcal{L}}\)</span>)</strong> and <strong>log-likelihood (<span class="math inline">\(\tilde{\ell}\)</span>) functions</strong>: <span class="math display">\[
+\begin{align*}
+\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&amp;=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
+&amp;=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
+\]</span></p>
+<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>: we can directly calculate the logarithm of the normal distribution. This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>) which is not the case for the normal mixture distribution.</p>
+<p>We do not observe the realizations <span class="math display">\[
+\mathbf{z}=(z_{11},\dots,z_{nG}),
+\]</span> but we know the distribution of the random variables <span class="math display">\[
+\mathbf{Z}=(Z_{11},\dots,Z_{nG}).
+\]</span> This leads to a <strong>stochastic version</strong> (in <span class="math inline">\(\mathbf{Z}\)</span>) of the log-likelihood function: <span class="math display">\[
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\]</span> From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean">Equation&nbsp;<span>2.6</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
+\begin{align*}
+&amp;\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\[2ex]
+&amp;\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
+\]</span></p>
+<p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1"><span>Section&nbsp;2.2.3</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems.</p>
+<p>In the following, the parameter vector <span class="math inline">\((\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> will be denoted as <span class="math inline">\(\boldsymbol{\theta}\)</span> for simplicity. <br></p>
+<ol type="1">
+<li><p>Set starting values <span class="math inline">\(\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})\)</span></p></li>
+<li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
+<ul>
+<li><p><span style="color:#FF5733"><strong>(Expectation)</strong> </span> Compute: <span class="math display">\[
+\begin{align*}
+\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+&amp;=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\
+&amp;=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\end{align*}
+\]</span> where <span class="math display">\[
+p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
+\]</span></p></li>
+<li><p><span style="color:#2471A3"><strong>(Maximization)</strong></span> Compute: <span class="math display">\[
+\begin{align*}
+\boldsymbol{\theta}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+\end{align*}
+\]</span></p></li>
+</ul></li>
+<li><p>Check Convergence:<br> Stop if the value of the maximized log-likelihood function, <span class="math display">\[
+\mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
+\]</span> does not change anymore substantially.</p></li>
+</ol>
+</section>
+</section>
+<section id="unsupervised-classification" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="unsupervised-classification"><span class="header-section-number">2.4</span> (Unsupervised) Classification</h2>
+<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group labels) from a random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
+<p><strong>Note:</strong> Above, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
+<p>A <strong>classification rule</strong> is a function <span class="math display">\[
+h: X \to Y.
+\]</span> That is, when we observe a new <span class="math inline">\(X,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X).\)</span></p>
+<p>If there are learning/training data <strong>with</strong> group-labels <span class="math display">\[
+(Y_1,X_1),\dots,(Y_n,X_n)
+\]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p>
+<p>If there are learning/training data <strong>without</strong> group-labels <span class="math display">\[
+X_1,\dots,X_n
+\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) problem or <strong>cluster analysis</strong>.</p>
+<section id="bayes-classifier" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">2.4.1</span> Bayes Classifier</h3>
+<p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. The most often used quantity to measure the accuracy of classification methods is the <strong>error rate</strong>.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-errorRate" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.1 (Error rate) </strong></span>The <strong>true error rate</strong> of the classifier <span class="math inline">\(h\)</span> is the loss function <span class="math display">\[
+L(h) = P(h(X)\neq Y).
+\]</span> The <strong>empirical error rate</strong> is <span class="math display">\[
+\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)}.
+\]</span></p>
+</div>
+</div>
+</div>
+<p>That is, we try to find a classifier <span class="math inline">\(h\)</span> that minimizes <span class="math inline">\(L(h)\)</span> and <span class="math inline">\(\hat{L}_n(h),\)</span> respectively.</p>
+<p>Let us focus on the special case of only two groups which can be coded, without loss of generality, as <span class="math display">\[
+Y\in\{0,1\}
+\]</span> For instance, <span class="math display">\[
+Y_i=\left\{\begin{array}{ll}
+1&amp;\text{if penguin $i$ belongs to species Chinstrap}\\
+0&amp;\text{if penguin $i$ belongs to species Gentoo}.
+\end{array}\right..
+\]</span></p>
+<p>The <strong>regression function</strong> (i.e.&nbsp;the conditional mean function) is then given by <span class="math display">\[
+m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
+\]</span> From Bayes’s theorem it follows that <span class="math display">\[
+m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(f_0(x) = f(x|Y=0);\)</span> conditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span></li>
+<li><span class="math inline">\(f_1(x) = f(x|Y=1);\)</span> cconditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=1\)</span></li>
+<li><span class="math inline">\(\pi_0 = P(Y=0)\)</span></li>
+<li><span class="math inline">\(\pi_1 = P(Y=1)\)</span></li>
+<li><span class="math inline">\(\pi_0 + \pi_1 = 1\)</span></li>
+</ul>
+<p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
+<p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-BayesCR" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2.2 (Bayes Classification Rule and Decision Boundary) </strong></span><br> The <strong>Bayes classification rule</strong> <span class="math inline">\(h^\ast\)</span> is given by <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }m(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> The <strong>decision boundary</strong> is given by the set <span class="math display">\[
+\mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
+\]</span></p>
+</div>
+</div>
+</div>
+<p>Equivalent forms of the Bayes’ classification rule: <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }P(Y=1|X=x)&gt;P(Y=0|X=x)\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> and <span class="math display">\[
+h^\ast(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\pi_1 f_1(x)&gt;\pi_0f_0(x)\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-BayesOptimal" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2.1 (Optimality of the Bayes decision rule) </strong></span><br> The Bayes decision rule is optimal. That is, if <span class="math inline">\(h\)</span> is any other classification rule then <span class="math display">\[
+L(h^\ast)\leq L(h).
+\]</span></p>
+</div>
+</div>
+</div>
+<p>The Bayes decision rule depends on unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
+<p><strong>Very roughly</strong>, there are three main approaches:</p>
+<ol type="1">
+<li><p><strong>Empirical Risk Minimization:</strong> Choose a set of classifiers <span class="math inline">\(\mathcal{H}\)</span> and try to find <span class="math inline">\(\hat{h}\in\mathcal{H}\)</span> such that <span class="math display">\[
+\hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
+\]</span></p></li>
+<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> and then use <span class="math display">\[
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> Example: Linear regression, logistic regression, etc.</p></li>
+<li><p><strong>Density Estimation:</strong> Find density and probability estimates <span class="math inline">\(\hat{f}_0,\)</span> <span class="math inline">\(\hat{f}_1,\)</span> <span class="math inline">\(\hat{\pi}_0=\hat{P}(Y=0),\)</span> and <span class="math inline">\(\hat{\pi}_1=\hat{P}(Y=1)\)</span> and define <span class="math display">\[
+\hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
+\]</span> Then use <span class="math display">\[
+\hat{h}(x) = \left\{\begin{array}{ll}
+1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.
+\]</span> Example: Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions</p></li>
+</ol>
+<section id="more-than-two-group-labels" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="more-than-two-group-labels">More than two group labels</h4>
+<p>Of course, we can generalize all this to the case where the discrete random variables <span class="math inline">\(Y\)</span> takes on more than only two group-labels.</p>
+<p>Let <span class="math display">\[
+Y\in\{1,\dots,G\}
+\]</span> for any <span class="math inline">\(G&gt;1.\)</span></p>
+<p>Then, the (error rate optimal) Bayes classification rule is <span class="math display">\[
+\begin{align*}
+h^\ast(x)
+&amp; = \arg\max_{g}P(Y=g|X=x) \\[2ex]
+&amp; = \arg\max_{g}\pi_g f_g(x),\\[2ex]
+\end{align*}
+\]</span> where <span class="math inline">\(P(Y=g|X=x)\)</span> is the <strong>posterior probability</strong> <span class="math display">\[
+P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
+\]</span> where <span class="math inline">\(\pi_g\)</span> is the <strong>prior probability</strong> <span class="math display">\[
+\pi_g = P(Y=g),
+\]</span> and where <span class="math inline">\(f_g\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g\)</span> <span class="math display">\[
+f_g(x) = f(x|Y=g)
+\]</span></p>
+</section>
+</section>
+<section id="synopsis-penguin-example" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="synopsis-penguin-example"><span class="header-section-number">2.4.2</span> Synopsis: Penguin Example</h3>
+<p>In our penguin example, we use the <strong>density estimation</strong> approach.</p>
+<p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as <span class="math inline">\(f\)</span> being a Gaussian density.</p>
+<p>In our penguin example, we assume that the conditional density function of flipper length <span class="math inline">\(X\)</span> given species <span class="math inline">\(Y=g\)</span> can be modelled reasonably well using a Gaussian density, <span class="math display">\[
+f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+\]</span> which leads to a Gaussian Mixture distribution.</p>
+<p>The unknown parameters <span class="math inline">\(\pi_g,\)</span> <span class="math inline">\(\mu_g,\)</span> and <span class="math inline">\(\sigma_g,\)</span> <span class="math inline">\(g=1,\dots,G,\)</span> are estimated using the <strong>EM algorithm</strong></p>
+<ol type="1">
+<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
+<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
+</ol>
+<p><a href="#fig-EMGif">Figure&nbsp;<span>2.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
+<ul>
+<li>The vertical line shows the decision boundary</li>
+<li>The two Gaussian density functins (dashed lines) show the conditional densities <span class="math inline">\(\varphi(x|\mu_g,\sigma_g),\)</span> <span class="math inline">\(g=1,2.\)</span></li>
+<li>The orange and green dots show the (unsupervised) classification results</li>
+</ul>
+<div class="cell" data-animation.hook="gifski" data-hash="Ch2_EMAlgorithmus_cache/html/fig-EMGif_0a6b52ee7f7380f9bf64b6213d74e627">
+<div class="cell-output-display">
+<div id="fig-EMGif" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch2_EMAlgorithmus_files/figure-html/fig-EMGif-.gif" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.4: Iterative estimation of the Gaussian mixture distribution using the EM alorighm.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a>.</p>
+<p>But well, the average penguin probably doesn’t care about the EM Algorithm.</p>
+<div id="fig-agressivepenguin" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/penguin_attack.gif" class="img-fluid figure-img" style="width:80.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.5: Penguin research on the limit.</figcaption><p></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
+<ol type="a">
+<li><p>Consider <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
+\]</span> where <span class="math inline">\(X\sim\text{Bernoulli}(p).\)</span> Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
+<li><p>Now let <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
+\]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_g\)</span> and prior probabilities <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
+<li><p>Let <span class="math inline">\((Z_{i1},\dots,Z_{iG})\in\{0,1\}^G\)</span> be the vector of latent group indicator random variables with <span class="math inline">\(Z_{i1}+\dots + Z_{iG}=1\)</span> and <span class="math inline">\(P(Z_{ig}=1)=\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Thus, the realization <span class="math inline">\(z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\)</span> that take into account the latend group indicator random variables.</p></li>
+<li><p>Write down the expression for the posterior probability <span class="math display">\[
+\mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i).
+\]</span></p></li>
+<li><p>Derive the expectation of <span class="math inline">\(\tilde\ell,\)</span> <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span>.</p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi}|\mathbf{x},\mathbf{Z})\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
+<li><p>Sketch the EM-Algorithm</p></li>
+</ol>
+<!-- {{< include Ch2_EMAlgorithmus_Solutions.qmd >}} -->
+<!-- 
+
+#### Exercise 2. {-} 
+
+
+The famouse minst data set.
+
+
+
+::: {.cell hash='Ch2_EMAlgorithmus_cache/html/unnamed-chunk-8_c2bc2eeba8c2dcb46a49006960730a7e'}
+
+```{.r .cell-code}
+suppressMessages(library("tidyverse"))
+suppressMessages(
+mnist_raw <- read_csv("https://pjreddie.com/media/files/mnist_train.csv", col_names = FALSE)
+)
+
+pixels_gathered <- mnist_raw %>%  
+head(10000)        %>%  # only the first 10000 cases (one case = one handwritten figure picture (28x28 pixels))
+rename(label = X1) %>%  # "label = 5" means a handwritten 5 
+mutate(instance = row_number()) %>%  
+gather(pixel, value, -label, -instance) %>%  
+tidyr::extract(pixel, "pixel", "(\\d+)", convert = TRUE) %>%  
+mutate(pixel = pixel - 2,         
+       x     = pixel %% 28,         
+       y     = 28 - pixel %/% 28)
+
+
+theme_set(theme_light())
+
+pixels_gathered %>%  
+filter(instance <= 12) %>%  
+ggplot(aes(x, y, fill = value)) +  geom_tile() +  facet_wrap(~ instance + label)
+```
+
+::: {.cell-output-display}
+![](Ch2_EMAlgorithmus_files/figure-html/unnamed-chunk-8-1.png){width=672}
+:::
+:::
+
+ -->
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Bishop_2006" class="csl-entry" role="doc-biblioentry">
+Bishop, Christopher M. 2006. <em>Pattern Recognition and Machine Learning</em>. Springer.
+</div>
+<div id="ref-Dempster_1977" class="csl-entry" role="doc-biblioentry">
+Dempster, Arthur P, Nan M Laird, and Donald B Rubin. 1977. <span>“Maximum Likelihood from Incomplete Data via the EM Algorithm.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 39 (1): 1–22.
+</div>
+<div id="ref-Hastie_2009" class="csl-entry" role="doc-biblioentry">
+Hastie, Trevor, Robert Tibshirani, Jerome H Friedman, and Jerome H Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Springer.
+</div>
+<div id="ref-palmerpenguins" class="csl-entry" role="doc-biblioentry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Ch1_MaximumLikelihood.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
