@@ -425,24 +425,39 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 </div>
 </div>
 </div>
-<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Warning
+Convergence of the Newton-Raphson Algorithm
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” at its root <span class="math inline">\(\theta;\)</span> i.e.&nbsp;</p>
+<p>Let <span class="math inline">\(\theta_{root}\)</span> denote the root of <span class="math inline">\(\ell_n';\)</span> i.e.&nbsp; <span class="math display">\[
+\ell_n'(\theta_{root})=0.
+\]</span> Using the Newton-Raphson algorithm, we aim to approximate <span class="math inline">\(\theta_{root}.\)</span> We call our best approximation of <span class="math inline">\(\theta_{root}\)</span> the maximum likelihood estimate; i.e.&nbsp;<span class="math inline">\(\hat{\theta}_{ML}\approx\theta_{root}.\)</span></p>
+<p>Let <span class="math display">\[
+\Delta_{(0)}=\theta_{root}-\theta_{(0)}
+\]</span> denote the start-value error and let <span class="math display">\[
+I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
+\]</span> denote the start-value neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
+<p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” over <span class="math inline">\(I;\)</span> i.e.&nbsp;</p>
 <ul>
-<li>if <span class="math inline">\(\ell_n''(\hat{\theta}_{ML})\neq 0,\)</span></li>
-<li>if <span class="math inline">\(\ell_n'''(\cdot)\)</span> is finite and continuous at <span class="math inline">\(\hat{\theta}_{ML},\)</span> and</li>
-<li>if you start with <span class="math inline">\(\theta_{(0)}\)</span> “close enough” to the root <span class="math inline">\(\hat{\theta}_{ML},\)</span></li>
+<li>if <span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I,\)</span></li>
+<li>if <span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I,\)</span></li>
 </ul>
-<p>then <span class="math inline">\(\theta_{(m)}\)</span> will converge to <span class="math inline">\(\theta.\)</span></p>
-<p>Unfortunately, we often don’t know if <span class="math inline">\(\ell_n'\)</span> is well behaved and we usually don’t know whether our first guess is “close enough”. So, we cannot guarantee convergence of the Newton-Raphson algorithm.</p>
+<p>and if the first guess <span class="math inline">\(\theta_{(0)}\)</span> is not too bad; i.e.&nbsp;</p>
+<ul>
+<li>if <span class="math inline">\(M|\Delta_{(0)}|&lt;1,\)</span> where <span class="math display">\[
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right),
+\]</span></li>
+</ul>
+<p>then <span class="math inline">\(\theta_{(m)}\)</span> will converge to <span class="math inline">\(\theta,\)</span> since then the approximation errors will become smaller in each step, <span class="math display">\[
+|\Delta_{(m+1)}|\leq M |\Delta_{(m)}|.
+\]</span></p>
+<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is well behaved and we usually don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
 </div>
 </div>
 <!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have

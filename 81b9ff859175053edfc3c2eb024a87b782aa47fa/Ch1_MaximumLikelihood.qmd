@@ -386,16 +386,46 @@ box()
 ```
 
 
-::: {.callout-warning}
-One can shown that if $\ell_n'$ is "well behaved" at its root $\theta;$ i.e. 
 
-* if $\ell_n''(\hat{\theta}_{ML})\neq 0,$ 
-* if $\ell_n'''(\cdot)$ is finite and continuous at $\hat{\theta}_{ML},$ and 
-* if you start with $\theta_{(0)}$ "close enough" to the root $\hat{\theta}_{ML},$ 
+::: {.callout-note}
 
-then $\theta_{(m)}$ will converge to $\theta.$ 
+# Convergence of the Newton-Raphson Algorithm
 
-Unfortunately, we often don't know if $\ell_n'$ is well behaved and we usually don't know whether our first guess is "close enough". So, we cannot guarantee convergence of the Newton-Raphson algorithm. 
+Let $\theta_{root}$ denote the root of $\ell_n';$ i.e. 
+$$
+\ell_n'(\theta_{root})=0.
+$$ 
+Using the Newton-Raphson algorithm, we aim to approximate $\theta_{root}.$ We call our best approximation of $\theta_{root}$ the maximum likelihood estimate; i.e. $\hat{\theta}_{ML}\approx\theta_{root}.$ 
+
+Let 
+$$
+\Delta_{(0)}=\theta_{root}-\theta_{(0)}
+$$
+denote the start-value error and let 
+$$
+I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
+$$
+denote the start-value neighborhood around $\theta_{root}.$   
+
+One can shown that if $\ell_n'$ is "well behaved" over $I;$ i.e. 
+
+* if $\ell_n''(\theta)\neq 0$ for all $\theta\in I,$
+* if $\ell_n'''(\theta)$ is finite and continuous for all $\theta\in I,$ 
+
+and if the first guess $\theta_{(0)}$ is not too bad; i.e. 
+
+* if $M|\Delta_{(0)}|<1,$ where 
+$$
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right),
+$$ 
+
+then $\theta_{(m)}$ will converge to $\theta,$ since then the approximation errors will become smaller in each step, 
+$$
+|\Delta_{(m+1)}|\leq M |\Delta_{(m)}|.
+$$ 
+
+Unfortunately, we typically don't know if $\ell_n'$ is well behaved and we usually don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
+<!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method -->
 :::
 
 <!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
