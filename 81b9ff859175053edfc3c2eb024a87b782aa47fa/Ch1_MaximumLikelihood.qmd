@@ -16,13 +16,15 @@ Why do we like maximum likelihood as an estimation method? The answer is that: A
 * **Asymptotically normal:** $\sqrt{n}(\hat\theta_n-\theta_0) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)$
 * **Asymptotically efficient:** This means that no consistent estimator has lower asymptotic mean squared error than the maximum likelihood estimator. 
 
+Likewise for multivariate parameter $\theta_0\in\mathbb{R}^p.$
+
 Thus, maximum likelihood estimators can be very appealing, provided that the assumption on the general distribution family is correct.
 
 
 ::: {.callout-important}
 ## ML-estimation requires to fix the family of distributions $f(\cdot|\theta)$
 
-Classic ML-estimation requires us to fix the general family of density functions $f$ of the random variables in the (i.i.d.) random sample $X_i\sim f$, $i=1,\dots,n,$ such that $f$ is known up to an unknown parameter $\theta,$ where $\theta$ is allowed to be a *finite* dimensional vector.  
+Classic ML-estimation requires us to fix the general family of density/probability mass functions $f$ of the random variables in the (i.i.d.) random sample $X_1,\dots,X_n$ such that $X_i\sim f$, $i=1,\dots,n,$ where $f$ is known up to an unknown parameter $\theta,$ where $\theta\in\mathbb{R}^K$ is allowed to be a *finite* ($1\leq K<\infty$) dimensional vector.  
 
 Examples: 
 
@@ -43,12 +45,12 @@ f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\
 $$ 
 with **unknown** parameter vector $\theta=(\mu,\sigma^2)^T.$
 
-This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the general distribution family of $f.$ To address this issue, the **quasi maximum likelihood method** generalizes classic ML estimation to cases where $f$ is misspecified (see @White1982).   
+This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the family of $f.$ To address this issue, the **quasi maximum likelihood theory** generalizes classic maximum likelihood estimation to cases where $f$ is misspecified (see @White1982).   
 :::
 
-### Example: Coin Flipping (Bernoulli Trial) 
+### Example: Coin Flipping (Bernoulli Trial) {-}
 
-To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a *possibly unfair* $\text{Coin}$ can take the value $H$ (Head) or $T$ (Tail),
+To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a **possibly unfair** $\text{Coin}$ can take the value $H$ (Head) or $T$ (Tail),
 $$
 \text{Coin}\in\{H,T\}.
 $$ 
@@ -65,17 +67,27 @@ X=\left\{
     \end{matrix}
     \right.
 $$ 
-with **unknown** probability of success parameter $0<\theta_0<1,$ 
+The probability mass function of the Bernoulli distribution $\mathcal{Bern}(\theta_0)$ with **unknown** probability of success parameter $0<\theta_0<1,$ is given by 
 $$
-\theta_0 = P(X=1) = P(\text{Coin}=H),
+f(x|\theta_0)=
+\left\{
+  \begin{array}{ll}
+  \theta_0,&\text{if } x=1\\
+  1-\theta_0, & \text{if } x=0
+  \end{array}
+\right.
+$$ 
+I.e.
+$$
+\theta_0 = f(1|\theta_0) = P(X=1) = P(\text{Coin}=H),
 $$
 which implies that the probability that we get a tail $T$ is 
 $$
-1-\theta_0 = P(X=0) = P(\text{Coin}=T).
+1-\theta_0 = f(0|\theta_0) = P(X=0) = P(\text{Coin}=T).
 $$ 
 
 
-Our goal is to estimate the unknown $\theta_0$ using a random (i.i.d.) sample of size $n$
+Our goal is to **estimate the unknown** $\theta_0$ using a random (i.i.d.) sample of size $n$
 $$
 \{X_1,\dots,X_n\}
 $$ 
@@ -102,7 +114,7 @@ consists of $0\leq N_{H,obs}\leq n$
 $$
 N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 $$ 
-many heads, and of 
+many heads and of 
 $$
 0\leq n-N_{H,obs} \leq n
 $$ 
@@ -121,26 +133,36 @@ If the observations are realizations of an i.i.d. sample, then the joint probabi
 $$
 \begin{align*}
 \mathcal{L}_n(\theta)
-&=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
-&= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
+&=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
+%&=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
+%&= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
 &= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}. 
 \end{align*} 
 $$
 
 The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. 
 
-::: {.callout-tip}
+
+::: {.callout-note icon=false} 
+## 
+::: {#def-LikelihoodFunction}
 # Likelihood Function
 More generally, when the observations $\{X_{1,obs},\dots,X_{n,obs}\}$ are a realization of an i.i.d. sample $\{X_1,\dots,X_n\}$ with $X_i\sim f$ for all $i=1,\dots,n$, we have that
 $$
 \mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
 $$
-where $f(X_{i,obs} | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_{i,obs},$ and where $\theta$ denotes the unknown finite dimensional parameter vector of the density function. 
+where $f(X_{i,obs} | \theta)$ is the density function of the random variable $X_i$ evaluated at the realization $X_{i,obs},$ and where $\theta$ denotes the unknown finite dimensional parameter vector of the density function. (A definition for dependent data (e.g. time series) is also possible.)
+:::
 :::
 
 #### Estimation Idea {-}
 
-We estimate the unknown $\theta$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}.$ The value $\hat\theta$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values. The value $\hat\theta$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+
+::: {.callout-note icon=false} 
+## 
+::: {#def-MLEstimator}
+# Maximum Likelihood (ML) Estimator
 $$
 \begin{align*}
 \hat{\theta}_{ML}
@@ -149,15 +171,16 @@ $$
 \end{align*}
 $$
 where $\Theta$ denotes the **parameter space**.
+:::
+:::
 
-
-In our coin flip example this means to estimate the unknown $\theta_0$ by the value $\hat\theta$ at which the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal 
+In our coin flip example this means to estimate the unknown $\theta_0$ by the value $\hat\theta$ at which the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal, 
 $$
 \hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 $$
 
 
-Usually it's easier to work with sums rather than products - also for doing the asymptotics in @sec-MLAsymp. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the **log-likelihood function**:
+Usually it's easier to work with sums rather than products---also for doing the asymptotics in @sec-MLAsymp. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the **log-likelihood function**:
 $$
 \begin{align*}
 \ell_n(\theta)
@@ -176,11 +199,13 @@ $$
 $$
 <!-- but $\ell_n(\theta)$ gives a more simple structure simplifying the maximization problem.  -->
 
-In our coin flipping example:
+In our coin flipping example, taking the natural logarithm ($\ln$) yields,
 $$
 \begin{align*}
 \mathcal{L}_n(\theta) &= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
-\Rightarrow\quad \ell_n(\theta)&=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
+\Rightarrow\quad \ell_n(\theta)
+&=\ln\mathcal{L}_n(\theta)\\[2ex]
+&=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right).
 \end{align*}
 $$
 
@@ -201,7 +226,7 @@ $$
 \end{array}
 $${#eq-MLECoinFlipp}
 
-Usually, however, the log-likelihood function is way more complicated and one needs to apply numeric optimization algorithms to find the MLE.  
+Usually, however, the log-likelihood function is **way more complicated** and one needs to apply **numeric optimization** algorithms to find the MLE, $\hat\theta_{ML}.$  
 
 
 ## Numeric Optimization
@@ -212,13 +237,16 @@ Usually we are not so fortunate as to have an analytical solution for the MLE, a
 
 **General idea:** 
 
-1. Start at some value for parameters in the parameter space $\Theta.$
-2. Search across the parameter space $\Theta$ until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero; i.e. smaller than some convergence criterion.).
+1. Start at some value, $\theta_{(0)},$ in the parameter space $\Theta.$
+2. Search across the parameter space $\Theta$ using a step-wise procedure until a updated parameter value $\ell'(\theta_{(m)})$ is found that yield a derivative of the log likelihood that is effectively zero (i.e. smaller than some convergence/stopping criterion), $\ell'(\theta_{(m)})\approx 0.$
 
 
 ### Newton-Raphson Optimization
 
 One of the most-used methods for optimization is the Newton-Raphson method (or a variant of it). The Newton-Raphson method relies on Taylor-series approximations of the log-likelihood function. 
+
+
+In the following, we consider the univariate case $\theta\in\mathbb{R}.$ However, the multivariate case $\theta\in\mathbb{R}^K$ is treated likewise, but requires substituting first derivatives by gradients, second derivatives by the Hessian, etc. 
 
 ::: {.callout-note}
 
@@ -295,7 +323,7 @@ To optimize the log-likelihood function $\ell_n,$ we try to find the root of $\e
 $$
 \ell_n'(\theta)=0.
 $$ 
-That is, we try to find the value of $\theta$ that fulfills the first order condition of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size $h.$ 
+That is, we try to find the value of $\theta$ that fulfills the **first order condition** of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size $h.$ 
 
 **Initialization:** Let $\theta_{(0)}\in\Theta$ be our first guess of the root of $\ell'_n.$ 
 

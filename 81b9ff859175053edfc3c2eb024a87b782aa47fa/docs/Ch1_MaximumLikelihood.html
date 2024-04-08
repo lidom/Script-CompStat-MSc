@@ -143,7 +143,7 @@ div.csl-indent {
   <li><a href="#likelihood-principle" id="toc-likelihood-principle" class="nav-link active" data-scroll-target="#likelihood-principle"><span class="toc-section-number">1.1</span>  Likelihood Principle</a>
   <ul class="collapse">
   <li><a href="#properties-of-maximum-likelihood-estimators" id="toc-properties-of-maximum-likelihood-estimators" class="nav-link" data-scroll-target="#properties-of-maximum-likelihood-estimators">Properties of Maximum Likelihood Estimators</a></li>
-  <li><a href="#example-coin-flipping-bernoulli-trial" id="toc-example-coin-flipping-bernoulli-trial" class="nav-link" data-scroll-target="#example-coin-flipping-bernoulli-trial"><span class="toc-section-number">1.1.1</span>  Example: Coin Flipping (Bernoulli Trial)</a></li>
+  <li><a href="#example-coin-flipping-bernoulli-trial" id="toc-example-coin-flipping-bernoulli-trial" class="nav-link" data-scroll-target="#example-coin-flipping-bernoulli-trial">Example: Coin Flipping (Bernoulli Trial)</a></li>
   </ul></li>
   <li><a href="#numeric-optimization" id="toc-numeric-optimization" class="nav-link" data-scroll-target="#numeric-optimization"><span class="toc-section-number">1.2</span>  Numeric Optimization</a>
   <ul class="collapse">
@@ -194,6 +194,7 @@ div.csl-indent {
 <li><strong>Asymptotically normal:</strong> <span class="math inline">\(\sqrt{n}(\hat\theta_n-\theta_0) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)\)</span></li>
 <li><strong>Asymptotically efficient:</strong> This means that no consistent estimator has lower asymptotic mean squared error than the maximum likelihood estimator.</li>
 </ul>
+<p>Likewise for multivariate parameter <span class="math inline">\(\theta_0\in\mathbb{R}^p.\)</span></p>
 <p>Thus, maximum likelihood estimators can be very appealing, provided that the assumption on the general distribution family is correct.</p>
 <div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -205,7 +206,7 @@ ML-estimation requires to fix the family of distributions <span class="math inli
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Classic ML-estimation requires us to fix the general family of density functions <span class="math inline">\(f\)</span> of the random variables in the (i.i.d.) random sample <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> such that <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> where <span class="math inline">\(\theta\)</span> is allowed to be a <em>finite</em> dimensional vector.</p>
+<p>Classic ML-estimation requires us to fix the general family of density/probability mass functions <span class="math inline">\(f\)</span> of the random variables in the (i.i.d.) random sample <span class="math inline">\(X_1,\dots,X_n\)</span> such that <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> where <span class="math inline">\(\theta\in\mathbb{R}^K\)</span> is allowed to be a <em>finite</em> (<span class="math inline">\(1\leq K&lt;\infty\)</span>) dimensional vector.</p>
 <p>Examples:</p>
 <ul>
 <li><span class="math inline">\(f\)</span> being the probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta)\)</span> with <span class="math display">\[
@@ -221,13 +222,13 @@ f(x_i|\theta)=
 f(x_i|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x_i-\mu}{\sigma}\right)\right)
 \]</span> with <strong>unknown</strong> parameter vector <span class="math inline">\(\theta=(\mu,\sigma^2)^T.\)</span></li>
 </ul>
-<p>This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the general distribution family of <span class="math inline">\(f.\)</span> To address this issue, the <strong>quasi maximum likelihood method</strong> generalizes classic ML estimation to cases where <span class="math inline">\(f\)</span> is misspecified (see <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span>).</p>
+<p>This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the family of <span class="math inline">\(f.\)</span> To address this issue, the <strong>quasi maximum likelihood theory</strong> generalizes classic maximum likelihood estimation to cases where <span class="math inline">\(f\)</span> is misspecified (see <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span>).</p>
 </div>
 </div>
 </section>
-<section id="example-coin-flipping-bernoulli-trial" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="example-coin-flipping-bernoulli-trial"><span class="header-section-number">1.1.1</span> Example: Coin Flipping (Bernoulli Trial)</h3>
-<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a <em>possibly unfair</em> <span class="math inline">\(\text{Coin}\)</span> can take the value <span class="math inline">\(H\)</span> (Head) or <span class="math inline">\(T\)</span> (Tail), <span class="math display">\[
+<section id="example-coin-flipping-bernoulli-trial" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="example-coin-flipping-bernoulli-trial">Example: Coin Flipping (Bernoulli Trial)</h3>
+<p>To introduce the main idea of maximum likelihood estimation, we use the simple example of a coin flipping experiment, where a <strong>possibly unfair</strong> <span class="math inline">\(\text{Coin}\)</span> can take the value <span class="math inline">\(H\)</span> (Head) or <span class="math inline">\(T\)</span> (Tail), <span class="math display">\[
 \text{Coin}\in\{H,T\}.
 \]</span> Such coin-flips can be modeled using Bernoulli random variables <span class="math display">\[
 X\sim\mathcal{Bern}(\theta_0)
@@ -238,12 +239,20 @@ X=\left\{
     0 &amp; \text{if } \text{Coin}=T
     \end{matrix}
     \right.
-\]</span> with <strong>unknown</strong> probability of success parameter <span class="math inline">\(0&lt;\theta_0&lt;1,\)</span> <span class="math display">\[
-\theta_0 = P(X=1) = P(\text{Coin}=H),
+\]</span> The probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta_0)\)</span> with <strong>unknown</strong> probability of success parameter <span class="math inline">\(0&lt;\theta_0&lt;1,\)</span> is given by <span class="math display">\[
+f(x|\theta_0)=
+\left\{
+  \begin{array}{ll}
+  \theta_0,&amp;\text{if } x=1\\
+  1-\theta_0, &amp; \text{if } x=0
+  \end{array}
+\right.
+\]</span> I.e. <span class="math display">\[
+\theta_0 = f(1|\theta_0) = P(X=1) = P(\text{Coin}=H),
 \]</span> which implies that the probability that we get a tail <span class="math inline">\(T\)</span> is <span class="math display">\[
-1-\theta_0 = P(X=0) = P(\text{Coin}=T).
+1-\theta_0 = f(0|\theta_0) = P(X=0) = P(\text{Coin}=T).
 \]</span></p>
-<p>Our goal is to estimate the unknown <span class="math inline">\(\theta_0\)</span> using a random (i.i.d.) sample of size <span class="math inline">\(n\)</span> <span class="math display">\[
+<p>Our goal is to <strong>estimate the unknown</strong> <span class="math inline">\(\theta_0\)</span> using a random (i.i.d.) sample of size <span class="math inline">\(n\)</span> <span class="math display">\[
 \{X_1,\dots,X_n\}
 \]</span> with <span class="math display">\[
 X_i=\left\{
@@ -259,7 +268,7 @@ X_i\sim\mathcal{Bern}(\theta_0),\quad i=1,\dots,n.
 \{X_{1,obs},X_{2,obs},\dots,X_{n,obs}\}=\{0,1,\dots,0\}
 \]</span> consists of <span class="math inline">\(0\leq N_{H,obs}\leq n\)</span> <span class="math display">\[
 N_{H,obs}=\sum_{i=1}^n X_{i,obs}
-\]</span> many heads, and of <span class="math display">\[
+\]</span> many heads and of <span class="math display">\[
 0\leq n-N_{H,obs} \leq n
 \]</span> many tails.</p>
 <section id="the-log-likelihood-function" class="level4 unnumbered">
@@ -270,41 +279,59 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <p>If the observations are realizations of an i.i.d. sample, then the joint probability of observing <span class="math inline">\(h\)</span> heads <span class="math inline">\(H\)</span> and <span class="math inline">\(n-h\)</span> tails <span class="math inline">\(T\)</span> in <span class="math inline">\(n\)</span> coin flips is: <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\theta)
-&amp;=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
-&amp;= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
+&amp;=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
+%&amp;=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
+%&amp;= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
 &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 \end{align*}
 \]</span></p>
 <p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Likelihood Function
+
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>More generally, when the observations <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> are a realization of an i.i.d. sample <span class="math inline">\(\{X_1,\dots,X_n\}\)</span> with <span class="math inline">\(X_i\sim f\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span>, we have that <span class="math display">\[
+<div id="def-LikelihoodFunction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.1 (Likelihood Function) </strong></span>More generally, when the observations <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> are a realization of an i.i.d. sample <span class="math inline">\(\{X_1,\dots,X_n\}\)</span> with <span class="math inline">\(X_i\sim f\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span>, we have that <span class="math display">\[
 \mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
-\]</span> where <span class="math inline">\(f(X_{i,obs} | \theta)\)</span> is the density function of the random variable <span class="math inline">\(X_i\)</span> evaluated at the realization <span class="math inline">\(X_{i,obs},\)</span> and where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of the density function.</p>
+\]</span> where <span class="math inline">\(f(X_{i,obs} | \theta)\)</span> is the density function of the random variable <span class="math inline">\(X_i\)</span> evaluated at the realization <span class="math inline">\(X_{i,obs},\)</span> and where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of the density function. (A definition for dependent data (e.g.&nbsp;time series) is also possible.)</p>
+</div>
 </div>
 </div>
 </section>
 <section id="estimation-idea" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="estimation-idea">Estimation Idea</h4>
-<p>We estimate the unknown <span class="math inline">\(\theta\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}.\)</span> The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong> <span class="math display">\[
+<p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values. The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-MLEstimator" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.2 (Maximum Likelihood (ML) Estimator) </strong></span><span class="math display">\[
 \begin{align*}
 \hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
 &amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
 \end{align*}
 \]</span> where <span class="math inline">\(\Theta\)</span> denotes the <strong>parameter space</strong>.</p>
-<p>In our coin flip example this means to estimate the unknown <span class="math inline">\(\theta_0\)</span> by the value <span class="math inline">\(\hat\theta\)</span> at which the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> is maximal <span class="math display">\[
+</div>
+</div>
+</div>
+<p>In our coin flip example this means to estimate the unknown <span class="math inline">\(\theta_0\)</span> by the value <span class="math inline">\(\hat\theta\)</span> at which the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> is maximal, <span class="math display">\[
 \hat\theta_{ML} = \arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
 \]</span></p>
-<p>Usually it’s easier to work with sums rather than products - also for doing the asymptotics in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
+<p>Usually it’s easier to work with sums rather than products—also for doing the asymptotics in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
 \begin{align*}
 \ell_n(\theta)
 &amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
@@ -318,10 +345,12 @@ Likelihood Function
 &amp;=\arg\max_{\theta\in\Theta} \ell_n(\theta).
 \end{align*}
 \]</span> <!-- but $\ell_n(\theta)$ gives a more simple structure simplifying the maximization problem.  --></p>
-<p>In our coin flipping example: <span class="math display">\[
+<p>In our coin flipping example, taking the natural logarithm (<span class="math inline">\(\ln\)</span>) yields, <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\theta) &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
-\Rightarrow\quad \ell_n(\theta)&amp;=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
+\Rightarrow\quad \ell_n(\theta)
+&amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
+&amp;=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right).
 \end{align*}
 \]</span></p>
 <p>The coin flip example is actually so simple that we can maximize <span class="math inline">\(\ell_n(\theta)\)</span> analytically. Computing the first derivative yields <span class="math display">\[
@@ -337,7 +366,7 @@ Likelihood Function
 \Leftrightarrow&amp;\hat\theta_{ML}&amp;=&amp;\dfrac{N_{H,obs}}{n}
 \end{array}
 \tag{1.1}\]</span></span></p>
-<p>Usually, however, the log-likelihood function is way more complicated and one needs to apply numeric optimization algorithms to find the MLE.</p>
+<p>Usually, however, the log-likelihood function is <strong>way more complicated</strong> and one needs to apply <strong>numeric optimization</strong> algorithms to find the MLE, <span class="math inline">\(\hat\theta_{ML}.\)</span></p>
 </section>
 </section>
 </section>
@@ -347,12 +376,13 @@ Likelihood Function
 <!-- [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html) -->
 <p><strong>General idea:</strong></p>
 <ol type="1">
-<li>Start at some value for parameters in the parameter space <span class="math inline">\(\Theta.\)</span></li>
-<li>Search across the parameter space <span class="math inline">\(\Theta\)</span> until values of parameters are found that yield a derivative of the log likelihood that is zero (or effectively zero; i.e.&nbsp;smaller than some convergence criterion.).</li>
+<li>Start at some value, <span class="math inline">\(\theta_{(0)},\)</span> in the parameter space <span class="math inline">\(\Theta.\)</span></li>
+<li>Search across the parameter space <span class="math inline">\(\Theta\)</span> using a step-wise procedure until a updated parameter value <span class="math inline">\(\ell'(\theta_{(m)})\)</span> is found that yield a derivative of the log likelihood that is effectively zero (i.e.&nbsp;smaller than some convergence/stopping criterion), <span class="math inline">\(\ell'(\theta_{(m)})\approx 0.\)</span></li>
 </ol>
 <section id="newton-raphson-optimization" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="newton-raphson-optimization"><span class="header-section-number">1.2.1</span> Newton-Raphson Optimization</h3>
 <p>One of the most-used methods for optimization is the Newton-Raphson method (or a variant of it). The Newton-Raphson method relies on Taylor-series approximations of the log-likelihood function.</p>
+<p>In the following, we consider the univariate case <span class="math inline">\(\theta\in\mathbb{R}.\)</span> However, the multivariate case <span class="math inline">\(\theta\in\mathbb{R}^K\)</span> is treated likewise, but requires substituting first derivatives by gradients, second derivatives by the Hessian, etc.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -394,7 +424,7 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 <p>Let <span class="math inline">\(\ell_n\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell_n',\)</span> and second, <span class="math inline">\(\ell_n'',\)</span> derivative.</p>
 <p>To optimize the log-likelihood function <span class="math inline">\(\ell_n,\)</span> we try to find the root of <span class="math inline">\(\ell_n',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\in\Theta\)</span> such that <span class="math display">\[
 \ell_n'(\theta)=0.
-\]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the first order condition of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size <span class="math inline">\(h.\)</span></p>
+\]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the <strong>first order condition</strong> of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size <span class="math inline">\(h.\)</span></p>
 <p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_{(0)}\in\Theta\)</span> be our first guess of the root of <span class="math inline">\(\ell'_n.\)</span></p>
 <p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, our guess is not perfect and thus <span class="math inline">\(\ell_n'(\theta_{(0)})\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_{(0)}\)</span> to a new root-candidate <span class="math inline">\(\theta_{(1)}\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
 \theta_{(1)} = \theta_{(0)} + h.
@@ -607,7 +637,7 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 \]</span> denotes the vector of predictor variables, where the (i.i.d.) random sample<br>
 <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
-\]</span> follows a <strong>random design</strong> (<a href="#def-RandomDesign">Definition&nbsp;<span>1.1</span></a>).</p>
+\]</span> follows a <strong>random design</strong> (<a href="#def-RandomDesign">Definition&nbsp;<span>1.3</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -619,7 +649,7 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 </div>
 <div class="callout-body-container callout-body">
 <div id="def-RandomDesign" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1.1 (Random Design (Regression Analysis)) </strong></span><br></p>
+<p><span class="theorem-title"><strong>Definition 1.3 (Random Design (Regression Analysis)) </strong></span><br></p>
 <p>A <strong>random desgin</strong> in regression analysis is given by the following setup:</p>
 <p>Let <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
