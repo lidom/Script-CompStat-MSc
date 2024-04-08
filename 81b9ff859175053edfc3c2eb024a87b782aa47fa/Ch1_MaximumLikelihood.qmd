@@ -386,81 +386,46 @@ box()
 ```
 
 
-
-::: {.callout-note}
-
-# Convergence of the Newton-Raphson Algorithm
+### Convergence of the Newton-Raphson Algorithm {#sec-ConvNR}
 
 Let $\theta_{root}$ denote the root of $\ell_n';$ i.e. 
 $$
 \ell_n'(\theta_{root})=0.
 $$ 
-Using the Newton-Raphson algorithm, we aim to approximate $\theta_{root}.$ We call our best approximation of $\theta_{root}$ the maximum likelihood estimate; i.e. $\hat{\theta}_{ML}\approx\theta_{root}.$ 
+We aim to find $\theta_{root}$ using the Newton-Raphson algorithm and call our best approximation of $\theta_{root}$ the maximum likelihood estimate; i.e. $\hat{\theta}_{ML}\approx\theta_{root}.$ 
 
 Let 
 $$
-\Delta_{(0)}=\theta_{root}-\theta_{(0)}
+e_{(0)}=\theta_{root}-\theta_{(0)}
 $$
-denote the start-value error and let 
+denote the start value error and let 
 $$
-I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
+I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 $$
-denote the start-value neighborhood around $\theta_{root}.$   
+denote the start value error neighborhood around $\theta_{root}.$   
 
 One can shown that if $\ell_n'$ is "well behaved" over $I;$ i.e. 
 
-* if $\ell_n''(\theta)\neq 0$ for all $\theta\in I,$
+* if $\ell_n''(\theta)\neq 0$ for all $\theta\in I$ and 
 * if $\ell_n'''(\theta)$ is finite and continuous for all $\theta\in I,$ 
 
-and if the first guess $\theta_{(0)}$ is not too bad; i.e. 
+and if our first guess $\theta_{(0)}$ is "close enough;" i.e. 
 
-* if $M|\Delta_{(0)}|<1,$ where 
+* if $M=0$ or 
+* if $0<M<1$ or 
+* if $1\leq M<\infty$ and $|e_{(0)}|<1,$ where 
+<!-- * if $M|e_{(0)}|<1,$ where  -->
 $$
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right),
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
 $$ 
 
-then $\theta_{(m)}$ will converge to $\theta,$ since then the approximation errors will become smaller in each step, 
-$$
-|\Delta_{(m+1)}|\leq M |\Delta_{(m)}|.
-$$ 
+then $\theta_{(m)}$ will converge to $\theta_{root}$ as $m\to\infty.$ 
 
-Unfortunately, we typically don't know if $\ell_n'$ is well behaved and we usually don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
+::: {.callout-warning}
+Unfortunately, we typically don't know if $\ell_n'$ is "well behaved" and we usually don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method -->
 :::
 
-<!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
-$$
-\begin{align*}
-\theta = \lim_{n\to\infty}\theta_{n+1} 
-&=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell_n'(\theta_{n})}{\ell_n''(\theta_{n})}\right)\\[2ex]
-&=\lim_{n\to\infty}\theta_{n} + \frac{\ell_n'(\lim_{n\to\infty}\theta_{n})}{\ell_n''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
-&=\theta + \frac{\ell_n'(\theta)}{\ell_n''(\theta)}.
-\end{align*}
-$$  
-Therefore, provided that $\ell_n''(\theta)\neq \pm\infty,$ we must have that $\ell_n'(\theta) = 0.$ -->
-
-**Checking convergence:** Since we are expecting that $\ell_n'(\theta_{(m)})\to 0,$ as $m\to\infty,$ a good stopping condition for the Newton-Raphson algorithm is 
-$$
-|\ell_n'(\theta_{(m)})|\leq \varepsilon
-$$ 
-for some (small) tolerance $\varepsilon>0.$ 
-
-::: {.callout-note}
-# Pseudo-Code: Newton-Raphson Algorithm
-$$
-\begin{array}{ll}
-\texttt{\textbf{let }} \theta_{(0)}\in\Theta\qquad&\\
-\texttt{\textbf{let }} m=0         &  \\
-\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | >\varepsilon & \texttt{\textbf{do}}\\
-&\left[
-                                    \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
-                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
-                                    \end{array} \right.\\
-\texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} & \\
-\texttt{\textbf{return }} \hat\theta_{ML} &  \\
-\end{array}
-$$
-::: 
 
 ::: {.callout-tip}
 * For problems that are globally concave, the starting value $\theta_0$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
@@ -477,7 +442,32 @@ In this case a simple strategy is to move a small step in the direction which de
 * In other cases where $\theta_{(m)}$ is too far from the true maximizer $\theta$, the Taylor approximation may be so inaccurate that $\ell_n(\theta_{(m+1)})$ is actually *smaller* than $\ell_n(\theta_{(m)}).$ When this happens one may replace $\theta_{(m+1)}$ with $(\theta_{(m+1)}+\theta_{(m)})/2$ (or some other value between $\theta_{(m)}$ and $\theta_{(m+1)}$) in the hope that a smaller step will produce better results.
 :::
 
-#### Newton-Raphson Algorithm: Coin-Flipping Example {-} 
+**Stopping Criterion:** Since we are expecting that $\ell_n'(\theta_{(m)})\to 0,$ as $m\to\infty,$ a good stopping condition for the Newton-Raphson algorithm is 
+$$
+|\ell_n'(\theta_{(m)})|\leq \varepsilon
+$$ 
+for some (small) tolerance $\varepsilon>0.$ 
+
+::: {.callout-note}
+# Pseudo-Code: Newton-Raphson Algorithm
+$$
+\begin{array}{ll}
+\texttt{\textbf{select }} \theta_{(0)}\in\Theta\;\;\text{ and}&\varepsilon>0 \\[2ex]
+\texttt{\textbf{let }} m=0         &  \\
+\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | >\varepsilon & \texttt{\textbf{do}}\\
+&\left[
+                                    \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
+                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
+                                    \end{array} \right.\\
+\texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} & \\
+\texttt{\textbf{return }} \hat\theta_{ML} &  \\
+\end{array}
+$$
+::: 
+
+
+
+### Newton-Raphson Algorithm: Coin-Flipping Example 
 
 Let's return to our earlier coin flipping example. 
 
@@ -487,9 +477,9 @@ $$
 $$
 but let us, nevertheless, apply the Newton-Raphson algorithm.  
 
-First and second derivatives of 
+The first and second derivatives of 
 $$
-\ell_n(\theta)=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
+\ell_n(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
 $$ 
 are 
 $$
@@ -502,8 +492,8 @@ $$
 
 We consider a sample size of $n=5$ with the following observed outcome: 
 
-* One Head; i.e., $N_{H,obs}=1$ 
-* Four Tails; i.e., $n-N_{H,obs}=4$
+* One Head: $N_{H,obs}=1$ 
+* Four Tails: $n-N_{H,obs}=4$
 
 Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
@@ -533,21 +523,48 @@ where $Y_i\in\mathbb{R}$ denotes the response (or "dependent") variable,
 $$
 \beta_0\in\mathbb{R}^p
 $$ 
-denotes the vector of unknown slope parametes, and 
+denotes the vector of unknown slope parameters, and 
 $$
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 $$
-denotes the vector of predictor variables, where the i.i.d. sample 
+denotes the vector of predictor variables, where the (i.i.d.) random sample  
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
-follows a **random design** (@def-RandomFixedDesign), which includes the exogeneity assumption $\mathbb{E}(\varepsilon_i|X_i)=0,$ for all $i=1,\dots,n.$ 
+follows a **random design** (@def-RandomDesign). 
 
+::: {.callout-note icon=false} 
+## 
+::: {#def-RandomDesign}
+
+## Random Design (Regression Analysis) 
+<br>
+
+A **random desgin** in regression analysis is given by the following setup: 
+
+Let 
+$$
+(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
+$$
+or equivalently 
+$$
+(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
+$$
+denote a (i.i.d.) random sample with 
+$$
+\mathbb{E}(\varepsilon_i|X_i)=0\quad\text{ for all }\quad i=1,\dots,n
+$$ 
+and with either
+
+* **homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0$, $i=1,\dots,n,$ for a constant $0<\sigma^2_0<\infty$ or 
+* **heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)<\infty$, $i=1,\dots,n,$ for a strictly positive and finite variance function $\sigma^2_0(\cdot).$
+:::
+:::
 
 For the following, it is convenient to write @eq-LinMod using matrix notation
 $$
 \begin{eqnarray*}
-  \underset{(n\times 1)}{Y}&=&\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta} + \underset{(n\times 1)}{\varepsilon},
+  \underset{(n\times 1)}{Y}&=&\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta_0} + \underset{(n\times 1)}{\varepsilon},
 \end{eqnarray*}
 $$
 where 
@@ -558,7 +575,7 @@ Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{
 $$
 
 
-Under normally distributed error terms, $\varepsilon_i,$ we have that 
+Under **normally distributed** error terms, $\varepsilon_i,$ we have that 
 $$
 \begin{align}
 \varepsilon &\sim \mathcal{N}\left(0, \sigma_0^2I_n\right)\\[2ex]
@@ -584,9 +601,9 @@ $$
 f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
 $$
-where $\theta_0=(\beta_0',\sigma_0^2)$ denotes the unknown parameter vector. 
+where $\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{>0}$ denotes the unknown parameter vector. 
 
-This allows us to setup the likelihood function: 
+This allows us to setup the likelihood function, 
 $$
 \begin{align*}
 \mathcal{L}_n(\beta',\sigma^2)
@@ -594,7 +611,7 @@ $$
 & =\prod_{i=1}^n \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
 & =\frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{\sum_{i=1}^n (Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
 %& =\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)\\[2ex]
-& =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right)\\[2ex]
+& =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right),\\[2ex]
 \end{align*}
 $$
 <!-- The multivariate density for $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'$ is then
@@ -604,10 +621,10 @@ f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\va
 \end{equation*}
 $$ -->
 <!-- Noting that $\varepsilon=Y-X\beta$, we get the  -->
-Log-likelihood function:
+and the log-likelihood function,
 $$
 \begin{align*}
-\ell_n(\beta',\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
+\ell_n(\beta',\sigma^2)& =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta).
 \end{align*}
 $$
 <!-- with $K+1$ unknown parameters: 
@@ -1481,6 +1498,23 @@ $$
 
 (b) Let $0<\lambda_0\leq 4.$ Find the maximum likelihood estimator, $\hat{P}(X=4),$ of $P(X=4).$
 
+
+#### Exercise 5. {-}
+
+Show that the Newton-Raphson algorithm converges under the setup outlined in @sec-ConvNR. 
+
+**Tip:** Use the first-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with **explicit reminder** term $R$ given by 
+$$
+\begin{align*}
+\overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)} 
+& = \ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + R,
+\end{align*}
+$$
+where 
+$$
+R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
+$$
+for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}$. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem @thm-MVT.   
 
 
 <!-- {{< include Ch1_MaximumLikelihood_Solutions.qmd >}} -->

@@ -148,6 +148,8 @@ div.csl-indent {
   <li><a href="#numeric-optimization" id="toc-numeric-optimization" class="nav-link" data-scroll-target="#numeric-optimization"><span class="toc-section-number">1.2</span>  Numeric Optimization</a>
   <ul class="collapse">
   <li><a href="#newton-raphson-optimization" id="toc-newton-raphson-optimization" class="nav-link" data-scroll-target="#newton-raphson-optimization"><span class="toc-section-number">1.2.1</span>  Newton-Raphson Optimization</a></li>
+  <li><a href="#sec-ConvNR" id="toc-sec-ConvNR" class="nav-link" data-scroll-target="#sec-ConvNR"><span class="toc-section-number">1.2.2</span>  Convergence of the Newton-Raphson Algorithm</a></li>
+  <li><a href="#newton-raphson-algorithm-coin-flipping-example" id="toc-newton-raphson-algorithm-coin-flipping-example" class="nav-link" data-scroll-target="#newton-raphson-algorithm-coin-flipping-example"><span class="toc-section-number">1.2.3</span>  Newton-Raphson Algorithm: Coin-Flipping Example</a></li>
   </ul></li>
   <li><a href="#sec-LinRegNorm" id="toc-sec-LinRegNorm" class="nav-link" data-scroll-target="#sec-LinRegNorm"><span class="toc-section-number">1.3</span>  Linear Regression under Normality</a>
   <ul class="collapse">
@@ -425,77 +427,43 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 </div>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Convergence of the Newton-Raphson Algorithm
-</div>
-</div>
-<div class="callout-body-container callout-body">
+</section>
+</section>
+<section id="sec-ConvNR" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="sec-ConvNR"><span class="header-section-number">1.2.2</span> Convergence of the Newton-Raphson Algorithm</h3>
 <p>Let <span class="math inline">\(\theta_{root}\)</span> denote the root of <span class="math inline">\(\ell_n';\)</span> i.e.&nbsp; <span class="math display">\[
 \ell_n'(\theta_{root})=0.
-\]</span> Using the Newton-Raphson algorithm, we aim to approximate <span class="math inline">\(\theta_{root}.\)</span> We call our best approximation of <span class="math inline">\(\theta_{root}\)</span> the maximum likelihood estimate; i.e.&nbsp;<span class="math inline">\(\hat{\theta}_{ML}\approx\theta_{root}.\)</span></p>
+\]</span> We aim to find <span class="math inline">\(\theta_{root}\)</span> using the Newton-Raphson algorithm and call our best approximation of <span class="math inline">\(\theta_{root}\)</span> the maximum likelihood estimate; i.e.&nbsp;<span class="math inline">\(\hat{\theta}_{ML}\approx\theta_{root}.\)</span></p>
 <p>Let <span class="math display">\[
-\Delta_{(0)}=\theta_{root}-\theta_{(0)}
-\]</span> denote the start-value error and let <span class="math display">\[
-I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
-\]</span> denote the start-value neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
+e_{(0)}=\theta_{root}-\theta_{(0)}
+\]</span> denote the start value error and let <span class="math display">\[
+I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
+\]</span> denote the start value error neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
 <p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” over <span class="math inline">\(I;\)</span> i.e.&nbsp;</p>
 <ul>
-<li>if <span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I,\)</span></li>
+<li>if <span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I\)</span> and</li>
 <li>if <span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I,\)</span></li>
 </ul>
-<p>and if the first guess <span class="math inline">\(\theta_{(0)}\)</span> is not too bad; i.e.&nbsp;</p>
+<p>and if our first guess <span class="math inline">\(\theta_{(0)}\)</span> is “close enough;” i.e.&nbsp;</p>
 <ul>
-<li>if <span class="math inline">\(M|\Delta_{(0)}|&lt;1,\)</span> where <span class="math display">\[
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right),
+<li>if <span class="math inline">\(M=0\)</span> or</li>
+<li>if <span class="math inline">\(0&lt;M&lt;1\)</span> or</li>
+<li>if <span class="math inline">\(1\leq M&lt;\infty\)</span> and <span class="math inline">\(|e_{(0)}|&lt;1,\)</span> where <!-- * if $M|e_{(0)}|<1,$ where  --> <span class="math display">\[
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
 \]</span></li>
 </ul>
-<p>then <span class="math inline">\(\theta_{(m)}\)</span> will converge to <span class="math inline">\(\theta,\)</span> since then the approximation errors will become smaller in each step, <span class="math display">\[
-|\Delta_{(m+1)}|\leq M |\Delta_{(m)}|.
-\]</span></p>
-<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is well behaved and we usually don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
-</div>
-</div>
-<!-- However, if $\theta_n\to\theta$ then, since $\ell_n'$ and $\ell_n''$ are continuous, we have
-$$
-\begin{align*}
-\theta = \lim_{n\to\infty}\theta_{n+1} 
-&=\lim_{n\to\infty}\left(\theta_{n} + \frac{\ell_n'(\theta_{n})}{\ell_n''(\theta_{n})}\right)\\[2ex]
-&=\lim_{n\to\infty}\theta_{n} + \frac{\ell_n'(\lim_{n\to\infty}\theta_{n})}{\ell_n''(\lim_{n\to\infty}\theta_{n})}\\[2ex]
-&=\theta + \frac{\ell_n'(\theta)}{\ell_n''(\theta)}.
-\end{align*}
-$$  
-Therefore, provided that $\ell_n''(\theta)\neq \pm\infty,$ we must have that $\ell_n'(\theta) = 0.$ -->
-<p><strong>Checking convergence:</strong> Since we are expecting that <span class="math inline">\(\ell_n'(\theta_{(m)})\to 0,\)</span> as <span class="math inline">\(m\to\infty,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
-|\ell_n'(\theta_{(m)})|\leq \varepsilon
-\]</span> for some (small) tolerance <span class="math inline">\(\varepsilon&gt;0.\)</span></p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<p>then <span class="math inline">\(\theta_{(m)}\)</span> will converge to <span class="math inline">\(\theta_{root}\)</span> as <span class="math inline">\(m\to\infty.\)</span></p>
+<div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Pseudo-Code: Newton-Raphson Algorithm
+Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><span class="math display">\[
-\begin{array}{ll}
-\texttt{\textbf{let }} \theta_{(0)}\in\Theta\qquad&amp;\\
-\texttt{\textbf{let }} m=0         &amp;  \\
-\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
-&amp;\left[
-                                    \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
-                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
-                                    \end{array} \right.\\
-\texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} &amp; \\
-\texttt{\textbf{return }} \hat\theta_{ML} &amp;  \\
-\end{array}
-\]</span></p>
+<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is “well behaved” and we usually don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
 </div>
 </div>
 <div class="callout-tip callout callout-style-default callout-captioned">
@@ -519,15 +487,43 @@ Tip
 </ul>
 </div>
 </div>
+<p><strong>Stopping Criterion:</strong> Since we are expecting that <span class="math inline">\(\ell_n'(\theta_{(m)})\to 0,\)</span> as <span class="math inline">\(m\to\infty,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
+|\ell_n'(\theta_{(m)})|\leq \varepsilon
+\]</span> for some (small) tolerance <span class="math inline">\(\varepsilon&gt;0.\)</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Pseudo-Code: Newton-Raphson Algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{array}{ll}
+\texttt{\textbf{select }} \theta_{(0)}\in\Theta\;\;\text{ and}&amp;\varepsilon&gt;0 \\[2ex]
+\texttt{\textbf{let }} m=0         &amp;  \\
+\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
+&amp;\left[
+                                    \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
+                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
+                                    \end{array} \right.\\
+\texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} &amp; \\
+\texttt{\textbf{return }} \hat\theta_{ML} &amp;  \\
+\end{array}
+\]</span></p>
+</div>
+</div>
 </section>
-<section id="newton-raphson-algorithm-coin-flipping-example" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example">Newton-Raphson Algorithm: Coin-Flipping Example</h4>
+<section id="newton-raphson-algorithm-coin-flipping-example" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example"><span class="header-section-number">1.2.3</span> Newton-Raphson Algorithm: Coin-Flipping Example</h3>
 <p>Let’s return to our earlier coin flipping example.</p>
 <p>If we observe, for instance, only one head <span class="math inline">\(N_{H,obs}=1\)</span> for a sample size of <span class="math inline">\(n=5,\)</span> we already know from <a href="#eq-MLECoinFlipp">Equation&nbsp;<span>1.1</span></a> that <span class="math display">\[
 \hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 \]</span> but let us, nevertheless, apply the Newton-Raphson algorithm.</p>
-<p>First and second derivatives of <span class="math display">\[
-\ell_n(\theta)=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right)
+<p>The first and second derivatives of <span class="math display">\[
+\ell_n(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
 \]</span> are <span class="math display">\[
 \begin{align*}
 \ell_n'(\theta)&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
@@ -537,8 +533,8 @@ Tip
 \]</span></p>
 <p>We consider a sample size of <span class="math inline">\(n=5\)</span> with the following observed outcome:</p>
 <ul>
-<li>One Head; i.e., <span class="math inline">\(N_{H,obs}=1\)</span></li>
-<li>Four Tails; i.e., <span class="math inline">\(n-N_{H,obs}=4\)</span></li>
+<li>One Head: <span class="math inline">\(N_{H,obs}=1\)</span></li>
+<li>Four Tails: <span class="math inline">\(n-N_{H,obs}=4\)</span></li>
 </ul>
 <p>Setting the tolerance level <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution is <span class="math inline">\(\hat\theta_{ML} = 0.2\)</span> which equals the analytic solution.</p>
 <div id="tbl-NR" class="anchored">
@@ -600,28 +596,55 @@ Tip
 </div>
 </section>
 </section>
-</section>
 <section id="sec-LinRegNorm" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-LinRegNorm"><span class="header-section-number">1.3</span> Linear Regression under Normality</h2>
 <p>Now let’s return to the linear regression model <span id="eq-LinMod"><span class="math display">\[
 Y_i=X_i'\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 \tag{1.2}\]</span></span> where <span class="math inline">\(Y_i\in\mathbb{R}\)</span> denotes the response (or “dependent”) variable, <span class="math display">\[
 \beta_0\in\mathbb{R}^p
-\]</span> denotes the vector of unknown slope parametes, and <span class="math display">\[
+\]</span> denotes the vector of unknown slope parameters, and <span class="math display">\[
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
-\]</span> denotes the vector of predictor variables, where the i.i.d. sample <span class="math display">\[
+\]</span> denotes the vector of predictor variables, where the (i.i.d.) random sample<br>
+<span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
-\]</span> follows a <strong>random design</strong> (<span class="quarto-unresolved-ref">?def-RandomFixedDesign</span>), which includes the exogeneity assumption <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0,\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></p>
+\]</span> follows a <strong>random design</strong> (<a href="#def-RandomDesign">Definition&nbsp;<span>1.1</span></a>).</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="def-RandomDesign" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.1 (Random Design (Regression Analysis)) </strong></span><br></p>
+<p>A <strong>random desgin</strong> in regression analysis is given by the following setup:</p>
+<p>Let <span class="math display">\[
+(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
+\]</span> or equivalently <span class="math display">\[
+(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
+\]</span> denote a (i.i.d.) random sample with <span class="math display">\[
+\mathbb{E}(\varepsilon_i|X_i)=0\quad\text{ for all }\quad i=1,\dots,n
+\]</span> and with either</p>
+<ul>
+<li><strong>homoscedastic</strong> errors: <span class="math inline">\(\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> for a constant <span class="math inline">\(0&lt;\sigma^2_0&lt;\infty\)</span> or</li>
+<li><strong>heteroscedastic</strong> errors: <span class="math inline">\(\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)&lt;\infty\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> for a strictly positive and finite variance function <span class="math inline">\(\sigma^2_0(\cdot).\)</span></li>
+</ul>
+</div>
+</div>
+</div>
 <p>For the following, it is convenient to write <a href="#eq-LinMod">Equation&nbsp;<span>1.2</span></a> using matrix notation <span class="math display">\[
 \begin{eqnarray*}
-  \underset{(n\times 1)}{Y}&amp;=&amp;\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta} + \underset{(n\times 1)}{\varepsilon},
+  \underset{(n\times 1)}{Y}&amp;=&amp;\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta_0} + \underset{(n\times 1)}{\varepsilon},
 \end{eqnarray*}
 \]</span> where <span class="math display">\[
 \begin{equation*}
 Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{matrix}X_{11}&amp;\dots&amp;X_{1K}\\\vdots&amp;\ddots&amp;\vdots\\ X_{n1}&amp;\dots&amp;X_{nK}\\\end{matrix}\right),\quad\text{and}\quad \varepsilon=\left(\begin{matrix}\varepsilon_1\\ \vdots\\ \varepsilon_n\end{matrix}\right).
 \end{equation*}
 \]</span></p>
-<p>Under normally distributed error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
+<p>Under <strong>normally distributed</strong> error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
 \begin{align}
 \varepsilon &amp;\sim \mathcal{N}\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad
@@ -640,24 +663,24 @@ The requirement to make a (correct) distributional assumption is much more restr
 <p>Under <a href="#eq-OLSnormAss">Equation&nbsp;<span>1.3</span></a>, we have <span class="math display">\[
 f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
-\]</span> where <span class="math inline">\(\theta_0=(\beta_0',\sigma_0^2)\)</span> denotes the unknown parameter vector.</p>
-<p>This allows us to setup the likelihood function: <span class="math display">\[
+\]</span> where <span class="math inline">\(\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{&gt;0}\)</span> denotes the unknown parameter vector.</p>
+<p>This allows us to setup the likelihood function, <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\beta',\sigma^2)
 &amp; =\prod_{i=1}^n f(Y_i|X_i;\beta',\sigma^2)\\[2ex]
 &amp; =\prod_{i=1}^n \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
 &amp; =\frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{\sum_{i=1}^n (Y_i-X_i'\beta)^2}{2\sigma^2}\right)\\[2ex]
 %&amp; =\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right)\\[2ex]
-&amp; =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right)\\[2ex]
+&amp; =(2\pi)^{-n/2} \cdot (\sigma^2)^{-n/2}\cdot  \exp\left(-\frac{(Y-X\beta)'(Y-X\beta)}{2\sigma^2}\right),\\[2ex]
 \end{align*}
 \]</span> <!-- The multivariate density for $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)'$ is then
 $$
 \begin{equation*}
 f(\varepsilon)=\dfrac{1}{(2\pi \sigma^2)^{n/2}} \exp\left(-\frac{\varepsilon'\varepsilon}{2\sigma^2}\right).
 \end{equation*}
-$$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> Log-likelihood function: <span class="math display">\[
+$$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-likelihood function, <span class="math display">\[
 \begin{align*}
-\ell_n(\beta',\sigma^2)&amp; =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta)
+\ell_n(\beta',\sigma^2)&amp; =-\dfrac{n}{2} \ln(2\pi) - \dfrac{n}{2}\ln(\sigma^2) - \dfrac{1}{2 \sigma^2}(Y-X\beta)'(Y-X\beta).
 \end{align*}
 \]</span> <!-- with $K+1$ unknown parameters: 
 
@@ -1398,6 +1421,18 @@ f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 <li><p>Find the maximum likelihood estimator, <span class="math inline">\(\hat{\lambda},\)</span> of <span class="math inline">\(\lambda_0.\)</span></p></li>
 <li><p>Let <span class="math inline">\(0&lt;\lambda_0\leq 4.\)</span> Find the maximum likelihood estimator, <span class="math inline">\(\hat{P}(X=4),\)</span> of <span class="math inline">\(P(X=4).\)</span></p></li>
 </ol>
+</section>
+<section id="exercise-5." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-5.">Exercise 5.</h4>
+<p>Show that the Newton-Raphson algorithm converges under the setup outlined in <a href="#sec-ConvNR"><span>Section&nbsp;1.2.2</span></a>.</p>
+<p><strong>Tip:</strong> Use the first-order Taylor expansion of <span class="math inline">\(\ell'(\theta_{root})\)</span> around <span class="math inline">\(\theta_{(m)}\)</span> with <strong>explicit reminder</strong> term <span class="math inline">\(R\)</span> given by <span class="math display">\[
+\begin{align*}
+\overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)}
+&amp; = \ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + R,
+\end{align*}
+\]</span> where <span class="math display">\[
+R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
+\]</span> for a mean-value <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{root}\)</span>. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem <a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>.</p>
 <!-- {{< include Ch1_MaximumLikelihood_Solutions.qmd >}} -->
 </section>
 </section>
