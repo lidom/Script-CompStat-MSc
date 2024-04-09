@@ -419,6 +419,59 @@ The first-order and the second-order Taylor polynomial can both be used to appro
 
 The second-order Taylor polynomial can be used to apprixmate $f'.$
 ::: -->
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div id="thm-TaylorThm" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1.1 (Taylor’s Theorem) </strong></span>Let <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> be <span class="math inline">\(k\geq 1\)</span> times differentiable at <span class="math inline">\(x\in\mathbb{R}\)</span> and let <span class="math inline">\(h\in\mathbb{R}.\)</span> Then there exists a function <span class="math inline">\(h_k:\mathbb{R}\to\mathbb{R}\)</span> such that <span class="math display">\[
+\begin{align*}
+f(x+h) &amp;=
+\underbrace{f(x)
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell}_{=P_k(x+h)}
++ h_k(x+h)(h)^k%\\[2ex]
+%&amp; =P_k(x) + h_k(x)(x-a)^k
+\end{align*}
+\]</span> with <span class="math display">\[
+h_k(x+h)\to 0\quad\text{as}\quad h\to 0,
+\]</span> where <span class="math inline">\(f^{(\ell)}(x)\)</span> denotes the <span class="math inline">\(\ell\)</span>th derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(x.\)</span></p>
+<blockquote class="blockquote">
+<p>Note: <span class="math inline">\(h_k(x)(x-a)^k=f(x) - P_k(x)\)</span> is called the <a href="https://en.wikipedia.org/wiki/Giuseppe_Peano">Peano</a> form of the approximation error <span class="math inline">\(f(x) - P_k(x)\)</span>.</p>
+</blockquote>
+<div class="callout-tip callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Qualitative version using the small-<span class="math inline">\(o\)</span> notation:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{align*}
+f(x + h) &amp; =
+f(x)
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ o\big(|h|^k\big),
+\end{align*}
+\]</span> where <span class="math inline">\(o\big(|h|^k\big)\)</span> denotes the family of real-valued functions, <span class="math inline">\(g(h)\)</span> say, that are of a strictly <strong>smaller <span class="math inline">\(o\)</span>rder of magnitude</strong> than the function <span class="math inline">\(|h|^k\)</span> as <span class="math inline">\(h\to 0\)</span> i.e.<br>
+<span class="math display">\[
+o\big(|h|^k\big)=\left\{g:\mathbb{R}\to\mathbb{R}:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
+\]</span> Note: <span class="math inline">\(h_k(x+h)(h)^k=o\big(|h|^k\big)\)</span> since <span class="math display">\[
+\frac{|h_k(x+h)(h)^k|}{|h|^k}\to 0\quad\text{as}\quad h\to 0.
+\]</span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <section id="optimization-idea" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="optimization-idea">Optimization Idea</h4>
 <p>Let <span class="math inline">\(\ell_n\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell_n',\)</span> and second, <span class="math inline">\(\ell_n'',\)</span> derivative.</p>
@@ -580,46 +633,46 @@ Pseudo-Code: Newton-Raphson Algorithm
 <tr class="header">
 <th><span class="math inline">\(m\)</span></th>
 <th><span class="math inline">\(\hat\theta_{(m)}\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(h=-\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})\)</span></th>
 <th><span class="math inline">\(\ell_n'(\hat\theta_{(m)})\)</span></th>
-<th><span class="math inline">\(\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(0.40\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-2.40\cdot 10^{-1}\)</span></td>
 <td><span class="math inline">\(-4.16\)</span></td>
-<td><span class="math inline">\(\phantom{-}2.40\cdot 10^{-1}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(0.16\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}3.32\cdot 10^{-2}\)</span></td>
 <td><span class="math inline">\(\phantom{-}1.48\)</span></td>
-<td><span class="math inline">\(-3.32\cdot 10^{-2}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(2\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}6.55\cdot 10^{-3}\)</span></td>
 <td><span class="math inline">\(\phantom{-}2.15\cdot 10^{-1}\)</span></td>
-<td><span class="math inline">\(-6.55\cdot 10^{-3}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(3\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.73\cdot 10^{-4}\)</span></td>
 <td><span class="math inline">\(\phantom{-}5.43\cdot 10^{-3}\)</span></td>
-<td><span class="math inline">\(-1.73\cdot 10^{-4}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(4\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.13\cdot 10^{-7}\)</span></td>
 <td><span class="math inline">\(\phantom{-}3.53\cdot 10^{-6}\)</span></td>
-<td><span class="math inline">\(-1.13\cdot 10^{-7}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(5\)</span></td>
 <td><span class="math inline">\(0.20\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}4.81\cdot 10^{-14}\)</span></td>
 <td><span class="math inline">\(\phantom{-}1.50\cdot 10^{-12}\)</span></td>
-<td><span class="math inline">\(-4.81\cdot 10^{-14}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -1094,7 +1147,7 @@ f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 </div>
 <p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
-\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>).</p>
+\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1106,7 +1159,7 @@ f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 </div>
 <div class="callout-body-container callout-body">
 <div id="thm-MVT" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.1 (Mean Value Theorem) </strong></span><em>Let <span class="math inline">\(f\)</span> be continuous over the closed interval <span class="math inline">\([a,b]\)</span> and differentiable over the open interval <span class="math inline">\((a,b).\)</span> Then, there exists at least one point <span class="math inline">\(c\in(a,b)\)</span> such that</em> <span class="math display">\[
+<p><span class="theorem-title"><strong>Theorem 1.2 (Mean Value Theorem) </strong></span><em>Let <span class="math inline">\(f\)</span> be continuous over the closed interval <span class="math inline">\([a,b]\)</span> and differentiable over the open interval <span class="math inline">\((a,b).\)</span> Then, there exists at least one point <span class="math inline">\(c\in(a,b)\)</span> such that</em> <span class="math display">\[
 f'(c) = \frac{f(b)-f(a)}{b-a}
 \]</span> <em>or equivalently</em> <span class="math display">\[
 f(b)=f(a) + f'(c)(b-a).
@@ -1114,7 +1167,7 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 </div>
 </div>
-<p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
+<p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \tag{1.6}\]</span></span> for some</p>
 <ul>
@@ -1355,7 +1408,7 @@ Machine learning
 </div>
 <div class="callout-body-container callout-body">
 <div id="thm-EVP" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.2 (Equivariance (or Invariance) Property of the ML-Estimator) </strong></span>Let <span class="math display">\[
+<p><span class="theorem-title"><strong>Theorem 1.3 (Equivariance (or Invariance) Property of the ML-Estimator) </strong></span>Let <span class="math display">\[
 \tau_0=g(\theta_0),
 \]</span> where <span class="math inline">\(g(\theta)\)</span> is a <strong>one-to-one (or injective) function</strong> of <span class="math inline">\(\theta\in\Theta;\)</span> i.e.&nbsp;<span class="math inline">\(g\)</span> maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)</p>
 <p>Let <span class="math inline">\(\hat{\theta}_{n}\)</span> be the maximum likelihood estimator of <span class="math inline">\(\theta_0.\)</span></p>
@@ -1365,7 +1418,7 @@ Machine learning
 </div>
 </div>
 </div>
-<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.2</span></a>:</strong></p>
+<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.3</span></a>:</strong></p>
 <p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it posses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
 <p>Thus <span class="math display">\[
 \hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
@@ -1462,7 +1515,7 @@ f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 \end{align*}
 \]</span> where <span class="math display">\[
 R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
-\]</span> for a mean-value <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{root}\)</span>. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem <a href="#thm-MVT">Theorem&nbsp;<span>1.1</span></a>.</p>
+\]</span> for a mean-value <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{root}\)</span>. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem <a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>.</p>
 <!-- {{< include Ch1_MaximumLikelihood_Solutions.qmd >}} -->
 </section>
 </section>

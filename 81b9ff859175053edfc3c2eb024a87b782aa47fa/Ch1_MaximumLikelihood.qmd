@@ -314,6 +314,52 @@ The first-order and the second-order Taylor polynomial can both be used to appro
 The second-order Taylor polynomial can be used to apprixmate $f'.$
 ::: -->
 
+::: {.callout-note icon=false} 
+## 
+::: {#thm-TaylorThm}
+# Taylor's Theorem 
+Let $f:\mathbb{R}\to\mathbb{R}$ be $k\geq 1$ times differentiable at $x\in\mathbb{R}$ and let $h\in\mathbb{R}.$ Then there exists a function $h_k:\mathbb{R}\to\mathbb{R}$ such that 
+$$
+\begin{align*}
+f(x+h) &= 
+\underbrace{f(x) 
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell}_{=P_k(x+h)}
++ h_k(x+h)(h)^k%\\[2ex]
+%& =P_k(x) + h_k(x)(x-a)^k
+\end{align*}
+$$
+with 
+$$
+h_k(x+h)\to 0\quad\text{as}\quad h\to 0,
+$$ 
+where $f^{(\ell)}(x)$ denotes the $\ell$th derivative of $f$ at $x.$
+
+> Note: $h_k(x)(x-a)^k=f(x) - P_k(x)$ is called the [Peano](https://en.wikipedia.org/wiki/Giuseppe_Peano) form of the approximation error $f(x) - P_k(x)$.
+
+::: {.callout-tip icon=false} 
+## Qualitative version using the small-$o$ notation:
+$$
+\begin{align*}
+f(x + h) & = 
+f(x) 
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ o\big(|h|^k\big),
+\end{align*}
+$$
+where $o\big(|h|^k\big)$ denotes the family of real-valued functions, $g(h)$ say, that are of a strictly **smaller $o$rder of magnitude** than the function $|h|^k$ as $h\to 0$ i.e.  
+$$
+o\big(|h|^k\big)=\left\{g:\mathbb{R}\to\mathbb{R}:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
+$$
+Note: 
+$h_k(x+h)(h)^k=o\big(|h|^k\big)$ 
+since 
+$$
+\frac{|h_k(x+h)(h)^k|}{|h|^k}\to 0\quad\text{as}\quad h\to 0.
+$$
+:::
+:::
+:::
+
 
 #### Optimization Idea {-}
 
@@ -526,14 +572,14 @@ We consider a sample size of $n=5$ with the following observed outcome:
 Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
-|$m$ 	|	$\hat\theta_{(m)}$	|	$\ell_n'(\hat\theta_{(m)})$	 |  $\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})$ |
-|-------------------|-------------------|----------------------------|---------------------------------------------|
-|$0$| $0.40$| $-4.16$                        |$\phantom{-}2.40\cdot 10^{-1}$|
-|$1$| $0.16$| $\phantom{-}1.48$              |$-3.32\cdot 10^{-2}$|
-|$2$| $0.19$| $\phantom{-}2.15\cdot 10^{-1}$ |$-6.55\cdot 10^{-3}$|
-|$3$| $0.19$| $\phantom{-}5.43\cdot 10^{-3}$ |$-1.73\cdot 10^{-4}$|
-|$4$| $0.19$| $\phantom{-}3.53\cdot 10^{-6}$ |$-1.13\cdot 10^{-7}$|
-|$5$| $0.20$| $\phantom{-}1.50\cdot 10^{-12}$|$-4.81\cdot 10^{-14}$|
+|$m$ 	|	$\hat\theta_{(m)}$	|	$h=-\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})$ |$\ell_n'(\hat\theta_{(m)})$	 |  
+|-------------------|-------------------|:--------------------------:|---------------------------------------------|
+|$0$| $0.40$| $-2.40\cdot 10^{-1}$| $-4.16$                        |
+|$1$| $0.16$| $\phantom{-}3.32\cdot 10^{-2}$ |$\phantom{-}1.48$              |
+|$2$| $0.19$| $\phantom{-}6.55\cdot 10^{-3}$ |$\phantom{-}2.15\cdot 10^{-1}$ |
+|$3$| $0.19$| $\phantom{-}1.73\cdot 10^{-4}$ |$\phantom{-}5.43\cdot 10^{-3}$ |
+|$4$| $0.19$| $\phantom{-}1.13\cdot 10^{-7}$ |$\phantom{-}3.53\cdot 10^{-6}$ |
+|$5$| $0.20$| $\phantom{-}4.81\cdot 10^{-14}$|$\phantom{-}1.50\cdot 10^{-12}$|
 
 : Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_{(0)}=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
 
