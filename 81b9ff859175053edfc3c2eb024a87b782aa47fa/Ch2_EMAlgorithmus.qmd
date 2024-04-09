@@ -31,6 +31,23 @@ pkgs <- c("tidyverse",      # Tidyverse packages
 install.packages(pkgs)
 ```
 
+For now, we need to load the following `R`-packages:
+```{r, eval=FALSE, echo=TRUE}
+library("tidyverse")
+library("palmerpenguins") # Penguin data 
+library("RColorBrewer")   # nice colors
+library("scales")         # transparent colors: alpha()
+```
+
+
+```{r, eval=TRUE, echo=FALSE}
+suppressPackageStartupMessages(library("tidyverse", quietly = TRUE))
+suppressPackageStartupMessages(library("palmerpenguins")) # Penguin data 
+suppressPackageStartupMessages(library("RColorBrewer"))   # nice colors
+suppressPackageStartupMessages(library("scales"))         # transparent colors: alpha()
+```
+
+
 
 ## Motivation: Cluster Analysis using Gaussian Mixture Models
 
@@ -58,14 +75,10 @@ Afterwards we can use the data in `penguin_species` to check how good our cluste
 
 
 ```{r, fig.align='center', out.width="100%", echo=TRUE, eval=TRUE}
-library("tidyverse", quietly = TRUE)
-library("palmerpenguins") # Penguin data 
-library("RColorBrewer")   # nice colors
-library("scales")         # transparent colors: alpha()
-
+## Select a color palette
 col_v <- RColorBrewer::brewer.pal(n = 3, name = "Set2")
 
-## Vorbereitung der Daten:
+## Preparing the data:
 penguins <- palmerpenguins::penguins %>%  # penguin data
   tidyr::as_tibble() %>%                  # 'tibble'-dataframe
   dplyr::filter(species!="Adelie") %>%    # remove penguin species 'Adelie' 
@@ -78,10 +91,10 @@ penguins <- palmerpenguins::penguins %>%  # penguin data
 ##  
 n      <- nrow(penguins)                  # sample size
 
-## Variable 'Penguine_Art' aus penguins-Daten "herausziehen"
-penguin_species    <- dplyr::pull(penguins, species)
+## Pulling out the variable 'penguin_species':
+penguin_species <- dplyr::pull(penguins, species)
 
-## Variable 'penguin_flipper' aus penguins-Daten "herausziehen"
+## Pulling out the variable 'penguin_flipper':
 penguin_flipper <- dplyr::pull(penguins, flipper)
 
 ## Plot
@@ -727,7 +740,9 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
 
 ## (Unsupervised) Classification
 
-The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from  a random variable $X$ is called **classification**. 
+The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from a possibly multivariate random variable $X$ is called **classification**. 
+
+**Example:** $Y\in\{0,1\}$ and $X\in\mathbb{R}^p$
 
 **Note:** Above, we used $Z,$ here we use $Y$ to denote the (unknown) group labels.
 
