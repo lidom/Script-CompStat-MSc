@@ -556,7 +556,7 @@ All this can be solved my adding unobserved group labels as missing variables.
 
 In our penguin data there are two groups $g\in\{1,2\}.$ 
 
-Thus, in principle (albeit unobserved) there are $G=2$ dimensional dummy variable, also called group-label, vectors $(z_{i1},z_{i2}),$ $i=1,\dots,n,$ with  
+Thus, in principle (albeit unobserved) there are $G=2$ dimensional dummy variable vectors $(z_{i1},z_{i2}),$ $i=1,\dots,n,$ which encode the group-labels,
 $$
 (z_{i1},z_{i2})=
 \left\{\begin{array}{ll}
@@ -566,8 +566,7 @@ $$
 $$
 
 ::: {.callout-tip}
-
-Case of more than two $G>2$ groups:  
+# Case of more than two $G>2$ groups:  
 $$
 \begin{align*}
 &(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
@@ -591,10 +590,10 @@ Requiring that
 $$
 \sum_{g=1}^Gz_{ig}=1
 $$
-means that for each (penguin) $i$ there is only **one** group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.
+means that for each (penguin) $i$ there is only **one** group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g. member of a gender group and member of a religious group).
 :::
 
-Unfortunately, the true group labels $z_{ig}$ are unknown. However, we nevertheless know something about these assignments. The weights 
+Unfortunately, the true group labels $z_{ig}$ are missing. However, we nevertheless know at least something about their group-assignments. The weights 
 $$
 \pi_1,\dots,\pi_G
 $$ 
@@ -602,16 +601,13 @@ of the Gaussian mixture distribution
 $$
 f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x|\mu_g,\sigma_g),
 $$
-give us the proportions of the individual distributions $\varphi(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_{GMM}$. 
-
-
-That is, on average, 
+give us the proportions of the individual distributions $\varphi(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_{GMM}$. Therefore, we know that, on average, 
 $$
 \pi_g\cdot 100\%
 $$ 
 of the data points $i=1,\dots,n$ come from group $g.$ 
 
-Thus, we can consider the unobserved group label $z_{ig}$ as a (unobserved) realization of a binary random variable $Z_{ig}\in\{0,1\}$ with probability mass function
+Thus, we can consider the missing group label $z_{ig}$ as a (unobserved) realization of a binary random variable $Z_{ig}\in\{0,1\}$ with probabilities
 $$
 \begin{align*}
 P(Z_{ig}=1)&=\pi_g\\[2ex]
@@ -620,8 +616,7 @@ P(Z_{ig}=0)&=(1-\pi_g)\\[2ex]
 $$
 for each $i=1,\dots,n.$
 
-
-The condition 
+Note that the condition 
 $$
 \sum_{g=1}^GZ_{ig}=1
 $$ 
@@ -651,7 +646,6 @@ If we know the flipper length of penguin $i$ then we can update the prior probab
 
 
 ::: {.callout-note} 
-
 # Bayes' Theorem applied to the Gaussian mixture distribution
 $$
 \begin{align*}
@@ -664,7 +658,8 @@ $${#eq-posteriorGMD}
 :::
 
 
-::: {.callout-important}
+::: {.callout-tip}
+# Where's the **Expection** in the EM-Algorithm? 
 The posterior probabilities $p_{ig}$ are conditional means:
 $$
 \begin{align*}
@@ -680,7 +675,15 @@ Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorith
 ### The Abstract Version of the EM-Algorithm
 
 
-If, in addition to the data points, $\mathbf{x}=(x_1,\dots,x_n),$ we had also observed the group assignments, $\mathbf{z}=(z_{11},\dots,z_{nG}),$ then we could establish the following alternative **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
+If, in addition to the data points (i.e. the predictors like the flipper lengths), 
+$$
+\mathbf{x}=(x_1,\dots,x_n),
+$$ 
+we had also observed the group assignments, 
+$$
+\mathbf{z}=(z_{11},\dots,z_{nG}),
+$$ 
+then we could establish the following alternative **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
 $$
 \begin{align*}
 \tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
@@ -719,9 +722,11 @@ The following EM algorithm differs only in notation from the version already dis
 In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ will be denoted as $\boldsymbol{\theta}$ for simplicity.
 <br>
 
-1. Set starting values $\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})$
+1. **Initialization:**<br>
+Set starting values $\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})$
 
-2. For $r=1,2,\dots$
+2. **Loop:**</br>
+For $r=1,2,\dots$
 
     - <span style="color:#FF5733">**(Expectation)** </span> Compute:
     $$
@@ -743,7 +748,7 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
     \end{align*}
     $$
 
-3. Check Convergence:<br> 
+3. **Check Convergence:**<br> 
    Stop if the value of the maximized log-likelihood function, 
    $$
    \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
@@ -754,17 +759,23 @@ In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\bold
 
 ## (Unsupervised) Classification
 
-The problem of predicting a discrete random variable $Y$ (i.e. the group labels) from a possibly multivariate random variable $X$ is called **classification**. 
+The problem of predicting a discrete random variable $Y$ (i.e. the group label) from a possibly multivariate predictor random variable $X$ is called **classification**. 
 
-**Example:** $Y\in\{0,1\}$ and $X\in\mathbb{R}^p$
+Consider iid data 
+$$
+(Y_1,X_1),\dots,(Y_n,X_n)
+$$
+where $X_i\in\mathbb{R}^p$ is a $p$-dimensional vector and $Y_i$ takes values in some finite set $\mathcal{Y}.$  
 
-**Note:** Above, we used $Z,$ here we use $Y$ to denote the (unknown) group labels.
+(**Note:** Above we used $Z,$ here we use $Y$ to denote the (unknown) group labels.)
+
+**Example:** Predict $Y\in\mathcal{Y}=\{0,1\}$ (e.g. passing the exam ($Y=1$) vs. failing $Y=0$) using the observed predictor values $X\in\mathbb{R}^p$ (e.g. previous gradings, number of hours studied, etc.)
 
 A **classification rule** is a function 
 $$
-h: X \to Y.
+h: \mathbb{R}^p \to \mathcal{Y}.
 $$
-That is, when we observe a new $X,$ we predict $Y$ to be $h(X).$
+That is, when we observe a new $X\in\mathbb{R}^p,$ we predict $Y$ to be $h(X)\in\mathcal{Y}.$
 
 If there are learning/training data **with** group-labels
 $$
@@ -791,15 +802,16 @@ predictions. The most often used quantity to measure the accuracy of classificat
 The **true error rate** of the classifier $h$ is the loss function
 $$
 L(h) = P(h(X)\neq Y).
-$$ 
+$${#eq-ErrorRate} 
 The **empirical error rate** is
 $$
-\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)}.
+\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)},
 $$
+where $1_{(\cdot)}$ denotes the indicator function with $1_{(\texttt{TRUE})}=1$ and $1_{(\texttt{FALSE})}=0.$
 :::
 :::
 
-That is, we try to find a classifier $h$ that minimizes $L(h)$ and $\hat{L}_n(h),$ respectively. 
+We try to find a classifier $h$ that minimizes $L(h)$ and $\hat{L}_n(h),$ respectively. 
 
 
 Let us focus on the special case of only two groups which can be coded, without loss of generality, as 
@@ -810,25 +822,42 @@ For instance,
 $$
 Y_i=\left\{\begin{array}{ll}
 1&\text{if penguin $i$ belongs to species Chinstrap}\\
-0&\text{if penguin $i$ belongs to species Gentoo}.
+0&\text{if penguin $i$ belongs NOT to species Chinstrap}.
 \end{array}\right..
 $$
 
 The **regression function** (i.e. the conditional mean function) is then given by 
 $$
-m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
+\begin{align*}
+m(x)
+&:=\mathbb{E}(Y|X=x)\\[2ex]
+&=1\cdot P(Y=1|X=x) + 0\cdot P(Y=0|X=x)\\[2ex]
+&=P(Y=1|X=x).
+\end{align*}
 $$
 From Bayes's theorem it follows that 
 $$
-m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
-$$
+\begin{align*}
+m(x)
+&=P(Y=1|X=x)\\[2ex]
+&=\frac{P(Y=1) f_{X|Y}(x|Y=1)}{P(Y=0) f_{X|Y}(x|Y=0)+P(Y=1) f_{X|Y}(x|Y=1) },\\[2ex]
+&=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{\pi_0\;f_{X|Y}(x|Y=0)+\pi_1\;f_{X|Y}(x|Y=1)}\\[2ex]
+&=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{f_{X}(x)},
+\end{align*}
+$${#eq-RegFun}
 where 
-
-* $f_0(x) = f(x|Y=0);$ conditional density of $X$ given $Y=0$
-* $f_1(x) = f(x|Y=1);$ cconditional density of $X$ given $Y=1$
-* $\pi_0  = P(Y=0)$
-* $\pi_1  = P(Y=1)$ 
-* $\pi_0 + \pi_1 = 1$
+$$
+\pi_0= P(Y=0)\quad\text{and}\quad\pi_1  = P(Y=1)
+$$ 
+denote the prior probabilities with $\pi_0 + \pi_1 = 1,$  
+$$
+f_{X|Y}(x|Y=0)\quad\text{and}\quad f_{X|Y}(x|Y=1)
+$$
+denote the conditional density functions of $X$ given $Y=0$ and $Y=1,$ respectively, and  
+$$
+f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
+$$ 
+denotes the unconditional density function of $X.$
 
 **Note:** Here $f$ denotes here some (unknown) density function, not necessarily the Gaussian density. 
 
@@ -850,7 +879,7 @@ h^\ast(x) = \left\{\begin{array}{ll}
 0&\text{otherwise}.
 \end{array}\right.
 $$
-The **decision boundary** is given by the set 
+The **decision boundary** of a classifier $h$ is given by the set 
 $$
 \mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
 $$
@@ -859,17 +888,21 @@ $$
 
 Equivalent forms of the Bayes' classification rule:
 $$
-h^\ast(x) = \left\{\begin{array}{ll}
+\begin{align*}
+h^\ast(x) 
+& = \left\{\begin{array}{ll}
+1&\text{if }m(x)>\frac{1}{2}\\
+0&\text{otherwise}.
+\end{array}\right.\\[2ex]
+& = \left\{\begin{array}{ll}
 1&\text{if }P(Y=1|X=x)>P(Y=0|X=x)\\
 0&\text{otherwise}.
-\end{array}\right.
-$$
-and
-$$
-h^\ast(x) = \left\{\begin{array}{ll}
-1&\text{if }\pi_1 f_1(x)>\pi_0f_0(x)\\
+\end{array}\right.\\[2ex]
+& = \left\{\begin{array}{ll}
+1&\text{if }\pi_1 f_{X|Y}(x|Y=1)>\pi_0f_{X|Y}(x|Y=0)\\
 0&\text{otherwise}.
 \end{array}\right.
+\end{align*}
 $$
 
 ::: {.callout-note icon=false} 
@@ -881,13 +914,14 @@ $$
 The Bayes decision rule is optimal. That is, if $h$ is any
 other classification rule then 
 $$
-L(h^\ast)\leq L(h).
+L(h^\ast)\leq L(h),
 $$
+where $L(h)=P(h(X)\neq Y)$ denotes the error rate loss function defined in @def-errorRate. 
 :::
 :::
 
 
-The Bayes decision rule depends on unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule. 
+The Bayes decision rule $h^\ast(x)$ depends on the unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule. 
 
 **Very roughly**, there are three main approaches:
 
@@ -895,19 +929,24 @@ The Bayes decision rule depends on unknown quantities and thus cannot be used in
 $$
 \hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
 $$
+**Example:** Random forests 
 
-2. **Regression:** Find an estimate $\hat{m}(x)$ of the regression function $m(x)=\mathbb{E}(Y|X=x)$ and then use 
+2. **Regression:** Find an estimate $\hat{m}(x)$ of the regression function $m(x)=\mathbb{E}(Y|X=x)$ in @eq-RegFun and then use 
 $$
 \hat{h}(x) = \left\{\begin{array}{ll}
 1&\text{if }\hat{m}(x)>\frac{1}{2}\\
 0&\text{otherwise}.
 \end{array}\right.
 $$
-Example: Linear regression, logistic regression, etc. 
+**Examples:** Linear regression, logistic regression, etc. 
 
-3. **Density Estimation:** Find density and probability estimates $\hat{f}_0,$ $\hat{f}_1,$ $\hat{\pi}_0=\hat{P}(Y=0),$ and $\hat{\pi}_1=\hat{P}(Y=1)$ and define 
+3. **Density Estimation:** Find density and probability estimates $\hat{f}_{X|Y},$ $\hat{\pi}_0=\hat{P}(Y=0),$ and $\hat{\pi}_1=\hat{P}(Y=1)$ and define 
 $$
-\hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
+\begin{align*}
+\hat{m}(x)
+&=\hat{P}(Y=1|X=x)\\[2ex]
+&=\frac{\hat{\pi}_1 \hat{f}_{X|Y}(x|Y=1)}{\hat{\pi}_0 \hat{f}_{X|Y}(x|Y=0) + \hat{\pi}_1 \hat{f}_{X|Y}(x|Y=1)}.
+\end{align*}
 $$
 Then use
 $$
@@ -916,7 +955,7 @@ $$
 0&\text{otherwise}.
 \end{array}\right.
 $$
-Example: Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions
+**Examples:** Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions, etc.
 
 #### More than two group labels {-}
 
@@ -933,21 +972,20 @@ $$
 \begin{align*}
 h^\ast(x) 
 & = \arg\max_{g}P(Y=g|X=x) \\[2ex]
-& = \arg\max_{g}\pi_g f_g(x),\\[2ex]
+& = \arg\max_{g}\pi_g f_{X|Y}(x|Y=g),\\[2ex]
 \end{align*}
 $$
-where $P(Y=g|X=x)$ is the **posterior probability** 
+where 
 $$
-P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
+P(Y=g|X=x) = \frac{\pi_g f_{X|Y}(x|Y=g)}{\sum_{g=1}^G\pi_g f_{X|Y}(x|Y=g)}
 $$
-where $\pi_g$ is the **prior probability**
+denotes the **posterior probability** of group $g$, 
 $$
-\pi_g = P(Y=g),
+\pi_g = P(Y=g)
 $$
-and where $f_g$ denotes the conditional density function of $X$ given $Y=g$
-$$
-f_g(x) = f(x|Y=g)
-$$
+denotes the **prior probability** of group $g,$ 
+and $f_{X|Y}(x|Y=g)$ denotes the conditional density function of $X$ given $Y=g.$
+
 
 
 ### Synopsis: Penguin Example 
@@ -958,20 +996,25 @@ Estimating general densities $f$ is hard --- particularly in multivariate cases.
 
 In our penguin example, we assume that the conditional density function of flipper length $X$ given species $Y=g$ can be modelled reasonably well using a Gaussian density,
 $$
-f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
 $$
 which leads to a Gaussian Mixture distribution. 
 
 The unknown parameters $\pi_g,$ $\mu_g,$ and $\sigma_g,$ $g=1,\dots,G,$ are estimated using the **EM algorithm**
 
-
-1. Estimate the Gaussian mixture distribution using the **EM algorithm**
-2. Assign the data points $x_i$ to the group that maximizes the **"posterior probability"**
+**Unsupervised Classification:** Assign the data points $x_i$ to the group $g$ according to the classification rule
+$$
+\begin{align*}
+\hat{h}(x_i) 
+%& = \arg\max_{g}P(Y=g|X=x) \\[2ex]
+& = \arg\max_{g}\hat{\pi}_g \varphi(x|\hat{\mu}_g,\hat{\sigma}_g),\\[2ex]
+\end{align*}
+$$
 
 @fig-EMGif shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:
 
 * The vertical line shows the decision boundary
-* The two Gaussian density functins (dashed lines) show the conditional densities $\varphi(x|\mu_g,\sigma_g),$ $g=1,2.$
+* The two Gaussian density functions (dashed lines) show the conditional densities $\varphi(x|\hat{\mu}_g,\hat{\sigma}_g),$ $g=1,2.$
 * The orange and green dots show the (unsupervised) classification results  
 
 

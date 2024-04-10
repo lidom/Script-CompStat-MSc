@@ -713,8 +713,7 @@ Remember:
 <section id="completion-of-the-data" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="completion-of-the-data"><span class="header-section-number">2.3.1</span> Completion of the Data</h3>
 <p>In our penguin data there are two groups <span class="math inline">\(g\in\{1,2\}.\)</span></p>
-<p>Thus, in principle (albeit unobserved) there are <span class="math inline">\(G=2\)</span> dimensional dummy variable, also called group-label, vectors <span class="math inline">\((z_{i1},z_{i2}),\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> with<br>
-<span class="math display">\[
+<p>Thus, in principle (albeit unobserved) there are <span class="math inline">\(G=2\)</span> dimensional dummy variable vectors <span class="math inline">\((z_{i1},z_{i2}),\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> which encode the group-labels, <span class="math display">\[
 (z_{i1},z_{i2})=
 \left\{\begin{array}{ll}
 (1,0)&amp;\text{if penguin }i\text{ belongs to group }g=1\\
@@ -727,12 +726,11 @@ Remember:
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Tip
+Case of more than two <span class="math inline">\(G&gt;2\)</span> groups:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Case of more than two <span class="math inline">\(G&gt;2\)</span> groups:<br>
-<span class="math display">\[
+<p><span class="math display">\[
 \begin{align*}
 &amp;(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
 &amp;=\left\{\begin{array}{ll}
@@ -760,24 +758,23 @@ Note
 <div class="callout-body-container callout-body">
 <p>Requiring that <span class="math display">\[
 \sum_{g=1}^Gz_{ig}=1
-\]</span> means that for each (penguin) <span class="math inline">\(i\)</span> there is only <strong>one</strong> group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures.</p>
+\]</span> means that for each (penguin) <span class="math inline">\(i\)</span> there is only <strong>one</strong> group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g.&nbsp;member of a gender group and member of a religious group).</p>
 </div>
 </div>
-<p>Unfortunately, the true group labels <span class="math inline">\(z_{ig}\)</span> are unknown. However, we nevertheless know something about these assignments. The weights <span class="math display">\[
+<p>Unfortunately, the true group labels <span class="math inline">\(z_{ig}\)</span> are missing. However, we nevertheless know at least something about their group-assignments. The weights <span class="math display">\[
 \pi_1,\dots,\pi_G
 \]</span> of the Gaussian mixture distribution <span class="math display">\[
 f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x|\mu_g,\sigma_g),
-\]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot|\mu_g,\sigma_g)\)</span> in the total distribution <span class="math inline">\(f_{GMM}\)</span>.</p>
-<p>That is, on average, <span class="math display">\[
+\]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot|\mu_g,\sigma_g)\)</span> in the total distribution <span class="math inline">\(f_{GMM}\)</span>. Therefore, we know that, on average, <span class="math display">\[
 \pi_g\cdot 100\%
 \]</span> of the data points <span class="math inline">\(i=1,\dots,n\)</span> come from group <span class="math inline">\(g.\)</span></p>
-<p>Thus, we can consider the unobserved group label <span class="math inline">\(z_{ig}\)</span> as a (unobserved) realization of a binary random variable <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probability mass function <span class="math display">\[
+<p>Thus, we can consider the missing group label <span class="math inline">\(z_{ig}\)</span> as a (unobserved) realization of a binary random variable <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probabilities <span class="math display">\[
 \begin{align*}
 P(Z_{ig}=1)&amp;=\pi_g\\[2ex]
 P(Z_{ig}=0)&amp;=(1-\pi_g)\\[2ex]
 \end{align*}
 \]</span> for each <span class="math inline">\(i=1,\dots,n.\)</span></p>
-<p>The condition <span class="math display">\[
+<p>Note that the condition <span class="math display">\[
 \sum_{g=1}^GZ_{ig}=1
 \]</span> implies that if <!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  --> <span class="math display">\[
 Z_{ig}=1
@@ -818,13 +815,13 @@ p_{ig}
 \tag{2.5}\]</span></span></p>
 </div>
 </div>
-<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Important
+Where’s the <strong>Expection</strong> in the EM-Algorithm?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -840,7 +837,11 @@ p_{ig}
 </section>
 <section id="the-abstract-version-of-the-em-algorithm" class="level3" data-number="2.3.3">
 <h3 data-number="2.3.3" class="anchored" data-anchor-id="the-abstract-version-of-the-em-algorithm"><span class="header-section-number">2.3.3</span> The Abstract Version of the EM-Algorithm</h3>
-<p>If, in addition to the data points, <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n),\)</span> we had also observed the group assignments, <span class="math inline">\(\mathbf{z}=(z_{11},\dots,z_{nG}),\)</span> then we could establish the following alternative <strong>likelihood (<span class="math inline">\(\tilde{\mathcal{L}}\)</span>)</strong> and <strong>log-likelihood (<span class="math inline">\(\tilde{\ell}\)</span>) functions</strong>: <span class="math display">\[
+<p>If, in addition to the data points (i.e.&nbsp;the predictors like the flipper lengths), <span class="math display">\[
+\mathbf{x}=(x_1,\dots,x_n),
+\]</span> we had also observed the group assignments, <span class="math display">\[
+\mathbf{z}=(z_{11},\dots,z_{nG}),
+\]</span> then we could establish the following alternative <strong>likelihood (<span class="math inline">\(\tilde{\mathcal{L}}\)</span>)</strong> and <strong>log-likelihood (<span class="math inline">\(\tilde{\ell}\)</span>) functions</strong>: <span class="math display">\[
 \begin{align*}
 \tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
 &amp;=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
@@ -864,8 +865,8 @@ p_{ig}
 <p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1"><span>Section&nbsp;2.2.3</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems.</p>
 <p>In the following, the parameter vector <span class="math inline">\((\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> will be denoted as <span class="math inline">\(\boldsymbol{\theta}\)</span> for simplicity. <br></p>
 <ol type="1">
-<li><p>Set starting values <span class="math inline">\(\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})\)</span></p></li>
-<li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
+<li><p><strong>Initialization:</strong><br> Set starting values <span class="math inline">\(\boldsymbol{\theta}^{(0)}=(\pi^{(0)}, \mu^{(0)}, \sigma^{(0)})\)</span></p></li>
+<li><p><strong>Loop:</strong><br> For <span class="math inline">\(r=1,2,\dots\)</span></p>
 <ul>
 <li><p><span style="color:#FF5733"><strong>(Expectation)</strong> </span> Compute: <span class="math display">\[
 \begin{align*}
@@ -882,7 +883,7 @@ p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})
 \end{align*}
 \]</span></p></li>
 </ul></li>
-<li><p>Check Convergence:<br> Stop if the value of the maximized log-likelihood function, <span class="math display">\[
+<li><p><strong>Check Convergence:</strong><br> Stop if the value of the maximized log-likelihood function, <span class="math display">\[
 \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
 \]</span> does not change anymore substantially.</p></li>
 </ol>
@@ -890,12 +891,15 @@ p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})
 </section>
 <section id="unsupervised-classification" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="unsupervised-classification"><span class="header-section-number">2.4</span> (Unsupervised) Classification</h2>
-<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group labels) from a possibly multivariate random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
-<p><strong>Example:</strong> <span class="math inline">\(Y\in\{0,1\}\)</span> and <span class="math inline">\(X\in\mathbb{R}^p\)</span></p>
-<p><strong>Note:</strong> Above, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
+<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
+<p>Consider iid data <span class="math display">\[
+(Y_1,X_1),\dots,(Y_n,X_n)
+\]</span> where <span class="math inline">\(X_i\in\mathbb{R}^p\)</span> is a <span class="math inline">\(p\)</span>-dimensional vector and <span class="math inline">\(Y_i\)</span> takes values in some finite set <span class="math inline">\(\mathcal{Y}.\)</span></p>
+<p>(<strong>Note:</strong> Above we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.)</p>
+<p><strong>Example:</strong> Predict <span class="math inline">\(Y\in\mathcal{Y}=\{0,1\}\)</span> (e.g.&nbsp;passing the exam (<span class="math inline">\(Y=1\)</span>) vs.&nbsp;failing <span class="math inline">\(Y=0\)</span>) using the observed predictor values <span class="math inline">\(X\in\mathbb{R}^p\)</span> (e.g.&nbsp;previous gradings, number of hours studied, etc.)</p>
 <p>A <strong>classification rule</strong> is a function <span class="math display">\[
-h: X \to Y.
-\]</span> That is, when we observe a new <span class="math inline">\(X,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X).\)</span></p>
+h: \mathbb{R}^p \to \mathcal{Y}.
+\]</span> That is, when we observe a new <span class="math inline">\(X\in\mathbb{R}^p,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X)\in\mathcal{Y}.\)</span></p>
 <p>If there are learning/training data <strong>with</strong> group-labels <span class="math display">\[
 (Y_1,X_1),\dots,(Y_n,X_n)
 \]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p>
@@ -916,35 +920,47 @@ X_1,\dots,X_n
 </div>
 <div class="callout-body-container callout-body">
 <div id="def-errorRate" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 2.1 (Error rate) </strong></span>The <strong>true error rate</strong> of the classifier <span class="math inline">\(h\)</span> is the loss function <span class="math display">\[
+<p><span class="theorem-title"><strong>Definition 2.1 (Error rate) </strong></span>The <strong>true error rate</strong> of the classifier <span class="math inline">\(h\)</span> is the loss function <span id="eq-ErrorRate"><span class="math display">\[
 L(h) = P(h(X)\neq Y).
-\]</span> The <strong>empirical error rate</strong> is <span class="math display">\[
-\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)}.
-\]</span></p>
+\tag{2.7}\]</span></span> The <strong>empirical error rate</strong> is <span class="math display">\[
+\hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)},
+\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function with <span class="math inline">\(1_{(\texttt{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\texttt{FALSE})}=0.\)</span></p>
 </div>
 </div>
 </div>
-<p>That is, we try to find a classifier <span class="math inline">\(h\)</span> that minimizes <span class="math inline">\(L(h)\)</span> and <span class="math inline">\(\hat{L}_n(h),\)</span> respectively.</p>
+<p>We try to find a classifier <span class="math inline">\(h\)</span> that minimizes <span class="math inline">\(L(h)\)</span> and <span class="math inline">\(\hat{L}_n(h),\)</span> respectively.</p>
 <p>Let us focus on the special case of only two groups which can be coded, without loss of generality, as <span class="math display">\[
 Y\in\{0,1\}
 \]</span> For instance, <span class="math display">\[
 Y_i=\left\{\begin{array}{ll}
 1&amp;\text{if penguin $i$ belongs to species Chinstrap}\\
-0&amp;\text{if penguin $i$ belongs to species Gentoo}.
+0&amp;\text{if penguin $i$ belongs NOT to species Chinstrap}.
 \end{array}\right..
 \]</span></p>
 <p>The <strong>regression function</strong> (i.e.&nbsp;the conditional mean function) is then given by <span class="math display">\[
-m(x):=\mathbb{E}(Y|X=x)=P(Y=1|X=x).
-\]</span> From Bayes’s theorem it follows that <span class="math display">\[
-m(x)=P(Y=1|X=x)=\frac{\pi_1 f_1(x)}{\pi_1 f_1(x)+\pi_0 f_0(x)},
-\]</span> where</p>
-<ul>
-<li><span class="math inline">\(f_0(x) = f(x|Y=0);\)</span> conditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span></li>
-<li><span class="math inline">\(f_1(x) = f(x|Y=1);\)</span> cconditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=1\)</span></li>
-<li><span class="math inline">\(\pi_0 = P(Y=0)\)</span></li>
-<li><span class="math inline">\(\pi_1 = P(Y=1)\)</span></li>
-<li><span class="math inline">\(\pi_0 + \pi_1 = 1\)</span></li>
-</ul>
+\begin{align*}
+m(x)
+&amp;:=\mathbb{E}(Y|X=x)\\[2ex]
+&amp;=1\cdot P(Y=1|X=x) + 0\cdot P(Y=0|X=x)\\[2ex]
+&amp;=P(Y=1|X=x).
+\end{align*}
+\]</span> From Bayes’s theorem it follows that <span id="eq-RegFun"><span class="math display">\[
+\begin{align*}
+m(x)
+&amp;=P(Y=1|X=x)\\[2ex]
+&amp;=\frac{P(Y=1) f_{X|Y}(x|Y=1)}{P(Y=0) f_{X|Y}(x|Y=0)+P(Y=1) f_{X|Y}(x|Y=1) },\\[2ex]
+&amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{\pi_0\;f_{X|Y}(x|Y=0)+\pi_1\;f_{X|Y}(x|Y=1)}\\[2ex]
+&amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{f_{X}(x)},
+\end{align*}
+\tag{2.8}\]</span></span> where <span class="math display">\[
+\pi_0= P(Y=0)\quad\text{and}\quad\pi_1  = P(Y=1)
+\]</span> denote the prior probabilities with <span class="math inline">\(\pi_0 + \pi_1 = 1,\)</span><br>
+<span class="math display">\[
+f_{X|Y}(x|Y=0)\quad\text{and}\quad f_{X|Y}(x|Y=1)
+\]</span> denote the conditional density functions of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span> and <span class="math inline">\(Y=1,\)</span> respectively, and<br>
+<span class="math display">\[
+f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
+\]</span> denotes the unconditional density function of <span class="math inline">\(X.\)</span></p>
 <p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
 <p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
@@ -963,22 +979,28 @@ h^\ast(x) = \left\{\begin{array}{ll}
 1&amp;\text{if }m(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
-\]</span> The <strong>decision boundary</strong> is given by the set <span class="math display">\[
+\]</span> The <strong>decision boundary</strong> of a classifier <span class="math inline">\(h\)</span> is given by the set <span class="math display">\[
 \mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
 \]</span></p>
 </div>
 </div>
 </div>
 <p>Equivalent forms of the Bayes’ classification rule: <span class="math display">\[
-h^\ast(x) = \left\{\begin{array}{ll}
+\begin{align*}
+h^\ast(x)
+&amp; = \left\{\begin{array}{ll}
+1&amp;\text{if }m(x)&gt;\frac{1}{2}\\
+0&amp;\text{otherwise}.
+\end{array}\right.\\[2ex]
+&amp; = \left\{\begin{array}{ll}
 1&amp;\text{if }P(Y=1|X=x)&gt;P(Y=0|X=x)\\
 0&amp;\text{otherwise}.
-\end{array}\right.
-\]</span> and <span class="math display">\[
-h^\ast(x) = \left\{\begin{array}{ll}
-1&amp;\text{if }\pi_1 f_1(x)&gt;\pi_0f_0(x)\\
+\end{array}\right.\\[2ex]
+&amp; = \left\{\begin{array}{ll}
+1&amp;\text{if }\pi_1 f_{X|Y}(x|Y=1)&gt;\pi_0f_{X|Y}(x|Y=0)\\
 0&amp;\text{otherwise}.
 \end{array}\right.
+\end{align*}
 \]</span></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -992,31 +1014,35 @@ h^\ast(x) = \left\{\begin{array}{ll}
 <div class="callout-body-container callout-body">
 <div id="thm-BayesOptimal" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 2.1 (Optimality of the Bayes decision rule) </strong></span><br> The Bayes decision rule is optimal. That is, if <span class="math inline">\(h\)</span> is any other classification rule then <span class="math display">\[
-L(h^\ast)\leq L(h).
-\]</span></p>
+L(h^\ast)\leq L(h),
+\]</span> where <span class="math inline">\(L(h)=P(h(X)\neq Y)\)</span> denotes the error rate loss function defined in <a href="#def-errorRate">Definition&nbsp;<span>2.1</span></a>.</p>
 </div>
 </div>
 </div>
-<p>The Bayes decision rule depends on unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
+<p>The Bayes decision rule <span class="math inline">\(h^\ast(x)\)</span> depends on the unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
 <p><strong>Very roughly</strong>, there are three main approaches:</p>
 <ol type="1">
 <li><p><strong>Empirical Risk Minimization:</strong> Choose a set of classifiers <span class="math inline">\(\mathcal{H}\)</span> and try to find <span class="math inline">\(\hat{h}\in\mathcal{H}\)</span> such that <span class="math display">\[
 \hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
-\]</span></p></li>
-<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> and then use <span class="math display">\[
+\]</span> <strong>Example:</strong> Random forests</p></li>
+<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> in <a href="#eq-RegFun">Equation&nbsp;<span>2.8</span></a> and then use <span class="math display">\[
 \hat{h}(x) = \left\{\begin{array}{ll}
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
-\]</span> Example: Linear regression, logistic regression, etc.</p></li>
-<li><p><strong>Density Estimation:</strong> Find density and probability estimates <span class="math inline">\(\hat{f}_0,\)</span> <span class="math inline">\(\hat{f}_1,\)</span> <span class="math inline">\(\hat{\pi}_0=\hat{P}(Y=0),\)</span> and <span class="math inline">\(\hat{\pi}_1=\hat{P}(Y=1)\)</span> and define <span class="math display">\[
-\hat{m}(x)=\hat{P}(Y=1|X=x)=\frac{\hat{\pi}_1 \hat{f}_1(x)}{\hat{\pi}_1 \hat{f}_1(x)+\hat{\pi}_0 \hat{f}_0(x)}.
+\]</span> <strong>Examples:</strong> Linear regression, logistic regression, etc.</p></li>
+<li><p><strong>Density Estimation:</strong> Find density and probability estimates <span class="math inline">\(\hat{f}_{X|Y},\)</span> <span class="math inline">\(\hat{\pi}_0=\hat{P}(Y=0),\)</span> and <span class="math inline">\(\hat{\pi}_1=\hat{P}(Y=1)\)</span> and define <span class="math display">\[
+\begin{align*}
+\hat{m}(x)
+&amp;=\hat{P}(Y=1|X=x)\\[2ex]
+&amp;=\frac{\hat{\pi}_1 \hat{f}_{X|Y}(x|Y=1)}{\hat{\pi}_0 \hat{f}_{X|Y}(x|Y=0) + \hat{\pi}_1 \hat{f}_{X|Y}(x|Y=1)}.
+\end{align*}
 \]</span> Then use <span class="math display">\[
 \hat{h}(x) = \left\{\begin{array}{ll}
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
-\]</span> Example: Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions</p></li>
+\]</span> <strong>Examples:</strong> Linear/quadratic discriminant analysis, naive Bayes, Gaussian mixture distributions, etc.</p></li>
 </ol>
 <section id="more-than-two-group-labels" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="more-than-two-group-labels">More than two group labels</h4>
@@ -1028,15 +1054,13 @@ Y\in\{1,\dots,G\}
 \begin{align*}
 h^\ast(x)
 &amp; = \arg\max_{g}P(Y=g|X=x) \\[2ex]
-&amp; = \arg\max_{g}\pi_g f_g(x),\\[2ex]
+&amp; = \arg\max_{g}\pi_g f_{X|Y}(x|Y=g),\\[2ex]
 \end{align*}
-\]</span> where <span class="math inline">\(P(Y=g|X=x)\)</span> is the <strong>posterior probability</strong> <span class="math display">\[
-P(Y=g|X=x) = \frac{\pi_g f_g(x)}{\sum_{g=1}^G\pi_gf_g(x)},
-\]</span> where <span class="math inline">\(\pi_g\)</span> is the <strong>prior probability</strong> <span class="math display">\[
-\pi_g = P(Y=g),
-\]</span> and where <span class="math inline">\(f_g\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g\)</span> <span class="math display">\[
-f_g(x) = f(x|Y=g)
-\]</span></p>
+\]</span> where <span class="math display">\[
+P(Y=g|X=x) = \frac{\pi_g f_{X|Y}(x|Y=g)}{\sum_{g=1}^G\pi_g f_{X|Y}(x|Y=g)}
+\]</span> denotes the <strong>posterior probability</strong> of group <span class="math inline">\(g\)</span>, <span class="math display">\[
+\pi_g = P(Y=g)
+\]</span> denotes the <strong>prior probability</strong> of group <span class="math inline">\(g,\)</span> and <span class="math inline">\(f_{X|Y}(x|Y=g)\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g.\)</span></p>
 </section>
 </section>
 <section id="synopsis-penguin-example" class="level3" data-number="2.4.2">
@@ -1044,17 +1068,20 @@ f_g(x) = f(x|Y=g)
 <p>In our penguin example, we use the <strong>density estimation</strong> approach.</p>
 <p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as <span class="math inline">\(f\)</span> being a Gaussian density.</p>
 <p>In our penguin example, we assume that the conditional density function of flipper length <span class="math inline">\(X\)</span> given species <span class="math inline">\(Y=g\)</span> can be modelled reasonably well using a Gaussian density, <span class="math display">\[
-f(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
+f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
 \]</span> which leads to a Gaussian Mixture distribution.</p>
 <p>The unknown parameters <span class="math inline">\(\pi_g,\)</span> <span class="math inline">\(\mu_g,\)</span> and <span class="math inline">\(\sigma_g,\)</span> <span class="math inline">\(g=1,\dots,G,\)</span> are estimated using the <strong>EM algorithm</strong></p>
-<ol type="1">
-<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong></li>
-</ol>
+<p><strong>Unsupervised Classification:</strong> Assign the data points <span class="math inline">\(x_i\)</span> to the group <span class="math inline">\(g\)</span> according to the classification rule <span class="math display">\[
+\begin{align*}
+\hat{h}(x_i)
+%&amp; = \arg\max_{g}P(Y=g|X=x) \\[2ex]
+&amp; = \arg\max_{g}\hat{\pi}_g \varphi(x|\hat{\mu}_g,\hat{\sigma}_g),\\[2ex]
+\end{align*}
+\]</span></p>
 <p><a href="#fig-EMGif">Figure&nbsp;<span>2.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
 <ul>
 <li>The vertical line shows the decision boundary</li>
-<li>The two Gaussian density functins (dashed lines) show the conditional densities <span class="math inline">\(\varphi(x|\mu_g,\sigma_g),\)</span> <span class="math inline">\(g=1,2.\)</span></li>
+<li>The two Gaussian density functions (dashed lines) show the conditional densities <span class="math inline">\(\varphi(x|\hat{\mu}_g,\hat{\sigma}_g),\)</span> <span class="math inline">\(g=1,2.\)</span></li>
 <li>The orange and green dots show the (unsupervised) classification results</li>
 </ul>
 <div class="cell" data-animation.hook="gifski" data-hash="Ch2_EMAlgorithmus_cache/html/fig-EMGif_0a6b52ee7f7380f9bf64b6213d74e627">
