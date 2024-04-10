@@ -164,7 +164,7 @@ xxd     <- seq(min(penguin_flipper)-3,
 ## mixture density
 yyd     <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1] +
            dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
-## single densities
+## single densities (scaled by their weights)
 yyd1    <- dnorm(xxd, mean_m[1], sqrt(cov_l[[1]]))*prop_v[1]
 yyd2    <- dnorm(xxd, mean_m[2], sqrt(cov_l[[2]]))*prop_v[2]
 
@@ -341,11 +341,15 @@ $$
 
 😒 **Problems with singularities in numerical solutions:** If one tries to solve the above maximization problem [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html), one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities. 
 
-For real GMMs (i.e. $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one or more of the normal distribution component(s) try to describe only single data points. A Gaussian density function centered around a single data point $x_i,$ i.e. 
+For real GMMs (i.e. $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s) tries to describe only single data points. This leads to a Gaussian density function centered around a **single data point** $x_i$ such that   
 $$
-\mu_g=x_i\quad\text{and}\quad  \sigma_g\to 0
+\mu_g=x_i.
 $$ 
-will thereby assume **very large** density function values, 
+and
+$$
+\sigma_g\to 0.
+$$
+This degenerating situation leads to **very large** density function values, 
 $$
 \varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
@@ -369,15 +373,20 @@ for(i in 1:length(sd_v)){
 ```
 
 
-🤓 **Analytic solution:** It is a bit tedious, but one can maximize the log-likelihood analytically. If you do this, you will get the following expressions:
+🤓 **Analytic solution:** It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see @eq-logLikGMM) analytically. If you do this, you will get the following expressions:
 $$
 \begin{align*}
 \hat\pi_g&=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
 \hat\mu_g=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\[2ex]
-\hat\sigma_g&=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2}
+\hat\sigma_g&=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2},
 \end{align*}
 $${#eq-AnalyticSol1}
-for $g=1,\dots,G.$
+where 
+$$
+p_{ig}=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+$${#eq-AnalyticSol2}
+for $i=1,\dots,n$ and $g=1,\dots,G$. 
+
 
 ::: {.callout-note}
 Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi}_g$ is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.  
@@ -385,11 +394,13 @@ Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi
 :::
 
 
-🙈 <span style="color:#FF5733">**However:**</span> The above expressions for $\hat\pi_g$, $\hat\mu_g$ and $\hat\sigma_g$ depend themselves on the <span style="color: #FF5733">**unknown**</span> parameters $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ and $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$, because:
-$$
-p_{ig}=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
-$${#eq-AnalyticSol2}
-for $i=1,\dots,n$ and $g=1,\dots,G$. 
+🙈 <span style="color:#FF5733">**However:**</span> The above expressions for $\hat\pi_g$, $\hat\mu_g$ and $\hat\sigma_g$ depend themselves on the <span style="color: #FF5733">**unknown**</span> parameters 
+
+* $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$, 
+* $\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)$ and 
+* $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$, 
+
+because the probabilities $0\leq p_{ig}\leq 1$ (defined in @eq-AnalyticSol2) depend on these unknown parameters. 
 
 * The probability $p_{ig}$ in @eq-AnalyticSol2 is called the **posterior probability**. The posterior probability $p_{ig}$ is the probability that penguine $i$ with flipper length $x_i$ belongs to group $g$. 
 * The probability $\pi_g$  in @eq-AnalyticSol2 is called the **prior probability**. The prior probability $\pi_g$ is the probability that a penguine $i$, from which we know nothing about its flipper length, belongs to group $g$.
@@ -399,7 +410,7 @@ Still, we cannot properly define what we mean by "prior probability" and "poster
 :::
 
 
-Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
+Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-AnalyticSol1 do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
 
 🥳 <span style="color:#138D75">**Solution: The EM Algorithm**</span>  
@@ -410,15 +421,16 @@ Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ do not al
 
 The expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-AnalyticSol1, however, suggest a simple iterative maximum likelihood estimation procedure: An **alternating estimation** of 
 
-* the (unknown) posterior probability
+* the (unknown) posterior probabilities
 $$
-p_{ig}
+p_{ig}\quad\text{for}\quad i=1,\dots,n,\; g=1,\dots,G
 $$ 
-and 
+
+and of 
 
 * the (unknown) parameters 
 $$
-(\pi_g,\mu_g,\sigma_g).
+(\pi_g,\mu_g,\sigma_g) \quad\text{for}\quad g=1,\dots,G
 $$
 
 ::: {.callout-tip}
@@ -429,9 +441,11 @@ Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ us
 
 **The EM Algorithm:**
 
-1. Set starting values $\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\boldsymbol{\sigma}^{(0)}$
+1. **Initialization:** <br> 
+Set starting values $\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\boldsymbol{\sigma}^{(0)}$
 
-2. For $r=1,2,\dots$
+2. **Loop:** <br> 
+For $r=1,2,\dots$
 
     - <span style="color:#FF5733">**(Expectation)**</span> Compute: 
      $$p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
@@ -440,7 +454,7 @@ Once you know $(\hat\pi_g, \hat\mu_g,\hat\sigma_g),$ you can compute $p_{ig}$ us
     <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r-1)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}x_i$</center> 
     <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center> 
 
-3. Check Convergence: <br>
+3. **Check Convergence:** <br>
     Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})$, does not change anymore substantially.
 
 The above pseudo code is implemented in the following code chunk:
