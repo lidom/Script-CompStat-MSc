@@ -55,7 +55,9 @@ while(check){
     if( abs(Lp_fct(theta_new, h=h, n=n)) < t ){check <- FALSE}
 }
 
-cbind(theta, Lp, Lp/Lpp)
+results           <- cbind(theta, -Lp/Lpp, Lp)
+colnames(results) <- c("theta_m", "h", "Lp(theta_m)")
+results
 ```
 
 
@@ -287,15 +289,15 @@ $$
 Let 
 $$
 \begin{align*}
-\Delta_{(0)}&=\theta_{root}-\theta_{(0)}\\[2ex]
-\Delta_{(m)}&=\theta_{root}-\theta_{(m)}
+e_{(0)}&=\theta_{root}-\theta_{(0)}\\[2ex]
+e_{(m)}&=\theta_{root}-\theta_{(m)}
 \end{align*}
 $$
 denote the start-value error and the $m$th step error, respectively.
 
 Let 
 $$
-I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
+I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 $$
 denote the start-value neighborhood around $\theta_{root}.$   
 
@@ -304,29 +306,30 @@ Let $\ell_n'$ be "well behaved" over $I;$ such that
 * $\ell_n''(\theta)\neq 0$ for all $\theta\in I$  and 
 * $\ell_n'''(\theta)$ is finite and continuous for all $\theta\in I.$ 
 
-Let $\theta_{(0)}$ be "close enough;" such that 
+Let $\theta_{(0)}$ be "close enough;" i.e. let
 
-* $M|\Delta_{(0)}|<1,$ where 
+* if $M|e_{(0)}|<1,$ 
+
+where 
 $$
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0.
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
 $$ 
 
 In the following, we show that the Newton-Raphson algorithm converges under this setup. 
 
 <!-- We'll see that it is a **quadratic** (i.e. very fast) convergence.  -->
 
-The first-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with explicit reminder term is given by 
+By the second-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with the mean-value form of the remainder term, we have that 
 $$
 \begin{align*}
 \overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)} 
-& = \ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + R,
+& = \ell'(\theta_{(m)}) + 
+    \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + 
+    \frac{1}{2}\ell'''(\xi)(\theta_{root}-\theta_{(m)})^2
 \end{align*}
 $$
-where 
-$$
-R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
-$$
-for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}.$
+for some real number $\xi_{(m)}$ between $\theta_{root}$ and $\theta_{(m)}.$ 
+
 
 Since $\ell'(\theta_{root})=0,$ we have that
 $$
@@ -348,7 +351,7 @@ Using the update steps of the alrorithm
 $$
 \theta_{(m+1)} = \theta_{(m)} - \frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}
 \quad\Leftrightarrow\quad 
-{\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}} = \theta_{(m)} - \theta_{(m+1)} 
+\theta_{(m)} - \theta_{(m+1)}  = {\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}}
 $$
 yields
 $$
@@ -359,123 +362,58 @@ $$
 \theta_{root} - \theta_{(m+1)}  
 &= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\\[2ex]
 \Leftrightarrow\quad
-\Delta_{(m+1)}  
-&= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\Delta_{(m)})^2
+e_{(m+1)}  
+&= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(e_{(m)})^2
 \end{align*}
 $$
 Taking absolute values, since we are not interested in the sign of the approximation errors, yields
 $$
 \begin{align*}
-|\Delta_{(m+1)}|  
-&= \frac{1}{2} \; |\ell'''(\xi_{(m)})|\;\frac{1}{|\ell''(\theta_{(m)})|}(\Delta_{(m)})^2
+|e_{(m+1)}|  
+&= \frac{1}{2} \; |\ell'''(\xi_{(m)})|\;\frac{1}{|\ell''(\theta_{(m)})|}(e_{(m)})^2
 \end{align*}
 $$
-Considering the worst cases, leads to the following inequality
+Considering the worst case within $I,$ leads to the following inequality
 $$
 \begin{align*}
-|\Delta_{(m+1)}|  
-&\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(\Delta_{(m)})^2\\[2ex]
-\Leftrightarrow\quad |\Delta_{(m+1)}|  
-&\leq  M\;(\Delta_{(m)})^2\\[-2ex]
-\end{align*}
-$$
-$$
-\begin{align*}
-\Leftrightarrow\quad|\Delta_{(m+1)}|&\leq \left(M\;|\Delta_{(m)}|\right)\;|\Delta_{(m)}|\phantom{AAAAAAAAAAAAAAa}.
+|e_{(m+1)}|  
+&\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(e_{(m)})^2\\[2ex]
+\Leftrightarrow\quad |e_{(m+1)}|  
+&\leq  M\;(e_{(m)})^2\\[-2ex]
 \end{align*}
 $${#eq-NRIneq}
 To show that the Newton-Raphon algorithm converges, we need to show that 
 $$
-|\Delta_{(m)}|\to 0 \quad\text{as}\quad m \to\infty. 
+|e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty. 
 $$
-Note that, if
+
+For $0<M\,|e_{(0)}|<1$ the inequality in @eq-NRIneq becomes a sharp inequality
+$$
+\begin{align*}
+&|e_{(1)}|\leq \overbrace{M\;|e_{(0)}|}^{<1}\,|e_{(0)}|
+\quad\Rightarrow\quad |e_{(1)}|< \,|e_{(0)}|\\[2ex]
+\Rightarrow\quad 
+& |e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{<1}\,|e_{(1)}|
+\quad\Rightarrow\quad |e_{(2)}|< \,|e_{(1)}|\\[2ex]
+&\phantom{|e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{<1}\,|e_{(1)}|}\vdots\\[2ex]
+\Rightarrow\quad 
+& |e_{(m+1)}|< \,|e_{(m)}| \quad\text{for all }m=0,1,2\dots
+\end{align*}
+$$
+which shows the convergence of the Newton Raphson algorithm. (The inequality in @eq-NRIneq implies that the convergence is even quadratic; i.e. very fast.)
+
+**Special Case** $M=0$: </br>
+For
 $$
 \sup_{\theta\in I}|\ell'''(\theta)|=0
 $$
-then $M=0$ and thus also $M|\Delta_{(0)}|=0,$ which implies that we find the root, $\theta_{root},$ already in the first $(m=1)$ update step, since  
+we have that $M=0$ which implies that we find the root, $\theta_{root},$ already in the first $(m=1)$ update step, since  
 $$
 \begin{align*}
-|\Delta_{(1)}|  
-&\leq \overbrace{\left(M |\Delta_{(0)}|\right)}^{=0}\;|\Delta_{(0)}|\\[2ex]
-\Rightarrow\quad |\Delta_{(1)}|&=0\\[2ex]
-\Rightarrow\qquad \theta_{(1)}&=\theta_{root}.
+|e_{(1)}|  
+&\leq \overbrace{\left(M |e_{(0)}|\right)}^{=0}\;|e_{(0)}|\\[2ex]
+\Rightarrow\quad |e_{(1)}|&=0\\[2ex]
+\Rightarrow\quad \theta_{(1)}&=\theta_{root},
 \end{align*}
 $$ 
-This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\ell'(\theta)$ has no curvature; i.e. $\ell'(\theta)$ is a straight line for all $x\in I$ which implies that the first-order Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).
-
-If, however, 
-$$
-\sup_{\theta\in I}|\ell'''(\theta)|>0
-$$
-then $M>0$ and together with the assumption that we do not start perfectly, i.e. $|\Delta_{(0)}|>0$, but "close enough" we have that 
-$$
-0<\left(M |\Delta_{(0)}|\right)<1.
-$${#eq-Inductm0}
-The inequlities in @eq-NRIneq and @eq-Inductm0 imply for the first $(m=1)$ update step that
-$$
-\begin{align*}
-|\Delta_{(1)}|  
-& \leq \left(M |\Delta_{(0)}|\right) \;|\Delta_{(0)}|\\[2ex] 
-\Rightarrow\quad|\Delta_{(1)}| & <|\Delta_{(0)}|,
-\end{align*}
-$$
-and, therefore, that 
-$$
-0<M|\Delta_{(1)}|<M|\Delta_{(0)}|<1.
-$${#eq-Inductm1}
-The inequlities in @eq-NRIneq and @eq-Inductm1 imply for the second $(m=2)$ update step that
-$$
-\begin{align*}
-|\Delta_{(2)}|  
-&\leq  \left(M |\Delta_{(1)}|\right) |\Delta_{(1)}|\\[2ex]
-\Rightarrow\quad|\Delta_{(2)}| &< |\Delta_{(1)}|
-\end{align*}
-$$
-and, therefore, that 
-$$
-0<M|\Delta_{(2)}|<M|\Delta_{(1)}|<M|\Delta_{(0)}|<1.
-$${#eq-Inductm2}
-OK, the inequalities in @eq-Inductm2 allow us to conjecture that 
-$$
-0<M|\Delta_{(m)}|<M|\Delta_{(m-1)}|<1\quad\text{for all}\quad m=0,1,2\dots,
-$${#eq-Induction}
-which would imply (by the inequality in @eq-NRIneq) that
-$$
-\begin{align*}
-|\Delta_{(m+1)}|
-&\leq \left(M |\Delta_{(m)}|\right) |\Delta_{(m)}|\\[2ex] 
-\Rightarrow\quad|\Delta_{(m+1)}|& <|\Delta_{(m)}|\quad\text{for all}\quad m=0,1,2\dots,
-\end{align*}
-$$ 
-and thus that the Newton-Raphon algorithm converges, i.e.
-$$
-|\Delta_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
-$$
- 
-
-To show that the inequalities in @eq-Induction are true **for all** $m=0,1,2\dots$ we can use a **proof by induction:**
-
-**1. Base Case.** First, we need to show that the statement in @eq-Induction is true for the *base case*; i.e. here for 
-$$
-0<M|\Delta_{(1)}|<M|\Delta_{(0)}| < 1, 
-$$
-which we already did in @eq-Inductm1. (We also checked it for the base case $m=2$ in @eq-Inductm1.)  
-
-**2. Induction Hypothesis and Induction Step.** Next we need to make the *induction hypothesis* that 
-$$
-0<M|\Delta_{(m+1)}|<M|\Delta_{(m)}| < 1
-$${#eq-InductHyp} 
-is true for some arbitrary $m,$ and then show (*induction step*) that this implies that the the $m+1$ case,
-$$
-0<M|\Delta_{(m+2)}|<M|\Delta_{(m+1)}| < 1
-$$ 
-is also true. 
-
-This is indeed true, since, by the inequality in @eq-NRIneq,  the induction hypothesis in @eq-InductHyp implies that  
-$$
-\begin{align*}
-|\Delta_{(m+1)}|
-&\leq \left(M |\Delta_{(m)}|\right) |\Delta_{(m)}|\\[2ex] 
-\Rightarrow\quad|\Delta_{(m+1)}|& <|\Delta_{(m)}|
-\end{align*}
-$$ 
+even when $|e_{(0)}|\gg 0.$ This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\ell'(\theta)$ has no curvature; i.e. $\ell'(\theta)$ is a straight line for all $x\in I$ which implies that the Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).

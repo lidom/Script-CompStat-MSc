@@ -318,23 +318,41 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 ## 
 ::: {#thm-TaylorThm}
 # Taylor's Theorem 
-Let $f:\mathbb{R}\to\mathbb{R}$ be $k\geq 1$ times differentiable at $x\in\mathbb{R}$ and let $h\in\mathbb{R}.$ Then there exists a function $h_k:\mathbb{R}\to\mathbb{R}$ such that 
+
+</br>
+
+**1. [Peano](https://en.wikipedia.org/wiki/Giuseppe_Peano) form of the remainder term:**</br> 
+Let $f:\mathbb{R}\to\mathbb{R}$ be $k$ times differentiable at $x\in\mathbb{R}$ and let $h\in\mathbb{R}.$ Then there exists a function $P_{k,x}:\mathbb{R}\to\mathbb{R}$ such that 
 $$
 \begin{align*}
 f(x+h) &= 
-\underbrace{f(x) 
-+ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell}_{=P_k(x+h)}
-+ h_k(x+h)(h)^k%\\[2ex]
-%& =P_k(x) + h_k(x)(x-a)^k
+f(x) 
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ P_{k,x}(h)\;(h)^k
 \end{align*}
 $$
 with 
 $$
-h_k(x+h)\to 0\quad\text{as}\quad h\to 0,
+P_{k,x}(h)\to 0\quad\text{as}\quad h\to 0,
 $$ 
 where $f^{(\ell)}(x)$ denotes the $\ell$th derivative of $f$ at $x.$
 
-> Note: $h_k(x)(x-a)^k=f(x) - P_k(x)$ is called the [Peano](https://en.wikipedia.org/wiki/Giuseppe_Peano) form of the approximation error $f(x) - P_k(x)$.
+**2. [Lagrange](https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange) or Mean-value form of the remainder term:**</br> 
+Let $f:\mathbb{R}\to\mathbb{R}$ be $k+1$ times differentiable on the open interval between $x$ and $x+h,$ with $h\in\mathbb{R},$ and let $f^{(k)}$ be continuous on the closed interval between $x$ and $x+h,$. Then 
+$$
+\begin{align*}
+f(x+h) &= 
+f(x) 
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ M_{k,x}(h)
+\end{align*}
+$$
+with 
+$$
+M_{k,x}(h)=\frac{f^{(k+1)}(\xi)}{(k+1)!}(h)^{k+1}
+$$ 
+for some real number $\xi$ between $x$ and $x+h.$ 
+
 
 ::: {.callout-tip icon=false} 
 ## Qualitative version using the small-$o$ notation:
@@ -346,15 +364,26 @@ f(x)
 + o\big(|h|^k\big),
 \end{align*}
 $$
-where $o\big(|h|^k\big)$ denotes the family of real-valued functions, $g(h)$ say, that are of a strictly **smaller $o$rder of magnitude** than the function $|h|^k$ as $h\to 0$ i.e.  
+where $o\big(|h|^k\big)$ denotes the family of real-valued functions, $g(h)$ say, that are of a **strictly smaller $o$rder of magnitude** than the function $|h|^k$ as $h\to 0;$ i.e.  
 $$
-o\big(|h|^k\big)=\left\{g:\mathbb{R}\to\mathbb{R}:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
+o\big(|h|^k\big)=\left\{g(h)\to 0\;\text{ as }\; h\to 0:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
 $$
-Note: 
-$h_k(x+h)(h)^k=o\big(|h|^k\big)$ 
+
+**1. Note: Peano form of the remainder term:**</br>
+$P_{k,x}(h)\;(h)^k=o\big(|h|^k\big)$ 
 since 
 $$
-\frac{|h_k(x+h)(h)^k|}{|h|^k}\to 0\quad\text{as}\quad h\to 0.
+\frac{|P_{k,x}(h)\;(h)^k|}{|h|^k}
+%=\frac{|P_k(x+h)|\cdot |h|^k|}{|h|^k}
+=|P_{k,x}(h)|\to 0\quad\text{as}\quad h\to 0.
+$$
+
+**2. Note: Mean-value form of the remainder term:**</br>
+$M_{k,x}(h)=o\big(|h|^k\big)$ 
+since 
+$$
+\frac{|M_{k,x}(h)|}{|h|^k}=
+\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad h\to 0.
 $$
 :::
 :::
@@ -485,10 +514,8 @@ One can shown that if $\ell_n'$ is "well behaved" over $I;$ i.e.
 
 and if our first guess $\theta_{(0)}$ is "close enough;" i.e. 
 
-* if $M=0$ or 
-* if $0<M<1$ or 
-* if $1\leq M<\infty$ and $|e_{(0)}|<1,$ where 
-<!-- * if $M|e_{(0)}|<1,$ where  -->
+* if $M|e_{(0)}|<1,$ 
+where 
 $$
 M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
 $$ 
@@ -566,20 +593,20 @@ $$
 
 We consider a sample size of $n=5$ with the following observed outcome: 
 
-* One Head: $N_{H,obs}=1$ 
-* Four Tails: $n-N_{H,obs}=4$
+* One Head:   $\quad N_{H,obs}=1$ 
+* Four Tails: $\quad n-N_{H,obs}=4$
 
-Setting the tolerance level $\varepsilon=10^{-10}$ as our convergence criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
+Setting $\varepsilon=10^{-10}$ as our stopping criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
 |$m$ 	|	$\hat\theta_{(m)}$	|	$h=-\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})$ |$\ell_n'(\hat\theta_{(m)})$	 |  
 |-------------------|-------------------|:--------------------------:|---------------------------------------------|
-|$0$| $0.40$| $-2.40\cdot 10^{-1}$| $-4.16$                        |
-|$1$| $0.16$| $\phantom{-}3.32\cdot 10^{-2}$ |$\phantom{-}1.48$              |
-|$2$| $0.19$| $\phantom{-}6.55\cdot 10^{-3}$ |$\phantom{-}2.15\cdot 10^{-1}$ |
-|$3$| $0.19$| $\phantom{-}1.73\cdot 10^{-4}$ |$\phantom{-}5.43\cdot 10^{-3}$ |
-|$4$| $0.19$| $\phantom{-}1.13\cdot 10^{-7}$ |$\phantom{-}3.53\cdot 10^{-6}$ |
-|$5$| $0.20$| $\phantom{-}4.81\cdot 10^{-14}$|$\phantom{-}1.50\cdot 10^{-12}$|
+|$0$| $0.40$| $-2.4\cdot 10^{-1}$| ${\color{red}-4.2 > \varepsilon}$                        |
+|$1$| $0.16$| $\phantom{-}3.3\cdot 10^{-2}$ |${\color{red}\phantom{-}1.5 > \varepsilon}$              |
+|$2$| $0.19$| $\phantom{-}6.6\cdot 10^{-3}$ |${\color{red}\phantom{-}2.2\cdot 10^{-1} > \varepsilon}$ |
+|$3$| $0.19$| $\phantom{-}1.7\cdot 10^{-4}$ |${\color{red}\phantom{-}5.4\cdot 10^{-3} > \varepsilon}$ |
+|$4$| $0.19$| $\phantom{-}1.1\cdot 10^{-7}$ |${\color{red}\phantom{-}3.5\cdot 10^{-6} > \varepsilon}$ |
+|$5$| $0.20$| $\phantom{-}4.8\cdot 10^{-14}$|${\color{darkgreen}\phantom{-}1.5\cdot 10^{-12} < \varepsilon}$|
 
 : Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_{(0)}=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
 
@@ -605,7 +632,7 @@ denotes the vector of predictor variables, where the (i.i.d.) random sample
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
-follows a **random design** (@def-RandomDesign). 
+follows a **random design with homoskedastic errors** (see @def-RandomDesign). 
 
 ::: {.callout-note icon=false} 
 ## 
@@ -624,14 +651,14 @@ or equivalently
 $$
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
 $$
-denote a (i.i.d.) random sample with 
-$$
-\mathbb{E}(\varepsilon_i|X_i)=0\quad\text{ for all }\quad i=1,\dots,n
-$$ 
+denote a (i.i.d.) random sample with $\mathbb{E}(\varepsilon_i|X_i)=0$, $i=1,\dots,n,$ 
 and with either
 
-* **homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0$, $i=1,\dots,n,$ for a constant $0<\sigma^2_0<\infty$ or 
-* **heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)<\infty$, $i=1,\dots,n,$ for a strictly positive and finite variance function $\sigma^2_0(\cdot).$
+* **homoskedastic** errors: $0<\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0<\infty$
+
+or
+
+* **heteroskedastic** errors: $0<\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)<\infty$, for a strictly positive and finite variance function $\sigma^2_0(\cdot).$
 :::
 :::
 
@@ -649,12 +676,12 @@ Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{
 $$
 
 
-Under **normally distributed** error terms, $\varepsilon_i,$ we have that 
+Under **normally distributed** (and homoskedastic) error terms, $\varepsilon_i,$ we have that 
 $$
 \begin{align}
-\varepsilon &\sim \mathcal{N}\left(0, \sigma_0^2I_n\right)\\[2ex]
+\underset{(n\times 1)}{\varepsilon} &\sim \mathcal{N}_n\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad 
-Y|X &\sim \mathcal{N}\left(X\beta_0, \sigma^2_0I_n\right)
+\underset{(n\times 1)}{Y|X} &\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
 \end{align}
 $${#eq-OLSnormAss}
 
@@ -675,7 +702,11 @@ $$
 f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
 $$
-where $\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{>0}$ denotes the unknown parameter vector. 
+where 
+$$
+\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{>0}
+$$ 
+denotes the unknown parameter vector. 
 
 This allows us to setup the likelihood function, 
 $$
@@ -725,7 +756,10 @@ $$
 \end{matrix}\right)
 $${#eq-LinRegScoreFun}
 
-::: {.callout-tip}
+
+::: {.callout-note icon=false} 
+## 
+::: {#def-ScoreFunction}
 
 # Score Function
 
@@ -748,6 +782,7 @@ $$
 $$ 
 for all $j=1,\dots,p.$ We show this below in @sec-MLAsymp.
 :::
+:::
 
 Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, and we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}:$
 
@@ -755,7 +790,7 @@ Solving for $\hat\beta_{ML}:$
 $$
 \begin{align*}
 & \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-& - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
+\Leftrightarrow\quad& - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
 \Rightarrow\quad & \hat\beta_{ML}=(X'X)^{-1}X'Y\\[2ex]
 \end{align*}
 $$
@@ -763,26 +798,39 @@ Solving for $s^2_{ML}:$
 $$
 \begin{align*}
 & \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
+\Leftrightarrow\quad&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
 \Rightarrow\quad  &
 s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
-&\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2.
+&\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2,
 \end{align*}
 $$
-Thus, $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta.$  Since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
+where 
+$\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.$
 
-However, the MLE $S_{ML}^2$ for $\sigma^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
+Thus, $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta.$  
+
+Since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
+
+However, the ML estimator $s_{ML}^2$ for $\sigma^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
 
 
 ### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
 
-To compute the (asymptotic) variance of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need all partial second derivatives of $\ell_n$ and the expressions of **$-1/n$ times the mean of these partial second derivatives**. 
+To compute the asymptotic variance of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need 
+
+* compute all partial second derivatives of $\ell_n$ and then 
+* take the expectation of these partial second derivatives and multiply it by $-1/n$, 
+
+which gives us the **Fisher Information**.
 
 Let's do this preliminary work in the following:
 
 1. Partial second derivatives with respect to $\beta:$
 $$
 \begin{align*}
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
+&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+\Rightarrow\quad 
 \underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)}
 &= - \dfrac{1}{\sigma^2}(X'X)
 \end{align*}
@@ -806,7 +854,9 @@ $$
 2. Second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
-\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)}
+\underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)} 
+&=-\frac{n}{2 \sigma^{2}}+\frac{1}{2}\frac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{2}}\\[2ex]
+\Rightarrow\quad\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)}
 &=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
 &=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
 \end{align*}
@@ -824,9 +874,19 @@ $$
 3. First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
+&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&= \dfrac{1}{\sigma^2}(X')(Y - X\beta)\\[2ex]
+&= \dfrac{1}{\sigma^2}X'\varepsilon\\[2ex]
+\end{align*}
+$$
+
+$$
+\begin{align*}
+\Rightarrow\quad 
 \underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta',\sigma^2)}
 =   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)'
-&= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
+%&= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
 & = \frac{X'\varepsilon}{\sigma^4}\\
 \end{align*}
 $$
@@ -843,7 +903,7 @@ $$
 $$
 since $\mathbb{E}(\varepsilon|X)=0$ is an $(n\times 1)$ zero vector. 
 
-Collecting the above results, allows us to write down the expression for $(-1/n)$ times the mean of the Hessian matrix of $\ell_n:$
+Collecting the above results, allows us to write down the expression for $(-1/n)$ times the expectation of the Hessian matrix of $\ell_n$ which yields the **Fisher Information (Matrix):**
 
 $$
 \begin{align*}
@@ -866,13 +926,18 @@ $$
 \end{align*}
 $$
 
-::: {.callout-tip}
+
+::: {.callout-note icon=false} 
+## 
+::: {#def-FisherInformMat}
+
 # Fisher Information Matrix
 The matrix 
 $$
 \mathcal{I}(\theta) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta)\right)
 $$
 is called **Fisher Information Matrix**.
+:::
 :::
 
 #### Asymptotic Variance and Fisher Information Matrix {-}
@@ -941,10 +1006,9 @@ $$ -->
 That is, 
 $$
 \begin{align*}
-&AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
-=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)%\\[2ex] 
-%&=
-=
+AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
+&=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex] 
+&=
 \left[\begin{array}{cc}
 \sigma^2_0\Sigma_{X'X}^{-1} & 0 \\[2ex]
 0 & \ 2\sigma^4_0
@@ -1003,7 +1067,7 @@ $$
 &=2\left(s_{ML}^2\right)^2
 \end{align}
 $$
-and to estimators of the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$ 
+and thus to estimators of the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$ 
 $$
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})

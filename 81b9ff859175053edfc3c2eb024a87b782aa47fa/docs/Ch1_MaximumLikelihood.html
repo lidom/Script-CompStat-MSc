@@ -128,7 +128,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></a>
+  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></a>
   </div>
 </li>
     </ul>
@@ -430,20 +430,27 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 </div>
 <div class="callout-body-container callout-body">
 <div id="thm-TaylorThm" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.1 (Taylor’s Theorem) </strong></span>Let <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> be <span class="math inline">\(k\geq 1\)</span> times differentiable at <span class="math inline">\(x\in\mathbb{R}\)</span> and let <span class="math inline">\(h\in\mathbb{R}.\)</span> Then there exists a function <span class="math inline">\(h_k:\mathbb{R}\to\mathbb{R}\)</span> such that <span class="math display">\[
+<p><span class="theorem-title"><strong>Theorem 1.1 (Taylor’s Theorem) </strong></span><br></p>
+<p><strong>1. <a href="https://en.wikipedia.org/wiki/Giuseppe_Peano">Peano</a> form of the remainder term:</strong><br> Let <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> be <span class="math inline">\(k\)</span> times differentiable at <span class="math inline">\(x\in\mathbb{R}\)</span> and let <span class="math inline">\(h\in\mathbb{R}.\)</span> Then there exists a function <span class="math inline">\(P_{k,x}:\mathbb{R}\to\mathbb{R}\)</span> such that <span class="math display">\[
 \begin{align*}
 f(x+h) &amp;=
-\underbrace{f(x)
-+ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell}_{=P_k(x+h)}
-+ h_k(x+h)(h)^k%\\[2ex]
-%&amp; =P_k(x) + h_k(x)(x-a)^k
+f(x)
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ P_{k,x}(h)\;(h)^k
 \end{align*}
 \]</span> with <span class="math display">\[
-h_k(x+h)\to 0\quad\text{as}\quad h\to 0,
+P_{k,x}(h)\to 0\quad\text{as}\quad h\to 0,
 \]</span> where <span class="math inline">\(f^{(\ell)}(x)\)</span> denotes the <span class="math inline">\(\ell\)</span>th derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(x.\)</span></p>
-<blockquote class="blockquote">
-<p>Note: <span class="math inline">\(h_k(x)(x-a)^k=f(x) - P_k(x)\)</span> is called the <a href="https://en.wikipedia.org/wiki/Giuseppe_Peano">Peano</a> form of the approximation error <span class="math inline">\(f(x) - P_k(x)\)</span>.</p>
-</blockquote>
+<p><strong>2. <a href="https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange">Lagrange</a> or Mean-value form of the remainder term:</strong><br> Let <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> be <span class="math inline">\(k+1\)</span> times differentiable on the open interval between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+h,\)</span> with <span class="math inline">\(h\in\mathbb{R},\)</span> and let <span class="math inline">\(f^{(k)}\)</span> be continuous on the closed interval between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+h,\)</span>. Then <span class="math display">\[
+\begin{align*}
+f(x+h) &amp;=
+f(x)
++ \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
++ M_{k,x}(h)
+\end{align*}
+\]</span> with <span class="math display">\[
+M_{k,x}(h)=\frac{f^{(k+1)}(\xi)}{(k+1)!}(h)^{k+1}
+\]</span> for some real number <span class="math inline">\(\xi\)</span> between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+h.\)</span></p>
 <div class="callout-tip callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -461,11 +468,18 @@ f(x)
 + \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!}(h)^\ell
 + o\big(|h|^k\big),
 \end{align*}
-\]</span> where <span class="math inline">\(o\big(|h|^k\big)\)</span> denotes the family of real-valued functions, <span class="math inline">\(g(h)\)</span> say, that are of a strictly <strong>smaller <span class="math inline">\(o\)</span>rder of magnitude</strong> than the function <span class="math inline">\(|h|^k\)</span> as <span class="math inline">\(h\to 0\)</span> i.e.<br>
+\]</span> where <span class="math inline">\(o\big(|h|^k\big)\)</span> denotes the family of real-valued functions, <span class="math inline">\(g(h)\)</span> say, that are of a <strong>strictly smaller <span class="math inline">\(o\)</span>rder of magnitude</strong> than the function <span class="math inline">\(|h|^k\)</span> as <span class="math inline">\(h\to 0;\)</span> i.e.<br>
 <span class="math display">\[
-o\big(|h|^k\big)=\left\{g:\mathbb{R}\to\mathbb{R}:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
-\]</span> Note: <span class="math inline">\(h_k(x+h)(h)^k=o\big(|h|^k\big)\)</span> since <span class="math display">\[
-\frac{|h_k(x+h)(h)^k|}{|h|^k}\to 0\quad\text{as}\quad h\to 0.
+o\big(|h|^k\big)=\left\{g(h)\to 0\;\text{ as }\; h\to 0:\frac{|g(h)|}{|h|^k}\to 0\quad\text{as}\quad h\to 0\right\}.
+\]</span></p>
+<p><strong>1. Note: Peano form of the remainder term:</strong><br> <span class="math inline">\(P_{k,x}(h)\;(h)^k=o\big(|h|^k\big)\)</span> since <span class="math display">\[
+\frac{|P_{k,x}(h)\;(h)^k|}{|h|^k}
+%=\frac{|P_k(x+h)|\cdot |h|^k|}{|h|^k}
+=|P_{k,x}(h)|\to 0\quad\text{as}\quad h\to 0.
+\]</span></p>
+<p><strong>2. Note: Mean-value form of the remainder term:</strong><br> <span class="math inline">\(M_{k,x}(h)=o\big(|h|^k\big)\)</span> since <span class="math display">\[
+\frac{|M_{k,x}(h)|}{|h|^k}=
+\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad h\to 0.
 \]</span></p>
 </div>
 </div>
@@ -529,9 +543,7 @@ I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 </ul>
 <p>and if our first guess <span class="math inline">\(\theta_{(0)}\)</span> is “close enough;” i.e.&nbsp;</p>
 <ul>
-<li>if <span class="math inline">\(M=0\)</span> or</li>
-<li>if <span class="math inline">\(0&lt;M&lt;1\)</span> or</li>
-<li>if <span class="math inline">\(1\leq M&lt;\infty\)</span> and <span class="math inline">\(|e_{(0)}|&lt;1,\)</span> where <!-- * if $M|e_{(0)}|<1,$ where  --> <span class="math display">\[
+<li>if <span class="math inline">\(M|e_{(0)}|&lt;1,\)</span> where <span class="math display">\[
 M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
 \]</span></li>
 </ul>
@@ -616,10 +628,10 @@ Pseudo-Code: Newton-Raphson Algorithm
 \]</span></p>
 <p>We consider a sample size of <span class="math inline">\(n=5\)</span> with the following observed outcome:</p>
 <ul>
-<li>One Head: <span class="math inline">\(N_{H,obs}=1\)</span></li>
-<li>Four Tails: <span class="math inline">\(n-N_{H,obs}=4\)</span></li>
+<li>One Head: <span class="math inline">\(\quad N_{H,obs}=1\)</span></li>
+<li>Four Tails: <span class="math inline">\(\quad n-N_{H,obs}=4\)</span></li>
 </ul>
-<p>Setting the tolerance level <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our convergence criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in Table <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution is <span class="math inline">\(\hat\theta_{ML} = 0.2\)</span> which equals the analytic solution.</p>
+<p>Setting <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our stopping criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution is <span class="math inline">\(\hat\theta_{ML} = 0.2\)</span> which equals the analytic solution.</p>
 <div id="tbl-NR" class="anchored">
 <table class="table">
 <caption>Table&nbsp;1.1: Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with <span class="math inline">\(N_{H,obs}=1,\)</span> sample size <span class="math inline">\(n=5,\)</span> starting value <span class="math inline">\(\theta_{(0)}=0.4,\)</span> and convergence criterion <span class="math inline">\(\varepsilon=10^{-10}.\)</span></caption>
@@ -641,38 +653,38 @@ Pseudo-Code: Newton-Raphson Algorithm
 <tr class="odd">
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(0.40\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(-2.40\cdot 10^{-1}\)</span></td>
-<td><span class="math inline">\(-4.16\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(-2.4\cdot 10^{-1}\)</span></td>
+<td><span class="math inline">\({\color{red}-4.2 &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(0.16\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\phantom{-}3.32\cdot 10^{-2}\)</span></td>
-<td><span class="math inline">\(\phantom{-}1.48\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}3.3\cdot 10^{-2}\)</span></td>
+<td><span class="math inline">\({\color{red}\phantom{-}1.5 &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(2\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\phantom{-}6.55\cdot 10^{-3}\)</span></td>
-<td><span class="math inline">\(\phantom{-}2.15\cdot 10^{-1}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}6.6\cdot 10^{-3}\)</span></td>
+<td><span class="math inline">\({\color{red}\phantom{-}2.2\cdot 10^{-1} &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(3\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.73\cdot 10^{-4}\)</span></td>
-<td><span class="math inline">\(\phantom{-}5.43\cdot 10^{-3}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.7\cdot 10^{-4}\)</span></td>
+<td><span class="math inline">\({\color{red}\phantom{-}5.4\cdot 10^{-3} &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(4\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.13\cdot 10^{-7}\)</span></td>
-<td><span class="math inline">\(\phantom{-}3.53\cdot 10^{-6}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}1.1\cdot 10^{-7}\)</span></td>
+<td><span class="math inline">\({\color{red}\phantom{-}3.5\cdot 10^{-6} &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(5\)</span></td>
 <td><span class="math inline">\(0.20\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\phantom{-}4.81\cdot 10^{-14}\)</span></td>
-<td><span class="math inline">\(\phantom{-}1.50\cdot 10^{-12}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\phantom{-}4.8\cdot 10^{-14}\)</span></td>
+<td><span class="math inline">\({\color{darkgreen}\phantom{-}1.5\cdot 10^{-12} &lt; \varepsilon}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -690,7 +702,7 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 \]</span> denotes the vector of predictor variables, where the (i.i.d.) random sample<br>
 <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
-\]</span> follows a <strong>random design</strong> (<a href="#def-RandomDesign">Definition&nbsp;<span>1.3</span></a>).</p>
+\]</span> follows a <strong>random design with homoskedastic errors</strong> (see <a href="#def-RandomDesign">Definition&nbsp;<span>1.3</span></a>).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -708,12 +720,13 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 \]</span> or equivalently <span class="math display">\[
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
-\]</span> denote a (i.i.d.) random sample with <span class="math display">\[
-\mathbb{E}(\varepsilon_i|X_i)=0\quad\text{ for all }\quad i=1,\dots,n
-\]</span> and with either</p>
+\]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
 <ul>
-<li><strong>homoscedastic</strong> errors: <span class="math inline">\(\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> for a constant <span class="math inline">\(0&lt;\sigma^2_0&lt;\infty\)</span> or</li>
-<li><strong>heteroscedastic</strong> errors: <span class="math inline">\(\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)&lt;\infty\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> for a strictly positive and finite variance function <span class="math inline">\(\sigma^2_0(\cdot).\)</span></li>
+<li><strong>homoskedastic</strong> errors: <span class="math inline">\(0&lt;\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0&lt;\infty\)</span></li>
+</ul>
+<p>or</p>
+<ul>
+<li><strong>heteroskedastic</strong> errors: <span class="math inline">\(0&lt;\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0(X_i)&lt;\infty\)</span>, for a strictly positive and finite variance function <span class="math inline">\(\sigma^2_0(\cdot).\)</span></li>
 </ul>
 </div>
 </div>
@@ -727,11 +740,11 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{matrix}X_{11}&amp;\dots&amp;X_{1K}\\\vdots&amp;\ddots&amp;\vdots\\ X_{n1}&amp;\dots&amp;X_{nK}\\\end{matrix}\right),\quad\text{and}\quad \varepsilon=\left(\begin{matrix}\varepsilon_1\\ \vdots\\ \varepsilon_n\end{matrix}\right).
 \end{equation*}
 \]</span></p>
-<p>Under <strong>normally distributed</strong> error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
+<p>Under <strong>normally distributed</strong> (and homoskedastic) error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
 \begin{align}
-\varepsilon &amp;\sim \mathcal{N}\left(0, \sigma_0^2I_n\right)\\[2ex]
+\underset{(n\times 1)}{\varepsilon} &amp;\sim \mathcal{N}_n\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad
-Y|X &amp;\sim \mathcal{N}\left(X\beta_0, \sigma^2_0I_n\right)
+\underset{(n\times 1)}{Y|X} &amp;\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
 \end{align}
 \tag{1.3}\]</span></span></p>
 <!-- We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic. -->
@@ -746,7 +759,9 @@ The requirement to make a (correct) distributional assumption is much more restr
 <p>Under <a href="#eq-OLSnormAss">Equation&nbsp;<span>1.3</span></a>, we have <span class="math display">\[
 f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
-\]</span> where <span class="math inline">\(\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{&gt;0}\)</span> denotes the unknown parameter vector.</p>
+\]</span> where <span class="math display">\[
+\theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{&gt;0}
+\]</span> denotes the unknown parameter vector.</p>
 <p>This allows us to setup the likelihood function, <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\beta',\sigma^2)
@@ -784,17 +799,18 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)
 \end{matrix}\right)
 \tag{1.4}\]</span></span></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Score Function
+
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>More generally, let <span class="math inline">\(\ell_n(\theta)\)</span> denote the log-likelihood function evaluated at a <span class="math inline">\(p\)</span>-dimensional parameter vector <span class="math inline">\(\theta=(\theta_1,\dots,\theta_p)'.\)</span></p>
+<div id="def-ScoreFunction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.4 (Score Function) </strong></span>More generally, let <span class="math inline">\(\ell_n(\theta)\)</span> denote the log-likelihood function evaluated at a <span class="math inline">\(p\)</span>-dimensional parameter vector <span class="math inline">\(\theta=(\theta_1,\dots,\theta_p)'.\)</span></p>
 <p>Then the gradient vector <span class="math display">\[\nabla\ell_n(\theta')=\left(\begin{matrix}
   \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\
   \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
@@ -807,30 +823,41 @@ Score Function
 \]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span> We show this below in <a href="#sec-MLAsymp"><span>Section&nbsp;1.4</span></a>.</p>
 </div>
 </div>
+</div>
 <p>Setting the score function in <a href="#eq-LinRegScoreFun">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, and we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
 <p>Solving for <span class="math inline">\(\hat\beta_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
 &amp; \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-&amp; - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
+\Leftrightarrow\quad&amp; - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
 \Rightarrow\quad &amp; \hat\beta_{ML}=(X'X)^{-1}X'Y\\[2ex]
 \end{align*}
 \]</span> Solving for <span class="math inline">\(s^2_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
 &amp; \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-&amp;-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
+\Leftrightarrow\quad&amp;-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
 \Rightarrow\quad  &amp;
 s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
-&amp;\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2.
+&amp;\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2,
 \end{align*}
-\]</span> Thus, <span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta.\)</span> Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator (same formula, same mean, same variance) we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p>
-<p>However, the MLE <span class="math inline">\(S_{ML}^2\)</span> for <span class="math inline">\(\sigma^2\)</span> differs from the unbiased variance estimator <span class="math inline">\(s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.\)</span></p>
+\]</span> where <span class="math inline">\(\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.\)</span></p>
+<p>Thus, <span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta.\)</span></p>
+<p>Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p>
+<p>However, the ML estimator <span class="math inline">\(s_{ML}^2\)</span> for <span class="math inline">\(\sigma^2\)</span> differs from the unbiased variance estimator <span class="math inline">\(s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.\)</span></p>
 <section id="sec-varMLE" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="sec-varMLE"><span class="header-section-number">1.3.1</span> Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></h3>
-<p>To compute the (asymptotic) variance of the ML-estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML},\)</span> we need all partial second derivatives of <span class="math inline">\(\ell_n\)</span> and the expressions of <strong><span class="math inline">\(-1/n\)</span> times the mean of these partial second derivatives</strong>.</p>
+<p>To compute the asymptotic variance of the ML-estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML},\)</span> we need</p>
+<ul>
+<li>compute all partial second derivatives of <span class="math inline">\(\ell_n\)</span> and then</li>
+<li>take the expectation of these partial second derivatives and multiply it by <span class="math inline">\(-1/n\)</span>,</li>
+</ul>
+<p>which gives us the <strong>Fisher Information</strong>.</p>
 <p>Let’s do this preliminary work in the following:</p>
 <ol type="1">
 <li><p>Partial second derivatives with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
+&amp;= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+\Rightarrow\quad
 \underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta}(\beta',\sigma^2)}
 &amp;= - \dfrac{1}{\sigma^2}(X'X)
 \end{align*}
@@ -850,7 +877,9 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \]</span></p></li>
 <li><p>Second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
-\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)}
+\underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)}
+&amp;=-\frac{n}{2 \sigma^{2}}+\frac{1}{2}\frac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{2}}\\[2ex]
+\Rightarrow\quad\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta',\sigma^2)}
 &amp;=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)'(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
 &amp;=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
 \end{align*}
@@ -866,9 +895,19 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \]</span></p></li>
 <li><p>First derivative with respect to <span class="math inline">\(\beta,\)</span> second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
+&amp;= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2}(X')(Y - X\beta)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2}X'\varepsilon\\[2ex]
+\end{align*}
+\]</span></p></li>
+</ol>
+<p><span class="math display">\[
+\begin{align*}
+\Rightarrow\quad
 \underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta',\sigma^2)}
 =   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta',\sigma^2)\right)'
-&amp;= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
+%&amp;= -\frac{X'(Y-X\beta)}{\sigma^4}\\[2ex]
 &amp; = \frac{X'\varepsilon}{\sigma^4}\\
 \end{align*}
 \]</span> <span class="math display">\[
@@ -881,9 +920,8 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 &amp;=-\frac{1}{n}\cdot\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
 &amp;=-\frac{1}{n}\cdot 0=0,
 \end{align*}
-\]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p></li>
-</ol>
-<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the mean of the Hessian matrix of <span class="math inline">\(\ell_n:\)</span></p>
+\]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p>
+<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the Hessian matrix of <span class="math inline">\(\ell_n\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
 <p><span class="math display">\[
 \begin{align*}
 &amp;\mathcal{I}(\theta) :=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta',\sigma^2)\right)\\[2ex]
@@ -904,19 +942,21 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 \end{array}\right]
 \end{align*}
 \]</span></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Fisher Information Matrix
+
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The matrix <span class="math display">\[
+<div id="def-FisherInformMat" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.5 (Fisher Information Matrix) </strong></span>The matrix <span class="math display">\[
 \mathcal{I}(\theta) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta)\right)
 \]</span> is called <strong>Fisher Information Matrix</strong>.</p>
+</div>
 </div>
 </div>
 <section id="asymptotic-variance-and-fisher-information-matrix" class="level4 unnumbered">
@@ -979,10 +1019,9 @@ $$
 $$ -->
 <p>That is, <span id="eq-FIMVar"><span class="math display">\[
 \begin{align*}
-&amp;AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)%\\[2ex]
-%&amp;=
-=
+AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
+&amp;=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+&amp;=
 \left[\begin{array}{cc}
 \sigma^2_0\Sigma_{X'X}^{-1} &amp; 0 \\[2ex]
 0 &amp; \ 2\sigma^4_0
@@ -1928,7 +1967,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Ch2_EMAlgorithmus.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">The Expectation Maximization (EM) Algorithm</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

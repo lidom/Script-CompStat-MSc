@@ -164,15 +164,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>( <span class="fu">abs</span>(<span class="fu">Lp_fct</span>(theta_new, <span class="at">h=</span>h, <span class="at">n=</span>n)) <span class="sc">&lt;</span> t ){check <span class="ot">&lt;-</span> <span class="cn">FALSE</span>}</span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(theta, Lp, Lp<span class="sc">/</span>Lpp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>results           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(theta, <span class="sc">-</span>Lp<span class="sc">/</span>Lpp, Lp)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"theta_m"</span>, <span class="st">"h"</span>, <span class="st">"Lp(theta_m)"</span>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         theta            Lp              
-[1,] 0.4000000 -4.166667e+00  2.400000e-01
-[2,] 0.1600000  1.488095e+00 -3.326733e-02
-[3,] 0.1932673  2.159084e-01 -6.558924e-03
-[4,] 0.1998263  5.433195e-03 -1.736356e-04
-[5,] 0.1999999  3.539786e-06 -1.132731e-07
-[6,] 0.2000000  1.504574e-12 -4.814638e-14</code></pre>
+<pre><code>       theta_m             h   Lp(theta_m)
+[1,] 0.4000000 -2.400000e-01 -4.166667e+00
+[2,] 0.1600000  3.326733e-02  1.488095e+00
+[3,] 0.1932673  6.558924e-03  2.159084e-01
+[4,] 0.1998263  1.736356e-04  5.433195e-03
+[5,] 0.1999999  1.132731e-07  3.539786e-06
+[6,] 0.2000000  4.814638e-14  1.504574e-12</code></pre>
 </div>
 </div>
 </section>
@@ -363,34 +365,35 @@ P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
 \ell_n'(\theta_{root})=0.
 \]</span> Let <span class="math display">\[
 \begin{align*}
-\Delta_{(0)}&amp;=\theta_{root}-\theta_{(0)}\\[2ex]
-\Delta_{(m)}&amp;=\theta_{root}-\theta_{(m)}
+e_{(0)}&amp;=\theta_{root}-\theta_{(0)}\\[2ex]
+e_{(m)}&amp;=\theta_{root}-\theta_{(m)}
 \end{align*}
 \]</span> denote the start-value error and the <span class="math inline">\(m\)</span>th step error, respectively.</p>
 <p>Let <span class="math display">\[
-I=[\theta_{root}-|\Delta_{(0)}|, \theta_{root}+|\Delta_{(0)}|]
+I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 \]</span> denote the start-value neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
 <p>Let <span class="math inline">\(\ell_n'\)</span> be “well behaved” over <span class="math inline">\(I;\)</span> such that</p>
 <ul>
 <li><span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I\)</span> and</li>
 <li><span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I.\)</span></li>
 </ul>
-<p>Let <span class="math inline">\(\theta_{(0)}\)</span> be “close enough;” such that</p>
+<p>Let <span class="math inline">\(\theta_{(0)}\)</span> be “close enough;” i.e.&nbsp;let</p>
 <ul>
-<li><span class="math inline">\(M|\Delta_{(0)}|&lt;1,\)</span> where <span class="math display">\[
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0.
-\]</span></li>
+<li>if <span class="math inline">\(M|e_{(0)}|&lt;1,\)</span></li>
 </ul>
+<p>where <span class="math display">\[
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
+\]</span></p>
 <p>In the following, we show that the Newton-Raphson algorithm converges under this setup.</p>
 <!-- We'll see that it is a **quadratic** (i.e. very fast) convergence.  -->
-<p>The first-order Taylor expansion of <span class="math inline">\(\ell'(\theta_{root})\)</span> around <span class="math inline">\(\theta_{(m)}\)</span> with explicit reminder term is given by <span class="math display">\[
+<p>By the second-order Taylor expansion of <span class="math inline">\(\ell'(\theta_{root})\)</span> around <span class="math inline">\(\theta_{(m)}\)</span> with the mean-value form of the remainder term, we have that <span class="math display">\[
 \begin{align*}
 \overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)}
-&amp; = \ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + R,
+&amp; = \ell'(\theta_{(m)}) +
+    \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) +
+    \frac{1}{2}\ell'''(\xi)(\theta_{root}-\theta_{(m)})^2
 \end{align*}
-\]</span> where <span class="math display">\[
-R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
-\]</span> for a mean-value <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{root}.\)</span></p>
+\]</span> for some real number <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{root}\)</span> and <span class="math inline">\(\theta_{(m)}.\)</span></p>
 <p>Since <span class="math inline">\(\ell'(\theta_{root})=0,\)</span> we have that <span class="math display">\[
 \begin{align*}
 0
@@ -406,7 +409,7 @@ R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 \]</span> Using the update steps of the alrorithm <span class="math display">\[
 \theta_{(m+1)} = \theta_{(m)} - \frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}
 \quad\Leftrightarrow\quad
-{\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}} = \theta_{(m)} - \theta_{(m+1)}
+\theta_{(m)} - \theta_{(m+1)}  = {\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}}
 \]</span> yields <span class="math display">\[
 \begin{align*}
 \theta_{(m)} - \theta_{(m+1)} + (\theta_{root}-\theta_{(m)})
@@ -415,86 +418,47 @@ R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 \theta_{root} - \theta_{(m+1)}  
 &amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\\[2ex]
 \Leftrightarrow\quad
-\Delta_{(m+1)}  
-&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\Delta_{(m)})^2
+e_{(m+1)}  
+&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(e_{(m)})^2
 \end{align*}
 \]</span> Taking absolute values, since we are not interested in the sign of the approximation errors, yields <span class="math display">\[
 \begin{align*}
-|\Delta_{(m+1)}|  
-&amp;= \frac{1}{2} \; |\ell'''(\xi_{(m)})|\;\frac{1}{|\ell''(\theta_{(m)})|}(\Delta_{(m)})^2
+|e_{(m+1)}|  
+&amp;= \frac{1}{2} \; |\ell'''(\xi_{(m)})|\;\frac{1}{|\ell''(\theta_{(m)})|}(e_{(m)})^2
 \end{align*}
-\]</span> Considering the worst cases, leads to the following inequality <span class="math display">\[
+\]</span> Considering the worst case within <span class="math inline">\(I,\)</span> leads to the following inequality <span id="eq-NRIneq"><span class="math display">\[
 \begin{align*}
-|\Delta_{(m+1)}|  
-&amp;\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(\Delta_{(m)})^2\\[2ex]
-\Leftrightarrow\quad |\Delta_{(m+1)}|  
-&amp;\leq  M\;(\Delta_{(m)})^2\\[-2ex]
-\end{align*}
-\]</span> <span id="eq-NRIneq"><span class="math display">\[
-\begin{align*}
-\Leftrightarrow\quad|\Delta_{(m+1)}|&amp;\leq \left(M\;|\Delta_{(m)}|\right)\;|\Delta_{(m)}|\phantom{AAAAAAAAAAAAAAa}.
+|e_{(m+1)}|  
+&amp;\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(e_{(m)})^2\\[2ex]
+\Leftrightarrow\quad |e_{(m+1)}|  
+&amp;\leq  M\;(e_{(m)})^2\\[-2ex]
 \end{align*}
 \tag{2}\]</span></span> To show that the Newton-Raphon algorithm converges, we need to show that <span class="math display">\[
-|\Delta_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
-\]</span> Note that, if <span class="math display">\[
+|e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
+\]</span></p>
+<p>For <span class="math inline">\(0&lt;M\,|e_{(0)}|&lt;1\)</span> the inequality in <a href="#eq-NRIneq">Equation&nbsp;2</a> becomes a sharp inequality <span class="math display">\[
+\begin{align*}
+&amp;|e_{(1)}|\leq \overbrace{M\;|e_{(0)}|}^{&lt;1}\,|e_{(0)}|
+\quad\Rightarrow\quad |e_{(1)}|&lt; \,|e_{(0)}|\\[2ex]
+\Rightarrow\quad
+&amp; |e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{&lt;1}\,|e_{(1)}|
+\quad\Rightarrow\quad |e_{(2)}|&lt; \,|e_{(1)}|\\[2ex]
+&amp;\phantom{|e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{&lt;1}\,|e_{(1)}|}\vdots\\[2ex]
+\Rightarrow\quad
+&amp; |e_{(m+1)}|&lt; \,|e_{(m)}| \quad\text{for all }m=0,1,2\dots
+\end{align*}
+\]</span> which shows the convergence of the Newton Raphson algorithm. (The inequality in <a href="#eq-NRIneq">Equation&nbsp;2</a> implies that the convergence is even quadratic; i.e.&nbsp;very fast.)</p>
+<p><strong>Special Case</strong> <span class="math inline">\(M=0\)</span>: <br> For <span class="math display">\[
 \sup_{\theta\in I}|\ell'''(\theta)|=0
-\]</span> then <span class="math inline">\(M=0\)</span> and thus also <span class="math inline">\(M|\Delta_{(0)}|=0,\)</span> which implies that we find the root, <span class="math inline">\(\theta_{root},\)</span> already in the first <span class="math inline">\((m=1)\)</span> update step, since<br>
+\]</span> we have that <span class="math inline">\(M=0\)</span> which implies that we find the root, <span class="math inline">\(\theta_{root},\)</span> already in the first <span class="math inline">\((m=1)\)</span> update step, since<br>
 <span class="math display">\[
 \begin{align*}
-|\Delta_{(1)}|  
-&amp;\leq \overbrace{\left(M |\Delta_{(0)}|\right)}^{=0}\;|\Delta_{(0)}|\\[2ex]
-\Rightarrow\quad |\Delta_{(1)}|&amp;=0\\[2ex]
-\Rightarrow\qquad \theta_{(1)}&amp;=\theta_{root}.
+|e_{(1)}|  
+&amp;\leq \overbrace{\left(M |e_{(0)}|\right)}^{=0}\;|e_{(0)}|\\[2ex]
+\Rightarrow\quad |e_{(1)}|&amp;=0\\[2ex]
+\Rightarrow\quad \theta_{(1)}&amp;=\theta_{root},
 \end{align*}
-\]</span> This makes sense, since <span class="math inline">\(\sup_{\theta\in I}|\ell'''(\theta)|=0\)</span> implies that <span class="math inline">\(\ell'(\theta)\)</span> has no curvature; i.e.&nbsp;<span class="math inline">\(\ell'(\theta)\)</span> is a straight line for all <span class="math inline">\(x\in I\)</span> which implies that the first-order Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).</p>
-<p>If, however, <span class="math display">\[
-\sup_{\theta\in I}|\ell'''(\theta)|&gt;0
-\]</span> then <span class="math inline">\(M&gt;0\)</span> and together with the assumption that we do not start perfectly, i.e.&nbsp;<span class="math inline">\(|\Delta_{(0)}|&gt;0\)</span>, but “close enough” we have that <span id="eq-Inductm0"><span class="math display">\[
-0&lt;\left(M |\Delta_{(0)}|\right)&lt;1.
-\tag{3}\]</span></span> The inequlities in <a href="#eq-NRIneq">Equation&nbsp;2</a> and <a href="#eq-Inductm0">Equation&nbsp;3</a> imply for the first <span class="math inline">\((m=1)\)</span> update step that <span class="math display">\[
-\begin{align*}
-|\Delta_{(1)}|  
-&amp; \leq \left(M |\Delta_{(0)}|\right) \;|\Delta_{(0)}|\\[2ex]
-\Rightarrow\quad|\Delta_{(1)}| &amp; &lt;|\Delta_{(0)}|,
-\end{align*}
-\]</span> and, therefore, that <span id="eq-Inductm1"><span class="math display">\[
-0&lt;M|\Delta_{(1)}|&lt;M|\Delta_{(0)}|&lt;1.
-\tag{4}\]</span></span> The inequlities in <a href="#eq-NRIneq">Equation&nbsp;2</a> and <a href="#eq-Inductm1">Equation&nbsp;4</a> imply for the second <span class="math inline">\((m=2)\)</span> update step that <span class="math display">\[
-\begin{align*}
-|\Delta_{(2)}|  
-&amp;\leq  \left(M |\Delta_{(1)}|\right) |\Delta_{(1)}|\\[2ex]
-\Rightarrow\quad|\Delta_{(2)}| &amp;&lt; |\Delta_{(1)}|
-\end{align*}
-\]</span> and, therefore, that <span id="eq-Inductm2"><span class="math display">\[
-0&lt;M|\Delta_{(2)}|&lt;M|\Delta_{(1)}|&lt;M|\Delta_{(0)}|&lt;1.
-\tag{5}\]</span></span> OK, the inequalities in <a href="#eq-Inductm2">Equation&nbsp;5</a> allow us to conjecture that <span id="eq-Induction"><span class="math display">\[
-0&lt;M|\Delta_{(m)}|&lt;M|\Delta_{(m-1)}|&lt;1\quad\text{for all}\quad m=0,1,2\dots,
-\tag{6}\]</span></span> which would imply (by the inequality in <a href="#eq-NRIneq">Equation&nbsp;2</a>) that <span class="math display">\[
-\begin{align*}
-|\Delta_{(m+1)}|
-&amp;\leq \left(M |\Delta_{(m)}|\right) |\Delta_{(m)}|\\[2ex]
-\Rightarrow\quad|\Delta_{(m+1)}|&amp; &lt;|\Delta_{(m)}|\quad\text{for all}\quad m=0,1,2\dots,
-\end{align*}
-\]</span> and thus that the Newton-Raphon algorithm converges, i.e. <span class="math display">\[
-|\Delta_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
-\]</span></p>
-<p>To show that the inequalities in <a href="#eq-Induction">Equation&nbsp;6</a> are true <strong>for all</strong> <span class="math inline">\(m=0,1,2\dots\)</span> we can use a <strong>proof by induction:</strong></p>
-<p><strong>1. Base Case.</strong> First, we need to show that the statement in <a href="#eq-Induction">Equation&nbsp;6</a> is true for the <em>base case</em>; i.e.&nbsp;here for <span class="math display">\[
-0&lt;M|\Delta_{(1)}|&lt;M|\Delta_{(0)}| &lt; 1,
-\]</span> which we already did in <a href="#eq-Inductm1">Equation&nbsp;4</a>. (We also checked it for the base case <span class="math inline">\(m=2\)</span> in <a href="#eq-Inductm1">Equation&nbsp;4</a>.)</p>
-<p><strong>2. Induction Hypothesis and Induction Step.</strong> Next we need to make the <em>induction hypothesis</em> that <span id="eq-InductHyp"><span class="math display">\[
-0&lt;M|\Delta_{(m+1)}|&lt;M|\Delta_{(m)}| &lt; 1
-\tag{7}\]</span></span> is true for some arbitrary <span class="math inline">\(m,\)</span> and then show (<em>induction step</em>) that this implies that the the <span class="math inline">\(m+1\)</span> case, <span class="math display">\[
-0&lt;M|\Delta_{(m+2)}|&lt;M|\Delta_{(m+1)}| &lt; 1
-\]</span> is also true.</p>
-<p>This is indeed true, since, by the inequality in <a href="#eq-NRIneq">Equation&nbsp;2</a>, the induction hypothesis in <a href="#eq-InductHyp">Equation&nbsp;7</a> implies that<br>
-<span class="math display">\[
-\begin{align*}
-|\Delta_{(m+1)}|
-&amp;\leq \left(M |\Delta_{(m)}|\right) |\Delta_{(m)}|\\[2ex]
-\Rightarrow\quad|\Delta_{(m+1)}|&amp; &lt;|\Delta_{(m)}|
-\end{align*}
-\]</span></p>
+\]</span> even when <span class="math inline">\(|e_{(0)}|\gg 0.\)</span> This makes sense, since <span class="math inline">\(\sup_{\theta\in I}|\ell'''(\theta)|=0\)</span> implies that <span class="math inline">\(\ell'(\theta)\)</span> has no curvature; i.e.&nbsp;<span class="math inline">\(\ell'(\theta)\)</span> is a straight line for all <span class="math inline">\(x\in I\)</span> which implies that the Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).</p>
 </section>
 </section>
 
