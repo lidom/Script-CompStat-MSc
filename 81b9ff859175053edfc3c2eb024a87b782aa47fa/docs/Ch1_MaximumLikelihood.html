@@ -430,7 +430,7 @@ The second-order Taylor polynomial can be used to apprixmate $f'.$
 </div>
 <div class="callout-body-container callout-body">
 <div id="thm-TaylorThm" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.1 (Taylor’s Theorem) </strong></span><br></p>
+<p><span class="theorem-title"><strong>Theorem 1.1 (Taylor’s Theorem) </strong></span><br> Today, there are many different versions of Taylor’s theorem. We consider the following two:</p>
 <p><strong>1. <a href="https://en.wikipedia.org/wiki/Giuseppe_Peano">Peano</a> form of the remainder term:</strong><br> Let <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> be <span class="math inline">\(k\)</span> times differentiable at <span class="math inline">\(x\in\mathbb{R}\)</span> and let <span class="math inline">\(h\in\mathbb{R}.\)</span> Then there exists a function <span class="math inline">\(P_{k,x}:\mathbb{R}\to\mathbb{R}\)</span> such that <span class="math display">\[
 \begin{align*}
 f(x+h) &amp;=
@@ -450,7 +450,7 @@ f(x)
 \end{align*}
 \]</span> with <span class="math display">\[
 M_{k,x}(h)=\frac{f^{(k+1)}(\xi)}{(k+1)!}(h)^{k+1}
-\]</span> for some real number <span class="math inline">\(\xi\)</span> between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+h.\)</span></p>
+\]</span> for some real number <span class="math inline">\(\xi\)</span> between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+h.\)</span> (This form of Taylor’s theorem is based on the mean-value <a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>.)</p>
 <div class="callout-tip callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1070,7 +1070,7 @@ S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\
 \widehat{AVar}(s^2_{ML})
 &amp;=2\left(s_{ML}^2\right)^2
 \end{align}
-\]</span> and to estimators of the variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <span class="math display">\[
+\]</span> and thus to estimators of the variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <span class="math display">\[
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})
 =\frac{1}{n}\widehat{AVar}(\hat{\beta}_{ML})
@@ -1167,11 +1167,11 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Example
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A possible <strong>example</strong> that fits into the above setup is the density of the exponential distribution <span class="math display">\[
+<p>An <strong>example</strong> that fits into the above setup is the density of the exponential distribution <span class="math display">\[
 f(x;\theta)=\left\{
     \begin{matrix}
     \theta\exp(- \theta x)&amp; \text{for }x\geq 0\\
@@ -1208,17 +1208,18 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 <p>By the Mean Value Theorem (<a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
-\tag{1.6}\]</span></span> for some</p>
+\tag{1.6}\]</span></span> for some <span class="math inline">\(\psi_n\)</span> between <span class="math inline">\(\hat{\theta}_n\)</span> and <span class="math inline">\(\theta_0;\)</span> i.e.</p>
 <ul>
 <li><span class="math inline">\(\psi_n\in(\theta_0,\hat{\theta}_n)\quad\)</span> if <span class="math inline">\(\quad\theta_0&lt;\hat{\theta}_n\)</span></li>
 <li><span class="math inline">\(\psi_n\in(\hat{\theta}_n,\theta_0)\quad\)</span> if <span class="math inline">\(\quad\hat{\theta}_n&lt;\theta_0\)</span></li>
 </ul>
+<p>Note: <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a> is simply the first-order version of the mean-value form of Taylor’s theorem (<a href="#thm-TaylorThm">Theorem&nbsp;<span>1.1</span></a>).</p>
 <p>Since <span class="math inline">\(\hat{\theta}_n\)</span> maximizes the log-Likelihood function it follows that <span class="math display">\[
 \ell_n'(\hat{\theta}_n)=0.
 \]</span> Together with <a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>, this implies that <span class="math display">\[
-\overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
+\overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \]</span> <span id="eq-ml2"><span class="math display">\[
-\Rightarrow\quad \ell_n'(\theta)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
+\Rightarrow\quad \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
 \tag{1.7}\]</span></span> Now, note that necessarily <span class="math display">\[
 \int_{-\infty}^{\infty} f(x;\theta)dx=1
 \]</span> for <em>all possible values</em> of <span class="math inline">\(\theta\in\Theta,\)</span> since <span class="math inline">\(f\)</span> is a density function.</p>
@@ -1226,19 +1227,20 @@ f(b)=f(a) + f'(c)(b-a).
 \begin{align*}
 \frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx&amp;=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
-\]</span> Using that we can here pass the partial derivative under the integral sign, we have thus <span id="eq-zero1"><span class="math display">\[
+\]</span> Using that we can here pass the partial derivative under the integral sign, we thus have <span id="eq-zero1"><span class="math display">\[
 \int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
 \tag{1.8}\]</span></span> And likewise, <span class="math display">\[
 \begin{align*}
 \frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx&amp;=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
-\]</span> Using again that we can here pass the partial derivative under the integral sign, we have thus <span id="eq-zero2"><span class="math display">\[
+\]</span> Using again that we can here pass the partial derivative under the integral sign, we thus have <span id="eq-zero2"><span class="math display">\[
 \int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
 \tag{1.9}\]</span></span></p>
 <p>Using <a href="#eq-zero1">Equation&nbsp;<span>1.8</span></a> and <a href="#eq-zero2">Equation&nbsp;<span>1.9</span></a>, we can now show that the average <span class="math display">\[
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
-\]</span> is asymptotically normal. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem.</p>
-<p>Firstly, for the mean one gets: <span class="math display">\[
+\]</span> is <strong>asymptotically normal</strong>.</p>
+<p>This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem.</p>
+<p>Firstly, for the mean one gets: <span id="eq-Mean"><span class="math display">\[
 \begin{align*}
 \mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\[2ex]
@@ -1249,7 +1251,7 @@ f(b)=f(a) + f'(c)(b-a).
 &amp;=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex]
 &amp;=0,
 \end{align*}
-\]</span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span>1.8</span></a>.</p>
+\tag{1.10}\]</span></span> where the last step follows from <a href="#eq-zero1">Equation&nbsp;<span>1.8</span></a>.</p>
 <p>Secondly, for the variance one gets: <span class="math display">\[
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
@@ -1259,22 +1261,26 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\
 &amp;=:\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
-\]</span> where the simplification of the variance expression (i.e.&nbsp;that here the variance equals the second moment) follows from <a href="#eq-zero2">Equation&nbsp;<span>1.9</span></a>, and where <span class="math inline">\(\mathcal{I}\)</span> is the Fisher information (here a scalar) evaluated at <span class="math inline">\(\theta_0.\)</span></p>
+\]</span> where the simplification of the variance expression to a second moment expression follows from <a href="#eq-Mean">Equation&nbsp;<span>1.10</span></a>.</p>
+<p><span class="math inline">\(\mathcal{I}(\theta_0)\)</span> is the Fisher information (here a scalar) evaluated at <span class="math inline">\(\theta_0.\)</span></p>
 <p>Thirdly, the average <span class="math display">\[
 \frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)
 \]</span> is taken over i.i.d. random variables: <span class="math display">\[
 \frac{\partial}{\partial \theta} \ln f(X_i;\theta_0),\quad i=1,\dots,n.
-\]</span> Thus, we can apply the Lindeberg-Lévy central limit theorem from which it follows that <span class="math display">\[
+\]</span> Thus, we can apply the <strong>Lindeberg-Lévy central limit theorem</strong> from which it follows that <span class="math display">\[
 \frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 \]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
-<p>Thus, using our mean value expression (<a href="#eq-ml2">Equation&nbsp;<span>1.7</span></a>) for <span class="math inline">\(\ell_n'(\theta_0),\)</span> we also have <span class="math display">\[
+<p>Thus, that by our mean value expression in <a href="#eq-ml2">Equation&nbsp;<span>1.7</span></a> <span class="math display">\[
+\ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
+\]</span> we thus have <span class="math display">\[
 \frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{I}(\theta_0)}}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1),
 \]</span> which is equivalent to <span id="eq-MLNorm"><span class="math display">\[
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1).
-\tag{1.10}\]</span></span></p>
-<p>The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> is our object of interest. The further analysis requires us to study the statistic <span class="math display">\[
+\tag{1.11}\]</span></span> The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm">Equation&nbsp;<span>1.11</span></a> is our object of interest.</p>
+<p>The further analysis requires us to study the asymptotic behavior of<br>
+<span class="math display">\[
 -\frac{1}{n}\ell_n''(\psi_n)
-\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a>.</p>
+\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.11</span></a>.</p>
 <div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1316,30 +1322,38 @@ Important
 &amp;=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}
 {f(X_i;\theta_0)}+\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
 {f(X_i;\theta_0)}\right)^2\right)\quad[\text{i.i.d.}]\\[2ex]
+&amp;=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
+{f(X_i;\theta_0)}\right)^2\right)
+\end{align*}
+\]</span> From <a href="#eq-Mean">Equation&nbsp;<span>1.10</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2} f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
+\begin{align*}
+\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
 &amp;=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\[2ex]
 &amp;=\mathcal{I}(\theta_0),
 \end{align*}
 \]</span> <span class="math display">\[
 \Rightarrow \qquad \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)=\mathcal{I}(\theta_0)\qquad
 \]</span></p>
-<p>This means that <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span> <!-- $$
+<p>This means that <span class="math display">\[
+-\frac{1}{n}\ell_n''(\theta_0)
+\]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span> <!-- $$
 \begin{align*}
 \operatorname{Bias}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
 &=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta_0)\right)-\left(\mathcal{I}(\theta_0)\right)\\[2ex]
 &=0. 
 \end{align*}
 $$ --></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Tip
+Multivariate Settings
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta_0,\)</span> the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=(-1)\cdot \mathbb{E}\left(\ell_n''(\theta_0)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span>Section&nbsp;1.3.1</span></a>); i.e.&nbsp;a special version of a Hesse matrix.</p>
+<p>For multivariate (<span class="math inline">\(p\)</span>-dimensional) parameters <span class="math inline">\(\theta_0,\)</span> the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=(-1)\cdot \mathbb{E}\left(\ell_n''(\theta_0)\right)\)</span> becomes the (<span class="math inline">\(p\times p\)</span>) Fisher information matrix (see <a href="#sec-varMLE"><span>Section&nbsp;1.3.1</span></a>).</p>
 </div>
 </div>
 <p>Second, the variance of variance of <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0):\)</span> <span class="math display">\[
@@ -1377,24 +1391,24 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span></p>
+<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm">Equation&nbsp;<span>1.11</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span> Studying <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> was only the simpler thing to do.</p>
 <p>Luckily, we are actually close now.</p>
 </div>
 </div>
-<p>Next, we use that ML estimators <span class="math inline">\(\hat\theta_n\)</span> are (weakly) consistent, i.e., <span class="math display">\[
+<p>Next, we use that ML estimators <span class="math inline">\(\hat\theta_n\)</span> are (weakly) <strong>consistent</strong>, i.e., <span class="math display">\[
 \hat\theta_n\to_p\theta_0\quad\text{as}\quad n\to\infty;
 \]</span> this is, for instance, implied by our results in <a href="#sec-LinRegNorm"><span>Section&nbsp;1.3</span></a> for the case of ML estimation in linear regression under normality.</p>
-<p>Since <span class="math inline">\(\psi_n\)</span> is a value between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>), the consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that also <span class="math display">\[
+<p>Since <span class="math inline">\(\psi_n\)</span> is a <strong>mean value</strong> between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT">Equation&nbsp;<span>1.6</span></a>), consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that <span class="math display">\[
 \psi_n\to_p\theta_0\quad\text{as}\quad n\to\infty.
 \]</span></p>
-<p>Therefore, we have by the <strong>continuous mapping theorem</strong> that also <span class="math display">\[
+<p>Therefore, we have by the <strong>continuous mapping theorem</strong> that <span class="math display">\[
 \begin{align}
 -\frac{1}{n}\ell_n''(\psi_n) &amp; \to_p \phantom{-}\mathcal{I}(\theta_0)\quad \hbox{ as }\quad n\to\infty\\[2ex]
 \Rightarrow\qquad
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)&amp;\to_p \sqrt{\mathcal{I}(\theta_0)} \quad \hbox{ as }\quad n\to\infty.
 \end{align}
 \]</span></p>
-<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span>1.10</span></a> such that <span class="math display">\[
+<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm">Equation&nbsp;<span>1.11</span></a> such that <span class="math display">\[
 \begin{align*}
 \underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)}_{\to_p \sqrt{\mathcal{I}(\theta_0)} }\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d\mathcal{N}(0,1)
 \end{align*}
@@ -1402,21 +1416,23 @@ Important
 \begin{align*}
 \sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d N\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
-\tag{1.11}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the asymptotic variance of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math inline">\(\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).\)</span></p>
-<p><a href="#eq-AsymNormMLE">Equation&nbsp;<span>1.11</span></a> is the asymptotic normality result we aimed for.</p>
+\tag{1.12}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the <strong>asymptotic variance</strong> of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math display">\[
+\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).
+\]</span></p>
+<p><a href="#eq-AsymNormMLE">Equation&nbsp;<span>1.12</span></a> is the asymptotic normality result we aimed for.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Multivariate Settings
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The above arguments can easily be generalized to multivariate (<span class="math inline">\(p\)</span>-dimensional) parameter vectors <span class="math inline">\(\theta\in\mathbb{R}^p\)</span>. In this case, <span class="math inline">\(\mathcal{I}(\theta_0)\)</span> becomes a <span class="math inline">\(p\times p\)</span> Hesse matrix, and <span class="math display">\[
+<p>The above arguments can easily be generalized to multivariate (<span class="math inline">\(p\)</span>-dimensional) parameter vectors <span class="math inline">\(\theta\in\mathbb{R}^p\)</span>. In this case, <span class="math inline">\(\mathcal{I}(\theta_0)\)</span> becomes a <span class="math inline">\(p\times p\)</span> matrix, and <span class="math display">\[
 \sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d \mathcal{N}_p\left(0, \mathcal{I}(\theta_0)^{-1}\right),
-\]</span> where <span class="math inline">\(\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}\left(H_{\ell_n}(\theta_0)\right)\)</span> is the <span class="math inline">\((p\times p)\)</span> Fisher information matrix.</p>
+\]</span> where <span class="math inline">\(\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}\left(H_{\ell_n}(\theta_0)\right)\)</span> is the <span class="math inline">\((p\times p)\)</span> Fisher information matrix with <span class="math inline">\(H_{\ell_n}(\theta_0)\)</span> denoting the Hesse matrix of <span class="math inline">\(\ell_n(\cdot)\)</span> evaluated at <span class="math inline">\(\theta_0.\)</span></p>
 </div>
 </div>
 <div class="callout-tip callout callout-style-default callout-captioned">
@@ -1425,7 +1441,7 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Machine learning
+ML-Theory and Machine learning
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1458,16 +1474,21 @@ Machine learning
 </div>
 </div>
 <p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.3</span></a>:</strong></p>
-<p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it posses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
+<p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it possesses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
 <p>Thus <span class="math display">\[
 \hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
 \]</span> and <span class="math display">\[
 \theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
-\]</span> This allows us to express the likelihood function <span class="math inline">\(\tilde{\mathcal{L}}(\tau)\)</span> used for estimating <span class="math inline">\(\tau_0\)</span> in terms of the likelihood function used for estimating <span class="math inline">\(\theta_0 = g^{-1}(\tau_0):\)</span> <span class="math display">\[
-\tilde{\mathcal{L}}_n(\tau) = \mathcal{L}_n(g^{-1}(\tau))=\mathcal{L}_n(\theta).
-\]</span> Since <span class="math inline">\(\hat\theta_n\)</span> denotes the ML estimator of <span class="math inline">\(\theta_0,\)</span> we know that <span class="math display">\[
+\]</span> This allows us to express the likelihood function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> used for estimating <span class="math inline">\(\theta_0\)</span> in terms of a likelihood function <span class="math inline">\(\tilde{\mathcal{L}}_n(\tau)\)</span> in <span class="math inline">\(\tau\)</span>: <span class="math display">\[
+\mathcal{L}_n(\theta) = \mathcal{L}_n(g^{-1}(\tau)) = \tilde{\mathcal{L}}_n(\tau).
+\]</span> for all <span class="math inline">\(\theta\in\Theta.\)</span> At <span class="math inline">\(\hat{\theta}_n\)</span> we thus have <span class="math display">\[
+\mathcal{L}_n(\hat{\theta}_n) = \mathcal{L}_n(\overbrace{g^{-1}(\hat{\tau}_n)}^{=\hat{\theta}_n})=\tilde{\mathcal{L}}_n(\hat{\tau}_n).
+\]</span> To show now that <span class="math inline">\(\hat\tau\)</span> is the maximum likelihood estimator of <span class="math inline">\(\tau_0,\)</span> we need to show that <span class="math display">\[
+\tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau.
+\]</span></p>
+<p>Since <span class="math inline">\(\hat\theta_n\)</span> denotes the ML estimator of <span class="math inline">\(\theta_0,\)</span> we know that <span class="math display">\[
 \mathcal{L}_n(\theta)\leq\mathcal{L}_n(\hat\theta_n)\quad\text{for all}\quad\theta\in\Theta.
-\]</span> But since and for any <span class="math inline">\(\tau=g(\theta)\)</span> <span class="math display">\[
+\]</span> But since for any <span class="math inline">\(\tau=g(\theta)\)</span> <span class="math display">\[
 \tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta)
 \leq
 \mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
