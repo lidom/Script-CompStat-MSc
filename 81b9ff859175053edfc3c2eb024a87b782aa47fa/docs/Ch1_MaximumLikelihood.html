@@ -698,7 +698,7 @@ Y_i=X_i'\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 \tag{1.2}\]</span></span> where <span class="math inline">\(Y_i\in\mathbb{R}\)</span> denotes the response (or “dependent”) variable, <span class="math display">\[
 \beta_0\in\mathbb{R}^p
 \]</span> denotes the vector of unknown slope parameters, and <span class="math display">\[
-X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^K
 \]</span> denotes the vector of predictor variables, where the (i.i.d.) random sample<br>
 <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
@@ -720,7 +720,7 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 \]</span> or equivalently <span class="math display">\[
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
-\]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
+\]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, intertable <span class="math inline">\((K\times K)\)</span> matrix <span class="math inline">\(\mathbb{E}(X_iX_i')=\Sigma_{X'X}\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
 <ul>
 <li><strong>homoskedastic</strong> errors: <span class="math inline">\(0&lt;\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0&lt;\infty\)</span></li>
 </ul>
@@ -744,7 +744,11 @@ Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{
 \begin{align}
 \underset{(n\times 1)}{\varepsilon} &amp;\sim \mathcal{N}_n\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad
-\underset{(n\times 1)}{Y|X} &amp;\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
+(Y-X\beta_0)|X &amp;\sim \mathcal{N}_n\left(0, \sigma^2_0I_n\right)\\[2ex]
+\Rightarrow\quad
+(Y_i-X_i'\beta_0)|X_i &amp;\sim \mathcal{N}\left(0, \sigma^2_0\right)\\[2ex]
+%\Rightarrow\quad
+%\underset{(n\times 1)}{Y|X} &amp;\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
 \end{align}
 \tag{1.3}\]</span></span></p>
 <!-- We could also choose another distributional assumption for $\varepsilon,$ but the classical ML estimation theory requires us to assumed the correct error distribution. Luckily, the quasi maximum likelihood theory of @White1982 shows that false distributional assumptions are typically not problematic. -->

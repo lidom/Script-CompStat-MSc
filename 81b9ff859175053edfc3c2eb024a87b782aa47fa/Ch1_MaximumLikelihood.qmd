@@ -627,7 +627,7 @@ $$
 $$ 
 denotes the vector of unknown slope parameters, and 
 $$
-X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^p
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^K
 $$
 denotes the vector of predictor variables, where the (i.i.d.) random sample  
 $$
@@ -652,7 +652,8 @@ or equivalently
 $$
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
 $$
-denote a (i.i.d.) random sample with $\mathbb{E}(\varepsilon_i|X_i)=0$, $i=1,\dots,n,$ 
+denote a (i.i.d.) random sample with 
+$\mathbb{E}(\varepsilon_i|X_i)=0$, intertable $(K\times K)$ matrix $\mathbb{E}(X_iX_i')=\Sigma_{X'X}$, $i=1,\dots,n,$ 
 and with either
 
 * **homoskedastic** errors: $0<\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0<\infty$
@@ -682,7 +683,11 @@ $$
 \begin{align}
 \underset{(n\times 1)}{\varepsilon} &\sim \mathcal{N}_n\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad 
-\underset{(n\times 1)}{Y|X} &\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
+(Y-X\beta_0)|X &\sim \mathcal{N}_n\left(0, \sigma^2_0I_n\right)\\[2ex]
+\Rightarrow\quad 
+(Y_i-X_i'\beta_0)|X_i &\sim \mathcal{N}\left(0, \sigma^2_0\right)\\[2ex]
+%\Rightarrow\quad 
+%\underset{(n\times 1)}{Y|X} &\sim \mathcal{N}_n\left(X\beta_0, \sigma^2_0I_n\right)
 \end{align}
 $${#eq-OLSnormAss}
 
