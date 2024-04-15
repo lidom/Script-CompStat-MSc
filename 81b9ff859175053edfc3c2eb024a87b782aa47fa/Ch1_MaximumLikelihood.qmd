@@ -751,6 +751,7 @@ $$
 $$
 Putting the above derivative functions into one column vector yields the $((K+1)\times 1)$-dimensional gradient called **score function** in ML-theory:
 $$
+\nabla\ell_n(\theta')=
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)
@@ -785,7 +786,7 @@ for all $j=1,\dots,p.$ We show this below in @sec-MLAsymp.
 :::
 :::
 
-Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, and we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}:$
+Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, which we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}:$
 
 Solving for $\hat\beta_{ML}:$
 $$
@@ -808,25 +809,27 @@ $$
 where 
 $\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.$
 
-Thus, $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta.$  
+**Observations:**
 
+* $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta=(X'X)^{-1}X'Y.$  </br>
 Since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
 
-However, the ML estimator $s_{ML}^2$ for $\sigma^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
+* $s_{ML}^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
 
 
 ### Variance of ML-Estimators $\hat\beta_{ML}$ and $s^2_{ML}$ {#sec-varMLE}
 
-To compute the asymptotic variance of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need 
+::: {.callout-tip}
+To compute the **asymptotic variance** of the ML-estimators $\hat\beta_{ML}$ and $s^2_{ML},$ we need to 
 
-* compute all partial second derivatives of $\ell_n$ and then 
-* take the expectation of these partial second derivatives and multiply it by $-1/n$, 
-
-which gives us the **Fisher Information**.
+1. compute the Hessian matrix (i.e. all second partial derivatives) of $\ell_n,$  
+2. take the expectation of this Hessian matrix and multiply it by $-1/n$, which gives us the **Fisher Information matrix**. 
+3. Inverting the Fisher information matrix give the **asymptotic variance** expression. 
+:::
 
 Let's do this preliminary work in the following:
 
-1. Partial second derivatives with respect to $\beta:$
+* Partial second derivatives with respect to $\beta:$
 $$
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
@@ -852,7 +855,7 @@ $$
 =n\underbrace{\mathbb{E}\left(X_iX_i'\right)}_{=:\Sigma_{X'X}} = n\Sigma_{X'X}.
 $$ 
 
-2. Second derivative with respect to $\sigma^2:$
+* Second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
 \underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)} 
@@ -872,7 +875,8 @@ $$
 &=\frac{1}{2\sigma^{4}}\\[2ex]
 \end{align*}
 $$
-3. First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
+
+* First derivative with respect to $\beta,$ second derivative with respect to $\sigma^2:$
 $$
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
@@ -904,7 +908,7 @@ $$
 $$
 since $\mathbb{E}(\varepsilon|X)=0$ is an $(n\times 1)$ zero vector. 
 
-Collecting the above results, allows us to write down the expression for $(-1/n)$ times the expectation of the Hessian matrix of $\ell_n$ which yields the **Fisher Information (Matrix):**
+Collecting the above results, allows us to write down the expression for $(-1/n)$ times the expectation of the **Hessian matrix** of $\ell_n$ which yields the **Fisher Information (Matrix):**
 
 $$
 \begin{align*}
@@ -1049,7 +1053,7 @@ Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$. -->
 
-Of course, the variance expressions in @eq-FIMVar contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: 
+Of course, the variance expressions in @eq-FIMVar contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities; namely 
 $$
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 $$
@@ -1538,15 +1542,15 @@ $$
 $$ 
 where $g(\theta)$ is a **one-to-one (or injective) function** of $\theta\in\Theta;$ i.e. $g$ maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)
 
-Let $\hat{\theta}_{n}$ be the maximum likelihood estimator of $\theta_0.$ 
-
-Then 
+Let $\hat{\theta}_{n}\arg\max_{\theta\in\Theta}\mathcal{L}(\theta)$ be the maximum likelihood estimator of $\theta_0.$ Then 
 $$
 \hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
 $$
 is the maximum likelihood estimator of $\tau_0.$
 :::
 :::
+
+**Example:** $g(\theta)=\theta + 5.$
 
 
 **Proof of @thm-EVP:**
@@ -1563,7 +1567,12 @@ $$
 $$
 This allows us to express the likelihood function $\mathcal{L}_n(\theta)$ used for estimating $\theta_0$ in terms of a likelihood function $\tilde{\mathcal{L}}_n(\tau)$ in $\tau$: 
 $$
-\mathcal{L}_n(\theta) = \mathcal{L}_n(g^{-1}(\tau)) = \tilde{\mathcal{L}}_n(\tau). 
+\begin{align*}
+\mathcal{L}_n(\theta) 
+& = \mathcal{L}_n(g^{-1}(\tau))\\[2ex] 
+& = \prod_{i=1}^n f(X_i|)\\[2ex]
+& = \tilde{\mathcal{L}}_n(\tau)\\[2ex]
+\end{align*} 
 $$
 for all $\theta\in\Theta.$ At $\hat{\theta}_n$ we thus have 
 $$
@@ -1676,7 +1685,11 @@ $$
 
 #### Exercise 5. {-}
 
-Show that the Newton-Raphson algorithm converges under the setup outlined in @sec-ConvNR. 
+Show that the Newton-Raphson algorithm converges; i.e. that 
+$$
+|e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty. 
+$$ 
+under the setup outlined in @sec-ConvNR. 
 
 **Tip:** Use the first-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with **explicit reminder** term $R$ given by 
 $$

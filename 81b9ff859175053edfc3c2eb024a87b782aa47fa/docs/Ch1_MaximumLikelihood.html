@@ -794,6 +794,7 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 %&amp;=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)'(Y-X\beta)-n\right]
 \end{align*}
 \]</span> Putting the above derivative functions into one column vector yields the <span class="math inline">\(((K+1)\times 1)\)</span>-dimensional gradient called <strong>score function</strong> in ML-theory: <span id="eq-LinRegScoreFun"><span class="math display">\[
+\nabla\ell_n(\theta')=
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)
@@ -824,7 +825,7 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 </div>
 </div>
 </div>
-<p>Setting the score function in <a href="#eq-LinRegScoreFun">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, and we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
+<p>Setting the score function in <a href="#eq-LinRegScoreFun">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
 <p>Solving for <span class="math inline">\(\hat\beta_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
 &amp; \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
@@ -840,19 +841,34 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 &amp;\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2,
 \end{align*}
 \]</span> where <span class="math inline">\(\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.\)</span></p>
-<p>Thus, <span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta.\)</span></p>
-<p>Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p>
-<p>However, the ML estimator <span class="math inline">\(s_{ML}^2\)</span> for <span class="math inline">\(\sigma^2\)</span> differs from the unbiased variance estimator <span class="math inline">\(s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.\)</span></p>
+<p><strong>Observations:</strong></p>
+<ul>
+<li><p><span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta=(X'X)^{-1}X'Y.\)</span> <br> Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p></li>
+<li><p><span class="math inline">\(s_{ML}^2\)</span> differs from the unbiased variance estimator <span class="math inline">\(s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.\)</span></p></li>
+</ul>
 <section id="sec-varMLE" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="sec-varMLE"><span class="header-section-number">1.3.1</span> Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></h3>
-<p>To compute the asymptotic variance of the ML-estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML},\)</span> we need</p>
-<ul>
-<li>compute all partial second derivatives of <span class="math inline">\(\ell_n\)</span> and then</li>
-<li>take the expectation of these partial second derivatives and multiply it by <span class="math inline">\(-1/n\)</span>,</li>
-</ul>
-<p>which gives us the <strong>Fisher Information</strong>.</p>
-<p>Let’s do this preliminary work in the following:</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To compute the <strong>asymptotic variance</strong> of the ML-estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML},\)</span> we need to</p>
 <ol type="1">
+<li>compute the Hessian matrix (i.e.&nbsp;all second partial derivatives) of <span class="math inline">\(\ell_n,\)</span><br>
+</li>
+<li>take the expectation of this Hessian matrix and multiply it by <span class="math inline">\(-1/n\)</span>, which gives us the <strong>Fisher Information matrix</strong>.</li>
+<li>Inverting the Fisher information matrix give the <strong>asymptotic variance</strong> expression.</li>
+</ol>
+</div>
+</div>
+<p>Let’s do this preliminary work in the following:</p>
+<ul>
 <li><p>Partial second derivatives with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)}    
@@ -901,7 +917,7 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 &amp;= \dfrac{1}{\sigma^2}X'\varepsilon\\[2ex]
 \end{align*}
 \]</span></p></li>
-</ol>
+</ul>
 <p><span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
@@ -921,7 +937,7 @@ s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})'(Y-X\hat\beta_{ML})\\[2ex]
 &amp;=-\frac{1}{n}\cdot 0=0,
 \end{align*}
 \]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p>
-<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the Hessian matrix of <span class="math inline">\(\ell_n\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
+<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the <strong>Hessian matrix</strong> of <span class="math inline">\(\ell_n\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
 <p><span class="math display">\[
 \begin{align*}
 &amp;\mathcal{I}(\theta) :=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta',\sigma^2)\right)\\[2ex]
@@ -1057,7 +1073,7 @@ $$
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$. -->
-<p>Of course, the variance expressions in <a href="#eq-FIMVar">Equation&nbsp;<span>1.5</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities: <span class="math display">\[
+<p>Of course, the variance expressions in <a href="#eq-FIMVar">Equation&nbsp;<span>1.5</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities; namely <span class="math display">\[
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 \]</span> and <span class="math display">\[
 S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\quad \Sigma_{X'X}^{-1}.
@@ -1466,13 +1482,13 @@ ML-Theory and Machine learning
 <p><span class="theorem-title"><strong>Theorem 1.3 (Equivariance (or Invariance) Property of the ML-Estimator) </strong></span>Let <span class="math display">\[
 \tau_0=g(\theta_0),
 \]</span> where <span class="math inline">\(g(\theta)\)</span> is a <strong>one-to-one (or injective) function</strong> of <span class="math inline">\(\theta\in\Theta;\)</span> i.e.&nbsp;<span class="math inline">\(g\)</span> maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)</p>
-<p>Let <span class="math inline">\(\hat{\theta}_{n}\)</span> be the maximum likelihood estimator of <span class="math inline">\(\theta_0.\)</span></p>
-<p>Then <span class="math display">\[
+<p>Let <span class="math inline">\(\hat{\theta}_{n}\arg\max_{\theta\in\Theta}\mathcal{L}(\theta)\)</span> be the maximum likelihood estimator of <span class="math inline">\(\theta_0.\)</span> Then <span class="math display">\[
 \hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
 \]</span> is the maximum likelihood estimator of <span class="math inline">\(\tau_0.\)</span></p>
 </div>
 </div>
 </div>
+<p><strong>Example:</strong> <span class="math inline">\(g(\theta)=\theta + 5.\)</span></p>
 <p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.3</span></a>:</strong></p>
 <p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it possesses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
 <p>Thus <span class="math display">\[
@@ -1480,7 +1496,12 @@ ML-Theory and Machine learning
 \]</span> and <span class="math display">\[
 \theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
 \]</span> This allows us to express the likelihood function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> used for estimating <span class="math inline">\(\theta_0\)</span> in terms of a likelihood function <span class="math inline">\(\tilde{\mathcal{L}}_n(\tau)\)</span> in <span class="math inline">\(\tau\)</span>: <span class="math display">\[
-\mathcal{L}_n(\theta) = \mathcal{L}_n(g^{-1}(\tau)) = \tilde{\mathcal{L}}_n(\tau).
+\begin{align*}
+\mathcal{L}_n(\theta)
+&amp; = \mathcal{L}_n(g^{-1}(\tau))\\[2ex]
+&amp; = \prod_{i=1}^n f(X_i|)\\[2ex]
+&amp; = \tilde{\mathcal{L}}_n(\tau)\\[2ex]
+\end{align*}
 \]</span> for all <span class="math inline">\(\theta\in\Theta.\)</span> At <span class="math inline">\(\hat{\theta}_n\)</span> we thus have <span class="math display">\[
 \mathcal{L}_n(\hat{\theta}_n) = \mathcal{L}_n(\overbrace{g^{-1}(\hat{\tau}_n)}^{=\hat{\theta}_n})=\tilde{\mathcal{L}}_n(\hat{\tau}_n).
 \]</span> To show now that <span class="math inline">\(\hat\tau\)</span> is the maximum likelihood estimator of <span class="math inline">\(\tau_0,\)</span> we need to show that <span class="math display">\[
@@ -1567,7 +1588,9 @@ f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 </section>
 <section id="exercise-5." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-5.">Exercise 5.</h4>
-<p>Show that the Newton-Raphson algorithm converges under the setup outlined in <a href="#sec-ConvNR"><span>Section&nbsp;1.2.2</span></a>.</p>
+<p>Show that the Newton-Raphson algorithm converges; i.e.&nbsp;that <span class="math display">\[
+|e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
+\]</span> under the setup outlined in <a href="#sec-ConvNR"><span>Section&nbsp;1.2.2</span></a>.</p>
 <p><strong>Tip:</strong> Use the first-order Taylor expansion of <span class="math inline">\(\ell'(\theta_{root})\)</span> around <span class="math inline">\(\theta_{(m)}\)</span> with <strong>explicit reminder</strong> term <span class="math inline">\(R\)</span> given by <span class="math display">\[
 \begin{align*}
 \overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)}
