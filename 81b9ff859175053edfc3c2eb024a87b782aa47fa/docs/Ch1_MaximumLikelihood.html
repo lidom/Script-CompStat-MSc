@@ -156,7 +156,10 @@ div.csl-indent {
   <li><a href="#sec-varMLE" id="toc-sec-varMLE" class="nav-link" data-scroll-target="#sec-varMLE"><span class="toc-section-number">1.3.1</span>  Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></a></li>
   </ul></li>
   <li><a href="#sec-MLAsymp" id="toc-sec-MLAsymp" class="nav-link" data-scroll-target="#sec-MLAsymp"><span class="toc-section-number">1.4</span>  Asymptotic Theory of Maximum-Likelihood Estimators</a></li>
-  <li><a href="#equivariance-property-of-the-ml-estimator" id="toc-equivariance-property-of-the-ml-estimator" class="nav-link" data-scroll-target="#equivariance-property-of-the-ml-estimator"><span class="toc-section-number">1.5</span>  Equivariance Property of the ML-Estimator</a></li>
+  <li><a href="#invariance-property-of-the-ml-estimator" id="toc-invariance-property-of-the-ml-estimator" class="nav-link" data-scroll-target="#invariance-property-of-the-ml-estimator"><span class="toc-section-number">1.5</span>  Invariance Property of the ML-Estimator</a>
+  <ul class="collapse">
+  <li><a href="#one-to-one-functions" id="toc-one-to-one-functions" class="nav-link" data-scroll-target="#one-to-one-functions">One-to-One Functions</a></li>
+  </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -1358,13 +1361,7 @@ Important
 \]</span></p>
 <p>This means that <span class="math display">\[
 -\frac{1}{n}\ell_n''(\theta_0)
-\]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span> <!-- $$
-\begin{align*}
-\operatorname{Bias}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
-&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta_0)\right)-\left(\mathcal{I}(\theta_0)\right)\\[2ex]
-&=0. 
-\end{align*}
-$$ --></p>
+\]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1472,56 +1469,153 @@ ML-Theory and Machine learning
 </div>
 </div>
 </section>
-<section id="equivariance-property-of-the-ml-estimator" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="equivariance-property-of-the-ml-estimator"><span class="header-section-number">1.5</span> Equivariance Property of the ML-Estimator</h2>
-<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<section id="invariance-property-of-the-ml-estimator" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="invariance-property-of-the-ml-estimator"><span class="header-section-number">1.5</span> Invariance Property of the ML-Estimator</h2>
+<p>Suppose that a distribution has the parameter <span class="math inline">\(\theta_0,\)</span> but we are interested in finding an estimator of a function of <span class="math inline">\(\theta_0,\)</span> say <span class="math display">\[
+\eta_0=\tau(\theta_0).
+\]</span> The invariance property of ML-estimators says that if <span class="math inline">\(\hat{\theta}_n\)</span> is the ML-estimator of <span class="math inline">\(\theta_0,\)</span> then <span class="math inline">\(\tau(\hat{\theta}_n)\)</span> is the ML-estimator of <span class="math inline">\(\eta_0=\tau(\theta_0).\)</span></p>
+<section id="one-to-one-functions" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="one-to-one-functions">One-to-One Functions</h3>
+<p>Let the function <span class="math display">\[
+\eta = \tau(\theta)
+\]</span> be a <strong>one-to-one</strong> function. That is, for each value of <span class="math inline">\(\theta\)</span> there is a unique value of <span class="math inline">\(\eta\)</span> and vice versa.</p>
+<p>Important property of one-to-one functions: A one-to-one function <span class="math inline">\(\eta = \tau(\theta)\)</span> possesses a well-defined <strong>inverse</strong> <span class="math display">\[
+\theta=\tau^{-1}(\eta).
+\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-
+Example:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div id="thm-EVP" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 1.3 (Equivariance (or Invariance) Property of the ML-Estimator) </strong></span>Let <span class="math display">\[
-\tau_0=g(\theta_0),
-\]</span> where <span class="math inline">\(g(\theta)\)</span> is a <strong>one-to-one (or injective) function</strong> of <span class="math inline">\(\theta\in\Theta;\)</span> i.e.&nbsp;<span class="math inline">\(g\)</span> maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)</p>
-<p>Let <span class="math inline">\(\hat{\theta}_{n}\arg\max_{\theta\in\Theta}\mathcal{L}(\theta)\)</span> be the maximum likelihood estimator of <span class="math inline">\(\theta_0.\)</span> Then <span class="math display">\[
-\hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
-\]</span> is the maximum likelihood estimator of <span class="math inline">\(\tau_0.\)</span></p>
-</div>
-</div>
-</div>
-<p><strong>Example:</strong> <span class="math inline">\(g(\theta)=\theta + 5.\)</span></p>
-<p><strong>Proof of <a href="#thm-EVP">Theorem&nbsp;<span>1.3</span></a>:</strong></p>
-<p>Since <span class="math inline">\(g\)</span> is a one-to-one function, it possesses an inverse <span class="math inline">\(g^{-1}.\)</span></p>
-<p>Thus <span class="math display">\[
-\hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
-\]</span> and <span class="math display">\[
-\theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
-\]</span> This allows us to express the likelihood function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> used for estimating <span class="math inline">\(\theta_0\)</span> in terms of a likelihood function <span class="math inline">\(\tilde{\mathcal{L}}_n(\tau)\)</span> in <span class="math inline">\(\tau\)</span>: <span class="math display">\[
+<p>For instance, the functions <span class="math display">\[
 \begin{align*}
-\mathcal{L}_n(\theta)
-&amp; = \mathcal{L}_n(g^{-1}(\tau))\\[2ex]
-&amp; = \prod_{i=1}^n f(X_i|)\\[2ex]
-&amp; = \tilde{\mathcal{L}}_n(\tau)\\[2ex]
+\eta = \tau(\theta) &amp; = \theta + 3
+\quad\Rightarrow\quad \theta = \tau^{-1}(\eta) = \eta -3 \\[2ex]
+\eta = \tau(\theta) &amp; = \theta/5  
+\quad\Rightarrow\quad \theta = \tau^{-1}(\eta) = 5 \eta
 \end{align*}
-\]</span> for all <span class="math inline">\(\theta\in\Theta.\)</span> At <span class="math inline">\(\hat{\theta}_n\)</span> we thus have <span class="math display">\[
-\mathcal{L}_n(\hat{\theta}_n) = \mathcal{L}_n(\overbrace{g^{-1}(\hat{\tau}_n)}^{=\hat{\theta}_n})=\tilde{\mathcal{L}}_n(\hat{\tau}_n).
-\]</span> To show now that <span class="math inline">\(\hat\tau\)</span> is the maximum likelihood estimator of <span class="math inline">\(\tau_0,\)</span> we need to show that <span class="math display">\[
+\]</span> are one-to-one functions. However, for instance, the functions <span class="math display">\[
+\begin{align*}
+\tau(\theta) &amp; = \sin(\theta)\\[2ex]
+\tau(\theta) &amp; = \theta^2  
+\end{align*}
+\]</span> are <strong>not</strong> one-to-one functions.</p>
+</div>
+</div>
+<p>In this one-to-one case, it is easily seen that it makes no difference whether we maximize the likelihood function as a function of <span class="math inline">\(\theta\)</span> or as a function of <span class="math inline">\(\eta = \tau(\theta)\)</span>—in each case we get the same answer.</p>
+<p>The likelihood function of <span class="math inline">\(\tau(\theta),\)</span> written as a function of <span class="math inline">\(\eta,\)</span> is given by <span class="math display">\[
+\begin{align*}
+\mathcal{L}^*(\eta)
+&amp;= \prod_{i=1}^n f\big(X_i;\tau^{-1}(\eta)\big)
+= \mathcal{L}\big(\;\overbrace{\tau^{-1}(\eta)}^{=\theta}\;\big)
+\end{align*}
+\]</span> and <span class="math display">\[
+\begin{align*}
+  \sup_{\eta}  \mathcal{L}^*(\eta)
+= \sup_{\eta}  \mathcal{L}\big(\;\overbrace{\tau^{-1}(\eta)}^{=\theta}\;\big)
+= \sup_{\theta}\mathcal{L}\big(\theta\big).
+\end{align*}
+\]</span> Thus, the maximum of <span class="math inline">\(\mathcal{L}^*(\eta)\)</span> is attained at <span class="math display">\[
+\eta=\tau(\theta)=\tau(\hat\theta_n),
+\]</span> showing that the ML-estimator of <span class="math inline">\(\tau(\theta_0)\)</span> is <span class="math inline">\(\tau(\hat\theta_n).\)</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+More general (not one-to-one) functions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In many cases, however, this simply version of the invariance of ML-estimators is not useful since many functions of interest are not one-to-one.</p>
+<p>Luckily, the invariance property of the ML-estimator also holds for functions that are not one-to-one; see Chapter 7 in <span class="citation" data-cites="CasellaBerger_StatInf_2001">Casella and Berger (<a href="#ref-CasellaBerger_StatInf_2001" role="doc-biblioref">2001</a>)</span>.</p>
+</div>
+</div>
+<!-- 
+## General Functions 
+
+To generalize the above argument we need a more general definition of the likelihood function $\mathcal{L}^*(\eta)$ of $\eta = \tau(\theta).$ 
+
+If $\tau(\theta)$ is **not** one-to-one, then for a given value of $\eta$ there may be more than one value of $\theta$ that satisfies $\tau(\theta) = \eta.$ 
+
+In such cases, the correspondence between the maximization over $\eta$ and that over $\theta$ can break down. For instance, if $\hat\theta_n$ is the ML-estimator of $\theta_0,$ there may be another value of $\theta,$ say $\theta',$ for which $\tau(\hat\theta_n)=\tau(\theta').$ 
+
+To avoid such difficulties, we proceed by defining for $\tau(\theta)$ the *induced likelihood function* $\mathcal{L}^*(\eta),$ given by
+$$
+\begin{align*}
+\mathcal{L}^*(\eta) = \sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta).
+\end{align*}
+$${#eq-MLInvariance}
+The value $\hat\eta$ that maximizes $\mathcal{L}^*(\eta)$ will be called the ML-estimator of $\eta_0=\tau(\theta_0),$ and it can be seen from @eq-MLInvariance that the maxima of $\mathcal{L}^*$ and $\mathcal{L}$ coincide; i.e. that 
+$$
+\sup_{\eta}\mathcal{L}^*(\eta) = \sup_{\eta} \left(\sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta)\right).
+$$
+
+
+::: {.callout-note icon=false} 
+## 
+::: {#thm-EVP}
+
+# Invariance Property of ML-Estimators
+
+If $\hat{\theta}_n$ is a ML-estimator of $\theta_0,$ then for any function $\tau(\theta_0),$ the ML-estimator of $\tau(\theta_0)$ is $\tau(\hat{\theta}_n).$
+:::
+:::
+
+**Example:** $g(\theta)=\theta + 5.$
+
+
+**Proof of @thm-EVP:**
+
+Since $g$ is a one-to-one function, it possesses an inverse $g^{-1}.$ 
+
+Thus 
+$$
+\hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
+$$
+and 
+$$
+\theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
+$$
+This allows us to express the likelihood function $\mathcal{L}_n(\theta)$ used for estimating $\theta_0$ in terms of a likelihood function $\tilde{\mathcal{L}}_n(\tau)$ in $\tau$: 
+$$
+\begin{align*}
+\mathcal{L}_n(\theta) 
+& = \mathcal{L}_n(g^{-1}(\tau))\\[2ex] 
+& = \prod_{i=1}^n f(X_i|)\\[2ex]
+& = \tilde{\mathcal{L}}_n(\tau)\\[2ex]
+\end{align*} 
+$$
+for all $\theta\in\Theta.$ At $\hat{\theta}_n$ we thus have 
+$$
+\mathcal{L}_n(\hat{\theta}_n) = \mathcal{L}_n(\overbrace{g^{-1}(\hat{\tau}_n)}^{=\hat{\theta}_n})=\tilde{\mathcal{L}}_n(\hat{\tau}_n). 
+$$
+To show now that $\hat\tau$ is the maximum likelihood estimator of $\tau_0,$ we need to show that
+$$
 \tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau.
-\]</span></p>
-<p>Since <span class="math inline">\(\hat\theta_n\)</span> denotes the ML estimator of <span class="math inline">\(\theta_0,\)</span> we know that <span class="math display">\[
+$$ 
+
+Since $\hat\theta_n$ denotes the ML estimator of $\theta_0,$ we know that 
+$$
 \mathcal{L}_n(\theta)\leq\mathcal{L}_n(\hat\theta_n)\quad\text{for all}\quad\theta\in\Theta.
-\]</span> But since for any <span class="math inline">\(\tau=g(\theta)\)</span> <span class="math display">\[
-\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta)
-\leq
+$$
+But since for any $\tau=g(\theta)$
+$$
+\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta) 
+\leq 
 \mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
-\]</span> we know also that <span class="math display">\[
+$$
+we know also that 
+$$
 \tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau;
-\]</span> i.e., <span class="math inline">\(\hat{\tau}_n\)</span> is indeed a maximum likelihood estimator of <span class="math inline">\(\tau_0.\)</span></p>
+$$
+i.e., $\hat{\tau}_n$ is indeed a maximum likelihood estimator of $\tau_0.$  -->
 <!-- The likelihood function with respect to $\tau$ can be expressed the likelihood function with respect to $\theta = h(\tau)\in\Theta,$ i.e. 
 $$
 \begin{align*}
@@ -1548,6 +1642,7 @@ which shows the statement of @thm-EVP:
 $$
 \hat{\tau}_n=\arg\max_\tau\tilde{\mathcal{L}}(\tau).
 $$ -->
+</section>
 </section>
 <section id="exercises" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
@@ -1898,6 +1993,9 @@ R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-CasellaBerger_StatInf_2001" class="csl-entry" role="doc-biblioentry">
+Casella, George, and Roger Berger. 2001. <em>Statistical Inference</em>. 2nd ed. Duxbury.
+</div>
 <div id="ref-Kirkpatrick_2017" class="csl-entry" role="doc-biblioentry">
 Kirkpatrick, James, Razvan Pascanu, Neil Rabinowitz, Joel Veness, Guillaume Desjardins, Andrei A Rusu, Kieran Milan, et al. 2017. <span>“Overcoming Catastrophic Forgetting in Neural Networks.”</span> <em>Proceedings of the National Academy of Sciences</em> 114 (13): 3521–26.
 </div>

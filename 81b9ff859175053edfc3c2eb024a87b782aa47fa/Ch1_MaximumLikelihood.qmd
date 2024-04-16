@@ -1418,13 +1418,6 @@ $$
 -\frac{1}{n}\ell_n''(\theta_0)
 $$ 
 is an **unbiased estimator** of the Fisher information $\mathcal{I}(\theta_0).$
-<!-- $$
-\begin{align*}
-\operatorname{Bias}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
-&=\mathbb{E}\left(\frac{1}{n}\ell_n''(\theta_0)\right)-\left(\mathcal{I}(\theta_0)\right)\\[2ex]
-&=0. 
-\end{align*}
-$$ -->
 
 ::: {.callout-note}
 # Multivariate Settings
@@ -1534,25 +1527,112 @@ Fisher information can be used as an alternative to the Hessian of the loss func
 :::
 
 
-## Equivariance Property of the ML-Estimator 
+## Invariance Property of the ML-Estimator 
+
+Suppose that a distribution has the parameter $\theta_0,$ but we are interested in finding an estimator of a function of $\theta_0,$ say 
+$$
+\eta_0=\tau(\theta_0).
+$$
+The invariance property of ML-estimators says that if $\hat{\theta}_n$ is the ML-estimator of $\theta_0,$ then $\tau(\hat{\theta}_n)$ is the ML-estimator of $\eta_0=\tau(\theta_0).$
+
+### One-to-One Functions {-}
+
+Let the function 
+$$
+\eta = \tau(\theta) 
+$$ 
+be a **one-to-one** function. That is, for each value of $\theta$ there is a unique value of $\eta$ and vice versa. 
+
+
+Important property of one-to-one functions: A one-to-one function $\eta = \tau(\theta)$ possesses a well-defined **inverse** 
+$$
+\theta=\tau^{-1}(\eta).
+$$ 
+
+
+::: {.callout-note}
+# Example: 
+For instance, the functions
+$$
+\begin{align*}
+\eta = \tau(\theta) & = \theta + 3 
+\quad\Rightarrow\quad \theta = \tau^{-1}(\eta) = \eta -3 \\[2ex]
+\eta = \tau(\theta) & = \theta/5  
+\quad\Rightarrow\quad \theta = \tau^{-1}(\eta) = 5 \eta
+\end{align*}
+$$
+are one-to-one functions. However, for instance, the functions 
+$$
+\begin{align*}
+\tau(\theta) & = \sin(\theta)\\[2ex]
+\tau(\theta) & = \theta^2  
+\end{align*}
+$$
+are **not** one-to-one functions. 
+:::
+
+
+In this one-to-one case, it is easily seen that it makes no difference whether we maximize the likelihood function as a function of $\theta$ or as a function of $\eta = \tau(\theta)$---in each case we get the same answer.
+
+
+
+The likelihood function of $\tau(\theta),$ written as a function of $\eta,$ is given by
+$$
+\begin{align*}
+\mathcal{L}^*(\eta) 
+&= \prod_{i=1}^n f\big(X_i;\tau^{-1}(\eta)\big)
+= \mathcal{L}\big(\;\overbrace{\tau^{-1}(\eta)}^{=\theta}\;\big) 
+\end{align*}
+$$
+and 
+$$
+\begin{align*}
+  \sup_{\eta}  \mathcal{L}^*(\eta) 
+= \sup_{\eta}  \mathcal{L}\big(\;\overbrace{\tau^{-1}(\eta)}^{=\theta}\;\big)
+= \sup_{\theta}\mathcal{L}\big(\theta\big). 
+\end{align*}
+$$
+Thus, the maximum of $\mathcal{L}^*(\eta)$ is attained at 
+$$
+\eta=\tau(\theta)=\tau(\hat\theta_n),
+$$ 
+showing that the ML-estimator of $\tau(\theta_0)$ is $\tau(\hat\theta_n).$ 
+
+::: {.callout-note}
+# More general (not one-to-one) functions
+In many cases, however, this simply version of the invariance of ML-estimators is not useful since many functions of interest are not one-to-one. 
+
+Luckily, the invariance property of the ML-estimator also holds for functions that are not one-to-one; see Chapter 7 in @CasellaBerger_StatInf_2001. 
+:::
+
+<!-- 
+## General Functions 
+
+To generalize the above argument we need a more general definition of the likelihood function $\mathcal{L}^*(\eta)$ of $\eta = \tau(\theta).$ 
+
+If $\tau(\theta)$ is **not** one-to-one, then for a given value of $\eta$ there may be more than one value of $\theta$ that satisfies $\tau(\theta) = \eta.$ 
+
+In such cases, the correspondence between the maximization over $\eta$ and that over $\theta$ can break down. For instance, if $\hat\theta_n$ is the ML-estimator of $\theta_0,$ there may be another value of $\theta,$ say $\theta',$ for which $\tau(\hat\theta_n)=\tau(\theta').$ 
+
+To avoid such difficulties, we proceed by defining for $\tau(\theta)$ the *induced likelihood function* $\mathcal{L}^*(\eta),$ given by
+$$
+\begin{align*}
+\mathcal{L}^*(\eta) = \sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta).
+\end{align*}
+$${#eq-MLInvariance}
+The value $\hat\eta$ that maximizes $\mathcal{L}^*(\eta)$ will be called the ML-estimator of $\eta_0=\tau(\theta_0),$ and it can be seen from @eq-MLInvariance that the maxima of $\mathcal{L}^*$ and $\mathcal{L}$ coincide; i.e. that 
+$$
+\sup_{\eta}\mathcal{L}^*(\eta) = \sup_{\eta} \left(\sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta)\right).
+$$
+
 
 ::: {.callout-note icon=false} 
 ## 
 ::: {#thm-EVP}
 
-# Equivariance (or Invariance) Property of the ML-Estimator
+# Invariance Property of ML-Estimators
 
-Let 
-$$
-\tau_0=g(\theta_0),
-$$ 
-where $g(\theta)$ is a **one-to-one (or injective) function** of $\theta\in\Theta;$ i.e. $g$ maps distinct elements of its domain to distinct elements such that the outputs never repeat. (One-to-one functions are invertible.)
-
-Let $\hat{\theta}_{n}\arg\max_{\theta\in\Theta}\mathcal{L}(\theta)$ be the maximum likelihood estimator of $\theta_0.$ Then 
-$$
-\hat{\tau}_{n} = g\left(\hat{\theta}_{n}\right)
-$$
-is the maximum likelihood estimator of $\tau_0.$
+If $\hat{\theta}_n$ is a ML-estimator of $\theta_0,$ then for any function $\tau(\theta_0),$ the ML-estimator of $\tau(\theta_0)$ is $\tau(\hat{\theta}_n).$
 :::
 :::
 
@@ -1603,7 +1683,7 @@ we know also that
 $$
 \tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau;
 $$
-i.e., $\hat{\tau}_n$ is indeed a maximum likelihood estimator of $\tau_0.$ 
+i.e., $\hat{\tau}_n$ is indeed a maximum likelihood estimator of $\tau_0.$  -->
 
 <!-- The likelihood function with respect to $\tau$ can be expressed the likelihood function with respect to $\theta = h(\tau)\in\Theta,$ i.e. 
 $$
