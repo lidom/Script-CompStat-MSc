@@ -1265,41 +1265,54 @@ for *all possible values* of $\theta\in\Theta,$ since $f$ is a density function.
 Therefore,
 $$
 \begin{align*}
-\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx&=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial}{\partial \theta}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$
 Using that we can here pass the partial derivative under the integral sign, we thus have 
 $$
-\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
+\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx
+=\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx
+=0 
 $${#eq-zero1} 
-And likewise, 
+for all $\theta\in\Theta.$ 
+
+Likewise, 
 $$
 \begin{align*}
-\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx&=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial^2}{\partial \theta^2}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$ 
 Using again that we can here pass the partial derivative under the integral sign, we thus have
 $$
-\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx=0,\quad\text{for all}\quad\theta\in\Theta.
+\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
+=\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx
+=0
 $${#eq-zero2} 
-
+for all $\theta\in\Theta.$
 
 Using @eq-zero1 and @eq-zero2, we can now show that the average 
 $$
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 $$ 
-is **asymptotically normal**. 
-
-This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem. 
+is **asymptotically normal**. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem. 
 
 
-Firstly, for the mean one gets:
+Firstly, the average 
+$$
+\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)
+$$ 
+is taken over i.i.d. random variables: 
+$$
+\frac{\partial}{\partial \theta} \ln f(X_1;\theta_0),\dots,\frac{\partial}{\partial \theta} \ln f(X_n;\theta_0)\overset{\text{i.i.d.}}{\sim}\frac{\partial}{\partial \theta} \ln f(X;\theta_0)
+$$ 
+
+Secondly, for the mean one gets:
 $$
 \begin{align*}
 \mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\[2ex]
-&=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\quad[\text{i.i.d.}]\\[2ex]
-&=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)\quad[\text{chain rule}]\\[2ex]
+&=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\[2ex]
+&=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X;\theta_0)}{f(X;\theta_0)}\right)\quad[\text{chain rule}]\\[2ex]
 &=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
 {f(x;\theta_0)}f(x;\theta_0)dx\quad[\text{Def. of $\mathbb{E}$}]\\[2ex] 
 &=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex] 
@@ -1308,36 +1321,40 @@ $$
 $${#eq-Mean}
 where the last step follows from @eq-zero1. 
 
-Secondly, for the variance one gets:
+Thirdly, for the variance one gets:
 $$
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\
-&=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\quad[\text{i.i.d.}]\\
-&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X_i;\theta_0)}{f(X_i|\theta)}\right)\quad[\text{chain rule}]\\
-&=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\
-&=:\frac{1}{n}\mathcal{I}(\theta_0),
+&=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\
+&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X;\theta_0)}{f(X|\theta)}\right)\quad[\text{chain rule}]\\
+&=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
+&=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
 $$
-where the simplification of the variance expression to a second moment expression follows from @eq-Mean. 
+where the simplification of the variance expression to a second moment expression follows from @eq-Mean. </br>
 
-$\mathcal{I}(\theta_0)$ is the Fisher information (here a scalar) evaluated at $\theta_0.$ 
+> We can write the last expression using the Fisher Information $\mathcal{I}(\theta_0)-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))$ since below in @eq-FisherInfoDeriv we'll see that 
+$$
+\begin{align*}
+\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
+& =-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)) = \mathcal{I}(\theta_0).
+\end{align*}
+$$  
+<!-- , where we found that 
+$$
+\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)=0.
+$$  -->
 
-Thirdly, the average 
-$$
-\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)
-$$ 
-is taken over i.i.d. random variables: 
-$$
-\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0),\quad i=1,\dots,n.
-$$ 
+
+
 Thus, we can apply the **Lindeberg-Lévy central limit theorem** from which it follows that
 $$
 \frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 $$
 as $n\to\infty.$
 
-Thus, that by our mean value expression in @eq-ml2 
+By our mean value expression in @eq-ml2 
 $$
 \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 $$ 
@@ -1392,23 +1409,23 @@ Taking the mean of $-\frac{1}{n}\ell_n''(\theta_0)$ yields that
 $$
 \begin{align*}
 \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
-&=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}
-{f(X_i;\theta_0)}+\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
-{f(X_i;\theta_0)}\right)^2\right)\quad[\text{i.i.d.}]\\[2ex]
-&=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}
-{f(X_i;\theta_0)}\right)^2\right)
+&=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}
+{f(X;\theta_0)}+\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}
+{f(X;\theta_0)}\right)^2\right)\quad[\text{i.i.d.}]\\[2ex]
+&=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}
+{f(X;\theta_0)}\right)^2\right)
 \end{align*}
 $$
 From @eq-Mean, we know that 
-$\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)=0$
+$\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0$
 thus
 $$
 \begin{align*}
 \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
-&=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X_i;\theta_0)}{f(X_i;\theta_0)}\right)^2\right)\\[2ex]
+&=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\[2ex]
 &=\mathcal{I}(\theta_0),
 \end{align*}
-$$
+$${#eq-FisherInfoDeriv}
 $$
 \Rightarrow \qquad \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)=\mathcal{I}(\theta_0)\qquad
 $$
@@ -1430,7 +1447,7 @@ $$
 Var\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
 &=Var\left(-\frac{1}{n}\sum_{i=1}^n\frac{\partial^2}{\partial \theta\partial \theta}\ln f(X_i;\theta_0)\right)\\[2ex]
 &=\frac{n}{n^2}
-\underbrace{Var\left(\frac{\partial^2}{\partial \theta \partial \theta}  \ln f(X_i;\theta_0)\right)}_{=\texttt{constant}}\\[2ex]
+\underbrace{Var\left(\frac{\partial^2}{\partial \theta \partial \theta}  \ln f(X;\theta_0)\right)}_{=\texttt{constant}}\\[2ex]
 &=\frac{1}{n}\texttt{constant},
 \end{align*}
 $$
@@ -1469,9 +1486,10 @@ Luckily, we are actually close now.
 
 Next, we use that ML estimators $\hat\theta_n$ are (weakly) **consistent**, i.e., 
 $$
-\hat\theta_n\to_p\theta_0\quad\text{as}\quad n\to\infty;
+\hat\theta_n\to_p\theta_0\quad\text{as}\quad n\to\infty.
 $$
-this is, for instance, implied by our results in @sec-LinRegNorm for the case of ML estimation in linear regression under normality.  
+
+> **Example:** Our results in @sec-LinRegNorm imply, for instance, that the ML estimator $\hat{\beta}_n$ is consistent for $\beta.$  
 
 
 Since $\psi_n$ is a **mean value** between $\theta_0$ and $\hat{\theta}_n$ (@eq-MVT), consistency of $\hat{\theta}_n$ implies that 
@@ -1748,7 +1766,7 @@ $$
 $$
 \sqrt{n}(\hat\theta_n-\theta_0)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right).
 $$
-Derive the expression for the Fischer information $\mathcal{I}(\theta_0).$ Use the Fisher information to give the *explicit* formula for the asymptotic distribution of $\hat\theta_n$.
+Derive the expression for the Fisher information $\mathcal{I}(\theta_0).$ Use the Fisher information to give the *explicit* formula for the asymptotic distribution of $\hat\theta_n$.
 
 
 
