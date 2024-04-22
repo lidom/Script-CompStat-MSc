@@ -244,12 +244,13 @@ div.csl-indent {
 
 </header>
 
-<p>The Expectation Maximization (EM) algorithm is often used to simplify, or make possible, complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating Gaussian mixture distributions, as this is probably its most well-known application. Even the original work on the EM algorithm <span class="citation" data-cites="Dempster_1977">(<a href="#ref-Dempster_1977" role="doc-biblioref">Dempster, Laird, and Rubin 1977</a>)</span> already dealt with the estimation of Gaussian mixture distributions.</p>
-<section id="possible-applications-of-gaussian-mixture-distributions" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="possible-applications-of-gaussian-mixture-distributions">Possible Applications of Gaussian mixture distributions</h4>
+<p>The Expectation Maximization (EM) algorithm is often used to simplify or to facilitate complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating <strong>Gaussian mixture distributions</strong>, as this is probably its most well-known application. Even the original work on the EM algorithm <span class="citation" data-cites="Dempster_1977">(<a href="#ref-Dempster_1977" role="doc-biblioref">Dempster, Laird, and Rubin 1977</a>)</span> already dealt with the estimation of Gaussian mixture distributions.</p>
+<section id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions">Possible Applications of the EM-Algorithm and Gaussian mixture distributions</h4>
 <ul>
-<li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>).</li>
-<li>For instance: Automatic video editing (e.g., separation of back- and foreground)</li>
+<li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>). For instance: Automatic video editing (e.g., separation of back- and foreground)<br>
+</li>
+<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to solve the maximization problem.</li>
 </ul>
 </section>
 <section id="some-literature" class="level4 unnumbered">
@@ -262,15 +263,14 @@ div.csl-indent {
 <section id="r-packages-for-this-chapter" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="r-packages-for-this-chapter"><code>R</code>-Packages for this Chapter</h4>
 <p>The following <code>R</code>-packages are used in this chapter:</p>
-<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-1_592d14ea947eb78ac0cf78c2bb0a8293">
+<div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-1_b7bb813eb0e2210fd79fd91828638518">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tidyverse"</span>,      <span class="co"># Tidyverse packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">"palmerpenguins"</span>, <span class="co"># Penguins data</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"scales"</span>,         <span class="co"># Transparent colors: alpha()</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">"RColorBrewer"</span>,   <span class="co"># Nice colors</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>          <span class="st">"mclust"</span>,         <span class="co"># Gaussian mixture models for clustering</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="st">"MASS"</span>)           <span class="co"># Used to generate multivariate </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            <span class="co"># random normal variables</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(pkgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="st">"MASS"</span>)           <span class="co"># Used to generate multivariate random normal variables</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(pkgs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For now, we need to load the following <code>R</code>-packages:</p>
 <div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-2_c75c9bd1853671f8ab5e474c82c00593">
@@ -309,7 +309,7 @@ Caution
 <p>Afterwards we can use the data in <code>penguin_species</code> to check how good our cluster analysis is.</p>
 </div>
 </div>
-<div class="cell" data-layout-align="center" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-4_7016088e04509b4aac7b364ee9607dcb">
+<div class="cell" data-layout-align="center" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-4_3fe58e5ee2f2974839541a6bc6e4e8de">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Select a color palette</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>col_v <span class="ot">&lt;-</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">name =</span> <span class="st">"Set2"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -324,7 +324,7 @@ Caution
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(species, flipper)         <span class="co"># select variables </span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="fu">nrow</span>(penguins)                  <span class="co"># sample size</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="fu">nrow</span>(penguins)                  <span class="co"># sample size (n=187)</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Pulling out the variable 'penguin_species':</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>penguin_species <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(penguins, species)</span>
@@ -352,9 +352,10 @@ Caution
 </div>
 <section id="clustering-using-gaussian-mixture-distributions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions">Clustering using Gaussian Mixture Distributions</h4>
+<p>At the end of this chapter, we’ll be able to</p>
 <ol type="1">
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the data points <span class="math inline">\(x_i\)</span> to the group that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a> and <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>)</li>
+<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a> and <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>)</li>
 </ol>
 <div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/fig-GMM-plot1_f7a60418ecca153a50c5164a7120d00f">
 <div class="cell-output-display">
@@ -367,7 +368,7 @@ Caution
 </div>
 </div>
 <p>Figure <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
-<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a>. We’ll learn everything about it in this chapter:</p>
+<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a>:</p>
 <div class="cell" data-hash="Ch2_EMAlgorithmus_cache/html/unnamed-chunk-6_9cc4b140c90b4056e6e9d7a3c4b8f7d3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
@@ -429,13 +430,14 @@ Caution
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"jitter"</span>, <span class="at">jitter =</span> .<span class="dv">0005</span>, <span class="at">at =</span> .<span class="dv">001</span>,</span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>           <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">col=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">bg=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>But coding is nothing without understanding. We’ll learn the underlying statistical method it in this chapter.</p>
 </section>
 </section>
 <section id="the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions"><span class="header-section-number">2.2</span> The EM Algorithm for Maximum Likelihood Estimation of Gaussian Mixture Distributions</h2>
 <section id="gaussian-mixture-models-gmm" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="gaussian-mixture-models-gmm"><span class="header-section-number">2.2.1</span> Gaussian Mixture Models (GMM)</h3>
-<p>We denote a random variable <span class="math inline">\(X\)</span> that follows a Gaussian mixed distribution as <span class="math display">\[
+<p>We denote a random variable <span class="math inline">\(X\)</span> that follows a Gaussian mixture distribution as <span class="math display">\[
 X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
 \]</span></p>
 <p>The corresponding density function of a Gaussian mixture distribution is defined as follows: <span id="eq-GMMdens"><span class="math display">\[
@@ -466,14 +468,14 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X
 X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}).
 \]</span></li>
 </ul>
-<blockquote class="blockquote">
-<p>That is, in a certain sense, the observed data <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> “know” the unknown parameters <span class="math inline">\(\boldsymbol{\pi},\)</span> <span class="math inline">\(\boldsymbol{\mu}\)</span> und <span class="math inline">\(\boldsymbol{\sigma}\)</span> and we “only” have to elicit this information from them.</p>
-</blockquote>
+<!-- 
+> That is, in a certain sense, the observed data $\mathbf{x}=(x_1,\dots,x_n)$ "know" the unknown parameters $\boldsymbol{\pi},$ $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ and we "only" have to elicit this information from them. 
+-->
 <ul>
 <li><p><strong>Estimation Idea:</strong> Choose <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> such that <span class="math inline">\(f_{GMM}(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> <strong>“optimally”</strong> fits the observed data <span class="math inline">\(\mathbf{x}\)</span>.</p></li>
 <li><p><strong>Implementation of the Estimation Idea:</strong> Maximize (with respect to <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span>) the likelihood function <span class="math display">\[
 \mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
-\]</span> Or maximize the log-likelihood function (simpler maximization) <span id="eq-logLikGMM"><span class="math display">\[
+\]</span> Or, equivalently, maximize the log-likelihood function (simpler maximization) <span id="eq-logLikGMM"><span class="math display">\[
 \begin{align*}
 %\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
 \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
@@ -488,11 +490,16 @@ X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Maximization constraints
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The maximization must take into account the parameter constraints in <a href="#eq-GMMdens">Equation&nbsp;<span>2.1</span></a>; namely, <span class="math inline">\(\sigma_g&gt;0\)</span> and <span class="math inline">\(\pi_g&gt;0\)</span> for all <span class="math inline">\(g=1,\dots,G\)</span> and <span class="math inline">\(\sum_{g=1}^G\pi_g=1\)</span>.</p>
+<p>The maximization must take into account the parameter constraints in <a href="#eq-GMMdens">Equation&nbsp;<span>2.1</span></a>; namely,</p>
+<ul>
+<li><span class="math inline">\(\sigma_g&gt;0\)</span> and</li>
+<li><span class="math inline">\(\pi_g&gt;0\)</span> for all <span class="math inline">\(g=1,\dots,G\)</span> such that</li>
+<li><span class="math inline">\(\sum_{g=1}^G\pi_g=1\)</span>.</li>
+</ul>
 </div>
 </div>
 <p>The maximizing parameter values <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\pi}}\)</span></span>, <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\mu}}\)</span></span> and <span style="color:#FF5733"><span class="math inline">\(\hat{\boldsymbol{\sigma}}\)</span></span> are the <span style="color:#FF5733"><strong>ML-Estimators</strong></span>:</p>
@@ -500,14 +507,14 @@ Note
 (\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
 \]</span></p>
 <p>😒 <strong>Problems with singularities in numerical solutions:</strong> If one tries to solve the above maximization problem <a href="https://jaimemosg.github.io/EstimationTools/index.html">numerically with the help of the computer</a>, one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities.</p>
-<p>For real GMMs (i.e.&nbsp;<span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s) tries to describe only single data points. This leads to a Gaussian density function centered around a <strong>single data point</strong> <span class="math inline">\(x_i\)</span> such that<br>
+<p>For real GMMs (i.e.&nbsp;GMMs with more than one group <span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s), say <span class="math inline">\(\varphi_g(x_i|\mu_g,\sigma_g),\)</span> tries to describe only single data points. This leads to a Gaussian density function centered around a <strong>single data point</strong> <span class="math inline">\(x_i\)</span> such that<br>
 <span class="math display">\[
-\mu_g=x_i.
-\]</span> and <span class="math display">\[
+\varphi(x_i|{\color{red}\mu_g=x_i},\sigma_g),
+\]</span> where <span class="math display">\[
 \sigma_g\to 0.
 \]</span> This degenerating situation leads to <strong>very large</strong> density function values, <span class="math display">\[
 \varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
-\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>2.3</span></a>). Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible estimation results.</p>
+\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1">Figure&nbsp;<span>2.3</span></a>).</p>
 <div class="cell" data-layout-align="center" data-animation.hook="gifski" data-hash="Ch2_EMAlgorithmus_cache/html/fig-dirac1_f1fb5dbf386614d9df20d8ae75b1c733">
 <div class="cell-output-display">
 <div id="fig-dirac1" class="quarto-figure quarto-figure-center anchored">
@@ -518,6 +525,7 @@ Note
 </div>
 </div>
 </div>
+<p>Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible, non-useful estimation results.</p>
 <p>🤓 <strong>Analytic solution:</strong> It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see <a href="#eq-logLikGMM">Equation&nbsp;<span>2.2</span></a>) analytically. If you do this, you will get the following expressions: <span id="eq-AnalyticSol1"><span class="math display">\[
 \begin{align*}
 \hat\pi_g&amp;=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
@@ -537,7 +545,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Deriving the above expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
+<p>Deriving the expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
 <!-- In one of the exercises, you may derive the expression for $\hat\mu_g$. --></p>
 </div>
 </div>
@@ -548,24 +556,29 @@ Note
 <li><span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span>,</li>
 </ul>
 <p>because the probabilities <span class="math inline">\(0\leq p_{ig}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a>) depend on these unknown parameters.</p>
-<ul>
-<li>The probability <span class="math inline">\(p_{ig}\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.</li>
-<li>The probability <span class="math inline">\(\pi_g\)</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
-</ul>
+<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Prior and Posterior Probabilities
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Still, we cannot properly define what we mean by “prior probability” and “posterior probability”. We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>.</p>
+<ul>
+<li>The probability <span class="math display">\[
+\pi_g = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g\right)
+\]</span><br>
+in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
+<li>The conditional probability <span class="math display">\[
+p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)
+\]</span> in <a href="#eq-AnalyticSol2">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
+</ul>
+<p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior"><span>Section&nbsp;2.3.2</span></a>.</p>
 </div>
 </div>
-<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
 <p>🥳 <span style="color:#138D75"><strong>Solution: The EM Algorithm</strong></span></p>
 </section>
 </section>
@@ -573,15 +586,16 @@ Note
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-EM1"><span class="header-section-number">2.2.3</span> The EM Algorithm for GMMs</h3>
 <p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1">Equation&nbsp;<span>2.3</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
 <ul>
-<li>the (unknown) posterior probabilities <span class="math display">\[
-p_{ig}\quad\text{for}\quad i=1,\dots,n,\; g=1,\dots,G
-\]</span></li>
-</ul>
-<p>and of</p>
-<ul>
-<li>the (unknown) parameters <span class="math display">\[
+<li><p>the (unknown) posterior probabilities <span class="math display">\[
+\begin{align*}
+p_{ig}
+&amp;= \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)\\[2ex]
+&amp; = \frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+\end{align*}
+\]</span> for <span class="math inline">\(i=1,\dots,n,\)</span> and <span class="math inline">\(g=1,\dots,G,\)</span> and of</p></li>
+<li><p>the (unknown) parameters <span class="math display">\[
 (\pi_g,\mu_g,\sigma_g) \quad\text{for}\quad g=1,\dots,G
-\]</span></li>
+\]</span></p></li>
 </ul>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1184,6 +1198,9 @@ Hastie, Trevor, Robert Tibshirani, Jerome H Friedman, and Jerome H Friedman. 200
 </div>
 <div id="ref-palmerpenguins" class="csl-entry" role="doc-biblioentry">
 Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+<div id="ref-Traiberman_AER2019" class="csl-entry" role="doc-biblioentry">
+Traiberman, Sharon. 2019. <span>“Occupations and Import Competition: Evidence from Denmark.”</span> <em>American Economic Review</em> 109 (12): 4260–4301.
 </div>
 </div>
 </section>

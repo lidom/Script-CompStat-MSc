@@ -12,15 +12,76 @@ The bootstrap is an important tool of modern statistical analysis. It establishe
 
 Some literature:
 
+* @Shao_Tu_1996: The Jackknife and Bootstrap
 * @Hall_1992: The Bootstrap and Edgeworth Expansion
 * @Efron_Tibshirani_1994: An Introduction to the Bootstrap
-* @Shao_Tu_1996: The Jackknife and Bootstrap
 * @Horowitz_2001: The Bootstrap. In: Handbook of Econometrics
 * @Davison_Hinkley_2013: Bootstrap Methods and their Applications
 
 
-## The Empirical Distribution Function
+::: {.callout-tip}
+## Bradley Efron
 
+The bootstrap method is attributed to [Bradley Efron](https://statistics.stanford.edu/people/bradley-efron), who received the *[International Prize in Statistics](https://statsandstories.net/methods/2018/9/28/bootstrapping-an-international-prize)* (the Nobel price of statistics) for his seminal works on the bootstrap method. 
+:::
+
+
+
+## Illustration: When are you happy about the Bootstrap? {#sec-Illustraction}
+
+Suppose that we wish to invest a fixed sum of money in two financial assets that yield returns of $X$ and $Y.$ These returns $X$ and $Y$ are random with 
+
+* $Var(X)=\sigma^2_X$
+* $Var(Y)=\sigma^2_Y$ 
+* $Cov(X,Y)=\sigma_{XY}$
+
+We want to invest a fraction $\alpha\in(0,1)$ in $X$ and invest the remaining $1-\alpha$ in $Y.$
+
+Our aim is to minimize the variance (risk) of our investment, i.e., we want to minimize
+$$
+Var\left(\alpha X + (1-\alpha)Y\right).
+$$ 
+One can show that the value $\alpha$ that minimizes this variance is
+$$
+\alpha = \frac{\sigma^2_Y - \sigma_{XY}}{\sigma^2_X + \sigma^2_Y - 2\sigma_{XY}}.
+$${#eq-alpha}
+Using a data set that contains past measurements 
+$$
+((X_1,Y_1),\dots,(X_n,Y_n))
+$$
+for $X$ and $Y,$ we can estimate the unknown $\alpha$ by plugging in estimates of the variances and covariances
+$$
+\hat\alpha = \frac{\hat\sigma^2_Y - \hat\sigma_{XY}}{\hat\sigma^2_X + \hat\sigma^2_Y - 2\hat\sigma_{XY}}
+$${#eq-alphahat}
+with 
+$$
+\begin{align*}
+\hat{\sigma}^2_X&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2\\ 
+\hat{\sigma}^2_Y&=\frac{1}{n}\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2\\ 
+\hat{\sigma}_{XY}&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right),
+\end{align*}
+$$
+where 
+$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$ and 
+$\bar{Y}=\frac{1}{n}\sum_{i=1}^nY_i.$
+
+It is natural to wish to quantify the accuracy of our estimator 
+$$
+\hat\alpha\approx \alpha.
+$$ 
+
+For instance, to construct a confidence interval we need to know the standard error of the estimator $\hat\alpha$, 
+$$
+\sqrt{Var(\hat\alpha)} = \operatorname{SE}(\hat\alpha)=?
+$$
+However, computing $\operatorname{SE}(\hat\alpha)$ is here difficult due to the definition of $\hat\alpha$ in @eq-alphahat which contains variance estimates also in the denominator. 
+
+In such cases, we are happy to use the Bootstrap which allows us to approximate $\operatorname{SE}(\hat\alpha)$ simply by resampling from the data. 
+
+Moreover, specific versions of the Bootstrap are found to be **more accurate** than standard asymptotic theory results. 
+
+
+## Recap: The Empirical Distribution Function
 
 The distribution of a real-valued random variable $X$ can be completely described by its distribution function
 $$
@@ -28,14 +89,33 @@ F(x)=P(X\leq x)\quad \text{for all } x\in\mathbb{R}.
 $$
 
 
-
-
 For given data, the sample analogue of $F$ is the so-called **empirical distribution function**, which is an important tool of statistical inference.
 
 **Data:** i.i.d. random sample $X_1,\dots,X_n$ from $X\sim F$
 
 
-Let $1_{(\cdot)}$ denote the indicator function, i.e., $1_{(x\leq t)}=1$ if $x\leq t$, and $1_{(x\leq t)}=0$ if $x>t.$
+Let $1_{(\cdot)}$ denote the indicator function, i.e., 
+$$
+1_{(x\leq t)}=\left\{
+  \begin{array}
+  1 & \quad\text{if}\; x\leq t\\
+  0 & \quad\text{if}\; x>t.
+  \end{array}
+  \right.
+$$  
+
+
+
+::: {.callout-note icon=false} 
+##
+::: {#def-cdf}
+# (Cumulative) Distribution Function
+$$
+F(x)=\mathbb{P}(X \leq x).
+$$
+:::
+:::
+
 
 ::: {.callout-note icon=false} 
 ##
@@ -52,23 +132,35 @@ I.e $F_n(x)$ is the proportion of observations with $X_i\le x,$ $i=1,\dots,n.$
 
 **Properties:**
 
-* $0\le F_n(x)\le 1$ 
-* $F_n(x)=0,$ if $x<X_{(1)}$, where $X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}$ denotes the **order-statistic**. 
-* $F_n(x)=1,$ if $x\ge X_{(n)}$, where $X_{(n)}$ is largest observation
+* $0\le F_n(x)\le 1$</br> 
+* $F_n(x)=0,$ if $x<X_{(1)}$, where $X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}$ denotes the **order-statistic**.</br> 
+* $F_n(x)=1,$ if $x\ge X_{(n)}$, where $X_{(n)}$ is largest observation</br>
 * $F_n$ is a monotonically increasing step function
 
 
 ::: {.callout-note}
-Structurally, $F_n$ itself is a distribution function. $F_n$ is the distribution function of a **discrete random variable** $X^*$ 
+# The empirical distribution function $F_n$ is itself is a distribution function
 
-* with possible values $X^*\in\{X_1,\dots,X_n\}$ and 
-* with $P(X^*=X_i)=\frac{1}{n}$ for each $i=1,\dots,n.$
+The empirical distribution funciton $F_n$ is the distribution function  (@def-cdf) of the **discrete random variable** $X^*,$ where  
+
+* $X^*\in\{X_1,\dots,X_n\}$ 
+
+and 
+
+* $P(X^*=X_i)=\frac{1}{n}$ for each $i=1,\dots,n.$
+
+Thus
+
+$$
+F_n(x) = \mathbb{P}\left(X^*\leq x\right)=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}
+$$
 :::
 
 
+::: {.callout-note icon=false} 
+##
 ::: {#exm-ecdfexample}
-
-# Empirical distribution function
+# Computing the empirical distribution function in R 
 
 <br>
 
@@ -96,22 +188,58 @@ observedSample <- c(5.20, 4.80, 5.30, 4.60,
 myecdf_fun     <- ecdf(observedSample)
 
 plot(myecdf_fun, main="")
+
+
+## Note: ecdf() returns a function!
+myecdf_fun(5.0)
 ```
 :::
-
+:::
 
 $F_n(x)$ depends on the i.i.d. random sample $X_1,\dots,X_n$ and thus is itself a **random function**. 
 
 We obtain
+$$
+nF_n(x)\sim B(n, p=F(x))\quad x\in\mathbb{R}
+$$
+ 
+I.e., $nF_n(x)$ has a binomial distribution with parameters $n$ ("number of trials") and $p=F(x)$ ("probability of success on a single trial").
 
-* For every $x\in\mathbb{R}$
- $$
- nF_n(x)\sim B(n, p=F(x))
- $$
- I.e., $nF_n(x)$ has a binomial distribution with parameters $n$ ("number of trials") and $p=F(x)$ ("probability of success on a single trial").
-* $\mathbb{E}(F_n(x))=F(x)$
-* $\mathbb{V}(F_n(x))=\frac{F(x)(1-F(x))}{n}$
+Thus, 
+$$
+\begin{align*}
+\mathbb{E}(nF_n(x))& = np = nF(x)\\[2ex]
+\Rightarrow \quad \mathbb{E}(F_n(x))& = p = F(x)\\[2ex]
+\Rightarrow \quad \operatorname{Bias}(F_n(x))& = \mathbb{E}(F_n(x)) - F(x) =0\\
+\end{align*}
+$$
+and 
+$$
+\begin{align*}
+Var(nF_n(x))& = np(1-p) = nF(x)(1-F(x))\\[2ex]
+\Rightarrow \quad Var(F_n(x))& = \frac{nF(x)(1-F(x))}{n^2}=\frac{F(x)(1-F(x))}{n}
+\end{align*}
+$$
+such that
+$$
+\begin{align*}
+\operatorname{MSE}(F_n(x))
+& = (\operatorname{Bias}(F_n(x)))^2 + Var(F_n(x))\\[2ex]
+& =\frac{F(x)(1-F(x))}{n}.
+\end{align*}
+$$
 
+This allows us to conclude that 
+$$
+\begin{align*}
+F_n(x) & \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
+\Rightarrow \quad F_n(x) & \to_{p} F(x)\quad\text{as}\quad n\to\infty.
+\end{align*}
+$$
+
+That is, $F_n(x)$ is **point-wise** for each $x\in\mathbb{R}$ a weakly consistent estimator of $F(x).$  
+
+The Clivenko-Cantelli @thm-Clivenko-Cantelli states that $F_n$ is even **uniformly** over $\mathbb{R}$ a consistent estimator of $F.$
 
 ::: {.callout-note icon=false} 
 ## 
@@ -119,7 +247,11 @@ We obtain
 
 # Theorem of Glivenko-Cantelli
 $$
-P\left(\lim_{n\rightarrow\infty} \sup_{x\in\mathbb{R}} |F_n(x)-F(x)|=0\right)=1
+\begin{align*}
+&\quad P\left(\lim_{n\rightarrow\infty} \sup_{x\in\mathbb{R}} |F_n(x)-F(x)|=0\right)=1\\[2ex]
+\Leftrightarrow &\quad 
+\sup_{x\in\mathbb{R}} |F_n(x)-F(x)|\to_{a.s.} 0
+\end{align*}
 $$
 :::
 :::
@@ -134,19 +266,20 @@ The basic idea of the bootstrap is to replace random sampling from the true (unk
 $$
 P(X\in [a,b])=F(b)-F(a).
 $$
+Let $\theta_0$ denote a distribution parameter of $F$ which we want to estimate, and let $\hat\theta_n$ denote an estimator of $\theta_0.$</br>
 If we would know $F,$ we could generate arbitrarily many realizations of an estimator $\hat{\theta}_n$ 
 $$
 \hat{\theta}_{n,1}, \hat{\theta}_{n,2}, \dots, \hat{\theta}_{n,m}
 $$
-with $m\to\infty$ and do inference about $\theta_0$ using these realizations. 
+with $m\to\infty$ and do inference about $\theta_0$ using these realizations. Unfortunately, we don't know $F,$ thus Monte Carlo inference is infeasible.  
 
-**The idea of the bootstrap (doing a feasible Monte Carlo simulation):** </br> 
-Mimicking the data generating process: Instead of random sampling from $F,$ which is infeasible, the bootstrap uses random sampling from the known empirical distribution function $F_n$ to generate arbitrarily many **bootstrap realizations** of an estimator $\hat{\theta}_n$ 
+**The idea of the bootstrap is to make the infeasible Monte Carlo inference feasible:** </br> 
+Instead of random sampling from $F,$ which is infeasible, the bootstrap uses random sampling from the known empirical distribution function $F_n$ to generate arbitrarily many **bootstrap realizations** of an estimator $\hat{\theta}_n$ 
 $$
 \hat{\theta}^*_{n,1}, \hat{\theta}^*_{n,2}, \dots, \hat{\theta}^*_{n,m}
 $$
 with $m\to\infty$ and do inference about $\theta_0$ using these bootstrap realizations.</br> 
-This is justified asymptotically since for large $n,$ the empirical distribution $F_n$ of the sample values is "close" to the unknown distribution $F$ (Glivenko-Cantelli @thm-Clivenko-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$   
+This is justified asymptotically since for large $n,$ the empirical distribution $F_n$ is "close" to the unknown distribution $F$ (Glivenko-Cantelli @thm-Clivenko-Cantelli). That is, for $n\rightarrow\infty$ the relative frequency of observations $X_i$ in $[a,b]$ converges to $P(X\in [a,b])$   
 $$
   \begin{align*}
   \underbrace{\frac{1}{n}\sum_{i=1}^n1_{(X_i\in[a,b])}}_{=F_n(b)-F_n(a)}&\to_p \underbrace{P(X\in [a,b])}_{=F(b)-F(a)}
@@ -155,72 +288,82 @@ $$
 
 
 
-
-
-::: {.callout-tip}
-
-## Bradley Efron
-
-The bootstrap method is attributed to [Bradley Efron](https://statistics.stanford.edu/people/bradley-efron), who received the *[International Prize in Statistics](https://statsandstories.net/methods/2018/9/28/bootstrapping-an-international-prize)* (the Nobel price of statistics) for his seminal works on the bootstrap method. 
-:::
-
 ## The Nonparametric (Standard) Bootstrap
 
 
 **Setup:**
 
 * i.i.d. sample $\mathcal{S}_n=\{X_1,\dots,X_n\},$ where $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}F.$ 
-* The distribution $F$ is depends on an unknown parameter (vector) $\theta_0.$
-* The data $X_1,\dots,X_n$ is used to estimate (an element of) $\theta_0.$
+* The distribution $F$ is depends on an unknown parameter $\theta_0.$
+* The data $X_1,\dots,X_n$ is used to estimate $\theta_0.$
 * Thus, the estimator is a function of the random sample 
 $$
   \hat\theta_n\equiv \hat\theta(X_1,\dots,X_n).
 $$
 
-**Inference:** We are interested in evaluating the distribution of 
+Moreover, for simplicity let us focus on unbiased and $\sqrt{n}$ consistent estimators, i.e.
+
+* $\mathbb{E}\left(\hat\theta_n\right)=\theta_0$
+* $\operatorname{SE}\left(\hat\theta_n\right)=\sqrt{Var\left(\hat\theta_n\right)}=\frac{1}{\sqrt{n}}\cdot\text{constant}$
+
+**Inference:** In order to provide standard errors, construct confidence intervals, and to perform tests of hypothesis, we are interested in learning the distribution of 
 $$
-\hat\theta_n-\theta_0
-$$ 
-in order to provide standard errors, construct confidence intervals, and to  perform tests of hypothesis.
+\sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty,
+$$
+i.e. in learning the limit of 
+$$
+H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
+$$
+as $n\to\infty.$
 
 
-### The Bootstrap Algorithm {-}
+Of course, we could do asymptotic statistics. For instance, using the Lindeberg-Lévy CLT, we may be able to show that that the limit of $H_{n}(x)$ is the Normal distribution. 
 
+However, deriving a useful, explicit expression of the asymptotic variance of $\hat{\theta}_n$ can be very hard (see @sec-Illustraction). Then, one is very happy to use the bootstrap instead of doing painful math. 
+
+
+::: {.callout-note}
+# The Bootstrap Algorithm (Core Part)
 1. **Draw a bootstrap sample:** Generate a new random sample $X_1^*,\dots,X_n^*$ by drawing observations independently and with replacement from the available sample $\mathcal{S}_n=\{X_1,\dots,X_n\}.$</br>
 2. **Compute bootstrap estimate:** Compute the estimate 
 $$
 \hat\theta^*_n\equiv \hat\theta(X_1^*,\dots,X_n^*)
 $$
-3. **Bootstrap replications:** Repeat Steps 1 and 2 $m$ times (for a large value of $m,$ such as $m=5000$) leading to $m$ bootstrap estimates 
+3. **Bootstrap replications:** Repeat Steps 1 and 2 $m$ times (for a large value of $m,$ such as $m=5000$ or $m=10000$) leading to $m$ bootstrap estimates 
 $$
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 $$
-
-**Note:** For large $m$, i.e. as $m\to\infty,$ the estimates $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ allow to approximate the **bootstrap distribution** of 
-$$
-\hat\theta^*_n-\hat\theta_n
-$$ 
-arbitrarily well. 
-
-The crucial question is, whether the bootstrap distribution of $\hat\theta^*_n-\hat\theta_n$ is able to approximate the unknown distribution of $\hat\theta_n-\theta_0$ as $n\to\infty.$ 
-
-The theoretical justification of the bootstrap is based on asymptotic arguments as $n\to\infty$. In many important applications the bootstrap is able to provide confidence intervals or tests which are **more accurate** than those based on standard asymptotic approximations.
-
-
-::: {.callout-tip}
-# Overview: Bootstrap-World vs Population-World
-The **bootstrap distribution** of 
-$$
-\hat\theta^*_n-\hat\theta_n
-$$ 
-is used to approximate the unknown distribution of 
-$$
-\hat\theta_n-\theta_0
-$$
-
-**Note:** For the bootstrap distribution $\hat\theta_n$ is a "population parameter". 
 :::
 
+By the Clivenko-Cantelli (@thm-Clivenko-Cantelli) the bootstrap estimators 
+$$
+\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
+$$ 
+allow us to approximate the **bootstrap distribution**  
+$$
+H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\right|\mathcal{S}_n\right)
+$$ 
+arbitrarily well, i.e., 
+$$
+\sup_{x}\left|H^{Boot}_{n,m}(x)-H^{Boot}_{n}(x)\right|\to_{a.s} 0\quad\text{as}\quad m\to\infty,
+$$ 
+where 
+$$
+H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
+$$ 
+denotes the empirical distribution function, which we can use to approximate the bootstrap distribution $H^{Boot}_{n}(x).$ 
+
+Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error in $H^{Boot}_{n,m}(x).$ That is, we can treat the bootstrap distribution $H^{Boot}_{n}(x)$ is known.  
+
+The crucial question is, however, whether the feasible bootstrap distribution 
+$$
+H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
+$$ 
+is able to approximate the unknown distribution 
+$$
+H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
+$$
+as $n\to\infty.$ 
 
 
 ### Bootstrap Consistency {-}
@@ -232,8 +375,6 @@ $$
 The bootstrap does **not always work**. A necessary condition for the use of the bootstrap is the **consistency of the bootstrap approximation**.
 :::
 
-
-
 The bootstrap is called **consistent** if, for large $n$, the bootstrap distribution of $\hat{\theta}^*_n -\hat{\theta}_n$ is a good approximation of the underlying distribution of $\hat{\theta}_n-\theta_0$, i.e.
 $$
 \text{distribution}(\hat{\theta}^*_n -\hat{\theta}_n\ |{\cal S}_n)\approx 
@@ -244,17 +385,15 @@ The following definition states this more precisely.
 ::: {.callout-note icon=false} 
 ## 
 ::: {#def-BootstrapConsistency}
-
-## Bootstrap consistency </br>
-
-If for some $\gamma>0$ (usually: $\gamma=1/2$) we have $n^\gamma(\hat{\theta}_n-\theta_0)\rightarrow_d Z$ for some random variable $Z$ with a non-degenerate distribution, then the bootstrap is **consistent** if and only if
+## Bootstrap consistency 
+Let the limit (as $n\to\infty$) of $H_n$ be a non-degenerate distribution, then the bootstrap is **consistent** if and only if
 $$
-\sup_\delta \left|
-   P\left(n^\gamma(\hat\theta^*_n-\hat\theta_n)\le \delta \ |{\cal S}_n\right) 
-  -P\left(n^\gamma(\hat\theta_n      -\theta_0)\le \delta\right)
-  \right|\rightarrow_p 0
+\sup_x \Big|\;
+   \underbrace{P\Big(\sqrt{n}\big(\hat\theta^*_n-\hat\theta_n\big)\le x \ |{\cal S}_n\Big)}_{H_n^{Boot}(x)} 
+  -\underbrace{P\Big(\sqrt{n}\big(\hat\theta_n -\theta_0\big)\le x\Big)}_{H_n(x)}
+  \Big|\rightarrow_p 0
 $$
-as $n\to\infty.$*
+as $n\to\infty.$
 :::
 :::
 
@@ -280,12 +419,14 @@ The standard bootstrap **will usually fail** if one of the above conditions 1 or
 
 **Setup:**
 
-* $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F_0$ 
-* Continuous random variable $X\sim F_0$ with unknown $F_0$ and thus unknown mean 
+* $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F$ 
+* Continuous random variable $X\sim F$ 
+* Non-zero, finite variance $0<Var(X)=\sigma_0^2<\infty$ 
+* Unknown mean $\mathbb{E}(X)=\mu_0,$ where  
 $$
-\mu_0 = \int x f_0(x) dx = \int x d F_0(x),
+\mu_0 = \int x f(x) dx = \int x d F(x),
 $$ 
-where $f_0=F'_0$ denotes the density function corresponding to $F_0.$ 
+where $f=F'$ denotes the density function.
 * Estimator: Empirical mean
 $$
 \begin{align*}
@@ -296,12 +437,38 @@ $$
 \end{align*}
 $$
 
+**Inference Problem:** What is the (asymptotic) distribution of 
+$$
+\sqrt{n}\left(\bar{X}_n -\mu_0\right)
+$$
+as $n\to\infty$? 
 
 
-**Inference Problem:** What is the distribution of 
+::: {.callout-note}
+# Asymptotic Result
+This example is so simple that we know (by the Lindeberg-Levy CLT) that 
 $$
-\bar{X}_n -\mu_0?
+\sqrt{n}\left(\bar{X}_n -\mu_0\right)\to_d\mathcal{N}(0,\sigma_0)\quad\text{as}\quad n\to\infty,
 $$
+i.e., that
+$$
+%\bar{X}_n\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{1}{n}\sigma_0\right).
+H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0}(x)\quad\text{as}\quad n\to\infty,
+$$
+for all continuity points $x,$ where 
+$$
+\Phi_{\sigma_0}(x)=\Phi(x/\sigma_0)
+$$ 
+with $\Phi$ denoting the distribution function of the standard normal distribution. 
+:::
+
+Yes, the asymptotic result is simple here, but can we simply use the Bootstrap to approximate this limit result with an estimation of $\sigma_0$ right away? I.e., is 
+$$
+H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\right|\mathcal{S}_n\right)
+$$ 
+able to approximate $\Phi_{\sigma_0}$? In the following, we check this empirically. 
+
+
 
 Now assume that $n=8$ and that the **observed sample** is
 
@@ -438,10 +605,10 @@ Under H$_0,$ we know that the true (unknown) mean equals the hypothetical mean $
 
 
 ::: {.callout-tip}
-## Notation $\mathbb{E}^*(\cdot),$ $\mathbb{V}^*(\cdot),$ and $P^*(\cdot)$
+## Notation $\mathbb{E}^*(\cdot),$ $Var^*(\cdot),$ and $P^*(\cdot)$
 In the bootstrap literature one frequently finds the notation 
 $$
-\mathbb{E}^*(\cdot),\;\mathbb{V}^*(\cdot),\;\text{and}\;P^*(\cdot)
+\mathbb{E}^*(\cdot),\;Var^*(\cdot),\;\text{and}\;P^*(\cdot)
 $$ 
 to denote the **conditional** expectation
 $$
@@ -449,7 +616,7 @@ $$
 $$
 the **conditional** variance 
 $$
-\mathbb{V}^*(\cdot)=\mathbb{V}(\cdot|\mathcal{S}_n),
+Var^*(\cdot)=Var(\cdot|\mathcal{S}_n),
 $$ 
 and the **conditional** probability 
 $$
@@ -513,8 +680,8 @@ $$
 * The conditional variance of $X_i^*$ is
 $$
 \begin{align*}
-\mathbb{V}^*(X_i^*)
-&=\mathbb{V}(X_i^*|{\cal S}_n)\\[2ex] 
+Var^*(X_i^*)
+&=Var(X_i^*|{\cal S}_n)\\[2ex] 
 &=\mathbb{E}((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n)\\[2ex] 
 &=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2\\[2ex] 
 &=\hat\sigma^2
@@ -522,6 +689,20 @@ $$
 $$
 
 That is, in the bootstrap sample $X_1^*,\dots,X_n^*$ the "population" mean and the "population" variance are equal to the empirical mean, $\bar{X},$ and the empirical variance, $\hat{\sigma}^2,$ of the original sample $X_1,\dots,X_n.$ 
+
+::: {.callout-note}
+# Bootstrap-World vs Population-World
+The **bootstrap distribution** of 
+$$
+\hat\theta^*_n-\hat\theta_n
+$$ 
+is used to approximate the unknown distribution of 
+$$
+\hat\theta_n-\theta_0
+$$
+
+**Note:** For the bootstrap distribution $\hat\theta_n$ is a "population parameter". 
+:::
 
 ::: {.callout-tip}
 ## General case: Conditional moments of transformed $g(X_i^*)$
@@ -587,9 +768,9 @@ $$
 * The conditional variance of $\bar X^*$ is
 $$
 \begin{align*}
-\mathbb{V}^*(\bar X^*)
-&=\mathbb{V}(\bar X^*|{\cal S}_n)\\
-&=\frac{1}{n^2}\sum_{i=1}^n \mathbb{V}(X_i^*|{\cal S}_n)\\
+Var^*(\bar X^*)
+&=Var(\bar X^*|{\cal S}_n)\\
+&=\frac{1}{n^2}\sum_{i=1}^n Var(X_i^*|{\cal S}_n)\\
 &=\frac{1}{n^2}\sum_{i=1}^n \hat\sigma^2\\
 &=\frac{n}{n^2}\hat\sigma^2\\
 &=\frac{1}{n}\hat\sigma^2,
@@ -607,7 +788,7 @@ Conditionally on ${\cal S}_n=\{X_1,\dots,X_n\}$,
 
 * the random variables $X_1^*,\dots,X_n^*$ are i.i.d.
 * with mean $\mathbb{E}^*(X_i^*)=\bar X$ 
-* and variance $\mathbb{V}^*(X^*)=\hat\sigma^2$
+* and variance $Var^*(X^*)=\hat\sigma^2$
 
 Thus, we can apply the [central limit theorem (Lindeberg-Lévy)](https://www.statlect.com/asymptotic-theory/central-limit-theorem) to the appropriately standardized bootstrap sample mean $\hat{X}^*$ conditionally on ${\cal S}_n$
 $$
@@ -764,10 +945,10 @@ $$
 and 
 $$
 \begin{align*}
-\mathbb{V}^*(n \hat p^*)
-&=\mathbb{V}(n \hat p^*|\ {\cal S}_n)\\[2ex]
+Var^*(n \hat p^*)
+&=Var(n \hat p^*|\ {\cal S}_n)\\[2ex]
 & = n \hat{p} (1- \hat{p})\\[2ex]
-\Rightarrow \mathbb{V}^*(\hat p^*) & = \frac{\hat{p}(1-\hat{p})}{n}
+\Rightarrow Var^*(\hat p^*) & = \frac{\hat{p}(1-\hat{p})}{n}
 \end{align*}
 $$
 
@@ -1035,7 +1216,7 @@ is **asymptotically pivotal**.
 
 #### Example: $\bar{X}$ is Asymptotically Pivotal {-}
 
-Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu$, variance $\mathbb{V}(X)=\sigma^2>0$, and $\mathbb{E}(|X|^4)=\beta<\infty$. 
+Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu$, variance $Var(X)=\sigma^2>0$, and $\mathbb{E}(|X|^4)=\beta<\infty$. 
  
 If $X$ is normally distributed, we obtain
 $$
@@ -1478,7 +1659,7 @@ $$
 $$
 and
 $$
-\mathbb{V}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2.
+Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2.
 $$
 An appropriate central limit theorem argument implies that 
 $$
@@ -1620,7 +1801,7 @@ Consider the following setup:
 
 *  iid data $X_1,\dots,X_n$ with $X_i\sim F$
 *  $\mathbb{E}(X_i)=\mu$
-*  $\mathbb{V}(X_i)=\sigma^2<\infty$
+*  $Var(X_i)=\sigma^2<\infty$
 *  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
 
 (a) Derive the classic confidence interval for $\mu$ using the asymptotic normality of the estimator $\bar{X}.$ Use a Monte Carlo simulation to approximate the coverage probability of this confidence interval for a sample size of $n=20$ and, 
@@ -1697,8 +1878,8 @@ $$
 and that 
 $$
 \begin{align*}
-\mathbb{V}(nF_n(x)) &= nF(x)(1-F(x))\\
-\Leftrightarrow \quad \mathbb{V}(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
+Var(nF_n(x)) &= nF(x)(1-F(x))\\
+\Leftrightarrow \quad Var(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
 \end{align*}
 $$
 
@@ -1720,12 +1901,12 @@ $$
 \begin{align*}
 \operatorname{MSE}(F_n(x)) 
 &= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
-&= \mathbb{V}(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
+&= Var(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
 \end{align*}
 $$
 It follows from our previous results that for each $x\in\mathbb{R}$
 $$
-\mathbb{V}(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
+Var(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
 $$
 as $n\to\infty,$ and that 
 $$
@@ -1733,7 +1914,7 @@ $$
 $$
 for all $n.$ Therefore, 
 $$
-\operatorname{MSE}(F_n(x)) = \mathbb{V}(F_n(x)) \to 0
+\operatorname{MSE}(F_n(x)) = Var(F_n(x)) \to 0
 $$
 as $n\to\infty.$ Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
 $$
@@ -1823,7 +2004,7 @@ Setup:
 
 *  iid data $X_1,\dots,X_n$ with $X_i\sim F$
 *  $\mathbb{E}(X_i)=\mu$
-*  $\mathbb{V}(X_i)=\sigma^2<\infty$
+*  $Var(X_i)=\sigma^2<\infty$
 *  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
 
 If $F$ is a normal distribution:
@@ -2007,7 +2188,7 @@ In the following we approximate the bootstrap distribution of $\bar{X}_n^\ast$ u
 ```{r, fig.margin = TRUE,fig.width=4.5, fig.height=3.5}
 ## Bootstr-Setup:
 alpha            <- 0.05
-n.Bootsrap.draws <- 1500
+n.Bootsrap.draws <- 15#1500
 
 ## Generate bootstap samples:
 Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
@@ -2049,7 +2230,7 @@ n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
-n.Bootsrap.draws <- 1500
+n.Bootsrap.draws <- 15#1500
 
 ## MC-Setup:
 set.seed(123)
@@ -2134,7 +2315,7 @@ sd.hat  <- sd(S_n)
 
 ## Bootstr-Setup:
 alpha            <- 0.05
-n.Bootsrap.draws <- 1500
+n.Bootsrap.draws <- 15#1500
 
 ## Generate bootstap samples:
 Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
@@ -2181,7 +2362,7 @@ n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
-n.Bootsrap.draws <- 1500
+n.Bootsrap.draws <- 15#1500
 
 ## MC-Setup:
 set.seed(123)

@@ -1,12 +1,12 @@
 # EM Algorithm & Cluster Analysis
 
-The Expectation Maximization (EM) algorithm is often used to simplify, or make possible, complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating Gaussian mixture distributions, as this is probably its most well-known application. Even the original work on the EM algorithm [@Dempster_1977] already dealt with the estimation of Gaussian mixture distributions.
+The Expectation Maximization (EM) algorithm is often used to simplify or to facilitate complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating **Gaussian mixture distributions**, as this is probably its most well-known application. Even the original work on the EM algorithm [@Dempster_1977] already dealt with the estimation of Gaussian mixture distributions.
 
 
-#### Possible Applications of Gaussian mixture distributions {-}
+#### Possible Applications of the EM-Algorithm and Gaussian mixture distributions {-}
 
-* General: Finding grouping structures (two or more) in data (**cluster analysis**). 
-* For instance: Automatic video editing (e.g., separation of back- and foreground)  
+* General: Finding grouping structures (two or more) in data (**cluster analysis**). For instance: Automatic video editing (e.g., separation of back- and foreground)  
+* @Traiberman_AER2019 uses the EM-Algorithm to compute the maximum likelihood estimators. Since he no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to solve the maximization problem. 
 
 
 #### Some literature {-}
@@ -25,8 +25,7 @@ pkgs <- c("tidyverse",      # Tidyverse packages
           "scales",         # Transparent colors: alpha()
           "RColorBrewer",   # Nice colors
           "mclust",         # Gaussian mixture models for clustering
-          "MASS")           # Used to generate multivariate 
-                            # random normal variables
+          "MASS")           # Used to generate multivariate random normal variables
 install.packages(pkgs)
 ```
 
@@ -88,7 +87,7 @@ penguins <- palmerpenguins::penguins %>%  # penguin data
   dplyr::select(species, flipper)         # select variables 
 
 ##  
-n      <- nrow(penguins)                  # sample size
+n      <- nrow(penguins)                  # sample size (n=187)
 
 ## Pulling out the variable 'penguin_species':
 penguin_species <- dplyr::pull(penguins, species)
@@ -111,8 +110,10 @@ stripchart(x = penguin_flipper, method = "jitter",
 
 #### Clustering using Gaussian Mixture Distributions {-}
 
+At the end of this chapter, we'll be able to 
+
 1. Estimate the Gaussian mixture distribution using the **EM algorithm**
-2. Assign the data points $x_i$ to the group that maximizes the **"posterior probability"** (see @fig-GMM-plot1 and @sec-PriorPosterior)
+2. Assign the predictors $x_i$ (flipper length) to the group (penguine species) that maximizes the **"posterior probability"** (see @fig-GMM-plot1 and @sec-PriorPosterior)
 
 
 ```{r}
@@ -187,7 +188,7 @@ stripchart(penguin_flipper[class==2],
 Figure @fig-GMM-plot1 shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: `r round(sum(class == as.numeric(penguin_species))/n, 2)*100`% of the penguins could be correctly assigned - based only on their flipper lengths.
 
 
-The following `R` codes can be used to reproduce the above cluster analysis (using the `R` package `mclust`) and @fig-GMM-plot1. We'll learn everything about it in this chapter:
+The following `R` codes can be used to reproduce the above cluster analysis (using the `R` package `mclust`) and @fig-GMM-plot1:
 
 ```{r}
 #| echo: true
@@ -254,6 +255,7 @@ stripchart(penguin_flipper[class==2],
            pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
 ```
 
+But coding is nothing without understanding. We'll learn the underlying statistical method it in this chapter. 
 
 
 ## The EM Algorithm for Maximum Likelihood Estimation of Gaussian Mixture Distributions
@@ -261,7 +263,7 @@ stripchart(penguin_flipper[class==2],
 ### Gaussian Mixture Models (GMM)
 
 
-We denote a random variable $X$ that follows a Gaussian mixed distribution as
+We denote a random variable $X$ that follows a Gaussian mixture distribution as
 $$
 X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
 $$
@@ -302,7 +304,10 @@ $$
 X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}).
 $$ 
 
-> That is, in a certain sense, the observed data $\mathbf{x}=(x_1,\dots,x_n)$ "know" the unknown parameters $\boldsymbol{\pi},$ $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ and we "only" have to elicit this information from them.
+
+<!-- 
+> That is, in a certain sense, the observed data $\mathbf{x}=(x_1,\dots,x_n)$ "know" the unknown parameters $\boldsymbol{\pi},$ $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ and we "only" have to elicit this information from them. 
+-->
 
 
 * **Estimation Idea:** 
@@ -312,7 +317,7 @@ Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such tha
 $$
 \mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
 $$
-Or maximize the log-likelihood function (simpler maximization)
+Or, equivalently, maximize the log-likelihood function (simpler maximization)
 $$
 \begin{align*}
 %\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
@@ -323,7 +328,12 @@ $$
 $${#eq-logLikGMM}
 
 ::: {.callout-note}
-The maximization must take into account the parameter constraints in @eq-GMMdens; namely, $\sigma_g>0$ and $\pi_g>0$ for all $g=1,\dots,G$ and $\sum_{g=1}^G\pi_g=1$.
+# Maximization constraints
+The maximization must take into account the parameter constraints in @eq-GMMdens; namely, 
+
+* $\sigma_g>0$ and 
+* $\pi_g>0$ for all $g=1,\dots,G$ such that 
+* $\sum_{g=1}^G\pi_g=1$.
 ::: 
 
 The maximizing parameter values 
@@ -340,11 +350,11 @@ $$
 
 😒 **Problems with singularities in numerical solutions:** If one tries to solve the above maximization problem [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html), one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities. 
 
-For real GMMs (i.e. $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s) tries to describe only single data points. This leads to a Gaussian density function centered around a **single data point** $x_i$ such that   
+For real GMMs (i.e. GMMs with more than one group $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s), say $\varphi_g(x_i|\mu_g,\sigma_g),$ tries to describe only single data points. This leads to a Gaussian density function centered around a **single data point** $x_i$ such that   
 $$
-\mu_g=x_i.
+\varphi(x_i|{\color{red}\mu_g=x_i},\sigma_g),
 $$ 
-and
+where 
 $$
 \sigma_g\to 0.
 $$
@@ -352,9 +362,7 @@ This degenerating situation leads to **very large** density function values,
 $$
 \varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
-and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1). Such **undesirable, trivial maximization solutions** typically lead to implausible estimation results.
-
-
+and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1).
 ```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.1, fig.align="center"}
 #| label: fig-dirac1
 #| echo: false
@@ -370,7 +378,7 @@ for(i in 1:length(sd_v)){
   axis(2); axis(1, at=0, labels = expression(x[i])); box()
 }
 ```
-
+Such **undesirable, trivial maximization solutions** typically lead to implausible, non-useful estimation results.
 
 🤓 **Analytic solution:** It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see @eq-logLikGMM) analytically. If you do this, you will get the following expressions:
 $$
@@ -388,7 +396,7 @@ for $i=1,\dots,n$ and $g=1,\dots,G$.
 
 
 ::: {.callout-note}
-Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi}_g$ is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.  
+Deriving the expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi}_g$ in @eq-AnalyticSol1 is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.  
 <!-- In one of the exercises, you may derive the expression for $\hat\mu_g$. -->
 :::
 
@@ -401,15 +409,25 @@ Deriving the above expressions for $\hat{\mu}_g$, $\hat{\sigma}_g$ and $\hat{\pi
 
 because the probabilities $0\leq p_{ig}\leq 1$ (defined in @eq-AnalyticSol2) depend on these unknown parameters. 
 
-* The probability $p_{ig}$ in @eq-AnalyticSol2 is called the **posterior probability**. The posterior probability $p_{ig}$ is the probability that penguine $i$ with flipper length $x_i$ belongs to group $g$. 
-* The probability $\pi_g$  in @eq-AnalyticSol2 is called the **prior probability**. The prior probability $\pi_g$ is the probability that a penguine $i$, from which we know nothing about its flipper length, belongs to group $g$.
+Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-AnalyticSol1 do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
 ::: {.callout-note}
-Still, we cannot properly define what we mean by "prior probability" and "posterior probability". We'll discuss the prior and the posterior probability in more detail in @sec-PriorPosterior.
+# Prior and Posterior Probabilities
+
+* The probability 
+$$
+\pi_g = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g\right)
+$$  
+in @eq-AnalyticSol2 is called the **prior probability**. The prior probability $\pi_g$ is the probability that a penguine $i$, from which we know nothing about its flipper length, belongs to group $g$.
+* The conditional probability 
+$$
+p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)
+$$ 
+in @eq-AnalyticSol2 is called the **posterior probability**. The posterior probability $p_{ig}$ is the probability that penguine $i$ with flipper length $x_i$ belongs to group $g.$ 
+
+We'll discuss the prior and the posterior probability in more detail in @sec-PriorPosterior.
 :::
 
-
-Thus, the expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-AnalyticSol1 do not allow direct estimation of the unknown parameters $\pi_g$, $\mu_g$, and $\sigma_g$.
 
 
 🥳 <span style="color:#138D75">**Solution: The EM Algorithm**</span>  
@@ -422,9 +440,13 @@ The expressions for $\hat\pi_g$, $\hat\mu_g$, and $\hat\sigma_g$ in @eq-Analytic
 
 * the (unknown) posterior probabilities
 $$
-p_{ig}\quad\text{for}\quad i=1,\dots,n,\; g=1,\dots,G
+\begin{align*}
+p_{ig} 
+&= \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)\\[2ex]
+& = \frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+\end{align*}
 $$ 
-
+for $i=1,\dots,n,$ and $g=1,\dots,G,$
 and of 
 
 * the (unknown) parameters 
