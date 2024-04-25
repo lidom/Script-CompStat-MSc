@@ -209,13 +209,13 @@ div.csl-indent {
   <li><a href="#maximum-likelihood-ml-estimation" id="toc-maximum-likelihood-ml-estimation" class="nav-link" data-scroll-target="#maximum-likelihood-ml-estimation"><span class="toc-section-number">2.2.2</span>  Maximum Likelihood (ML) Estimation</a></li>
   <li><a href="#sec-EM1" id="toc-sec-EM1" class="nav-link" data-scroll-target="#sec-EM1"><span class="toc-section-number">2.2.3</span>  The EM Algorithm for GMMs</a></li>
   </ul></li>
-  <li><a href="#the-true-view-on-the-em-algorithm-adding-unobserved-variables" id="toc-the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="nav-link" data-scroll-target="#the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="toc-section-number">2.3</span>  The True View on the EM Algorithm: Adding Unobserved Variables</a>
+  <li><a href="#sec-TrueViewEM" id="toc-sec-TrueViewEM" class="nav-link" data-scroll-target="#sec-TrueViewEM"><span class="toc-section-number">2.3</span>  The True View on the EM Algorithm: Adding Unobserved Variables</a>
   <ul class="collapse">
   <li><a href="#data-completion" id="toc-data-completion" class="nav-link" data-scroll-target="#data-completion"><span class="toc-section-number">2.3.1</span>  Data Completion</a></li>
   <li><a href="#sec-PriorPosterior" id="toc-sec-PriorPosterior" class="nav-link" data-scroll-target="#sec-PriorPosterior"><span class="toc-section-number">2.3.2</span>  Prior and Posterior Probabilities</a></li>
   <li><a href="#the-abstract-version-of-the-em-algorithm" id="toc-the-abstract-version-of-the-em-algorithm" class="nav-link" data-scroll-target="#the-abstract-version-of-the-em-algorithm"><span class="toc-section-number">2.3.3</span>  The Abstract Version of the EM-Algorithm</a></li>
   </ul></li>
-  <li><a href="#unsupervised-classification" id="toc-unsupervised-classification" class="nav-link" data-scroll-target="#unsupervised-classification"><span class="toc-section-number">2.4</span>  (Unsupervised) Classification</a>
+  <li><a href="#cluster-analysis" id="toc-cluster-analysis" class="nav-link" data-scroll-target="#cluster-analysis"><span class="toc-section-number">2.4</span>  Cluster Analysis</a>
   <ul class="collapse">
   <li><a href="#bayes-classifier" id="toc-bayes-classifier" class="nav-link" data-scroll-target="#bayes-classifier"><span class="toc-section-number">2.4.1</span>  Bayes Classifier</a></li>
   <li><a href="#synopsis-penguin-example" id="toc-synopsis-penguin-example" class="nav-link" data-scroll-target="#synopsis-penguin-example"><span class="toc-section-number">2.4.2</span>  Synopsis: Penguin Example</a></li>
@@ -701,8 +701,8 @@ standard-deviations    7.32    6.25</code></pre>
 </div>
 </section>
 </section>
-<section id="the-true-view-on-the-em-algorithm-adding-unobserved-variables" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="the-true-view-on-the-em-algorithm-adding-unobserved-variables"><span class="header-section-number">2.3</span> The True View on the EM Algorithm: Adding Unobserved Variables</h2>
+<section id="sec-TrueViewEM" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-TrueViewEM"><span class="header-section-number">2.3</span> The True View on the EM Algorithm: Adding Unobserved Variables</h2>
 <p>The EM algorithm allows maximum likelihood problems to be simplified by <strong>adding unobserved (“latent”) variables</strong> to the data. This idea is the actually original contribution of the EM Algorithm (<span class="citation" data-cites="Dempster_1977">Dempster, Laird, and Rubin (<a href="#ref-Dempster_1977" role="doc-biblioref">1977</a>)</span>). While this idea can be applied for solving various maximum likelihood problems, we keep focusing on estimating GMMs.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -904,23 +904,55 @@ p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i;\mu_g^{(r-1)},\sigma_g^{(r-1)})
 </ol>
 </section>
 </section>
-<section id="unsupervised-classification" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="unsupervised-classification"><span class="header-section-number">2.4</span> (Unsupervised) Classification</h2>
+<section id="cluster-analysis" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="cluster-analysis"><span class="header-section-number">2.4</span> Cluster Analysis</h2>
 <p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
 <p>Consider iid data <span class="math display">\[
-(Y_1,X_1),\dots,(Y_n,X_n)
-\]</span> where <span class="math inline">\(X_i\in\mathbb{R}^p\)</span> is a <span class="math inline">\(p\)</span>-dimensional vector and <span class="math inline">\(Y_i\)</span> takes values in some finite set <span class="math inline">\(\mathcal{Y}.\)</span></p>
-<p>(<strong>Note:</strong> Above we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.)</p>
-<p><strong>Example:</strong> Predict <span class="math inline">\(Y\in\mathcal{Y}=\{0,1\}\)</span> (e.g.&nbsp;passing the exam (<span class="math inline">\(Y=1\)</span>) vs.&nbsp;failing <span class="math inline">\(Y=0\)</span>) using the observed predictor values <span class="math inline">\(X\in\mathbb{R}^p\)</span> (e.g.&nbsp;previous gradings, number of hours studied, etc.)</p>
-<p>A <strong>classification rule</strong> is a function <span class="math display">\[
+(Y_1,X_1),\dots,(Y_n,X_n)\overset{\text{i.i.d.}}{\sim}(Y,X)
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(X_i\in\mathbb{R}^p\)</span> is a <span class="math inline">\(p\)</span>-dimensional vector and</li>
+<li><span class="math inline">\(Y_i\)</span> takes values in some finite set <span class="math inline">\(\mathcal{Y}.\)</span></li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> Above in <a href="#sec-TrueViewEM"><span>Section&nbsp;2.3</span></a>, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
+</blockquote>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Example
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Predict <span class="math inline">\(Y\in\mathcal{Y}=\{0,1\}\)</span> (e.g.&nbsp;passing the exam (<span class="math inline">\(Y=1\)</span>) vs.&nbsp;failing <span class="math inline">\(Y=0\)</span>) using the observed predictor values <span class="math inline">\(X\in\mathbb{R}^p\)</span> (e.g.&nbsp;previous gradings, number of hours studied, etc.)</p>
+</div>
+</div>
+<p>A <strong>classification rule</strong> <span class="math inline">\(h\)</span> is a function <span class="math display">\[
 h: \mathbb{R}^p \to \mathcal{Y}.
 \]</span> That is, when we observe a new <span class="math inline">\(X\in\mathbb{R}^p,\)</span> we predict <span class="math inline">\(Y\)</span> to be <span class="math inline">\(h(X)\in\mathcal{Y}.\)</span></p>
-<p>If there are learning/training data <strong>with</strong> group-labels <span class="math display">\[
-(Y_1,X_1),\dots,(Y_n,X_n)
-\]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p>
-<p>If there are learning/training data <strong>without</strong> group-labels <span class="math display">\[
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+(Un-)Supervised Classification
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>Supervised Classification:</strong> If there are learning/training data <span style="color:#f01e2c"><strong>with group-labels</strong></span> <span class="math display">\[
+({\color{red}Y_1},X_1),\dots,({\color{red}Y_n},X_n)
+\]</span> that can be used to estimate <span class="math inline">\(h,\)</span> it’s called a <strong>supervised classification</strong> (computer science: supervised learning) problem.</p></li>
+<li><p><strong>Unsupervised Classification/Cluster Analysis:</strong> If there are learning/training data <span style="color:#f01e2c"><strong>without group-labels</strong></span> <span class="math display">\[
 X_1,\dots,X_n
-\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) problem or <strong>cluster analysis</strong>.</p>
+\]</span> it’s called a <strong>unsupervised classification</strong> (computer science: unsupervised learning) problem or <strong>cluster analysis</strong>.</p></li>
+</ul>
+</div>
+</div>
 <section id="bayes-classifier" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">2.4.1</span> Bayes Classifier</h3>
 <p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. The most often used quantity to measure the accuracy of classification methods is the <strong>error rate</strong>.</p>
@@ -959,7 +991,8 @@ m(x)
 &amp;=1\cdot P(Y=1|X=x) + 0\cdot P(Y=0|X=x)\\[2ex]
 &amp;=P(Y=1|X=x).
 \end{align*}
-\]</span> From Bayes’s theorem it follows that <span id="eq-RegFun"><span class="math display">\[
+\]</span> That is, the conditonal mean <span class="math inline">\(m(x)\)</span> is the <strong>posterior probability</strong>, i.e.&nbsp;the probability of <span class="math inline">\(Y=1\)</span> given <span class="math inline">\(X=x.\)</span></p>
+<p>From Bayes’ theorem it follows that <span id="eq-RegFun"><span class="math display">\[
 \begin{align*}
 m(x)
 &amp;=P(Y=1|X=x)\\[2ex]
@@ -967,15 +1000,19 @@ m(x)
 &amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{\pi_0\;f_{X|Y}(x|Y=0)+\pi_1\;f_{X|Y}(x|Y=1)}\\[2ex]
 &amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{f_{X}(x)},
 \end{align*}
-\tag{2.8}\]</span></span> where <span class="math display">\[
+\tag{2.8}\]</span></span> where</p>
+<ol type="1">
+<li><span class="math display">\[
 \pi_0= P(Y=0)\quad\text{and}\quad\pi_1  = P(Y=1)
-\]</span> denote the prior probabilities with <span class="math inline">\(\pi_0 + \pi_1 = 1,\)</span><br>
-<span class="math display">\[
+\]</span> denote the <strong>prior probabilities</strong> with <span class="math inline">\(\pi_0 + \pi_1 = 1,\)</span><br>
+</li>
+<li><span class="math display">\[
 f_{X|Y}(x|Y=0)\quad\text{and}\quad f_{X|Y}(x|Y=1)
-\]</span> denote the conditional density functions of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span> and <span class="math inline">\(Y=1,\)</span> respectively, and<br>
-<span class="math display">\[
+\]</span> denote the conditional density functions of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span> and <span class="math inline">\(Y=1,\)</span> respectively, and</li>
+<li><span class="math display">\[
 f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
-\]</span> denotes the unconditional density function of <span class="math inline">\(X.\)</span></p>
+\]</span> denotes the unconditional density function of <span class="math inline">\(X.\)</span></li>
+</ol>
 <p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
 <p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">

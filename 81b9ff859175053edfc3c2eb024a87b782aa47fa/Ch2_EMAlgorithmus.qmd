@@ -551,7 +551,7 @@ results %>% round(., 2)
 
 
 
-## The True View on the EM Algorithm: Adding Unobserved Variables
+## The True View on the EM Algorithm: Adding Unobserved Variables {#sec-TrueViewEM}
 
 The EM algorithm allows maximum likelihood problems to be simplified by **adding unobserved ("latent") variables** to the data. This idea is the actually original contribution of the EM Algorithm (@Dempster_1977). While this idea can be applied for solving various maximum likelihood problems, we keep focusing on estimating GMMs.
 
@@ -780,38 +780,47 @@ For $r=1,2,\dots$
 
 
 
-## (Unsupervised) Classification
+## Cluster Analysis
 
 The problem of predicting a discrete random variable $Y$ (i.e. the group label) from a possibly multivariate predictor random variable $X$ is called **classification**. 
 
 Consider iid data 
 $$
-(Y_1,X_1),\dots,(Y_n,X_n)
+(Y_1,X_1),\dots,(Y_n,X_n)\overset{\text{i.i.d.}}{\sim}(Y,X)
 $$
-where $X_i\in\mathbb{R}^p$ is a $p$-dimensional vector and $Y_i$ takes values in some finite set $\mathcal{Y}.$  
+where 
 
-(**Note:** Above we used $Z,$ here we use $Y$ to denote the (unknown) group labels.)
+* $X_i\in\mathbb{R}^p$ is a $p$-dimensional vector and 
+* $Y_i$ takes values in some finite set $\mathcal{Y}.$  
 
-**Example:** Predict $Y\in\mathcal{Y}=\{0,1\}$ (e.g. passing the exam ($Y=1$) vs. failing $Y=0$) using the observed predictor values $X\in\mathbb{R}^p$ (e.g. previous gradings, number of hours studied, etc.)
+> **Note:** Above in @sec-TrueViewEM, we used $Z,$ here we use $Y$ to denote the (unknown) group labels.
 
-A **classification rule** is a function 
+::: {.callout-note}
+# Example 
+Predict $Y\in\mathcal{Y}=\{0,1\}$ (e.g. passing the exam ($Y=1$) vs. failing $Y=0$) using the observed predictor values $X\in\mathbb{R}^p$ (e.g. previous gradings, number of hours studied, etc.)
+:::
+
+A **classification rule** $h$ is a function 
 $$
 h: \mathbb{R}^p \to \mathcal{Y}.
 $$
 That is, when we observe a new $X\in\mathbb{R}^p,$ we predict $Y$ to be $h(X)\in\mathcal{Y}.$
 
-If there are learning/training data **with** group-labels
+::: {.callout-note}
+# (Un-)Supervised Classification
+
+* **Supervised Classification:** If there are learning/training data <span style="color:#f01e2c">**with group-labels**</span>
 $$
-(Y_1,X_1),\dots,(Y_n,X_n)
+({\color{red}Y_1},X_1),\dots,({\color{red}Y_n},X_n)
 $$
 that can be used to estimate $h,$ it's called a **supervised classification** (computer science: supervised learning) problem. 
 
-If there are learning/training data **without** group-labels
+* **Unsupervised Classification/Cluster Analysis:** If there are learning/training data <span style="color:#f01e2c">**without group-labels**</span>
 $$
 X_1,\dots,X_n
 $$
 it's called a **unsupervised classification** (computer science: unsupervised learning) problem or **cluster analysis**.
-
+:::
 
 ### Bayes Classifier 
 
@@ -858,7 +867,10 @@ m(x)
 &=P(Y=1|X=x).
 \end{align*}
 $$
-From Bayes's theorem it follows that 
+That is, the conditonal mean $m(x)$ is the **posterior probability**, i.e. the probability of $Y=1$ given $X=x.$
+
+
+From Bayes' theorem it follows that 
 $$
 \begin{align*}
 m(x)
@@ -869,14 +881,18 @@ m(x)
 \end{align*}
 $${#eq-RegFun}
 where 
+
+1. 
 $$
 \pi_0= P(Y=0)\quad\text{and}\quad\pi_1  = P(Y=1)
 $$ 
-denote the prior probabilities with $\pi_0 + \pi_1 = 1,$  
+denote the **prior probabilities** with $\pi_0 + \pi_1 = 1,$  
+2. 
 $$
 f_{X|Y}(x|Y=0)\quad\text{and}\quad f_{X|Y}(x|Y=1)
 $$
-denote the conditional density functions of $X$ given $Y=0$ and $Y=1,$ respectively, and  
+denote the conditional density functions of $X$ given $Y=0$ and $Y=1,$ respectively, and 
+3.  
 $$
 f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
 $$ 
