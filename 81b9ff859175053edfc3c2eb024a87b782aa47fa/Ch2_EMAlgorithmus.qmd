@@ -270,7 +270,7 @@ $$
 
 The corresponding density function of a Gaussian mixture distribution is defined as follows:
 $$
-f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g \varphi(x|\mu_g,\sigma_g) 
+f_{GMM}(x;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g \varphi(x;\mu_g,\sigma_g) 
 $${#eq-GMMdens}
 
 * **Weights:** $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$ with $\pi_g>0$ and $\sum_{g=1}^G\pi_g=1$
@@ -278,7 +278,7 @@ $${#eq-GMMdens}
 * **Standard deviations:** $\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)$ with $\sigma_g>0$ 
 * **Normal density of group $g=1,\dots,G$:** 
 $$
-\varphi(x|\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
+\varphi(x;\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
 $$
 * **Unknown parameters:** <span style="color:#FF5733">$\boldsymbol{\pi}$</span>, <span style="color:#FF5733">$\boldsymbol{\mu}$</span> und <span style="color:#FF5733">$\boldsymbol{\sigma}$</span>
 
@@ -311,19 +311,19 @@ $$
 
 
 * **Estimation Idea:** 
-Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such that $f_{GMM}(\cdot|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **"optimally"** fits the observed data $\mathbf{x}$.
+Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such that $f_{GMM}(\cdot;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **"optimally"** fits the observed data $\mathbf{x}$.
 
 * **Implementation of the Estimation Idea:** Maximize (with respect to $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$) the likelihood function
 $$
-\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
 $$
 Or, equivalently, maximize the log-likelihood function (simpler maximization)
 $$
 \begin{align*}
-%\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})\right)=
-\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
-=&\sum_{i=1}^n\ln\left(f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
-=&\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
+%\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})\right)=
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
+=&\sum_{i=1}^n\ln\left(f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
+=&\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)
 \end{align*}
 $${#eq-logLikGMM}
 
@@ -343,16 +343,16 @@ The maximizing parameter values
 are the <span style="color:#FF5733">**ML-Estimators**</span>:
 
 $$
-(\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
+(\hat{\boldsymbol{\pi}},\hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}})=\arg\max_{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
 $$
 
 
 
 😒 **Problems with singularities in numerical solutions:** If one tries to solve the above maximization problem [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html), one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities. 
 
-For real GMMs (i.e. GMMs with more than one group $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s), say $\varphi_g(x_i|\mu_g,\sigma_g),$ tries to describe only single data points. This leads to a Gaussian density function centered around a **single data point** $x_i$ such that   
+For real GMMs (i.e. GMMs with more than one group $G>1$), problems with singularities occur very easily during a numerical maximization. This happens whenever one (or more) of the normal distribution component(s), say $\varphi_g(x_i;\mu_g,\sigma_g),$ tries to describe only single data points. This leads to a Gaussian density function centered around a **single data point** $x_i$ such that   
 $$
-\varphi(x_i|{\color{red}\mu_g=x_i},\sigma_g),
+\varphi(x_i;{\color{red}\mu_g=x_i},\sigma_g),
 $$ 
 where 
 $$
@@ -360,7 +360,7 @@ $$
 $$
 This degenerating situation leads to **very large** density function values, 
 $$
-\varphi(x_i|\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
+\varphi(x_i;\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
 $$ 
 and thus maximize the log-likelihood in an *undesirable* way (see @fig-dirac1).
 ```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.1, fig.align="center"}
@@ -390,7 +390,7 @@ $$
 $${#eq-AnalyticSol1}
 where 
 $$
-p_{ig}=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+p_{ig}=\frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 $${#eq-AnalyticSol2}
 for $i=1,\dots,n$ and $g=1,\dots,G$. 
 
@@ -443,7 +443,7 @@ $$
 \begin{align*}
 p_{ig} 
 &= \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)\\[2ex]
-& = \frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+& = \frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 \end{align*}
 $$ 
 for $i=1,\dots,n,$ and $g=1,\dots,G,$
@@ -469,14 +469,14 @@ Set starting values $\boldsymbol{\pi}^{(0)}$, $\boldsymbol{\mu}^{(0)}$ und $\bol
 For $r=1,2,\dots$
 
     - <span style="color:#FF5733">**(Expectation)**</span> Compute: 
-     $$p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i|\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
+     $$p_{ig}^{(r-1)}=\frac{\pi_g^{(r-1)}\varphi(x_i;\mu^{(r-1)}_g,\sigma_g^{(r-1)})}{f_{GMM}(x_i;\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}$$
     
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute: 
     <center>$\hat\pi_g^{(r)}=\frac{1}{n}\sum_{i=1}^np_{ig}^{(r-1)},\quad\quad\hat\mu_g^{(r)}=\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}x_i$</center> 
     <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{p_{ig}^{(r-1)}}{\left(\sum_{j=1}^np_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}$</center> 
 
 3. **Check Convergence:** <br>
-    Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)}|\mathbf{x})$, does not change anymore substantially.
+    Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\pi}^{(r)},\boldsymbol{\mu}^{(r)},\boldsymbol{\sigma}^{(r)};\mathbf{x})$, does not change anymore substantially.
 
 The above pseudo code is implemented in the following code chunk:
 
@@ -559,21 +559,16 @@ The EM algorithm allows maximum likelihood problems to be simplified by **adding
 
 # Remember:
 
-* We were note able to maximize the log-likelihood function
-  $$
-  \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x})
-  =\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)
-  $$
-  directly. In fact, the $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
-
-
-* Moreover, so far, we were not able to propertly state what we mean by prior and posterior probability. 
-
-All this can be solved my adding unobserved group labels as missing variables. 
+We were note able to maximize the log-likelihood function
+$$
+\ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
+  =\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)
+$$
+directly. In fact, the $\ln(\sum_{g=1}^G[\dots])$-construction makes life difficult here.
 :::
 
 
-### Completion of the Data
+### Data Completion
 
 In our penguin data there are two groups $g\in\{1,2\}.$ 
 
@@ -601,17 +596,17 @@ $$
 $$
 :::
 
-The group labels $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ where, however, it must hold true that 
+The group labels $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ for each $i=1,\dots,n$ and $g=1,\dots,G.$ However, it must hold true that each $i$ belongs to only **one** group, i.e.
 $$
-\sum_{g=1}^Gz_{ig}=1.
+\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
 $$
 
 ::: {.callout-note}
 Requiring that
 $$
-\sum_{g=1}^Gz_{ig}=1
+\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n
 $$
-means that for each (penguin) $i$ there is only **one** group. This is an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g. member of a gender group and member of a religious group).
+means an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g. member of a gender group and member of a religious group).
 :::
 
 Unfortunately, the true group labels $z_{ig}$ are missing. However, we nevertheless know at least something about their group-assignments. The weights 
@@ -620,27 +615,28 @@ $$
 $$ 
 of the Gaussian mixture distribution 
 $$
-f_{GMM}(x|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x|\mu_g,\sigma_g),
+f_{GMM}(x;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x;\mu_g,\sigma_g),
 $$
-give us the proportions of the individual distributions $\varphi(\cdot|\mu_g,\sigma_g)$ in the total distribution $f_{GMM}$. Therefore, we know that, on average, 
+give us the proportions of the individual distributions $\varphi(\cdot;\mu_g,\sigma_g)$ in the total distribution $f_{GMM}$. Therefore, we know that, on average, 
 $$
 \pi_g\cdot 100\%
 $$ 
 of the data points $i=1,\dots,n$ come from group $g.$ 
 
-Thus, we can consider the missing group label $z_{ig}$ as a (unobserved) realization of a binary random variable $Z_{ig}\in\{0,1\}$ with probabilities
+Thus, we can consider the missing group label $z_{ig}$ as a **unobserved realization of a binary random variable** $Z_{ig}\in\{0,1\}$ with probabilities
 $$
 \begin{align*}
 P(Z_{ig}=1)&=\pi_g\\[2ex]
 P(Z_{ig}=0)&=(1-\pi_g)\\[2ex]
 \end{align*}
 $$
-for each $i=1,\dots,n.$
-
-Note that the condition 
+and with the restriction that 
 $$
-\sum_{g=1}^GZ_{ig}=1
+\sum_{g=1}^GZ_{ig}=1\quad\text{for each}\quad i=1,\dots,n.$
 $$ 
+
+
+Note that the condition $\sum_{g=1}^GZ_{ig}=1$ 
 implies that if
 <!-- für Realisationen $Z_{ig}=1$, dass alle anderen Zuordnungen $Z_{i-g}=0$ immer gleich null  -->
 $$
@@ -654,13 +650,19 @@ $$
 
 ### Prior and Posterior Probabilities {#sec-PriorPosterior}
 
-**Prior Probability $\pi_g$**<br>
+**Prior Probability**
+$$
+\pi_g = P(Z_{ig}=1)
+$$
 If we know nothing about the flipper length of penguin $i$ then we are left with the prior probability: <br>
 <center>"With probability $\pi_g=P(Z_{ig}=1)$ penguin $i$ belongs to group $g$."</center> 
 <br>
 
 
-**Posterior Probability $p_{ig}$**<br> 
+**Posterior Probability**<br>
+$$
+p_{ig}=P(Z_{ig}=1|X_i=x_i)
+$$ 
 If we know the flipper length of penguin $i$ then we can update the prior probability using **Bayes' Theorem** (see @eq-posteriorGMD) which leads to the posterior probability: <br>
 <center>"With probability $p_{ig}=P(Z_{ig}=1|X_i=x_i)$ penguin $i$ with flipper length $x_i$ belongs to group $g$."</center>
 <br>
@@ -672,15 +674,15 @@ $$
 \begin{align*}
 p_{ig}
 =\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}
-&=\frac{\pi_g\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
-&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}\varphi(x_i|\mu_g,\sigma_g)}{f_{GMM}(x_i|\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+&=\frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
+&=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
 \end{align*}
 $${#eq-posteriorGMD}
 :::
 
 
 ::: {.callout-tip}
-# Where's the **Expection** in the EM-Algorithm? 
+# Where's the <span style="color:#FF5733">**Expectation** </span> in the <span style="color:#FF5733">**E**</span>M-Algorithm? 
 The posterior probabilities $p_{ig}$ are conditional means:
 $$
 \begin{align*}
@@ -689,7 +691,7 @@ p_{ig}
 &= \mathbb{E}(Z_{ig}|X_i=x_i)\\
 \end{align*}
 $${#eq-posteriorMean}
-Thus, the computation of $p_{ig}$ in the **Expectation**-step of the EM algorithm (@sec-EM1) is indeed a computation of an expectation. 
+Thus, the computation of $p_{ig}$ is the **Expectation**-step of the EM algorithm (@sec-EM1). 
 ::: 
 
 
@@ -707,40 +709,40 @@ $$
 then we could establish the following alternative **likelihood ($\tilde{\mathcal{L}}$)** and **log-likelihood ($\tilde{\ell}$) functions**:
 $$
 \begin{align*}
-\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_g\varphi(x_i|\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
-\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{z})
-&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\tilde{\mathcal{L}}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{z})
+&=\prod_{i=1}^n\prod_{g=1}^G\left(\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)^{z_{ig}}\\[2ex]
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{z})
+&=\sum_{i=1}^n\sum_{g=1}^Gz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+&=\sum_{g=1}^G\left(\sum_{i=1}^nz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\right)
 \end{align*}
 $$
 
-Unlike the original log-likelihood function (@eq-logLikGMM), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**: we can directly calculate the logarithm of the normal distribution.  This simplifies the maximization problem considerably, since the normal distribution belongs to the exponential family (see @sec-MLAsymp) which is not the case for the normal mixture distribution.
+Unlike the original log-likelihood function (@eq-logLikGMM), the new log-likelihood function $\tilde\ell$ would be **easy to maximize**: We can effectively maximize separately for each group $g,$ which then involves only a single normal density function and not a too flexible mixture of density functions. This simplifies the maximization problem considerably, since the normal density belongs to the exponential family (see @sec-MLAsymp) which is not the case for the normal mixture distribution.
 
-We do not observe the realizations 
+However, we do not observe the realizations 
 $$
 \mathbf{z}=(z_{11},\dots,z_{nG}),
 $$ 
-but we know the distribution of the random variables 
+but only know the distribution of the random variables 
 $$
 \mathbf{Z}=(Z_{11},\dots,Z_{nG}).
 $$ 
 This leads to a **stochastic version** (in $\mathbf{Z}$) of the log-likelihood function:
 $$
-\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})=\sum_{i=1}^n\sum_{g=1}^GZ_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
 $$
 From this, we can calculate the conditional expected value (using @eq-posteriorMean), which motivates the "Expectation"-Step in the EM-algorithm:
 $$
 \begin{align*}
-&\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\[2ex]
-&\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+&\mathbb{E}_{\boldsymbol{\theta}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z}))\\[2ex]
+&\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\},
 \end{align*}
 $$
+where $\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ is used to denote the parameter vector. 
 
+The following EM algorithm differs only in notation from the version already discussed in @sec-EM1. The notation chosen here clarifies that the **Expectation**-step *updates the log-likelihood function* to be maximized in the **Maximization**-step. 
 
-
-The following EM algorithm differs only in notation from the version already discussed in @sec-EM1. The notation chosen here clarifies that the **Expectation**-step *updates the log-likelihood function* to be maximized in the **Maximization**-step. Moreover, the chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. 
-
-In the following, the parameter vector $(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ will be denoted as $\boldsymbol{\theta}$ for simplicity.
+The chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. 
 <br>
 
 1. **Initialization:**<br>
@@ -753,13 +755,13 @@ For $r=1,2,\dots$
     $$
     \begin{align*}
     \mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}|\mathbf{x},\mathbf{Z}))\\
-    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i|\mu_g,\sigma_g)\right)\right\}
+    &=\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z}))\\
+    &=\sum_{i=1}^n\sum_{k=1}^Kp_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
     \end{align*}
     $$
     where
     $$
-    p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i|\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_{GMM}(x_i|\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
+    p_{ig}^{(r-1)} = \frac{\pi_g^{(r-1)} \varphi(x_i;\mu_g^{(r-1)},\sigma_g^{(r-1)})}{f_{GMM}(x_i;\boldsymbol{\pi}^{(r-1)},\boldsymbol{\mu}^{(r-1)},\boldsymbol{\sigma}^{(r-1)})}
     $$
 
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
@@ -770,9 +772,9 @@ For $r=1,2,\dots$
     $$
 
 3. **Check Convergence:**<br> 
-   Stop if the value of the maximized log-likelihood function, 
+   Stop if the value of the maximized log-likelihood function 
    $$
-   \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)}),
+   \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})
    $$ 
    does not change anymore substantially. 
 
