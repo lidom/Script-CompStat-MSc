@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -161,6 +224,7 @@ div.csl-indent {
   <li><a href="#one-to-one-functions" id="toc-one-to-one-functions" class="nav-link" data-scroll-target="#one-to-one-functions">One-to-One Functions</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -509,13 +573,21 @@ o\big(|h|^k\big)=\left\{g(h)\to 0\;\text{ as }\; h\to 0:\frac{|g(h)|}{|h|^k}\to 
 \end{align*}
 \]</span> Thus, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_n',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h = 0\\[2ex]
-\Rightarrow h = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
+\Rightarrow h_{(0)} = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
 \end{align*}
 \]</span> Based on this <span class="math inline">\(h\)</span>-step, the new root-candidate is <span class="math display">\[
-\theta_{(1)} = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+\begin{align*}
+\theta_{(1)}
+&amp; = \theta_{(0)} + h_{(0)}\\[2ex]
+&amp; = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+\end{align*}
 \]</span> Likewise, the <span class="math inline">\(m\)</span>th root-candidate is <span class="math display">\[
-\theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
+\begin{align*}
+\theta_{(m)}
+&amp; = \theta_{(m-1)} + h_{(m-1)}\\[2ex]
+&amp; = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
+\end{align*}
 \]</span> see also <a href="#fig-NR">Figure&nbsp;<span>1.2</span></a>.</p>
 <div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/fig-NR_3e37eb79dd90aa55545172f4be78103a">
 <div class="cell-output-display">
@@ -648,7 +720,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 <tr class="header">
 <th><span class="math inline">\(m\)</span></th>
 <th><span class="math inline">\(\hat\theta_{(m)}\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(-\ell_n'(\hat\theta_{(m)})/\ell_n''(\hat\theta_{(m)})\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(h_{{(m)}}=\frac{-\ell_n'(\hat\theta_{(m)})}{\ell_n''(\hat\theta_{(m)})}\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(\ell_n'(\hat\theta_{(m)})\gtrless \varepsilon\)</span></th>
 </tr>
 </thead>
@@ -1302,12 +1374,13 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 \mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
 &amp; =-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)) = \mathcal{I}(\theta_0).
 \end{align*}
-\]</span><br>
+\]</span></p>
+</blockquote>
 <!-- , where we found that 
 $$
 \mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)=0.
-$$  --></p>
-</blockquote>
+$$  
+-->
 <p>Thus, we can apply the <strong>Lindeberg-Lévy central limit theorem</strong> from which it follows that <span class="math display">\[
 \frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 \]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
@@ -1542,10 +1615,12 @@ Example:
 \]</span> Thus, the maximum of <span class="math inline">\(\mathcal{L}^*(\eta)\)</span> is attained at <span class="math display">\[
 \eta=\tau(\theta)=\tau(\hat\theta_n),
 \]</span> showing that the ML-estimator of <span class="math inline">\(\tau(\theta_0)\)</span> is <span class="math inline">\(\tau(\hat\theta_n).\)</span></p>
-<!-- Moreover, using the multivariate version (for $\tau(\theta_0)\in\mathcal{K}$) of the first-order Taylor expansion of $\tau$ around $\theta_0,$ one can show that
+<!-- 
+Moreover, using the multivariate version (for $\tau(\theta_0)\in\mathcal{K}$) of the first-order Taylor expansion of $\tau$ around $\theta_0,$ one can show that
 $$
 \sqrt{n}\left(\tau(\hat\theta_n) - \tau(\theta_0)\right)\sim\mathcal{N}\left(0,\left(\mathcal{I}(\theta_0)\right)^{-1}\right) \nabla\ell_n(\theta')
-$$ -->
+$$ 
+-->
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1560,111 +1635,6 @@ More general (not one-to-one) functions
 <p>Luckily, the invariance property of the ML-estimator also holds for functions that are not one-to-one; see Chapter 7 in <span class="citation" data-cites="CasellaBerger_StatInf_2001">Casella and Berger (<a href="#ref-CasellaBerger_StatInf_2001" role="doc-biblioref">2001</a>)</span>.</p>
 </div>
 </div>
-<!-- 
-## General Functions 
-
-To generalize the above argument we need a more general definition of the likelihood function $\mathcal{L}^*(\eta)$ of $\eta = \tau(\theta).$ 
-
-If $\tau(\theta)$ is **not** one-to-one, then for a given value of $\eta$ there may be more than one value of $\theta$ that satisfies $\tau(\theta) = \eta.$ 
-
-In such cases, the correspondence between the maximization over $\eta$ and that over $\theta$ can break down. For instance, if $\hat\theta_n$ is the ML-estimator of $\theta_0,$ there may be another value of $\theta,$ say $\theta',$ for which $\tau(\hat\theta_n)=\tau(\theta').$ 
-
-To avoid such difficulties, we proceed by defining for $\tau(\theta)$ the *induced likelihood function* $\mathcal{L}^*(\eta),$ given by
-$$
-\begin{align*}
-\mathcal{L}^*(\eta) = \sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta).
-\end{align*}
-$${#eq-MLInvariance}
-The value $\hat\eta$ that maximizes $\mathcal{L}^*(\eta)$ will be called the ML-estimator of $\eta_0=\tau(\theta_0),$ and it can be seen from @eq-MLInvariance that the maxima of $\mathcal{L}^*$ and $\mathcal{L}$ coincide; i.e. that 
-$$
-\sup_{\eta}\mathcal{L}^*(\eta) = \sup_{\eta} \left(\sup_{\theta : \tau(\theta)=\eta}\mathcal{L}(\theta)\right).
-$$
-
-
-::: {.callout-note icon=false} 
-## 
-::: {#thm-EVP}
-
-# Invariance Property of ML-Estimators
-
-If $\hat{\theta}_n$ is a ML-estimator of $\theta_0,$ then for any function $\tau(\theta_0),$ the ML-estimator of $\tau(\theta_0)$ is $\tau(\hat{\theta}_n).$
-:::
-:::
-
-**Example:** $g(\theta)=\theta + 5.$
-
-
-**Proof of @thm-EVP:**
-
-Since $g$ is a one-to-one function, it possesses an inverse $g^{-1}.$ 
-
-Thus 
-$$
-\hat{\theta}_{n} = g^{-1}(\hat{\tau}_{n})
-$$
-and 
-$$
-\theta = g^{-1}(\tau)\quad\text{for all}\quad\theta\in\Theta.
-$$
-This allows us to express the likelihood function $\mathcal{L}_n(\theta)$ used for estimating $\theta_0$ in terms of a likelihood function $\tilde{\mathcal{L}}_n(\tau)$ in $\tau$: 
-$$
-\begin{align*}
-\mathcal{L}_n(\theta) 
-& = \mathcal{L}_n(g^{-1}(\tau))\\[2ex] 
-& = \prod_{i=1}^n f(X_i|)\\[2ex]
-& = \tilde{\mathcal{L}}_n(\tau)\\[2ex]
-\end{align*} 
-$$
-for all $\theta\in\Theta.$ At $\hat{\theta}_n$ we thus have 
-$$
-\mathcal{L}_n(\hat{\theta}_n) = \mathcal{L}_n(\overbrace{g^{-1}(\hat{\tau}_n)}^{=\hat{\theta}_n})=\tilde{\mathcal{L}}_n(\hat{\tau}_n). 
-$$
-To show now that $\hat\tau$ is the maximum likelihood estimator of $\tau_0,$ we need to show that
-$$
-\tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau.
-$$ 
-
-Since $\hat\theta_n$ denotes the ML estimator of $\theta_0,$ we know that 
-$$
-\mathcal{L}_n(\theta)\leq\mathcal{L}_n(\hat\theta_n)\quad\text{for all}\quad\theta\in\Theta.
-$$
-But since for any $\tau=g(\theta)$
-$$
-\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta) 
-\leq 
-\mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
-$$
-we know also that 
-$$
-\tilde{\mathcal{L}}_n(\tau)\leq\tilde{\mathcal{L}}_n(\hat\tau_n)\quad\text{for all}\quad\tau;
-$$
-i.e., $\hat{\tau}_n$ is indeed a maximum likelihood estimator of $\tau_0.$  -->
-<!-- The likelihood function with respect to $\tau$ can be expressed the likelihood function with respect to $\theta = h(\tau)\in\Theta,$ i.e. 
-$$
-\begin{align*}
-\tilde{\mathcal{L}}(\tau) = \mathcal{L}(h(\tau)) 
-& = \prod_{i=1}^n f(X_{i,obs}|h(\tau))\\[2ex]
-& = \prod_{i=1}^n f(X_{i,obs}|\theta)  = \mathcal{L}(\theta).
-\end{align*}
-$$
-Thus
-$$
-\begin{align*}
-\tilde{\mathcal{L}}(\hat{\tau}_{n})
-%&= \mathcal{L}(h(\hat{\tau}_{n}))\\[2ex]
-&= \mathcal{L}(\hat{\theta}_n)
-\end{align*}
-$$
-and for any $\tau$
-$$
-\tilde{\mathcal{L}}(\tau)   = \mathcal{L}(\theta) 
-\leq 
-\mathcal{L}(\hat{\theta}_n) = \tilde{\mathcal{L}}(\hat{\tau}_{n}),
-$$
-which shows the statement of @thm-EVP:
-$$
-\hat{\tau}_n=\arg\max_\tau\tilde{\mathcal{L}}(\tau).
-$$ -->
 </section>
 </section>
 <section id="exercises" class="level2 unnumbered">
@@ -1703,7 +1673,7 @@ Var(X_i)=\frac{1}{\theta_0^2}.
 <section id="exercise-4." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
 <p>Let <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\)</span> with <span class="math inline">\(X\sim\mathcal{Poisson}(\lambda_0).\)</span> That is <span class="math inline">\(X\sim f\)</span> with density function <span class="math display">\[
-f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
+f(x;\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 \]</span></p>
 <ol type="a">
 <li><p>Find the maximum likelihood estimator, <span class="math inline">\(\hat{\lambda},\)</span> of <span class="math inline">\(\lambda_0.\)</span></p></li>
@@ -1723,11 +1693,385 @@ f(x|\lambda_0) = \frac{\lambda_0^x \exp(-\lambda_0)}{x!}.
 \]</span> where <span class="math display">\[
 R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 \]</span> for a mean-value <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{root}\)</span>. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem <a href="#thm-MVT">Theorem&nbsp;<span>1.2</span></a>.</p>
-<!-- {{< include Ch1_MaximumLikelihood_Solutions.qmd >}} -->
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solutions-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-1.">Solutions of Exercise 1.</h4>
+<p>Below I use the same data (one H, four T) that was used to produce the results in <a href="#tbl-NR">Table&nbsp;<span>1.1</span></a> of our script. However, you can produce new data by setting another seed-value</p>
+<div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/unnamed-chunk-3_6ab25ddab0ac8252f20f0f5a07df1788">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_true <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># unknown true theta value</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n          <span class="ot">&lt;-</span>  <span class="dv">5</span>     <span class="co"># sample size</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate data: n many (unfair) coin tosses</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">size    =</span> n, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">replace =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">prob    =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">-</span>theta_true, theta_true)) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">## number of heads (i.e., the number of "1"s in x)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>N_H <span class="ot">&lt;-</span> <span class="fu">sum</span>(x)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">## First derivative of the log-likelihood function</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>Lp_fct   <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, <span class="at">N_H =</span> N_H, <span class="at">n =</span> n){</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    (N_H<span class="sc">/</span>theta) <span class="sc">-</span> (n <span class="sc">-</span> N_H)<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">-</span> theta)    </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Second derivative of the log-likelihood function</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>Lpp_fct   <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, <span class="at">N_H =</span> N_H, <span class="at">n =</span> n){</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span> (N_H<span class="sc">/</span>theta<span class="sc">^</span><span class="dv">2</span>) <span class="sc">-</span> (n <span class="sc">-</span> N_H)<span class="sc">/</span>(<span class="dv">1</span> <span class="sc">-</span> theta)<span class="sc">^</span><span class="dv">2</span>    </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>t     <span class="ot">&lt;-</span> <span class="fl">1e-10</span>   <span class="co"># convergence criterion</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>check <span class="ot">&lt;-</span> <span class="cn">TRUE</span>    <span class="co"># check object to stop the while-loop</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>i     <span class="ot">&lt;-</span> <span class="dv">0</span>       <span class="co"># count iterations</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Initializations </span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>theta  <span class="ot">&lt;-</span> <span class="fl">0.4</span>     <span class="co"># starting value theta_{(0)}</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>h_step <span class="ot">&lt;-</span> <span class="cn">NULL</span>    <span class="co"># empty value </span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>Lp     <span class="ot">&lt;-</span> <span class="fu">Lp_fct</span>( theta, <span class="at">N_H=</span>N_H, <span class="at">n=</span>n)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>Lpp    <span class="ot">&lt;-</span> <span class="fu">Lpp_fct</span>(theta, <span class="at">N_H=</span>N_H, <span class="at">n=</span>n)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(check){</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    i         <span class="ot">&lt;-</span> i <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    h_step_new <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> (<span class="fu">Lp_fct</span>(theta[i], <span class="at">N_H=</span>N_H, <span class="at">n=</span>n) <span class="sc">/</span> <span class="fu">Lpp_fct</span>(theta[i], <span class="at">N_H=</span>N_H, <span class="at">n=</span>n))    </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    h_step     <span class="ot">&lt;-</span> <span class="fu">c</span>(h_step, h_step_new)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    theta_new  <span class="ot">&lt;-</span> theta[i] <span class="sc">+</span> h_step_new</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    Lp_new     <span class="ot">&lt;-</span> <span class="fu">Lp_fct</span>( theta_new, <span class="at">N_H=</span>N_H, <span class="at">n=</span>n)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    Lpp_new    <span class="ot">&lt;-</span> <span class="fu">Lpp_fct</span>(theta_new, <span class="at">N_H=</span>N_H, <span class="at">n=</span>n)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    theta      <span class="ot">&lt;-</span> <span class="fu">c</span>(theta, theta_new) </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    Lp         <span class="ot">&lt;-</span> <span class="fu">c</span>(Lp,    Lp_new) </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Lpp        <span class="ot">&lt;-</span> <span class="fu">c</span>(Lpp,   Lpp_new) </span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="do">##</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>( <span class="fu">abs</span>(<span class="fu">Lp_fct</span>(theta_new, <span class="at">N_H=</span>N_H, <span class="at">n=</span>n)) <span class="sc">&lt;</span> t ){</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>      check <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>results           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(theta)<span class="sc">-</span><span class="dv">1</span>, theta, <span class="sc">-</span>Lp<span class="sc">/</span>Lpp, Lp)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"m"</span>, <span class="st">"theta_m"</span>, <span class="st">"h_m"</span>, <span class="st">"Lp(theta_m)"</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     m   theta_m           h_m   Lp(theta_m)
+[1,] 0 0.4000000 -2.400000e-01 -4.166667e+00
+[2,] 1 0.1600000  3.326733e-02  1.488095e+00
+[3,] 2 0.1932673  6.558924e-03  2.159084e-01
+[4,] 3 0.1998263  1.736356e-04  5.433195e-03
+[5,] 4 0.1999999  1.132731e-07  3.539786e-06
+[6,] 5 0.2000000  4.814638e-14  1.504574e-12</code></pre>
+</div>
+</div>
+</section>
+<section id="solutions-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-2.">Solutions of Exercise 2.</h4>
+<section id="a-log-likelihood-function" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-log-likelihood-function">(a) Log-likelihood function</h5>
+<p>The log-likelihood function is given by <span class="math display">\[
+\begin{align*}
+\ell_n(\theta)
+&amp;=\sum_{i=1}^n \ln (\theta\exp(-\theta X_i))\\
+&amp;=\sum_{i=1}^n (\ln \theta -\theta X_i)\\
+&amp;=n \ln \theta -\sum_{i=1}^n \theta X_i
+\end{align*}
+\]</span></p>
+</section>
+<section id="b-ml-estimator" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-ml-estimator">(b) ML-estimator</h5>
+<p>The ML estimator is defined as <span class="math inline">\(\hat{\theta}_{n}=\arg\max\ell(\theta)\)</span>. Deriving the ML estimator <span class="math inline">\(\hat\theta_n\)</span>: <span class="math display">\[
+\begin{align*}
+\ell_n'(\theta)&amp;=n\frac{1}{\theta} - \sum_{i=1}^n X_i\\
+\ell_n'(\hat\theta_n)=0\quad \Leftrightarrow &amp;\quad 0=n\frac{1}{\hat\theta_n} - \sum_{i=1}^n X_i\\
+\Leftrightarrow &amp;\quad n\frac{1}{\hat\theta_n} = \sum_{i=1}^n X_i\\
+\Leftrightarrow &amp;\quad \hat\theta_n = \frac{1}{\frac{1}{n}\sum_{i=1}^n X_i}= \frac{1}{\bar{X}_n}
+\end{align*}
+\]</span></p>
+</section>
+<section id="b-fisher-information" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-fisher-information">(b) Fisher information</h5>
+<p>The Fisher information is given by <span class="math display">\[
+\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell''(\theta_0)).
+\]</span> The second derivative of <span class="math inline">\(\ell_n(\theta)\)</span> is given by <span class="math display">\[
+\ell''_n(\theta)=-n\frac{1}{\theta^2}.
+\]</span> Thus, <span class="math display">\[
+\begin{align*}
+\mathcal{I}(\theta_0)
+&amp;=-\frac{1}{n}\mathbb{E}(\ell''_n(\theta_0))\\[2ex]
+&amp;=-\frac{1}{n}\left(-n\frac{1}{\theta^2_0}\right)\\[2ex]
+&amp;=\frac{1}{\theta^2_0}.
+\end{align*}
+\]</span> Therefore, the asymptotic distribution of <span class="math inline">\(\hat\theta_n\)</span> is <span class="math display">\[
+\begin{align*}
+\sqrt{n}(\hat\theta_n-\theta)&amp;\to_d \mathcal{N}\left(0,\theta^2_0\right),
+\end{align*}
+\]</span> <span class="math inline">\(n\to\infty.\)</span></p>
+<p>Since we do not know the asymptotic variance <span class="math inline">\(\theta_0^2,\)</span> we need to plug-in a consistent estimator; namely, <span class="math display">\[
+\hat{\theta}_n^2 = \left(\frac{1}{\bar{X}_n}\right)^2 \approx \theta^2_0.
+\]</span> This allows us to use the following Normal approximation to construct statistical hypothesis tests and confidence intervals, etc: <span class="math display">\[
+\begin{align*}
+\hat\theta_n&amp;\overset{a}{\sim}\mathcal{N}\left(\theta,\frac{\hat{\theta}_n^2}{n}\right)
+\end{align*}
+\]</span> This approximation is good for largish sample sizes (roughly <span class="math inline">\(n\geq 30\)</span>).</p>
+</section>
+</section>
+<section id="solutions-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-3.">Solutions of Exercise 3.</h4>
+<section id="a-likelihood-function" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-likelihood-function">(a) Likelihood function</h5>
+<p>Recall that the density function of <span class="math inline">\(\mathcal{Unif}(0,\theta)\)</span> is <span class="math display">\[
+f(x;\theta)
+=\left\{
+\begin{array}{ll}
+\frac{1}{\theta} &amp; 0\leq x\leq \theta\\
+0                &amp; \text{otherwise}\\
+\end{array}
+\right.
+\]</span> Thus, the likelihood function is <span class="math display">\[
+\mathcal{L}_n(\theta) = \prod_{i=1}^n f(X_i;\theta).
+\]</span> <strong>Note:</strong> If any <span class="math inline">\(\theta&lt;X_i,\)</span> we have that <span class="math display">\[
+\mathcal{L}_n(\theta)=0.
+\]</span> Putting it differently, let <span class="math display">\[
+X_{(n)}=\max\{X_1,\dots,X_n\}
+\]</span> denote the <span class="math inline">\(n\)</span>th order-statistic, then <span class="math display">\[
+\mathcal{L}_n(\theta)=0\quad\text{for all}\quad \theta&lt;X_{(n)}.
+\]</span></p>
+<p>However, for all <span class="math inline">\(\theta \geq X_{(n)}\)</span> we have that <span class="math display">\[
+f(X_i;\theta)=\frac{1}{\theta}\quad\textbf{for all}\quad i=1,\dots,n.
+\]</span> Thus, for all <span class="math inline">\(\theta \geq X_{(n)},\)</span> <span class="math display">\[
+\mathcal{L}_n(\theta)=\left(\frac{1}{\theta}\right)^n.
+\]</span></p>
+<p>Summing up, <span id="eq-MLMaxestim"><span class="math display">\[
+\mathcal{L}_n(\theta)
+=\left\{
+\begin{array}{ll}
+\left(\frac{1}{\theta}\right)^n &amp; \theta \geq  X_{(n)}\\
+0                               &amp; \theta &lt; X_{(n)}\\
+\end{array}
+\right.
+\tag{1.14}\]</span></span></p>
+</section>
+</section>
+<section id="b-maximum-likelihood-estimator-of-theta" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="b-maximum-likelihood-estimator-of-theta">(b) Maximum likelihood estimator of <span class="math inline">\(\theta\)</span></h4>
+<p><span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is strictly decreasing over the interval <span class="math inline">\([X_{(n)},\infty);\)</span> see <a href="#fig-MLMaxestim">Figure&nbsp;<span>1.3</span></a>.</p>
+<div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/fig-MLMaxestim_05a8afaba5c49b6e6b99b218b2eefab8">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n          <span class="ot">&lt;-</span> <span class="dv">20</span>   <span class="co"># sample size</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_max      <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>theta_vec  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">to   =</span> X_max <span class="sc">*</span> <span class="fl">1.5</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">len  =</span> <span class="dv">100</span>) </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>likelihood_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, X_max, n){ </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    likelihood                <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(theta<span class="sc">^</span>n)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    likelihood[theta <span class="sc">&lt;</span> X_max] <span class="ot">&lt;-</span> <span class="dv">0</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(likelihood) </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>likelihood_vec <span class="ot">&lt;-</span> <span class="fu">likelihood_fun</span>(<span class="at">theta =</span> theta_vec,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">X_max =</span> X_max, </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">n     =</span> n)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> likelihood_vec, </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> theta_vec, </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Likelihood"</span>, </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">""</span>)            </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> X_max, <span class="at">labels =</span> <span class="fu">expression</span>(X[(n)]))                  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-MLMaxestim" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="Ch1_MaximumLikelihood_files/figure-html/fig-MLMaxestim-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1.3: Graph of the likelihood function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> given in <a href="#eq-MLMaxestim">Equation&nbsp;<span>1.14</span></a>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Thus, the maximum likelihood estimator is <span class="math display">\[
+\begin{align}
+\hat{\theta}_{ML}
+&amp; =\arg\max_{\theta&gt;0}\mathcal{L}_n(\theta)\\
+&amp; = X_{(n)}.
+\end{align}
+\]</span></p>
+</section>
+<section id="solutions-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-4.">Solutions of Exercise 4.</h4>
+<section id="a-finding-the-maximum-likelihood-estimator-of-lambda" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-finding-the-maximum-likelihood-estimator-of-lambda">(a) Finding the Maximum likelihood estimator of <span class="math inline">\(\lambda\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+\mathcal{L}_n(\lambda)
+&amp; = \prod_{i=1}^n f(X_i;\lambda)\\[2ex]
+&amp; = \prod_{i=1}^n \frac{\lambda^{X_i} \exp(-\lambda)}{X_i!} \\[2ex]
+&amp; = \frac{\lambda^{\sum_{i=1}^n X_i}  \exp(-n \lambda)}{\prod_{i=1}^n (X_i!)} \\[4ex]
+\ell(\lambda)
+&amp;= \left(\sum_{i=1}^n X_i\right) \ln(\lambda) -n\lambda\cdot 1 - \sum_{i=1}^n \ln(X_i!)
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\ell'_n(\lambda)
+&amp;= \frac{\left(\sum_{i=1}^n X_i\right)}{\lambda}  - n
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\ell''_n(\lambda)
+&amp;= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} &lt; 0  
+\end{align}
+\]</span> since by the properties of the Poisson distribution <span class="math inline">\(x_1,\dots,x_n&gt;0\)</span> and <span class="math inline">\(\lambda&gt;0.\)</span></p>
+<p>Thus the maximum likelihood estimator of <span class="math inline">\(\lambda\)</span> is given by <span class="math display">\[
+\begin{align}
+&amp;\frac{\left(\sum_{i=1}^n X_i\right)}{\hat\lambda}  - n \overset{!}{=} 0\\[2ex]
+\Rightarrow &amp; \hat \lambda_n = \frac{1}{n}\sum_{i=1}^n X_i.
+\end{align}
+\]</span></p>
+</section>
+<section id="b-finding-the-maximum-likelihood-estimator-of-px4" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-finding-the-maximum-likelihood-estimator-of-px4">(b) Finding the Maximum likelihood estimator of <span class="math inline">\(P(X=4)\)</span></h5>
+<p><span class="math display">\[
+\begin{align}
+P(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!}
+\end{align}
+\]</span></p>
+<p>Thus <span class="math inline">\(P(X=4)\)</span> is a function of <span class="math inline">\(\lambda\)</span> <span class="math display">\[
+\begin{align}
+P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
+\end{align}
+\]</span></p>
+<div class="cell" data-hash="Ch1_MaximumLikelihood_cache/html/unnamed-chunk-5_c37dbaa557a6d27347447d7fe3523290">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lambda_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> .<span class="dv">0001</span>, <span class="at">to =</span> <span class="dv">15</span>, <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>g_vec      <span class="ot">&lt;-</span> (lambda_vec<span class="sc">^</span><span class="dv">4</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span>lambda_vec))<span class="sc">/</span>( <span class="fu">factorial</span>(<span class="dv">4</span>) )</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> lambda_vec, <span class="at">y =</span> g_vec, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab=</span><span class="fu">expression</span>(lambda), <span class="at">ylab=</span><span class="st">"g"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">4</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Ch1_MaximumLikelihood_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For <span class="math inline">\(0&lt;\lambda\leq 4,\)</span> <span class="math inline">\(g(\lambda)\)</span> is even a one-to-one mapping.</p>
+<p>By the invariance property of the maximum likelihood estimator we thus have <span class="math display">\[
+\begin{align}
+\hat{P}(X=4)\equiv \hat{P}(X=4|\hat{\lambda}_n) = \frac{\hat{\lambda}^4_n \exp(-\hat{\lambda}_n)}{4!}
+\end{align}
+\]</span> with <span class="math inline">\(\hat{\lambda}_n=\frac{1}{n}\sum_{i=1}^n X_i.\)</span></p>
+</section>
+</section>
+<section id="solutions-of-exercise-5." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-5.">Solutions of Exercise 5.</h4>
+<p>Setup of <a href="#sec-ConvNR"><span>Section&nbsp;1.2.2</span></a>:</p>
+<p>Let <span class="math inline">\(\theta_{root}\)</span> denote the root of <span class="math inline">\(\ell_n';\)</span> i.e.&nbsp; <span class="math display">\[
+\ell_n'(\theta_{root})=0.
+\]</span> Let <span class="math display">\[
+\begin{align*}
+e_{(0)}&amp;=\theta_{root}-\theta_{(0)}\\[2ex]
+e_{(m)}&amp;=\theta_{root}-\theta_{(m)}
+\end{align*}
+\]</span> denote the start-value error and the <span class="math inline">\(m\)</span>th step error, respectively.</p>
+<p>Let <span class="math display">\[
+I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
+\]</span> denote the start-value neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
+<p>Let <span class="math inline">\(\ell_n'\)</span> be “well behaved” over <span class="math inline">\(I;\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I\)</span> and</li>
+<li><span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I.\)</span></li>
+</ul>
+<p>Let <span class="math inline">\(\theta_{(0)}\)</span> be “close enough;” i.e.&nbsp;let</p>
+<ul>
+<li><span class="math inline">\(M|e_{(0)}|&lt;1,\)</span></li>
+</ul>
+<p>where <span class="math display">\[
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
+\]</span></p>
+<p>In the following, we show that the Newton-Raphson algorithm converges under this setup.</p>
+<!-- We'll see that it is a **quadratic** (i.e. very fast) convergence.  -->
+<p>By the second-order Taylor expansion of <span class="math inline">\(\ell'(\theta_{root})\)</span> around <span class="math inline">\(\theta_{(m)}\)</span> with the mean-value form of the remainder term, we have that <span class="math display">\[
+\begin{align*}
+\overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)}
+&amp; = \ell'(\theta_{(m)}) +
+    \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) +
+    \frac{1}{2}\ell'''(\xi)(\theta_{root}-\theta_{(m)})^2
+\end{align*}
+\]</span> for some real-valued number <span class="math inline">\(\xi_{(m)}\)</span> between <span class="math inline">\(\theta_{root}\)</span> and <span class="math inline">\(\theta_{(m)}.\)</span></p>
+<p>Since <span class="math inline">\(\ell'(\theta_{root})=0,\)</span> we have that <span class="math display">\[
+\begin{align*}
+0
+&amp; = \ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)}) + \frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
+\end{align*}
+\]</span> Some rearrangments lead <span class="math display">\[
+\begin{align*}
+\ell'(\theta_{(m)}) + \ell''(\theta_{(m)})(\theta_{root}-\theta_{(m)})
+&amp; = -\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2\\[2ex]
+{\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}} + (\theta_{root}-\theta_{(m)})
+&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\qquad[\text{dividing by}\;\ell''(\theta_{(m)})]\\[2ex]
+\end{align*}
+\]</span> Using the update steps of the alrorithm <span class="math display">\[
+\theta_{(m+1)} = \theta_{(m)} - \frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}
+\quad\Leftrightarrow\quad
+\theta_{(m)} - \theta_{(m+1)}  = {\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}}
+\]</span> yields <span class="math display">\[
+\begin{align*}
+\theta_{(m)} - \theta_{(m+1)} + (\theta_{root}-\theta_{(m)})
+&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\\[2ex]
+\Leftrightarrow\quad
+\theta_{root} - \theta_{(m+1)}  
+&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\\[2ex]
+\Leftrightarrow\quad
+e_{(m+1)}  
+&amp;= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(e_{(m)})^2
+\end{align*}
+\]</span> Taking absolute values, since we are not interested in the sign of the approximation errors, yields <span class="math display">\[
+\begin{align*}
+|e_{(m+1)}|  
+&amp;= \frac{1}{2} \; |\ell'''(\xi_{(m)})|\;\frac{1}{|\ell''(\theta_{(m)})|}(e_{(m)})^2
+\end{align*}
+\]</span> Considering the worst case within <span class="math inline">\(I,\)</span> leads to the following inequality <span id="eq-NRIneq"><span class="math display">\[
+\begin{align*}
+|e_{(m+1)}|  
+&amp;\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(e_{(m)})^2\\[2ex]
+\Leftrightarrow\quad |e_{(m+1)}|  
+&amp;\leq  M\;(e_{(m)})^2\\[-2ex]
+\end{align*}
+\tag{1.15}\]</span></span> To show that the Newton-Raphon algorithm converges, we need to show that <span class="math display">\[
+|e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty.
+\]</span></p>
+<p>For <span class="math inline">\(0\leq M\,|e_{(0)}|&lt;1\)</span> the inequality in <a href="#eq-NRIneq">Equation&nbsp;<span>1.15</span></a> becomes a sharp inequality <span class="math display">\[
+\begin{align*}
+&amp;|e_{(1)}|\leq \overbrace{M\;|e_{(0)}|}^{&lt;1}\,|e_{(0)}|
+\quad\Rightarrow\quad |e_{(1)}|&lt; \,|e_{(0)}|\\[2ex]
+\Rightarrow\quad
+&amp; |e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{&lt;1}\,|e_{(1)}|
+\quad\Rightarrow\quad |e_{(2)}|&lt; \,|e_{(1)}|\\[2ex]
+&amp;\phantom{|e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{&lt;1}\,|e_{(1)}|}\vdots\\[2ex]
+\Rightarrow\quad
+&amp; |e_{(m+1)}|&lt; \,|e_{(m)}| \quad\text{for all }m=0,1,2\dots
+\end{align*}
+\]</span> which shows the convergence of the Newton Raphson algorithm. (The inequality in <a href="#eq-NRIneq">Equation&nbsp;<span>1.15</span></a> implies that the convergence is even quadratic; i.e.&nbsp;very fast.)</p>
+<p><strong>Special Case</strong> <span class="math inline">\(M=0\)</span>: <br> For <span class="math display">\[
+\sup_{\theta\in I}|\ell'''(\theta)|=0
+\]</span> we have that <span class="math inline">\(M=0\)</span> which implies that we find the root, <span class="math inline">\(\theta_{root},\)</span> already in the first <span class="math inline">\((m=1)\)</span> update step, since<br>
+<span class="math display">\[
+\begin{align*}
+|e_{(1)}|  
+&amp;\leq \overbrace{\left(M |e_{(0)}|\right)}^{=0}\;|e_{(0)}|\\[2ex]
+\Rightarrow\quad |e_{(1)}|&amp;=0\\[2ex]
+\Rightarrow\quad \theta_{(1)}&amp;=\theta_{root},
+\end{align*}
+\]</span> even when <span class="math inline">\(|e_{(0)}|\gg 0.\)</span></p>
+<p>This makes sense, since <span class="math inline">\(\sup_{\theta\in I}|\ell'''(\theta)|=0\)</span> implies that <span class="math inline">\(\ell'(\theta)\)</span> has no curvature; i.e.&nbsp;<span class="math inline">\(\ell'(\theta)\)</span> is a straight line for all <span class="math inline">\(x\in I\)</span> which implies that the Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<!-- DO NOT DELETE! -->
+<!-- Further ML-Material (Particularly Tests) -->
+<!-- DO NOT DELETE! -->
 <!-- **Example::** Assume an i.i.d. sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by $f(x;\theta)=\theta\exp(-\theta x)$. We then have $\mu:=E(X_i)=\frac{1}{\theta}$ as well as $\sigma^2_X:=\textrm{var}(X_i)=\frac{1}{\theta^2}$. The -->
 <!-- log-likelihood functions is given by  -->
 <!-- $$l(\theta)=\sum_{i=1}^n \ln (\theta\exp(-\theta X_i)))=n \ln \theta -\sum_{i=1}^n \theta X_i$$ -->
