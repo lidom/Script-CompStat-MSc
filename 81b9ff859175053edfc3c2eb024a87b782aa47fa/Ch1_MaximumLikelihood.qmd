@@ -1724,7 +1724,6 @@ for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}$. This is
 
 #### Solutions of Exercise 1. {-} 
 
-
 Below I use the same data (one H, four T) that was used to produce the results in @tbl-NR of our script. However, you can produce new data by setting another seed-value
 
 ```{r}
@@ -1785,11 +1784,9 @@ results
 ```
 
 
-
-
 #### Solutions of Exercise 2. {-} 
 
-##### (a) Log-likelihood function {-}
+##### (a) Log-Likelihood Function {-}
 
 The log-likelihood function is given by
 $$
@@ -1801,9 +1798,9 @@ $$
 \end{align*}
 $$
 
-##### (b) ML-estimator  {-}
+##### (b) ML-Estimator  {-}
 
-The ML estimator is defined as $\hat{\theta}_{n}=\arg\max\ell(\theta)$. Deriving the ML estimator $\hat\theta_n$:
+The ML estimator is defined as $\hat{\theta}_{n}=\arg\max_{\theta}\ell(\theta)$. Deriving the ML estimator $\hat\theta_n$:
 $$
 \begin{align*}
 \ell_n'(\theta)&=n\frac{1}{\theta} - \sum_{i=1}^n X_i\\
@@ -1813,15 +1810,15 @@ $$
 \end{align*}
 $$
 
-##### (b) Fisher information {-}
+##### (b) Fisher Information {-}
 
 The Fisher information is given by 
 $$
 \mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell''(\theta_0)).
 $$ 
-The second derivative of $\ell_n(\theta)$ is given by
+The second derivative of $\ell_n(\theta)$ evaluated at $\theta_0$ is given by
 $$
-\ell''_n(\theta)=-n\frac{1}{\theta^2}.
+\ell''_n(\theta)=-n\frac{1}{\theta^2_0}.
 $$
 Thus,
 $$
@@ -1854,15 +1851,14 @@ This approximation is good for largish sample sizes (roughly $n\geq 30$).
 
 #### Solutions of Exercise 3. {-}
 
-
-##### (a) Likelihood function {-}
+##### (a) Likelihood Function {-}
 
 Recall that the density function of $\mathcal{Unif}(0,\theta)$ is
 $$
-f(x;\theta)
+f(x;\theta_0)
 =\left\{
 \begin{array}{ll}
-\frac{1}{\theta} & 0\leq x\leq \theta\\
+\frac{1}{\theta} & 0\leq x\leq \theta_0\\
 0                & \text{otherwise}\\
 \end{array}
 \right.
@@ -1884,11 +1880,11 @@ $$
 \mathcal{L}_n(\theta)=0\quad\text{for all}\quad \theta<X_{(n)}.
 $$ 
 
-However, for all $\theta \geq X_{(n)}$ we have that 
+However, for all values of $\theta$ with $\theta \geq X_{(n)}$ we have that 
 $$
 f(X_i;\theta)=\frac{1}{\theta}\quad\textbf{for all}\quad i=1,\dots,n.
 $$
-Thus, for all $\theta \geq X_{(n)},$
+Thus, for all values of $\theta$ with $\theta \geq X_{(n)},$
 $$
 \mathcal{L}_n(\theta)=\left(\frac{1}{\theta}\right)^n.
 $$ 
@@ -1905,8 +1901,7 @@ $$
 $${#eq-MLMaxestim}
 
 
-
-#### (b) Maximum likelihood estimator of $\theta$ {-}
+#### (b) Maximum Likelihood Estimator of $\theta_0$ {-}
 
 $\mathcal{L}_n(\theta)$ is strictly decreasing over the interval $[X_{(n)},\infty);$ see @fig-MLMaxestim.
 
@@ -1938,7 +1933,7 @@ plot(y = likelihood_vec,
 axis(1, at = X_max, labels = expression(X[(n)]))                  
 ```
 
-Thus, the maximum likelihood estimator is 
+Thus, the maximum likelihood estimator of $\theta_0$ is 
 $$
 \begin{align}
 \hat{\theta}_{ML} 
@@ -1951,7 +1946,7 @@ $$
 #### Solutions of Exercise 4. {-}
 
 
-##### (a) Finding the Maximum likelihood estimator of $\lambda$ {-}
+##### (a) Finding the Maximum Likelihood Estimator of $\lambda_0$ {-}
 
 $$
 \begin{align}
@@ -1977,30 +1972,29 @@ $$
 &= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} < 0  
 \end{align}
 $$
-since by the properties of the Poisson distribution $x_1,\dots,x_n>0$ and $\lambda>0.$
+since by the properties of the Poisson distribution $X_1,\dots,X_n>0$ and $\lambda>0.$
 
-Thus the maximum likelihood estimator of $\lambda$ is given by
+Thus the maximum likelihood estimator of $\lambda_0$ is given by
 $$
 \begin{align}
-&\frac{\left(\sum_{i=1}^n X_i\right)}{\hat\lambda}  - n \overset{!}{=} 0\\[2ex]
+&\frac{\left(\sum_{i=1}^n X_i\right)}{\hat\lambda_n}  - n \overset{!}{=} 0\\[2ex]
 \Rightarrow & \hat \lambda_n = \frac{1}{n}\sum_{i=1}^n X_i.
 \end{align}
 $$
 
 
-##### (b) Finding the Maximum likelihood estimator of $P(X=4)$ {-}
-
+##### (b) Finding the Maximum Likelihood Estimator of $P(X=4)$ {-}
 
 $$
 \begin{align}
-P(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!}
+P(X=4) = \frac{\lambda_0^4 \exp(-\lambda_0)}{4!}
 \end{align}
 $$
 
 Thus $P(X=4)$ is a function of $\lambda$
 $$
 \begin{align}
-P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = g(\lambda)
+P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = \tau(\lambda)
 \end{align}
 $$
 
@@ -2010,14 +2004,14 @@ lambda_vec <- seq(from = .0001, to = 15, len = 100)
 g_vec      <- (lambda_vec^4 * exp(-1*lambda_vec))/( factorial(4) )
 
 plot(x = lambda_vec, y = g_vec, 
-     type = "l", xlab=expression(lambda), ylab="g")
+     type = "l", xlab=expression(lambda), ylab=expression(tau(lambda)))
 abline(v = 4)
 axis(1, at = 4)
 ```
 
-For $0<\lambda\leq 4,$ $g(\lambda)$ is even a one-to-one mapping. 
+(For $0<\lambda\leq 4,$ $g(\lambda)$ is even a one-to-one mapping.) 
 
-By the invariance property of the maximum likelihood estimator we thus have
+By the invariance property of the maximum likelihood estimator (which also applies to functions $\tau$ that are not one-to-one) we thus have
 $$
 \begin{align}
 \hat{P}(X=4)\equiv \hat{P}(X=4|\hat{\lambda}_n) = \frac{\hat{\lambda}^4_n \exp(-\hat{\lambda}_n)}{4!}
@@ -2139,9 +2133,10 @@ For $0\leq M\,|e_{(0)}|<1$ the inequality in @eq-NRIneq becomes a sharp inequali
 $$
 \begin{align*}
 &|e_{(1)}|\leq \overbrace{M\;|e_{(0)}|}^{<1}\,|e_{(0)}|
-\quad\Rightarrow\quad |e_{(1)}|< \,|e_{(0)}|\\[2ex]
+\quad\Rightarrow\quad |e_{(1)}|< \,|e_{(0)}|\\[3ex]
+&{\color{darkgreen}[\text{Using that $M\;|e_{(0)}|<1$ and that $|e_{(1)}|<|e_{(0)}|$}]}\\[2ex]
 \Rightarrow\quad 
-& |e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{<1}\,|e_{(1)}|
+& |e_{(2)}|\leq {\color{darkgreen}\overbrace{M\;|e_{(1)}|}^{<1}}\,|e_{(1)}|
 \quad\Rightarrow\quad |e_{(2)}|< \,|e_{(1)}|\\[2ex]
 &\phantom{|e_{(2)}|\leq \overbrace{M\;|e_{(1)}|}^{<1}\,|e_{(1)}|}\vdots\\[2ex]
 \Rightarrow\quad 
