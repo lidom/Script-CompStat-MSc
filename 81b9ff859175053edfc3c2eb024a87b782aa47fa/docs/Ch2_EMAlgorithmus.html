@@ -112,6 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./Ch3_Bootstrap.html" rel="next">
 <link href="./Ch1_MaximumLikelihood.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -191,6 +192,11 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></a>
   </div>
 </li>
     </ul>
@@ -998,7 +1004,7 @@ m(x)
 &amp;=P(Y=1|X=x).
 \end{align*}
 \]</span> That is, the conditonal mean <span class="math inline">\(m(x)\)</span> is the <strong>posterior probability</strong>, i.e.&nbsp;the probability of <span class="math inline">\(Y=1\)</span> given <span class="math inline">\(X=x.\)</span></p>
-<p>From Bayes’ theorem it follows that <span id="eq-RegFun"><span class="math display">\[
+<p>From <strong>Bayes’ theorem</strong> it follows that <span id="eq-RegFun"><span class="math display">\[
 \begin{align*}
 m(x)
 &amp;=P(Y=1|X=x)\\[2ex]
@@ -1014,12 +1020,12 @@ m(x)
 </li>
 <li><span class="math display">\[
 f_{X|Y}(x|Y=0)\quad\text{and}\quad f_{X|Y}(x|Y=1)
-\]</span> denote the conditional density functions of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span> and <span class="math inline">\(Y=1,\)</span> respectively, and</li>
+\]</span> denote the <strong>conditional density functions</strong> of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=0\)</span> and <span class="math inline">\(Y=1,\)</span> respectively, and</li>
 <li><span class="math display">\[
 f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
-\]</span> denotes the unconditional density function of <span class="math inline">\(X.\)</span></li>
+\]</span> denotes the <strong>unconditional density function</strong> of <span class="math inline">\(X.\)</span></li>
 </ol>
-<p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density.</p>
+<p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density or a Gaussian mixture.</p>
 <p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1034,7 +1040,7 @@ f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
 <div id="def-BayesCR" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 2.2 (Bayes Classification Rule and Decision Boundary) </strong></span><br> The <strong>Bayes classification rule</strong> <span class="math inline">\(h^\ast\)</span> is given by <span class="math display">\[
 h^\ast(x) = \left\{\begin{array}{ll}
-1&amp;\text{if }m(x)&gt;\frac{1}{2}\\
+1&amp;\text{if }P(Y=1|X=x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
 \end{array}\right.
 \]</span> The <strong>decision boundary</strong> of a classifier <span class="math inline">\(h\)</span> is given by the set <span class="math display">\[
@@ -1077,12 +1083,12 @@ L(h^\ast)\leq L(h),
 </div>
 </div>
 </div>
-<p>The Bayes decision rule <span class="math inline">\(h^\ast(x)\)</span> depends on the unknown quantities and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
+<p>The Bayes decision rule <span class="math inline">\(h^\ast(x)\)</span> depends on the unknown <span class="math inline">\(m(x)=P(Y=1|X=x)\)</span> and thus cannot be used in practice. However, we can use data to find some approximation to the Bayes decision rule.</p>
 <p><strong>Very roughly</strong>, there are three main approaches:</p>
 <ol type="1">
 <li><p><strong>Empirical Risk Minimization:</strong> Choose a set of classifiers <span class="math inline">\(\mathcal{H}\)</span> and try to find <span class="math inline">\(\hat{h}\in\mathcal{H}\)</span> such that <span class="math display">\[
 \hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
-\]</span> <strong>Example:</strong> Random forests</p></li>
+\]</span> <strong>Example:</strong> Random forests, neural nets, etc.</p></li>
 <li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> in <a href="#eq-RegFun">Equation&nbsp;<span>2.8</span></a> and then use <span class="math display">\[
 \hat{h}(x) = \left\{\begin{array}{ll}
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
@@ -1116,7 +1122,7 @@ h^\ast(x)
 \end{align*}
 \]</span> where <span class="math display">\[
 P(Y=g|X=x) = \frac{\pi_g f_{X|Y}(x|Y=g)}{\sum_{g=1}^G\pi_g f_{X|Y}(x|Y=g)}
-\]</span> denotes the <strong>posterior probability</strong> of group <span class="math inline">\(g\)</span>, <span class="math display">\[
+\]</span> denotes the <strong>posterior probability</strong> of group <span class="math inline">\(g\)</span>, and <span class="math display">\[
 \pi_g = P(Y=g)
 \]</span> denotes the <strong>prior probability</strong> of group <span class="math inline">\(g,\)</span> and <span class="math inline">\(f_{X|Y}(x|Y=g)\)</span> denotes the conditional density function of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=g.\)</span></p>
 </section>
@@ -1355,6 +1361,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./Ch3_Bootstrap.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -1584,14 +1584,14 @@ $$
 and their accuracy depends on the particular procedure applied (e.g. basic bootstrap vs. bootstrap-$t$).
 
 
-* (Symmetric) confidence intervals are said to be **first-order accurate** if there exist some constants $c_1,c_2<\infty$ such that for sufficiently large $n$
+* Two-sided confidence intervals are said to be **first-order accurate** if there exist some constants $c_1,c_2<\infty$ such that for sufficiently large $n$
 $$
 \begin{align*}
 \left|P(\theta<L_n)-\frac{\alpha}{2}\right|\le \frac{c_1}{\sqrt{n}}\\
 \left|P(\theta>U_n)-\frac{\alpha}{2}\right|\le \frac{c_2}{\sqrt{n}}
 \end{align*}
 $$
-* (Symmetric) confidence intervals are said to be **second-order accurate** if there exist some constants $c_3,c_4<\infty$ such that
+* Two-sided confidence intervals are said to be **second-order accurate** if there exist some constants $c_3,c_4<\infty$ such that
 for sufficiently large $n$
 $$
 \begin{align*}
@@ -1601,23 +1601,23 @@ $$
 $$
 
 
-If the distribution of $\hat\theta$ is asymptotically normal and the bootstrap is consistent, then under some additional regularity conditions it can usually be shown that
+If the distribution of $\hat\theta_n$ is asymptotically normal and the bootstrap is consistent, then under some additional regularity conditions it can usually be shown that
 
-* Standard confidence intervals based on asymptotic approximations are **first-order** accurate. 
+* Standard confidence intervals based on asymptotic Normality approximations are **first-order** accurate. 
 * Basic bootstrap confidence intervals are **first-order** accurate.
 * Bootstrap-$t$ confidence intervals are **second-order** accurate.
 
 The difference between first and second-order accuracy is not just a theoretical nicety. In many practically important situations second-order accurate intervals lead to *much* better approximations. If possible, bootstrap confidence intervals as well as tests should thus be based on pivotal statistics.
 
 ::: {.callout-note}
-Proofs required for this type of results is technically difficult since Edgeworth expansions are involved. The investigation of the accuracy of the bootstrap estimators is still an active field. 
+Proofs required for this type of results is technically difficult since Edgeworth expansions are involved. The investigation of the accuracy of the bootstrap estimators is still an active field (see, for instance, @koike2024high). 
 :::
 
 ## Regression Analysis: Bootstrapping Pairs
 
 Consider the linear regression model 
 $$
-Y_i=X_i^T\beta+ \varepsilon_i,\quad  i=1,\dots,n,
+Y_i=X_i^T\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 $$
 where $Y_i\in\mathbb{R}$ denotes the response (or "dependent") variable and 
 $$
@@ -1632,20 +1632,20 @@ denotes the vector of predictor variables. In the following, we differentiate be
 ## Random and fixed design 
 <br>
 
-***Random Design:**
+**Random Design:**
 $$
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 $$
-are i.i.d. random variables and $\mathbb{E}(\varepsilon_i|X_i)=0$ with either*
+are i.i.d. random variables with $\mathbb{E}(\varepsilon_i|X_i)=0,$ $\mathbb{E}(X_iX_i^T)$ non-singular, and with either
 
-* ***homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a constant $\sigma^2<\infty$ or* 
-* ***heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n.$*
+* **homoscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2$, $i=1,\dots,n$, for a constant $\sigma^2<\infty$ or 
+* **heteroscedastic** errors: $\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2(X_i)<\infty$, $i=1,\dots,n.$
 
-***Fixed Design:** 
+**Fixed Design:** 
 $$
 X_1, X_2, \dots, X_n
 $$
-are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. random variables with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic errors** $\mathbb{E}(\varepsilon_i^2)=\sigma^2$ for all $i=1,\dots,n.$*
+are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon_n$ are i.i.d. random variables with zero mean $\mathbb{E}(\varepsilon_i)=0$ and **homoscedastic errors** $\mathbb{E}(\varepsilon_i^2)=\sigma^2$ for all $i=1,\dots,n.$
 :::
 :::
 
@@ -1655,7 +1655,7 @@ are deterministic vectors in $\mathbb{R}^p$ and $\varepsilon_1,\dots,\varepsilon
 The least squares estimator $\hat\beta\in\mathbb{R}^p$ is given by
 $$
 \begin{align*}
-\hat\beta 
+\hat\beta_n 
 &=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i\\
 &=\beta+\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\varepsilon_i.
 \end{align*}
