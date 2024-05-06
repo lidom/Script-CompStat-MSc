@@ -372,7 +372,7 @@ F_n(x)=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\quad\text{for all}\quad x\in\mat
 </div>
 </div>
 <p><strong>Properties of the ECDF:</strong></p>
-<p><span class="math inline">\(F_n\)</span> is a <strong>monotonically increasing step function</strong> that is bounded between zero and one, <span class="math display">\[
+<p><span class="math inline">\(F_n\)</span> is a <strong>monotonically increasing right-continuous step function</strong> that is bounded between zero and one, <span class="math display">\[
 0\le F_n(x)\le 1,
 \]</span> where <span class="math display">\[
 F_n(x)=\left\{
@@ -477,14 +477,17 @@ F_n(x)
 <section id="statistical-properties-of-f_n" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="statistical-properties-of-f_n">Statistical Properties of <span class="math inline">\(F_n\)</span></h4>
 <p><span class="math inline">\(F_n(x)\)</span> depends on the i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> and thus is itself a <strong>random function</strong>.</p>
-<p>We obtain <span class="math display">\[
-nF_n(x)\sim B(n, p=F(x))\quad x\in\mathbb{R}
-\]</span></p>
+<p>We obtain <span id="eq-ecdfDistr"><span class="math display">\[
+nF_n(x)\sim B(n, p=F(x))\quad\text{for each}\quad x\in\mathbb{R}
+\tag{3.3}\]</span></span></p>
 <p>I.e., <span class="math inline">\(nF_n(x)\)</span> has a binomial distribution with parameters:</p>
 <ul>
 <li><span class="math inline">\(n\)</span> (“number of trials”)</li>
 <li><span class="math inline">\(p=F(x)\)</span> (“probability of success on a single trial”).</li>
 </ul>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> The result in <a href="#eq-ecdfDistr">Equation&nbsp;<span>3.3</span></a> holds for any <span class="math inline">\(F.\)</span> Therefore, <span class="math inline">\(nF_n\)</span> and thus also <span class="math inline">\(F_n\)</span> is called <strong>distribution free</strong></p>
+</blockquote>
 <p>Thus, <span class="math display">\[
 \begin{align*}
 \mathbb{E}(nF_n(x))&amp; = np = nF(x)\\[2ex]
@@ -1050,13 +1053,13 @@ Characteristic Function: Some useful facts
 <li><p>… is often used to prove that two distributions are equal.</p></li>
 <li><p>The characteristic function of <span class="math inline">\(\Phi_{\sigma_0}\)</span> is <span id="eq-CharacNormal"><span class="math display">\[
 \psi_{\Phi_{\sigma_0}}(t)=\exp\left(-\frac{1}{2}\sigma_0^2\,t^2\right)=\lim_{n\to\infty}\left(1-\frac{1}{n}\,\frac{1}{2}\,\sigma_0^2 \, t^2\right)^n
-\tag{3.3}\]</span></span></p></li>
+\tag{3.4}\]</span></span></p></li>
 <li><p>The characteristic function of <span class="math inline">\(\sum_{i=1}^nW_i,\)</span> where <span class="math inline">\(W_1,\dots,W_n\)</span> are i.i.d., is <span id="eq-CharacFctSum"><span class="math display">\[
 \psi_{\sum_{i=1}^nW_i}(t)=\left(\psi_{W_1}(t)\right)^n.
-\tag{3.4}\]</span></span></p></li>
+\tag{3.5}\]</span></span></p></li>
 <li><p>Let <span class="math inline">\(W\)</span> be a random variable with <span class="math inline">\(\mathbb{E}(W)=0\)</span> and <span class="math inline">\(Var(W)=\sigma_W^2.\)</span> Then, we have that (see Equation (26.11) in <span class="citation" data-cites="Billingsley_1995">Billingsley (<a href="#ref-Billingsley_1995" role="doc-biblioref">1995</a>)</span>) <span id="eq-CharacFctBillingsley"><span class="math display">\[
 \psi_W(t)=1-\frac{1}{2}\sigma_W^2 \, t^2 + \lambda(t),
-\tag{3.5}\]</span></span> where <span class="math inline">\(|\lambda(t)|\leq |t^2|\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).\)</span></p></li>
+\tag{3.6}\]</span></span> where <span class="math inline">\(|\lambda(t)|\leq |t^2|\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).\)</span></p></li>
 </ul>
 </div>
 </div>
@@ -1077,7 +1080,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 <li><span class="math inline">\(\mathbb{E}(W_{i,n})=0\)</span> and</li>
 <li><span class="math inline">\(Var(W_{i,n})=\frac{1}{n}\sigma_0^2.\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum">Equation&nbsp;<span>3.4</span></a> together with <a href="#eq-CharacFctBillingsley">Equation&nbsp;<span>3.5</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1093,7 +1096,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 \]</span> That is, <span class="math display">\[
 n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 \]</span> which means that <span class="math inline">\(|\lambda_n(t)|\to 0\)</span> faster than <span class="math inline">\(n^{-1}.\)</span></p>
-<p>Thus, by <a href="#eq-CharacNormal">Equation&nbsp;<span>3.3</span></a> <span class="math display">\[
+<p>Thus, by <a href="#eq-CharacNormal">Equation&nbsp;<span>3.4</span></a> <span class="math display">\[
 \begin{align*}
 \lim_{n\to\infty}\psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;= \lim_{n\to\infty}\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1117,7 +1120,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 <li><span class="math inline">\(\mathbb{E}^*(W^*_{n})=\mathbb{E}(W^*_{n}|\mathcal{S}_n)=0\)</span> and</li>
 <li><span class="math inline">\(Var^*(W^*_{n})=Var(W^*_{n}|\mathcal{S}_n)=\frac{1}{n}\hat{\sigma}_0^2=\frac{1}{n}\left(\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\right)\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum">Equation&nbsp;<span>3.4</span></a> together with <a href="#eq-CharacFctBillingsley">Equation&nbsp;<span>3.5</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}|\mathcal{S}_n}(t)\\[2ex]
@@ -1134,7 +1137,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 n{\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0\quad\text{as}\quad n\to\infty,
 \]</span> i.e., <span class="math inline">\({\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0\)</span> faster than <span class="math inline">\(n^{-1}.\)</span> Moreover, since <span class="math display">\[
 {\color{darkgreen}\hat\sigma_0^2} = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\to_{a.s.}\sigma_0^2
-\]</span> we have that (using <a href="#eq-CharacNormal">Equation&nbsp;<span>3.3</span></a>) <span class="math display">\[
+\]</span> we have that (using <a href="#eq-CharacNormal">Equation&nbsp;<span>3.4</span></a>) <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 \to_{a.s.}&amp;
@@ -1392,12 +1395,12 @@ Assumption: Bootstrap is Consistent
   \hat\theta^*_{n,(\lfloor mp\rfloor+1)},         &amp; mp \text{ not a whole number}\\
   (\hat\theta^*_{n,(mp)}+\hat\theta^*_{n,(mp+1)})/2,&amp; mp \text{ a whole number}
 \end{array}\right.
-\tag{3.6}\]</span></span> for <span class="math inline">\(p=\frac{\alpha}{2}\)</span> or <span class="math inline">\(p=1-\frac{\alpha}{2},\)</span> where <span class="math inline">\(\hat\theta_{(j)}^*\)</span> denotes the <span class="math inline">\(j\)</span>th order statistic <span class="math display">\[
+\tag{3.7}\]</span></span> for <span class="math inline">\(p=\frac{\alpha}{2}\)</span> or <span class="math inline">\(p=1-\frac{\alpha}{2},\)</span> where <span class="math inline">\(\hat\theta_{(j)}^*\)</span> denotes the <span class="math inline">\(j\)</span>th order statistic <span class="math display">\[
 \hat\theta_{n,(1)}^* \leq \hat\theta_{n,(2)}^*\leq \dots\leq \hat\theta_{n,(m)}^*,
 \]</span> and <span class="math inline">\(\lfloor mp\rfloor\)</span> denotes the greatest whole number less than or equal to <span class="math inline">\(mp\)</span> (e.g.&nbsp;<span class="math inline">\(\lfloor 4.9\rfloor = 4\)</span>).</p></li>
 <li><p>The approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) <strong>basic bootstrap confidence interval</strong> is then given by <span id="eq-NPBootCI"><span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
-\tag{3.7}\]</span></span></p></li>
+\tag{3.8}\]</span></span></p></li>
 </ol>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -1416,7 +1419,7 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \]</span> since for large <span class="math inline">\(m\)</span> (<span class="math inline">\(m\to\infty\)</span>) the difference between <span class="math inline">\(G_{n,m}^{Boot}\)</span> and <span class="math inline">\(G_{n}^{Boot}\)</span> is negligible (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli">Theorem&nbsp;<span>3.1</span></a>) and we can choose <span class="math inline">\(m\)</span> to be large.</p>
 </div>
 </div>
-<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI">Equation&nbsp;<span>3.7</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong> <span class="math display">\[
+<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong> <span class="math display">\[
 \begin{align*}
 &amp;P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
@@ -1440,7 +1443,7 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \Rightarrow &amp;P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
 \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
 \end{align*}
-\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.7</span></a> <span class="math display">\[
+\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a> <span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 \]</span> is indeed an asymptotically valid (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) confidence interval.</p>
 </section>
@@ -1494,7 +1497,7 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 \bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.
 \]</span></p></li>
 <li><p>Compute the empirical quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math inline">\(\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.\)</span></p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) basic bootstrap confidence interval according to <a href="#eq-NPBootCI">Equation&nbsp;<span>3.7</span></a>: <span class="math display">\[
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) basic bootstrap confidence interval according to <a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
 \left[2\bar X_n -\hat q^*_{n,1-\frac{\alpha}{2}},
    2\bar X_n -\hat q^*_{n,\frac{\alpha}{2}}\right]
 \]</span></p></li>
@@ -1608,14 +1611,14 @@ T_n^*&amp;=\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}.
 \]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) many bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
 \]</span></p></li>
-<li><p>Use the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> to approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> empirical quantiles <span class="math inline">\(\hat \tau^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat \tau^*_{n,1-\frac{\alpha}{2}}\)</span> (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.6</span></a>).</p></li>
+<li><p>Use the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> to approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> empirical quantiles <span class="math inline">\(\hat \tau^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat \tau^*_{n,1-\frac{\alpha}{2}}\)</span> (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>).</p></li>
 <li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) bootstrap-<span class="math inline">\(t\)</span> confidence interval<br>
 <span id="eq-Boot_tCI"><span class="math display">\[
 \left[\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
    \hat{\theta}_n - \hat \tau^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
-\tag{3.8}\]</span></span> where <span class="math inline">\(\hat\theta_n\)</span> and <span class="math inline">\(\hat v_n\)</span> are the estimates of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(v_0\)</span> based on the original sample <span class="math inline">\(X_1,\dots,X_n.\)</span></p></li>
+\tag{3.9}\]</span></span> where <span class="math inline">\(\hat\theta_n\)</span> and <span class="math inline">\(\hat v_n\)</span> are the estimates of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(v_0\)</span> based on the original sample <span class="math inline">\(X_1,\dots,X_n.\)</span></p></li>
 </ol>
-<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI">Equation&nbsp;<span>3.8</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
+<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI">Equation&nbsp;<span>3.9</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
 <p>The bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*
 \]</span> yield the empirical bootstrap distribution <span class="math display">\[
@@ -1641,7 +1644,7 @@ P^*\left(\hat \tau^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\th
 \Rightarrow &amp; P\left(\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat \tau^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha
 \end{align*}
-\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI">Equation&nbsp;<span>3.8</span></a>) <span class="math display">\[
+\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI">Equation&nbsp;<span>3.9</span></a>) <span class="math display">\[
 \left[\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
       \hat{\theta}_n - \hat \tau^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 \]</span> is indeed an asymptotic (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> CI.</p>
@@ -1658,8 +1661,8 @@ s_n^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2.
 \]</span></li>
 <li>Determine <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat \tau^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat \tau^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math display">\[
 \sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
-\]</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.6</span></a>.</li>
-<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.8</span></a>): <span class="math display">\[
+\]</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>.</li>
+<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.9</span></a>): <span class="math display">\[
 \left[\bar X_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
     \bar X_n - \hat \tau^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
 \]</span> where <span class="math inline">\(s_n\)</span> is computed from the original sample, i.e., <span class="math display">\[
@@ -1810,8 +1813,8 @@ Q
 \hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*
 \]</span></p></li>
 <li><p>Determine the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat t_{\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat t_{1-\frac{\alpha}{2},j}\)</span><br>
-from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*\)</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.6</span></a>.</p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) confidence interval as in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.7</span></a>: <span class="math display">\[
+from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*\)</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>.</p></li>
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) confidence interval as in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
 \left[2\hat\beta_j-\hat t_{1-\frac{\alpha}{2},j},
     2\hat\beta_j-\hat t_{\frac{\alpha}{2},j}\right]
 \]</span></p></li>
@@ -1918,10 +1921,10 @@ Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i
 <section id="nonparametric-bootstrap-confidence-intervals" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="nonparametric-bootstrap-confidence-intervals">Nonparametric bootstrap confidence intervals</h4>
 <p>Basic <strong>nonparametric bootstrap</strong> confidence intervals for the regression coefficients <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j=1,\dots,p,\)</span> can be constructed as following:</p>
-<p>Approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat t_{\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat t_{1-\frac{\alpha}{2},j}\)</span> of the bootstrap distribution of <span class="math inline">\(\hat\beta_j^*\)</span> using the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.6</span></a>) based on the <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
+<p>Approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat t_{\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat t_{1-\frac{\alpha}{2},j}\)</span> of the bootstrap distribution of <span class="math inline">\(\hat\beta_j^*\)</span> using the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>) based on the <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
 \hat\beta_{j1}^*,\hat\beta_{j2}^*, \dots, \hat\beta_{jm}^*.
 \]</span> <!-- This approximation step is with arbitrary accuracy as $m\to\infty.$ --></p>
-<p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) nonparametric bootstrap confidence interval as in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.7</span></a>: <span class="math display">\[
+<p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> (symmetric) nonparametric bootstrap confidence interval as in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
 \left[2\hat\beta_j-\hat t_{1-\frac{\alpha}{2},j},
       2\hat\beta_j-\hat t_{ \frac{\alpha}{2},j }\right]
 \]</span></p>
@@ -1943,10 +1946,10 @@ Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i
 T^*=\frac{\hat\beta_j^*-\hat\beta_j}{\hat\sigma^* \sqrt{\gamma_{jj}}}
 \]</span> with <span class="math display">\[
 \hat\sigma^{*2}:=\frac{1}{n-p}\sum_{i=1}^n \hat\varepsilon_i^{*2},
-\]</span> using the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.6</span></a>) based on the <span class="math inline">\(m\)</span> bootstrap realizations <span class="math display">\[
+\]</span> using the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>) based on the <span class="math inline">\(m\)</span> bootstrap realizations <span class="math display">\[
 T^*_1,T_2^*,\dots, T_m^*.
 \]</span></p>
-<p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
+<p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.9</span></a>: <span class="math display">\[
 \left[
   \hat\beta_j-\hat \tau_{1-\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}},\;
   \hat\beta_j-\hat \tau_{\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}}
