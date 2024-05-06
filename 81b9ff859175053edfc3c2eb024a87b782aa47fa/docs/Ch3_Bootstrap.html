@@ -208,10 +208,7 @@ div.csl-indent {
    
   <ul>
   <li><a href="#sec-Illustration" id="toc-sec-Illustration" class="nav-link active" data-scroll-target="#sec-Illustration"><span class="toc-section-number">3.1</span>  Illustration: When are you happy about the Bootstrap?</a></li>
-  <li><a href="#recap-the-empirical-distribution-function" id="toc-recap-the-empirical-distribution-function" class="nav-link" data-scroll-target="#recap-the-empirical-distribution-function"><span class="toc-section-number">3.2</span>  Recap: The Empirical Distribution Function</a>
-  <ul class="collapse">
-  <li><a href="#statistical-properties-of-f_n" id="toc-statistical-properties-of-f_n" class="nav-link" data-scroll-target="#statistical-properties-of-f_n">Statistical Properties of <span class="math inline">\(F_n\)</span></a></li>
-  </ul></li>
+  <li><a href="#recap-the-empirical-distribution-function" id="toc-recap-the-empirical-distribution-function" class="nav-link" data-scroll-target="#recap-the-empirical-distribution-function"><span class="toc-section-number">3.2</span>  Recap: The Empirical Distribution Function</a></li>
   <li><a href="#basic-idea-of-the-bootstrap" id="toc-basic-idea-of-the-bootstrap" class="nav-link" data-scroll-target="#basic-idea-of-the-bootstrap"><span class="toc-section-number">3.3</span>  Basic Idea of the Bootstrap</a></li>
   <li><a href="#sec-BasicBootstrap" id="toc-sec-BasicBootstrap" class="nav-link" data-scroll-target="#sec-BasicBootstrap"><span class="toc-section-number">3.4</span>  The Basic Bootstrap Method</a>
   <ul class="collapse">
@@ -323,8 +320,8 @@ Conclusion: Why Bootstrap?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap"><span>Section&nbsp;3.4</span></a>) which allows us to approximate <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> simply by resampling from the data; i.e.&nbsp;without having to derive an explicite formula for <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The <strong>Basic Bootstrap Method</strong> is found to be as accurate as the standard asymptotic Normality results.</p>
-<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> (<a href="#sec-BootT"><span>Section&nbsp;3.5</span></a>). The <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> is found to be <strong>more accurate</strong> than the standard asymptotic Normality results.</p>
+<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap"><span>Section&nbsp;3.4</span></a>) which allows us to approximate <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> simply by resampling from the data observed; i.e.&nbsp;without the need of an explicite formula of a consistent estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> to become useful.</p>
+<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> (<a href="#sec-BootT"><span>Section&nbsp;3.5</span></a>). The Bootstrap-<span class="math inline">\(t\)</span> Method is found to be <strong>more accurate</strong> than the standard asymptotic Normality results.</p>
 </div>
 </div>
 </section>
@@ -375,40 +372,30 @@ F_n(x)=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\quad\text{for all}\quad x\in\mat
 </div>
 </div>
 <p><strong>Properties of the ECDF:</strong></p>
-<ul>
-<li><span class="math inline">\(0\le F_n(x)\le 1\)</span><br></li>
-<li><span class="math inline">\(F_n(x)=0,\)</span> if <span class="math inline">\(x&lt;X_{(1)}\)</span>, where <span class="math inline">\(X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}\)</span> denotes the <strong>order-statistic</strong>.<br></li>
-<li><span class="math inline">\(F_n(x)=1,\)</span> if <span class="math inline">\(x\ge X_{(n)}\)</span>, where <span class="math inline">\(X_{(n)}\)</span> is largest observation<br></li>
-<li><span class="math inline">\(F_n\)</span> is a monotonically increasing step function</li>
-</ul>
-<div class="callout-note callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-The empirical distribution function <span class="math inline">\(F_n\)</span> is itself is a distribution function
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The empirical distribution funciton <span class="math inline">\(F_n\)</span> is the distribution function (<a href="#def-cdf">Definition&nbsp;<span>3.1</span></a>) of the <strong>discrete random variable</strong> <span class="math inline">\(X^*,\)</span> where</p>
-<ul>
-<li><span class="math inline">\(X^*\in\{X_1,\dots,X_n\}\)</span></li>
-</ul>
-<p>and</p>
-<ul>
-<li><span class="math inline">\(P(X^*=X_i)=\frac{1}{n}\)</span> for each <span class="math inline">\(i=1,\dots,n.\)</span></li>
-</ul>
-<p>Thus</p>
+<p><span class="math inline">\(F_n\)</span> is a <strong>monotonically increasing step function</strong> that is bounded between zero and one, <span class="math display">\[
+0\le F_n(x)\le 1,
+\]</span> where <span class="math display">\[
+F_n(x)=\left\{
+  \begin{array}{ll}
+  0&amp;\text{ if }x  &lt; X_{(1)}\\
+  1&amp;\text{ if }x\ge X_{(n)}\\
+  \end{array}
+\right.
+\]</span> where <span class="math display">\[
+X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}
+\]</span> denotes the <strong>order-statistic</strong>.</p>
+<p><span class="math inline">\(F_n\)</span> is itself a <strong>distribution function according to <a href="#def-cdf">Definition&nbsp;<span>3.1</span></a></strong>; namely, the distribution function of the <strong>discrete random variable</strong> <span class="math inline">\(X^*,\)</span> where</p>
 <p><span class="math display">\[
+X^*\in\{X_1,\dots,X_n\}
+\]</span> and <span class="math display">\[
+P(X^*=X_i)=\frac{1}{n}\quad\text{for each}\quad i=1,\dots,n.
+\]</span> Thus <span class="math display">\[
 \begin{align*}
 F_n(x)
 &amp;=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\[2ex]
-&amp;= P\left(X^*\leq x\right)
+&amp;= P\left(X^*\leq x\right).
 \end{align*}
 \]</span></p>
-</div>
-</div>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -420,8 +407,8 @@ F_n(x)
 </div>
 <div class="callout-body-container callout-body">
 <div id="exm-ecdfexample" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.1 (Computing the empirical distribution function in R) </strong></span><br></p>
-<p>Some data:</p>
+<p><span class="theorem-title"><strong>Example 3.1 (Computing the empirical distribution function <span class="math inline">\(F_n\)</span> in <code>R</code>) </strong></span><br></p>
+<p>Some data (i.e.&nbsp;an observed realization of an random sample <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}F\)</span>):</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -477,8 +464,8 @@ F_n(x)
 </div>
 </div>
 <p>The <code>R</code> function <code>ecdf()</code> returns a function that gives the values of <span class="math inline">\(F_n(x):\)</span></p>
-<div class="cell" data-hash="Ch3_Bootstrap_cache/html/ecdfEval_1a67940bd55d5c7103cb5486dd625f82">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Note: ecdf() returns a function!</span></span>
+<div class="cell" data-hash="Ch3_Bootstrap_cache/html/ecdfEval_89ebf5a48d2cc35bb6e9d5cad5f1efc7">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Note: ecdf() returns a function that can be evaluated! </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">myecdf_fun</span>(<span class="fl">5.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.25</code></pre>
@@ -487,13 +474,17 @@ F_n(x)
 </div>
 </div>
 </div>
-<section id="statistical-properties-of-f_n" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="statistical-properties-of-f_n">Statistical Properties of <span class="math inline">\(F_n\)</span></h3>
+<section id="statistical-properties-of-f_n" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="statistical-properties-of-f_n">Statistical Properties of <span class="math inline">\(F_n\)</span></h4>
 <p><span class="math inline">\(F_n(x)\)</span> depends on the i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> and thus is itself a <strong>random function</strong>.</p>
 <p>We obtain <span class="math display">\[
 nF_n(x)\sim B(n, p=F(x))\quad x\in\mathbb{R}
 \]</span></p>
-<p>I.e., <span class="math inline">\(nF_n(x)\)</span> has a binomial distribution with parameters <span class="math inline">\(n\)</span> (“number of trials”) and <span class="math inline">\(p=F(x)\)</span> (“probability of success on a single trial”).</p>
+<p>I.e., <span class="math inline">\(nF_n(x)\)</span> has a binomial distribution with parameters:</p>
+<ul>
+<li><span class="math inline">\(n\)</span> (“number of trials”)</li>
+<li><span class="math inline">\(p=F(x)\)</span> (“probability of success on a single trial”).</li>
+</ul>
 <p>Thus, <span class="math display">\[
 \begin{align*}
 \mathbb{E}(nF_n(x))&amp; = np = nF(x)\\[2ex]
@@ -503,9 +494,9 @@ nF_n(x)\sim B(n, p=F(x))\quad x\in\mathbb{R}
 \]</span> and <span class="math display">\[
 \begin{align*}
 Var(nF_n(x))&amp; = np(1-p) = nF(x)(1-F(x))\\[2ex]
-\Rightarrow \quad Var(F_n(x))&amp; = \frac{nF(x)(1-F(x))}{n^2}=\frac{F(x)(1-F(x))}{n}
+\Rightarrow \quad Var(F_n(x))&amp; = \frac{nF(x)(1-F(x))}{n^2}=\frac{F(x)(1-F(x))}{n}.
 \end{align*}
-\]</span> such that <span class="math display">\[
+\]</span> Therefore, <span class="math display">\[
 \begin{align*}
 \operatorname{MSE}(F_n(x))
 &amp; = (\operatorname{Bias}(F_n(x)))^2 + Var(F_n(x))\\[2ex]
@@ -515,9 +506,9 @@ Var(nF_n(x))&amp; = np(1-p) = nF(x)(1-F(x))\\[2ex]
 <p>This allows us to conclude that <span class="math display">\[
 \begin{align*}
 F_n(x) &amp; \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
-\Rightarrow \quad F_n(x) &amp; \to_{p} F(x)\quad\text{as}\quad n\to\infty.
+\Rightarrow \quad F_n(x) &amp; \to_{p} F(x)\quad\text{as}\quad n\to\infty
 \end{align*}
-\]</span></p>
+\]</span> for any <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
 <p>That is, <span class="math inline">\(F_n(x)\)</span> is <strong>point-wise</strong> for each <span class="math inline">\(x\in\mathbb{R}\)</span> a weakly consistent estimator of <span class="math inline">\(F(x).\)</span></p>
 <p>The Clivenko-Cantelli <a href="#thm-Clivenko-Cantelli">Theorem&nbsp;<span>3.1</span></a> states that <span class="math inline">\(F_n\)</span> is even <strong>uniformly</strong> over <span class="math inline">\(\mathbb{R}\)</span> a consistent estimator of <span class="math inline">\(F.\)</span></p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">

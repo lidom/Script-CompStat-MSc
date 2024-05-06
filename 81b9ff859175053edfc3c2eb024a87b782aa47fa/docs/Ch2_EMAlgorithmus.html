@@ -1130,7 +1130,7 @@ P(Y=g|X=x) = \frac{\pi_g f_{X|Y}(x|Y=g)}{\sum_{g=1}^G\pi_g f_{X|Y}(x|Y=g)}
 <section id="synopsis-penguin-example" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="synopsis-penguin-example"><span class="header-section-number">2.4.2</span> Synopsis: Penguin Example</h3>
 <p>In our penguin example, we use the <strong>density estimation</strong> approach.</p>
-<p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as <span class="math inline">\(f\)</span> being a Gaussian density.</p>
+<p>Estimating general densities <span class="math inline">\(f\)</span> is hard — particularly in multivariate cases. Therefore, one often tries to make certain simplifying assumptions such as <span class="math inline">\(f\)</span> being a Gaussian (mixture) density.</p>
 <p>In our penguin example, we assume that the conditional density function of flipper length <span class="math inline">\(X\)</span> given species <span class="math inline">\(Y=g\)</span> can be modelled reasonably well using a Gaussian density, <span class="math display">\[
 f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right).
 \]</span> which leads to a Gaussian Mixture distribution.</p>
@@ -1139,7 +1139,7 @@ f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\l
 \begin{align*}
 \hat{h}(x_i)
 %&amp; = \arg\max_{g}P(Y=g|X=x) \\[2ex]
-&amp; = \arg\max_{g}\hat{\pi}_g \varphi(x|\hat{\mu}_g,\hat{\sigma}_g),\\[2ex]
+&amp; = \arg\max_{g}\hat{\pi}_g \varphi(x_i|\hat{\mu}_g,\hat{\sigma}_g),\\[2ex]
 \end{align*}
 \]</span></p>
 <p><a href="#fig-EMGif">Figure&nbsp;<span>2.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
@@ -1159,7 +1159,7 @@ f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\l
 </div>
 </div>
 <p>The final estimation result replicates <a href="#fig-GMM-plot1">Figure&nbsp;<span>2.2</span></a>.</p>
-<p>But well, the average penguin probably doesn’t care about the EM Algorithm.</p>
+<p>The average penguin probably doesn’t care about our EM Algorithm.</p>
 <div id="fig-agressivepenguin" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/penguin_attack.gif" class="img-fluid figure-img" style="width:80.0%"></p>

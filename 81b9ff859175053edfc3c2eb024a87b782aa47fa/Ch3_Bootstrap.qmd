@@ -79,10 +79,10 @@ However, computing $\operatorname{SE}(\hat\alpha)$ is here difficult due to the 
 
 ::: {.callout-note}
 # Conclusion: Why Bootstrap? 
-In cases as described above, we are happy to use the **Basic Bootstrap Method** (@sec-BasicBootstrap) which allows us to approximate $\operatorname{SE}(\hat\alpha)$ simply by resampling from the data; i.e. without having to derive an explicite formula for $\operatorname{SE}(\hat\alpha).$ The **Basic Bootstrap Method** is found to be as accurate as the standard asymptotic Normality results.
+In cases as described above, we are happy to use the **Basic Bootstrap Method** (@sec-BasicBootstrap) which allows us to approximate $\operatorname{SE}(\hat\alpha)$ simply by resampling from the data observed; i.e. without the need of an explicite formula of a consistent estimator of $\operatorname{SE}(\hat\alpha).$ The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of $\operatorname{SE}(\hat\alpha)$ to become useful.
 
 
-If we have a consistent estimator for the $\operatorname{SE}(\hat\alpha),$ then we can make use of this estimator by applying the **Bootstrap-$t$ Method** (@sec-BootT). The **Bootstrap-$t$ Method** is found to be **more accurate** than the standard asymptotic Normality results. 
+If we have a consistent estimator for the $\operatorname{SE}(\hat\alpha),$ then we can make use of this estimator by applying the **Bootstrap-$t$ Method** (@sec-BootT). The Bootstrap-$t$ Method is found to be **more accurate** than the standard asymptotic Normality results. 
 :::
 
 
@@ -132,43 +132,55 @@ I.e $F_n(x)$ is the proportion of observations with $X_i\le x,$ $i=1,\dots,n.$
 
 **Properties of the ECDF:**
 
-* $0\le F_n(x)\le 1$</br> 
-* $F_n(x)=0,$ if $x<X_{(1)}$, where $X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}$ denotes the **order-statistic**.</br> 
-* $F_n(x)=1,$ if $x\ge X_{(n)}$, where $X_{(n)}$ is largest observation</br>
-* $F_n$ is a monotonically increasing step function
+
+$F_n$ is a **monotonically increasing step function** that is bounded between zero and one,
+$$
+0\le F_n(x)\le 1,
+$$
+where 
+$$
+F_n(x)=\left\{
+  \begin{array}{ll}
+  0&\text{ if }x  < X_{(1)}\\
+  1&\text{ if }x\ge X_{(n)}\\
+  \end{array}
+\right.
+$$
+where 
+$$
+X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}
+$$ 
+denotes the **order-statistic**. 
 
 
-::: {.callout-note}
-# The empirical distribution function $F_n$ is itself is a distribution function
+$F_n$ is itself a **distribution function according to @def-cdf**; namely, the distribution function of the **discrete random variable** $X^*,$ where  
 
-The empirical distribution funciton $F_n$ is the distribution function  (@def-cdf) of the **discrete random variable** $X^*,$ where  
-
-* $X^*\in\{X_1,\dots,X_n\}$ 
-
+$$
+X^*\in\{X_1,\dots,X_n\}
+$$ 
 and 
-
-* $P(X^*=X_i)=\frac{1}{n}$ for each $i=1,\dots,n.$
-
+$$
+P(X^*=X_i)=\frac{1}{n}\quad\text{for each}\quad i=1,\dots,n.
+$$
 Thus
-
 $$
 \begin{align*}
 F_n(x) 
 &=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\[2ex]
-&= P\left(X^*\leq x\right)
+&= P\left(X^*\leq x\right).
 \end{align*}
 $$
-:::
+
 
 
 ::: {.callout-note icon=false} 
 ##
 ::: {#exm-ecdfexample}
-# Computing the empirical distribution function in R 
+# Computing the empirical distribution function $F_n$ in `R` 
 
 <br>
 
-Some data:
+Some data (i.e. an observed realization of an random sample $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}F$):
 
 | $i$  | $X_i$| 
 |------|------|
@@ -196,13 +208,13 @@ plot(myecdf_fun, main="")
 
 The `R` function `ecdf()` returns a function that gives the values of $F_n(x):$
 ```{r, ecdfEval}
-## Note: ecdf() returns a function!
+## Note: ecdf() returns a function that can be evaluated! 
 myecdf_fun(5.0)
 ```
 :::
 :::
 
-### Statistical Properties of $F_n$ {-}
+#### Statistical Properties of $F_n$ {-}
 
 $F_n(x)$ depends on the i.i.d. random sample $X_1,\dots,X_n$ and thus is itself a **random function**. 
 
@@ -211,7 +223,10 @@ $$
 nF_n(x)\sim B(n, p=F(x))\quad x\in\mathbb{R}
 $$
  
-I.e., $nF_n(x)$ has a binomial distribution with parameters $n$ ("number of trials") and $p=F(x)$ ("probability of success on a single trial").
+I.e., $nF_n(x)$ has a binomial distribution with parameters: 
+
+* $n$ ("number of trials") 
+* $p=F(x)$ ("probability of success on a single trial").
 
 Thus, 
 $$
@@ -225,10 +240,10 @@ and
 $$
 \begin{align*}
 Var(nF_n(x))& = np(1-p) = nF(x)(1-F(x))\\[2ex]
-\Rightarrow \quad Var(F_n(x))& = \frac{nF(x)(1-F(x))}{n^2}=\frac{F(x)(1-F(x))}{n}
+\Rightarrow \quad Var(F_n(x))& = \frac{nF(x)(1-F(x))}{n^2}=\frac{F(x)(1-F(x))}{n}.
 \end{align*}
 $$
-such that
+Therefore,
 $$
 \begin{align*}
 \operatorname{MSE}(F_n(x))
@@ -241,9 +256,10 @@ This allows us to conclude that
 $$
 \begin{align*}
 F_n(x) & \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
-\Rightarrow \quad F_n(x) & \to_{p} F(x)\quad\text{as}\quad n\to\infty.
+\Rightarrow \quad F_n(x) & \to_{p} F(x)\quad\text{as}\quad n\to\infty
 \end{align*}
 $$
+for any $x\in\mathbb{R}.$
 
 That is, $F_n(x)$ is **point-wise** for each $x\in\mathbb{R}$ a weakly consistent estimator of $F(x).$  
 
