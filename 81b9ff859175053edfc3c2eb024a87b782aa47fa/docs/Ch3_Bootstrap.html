@@ -575,12 +575,12 @@ P(X\in [a,b])=F(b)-F(a).
 <li><span class="math inline">\(\operatorname{SE}\left(\hat\theta_n\right)=\sqrt{Var\left(\hat\theta_n\right)}=\frac{1}{\sqrt{n}}\cdot\text{constant}\)</span></li>
 </ul></li>
 </ul>
-<p><strong>Inference:</strong> In order to provide standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the <strong>distribution</strong> of <span class="math display">\[
-\sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty,
-\]</span> i.e.&nbsp;in learning the limit of the distribution function <span class="math display">\[
+<p><strong>Inference:</strong> In order to provide (approximate for <span class="math inline">\(n\to\infty\)</span>) standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the <strong>distribution</strong> of <span class="math display">\[
+\sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty;
+\]</span> i.e.&nbsp;we need to know the limit of the distribution function <span class="math display">\[
 H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty.
 \]</span></p>
-<p>We could do asymptotic statistics. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of <span class="math inline">\(H_{n}(x)\)</span> is the distribution function of the Normal distribution with mean zero and asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).\)</span></p>
+<p>We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of <span class="math inline">\(H_{n}(x)\)</span> is the distribution function of the Normal distribution with mean zero and asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).\)</span></p>
 <p>However, deriving a useful, explicit expression of the asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)\)</span> can be <em>very</em> hard (see <a href="#sec-Illustration"><span>Section&nbsp;3.1</span></a>). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -593,7 +593,9 @@ The Core Part of the Bootstrap Algorithm
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><strong>Draw a bootstrap sample:</strong> Generate a new random sample <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> by drawing observations independently and with replacement from the available sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}.\)</span><br></li>
+<li><strong>Draw a bootstrap sample:</strong> Generate a new random sample <span class="math display">\[
+X_1^*,\dots,X_n^*
+\]</span> by drawing observations <strong>independently and with replacement</strong> from the available sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}.\)</span><br></li>
 <li><strong>Compute bootstrap estimate:</strong> Compute the estimate <span class="math display">\[
 \hat\theta^*_n\equiv \hat\theta(X_1^*,\dots,X_n^*)
 \]</span></li>
@@ -603,7 +605,7 @@ The Core Part of the Bootstrap Algorithm
 </ol>
 </div>
 </div>
-<p>By the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli">Theorem&nbsp;<span>3.1</span></a>) the bootstrap estimators <span class="math display">\[
+<p>By the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli">Theorem&nbsp;<span>3.1</span></a>) the bootstrap estimates <span class="math display">\[
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 \]</span> allow us to approximate the <strong>bootstrap distribution</strong><br>
 <span class="math display">\[
@@ -612,8 +614,8 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\le
 \sup_{x\in\mathbb{R}}\left|H^{Boot}_{n,m}(x)-H^{Boot}_{n}(x)\right|\to_{a.s} 0\quad\text{as}\quad m\to\infty,
 \]</span> where <span class="math display">\[
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
-\]</span> denotes the empirical distribution function based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> centered by <span class="math inline">\(\hat{\theta}_n\)</span> and scaled by <span class="math inline">\(\sqrt{n}.\)</span></p>
-<p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> and <span class="math inline">\(H^{Boot}_{n}(x).\)</span> That is, we can (and will do so) treat the bootstrap distribution <span class="math inline">\(H^{Boot}_{n}(x)\)</span> <strong>as known.</strong></p>
+\]</span> denotes the <strong>empirical distribution function</strong> based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> centered by <span class="math inline">\(\hat{\theta}_n\)</span> and scaled by <span class="math inline">\(\sqrt{n}.\)</span></p>
+<p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> and <span class="math inline">\(H^{Boot}_{n}(x).\)</span> That is, we can (and will do so) treat the bootstrap distribution <span class="math inline">\(H^{Boot}_{n}(x)\)</span> <strong>as known.</strong> 🤓</p>
 <p>The crucial question is, however, whether the bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 \]</span> is able to approximate the unknown distribution <span class="math display">\[

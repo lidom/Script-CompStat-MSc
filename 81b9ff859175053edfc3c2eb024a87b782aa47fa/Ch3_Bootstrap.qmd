@@ -341,24 +341,28 @@ $$
   * $\mathbb{E}\left(\hat\theta_n\right)=\theta_0$
   * $\operatorname{SE}\left(\hat\theta_n\right)=\sqrt{Var\left(\hat\theta_n\right)}=\frac{1}{\sqrt{n}}\cdot\text{constant}$
 
-**Inference:** In order to provide standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the **distribution** of 
+**Inference:** In order to provide (approximate for $n\to\infty$) standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the **distribution** of 
 $$
-\sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty,
+\sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty;
 $$
-i.e. in learning the limit of the distribution function
+i.e. we need to know the limit of the distribution function
 $$
 H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty.
 $$
 
 
-We could do asymptotic statistics. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of $H_{n}(x)$ is the distribution function of the Normal distribution with mean zero and asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).$ 
+We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of $H_{n}(x)$ is the distribution function of the Normal distribution with mean zero and asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).$ 
 
 However, deriving a useful, explicit expression of the asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)$ can be *very* hard (see @sec-Illustration). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result. 
 
 
 ::: {.callout-note}
 # The Core Part of the Bootstrap Algorithm
-1. **Draw a bootstrap sample:** Generate a new random sample $X_1^*,\dots,X_n^*$ by drawing observations independently and with replacement from the available sample $\mathcal{S}_n=\{X_1,\dots,X_n\}.$</br>
+1. **Draw a bootstrap sample:** Generate a new random sample 
+$$
+X_1^*,\dots,X_n^*
+$$ 
+by drawing observations **independently and with replacement** from the available sample $\mathcal{S}_n=\{X_1,\dots,X_n\}.$</br>
 2. **Compute bootstrap estimate:** Compute the estimate 
 $$
 \hat\theta^*_n\equiv \hat\theta(X_1^*,\dots,X_n^*)
@@ -369,7 +373,7 @@ $$
 $$
 :::
 
-By the Clivenko-Cantelli (@thm-Clivenko-Cantelli) the bootstrap estimators 
+By the Clivenko-Cantelli (@thm-Clivenko-Cantelli) the bootstrap estimates 
 $$
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 $$ 
@@ -385,9 +389,9 @@ where
 $$
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
 $$ 
-denotes the empirical distribution function based on the $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ centered by $\hat{\theta}_n$ and scaled by $\sqrt{n}.$
+denotes the **empirical distribution function** based on the $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ centered by $\hat{\theta}_n$ and scaled by $\sqrt{n}.$
 
-Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error between $H^{Boot}_{n,m}(x)$ and $H^{Boot}_{n}(x).$ That is, we can (and will do so) treat the bootstrap distribution $H^{Boot}_{n}(x)$ **as known.**  
+Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error between $H^{Boot}_{n,m}(x)$ and $H^{Boot}_{n}(x).$ That is, we can (and will do so) treat the bootstrap distribution $H^{Boot}_{n}(x)$ **as known.** 🤓  
 
 The crucial question is, however, whether the bootstrap distribution 
 $$

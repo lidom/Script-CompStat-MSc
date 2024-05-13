@@ -797,8 +797,8 @@ For $r=1,2,\dots$
     - <span style="color:#FF5733">**(Expectation)** </span> Compute:
     $$
     \begin{align*}
-    &\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
-    =\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex]
+    &\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
+    =\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex]
     &=\sum_{i=1}^n\sum_{k=1}^K\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
     &=\sum_{i=1}^n\sum_{k=1}^K\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
     \end{align*}
@@ -811,7 +811,7 @@ For $r=1,2,\dots$
     - <span style="color:#2471A3">**(Maximization)**</span>  Compute:
     $$
     \begin{align*}
-    \boldsymbol{\hat{\theta}}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\theta}^{(r-1)})
+    \boldsymbol{\hat{\theta}}^{(r)}=\arg\max_{\boldsymbol{\theta}}\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
     \end{align*}
     $$
     where $\boldsymbol{\hat{\theta}}^{(r)}=(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)}),$
@@ -829,13 +829,13 @@ For $r=1,2,\dots$
 3. **Check Convergence:**<br> 
    Stop if the value of the maximized log-likelihood function 
    $$
-   \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})
+   \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r)},\boldsymbol{\hat{\theta}}^{(r-1)})
    $$ 
    does not change anymore substantially; i.e., if
    $$
-   \mathcal{Q}(\boldsymbol{\theta}^{(r)},\boldsymbol{\theta}^{(r-1)})
+   \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r)},\boldsymbol{\hat{\theta}}^{(r-1)})
    \approx
-   \mathcal{Q}(\boldsymbol{\theta}^{(r+1)},\boldsymbol{\theta}^{(r-1+1)})
+   \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r+1)},\boldsymbol{\hat{\theta}}^{(r-1+1)})
    $$ 
 
 
