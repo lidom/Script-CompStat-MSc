@@ -616,15 +616,15 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\le
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
 \]</span> denotes the <strong>empirical distribution function</strong> based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> centered by <span class="math inline">\(\hat{\theta}_n\)</span> and scaled by <span class="math inline">\(\sqrt{n}.\)</span></p>
 <p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> and <span class="math inline">\(H^{Boot}_{n}(x).\)</span> That is, we can (and will do so) treat the bootstrap distribution <span class="math inline">\(H^{Boot}_{n}(x)\)</span> <strong>as known.</strong> 🤓</p>
-<p>The crucial question is, however, whether the bootstrap distribution <span class="math display">\[
+<p>The crucial question is, however, whether the (effectively known) bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 \]</span> is able to approximate the unknown distribution <span class="math display">\[
 H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
-\]</span> as <span class="math inline">\(n\to\infty.\)</span> This is an important requirement called <strong>bootstrap consistency</strong>.</p>
+\]</span> as <span class="math inline">\(n\to\infty.\)</span> This is a basic requirement called <strong>bootstrap consistency</strong>. If a bootstrap method is inconsistent, you shall not use it in practice.</p>
 <section id="bootstrap-consistency" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bootstrap-consistency">Bootstrap Consistency</h3>
 <p>The bootstrap does <strong>not always work</strong>. A necessary condition for the use of the bootstrap is the <strong>consistency of the bootstrap approximation</strong>.</p>
-<p>The bootstrap is called <strong>consistent</strong> if, for large <span class="math inline">\(n\)</span>, the bootstrap distribution of <span class="math inline">\(\sqrt{n}\big(\hat{\theta}^*_n -\hat{\theta}_n\big)|\mathcal{S}_n\)</span> is a good approximation of the distribution of <span class="math inline">\(\sqrt{n}\big(\hat{\theta}_n-\theta_0\big)\)</span>, i.e. <span class="math display">\[
+<p>The bootstrap is called <strong>consistent</strong> if, for large <span class="math inline">\(n\)</span>, the bootstrap distribution of <span class="math inline">\(\sqrt{n}\big(\hat{\theta}^*_n -\hat{\theta}_n\big)|\mathcal{S}_n\)</span> is a good approximation of the distribution of <span class="math inline">\(\sqrt{n}\big(\hat{\theta}_n-\theta_0\big);\)</span> i.e., if <span class="math display">\[
 \underbrace{\text{distribution}\left(\sqrt{n}\big(\hat{\theta}^*_n -\hat{\theta}_n\big)\ |{\cal S}_n\right)}_{H_n^{Boot}}\approx
 \underbrace{\text{distribution}\left(\sqrt{n}\big(\hat{\theta}_n-\theta_0\big)\right)}_{H_n}.
 \]</span> for large <span class="math inline">\(n.\)</span></p>
@@ -640,7 +640,7 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 </div>
 <div class="callout-body-container callout-body">
 <div id="def-BootstrapConsistency" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3.3 (Bootstrap consistency) </strong></span><br> Let the limit (as <span class="math inline">\(n\to\infty\)</span>) of <span class="math inline">\(H_n\)</span> be a non-degenerate distribution. Then the bootstrap is <strong>consistent</strong> if and only if <span class="math display">\[
+<p><span class="theorem-title"><strong>Definition 3.3 (Bootstrap Consistency) </strong></span><br> Let the limit (as <span class="math inline">\(n\to\infty\)</span>) of <span class="math inline">\(H_n\)</span> be a non-degenerate distribution. Then the bootstrap is <strong>consistent</strong> if and only if <span class="math display">\[
 \sup_{x\in\mathbb{R}} \Big|\;
 \underbrace{P\Big(\sqrt{n}\big(\hat\theta^*_n-\hat\theta_n\big)\le x \ |{\cal S}_n\Big)}_{H_n^{Boot}(x)}
   -\underbrace{P\Big(\sqrt{n}\big(\hat\theta_n -\theta_0\big)\le x\Big)}_{H_n(x)}
@@ -649,7 +649,7 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 </div>
 </div>
 </div>
-<p>Luckily, the standard bootstrap is consistent in a large number of statistical problems. However, there are <strong>some requirements</strong>:</p>
+<p>Luckily, the standard bootstrap is consistent in a large number of statistical problems. Typically, the bootstrap is consistent if the following two requirements hold:</p>
 <ol type="1">
 <li>Generation of the bootstrap sample must reflect appropriately the way in which the original sample has been generated. That is,
 <ul>
@@ -660,10 +660,10 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
 \]</span> needs to be asymptotically normal.</li>
 </ol>
-<p>The standard bootstrap <strong>will usually fail</strong> if one of the above conditions is violated. For instance,</p>
+<p>The standard bootstrap <strong>will usually fail</strong> if one of the above conditions is violated. For instance, …</p>
 <ul>
-<li>The bootstrap will not work if the i.i.d. re-sample <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> does not properly reflect the way how <span class="math inline">\(X_1,\dots,X_n\)</span> are generated in a first place. (For instance, when <span class="math inline">\(X_1,\dots,X_n\)</span> is generated by a time-series process with auto-correlated data, but the bootstrap samples are generated by i.i.d. sampling.)</li>
-<li>The distribution of <span class="math display">\[
+<li>the bootstrap will not work if the i.i.d. re-sample <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> does not properly reflect the way how <span class="math inline">\(X_1,\dots,X_n\)</span> are generated in the first place. (For instance, when <span class="math inline">\(X_1,\dots,X_n\)</span> is generated by a time-series process with auto-correlated data, but the bootstrap samples are generated by i.i.d. sampling from <span class="math inline">\(\mathcal{S}_n\)</span>)</li>
+<li>the bootstrap will not work if the distribution of <span class="math display">\[
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
 \]</span> is not asymptotically normal. (For instance, in case of extreme value problems.)</li>
 </ul>
@@ -716,7 +716,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 \]</span></p>
 </div>
 </div>
-<p>Yes, the asymptotic result is simple here (boring), but can we alternatively use the Bootstrap to approximate this limit result? I.e., is <span class="math display">\[
+<p>Yes, the asymptotic result is simple here (boring 🥱), but can we alternatively use the Bootstrap to approximate this limit result? I.e., is <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 \]</span> able to approximate <span class="math inline">\(\Phi_{\sigma_0}(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span>?</p>
 <section id="sec-PracticeXbar" class="level4" data-number="3.4.1.1">
