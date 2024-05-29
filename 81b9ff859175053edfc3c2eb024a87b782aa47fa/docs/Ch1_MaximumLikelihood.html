@@ -776,7 +776,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 <p>Now let’s return to the linear regression model <span id="eq-LinMod"><span class="math display">\[
 Y_i=X_i'\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 \tag{1.2}\]</span></span> where <span class="math inline">\(Y_i\in\mathbb{R}\)</span> denotes the response (or “dependent”) variable, <span class="math display">\[
-\beta_0\in\mathbb{R}^p
+\beta_0\in\mathbb{R}^K
 \]</span> denotes the vector of unknown slope parameters, and <span class="math display">\[
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^K
 \]</span> denotes the vector of predictor variables, where the (i.i.d.) random sample<br>
@@ -1444,18 +1444,20 @@ Important
 &amp;=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}
 {f(X;\theta_0)}\right)^2\right)
 \end{align*}
-\]</span> From <a href="#eq-Mean">Equation&nbsp;<span>1.10</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2} f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span id="eq-FisherInfoDeriv"><span class="math display">\[
+\]</span> From <a href="#eq-Mean">Equation&nbsp;<span>1.10</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2} f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
 \begin{align*}
-\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)
-&amp;=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\[2ex]
-&amp;=\mathcal{I}(\theta_0),
+\underbrace{\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)}_{=\mathcal{I}(\theta_0)}
+&amp;=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
 \end{align*}
-\tag{1.12}\]</span></span> <span class="math display">\[
-\Rightarrow \qquad \mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)=\mathcal{I}(\theta_0)\qquad
-\]</span></p>
+\]</span> <span id="eq-FisherInfoDeriv"><span class="math display">\[
+\Rightarrow \qquad
+\mathcal{I}(\theta_0) =
+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
+\tag{1.12}\]</span></span></p>
 <p>This means that <span class="math display">\[
 -\frac{1}{n}\ell_n''(\theta_0)
 \]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
+<p>Moreover, <a href="#eq-FisherInfoDeriv">Equation&nbsp;<span>1.12</span></a> provides an alternative expression for the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

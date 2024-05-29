@@ -9,9 +9,9 @@ $$
 (Y_{1},X_{1}),\dots,(Y_{n},X_{n})\overset{\text{i.i.d}}{\sim}(Y,X)
 $$
 
-* $Y_{i}$ response variable
-* $X_{i}\in [a,b]\subset \mathbb{R}$ explanatory  variable
-* $n$ sufficiently large (e.g., $n\geq 40$)
+* $Y_{i}\in \mathbb{R}$ real response variable
+* $X_{i}\in [a,b]\subset \mathbb{R}$ real explanatory variable
+* $n$ sufficiently large sample size (e.g., $n\geq 40$)
 
 
 #### The Nonparametric Regression Model {-}
@@ -21,18 +21,19 @@ Y_i=m(X_i)+\varepsilon_i
 $$
 
 * $m(X)=\mathbb{E}(Y_i|X=X_i)$ regression function
-* $\mathbb{E}(\varepsilon_i)=0$, $Var(\varepsilon_i)=\sigma^2$
-* $\varepsilon_i$  independent of $X_i$ or at least $\mathbb{E}(\varepsilon_i|X_i)=0$
+* $\mathbb{E}(\varepsilon_i)=0$
+* $Var(\varepsilon_i|X_i) = Var(\varepsilon_i)=\sigma^2$
+* $\varepsilon_i$ and $X_i$ are independent or at least mean-independent, i.e., $\mathbb{E}(\varepsilon_i|X_i)=0$
 
 
 Special cases of **parametric**  regression models:
 
-* Linear regression: $m(x)$ is a straight line
+* Linear regression: $m$ is a straight line
 $$
 m(X)=\beta_0+\beta_1 X
 $$
 
-* Possible generalizations: $m(x)$ quadratic or cubic polynomial
+* Polynomial generalizations: $m$ is a quadratic or cubic polynomial
 $$
 \begin{align*}
                 m(X)&=\beta_0 +\beta_1 X+\beta_2 X^2\\
@@ -49,11 +50,11 @@ Many important applications lead to regression functions possessing a complicate
 
 
 
-An important point in theoretical analysis is the way how the observations $X_1,\dots,X_n$ have been generated. One distinguishes between "fixed" and "random design".
+An important point in theoretical analysis is the way how the observations $X_1,\dots,X_n$ have been generated. One distinguishes between **fixed** and **random** design.
 
 * **Fixed design:** The observation points $X_1,\dots,X_n$ are fixed  (non stochastic) values.
-   * **Example:** Crop yield ($Y$) in dependence of the amount of fertilizer ($X$) used.
-* **Equidistant Design:**  (Most important special case of fixed design)  
+   * **Example:** Crop yield ($Y$) in dependence of the amount of fertilizer ($X$) used, when the amount is determined deterministically by the experimenter.
+   * **Equidistant Design:**  (Most important special case of fixed design)  
    $$
    X_{i+1}-X_i=\frac{b-a}{n}.
    $$
@@ -86,11 +87,11 @@ plot(cps71$age, cps71$logwage, xlab="Age", ylab="log(wage)")
 What would be a good/reasonable model assumption for $m(x)$ to estimate the conditional mean function for the data shown in @fig-CanadianIncome?
 
 
-::: {.callout-important}
+::: {.callout-note}
 
 # No specific model assumption
 
-There are no specific assumptions about the structure of the regression function. It is only assumed that $m$ is **smooth** (sufficiently often differentiable).
+In nonparametric regression analysis, we do not make assumptions about the structure of the regression function $m(x).$ We only make the qualitative assumption that $m$ is a sufficiently **smooth** function, i.e. that $m(t)$ is sufficiently often differentiable at every $t\in(a,b)$.
 :::
 
 
@@ -121,16 +122,24 @@ $$
 $$
 
 
-Examples are approximations by polynomials, spline functions, wavelets or Fourier expansions (for periodic functions).
+Examples are approximations by: 
+
+* polynomials
+* spline functions
+* wavelets 
+* Fourier expansions (for periodic functions)
 
 
 ### Polynomial Regression
 
 **Theoretical Justification:** Every smooth function can be well approximated by a polynomial of sufficiently high degree.
 
+
 **Approach:**
 
-* Choose $p$ and fit a polynomial of degree $p$:
+* Monomial basis functions $b_j(x) = x^{j-1}$, $j=1,\dots,p-1.$
+
+* Choose $p$ (polynomial degree) and fit a polynomial of degree $p-1$:
   $$
   \min_{\beta_1,\dots,\beta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p {\beta}_{j} X^{j-1}\right)^2
   $$
@@ -140,13 +149,19 @@ Examples are approximations by polynomials, spline functions, wavelets or Fourie
   $$
 * This corresponds to an approximation with basis functions
   $$
-  b_1(x)=1, b_2(x)=x, b_3(x)=x^2, \dots, b_{p}(x)=x^{p-1}.
+  \begin{align*}
+  b_1(x)&=1\\[2ex]
+  b_2(x)&=x\\[2ex]
+  b_3(x)&=x^2\\[2ex]
+  \vdots\\[2ex]
+  b_{p}(x)&=x^{p-1}
+  \end{align*}
   $$
 
 **Note:** It is only assumed that $m$ is well approximated by a polynomial of degree $p$. That is, there will usually still exist an **approximation error** (i.e., bias of $\hat{m}_p \neq 0$).
 
 
-**R-Code to compute polynomial regressions:**
+**`R`-Code to Compute Polynomial Regressions:**
 
 Generate some data:
 
@@ -198,8 +213,9 @@ lines(y = predict(reg_p6, newdata = db),
 ```
 
 
-The quality of the approximation obviously depends on the choice of $p$ which serves as a "smoothing parameter"
+The quality of the approximation obviously depends on the choice of $p$ which serves as a **smoothing parameter**.
 
+Let's look at the fits of 200 Monte Carlo replications: 
 
 ```{r}
 m_true    <- sin(x_vec * 5)
@@ -257,28 +273,35 @@ Pt_Bias_p1 <- rowMeans(m_hat_p1) - m_true
 Pt_Bias_p3 <- rowMeans(m_hat_p3) - m_true
 Pt_Bias_p6 <- rowMeans(m_hat_p6) - m_true
 
+## Pointwise squared biases
+Pt_BiasSq_p1 <- Pt_Bias_p1^2
+Pt_BiasSq_p3 <- Pt_Bias_p3^2
+Pt_BiasSq_p6 <- Pt_Bias_p6^2
+
 ## Pointwise (for each x) variances \hat{m}(x):
 Pt_Var_p1  <- apply(m_hat_p1, 1, var)
 Pt_Var_p3  <- apply(m_hat_p3, 1, var)
 Pt_Var_p6  <- apply(m_hat_p6, 1, var)
 
 par(mfrow=c(1,2))
-matplot(y = cbind(Pt_Bias_p1, Pt_Bias_p3, Pt_Bias_p6), 
-        x = x_vec, type = "l", 
-        main = "Pointwise Bias", ylab="", xlab="x")
-legend("topleft", col = c(1,2,3), lty = c(1,2,3), 
+matplot(y = cbind(Pt_BiasSq_p1, Pt_BiasSq_p3, Pt_BiasSq_p6), 
+        x = x_vec, type = "l", col = c(1,2,"darkgreen"), 
+        main = "Pointwise Squared Bias", ylab="", xlab="x")
+legend("topleft", col = c(1,2,"darkgreen"), lty = c(1,2,3), 
 legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
 matplot(y = cbind(Pt_Var_p1, Pt_Var_p3, Pt_Var_p6), 
-        x = x_vec, type = "l", 
+        x = x_vec, type = "l", col = c(1,2,"darkgreen"), 
         main = "Pointwise Variance", ylab="", xlab="x")
-legend("top", col = c(1,2,3), lty = c(1,2,3), 
+legend("top", col = c(1,2,"darkgreen"), lty = c(1,2,3), 
 legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
 ```
 
 **The Bias-Variance Trade-Off:**
 
-* $p$ small: variability of the estimator is small, but there may exist a high systematic error (bias).
-* $p$ large: bias is small, but variability of the estimator is high.
+* $p$ small:<br>
+Variance of the estimator is small, but (squared) bias is large.
+* $p$ large:<br> 
+Variance of the estimator is large, but (squared) bias is small.
 
 ::: {.callout-note}
 # Remark
@@ -289,8 +312,7 @@ Polynomial regression is not very popular in practice. Reasons are numerical pro
 ### Regression Splines
 
 
-The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are **local polynomials**, i.e., so-called "spline functions".  
-
+The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are **local polynomials**, i.e., so-called **spline functions**.  
 
 A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ "knots" 
 $$
@@ -306,13 +328,16 @@ $$
 s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 $$
 with $s_0,\dots,s_k\in\mathbb{R}.$
-* $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
 
    * $s(x)$ is called a *linear spline* if $k=1$
 
    * $s(x)$ is a *quadratic spline* if $k=2$
 
    * $s(x)$ is a *cubic spline*  if $k=3$.
+
+* $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
+
+
 
 In practice, the most frequently used splines are **cubic** spline functions based on an equidistant sequence of $q$ knots, i.e.,
 $$
@@ -359,7 +384,7 @@ The B-Spline basis functions
 $$
 b_{j,k},\quad j=1,\dots,p=q+k-1,
 $$ 
-for splines of order $k$ based on a knot sequence 
+for splines of degree $k$ based on a knot sequence 
 $$
 a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b
 $$ 
@@ -375,34 +400,37 @@ And for $l=1,\dots,k$
 $$
 b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 \frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
-$$
-$j=1,\dots,q+k-1$, and $x\in [a,b],$
+$${#eq-BSplineRecursion}
+$j=1,\dots,q+k-1$, and $x\in [a,b],$ where 
 
-where
+where $\tau_j^\ast$ denotes the augmented knot sequence: 
 
-* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ (One left boundary knot $+$ $k$ replications), 
-* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) and 
-* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ (One right boundary knot $+$ $k$ replications).
+* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ ($k+1$ repetitions of the left boundary knot)
+* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) 
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ ($k+1$ repetitions of the right boundary knot)
 
+Note: @eq-BSplineRecursion is understood that if the denominator is 0, then the function is defined to be 0. 
+
+**`R`-Code to Compute B-Spline Basis Functions:**
 
 The following `R` code generates  
 $$
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
 $$ 
-cubic B-spline basis functions. Let's take a look at them:
+cubic ($k=3$) B-spline basis functions. Let's take a look at them:
 
 ```{r}
 library("splines2")
 
 degree         <- 3
-ord            <- degree + 1
+order          <- degree + 1
 internal_knots <- seq(from = 0.1, to = 0.9, by = 0.2)
 boundary_knots <- c(0, 1)
-all_knots      <- sort(c(rep(boundary_knots[1], ord), 
+all_knots      <- sort(c(rep(boundary_knots[1], order), 
                          internal_knots, 
-                         rep(boundary_knots[2], ord)))
+                         rep(boundary_knots[2], order)))
 
-## evaluation points
+## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
              to   = boundary_knots[2], len = 100)
 
@@ -411,8 +439,7 @@ X_mat_degree3 <- splines2::bSpline(
         knots          = internal_knots, 
         degree         = degree,
         intercept      = TRUE, 
-        Boundary.knots = boundary_knots
-    )
+        Boundary.knots = boundary_knots)
 
 matplot(x = x_vec, 
         y = X_mat_degree3, 
@@ -425,71 +452,79 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 dim(X_mat_degree3)
 ```
 
+::: {.callout-note}
+The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point $x$ is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points. 
+
+Basis functions are positive only over at most $k+1$ intervals and zero over the remaining intervals. This compact support property is important for computational efficiency since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property.
+:::
 
 #### Regression Splines {-}
 
 
-The so-called "regression spline" (or "B-spline") approach to estimating a regression function $m(x)$ is based on fitting a set of spline basis functions to the data. 
+The so-called **regression spline** (or B-spline) approach to estimating a regression function $m(x)$ is based on fitting a set of spline basis functions to the data. 
 
-Frequently, cubic splines ($k=3$) with equidistant knots are applied. 
+Typically, cubic splines ($k=3$) with equidistant knots are applied: 
 
+* $k=3$ (cubic splines)
 * $\tau_1=a$ 
 * $\tau_{j+1}=\tau_j + (b-a)/(q-1),\quad j=1,\dots,q-1$  
 * such that $\tau_q=b$
 
 
-In this case the number of knots $q,$ or more precisely the total number of basis functions 
+In this case the number of knots $q,$ or more precisely the total number of basis functions $p$
 $$
-p=q+k-1
+\begin{align*}
+p
+&=q+k-1\\[2ex]
+&=q+2\qquad (k=3)
+\end{align*}
 $$ 
-with $k=3$ in the case of cubic B-splines serves as the **smoothing parameter** which has to be selected by the statistician.
+serves as the **smoothing parameter** which has to be selected by the statistician.
 
 
 An estimator $\hat{m}_p(x)$ is then given by
 $$
 \hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
 $$
-and the coefficients $\hat\beta_j$ are determined by ordinary least squares.
+and the coefficients $\hat\beta_j$ are determined by ordinary least squares
+$$
+\hat\beta_1,\dots,\hat\beta_p=\arg\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_{j,k}(X_i)}_{X_{ij}}\right)^2
+$$
 
-
-
-Let 
+I.e., let 
 $$
 Y=(Y_1,\dots,Y_n)^\top 
 $$ 
 denote the vector of response variables and let 
 $$
-\mathbf{X}
+\underset{(n\times p)}{\mathbf{X}}
 $$ 
 denote the $n\times p$ matrix with elements 
 $$
 X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p.
 $$
-
-
 Then the OLS estimator
 $$
 \hat \beta=(\hat\beta_1,\dots,\hat\beta_p)^\top
 $$ 
 can be written as
 $$
-\hat\beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y.
+\hat\beta=(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top Y.
 $$
 The fitted values are given by
 $$
-% \left(\begin{array}{c}
-% {\hat Y}_1\\
-% \vdots%\\ \cdot\\ \cdot
-% \\ {\hat Y}_n
-% \end{array}\right)=
 \left(\begin{array}{c}
 {\hat m}_p(X_1)\\
 \vdots%\\ \cdot\\ \cdot
 \\ {\hat m}_p(X_n)
-\end{array}\right)=\mathbf{X}\hat\beta=\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top }_{=:S_p}Y
+\end{array}\right)=\mathbf{X}\hat\beta=\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top}_{=:S_p}Y = S_p Y
 $$
 
-The matrix $S_p$ is referred to as the **smoothing matrix** and the number of B-spline basis function $p$ is referred to as the **smoothing parameter**. 
+The matrix 
+$$
+S_p = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
+$$ 
+is referred to as the **smoothing matrix** and the number of B-spline basis function $p$ is referred to as the **smoothing parameter**. 
 
 
 ::: {.callout-note}
@@ -517,7 +552,7 @@ $$
 :::
 
 
-`R` code to compute regression splines:
+**`R` Code to Compute Regression Splines:**
 
 First, we generate some data.
 ```{r}
@@ -531,7 +566,7 @@ e_vec  <- rnorm(n = n, mean = 0, sd = .5)
 y_vec  <-  sin(x_vec * 5) + e_vec
 ```
 
-Then, we generate cubic B-spline basis functions with (different) equidistant knot sequences and evaluate them at `x_vec`: 
+Then, we generate cubic B-spline basis functions with equidistant knot sequence (different to `x_vec`) and evaluate them at `x_vec`: 
 
 ```{r}
 degree      <- 3 # piecewise cubic splines
@@ -555,21 +590,21 @@ X_mat_p17    <- splines2::bSpline(
     )    
 ```
 
-Compute the smoothing matrices $S_p$ for $p=7$ and $p=17$:
+Computing the smoothing matrices $S_p$ for $p=7$ and $p=17$:
 
 ```{r}
 S_p7  <- X_mat_p7  %*% solve(t(X_mat_p7)  %*% X_mat_p7)  %*% t(X_mat_p7) 
 S_p17 <- X_mat_p17 %*% solve(t(X_mat_p17) %*% X_mat_p17) %*% t(X_mat_p17) 
 ```
 
-Compute the estimates $\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)$ for $p=7$ and $p=17$:
+Computing the estimates $\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)$ for $p=7$ and $p=17$:
 
 ```{r}
 m_hat_p7  <- S_p7  %*% y_vec
 m_hat_p17 <- S_p17 %*% y_vec
 ```
 
-Let's plot the results:
+Plotting the estimation results:
 
 ```{r}
 plot(y=y_vec, x=x_vec, xlab="X", ylab="Y", 
@@ -593,7 +628,7 @@ In a nonparametric regression context we do **not** assume that the unknown true
 $$
 \hat m_p=(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n))^\top
 $$ 
-possesses a systematic estimation error (bias). That is, 
+typically possesses a systematic estimation error (bias). That is, 
 $$
 \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\neq m(X_i).
 $$
@@ -629,9 +664,10 @@ $$
 with $\mathbf{X}=(b_{j,k}(X_i))_{i,j}$, is invertible (under our conditions on the design density this holds with probability 1 for the random design).
 
 
-The behavior of nonparametric function estimates is usually evaluated with respect to **quadratic risk**. 
+The behavior of nonparametric function estimates is usually evaluated with respect to **quadratic risk** (i.e. mean squared error). 
 
-A commonly used measure of accuracy of a spline estimator $\hat m_p$ is the **Mean Average Squared Error (MASE):**
+
+A commonly used **global** measure of accuracy of a spline estimator $\hat m_p$ is the **Mean Average Squared Error (MASE),** which averages the **local** (at each $X_i$) mean squared errors over all $X_i,$ $i=1,\dots,n:$ 
 $$
 \begin{align*}
 &\operatorname{MASE}(\hat m_p):=\frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left(m(X_i)-\hat{m}_p(X_i)\right)^2\\
@@ -709,7 +745,7 @@ Examples:
 
 
 ::: {.callout-note}
-# Stochastic Landau symbol "Big Oh Pee" $O_P(r_n)$
+# Stochastic Landau symbol "Big Oh P" $O_P(r_n)$
 $$
 O_P(r_n)\quad\text{with}\quad r_n>0,\;n=1,2,\dots
 $$
@@ -731,7 +767,7 @@ $$
 :::
 
 ::: {.callout-note}
-# Stochastic Landau symbol "Small oh Pee" $o_P(r_n)$
+# Stochastic Landau symbol "Small oh P" $o_P(r_n)$
 $$
 o_P(r_n)\quad\text{with}\quad r_n>0,\;n=1,2,\dots
 $$
@@ -752,73 +788,99 @@ $$
 
 In the following we focus on the **MASE** which has the advantage that we can use matrix algebra. 
 
-$\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m_p(X_i)$:
+First, we look at the local bias of $\hat{m}_p(X_i)$ at a single evaluation point $X_i:$
+$$
+\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m_p(X_i),
+$$
+where 
 $$
 \begin{align*}
   \mathbb{E}_\varepsilon(\hat m_p(X_i))&=\mathbb{E}_\varepsilon\Big(\sum_{j=1}^p \hat{\beta}_j b_{j,k}(X_i)\Big)\\
  &=\sum_{j=1}^p\mathbb{E}_\varepsilon(\hat{\beta}_j) b_{j,k}(X_i),
 \end{align*}
 $$
-where $\hat{\beta}=(\hat{\beta}_1,\dots,\hat{\beta}_p)^\top=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top Y$.
-
-
-Then
+with 
+$$
+\hat{\beta}=\left(\begin{matrix}\hat{\beta}_1\\\vdots\\\hat{\beta}_p\end{matrix}\right)=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top Y
+$$
+and with 
 $$
 \begin{align*}
 \mathbb{E}_\varepsilon(\hat\beta)
-&=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  (\underbrace{m+\varepsilon}_{=Y})\Big)\\
-&=\underbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m}_{=:(\beta_1,\dots,\beta_p)^\top=\beta}+0,%\\
-%&=:(\beta_1,\dots,\beta_p)^\top=\beta
+&=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  (\overbrace{m+\varepsilon}^{=Y})\Big)\\[2ex]
+&=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m\Big)\;+\;\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \varepsilon\Big)\\[2ex]
+&=\overbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m}^{=(\beta_1,\dots,\beta_p)^\top=\beta}\;+\;\underbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \overbrace{\mathbb{E}_\varepsilon(\varepsilon)}^{=0}}_{=0}\\[2ex]
+&=(\beta_1,\dots,\beta_p)^\top=\beta
 \end{align*}
 $$
-where $m=(m(X_1),\dots, m(X_n))^\top$ and $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)^\top$.
-
-
-Note that 
+where 
 $$
-\beta=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
+m=\left(\begin{matrix}m(X_1)\\\vdots\\m(X_n)\end{matrix}\right)
 $$ 
-is a least squares solution; namely of the following least squares problem that tries to approximate the unknown $m$ using a spline function $s$:
+denotes the vector of true function values, and 
+$$
+\varepsilon=\left(\begin{matrix}\varepsilon_1\\\vdots\\\varepsilon_n\end{matrix}\right)
+$$ 
+denotes the vector of error terms.
+
+
+That is, the mean of the spline regression estimator evaluated at $X_i$ is given by 
+$$
+\mathbb{E}_\varepsilon(\hat m_p(X_i)) = \sum_{j=1}^p\beta_j b_{j,k}(X_i),
+$$
+where 
+$$
+\beta=\left(\begin{matrix}\beta_1\\\vdots\\\beta_p\end{matrix}\right)=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
+$$ 
+is a least squares solution; namely of the following least squares problem that tries to approximate the unknown vector $m=(m(X_1),\dots,m(X_n))^\top$ using a spline function $s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}:$
 $$
 \begin{align*}
-\sum_i (m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i))^2 
-&=\min_{\vartheta_1,\dots,\vartheta_p}\sum_i (m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i))^2\\
-&=\min_{s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}} \sum_i (m(X_i)-s(X_i))^2.
+\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i)\right)^2 
+&=\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i)\right)^2\\
+&=\min_{s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}} \sum_{i=1}^n \left(m(X_i)-s(X_i)\right)^2.
 \end{align*}
 $$
 
-That is, the mean of our spline regression estimator
+That is, the mean of the spline regression estimator evaluated at $X_i$
 $$
-\mathbb{E}_\varepsilon(\hat m_p(x))=\sum_{j=1}^p \beta_j b_j(x)=:\tilde m_p(x)
+\mathbb{E}_\varepsilon(\hat m_p(X_i))=\sum_{j=1}^p \beta_j b_j(X_i)=:\tilde m_p(X_i)
 $$
-is the best ($L_2$) approximation of the true, but unknown, regression function $m(x)$ by means of spline functions in ${\cal{S}}_{k,\tau_1,\dots,\tau_q}$.
+is the best ($L_2$) approximation of the true, but unknown, regression function vector $m=(m(X_1),\dots,m(X_n))^\top$ by means of a spline function vector $s=(s(X_1),\dots,s(X_n))^\top$ with $s\in{\cal{S}}_{k,\tau_1,\dots,\tau_q}.$
 
 ::: {.callout-important}
 If the true, but unknown, regression function $m$ happens to be an element of the space of spline functions ${\cal{S}}_{k,\tau_1,\dots,\tau_q},$ then 
 $$
-\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) = 0
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) = 0,\quad i=1,\dots,n.
 $$
 However, generally we do not expect that $m$ is actually an element of ${\cal{S}}_{k,\tau_1,\dots,\tau_q},$ such that  
 $$
-\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \neq 0.
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) \neq  0,\quad i=1,\dots,n.
 $$
-We rather hope that 
+For consistency, however, we need that 
 $$
-\operatorname{Bias}_\varepsilon(\hat m_p) = \tilde m_p(x) - m(x) \to 0
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) \to 0,\quad i=1,\dots,n.
 $$
-as $n\to\infty$ and $p\to\infty.$ 
+as $n\to\infty$ and $p\equiv p_n\to\infty.$ 
 :::
 
-By the general approximation properties of cubic splines ($k=3$) with $q=p-2$ equidistant knots, we will thus expect that (@DeBoor_1978 or @Eubank_1999):
+From the general approximation properties of cubic splines ($k=3$) with $q=p-2$ equidistant knots (@DeBoor_1978 or @Eubank_1999), we know that:
 
 * If $m$ is twice continuously differentiable over $(a,b)$, then
 $$
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2=\frac{1}{n}\sum_{i=1}^n \left(m(X_i)-\tilde m_p(X_i))\right)^2=O_p(p^{-4})
+\begin{align*}
+(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-4})
+\end{align*}
 $$
 
 * If $m$ is four times continuously differentiable, then
 $$
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2=\frac{1}{n}\sum_{i=1}^n \left(m(X_i)-\tilde m_p(X_i))\right)^2=O_p(p^{-8})
+\begin{align*}
+(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-8})
+\end{align*}
 $$
 
 
@@ -829,72 +891,104 @@ The next step is to compute the (average) **variance** of the estimator, which c
 %{\small -->
 $$
 \begin{align*}
-%\V_\varepsilon(\hat m_p)&=:
-\frac{1}{n}\sum_{i=1}Var_\varepsilon(\hat{m}_p(X_i))&=
-% \frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+Var_\varepsilon(\hat m_p)
+&=\frac{1}{n}\sum_{i=1}^nVar_\varepsilon(\hat{m}_p(X_i))\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\big((\hat{m}_p(X_i)-\overbrace{\tilde{m}(X_i)}^{=\mathbb{E}_\varepsilon(\hat{m}_p(X_i))})^2\big)\\[2ex]
+%\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 % \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \tilde m_p\Vert_2^2\right)\\
-\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+&=\frac{1}{n}\mathbb{E}_\varepsilon\left(\left\Vert \left(\begin{matrix}\hat{m}_p(X_1)\\\vdots\\\hat{m}_p(X_n)\end{matrix}\right)-\left(\begin{matrix}\tilde{m}_p(X_1)\\\vdots\\\tilde{m}_p(X_n)\end{matrix}\right)\right\Vert_2^2\right)\\[2ex]
+&=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
+&=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top (Y-m)\Vert_2^2\right)\\[2ex]
 &=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
-&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top\;\;\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top}_{(1\times n)}\;\;\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(n\times 1)}\Big)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\right)\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(  (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\varepsilon^\top\mathbf{X}\right)\right)\\[2ex]
 &=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
 &=\frac{1}{n} \sigma^2 \text{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbf{X}\right)\\[2ex]
 &=\frac{1}{n} \sigma^2 \text{trace}\left(I_p\right)\\[2ex]
-&=\sigma^2  \frac{p}{n}=:Var_\varepsilon(\hat{m}_p)
+&=\sigma^2  \frac{p}{n}
 \end{align*}
 $$
 
 
 ::: {.callout-tip}
 # Trace-Trick 
-For any $j\times l$ matrix $A$ and any $l\times j$ matrix $B$ we have the identity
+For any $(m\times n)$ matrix $A$ and any $(n\times m)$ matrix $B$ we have the identity
 $$\text{trace}(AB)=\text{trace}(BA)$$
 :::
 
 
 #### Summary {-} 
 
-For cubic ($k=3$) splines with $q$ equidistant knots and a twice differentiable function $m$ we will expect that:
+For cubic ($k=3$) splines with $q$ equidistant knots and a twice differentiable function $m$ we have that:
 
-* $\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2=O_p(p^{-4})$
-
-* $\displaystyle Var_\varepsilon(\hat m_p)= \sigma^2\frac{p}{n}$
-
-where $p=q+2$ is the number of basis functions. 
+$$
+\begin{align*}
+\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&=O_p(p^{-4})\\[2ex]
+\displaystyle Var_\varepsilon(\hat m_p)&= \sigma^2\frac{p}{n},
+\end{align*}
+$${#eq-BiasSqVar}
+where $p=q+2$ is the number of basis functions (i.e. the smoothing parameter). 
 
 This leads to the classical **trade-off between (average) squared bias and (average) variance** that is typical for nonparametric statistics:
 
-* $\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2$ **decreases** as $p$ increases.
-* $\displaystyle Var_\varepsilon(\hat m_p)$  **increases** as $p$ increases.
+* $p$ small:</br>
+$\displaystyle Var_\varepsilon(\hat m_p)$  is small, but squared bias 
+$\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2$ is large. 
+* $p$ large:</br>
+$\displaystyle Var_\varepsilon(\hat m_p)$ is large, but squared bias $\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2$ is small.
 
 <!-- p^-4 = p/n
      p^-5 = 1/n
      p    = (1/n)^-1/5  -->
 
-Thus if 
-
-* $p\to\infty$ as $n\to\infty$ such that $\dfrac{p}{n}\to 0$
-
-then 
-
+From @eq-BiasSqVar we have that 
 $$
-\operatorname{MASE}(\hat m_{p}) = (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p) \to 0
+\begin{align*}
+\operatorname{MASE}(\hat m_{p}) 
+&= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
+&=O_p(p^{-4}) + \sigma^2\frac{p}{n}
+\end{align*}
+$$
+
+Thus, if 
+$$
+p\equiv p_n\to\infty\quad\text{as}\quad n\to\infty,
+$$ 
+but sufficiently slow, such that 
+$$
+\dfrac{p_n}{n}\to 0,
+$$
+then 
+$$
+\begin{align*}
+\operatorname{MASE}(\hat m_{p}) 
+&= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\to 0
+\end{align*}
 $$
 as $n\to 0.$
 
-An **optimal smoothing parameter** $p_{opt}$ that minimizes $\operatorname{MASE}(\hat m_{p})$ will balance the squared bias and variance 
+An **optimal smoothing parameter** $p_{opt}$ that minimizes $\operatorname{MASE}(\hat m_{p})$ will balance the squared bias and variance: 
 $$
-\begin{align}
-p_{opt}^{-4} & \sim \frac{p_{opt}}{n}\\[2ex]
-%p_{opt}^{-5} & \sim \frac{1}{n}\\[2ex]
-\Leftrightarrow\;p_{opt}      & \sim n^{1/5},
-\end{align}
+\begin{align*}
+\frac{d}{d\,p}\operatorname{MASE}(\hat m_{p}) 
+&=\frac{d}{d\,p}\left(\texttt{const}\cdot p^{-4}+\sigma^2\frac{p}{n}\right)\\[2ex]
+&=-4\cdot\texttt{const}\cdot p^{-5}+\sigma^2\frac{1}{n}.
+\end{align*}
+$$
+Setting zero and solving for $p_{opt}$ yields
+$$
+p_{opt}=\texttt{const}\cdot\left(\frac{1}{n}\right)^{-1/5},
+$$
+where $\texttt{const}$ collects all constant factors; i.e., 
+$$
+p_{opt}=\texttt{const} \cdot n^{1/5}
 $$ 
-i.e., $p_{opt}=\texttt{const} \cdot n^{1/5}$ for some finite and positive constant $0 <\texttt{const}<\infty.$
+for some finite and positive constant $0 <\texttt{const}<\infty.$
 
-Then
+Thus
 $$
 \operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-4/5}).
 $$
@@ -902,8 +996,9 @@ $$
 ::: {.callout-note}
 For an estimator $\hat m$ based on a **valid** (!) parametric model we have
 $$
-\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-1}).
+\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-1}),
 $$
+since parametric models have no bias---provided, the model assumption is correct. 
 :::
 
 
@@ -917,14 +1012,13 @@ $$
 ## Selecting the Smoothing Parameter $p$ 
 
 **Problem:** 
-Since $m$ is unknown, we cannot directly compute $\operatorname{MASE}$ and $p_{opt}$. However, we need to choose the smoothing parameter $p$ in an (somehow) optimal and objective manner.
+Since $m$ is unknown, we cannot directly compute $\operatorname{MASE}(\hat{m}_p)$ and thus cannot compute the exact value of $p_{opt}$. However, we need to choose the smoothing parameter $p$ in an (somehow) optimal and objective manner.
 
 **Approach:** 
-Determine an estimate $\hat p_{opt}$ of the unknown "optimal" number $p_{opt}$ of basis functions by minimizing a suitable error criterion with the following properties:
+Determine an estimate $\hat p_{opt}$ of the unknown optimal smoothing parameter $p_{opt}$ by minimizing a suitable error criterion with the following properties:
 
 * For every possible $p$ the corresponding criterion function can be calculated from the *data*.
-* For any $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}$
-
+* For any $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}(\hat{m}_p)$.
 
 
 Recall: With 
@@ -933,28 +1027,31 @@ $$
 $$ 
 we have
 $$
-\hat m_p=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY,
+\hat m_p=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY.
 $$
-where 
+Note that 
 $$
-p=\operatorname{trace}(S_p).
+\begin{align*}
+\operatorname{trace}(S_p)
+&=\operatorname{trace}\big(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\big)\\[2ex]
+&=\operatorname{trace}\big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\big)\\[2ex]
+&=\operatorname{trace}\big(I_p\big)=p
+\end{align*}
 $$ 
 
 
-That is, for given $p$, the number of parameters to estimate by the spline method (one also speaks of the "degrees of freedom" of the smoothing procedure) is equal to $p$ which corresponds to the trace of the **smoother matrix** 
-$$
-S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top. 
-$$
+That is, for given $p$, the number of parameters to estimate by the spline method (one also speaks of the "degrees of freedom" of the smoothing procedure) is equal to $p$ which corresponds to the trace of the **smoother matrix** $S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.$ 
+
 
 Most frequently used error criteria are **Cross-Validation (CV)** and **Generalized Cross-Validation (GCV)**: 
 
 * **Cross-Validation (CV):** <br>
-For a given value $p,$ cross-validation tries to approximate the corresponding prediction error.
+For a given value $p,$ cross-validation tries to approximate the out-of-sample prediction error
 $$
 \operatorname{CV}(p)=\frac{1}{n} \sum_{i=1}^n\biggl( Y_i-
-{\hat m}_{p,-i}(X_i)\biggr)^2.
+{\hat m}_{p,-i}(X_i)\biggr)^2
 $$
-Here, for any $i=1,\dots,n$, ${\hat m}_{p,-i}$ is the "leave-one-out" estimator of $m$ to be obtained when a spline function is fitted to the $n-1$ observations:
+Here, for any $i=1,\dots,n$, ${\hat m}_{p,-i}(\cdot)$ is the "leave-one-out" estimator of $m(\cdot)$ to be obtained when a spline function is fitted using the $n-1$ observations:
 $$
 (Y_1,X_1),\dots,(Y_{i-1},X_{i-1}),(Y_{i+1},X_{i+1}),\dots,(Y_{n},X_{n}).
 $$
@@ -1015,26 +1112,39 @@ which allows us to rewrite $\operatorname{GCV}(p)$ as
 $$
 \operatorname{GCV}(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\operatorname{ARSS}(p)
 $$
-If $p\rightarrow\infty$ such that $p/n\rightarrow 0$, a Taylor expansion yields
-$$
-\begin{align*}
-\operatorname{GCV}(p)= 
-&\operatorname{ARSS}(p)+2\frac{p}{n}\overbrace{\text{ARSS}(p)}^{=\sigma^2+o_p(1)}+O_p\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
-&\operatorname{ARSS}(p)+2\sigma^2\frac{p}{n}+o_p(1)
-\end{align*}
-$$
 Some lengthy derivations show that the expected value of $\operatorname{ARSS}(p)$ is
 $$
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 $$
-Thus
+Moreover, a Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields that 
+$$
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+$$
+where the approximation becomes precise as $\frac{p}{n}\to 0.$ Thus
 $$
 \begin{align*}
-\mathbb{E}_\varepsilon(\operatorname{GCV}(p))\approx \operatorname{MASE}(\hat m_p) +\sigma^2
+\mathbb{E}_\varepsilon(\operatorname{GCV}(p))
+&\approx \left(1 + 2\frac{p}{n}\right)\mathbb{E}_\varepsilon(\operatorname{ARSS}(p)) \\[2ex]
+&=\left(1 + 2\frac{p}{n}\right) \left(\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2\right)\\[2ex]
+&= \operatorname{MASE}(\hat m_p) +\sigma^2 + O_p\left(\frac{p}{n}\right)
 \end{align*}
 $$
+
+
+Thus, at least on average, minimizing $\operatorname{GCV}(p)$ is approximately (for $p_n/n\to 0$ as $n\to\infty$) equivalent to minimizing $\operatorname{MASE}(\hat m_p),$ since $\sigma^2$ does not depend on $p.$ 
+
+<!-- 
+$$
+\begin{align*}
+\operatorname{GCV}(p)= 
+&\operatorname{ARSS}(p)+2\frac{p}{n}\overbrace{\text{ARSS}(p)}^{=\sigma^2+o_p(1)}+O_p\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+&\operatorname{ARSS}(p)+2\sigma^2\frac{p}{n}+o_p(1)
+\end{align*}
+$$ 
+-->
+
 
 ::: {.callout-note}
 # Over-fitting 
@@ -1058,7 +1168,8 @@ $$
 is called the **optimism** of the model and quantifies the amount by which the in-sample average residual sum of squares (ARSS) systematically  under-estimates the true mean average squared error (MASE) of $\hat m_p.$ 
 :::
 
-<!-- $$
+<!-- 
+$$
 \begin{align*}
 &\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))
 =\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left( Y_i - \hat{m}_{p}(X_i)\right)^2\right]\\[2ex]
@@ -1097,11 +1208,12 @@ $$
 &\phantom{=} + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\varepsilon_i^2\right]\\[2ex]
 &=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-$$ -->
+$$ 
+-->
 
 
 
-`R` code to compute an estimate of the optimal smoothing parameter
+**`R`-Code to Compute an Estimate of the Optimal Smoothing Parameter**
 
 First, we generate some data.
 ```{r}
@@ -1176,5 +1288,96 @@ legend("bottomleft",
        lty=c(2,1,1), lwd=c(2,2,2))
 
 ```
+
+## Exercises 
+
+#### Exercise 1. {-} 
+
+Show that 
+$$
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+$$
+where the approximation becomes precise as $\frac{p}{n}\to 0.$
+
+
+#### Exercise 2. {-}
+
+Show that 
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$
+
+
+<!--
+## Solutions 
+
+
+#### Solution for Exercise 1. {-} 
+
+A Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields
+$$
+\begin{align*}
+f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}
+&=\overbrace{1}^{f(0)}+p\;\overbrace{(-2)\cdot\left(1-\frac{0}{n}\right)^{-3}\cdot\left(-\frac{1}{n}\right)}^{=f'(p)|_{p=0}}\\[2ex]
+&\phantom{\overbrace{1}^{f(0)}} + p^2\;\overbrace{6\cdot\left(1-\frac{0}{n}\right)^{-4}\cdot\left(-\frac{1}{n}\right)^2}^{=f''(p)|_{p=0}}\\[2ex]
+&=1+ 2\,p\frac{1}{n}+O\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+\end{align*}
+$$
+Thus, 
+$$
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+$$
+where the approximation becomes precise as $\frac{p}{n}\to 0.$
+
+
+
+#### Solution for Exercise 2. {-} 
+
+
+$$
+\begin{align*}
+\operatorname{ARSS}(p)&=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) - 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+\mathbb{E}_\varepsilon\big(\operatorname{ARSS}(p)\big)
+&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+\end{align*}
+$$
+
+In the following, we focus on the second term:
+$$
+\begin{align*}
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i))\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
+&=- 2\sigma^2 \frac{p}{n}
+\end{align*}
+$$
+where $e_i^\top$ is a $(1\times p)$ vector with a $1$ at the $i$th element and $0$s else.
+
+Thus, 
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$
+
+-->
 
 ## References {-}
