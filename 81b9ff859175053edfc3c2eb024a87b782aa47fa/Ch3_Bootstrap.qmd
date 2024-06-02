@@ -1309,7 +1309,7 @@ $$
 $$
 and $\lfloor mp\rfloor$ denotes the greatest whole number less than or equal to $mp$ (e.g. $\lfloor 4.9\rfloor = 4$).
 
-3. The approximate $(1-\alpha)\times 100\%$ (symmetric) **basic bootstrap confidence interval** is then given by 
+3. The approximate $(1-\alpha)\times 100\%$  **basic bootstrap confidence interval** is then given by 
 $$
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 $${#eq-NPBootCI}
@@ -1363,7 +1363,7 @@ This demonstrates that the **basic bootstrap confidence interval** in @eq-NPBoot
 $$
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 $$
-is indeed an asymptotically valid (i.e. approximate) $(1-\alpha)\times 100\%$ (symmetric) confidence interval.
+is indeed an asymptotically valid (i.e. approximate) $(1-\alpha)\times 100\%$ confidence interval.
 
 
 #### Example: Basic Bootstrap Confidence Interval for the Population Mean {-}
@@ -1418,7 +1418,7 @@ $$
 
 2. Compute the empirical quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ from $\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.$ 
 
-3. Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) basic bootstrap confidence interval according to @eq-NPBootCI:
+3. Compute the approximate $(1-\alpha)\times 100\%$ basic bootstrap confidence interval according to @eq-NPBootCI:
 $$
 \left[2\bar X_n -\hat q^*_{n,1-\frac{\alpha}{2}}, 
       2\bar X_n -\hat q^*_{n,\frac{\alpha}{2}}\right]
@@ -1542,7 +1542,12 @@ $$
 such that 
 $$
 \begin{align*}
-\hat v^2_n &\to_p v_0^2\quad\text{as}\quad n\to\infty\\[2ex]
+\hat v^2_n &\to_p v_0^2\quad\text{as}\quad n\to\infty
+\end{align*}
+$$
+and
+$$
+\begin{align*}
 \hat v_n   &\to_p v_0\quad\text{as}\quad n\to\infty.
 \end{align*}
 $$  
@@ -1571,14 +1576,14 @@ $$
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
 $$
 
-2. Use the bootstrap estimates $T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*$ to approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ empirical quantiles $\hat \tau^*_{n,\frac{\alpha}{2}}$ and $\hat \tau^*_{n,1-\frac{\alpha}{2}}$ (see @eq-empiricalQuantile). 
+2. Compute the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ of the bootstrap estimates $T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*$ (see @eq-empiricalQuantile). 
 
-3. Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) bootstrap-$t$ confidence interval  
+3. Compute the approximate $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval  
 $$
-\left[\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
-      \hat{\theta}_n - \hat \tau^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
+\left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
+      \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 $${#eq-Boot_tCI}
-where $\hat\theta_n$ and $\hat v_n$ are the estimates of $\theta_0$ and $v_0$ based on the original sample $X_1,\dots,X_n.$
+where $\hat\theta_n$ and $\hat v_n$ are the estimates of $\theta_0$ and $v_0$ based on the original sample $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}.$
 
 
 
@@ -1598,9 +1603,9 @@ H_{n}^{Boot}(x)=P\left(\left.\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat
 $$ 
 arbitrarily precise as $m\to\infty$ (Glivenko-Cantelli @thm-Clivenko-Cantelli).
 
-Thus, the empirical bootstrap quantiles $\hat \tau^*_{n,\frac{\alpha}{2}}$ and $\hat \tau^*_{n,1-\frac{\alpha}{2}}$ of $H_{n,m}^{Boot}$ are indeed consistent ($m\to\infty$) for the quantiles $\hat \tau_{n,\frac{\alpha}{2}}$ and $\hat \tau_{n,1-\frac{\alpha}{2}}$ of the bootstrap distribution $H_{n}^{Boot}.$ This implies, for large $m,$
+Thus, the empirical bootstrap quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ of $H_{n,m}^{Boot}$ are indeed consistent ($m\to\infty$) for the quantiles $\hat q_{n,\frac{\alpha}{2}}$ and $\hat q_{n,1-\frac{\alpha}{2}}$ of the bootstrap distribution $H_{n}^{Boot}.$ This implies, for large $m,$
 $$
-P^*\left(\hat \tau^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}} \leq \hat \tau^*_{n,1-\frac{\alpha}{2}}\right)
+P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}} \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha.
 $$
 
@@ -1613,20 +1618,20 @@ $$
 Therefore, for large $n$ and large $m,$ 
 $$
 \begin{align*}
-& P\left(\hat \tau^*_{n,\frac{\alpha}{2}}\leq {\color{blue}\sqrt{n}\frac{\hat{\theta}_n-\theta_0}{v_0}} \leq \hat \tau^*_{n,1-\frac{\alpha}{2}}\right)
+& P\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{blue}\sqrt{n}\frac{\hat{\theta}_n-\theta_0}{v_0}} \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(\hat \tau^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\Rightarrow & P\left(\hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(- \hat{\theta}_n + \hat \tau^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
+\Rightarrow & P\left(- \hat{\theta}_n + \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat \tau^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\Rightarrow & P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha
 \end{align*}
 $$
-Thus, the approximate $(1-\alpha)\times 100\%$ (symmetric) bootstrap-$t$ confidence interval (@eq-Boot_tCI) 
+Thus, the approximate $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval (@eq-Boot_tCI) 
 $$
-\left[\hat{\theta}_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
-      \hat{\theta}_n - \hat \tau^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
+\left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
+      \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 $$
 is indeed an asymptotic (i.e. approximate) $(1-\alpha)\times 100\%$ CI.  
 
@@ -1647,15 +1652,15 @@ $\bar X^*$ as well as $s_n^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*_n)^
 $$
 \sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
 $$ 
-* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau^*_{n,\frac{\alpha}{2}}$ and $\hat \tau^*_{n,1-\frac{\alpha}{2}}$ from 
+* Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ from 
 $$
 \sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
 $$
 using @eq-empiricalQuantile.
 * This yields the $(1-\alpha)\times 100 \%$ confidence interval (using @eq-Boot_tCI):
 $$
-\left[\bar X_n - \hat \tau^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
-      \bar X_n - \hat \tau^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
+\left[\bar X_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
+      \bar X_n - \hat q^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
 $$
 where $s_n$ is computed from the original sample, i.e., 
 $$
@@ -1834,7 +1839,7 @@ and
 $\hat t_{1-\frac{\alpha}{2},j}$  
 from the bootstrap realizations $\hat{\beta}_{j1}^*,\dots,\hat\beta_{jm}^*$ using @eq-empiricalQuantile.
 
-* Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) confidence interval as in @eq-NPBootCI:
+* Compute the approximate $(1-\alpha)\times 100\%$ confidence interval as in @eq-NPBootCI:
 $$
 \left[2\hat\beta_j-\hat t_{1-\frac{\alpha}{2},j}, 
       2\hat\beta_j-\hat t_{\frac{\alpha}{2},j}\right]
@@ -1859,7 +1864,7 @@ is **not** an i.i.d. sample, the bootstrapping pairs procedure proposed above wi
 
 In the following we will formally assume a regression model
 $$
-Y_i=X_i^T\beta+ \varepsilon_i, \quad i=1,\dots,n,
+Y_i=X_i^T\beta_0 + \varepsilon_i, \quad i=1,\dots,n,
 $$
 with 
 $$
@@ -1878,7 +1883,7 @@ $$
 Though we will formally rely on a fixed design assumption, the residual bootstrap is also applicable for random designs or stochastic, but correlated $X$-variables (time-series). In these cases all arguments are meant conditionally on the given $X_1,\dots,X_n$. The above assumptions on the error terms then of course have to be satisfied conditionally on $X_1,\dots,X_n$.
 :::
 
-The idea of the residual bootstrap is very simple: The model implies that the error terms 
+The idea of the residual bootstrap is very simple: By assumption, the the error terms 
 $$
 \varepsilon_1,\dots,\varepsilon_n
 $$ 
@@ -1886,27 +1891,29 @@ are i.i.d which suggests a bootstrap based on resampling the error terms.
 
 These errors are, of course, unobserved, but they can be approximated by the corresponding residuals
 $$
-\hat \varepsilon_i:=Y_i-X_i^T\hat\beta, \quad i=1,\dots,n,
+\hat \varepsilon_i:=Y_i-X_i^T\hat\beta_n, \quad i=1,\dots,n,
 $$
 where again 
 $$
-\hat\beta=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i
+\hat\beta_n=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i
 $$ 
 denotes the least squares estimator. 
 
 It is well known that
 $$
-\hat\sigma^2:= \frac{1}{n-p}\sum_{i=1}^n \hat\varepsilon_i^2
+\hat\sigma^2_n:= \frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^2
 $$ 
-provides an unbiased, consistent estimator of the error variance $\sigma^2$. That is,
+provides a consistent estimator of the error variance $\sigma^2$. That is,
 $$
-\mathbb{E}(\hat\sigma^2)=\sigma^2 \quad \text{and}\quad \hat\sigma^2\rightarrow_p \sigma^2.
+\hat\sigma^2_n\rightarrow_p \sigma^2
 $$
+as $n\to\infty.$
+
 
 
 #### The Residual Bootstrap Algorithm {-}
 
-Based on the original data $(Y_i,X_i)$, $i=1,\dots,n$, and the least squares estimate $\hat\beta$, calculate the residuals $\hat\varepsilon_1,\dots,\hat \varepsilon_n$.
+Based on the original data $(Y_i,X_i)$, $i=1,\dots,n$, and the least squares estimate $\hat\beta_n$, calculate the residuals $\hat\varepsilon_1,\dots,\hat \varepsilon_n$.
 
 1. Generate random bootstrap samples $\hat\varepsilon_1^*,\dots,\hat\varepsilon_n^*$ of residuals by drawing observations independently and with replacement
 from 
@@ -1915,58 +1922,64 @@ $$
 $$
 2. Calculate new depend variables 
 $$
-Y_i^*=X_i^T\hat\beta+\hat\varepsilon_i^*,\quad i=1,\dots,n
+Y_i^*=X_i^T\hat\beta_n + \hat\varepsilon_i^*,\quad i=1,\dots,n
 $$
-3. Bootstrap estimators $\hat\beta^*$ are determined by least squares estimation from the data $(Y_1^*,X_1),\dots,(Y_n^*,X_n)$:
+3. Bootstrap estimators $\hat\beta^*_n$ are determined by least squares estimation from the data $(Y_1^*,X_1),\dots,(Y_n^*,X_n)$:
 $$
-\hat\beta^*=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i^*
+\hat\beta^*_n = \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_iY_i^*
 $$
 
 Repeating Steps 1-3 $m$ many times yields $m$ (e.g. $m=100,000$) bootstrap estimators 
 $$
-\hat\beta^*_1,\hat\beta^*_2,\dots,\hat\beta^*_m
+\hat\beta^*_{n,1},\hat\beta^*_{n,2},\dots,\hat\beta^*_{n,m}
 $$
-which allow us to approximate the bootstrap distribution $\hat\beta^*-\hat\beta|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
+which allow us to approximate the bootstrap distribution $\hat\beta^*_n-\hat\beta_n|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
 
 
 #### Motivating the Residual Bootstrap {-}
 
 It is not difficult to understand why the residual bootstrap generally works for *homoskedastic* (!) errors. We have
 $$
-\hat\beta-\beta=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\varepsilon_i
+\hat\beta_n-\beta_0=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\varepsilon_i
 $$
-and for large $n$ the distribution of $\sqrt{n}(\hat\beta-\beta)$ is approximately normal with mean 0 and covariance matrix $\sigma^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}$
+and for large $n$ the distribution of 
 $$
-\sqrt{n}(\hat\beta-\beta)\to_d\mathcal{N}\left(0,\sigma^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right)
+\sqrt{n}(\hat\beta_n - \beta_0)
+$$ 
+is approximately normal with mean zero and covariance matrix 
+$$
+\sigma^2 \Sigma_{X^\top X}^{-1}
+$$
+where $\Sigma_{X^\top X}=\mathbb{E}\left(X_iX_i^T\right);$ i.e.
+$$
+\sqrt{n}(\hat\beta-\beta)\to_d\mathcal{N}\left(0,\sigma^2 \Sigma_{X^\top X}^{-1}\right).
 $$
 
-On the other hand (the bootstrap world), we have construction
+On the other hand (the bootstrap world), we have the construction
 $$
-\hat\beta^*-\hat\beta
-=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\hat\varepsilon_i^*
+\hat\beta^*_n - \hat\beta_n
+=\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\frac{1}{n}\sum_{i=1}^n X_i\hat\varepsilon_i^*.
 $$
-Conditional on ${\cal S}_n,$ the bootstrap error terms are i.i.d with
+Conditionally on ${\cal S}_n,$ the bootstrap error terms $\hat\varepsilon_1^*,\dots,\hat\varepsilon_n^*$ are i.i.d with
 $$
 \mathbb{E}(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i =0
 $$
 and
 $$
-Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2.
+Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 = \hat\sigma^2_n,
 $$
+where $\hat\sigma^2_n\to\sigma^2$ as $n\to\infty.$ 
+
 An appropriate central limit theorem argument implies that 
 $$
-\left.\sqrt{n}(\hat\beta^*-\hat\beta)\right|\mathcal{S}_n\to_d\mathcal{N}\left(0,\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right),
+\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}\left(0,\sigma^2 \Sigma_{X^\top X}^{-1}\right),
 $$
-for $n\to\infty.$
+as $n\to\infty.$
 
-Since  
+That is, for large $n$, we have that
 $$
-\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2\rightarrow_p \sigma^2
-$$ 
-as $n\rightarrow\infty$, the bootstrap is consistent. That is, for large $n$, we have approximately
-$$
-\text{distribution}(\sqrt{n}(\hat\beta^*-\hat\beta) |{\cal S}_n)
-\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta-\beta))}_{\mathcal{N}\left(0,\sigma^2 \left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right)}
+\text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
+\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}\left(0,\sigma^2 \Sigma_{X^\top X}^{-1}\right)}
 $$
 
 
@@ -1977,17 +1990,17 @@ $$
 
 Basic **nonparametric bootstrap** confidence intervals for the regression coefficients $\beta_j$, $j=1,\dots,p,$ can be constructed as following: 
 
-Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat t_{\frac{\alpha}{2},j}$ and $\hat t_{1-\frac{\alpha}{2},j}$ of the bootstrap distribution of  $\hat\beta_j^*$ using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles (see @eq-empiricalQuantile) based on the $m$ bootstrap estimates 
+Compute the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q_{\frac{\alpha}{2},j}$ and $\hat q_{1-\frac{\alpha}{2},j}$ of the  $m$ bootstrap estimates 
 $$
-\hat\beta_{j1}^*,\hat\beta_{j2}^*, \dots, \hat\beta_{jm}^*.
+\hat\beta_{n,1,j}^*,\hat\beta_{n,2,j}^*, \dots, \hat\beta_{n,m,j}^*.
 $$
-<!-- This approximation step is with arbitrary accuracy as $m\to\infty.$ -->
 
-Compute the approximate $(1-\alpha)\times 100\%$ (symmetric) nonparametric bootstrap confidence interval as in @eq-NPBootCI:
+Compute the approximate $(1-\alpha)\times 100\%$ basic (nonparametric) bootstrap confidence interval as in @eq-NPBootCI:
 $$
-\left[2\hat\beta_j-\hat t_{1-\frac{\alpha}{2},j}, 
-      2\hat\beta_j-\hat t_{ \frac{\alpha}{2},j }\right]
+\left[2\hat\beta_{n,j}-\hat q_{1-\frac{\alpha}{2},j}, 
+      2\hat\beta_{n,j}-\hat q_{ \frac{\alpha}{2},j }\right],
 $$
+where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n\in\mathbb{R}^p$ computed from the orginal sample $\mathcal{S}_n.$
 
 
 #### Bootstrap-$t$ confidence intervals {-}
@@ -2000,45 +2013,48 @@ $$
 $$
 Then
 $$
-\frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}
+\frac{\sqrt{n}(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj}}}
 $$ 
 with 
 $$
-\hat{\sigma}=\sqrt{\frac{1}{n-p}\sum_{i=1}^n\hat{\varepsilon}_i^2}
+\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}
 $$
 is an asymptotically pivotal statistic, 
 $$
-\frac{\sqrt{n}(\hat\beta_j-\beta_j)}{\hat\sigma\sqrt{\gamma_{jj}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+\frac{\sqrt{n}(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 $$
 
-A bootstrap-$t$ interval for $\beta_j$, $j=1,\dots,p$, can thus be constructed as follows:
+A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be constructed as follows:
 
-Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat \tau_{\frac{\alpha}{2},j}$ and $\hat \tau_{1-\frac{\alpha}{2},j}$  of the bootstrap distribution of
+Approximate the $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q_{\frac{\alpha}{2},n,j}$ and $\hat q_{1-\frac{\alpha}{2},n,j}$  of the bootstrap distribution of
 $$
-T^*=\frac{\hat\beta_j^*-\hat\beta_j}{\hat\sigma^* \sqrt{\gamma_{jj}}}
+T^*_n=\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\hat\sigma_n^* \sqrt{\gamma_{jj}}}
 $$
 with 
 $$
-\hat\sigma^{*2}:=\frac{1}{n-p}\sum_{i=1}^n \hat\varepsilon_i^{*2},
+\hat\sigma^{*2}_n:=\frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^{*2},
 $$ 
-using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles  (see @eq-empiricalQuantile) based on the $m$ bootstrap realizations
+using the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles (see @eq-empiricalQuantile) based on the $m$ bootstrap realizations
 $$
-T^*_1,T_2^*,\dots, T_m^*.
+T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.
 $$
 
 Compute the $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval as in @eq-Boot_tCI:
 $$
 \left[
-  \hat\beta_j-\hat \tau_{1-\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}},\; 
-  \hat\beta_j-\hat \tau_{\frac{\alpha}{2},j}\hat\sigma \sqrt{\gamma_{jj}}
+  \hat\beta_{n,j}-\hat q_{1-\frac{\alpha}{2},n,j}\hat\sigma_n \sqrt{\gamma_{jj}},\; 
+  \hat\beta_{n,j}-\hat q_{\frac{\alpha}{2},n,j}\hat\sigma_n \sqrt{\gamma_{jj}}
 \right],
 $$
-where $\hat{\sigma}=\sqrt{\frac{1}{n-p}\sum_{i=1}^n\hat{\varepsilon}_i^2}.$
+where $\hat\beta_{n,j}$ and 
+$\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}$ are computed from the original sample $\mathcal{S}_n.$
 
 ::: {.callout-tip}
-There are many more bootstrap procedures. In case of heteroskedastic errors, for instance, there's also the "Wild Bootstrap." 
-
-For high-dimensional problems ($p$ as large as $n$ or larger), one can use (under certain regularity assumptions) the "Multiplier Bootstrap".
+There are furhter bootstrap procedures. In case of heteroskedastic errors, for instance, there's also the "Wild Bootstrap" (also called Multiplier Bootstrap.) It is similar to the residual bootstrap since it generates new outcome variables $Y^\ast_i$ by generating new residuals. However it does so by multiplying a real random variable $W_i\in\mathbb{R}$ to the observed residuals
+$$
+Y_i^\ast = X_i^\top \hat\beta_n + \hat\varepsilon_n \cdot W_i,
+$$ 
+$W_i$ has a specific distribution (Rademacher distribution or Mammen's distribution). This approach is very successful and also works in high-dimensional ($p$ as large as $n$ or larger) problems. 
 :::
 
 ## Exercises {-}
@@ -2583,15 +2599,15 @@ abline(v=mean,col="blue", lwd=1.5)
 
 The bootstrap-t confidence interval is given by (see lecture script):
 $$
-\left[\bar{X}_n-\hat{\tau}_{1-\alpha/2}\hat\sigma,  \bar{X}_n-\hat{\tau}_{\alpha/2}\hat\sigma\right],
+\left[\bar{X}_n-\hat{q}_{1-\alpha/2}\hat\sigma,  \bar{X}_n-\hat{q}_{\alpha/2}\hat\sigma\right],
 $$
-where $\hat\sigma=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, and where $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$ denote the $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles of the bootstrap distribution of: 
+where $\hat\sigma=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, and where $\hat{q}_{\alpha/2}$ and $\hat{q}_{1-\alpha/2}$ denote the $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles of the bootstrap distribution of: 
 $$
 \frac{\bar{X}_n^\ast-\bar{X}_n}{\hat\sigma^\ast}.
 $$
 
 
-In the following we approximate the bootstrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{\tau}_{\alpha/2}$ and $\hat{\tau}_{1-\alpha/2}$, and plot all of this:
+In the following we approximate the bootstrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{q}_{\alpha/2}$ and $\hat{q}_{1-\alpha/2}$, and plot all of this:
 
 ```{r, fig.margin = TRUE, fig.width=4.5, fig.height=3.5}
 ## Setup:
