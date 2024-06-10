@@ -233,7 +233,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#sec-bootPairs" id="toc-sec-bootPairs" class="nav-link" data-scroll-target="#sec-bootPairs"><span class="toc-section-number">3.5.1</span>  Bootstrapping Pairs: Bootstrap under Random Design</a></li>
   <li><a href="#sec-bootResid" id="toc-sec-bootResid" class="nav-link" data-scroll-target="#sec-bootResid"><span class="toc-section-number">3.5.2</span>  Residual Bootstrap: Bootstrap under Fixed Design</a></li>
-  <li><a href="#bootstrap-confidence-intervals-for-the-regression-coefficients" id="toc-bootstrap-confidence-intervals-for-the-regression-coefficients" class="nav-link" data-scroll-target="#bootstrap-confidence-intervals-for-the-regression-coefficients"><span class="toc-section-number">3.5.3</span>  Bootstrap Confidence Intervals for the Regression Coefficients</a></li>
+  <li><a href="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" id="toc-bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="nav-link" data-scroll-target="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="toc-section-number">3.5.3</span>  Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -1533,7 +1533,7 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 <p><strong>Setup:</strong></p>
 <ul>
 <li>By the CLT: <span class="math inline">\(\sqrt{n}(\bar X_n - \mu_0)\to_d\mathcal{N}(0,\sigma^2_0)\)</span> as <span class="math inline">\(n\to\infty\)</span></li>
-<li>Estimation of <span class="math inline">\(\sigma^2_0\)</span>: <span class="math inline">\(\hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2\)</span></li>
+<li>Estimation of <span class="math inline">\(\sigma^2_0\)</span>: <span class="math inline">\(\hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2,\)</span> where <span class="math inline">\(\hat{\sigma}^2_n\to_p\sigma^2_0\)</span> as <span class="math inline">\(n\to\infty.\)</span></li>
 <li>This implies: <span class="math inline">\(\sqrt{n}((\bar X_n -\mu_0)/\hat{\sigma}_n)\to_d\mathcal{N}(0,1)\)</span> as <span class="math inline">\(n\to\infty\)</span></li>
 </ul>
 <p>Let <span class="math inline">\(z_{\alpha/2}\)</span> and <span class="math inline">\(z_{1-\alpha/2}\)</span> denote the <span class="math inline">\(\alpha/2\)</span> and the <span class="math inline">\((1-\alpha/2)\)</span>-quantile of <span class="math inline">\(\mathcal{N}(0,1).\)</span> Since <span class="math inline">\(z_{\alpha/2} = -z_{1-\alpha/2},\)</span> we have that <span class="math display">\[
@@ -1967,23 +1967,38 @@ Y_i^*=X_i^T\hat\beta_n + \hat\varepsilon_i^*,\quad i=1,\dots,n
 Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 = \hat\sigma^2_n,
 \]</span> where <span class="math inline">\(\hat\sigma^2_n\to\sigma^2_0\)</span> as <span class="math inline">\(n\to\infty.\)</span></p>
 <p>An appropriate central limit theorem argument implies that <span class="math display">\[
-\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}\left(0,\sigma^2_0\, M\right),
-\]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M\right),
+\]</span> as <span class="math inline">\(n\to\infty,\)</span> assuming that <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M\)</span> as <span class="math inline">\(n\to\infty.\)</span></p>
 <p>That is, for large <span class="math inline">\(n\)</span>, we have that <span class="math display">\[
 \text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
-\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}\left(0,\sigma^2_0\, M\right)}
+\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M\right)}
 \]</span></p>
 </section>
 </section>
-<section id="bootstrap-confidence-intervals-for-the-regression-coefficients" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="bootstrap-confidence-intervals-for-the-regression-coefficients"><span class="header-section-number">3.5.3</span> Bootstrap Confidence Intervals for the Regression Coefficients</h3>
-<p>The following two confidence intervals use the basic bootstrap method (<a href="#sec-BasicBootstrap"><span>Section&nbsp;3.3</span></a>) and the bootstrap-<span class="math inline">\(t\)</span> method (<a href="#sec-BootT"><span>Section&nbsp;3.4</span></a>).</p>
-<section id="basic-bootstrap-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.3.1">
-<h4 data-number="3.5.3.1" class="anchored" data-anchor-id="basic-bootstrap-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.3.1</span> Basic Bootstrap Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
-<p>This allows to construct basic bootstrap confidence intervals for the <span class="math inline">\(j\)</span>th regression coefficient <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, of <span class="math inline">\(\beta_0\in\mathbb{R}^p.\)</span></p>
+<section id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="header-section-number">3.5.3</span> Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></h3>
+<p>This chapter introduces two confidence intervals. The first uses the basic bootstrap method (<a href="#sec-BasicBootstrap"><span>Section&nbsp;3.3</span></a>); the second uses the bootstrap-<span class="math inline">\(t\)</span> method (<a href="#sec-BootT"><span>Section&nbsp;3.4</span></a>).</p>
+<p>Both confidence intervals can be constructed either via bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) or via bootstrapping residuals (<a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>).</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>While the bootstrap confidence intervals based on bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) are heteroskedasticity robust, the bootstrap confidence intervals based on bootstrapping residuals are only valid for homoskedastic errors.</p>
+</div>
+</div>
+<section id="basic-bootstrap-confidence-intervals-for-beta_0j" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="basic-bootstrap-confidence-intervals-for-beta_0j">Basic Bootstrap Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
+<p>Let <span class="math inline">\(\beta_{0,j}\in\mathbb{R}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, denote the <span class="math inline">\(j\)</span>th component of <span class="math inline">\(\beta_0\in\mathbb{R}^p,\)</span> and let <span class="math inline">\(\hat{\beta}_{j,n}\in\mathbb{R}\)</span> denote the <span class="math inline">\(j\)</span>th component of the estimator <span class="math inline">\(\hat\beta_n\in\mathbb{R}^p.\)</span></p>
+<p>The basic bootstrap confidence interval for <span class="math inline">\(\beta_{0,j}\in\mathbb{R}\)</span> can be constructed as following:</p>
 <ol type="1">
-<li><p>Generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
-\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast
+<li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) or bootstrapping residuals (<a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
+\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.
 \]</span></p></li>
 <li><p>Determine the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast\)</span> using <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>.</p></li>
 <li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval as in <a href="#eq-NPBootCI">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
@@ -2025,8 +2040,8 @@ $$
 where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n\in\mathbb{R}^p$ computed from the orginal sample $\mathcal{S}_n.$ 
 -->
 </section>
-<section id="bootstrap-t-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.3.2">
-<h4 data-number="3.5.3.2" class="anchored" data-anchor-id="bootstrap-t-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.3.2</span> Bootstrap-<span class="math inline">\(t\)</span> Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
+<section id="bootstrap-t-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.3.1">
+<h4 data-number="3.5.3.1" class="anchored" data-anchor-id="bootstrap-t-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.3.1</span> Bootstrap-<span class="math inline">\(t\)</span> Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
 <p>Bootstrap-<span class="math inline">\(t\)</span> confidence intervals for the regression coefficients <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j=1,\dots,p,\)</span> can be constructed as following:</p>
 <p>Let <span class="math inline">\(\gamma_{jj,n}\)</span> denote the <span class="math inline">\(j\)</span>-th diagonal element of the matrix <span class="math inline">\((\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\)</span>, i.e., <span class="math display">\[
 \gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}.
@@ -2039,7 +2054,7 @@ where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n
 \]</span></p>
 <p>A bootstrap-<span class="math inline">\(t\)</span> interval for <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, can thus be constructed as follows:</p>
 <ol type="1">
-<li><p>Generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
+<li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) or bootstrapping residuals (<a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
 \]</span> where <span class="math display">\[
 T^*_{n}=\sqrt{n}\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\hat\sigma_n^* \sqrt{\gamma_{jj,n}}}

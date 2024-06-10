@@ -1389,7 +1389,7 @@ is indeed an asymptotically valid (i.e. approximate) $(1-\alpha)\times 100\%$ co
 **Setup:**
 
 * By the CLT: $\sqrt{n}(\bar X_n - \mu_0)\to_d\mathcal{N}(0,\sigma^2_0)$ as $n\to\infty$
-* Estimation of $\sigma^2_0$: $\hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2$
+* Estimation of $\sigma^2_0$: $\hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2,$ where $\hat{\sigma}^2_n\to_p\sigma^2_0$ as $n\to\infty.$
 * This implies: $\sqrt{n}((\bar X_n -\mu_0)/\hat{\sigma}_n)\to_d\mathcal{N}(0,1)$ as $n\to\infty$
 
 Let $z_{\alpha/2}$ and $z_{1-\alpha/2}$ denote the $\alpha/2$ and the $(1-\alpha/2)$-quantile of $\mathcal{N}(0,1).$ Since $z_{\alpha/2} = -z_{1-\alpha/2},$ we have that 
@@ -1981,29 +1981,38 @@ where $\hat\sigma^2_n\to\sigma^2_0$ as $n\to\infty.$
 
 An appropriate central limit theorem argument implies that 
 $$
-\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}\left(0,\sigma^2_0\, M\right),
+\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M\right),
 $$
-as $n\to\infty.$
+as $n\to\infty,$ assuming that $\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M$ as $n\to\infty.$
 
 That is, for large $n$, we have that
 $$
 \text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
-\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}\left(0,\sigma^2_0\, M\right)}
+\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M\right)}
 $$
 
 
-### Bootstrap Confidence Intervals for the Regression Coefficients
+### Bootstrap Confidence Intervals for the $j$th Component of the Regression Coefficient $\beta_{0,j}$
 
-The following two confidence intervals use the basic bootstrap method (@sec-BasicBootstrap) and the bootstrap-$t$ method (@sec-BootT). 
+This chapter introduces two confidence intervals. The first uses the basic bootstrap method (@sec-BasicBootstrap); the second uses the bootstrap-$t$ method (@sec-BootT). 
 
-#### Basic Bootstrap Confidence Intervals for $\beta_{0,j}$ 
+Both confidence intervals can be constructed either via bootstrapping pairs (@sec-bootPairs) or via bootstrapping residuals (@sec-bootResid). 
 
-This allows to construct basic bootstrap confidence intervals for the $j$th regression coefficient $\beta_{0,j}$, $j=1,\dots,p$, of $\beta_0\in\mathbb{R}^p.$
+::: {.callout-tip}
+While the bootstrap confidence intervals based on bootstrapping pairs (@sec-bootPairs) are heteroskedasticity robust, the bootstrap confidence intervals based on bootstrapping residuals are only valid for homoskedastic errors.    
+:::
 
-1. Generate $m$ (e.g. $m=10,000$) bootstrap realizations
+#### Basic Bootstrap Confidence Intervals for $\beta_{0,j}$ {-}
+
+Let $\beta_{0,j}\in\mathbb{R}$, $j=1,\dots,p$, denote the $j$th component of $\beta_0\in\mathbb{R}^p,$ and let $\hat{\beta}_{j,n}\in\mathbb{R}$ denote the $j$th component of the estimator $\hat\beta_n\in\mathbb{R}^p.$
+
+The basic bootstrap confidence interval for $\beta_{0,j}\in\mathbb{R}$ can be constructed as following:
+
+1. Use either bootstrapping pairs (@sec-bootPairs) or bootstrapping residuals (@sec-bootResid) to generate $m$ (e.g. $m=10,000$) bootstrap realizations
 $$
-\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast
+\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.
 $$
+
 
 2. Determine the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^\ast_{n,\frac{\alpha}{2},j}$ and $\hat q^\ast_{n,1-\frac{\alpha}{2},j}$ from the bootstrap realizations $\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast$ using @eq-empiricalQuantile.
 
@@ -2068,7 +2077,7 @@ $$
 
 A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be constructed as follows:
 
-1. Generate $m$ (e.g. $m=10,000$) bootstrap realizations
+1. Use either bootstrapping pairs (@sec-bootPairs) or bootstrapping residuals (@sec-bootResid) to generate $m$ (e.g. $m=10,000$) bootstrap realizations
 $$
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
 $$
