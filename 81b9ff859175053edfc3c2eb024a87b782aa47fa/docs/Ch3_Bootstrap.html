@@ -566,7 +566,8 @@ P(X\in [a,b])=F(b)-F(a).
 <h2 data-number="3.3" class="anchored" data-anchor-id="sec-BasicBootstrap"><span class="header-section-number">3.3</span> The Basic Bootstrap Method</h2>
 <p>The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e.&nbsp;parametric) assumption. The basic bootstrap method is often also called:</p>
 <ul>
-<li>(Standard) Nonparametric Bootstrap Method</li>
+<li>(Standard) Nonparametric Bootstrap Method or</li>
+<li>Nonparametric Percentile Bootstrap Method</li>
 </ul>
 <p><strong>Setup:</strong></p>
 <ul>
@@ -2016,7 +2017,7 @@ Remark
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This basic bootstrap confidence interval provides an asymptotically (first order) accurate confidence interval, even if the errors are <strong>heteroskedastic</strong>.</p>
+<p>This basic bootstrap confidence interval provides an asymptotically (first order) accurate confidence interval for <strong>homoskedastic errors,</strong> but also for <strong>heteroskedastic</strong> errors. We even do not need to know whether the errors are homoskedastic or heteroskedastic.</p>
 <p>This is not true for the standard confidence intervals usually provided by standard software packages. For instance, the standard <code>confint(object)</code> function in <code>R</code> for an <code>object</code> returned by the <code>lm()</code> function uses the standard error formula for <strong>homoskedastic</strong> errors.</p>
 </div>
 </div>
@@ -2044,31 +2045,56 @@ where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n
 <h4 data-number="3.5.3.1" class="anchored" data-anchor-id="bootstrap-t-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.3.1</span> Bootstrap-<span class="math inline">\(t\)</span> Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
 <p>Bootstrap-<span class="math inline">\(t\)</span> confidence intervals for the regression coefficients <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p,\)</span> can be constructed as following:</p>
 <p>Let <span class="math inline">\(\gamma_{jj,n}\)</span> denote the <span class="math inline">\(j\)</span>-th diagonal element of the matrix <span class="math inline">\((\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\)</span>, i.e., <span class="math display">\[
-\gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}.
+\gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^\top\right)^{-1}\right]_{jj}.
 \]</span> Then <span class="math display">\[
-\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}
+T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}
 \]</span> with <span class="math display">\[
 \hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}
 \]</span> is an asymptotically pivotal statistic; i.e.&nbsp; <span class="math display">\[
-\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 \]</span></p>
 <p>A bootstrap-<span class="math inline">\(t\)</span> interval for <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, can thus be constructed as follows:</p>
 <ol type="1">
 <li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) or bootstrapping residuals (<a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
-\]</span> where <span class="math display">\[
-T^*_{n}=\sqrt{n}\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\hat\sigma_n^* \sqrt{\gamma_{jj,n}}}
 \]</span> with <span class="math display">\[
-\hat\sigma^{*2}_n:=\frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^{*2}.
+T^*_{n}=\sqrt{n}\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\hat\sigma_n^* \sqrt{\gamma_{jj,n}}}
+\]</span> where <span class="math display">\[
+\hat\sigma^{*2}_n:=\frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^{*2},
+\]</span> and where <span class="math display">\[
+\gamma_{jj,n}=
+\left\{
+\begin{array}{ll}
+\left[\left(\frac{1}{n}\sum_{i=1}^n X^\ast_i X^{\ast\top}_i\right)^{-1}\right]_{jj}&amp;\textrm{when bootstrapping pairs}\\
+\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}&amp;\textrm{when bootstrapping residuals}\\
+\end{array}
+\right.
 \]</span></p></li>
 <li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> (see <a href="#eq-empiricalQuantile">Equation&nbsp;<span>3.7</span></a>) from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
 <li><p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI">Equation&nbsp;<span>3.9</span></a>: <span class="math display">\[
 \left[
-  \hat\beta_{n,j}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right),\;
-  \hat\beta_{n,j}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right)
+  \hat\beta_{j,n}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right),\;
+  \hat\beta_{j,n}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right)
 \right],
-\]</span> where <span class="math inline">\(\hat\beta_{n,j}\)</span> and <span class="math inline">\(\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}\)</span> are computed from the original sample <span class="math inline">\(\mathcal{S}_n\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
+\]</span> where <span class="math inline">\(\hat\beta_{n,j}\)</span> and <span class="math inline">\(\hat{\sigma}_n\,\sqrt{\gamma_{jj,n}}\)</span> are computed from the original sample <span class="math inline">\(\mathcal{S}_n\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
 </ol>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Remark
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Bootstrapping pairs allows, in principle, for heteroskedastic error terms. However, the above bootstrap-<span class="math inline">\(t\)</span> confidence interval is only usable under <strong>homoskedastic errors</strong> even when bootstrapping pairs.</p>
+<p>Reason: The confidence interval uses the estimator of the standard error of <span class="math inline">\(\hat{\beta}_{j,n}\)</span> for the case of <strong>homoskedastic errors:</strong> <span class="math display">\[
+\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast)=\frac{\hat\sigma_n^\ast \sqrt{\gamma_{jj,n}}}{\sqrt{n}}.
+\]</span></p>
+<p>In case of <strong>heteroskedastic errors</strong> one needs to use an appropriate version of <span class="math inline">\(\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast).\)</span></p>
+</div>
+</div>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2079,8 +2105,8 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There are furhter bootstrap procedures. In case of heteroskedastic errors, for instance, there’s also the Wild Bootstrap or the Multiplier Bootstrap (see, e.g., Section 6 in <span class="citation" data-cites="Horowitz_2001">Horowitz (<a href="#ref-Horowitz_2001" role="doc-biblioref">2001</a>)</span>). These two methods are similar to the residual bootstrap since they generate new outcome variables <span class="math inline">\(Y^\ast_i\)</span> by generating new residuals, conditionally on the predictors <span class="math inline">\(X_i\)</span>. However these boostrap methods generate new residuals by multiplying a real random variable <span class="math inline">\(W_i\in\mathbb{R}\)</span> to the observed (not resampled) residual <span class="math inline">\(\varepsilon_i:\)</span> <span class="math display">\[
-Y_i^\ast = X_i^\top \hat\beta_n + \hat\varepsilon_n \cdot W_i,
+<p>There are furhter bootstrap procedures. For instance, one can adjust the residual bootstrap to allow for heteroskedastic errors which leads to the <strong>Wild Bootstrap</strong> or the <strong>Multiplier Bootstrap</strong> (see, e.g., Section 6 in <span class="citation" data-cites="Horowitz_2001">Horowitz (<a href="#ref-Horowitz_2001" role="doc-biblioref">2001</a>)</span>). These two methods are similar to the residual bootstrap since they generate new outcome variables <span class="math inline">\(Y^\ast_i\)</span> by generating new residuals, conditionally on the predictors <span class="math inline">\(X_i\)</span>. However these boostrap methods generate new residuals by multiplying a real random variable <span class="math inline">\(W_i\in\mathbb{R}\)</span> to the observed (not resampled) residual <span class="math inline">\(\varepsilon_i:\)</span> <span class="math display">\[
+Y_i^\ast = X_i^\top \hat\beta_n + \underbrace{\hat\varepsilon_i \cdot W_i}_{=\hat\varepsilon_i^\ast},
 \]</span> where <span class="math inline">\(W_i\)</span> has a specific distribution (Rademacher distribution, Mammen’s distribution, Normal distribution, etc). <!-- 
 This approach is very successful and also works in high-dimensional ($p$ as large as $n$ or larger) problems.  
 --></p>

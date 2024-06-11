@@ -323,7 +323,8 @@ $$
 
 The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e. parametric) assumption. The basic bootstrap method is  often also called:
 
-* (Standard) Nonparametric Bootstrap Method
+* (Standard) Nonparametric Bootstrap Method or
+* Nonparametric Percentile Bootstrap Method
 
 
 
@@ -2027,7 +2028,7 @@ where $\hat\beta_{nj}$ denotes the $j$th component of $\hat\beta_{n}$ computed f
 
 ## Remark 
 
-This basic bootstrap confidence interval provides an asymptotically (first order) accurate confidence interval, even if the errors are **heteroskedastic**. 
+This basic bootstrap confidence interval provides an asymptotically (first order) accurate confidence interval for **homoskedastic errors,** but also for **heteroskedastic** errors. We even do not need to know whether the errors are homoskedastic or heteroskedastic. 
 
 This is not true for the standard confidence intervals usually provided by standard software packages. For instance, the standard `confint(object)` function in `R` for an `object` returned by the `lm()` function uses the standard error formula for **homoskedastic** errors. 
 ::: 
@@ -2060,11 +2061,11 @@ Bootstrap-$t$ confidence intervals for the regression coefficients $\beta_{0,j}$
 
 Let $\gamma_{jj,n}$ denote the $j$-th diagonal element of the matrix $(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$, i.e.,
 $$
-\gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}.
+\gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^\top\right)^{-1}\right]_{jj}.
 $$
 Then
 $$
-\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}
+T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}
 $$ 
 with 
 $$
@@ -2072,7 +2073,7 @@ $$
 $$
 is an asymptotically pivotal statistic; i.e. 
 $$
-\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\hat\sigma_n\sqrt{\gamma_{jj,n}}}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 $$
 
 A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be constructed as follows:
@@ -2081,14 +2082,24 @@ A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be construct
 $$
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
 $$
-where 
+with
 $$
 T^*_{n}=\sqrt{n}\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\hat\sigma_n^* \sqrt{\gamma_{jj,n}}}
 $$
-with 
+where 
 $$
-\hat\sigma^{*2}_n:=\frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^{*2}.
+\hat\sigma^{*2}_n:=\frac{1}{n}\sum_{i=1}^n \hat\varepsilon_i^{*2},
 $$ 
+and where
+$$
+\gamma_{jj,n}=
+\left\{
+\begin{array}{ll}
+\left[\left(\frac{1}{n}\sum_{i=1}^n X^\ast_i X^{\ast\top}_i\right)^{-1}\right]_{jj}&\textrm{when bootstrapping pairs}\\
+\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\right)^{-1}\right]_{jj}&\textrm{when bootstrapping residuals}\\
+\end{array}
+\right.
+$$
 
 2. Compute the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^\ast_{n,\frac{\alpha}{2},j}$ and $\hat q^\ast_{n,1-\frac{\alpha}{2},j}$ (see @eq-empiricalQuantile) from the bootstrap estimates $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
 
@@ -2096,17 +2107,32 @@ $$
 3. Compute the $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval as in @eq-Boot_tCI:
 $$
 \left[
-  \hat\beta_{n,j}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right),\; 
-  \hat\beta_{n,j}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right)
+  \hat\beta_{j,n}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right),\; 
+  \hat\beta_{j,n}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\frac{\hat\sigma_n \sqrt{\gamma_{jj,n}}}{\sqrt{n}}\right)
 \right],
 $$
-where $\hat\beta_{n,j}$ and 
-$\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}$ are computed from the original sample $\mathcal{S}_n$ and where the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
+where $\hat\beta_{n,j}$ and $\hat{\sigma}_n\,\sqrt{\gamma_{jj,n}}$ are computed from the original sample $\mathcal{S}_n$ and where the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
+
+
+::: {.callout-note}
+
+## Remark 
+
+Bootstrapping pairs allows, in principle, for heteroskedastic error terms. However, the above bootstrap-$t$ confidence interval is only usable under **homoskedastic errors** even when bootstrapping pairs. 
+
+Reason: The confidence interval uses the estimator of the standard error of $\hat{\beta}_{j,n}$ for the case of **homoskedastic errors:** 
+$$
+\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast)=\frac{\hat\sigma_n^\ast \sqrt{\gamma_{jj,n}}}{\sqrt{n}}.
+$$
+
+In case of **heteroskedastic errors** one needs to use an appropriate version of $\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast).$
+::: 
+
 
 ::: {.callout-tip}
-There are furhter bootstrap procedures. In case of heteroskedastic errors, for instance, there's also the Wild Bootstrap or the Multiplier Bootstrap (see, e.g., Section 6 in @Horowitz_2001). These two methods are similar to the residual bootstrap since they generate new outcome variables $Y^\ast_i$ by generating new residuals, conditionally on the predictors $X_i$. However these boostrap methods generate new residuals by multiplying a real random variable $W_i\in\mathbb{R}$ to the observed (not resampled) residual $\varepsilon_i:$
+There are furhter bootstrap procedures. For instance, one can adjust the residual bootstrap to allow for heteroskedastic errors which leads to the **Wild Bootstrap** or the **Multiplier Bootstrap** (see, e.g., Section 6 in @Horowitz_2001). These two methods are similar to the residual bootstrap since they generate new outcome variables $Y^\ast_i$ by generating new residuals, conditionally on the predictors $X_i$. However these boostrap methods generate new residuals by multiplying a real random variable $W_i\in\mathbb{R}$ to the observed (not resampled) residual $\varepsilon_i:$
 $$
-Y_i^\ast = X_i^\top \hat\beta_n + \hat\varepsilon_n \cdot W_i,
+Y_i^\ast = X_i^\top \hat\beta_n + \underbrace{\hat\varepsilon_i \cdot W_i}_{=\hat\varepsilon_i^\ast},
 $$ 
 where $W_i$ has a specific distribution (Rademacher distribution, Mammen's distribution, Normal distribution, etc). 
 <!-- 
