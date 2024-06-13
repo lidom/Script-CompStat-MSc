@@ -231,9 +231,11 @@ div.csl-indent {
   </ul></li>
   <li><a href="#bootstrap-and-linear-regression-analysis" id="toc-bootstrap-and-linear-regression-analysis" class="nav-link" data-scroll-target="#bootstrap-and-linear-regression-analysis"><span class="toc-section-number">3.5</span>  Bootstrap and Linear Regression Analysis</a>
   <ul class="collapse">
-  <li><a href="#sec-bootPairs" id="toc-sec-bootPairs" class="nav-link" data-scroll-target="#sec-bootPairs"><span class="toc-section-number">3.5.1</span>  Bootstrapping Pairs: Bootstrap under Random Design</a></li>
-  <li><a href="#sec-bootResid" id="toc-sec-bootResid" class="nav-link" data-scroll-target="#sec-bootResid"><span class="toc-section-number">3.5.2</span>  Residual Bootstrap: Bootstrap under Fixed Design</a></li>
-  <li><a href="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" id="toc-bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="nav-link" data-scroll-target="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="toc-section-number">3.5.3</span>  Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></a></li>
+  <li><a href="#sec-bootPairs" id="toc-sec-bootPairs" class="nav-link" data-scroll-target="#sec-bootPairs"><span class="toc-section-number">3.5.1</span>  Bootstrap under Random Design: Bootstrapping Pairs</a></li>
+  <li><a href="#sec-bootResid" id="toc-sec-bootResid" class="nav-link" data-scroll-target="#sec-bootResid"><span class="toc-section-number">3.5.2</span>  Bootstrap under Fixed Design: The Residual Bootstrap</a></li>
+  <li><a href="#sec-bootWild" id="toc-sec-bootWild" class="nav-link" data-scroll-target="#sec-bootWild"><span class="toc-section-number">3.5.3</span>  Bootstrap under Fixed Design: The Wild Bootstrap</a></li>
+  <li><a href="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" id="toc-bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="nav-link" data-scroll-target="#bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="toc-section-number">3.5.4</span>  Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></a></li>
+  <li><a href="#statistical-hypothesis-testing" id="toc-statistical-hypothesis-testing" class="nav-link" data-scroll-target="#statistical-hypothesis-testing"><span class="toc-section-number">3.5.5</span>  Statistical Hypothesis Testing</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -1838,7 +1840,7 @@ X_1, X_2, \dots, X_n
 \end{align*}
 \]</span></p>
 <section id="sec-bootPairs" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="sec-bootPairs"><span class="header-section-number">3.5.1</span> Bootstrapping Pairs: Bootstrap under Random Design</h3>
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="sec-bootPairs"><span class="header-section-number">3.5.1</span> Bootstrap under Random Design: Bootstrapping Pairs</h3>
 <p>Under a random design (<a href="#def-RandomFixedDesign">Definition&nbsp;<span>3.6</span></a>), we assume that there exists a non-singular (thus invertible) matrix <span class="math inline">\(M\)</span> <span class="math display">\[
 M=\mathbb{E}(X_iX_i^T).
 \]</span> This implies that the following matrix <span class="math inline">\(Q\)</span> is also non-singular: <span class="math display">\[
@@ -1893,7 +1895,7 @@ Q
 \]</span></p>
 </section>
 <section id="sec-bootResid" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="sec-bootResid"><span class="header-section-number">3.5.2</span> Residual Bootstrap: Bootstrap under Fixed Design</h3>
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="sec-bootResid"><span class="header-section-number">3.5.2</span> Bootstrap under Fixed Design: The Residual Bootstrap</h3>
 <p>If the sample <span class="math display">\[
 (Y_1,X_1),\dots,(Y_n,X_n)
 \]</span> is <strong>not</strong> an i.i.d. sample, the bootstrapping pairs procedure (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) proposed above will generally not be consistent. Therefore, bootstrapping pairs is not necessarily applicable for <strong>fixed designs</strong> and also generally not in time-series regression contexts. However, if error terms are <strong>homoskedastic</strong>, then it is possible to rely on the <strong>residual bootstrap</strong>.</p>
@@ -1919,7 +1921,7 @@ Applicability of the Residual Bootstrap under Random Designs
 </div>
 <div class="callout-body-container callout-body">
 <p>Though we will formally rely on a fixed design assumption, the residual bootstrap is also applicable for random designs—even when the <span class="math inline">\(X\)</span>-variables are correlated (e.g.&nbsp;time-series).</p>
-<p>In such cases, the following arguments are meant <em>conditionally</em> on the given <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
+<p>In such cases, the following arguments are meant <em>conditionally</em> on the observed predictors <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
 <p>The above assumptions on the error terms then, of course, also have to be satisfied <em>conditionally</em> on <span class="math inline">\(X_1,\dots,X_n.\)</span></p>
 </div>
 </div>
@@ -1976,8 +1978,67 @@ Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i
 \]</span></p>
 </section>
 </section>
-<section id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="level3" data-number="3.5.3">
-<h3 data-number="3.5.3" class="anchored" data-anchor-id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="header-section-number">3.5.3</span> Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></h3>
+<section id="sec-bootWild" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="sec-bootWild"><span class="header-section-number">3.5.3</span> Bootstrap under Fixed Design: The Wild Bootstrap</h3>
+<p>The wild bootstrap is a method for generating bootstrap samples that do not consist of resampling the original data or residuals as in <a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a> and <a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>. Rather, the wild bootstrap combines the data with random variables drawn from a known distribution to form a bootstrap sample.</p>
+<p>The wild bootstrap provides a way to deal with issues such as heteroskedasticity of unknown form in fixed-design regression models or random-design models in which one conditions on the predictors.</p>
+<p>In the following we will formally assume a regression model <span class="math display">\[
+Y_i=X_i^T\beta_0 + \varepsilon_i, \quad i=1,\dots,n,
+\]</span> with <span class="math display">\[
+X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p,
+\]</span> where the <span class="math inline">\(X_i\)</span>’s are fixed in repeated samples (<strong>fixed design</strong>), and where the error terms <span class="math display">\[
+\varepsilon_1,\dots,\varepsilon_n
+\]</span> are independent across <span class="math inline">\(i=1,\dots,n,\)</span> with<br>
+<span class="math display">\[
+\mathbb{E}(\varepsilon_i)=0\quad\text{for all}\quad i=1,\dots,n,
+\]</span> and possibly <strong>heteroskedastic</strong> variances (<span class="math inline">\(\sigma^2_{0,i}\neq \sigma^2_{0,j}\)</span> for <span class="math inline">\(i\neq j=1,\dots,n\)</span>) <span class="math display">\[
+0&lt;\mathbb{E}(\varepsilon_i^2)=\sigma^2_{0,i}&lt;\infty\quad\text{for all}\quad i=1,\dots,n.
+\]</span></p>
+<p>That is, the data generating process is here independent across <span class="math inline">\(i=1,\dots,n,\)</span> but not necessarily identically distributed across <span class="math inline">\(i=1,\dots,n.\)</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Applicability of the Wild Bootstrap under Random Designs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Though we will formally rely on a fixed design assumption, the wild bootstrap (as the residual bootstrap) is also applicable for random designs.</p>
+<p>In random designs, the following arguments are meant <em>conditionally</em> on the observed predictors <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
+<p>The above assumptions on the error terms then, of course, also have to be satisfied <em>conditionally</em> on <span class="math inline">\(X_1,\dots,X_n.\)</span></p>
+</div>
+</div>
+<p>As in the residual bootstrap method in <a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>, the wild bootstrap uses the <span class="math inline">\(X_i\)</span>’s from the original data. I.e., the <span class="math inline">\(X_i\)</span>’s are not resampled. The wild bootstrap generates bootstrap samples <span class="math display">\[
+\{(Y_1^\ast,X_1),\dots,(Y_n^\ast,X_n)\}
+\]</span> from <span class="math display">\[
+Y_i^\ast=X_i^\top\hat\beta_n + \varepsilon^\ast_i,\quad i=1,\dots,n,
+\]</span> where the <span class="math inline">\(\varepsilon_i^\ast\)</span>’s are generated by either of the following two methods:</p>
+<ol type="1">
+<li>Let <span class="math inline">\(\varepsilon_i=X_i^\top\hat\beta_n,\)</span> <span class="math inline">\(i=1,\dots,n\)</span> be the OLS residuals. For each <span class="math inline">\(i=1,\dots,n,\)</span> let <span class="math inline">\(F_i\)</span> be the <span class="math inline">\(i\)</span>-specific distribution of a discrete two-point random variable <span class="math display">\[
+W_i\in\left\{\left(1-\sqrt{5}\right)\hat\varepsilon_i,\;\left(1+\sqrt{5}\right)\frac{\hat\varepsilon_i}{2}\right\}
+\]</span> with <span class="math display">\[
+\begin{align*}
+P\left(W_i = \left(1-\sqrt{5}\right)\hat\varepsilon_i\right) &amp;= \frac{1+\sqrt{5}}{2\sqrt{5}}\\[2ex]
+P\left(W_i = \left(1+\sqrt{5}\right)\frac{\hat\varepsilon_i}{2}\right)&amp;=1 - \frac{1+\sqrt{5}}{2\sqrt{5}}.
+\end{align*}
+\]</span> Under this construction, we have that <span class="math display">\[
+\begin{align*}
+\mathbb{E}(W_i)  &amp;=0\\[2ex]
+\mathbb{E}(W_i^2)&amp;=\hat\varepsilon_i^2\\[2ex]
+\mathbb{E}(W_i^3)&amp;=\hat\varepsilon_i^3.
+\end{align*}
+\]</span> The wild bootstrap uses <span class="math display">\[
+\varepsilon_i^\ast = W_i\quad\text{for each}\quad i=1,\dots,n
+\]</span> to generate the bootstrap samples. <span class="citation" data-cites="Mammen_1993">Mammen (<a href="#ref-Mammen_1993" role="doc-biblioref">1993</a>)</span> provides a detailed discussion of the properties of this method.</li>
+<li>The second method is an example of the <strong>multiplier bootstrap</strong>, meaning that the <span class="math inline">\(\varepsilon_i^\ast\)</span>’s are multiples of transformations of the residuals <span class="math inline">\(\hat{\varepsilon}_i\)</span> and independent random variables. Specifically, let <span class="math inline">\(U_i,\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> be real valued random variables that are independent from each other and independent of the residuals <span class="math inline">\(\hat{\varepsilon}_i.\)</span> Let <span class="math inline">\(\mathbb{E}(U_i)=0\)</span> and <span class="math inline">\(\mathbb{E}(U_i^2)=1\)</span> for all <span class="math inline">\(i=1,dots,n.\)</span> One possibility would be <span class="math inline">\(U_i\sim\mathcal{N}(0,1).\)</span> Let <span class="math inline">\(f(\hat{\varepsilon}_i)\)</span> be a transformation of the residuals, where <span class="math inline">\(f(\hat{\varepsilon}_i)=\hat{\varepsilon}_i\)</span> is one possibility. The multiplier bootstrap uses <span class="math display">\[
+\varepsilon_i^\ast = U_i\,f(\hat{\varepsilon}_i)\quad\text{for each}\quad i=1,\dots,n
+\]</span> to generate the bootstrap samples. <span class="citation" data-cites="Davidson_and_Flachaire_2008">Davidson and Flachaire (<a href="#ref-Davidson_and_Flachaire_2008" role="doc-biblioref">2008</a>)</span> discuss properties of this method.</li>
+</ol>
+</section>
+<section id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="header-section-number">3.5.4</span> Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></h3>
 <p>This chapter introduces two confidence intervals. The first uses the basic bootstrap method (<a href="#sec-BasicBootstrap"><span>Section&nbsp;3.3</span></a>); the second uses the bootstrap-<span class="math inline">\(t\)</span> method (<a href="#sec-BootT"><span>Section&nbsp;3.4</span></a>).</p>
 <p>Both confidence intervals can be constructed either via bootstrapping pairs (<a href="#sec-bootPairs"><span>Section&nbsp;3.5.1</span></a>) or via bootstrapping residuals (<a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>).</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
@@ -2041,8 +2102,8 @@ $$
 where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n\in\mathbb{R}^p$ computed from the orginal sample $\mathcal{S}_n.$ 
 -->
 </section>
-<section id="bootstrap-t-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.3.1">
-<h4 data-number="3.5.3.1" class="anchored" data-anchor-id="bootstrap-t-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.3.1</span> Bootstrap-<span class="math inline">\(t\)</span> Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
+<section id="bootstrap-t-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.4.1">
+<h4 data-number="3.5.4.1" class="anchored" data-anchor-id="bootstrap-t-confidence-intervals-for-beta_0j"><span class="header-section-number">3.5.4.1</span> Bootstrap-<span class="math inline">\(t\)</span> Confidence Intervals for <span class="math inline">\(\beta_{0,j}\)</span></h4>
 <p>Bootstrap-<span class="math inline">\(t\)</span> confidence intervals for the regression coefficients <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p,\)</span> can be constructed as following:</p>
 <p>Let <span class="math inline">\(\gamma_{jj,n}\)</span> denote the <span class="math inline">\(j\)</span>-th diagonal element of the matrix <span class="math inline">\((\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\)</span>, i.e., <span class="math display">\[
 \gamma_{jj,n}:=\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^\top\right)^{-1}\right]_{jj}.
@@ -2088,13 +2149,90 @@ Remark
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Bootstrapping pairs allows, in principle, for heteroskedastic error terms. However, the above bootstrap-<span class="math inline">\(t\)</span> confidence interval is only usable under <strong>homoskedastic errors</strong> even when bootstrapping pairs.</p>
+<p>Bootstrapping pairs allows, in principle, for heteroskedastic error terms. However, the above bootstrap-<span class="math inline">\(t\)</span> confidence interval is only usable under <strong>homoskedastic errors</strong>, even when bootstrapping pairs.</p>
 <p>Reason: The confidence interval uses the estimator of the standard error of <span class="math inline">\(\hat{\beta}_{j,n}\)</span> for the case of <strong>homoskedastic errors:</strong> <span class="math display">\[
 \widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast)=\frac{\hat\sigma_n^\ast \sqrt{\gamma_{jj,n}}}{\sqrt{n}}.
 \]</span></p>
 <p>In case of <strong>heteroskedastic errors</strong> one needs to use an appropriate version of <span class="math inline">\(\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast).\)</span></p>
 </div>
 </div>
+</section>
+</section>
+<section id="statistical-hypothesis-testing" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="statistical-hypothesis-testing"><span class="header-section-number">3.5.5</span> Statistical Hypothesis Testing</h3>
+<p>In the following, we consider the <strong>residual bootstrap</strong> as introduced in <a href="#sec-bootResid"><span>Section&nbsp;3.5.2</span></a>.</p>
+<p>Suppose we want to test the hypothesis <span class="math display">\[
+\begin{align*}
+H_0                    &amp;: \beta_{0,j}    = 0\\[2ex]
+\text{against}\quad H_1&amp;: \beta_{0,j} \neq 0
+\end{align*}
+\]</span> using the test statistic <span class="math display">\[
+T_n = \frac{\hat\beta_{j,n} }{\widehat{\operatorname{SE}}(\hat\beta_{j,n})},
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\beta_{0,j}\)</span> denotes the <span class="math inline">\(j\)</span>th element of <span class="math inline">\(\beta_0\in\mathbb{R}^p,\)</span></li>
+<li><span class="math inline">\(\hat\beta_{j,n}\)</span> denotes the <span class="math inline">\(j\)</span>th element of the OLS estimator <span class="math inline">\(\hat\beta_n\in\mathbb{R}^p,\)</span></li>
+</ul>
+<p>and where in the case of homoskedastic error terms <span class="math display">\[
+\widehat{\operatorname{SE}}(\hat\beta_{j,n})=\frac{\hat{\sigma}_n\sqrt{\gamma_{jj,n}}}{\sqrt{n}}.
+\]</span> The <span class="math inline">\(p\)</span>-value is given by <span class="math display">\[
+\begin{align*}
+&amp;p_{obs} = \\[2ex]
+&amp;2\,\min\left\{P(T_n \geq T_{n,obs}|H_0\;\text{is true}),\;P(T_n \leq T_{n,obs}|H_0\;\text{is true})\right\}
+\end{align*}
+\]</span> where <span class="math inline">\(T_{n,obs}\)</span> is the value of the test statistic computed from the original sample <span class="math display">\[
+\mathcal{S}_n=\left\{(Y_1,X_1),\dots,(Y_n,X_n)\right\}.
+\]</span></p>
+<p>To conduct the test using the bootstrap, we have to estimate <span class="math inline">\(p_{obs}\)</span> by the bootstrap algorithm.</p>
+<p>Central question: <strong>How to generate bootstrap samples under <span class="math inline">\(H_0\)</span>?</strong></p>
+<p>To estimate <span class="math inline">\(\beta_0\in\mathbb{R}^p\)</span> under <span class="math inline">\(H_0,\)</span> we need to estimate all elements in <span class="math inline">\(\beta_0\)</span> that are not specified/fixed by <span class="math inline">\(H_0\)</span> leaving the other elements at their <span class="math inline">\(H_0\)</span>-values.</p>
+<p>Let <span class="math inline">\(\beta^{H_0}_0\in\mathbb{R}^{(p-1)}\)</span> denote the parameter vector that contains all elements of <span class="math inline">\(\beta_0\in\mathbb{R}^p\)</span> that are not specified by <span class="math inline">\(H_0.\)</span> <!-- 
+Under $H_0,$ we can rewrite the regression model as 
+$$
+\begin{align*}
+\overbrace{Y_i - \beta_{0,j}^0 X_j}^{=\tilde{Y}_i} = \tilde{X}_i^\top \beta^{H_0}_0 + \varepsilon_i,
+\end{align*}
+$$
+where $\tilde{X}_i\in\mathbb{R}^{(p-1)}$ denotes the predictor vector with the $j$th element removed.  
+--> The estimator of <span class="math inline">\(\beta^{H_0}_0\in\mathbb{R}^{(p-1)}\)</span> is then given by <span class="math display">\[
+\hat{\beta}^{H_0}_{n}=\left(\tilde{X}^\top\tilde{X}\right)^{-1}\tilde{X}^\top Y
+\]</span> where the <span class="math inline">\((n\times (p-1))\)</span>-matrix <span class="math inline">\(\tilde{X}\)</span> is the matrix <span class="math inline">\(X\)</span> with the <span class="math inline">\(j\)</span>th column removed.</p>
+<p>Using <span class="math inline">\(\hat{\beta}^{H_0}_{n},\)</span> we can compute the <span class="math inline">\((n\times 1)\)</span>-vector of residuals under <span class="math inline">\(H_0\)</span> as <span class="math display">\[
+\left(\begin{matrix}\hat{\varepsilon}^{H_0}_1\\ \vdots\\\hat{\varepsilon}^{H_0}_n\end{matrix}\right)=\hat{\varepsilon}^{H_0}=Y-\tilde{X}\hat{\beta}^{H_0}_{n}.
+\]</span></p>
+<p><strong>Residual bootstrap algorithm:</strong></p>
+<ol type="1">
+<li><p>Draw independently and with replacement <span class="math inline">\(n\)</span> values from <span class="math display">\[
+\{\hat{\varepsilon}^{H_0}_1, \dots, \hat{\varepsilon}^{H_0}_n\}
+\]</span> to generate bootstrap realizations under <span class="math inline">\(H_0\)</span> <span class="math display">\[
+\{\hat{\varepsilon}^{H_0\ast}_1, \dots, \hat{\varepsilon}^{H_0\ast}_n\}.
+\]</span> These allow us to generate the bootstrap samples under <span class="math inline">\(H_0,\)</span> <span class="math display">\[
+\left\{(Y_1^{H_0\ast},X_1),\dots,(Y_n^{H_0\ast},X_n)\right\},
+\]</span> where <span class="math display">\[
+Y_i^{H_0\ast} = \tilde{X}_i^\top \hat{\beta}^{H_0}_{n} + \hat{\varepsilon}^{H_0\ast}_i,\quad i=1,\dots,n.
+\]</span></p></li>
+<li><p>Based on the bootstrap sample <span class="math display">\[
+\left\{(Y_1^{H_0\ast},X_1),\dots,(Y_n^{H_0\ast},X_n)\right\}
+\]</span> we can compute the bootstrap realization of the OLS estimator under <span class="math inline">\(H_0,\)</span> <span class="math display">\[
+\hat{\beta}^{\ast}_{n}=\left(X^\top X\right)^{-1} X^\top Y^{H_0\ast},
+\]</span> which allows us to generate the corresponding realization of the test statistic <span class="math display">\[
+T_n^{\ast}
+\]</span> under <span class="math inline">\(H_0.\)</span></p></li>
+<li><p>Repeating Steps 1-2 leads to <span class="math inline">\(m\)</span>-many (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations of the test statistic<br>
+<span class="math display">\[
+T_{n,1}^{\ast},\dots,T_{n,m}^{\ast}
+\]</span> under <span class="math inline">\(H_0.\)</span></p></li>
+</ol>
+<p>To estimate the unknown <span class="math inline">\(p_{obs},\)</span> we can use now the following estimator <span class="math display">\[
+\begin{align*}
+&amp;\hat p_{obs} = \\[2ex]
+&amp;=2\,\min\left\{\hat{P}(T_n \geq T_{n,obs}|H_0\;\text{is true}),\;\hat{P}(T_n \leq T_{n,obs}|H_0\;\text{is true})\right\}\\[2ex]
+&amp;=2\,\min\left\{
+  \frac{1}{m}\sum_{j=1}^m 1_{\left(T_{n,j}^{\ast} \geq T_{n,obs}\right)},\;
+  \frac{1}{m}\sum_{j=1}^m 1_{\left(T_{n,j}^{\ast} \leq T_{n,obs}\right)}
+  \right\}
+\end{align*}
+\]</span></p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2105,14 +2243,9 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There are furhter bootstrap procedures. For instance, one can adjust the residual bootstrap to allow for heteroskedastic errors which leads to the <strong>Wild Bootstrap</strong> or the <strong>Multiplier Bootstrap</strong> (see, e.g., Section 6 in <span class="citation" data-cites="Horowitz_2001">Horowitz (<a href="#ref-Horowitz_2001" role="doc-biblioref">2001</a>)</span>). These two methods are similar to the residual bootstrap since they generate new outcome variables <span class="math inline">\(Y^\ast_i\)</span> by generating new residuals, conditionally on the predictors <span class="math inline">\(X_i\)</span>. However these boostrap methods generate new residuals by multiplying a real random variable <span class="math inline">\(W_i\in\mathbb{R}\)</span> to the observed (not resampled) residual <span class="math inline">\(\varepsilon_i:\)</span> <span class="math display">\[
-Y_i^\ast = X_i^\top \hat\beta_n + \underbrace{\hat\varepsilon_i \cdot W_i}_{=\hat\varepsilon_i^\ast},
-\]</span> where <span class="math inline">\(W_i\)</span> has a specific distribution (Rademacher distribution, Mammen’s distribution, Normal distribution, etc). <!-- 
-This approach is very successful and also works in high-dimensional ($p$ as large as $n$ or larger) problems.  
---></p>
+<p>In case of heteroskedasticity, the wild bootstrap and a corresponding formula for <span class="math inline">\(\widehat{\operatorname{SE}}(\hat{\beta}_j)\)</span> has to be used.</p>
 </div>
 </div>
-</section>
 </section>
 </section>
 <section id="exercises" class="level2 unnumbered">
@@ -2910,6 +3043,9 @@ since $Y_i^*\sim Y_i\sim F.$
 <div id="ref-Billingsley_1995" class="csl-entry" role="doc-biblioentry">
 Billingsley, Patrick. 1995. <em>Probability and Measure</em>. 3rd ed. Wiley.
 </div>
+<div id="ref-Davidson_and_Flachaire_2008" class="csl-entry" role="doc-biblioentry">
+Davidson, Russell, and Emmanuel Flachaire. 2008. <span>“The Wild Bootstrap, Tamed at Last.”</span> <em>Journal of Econometrics</em> 146 (1): 162–69.
+</div>
 <div id="ref-Davison_Hinkley_2013" class="csl-entry" role="doc-biblioentry">
 Davison, Anthony Christopher, and David Victor Hinkley. 2013. <em>Bootstrap Methods and Their Application</em>. Cambridge University Press.
 </div>
@@ -2927,6 +3063,9 @@ Koike, Yuta. 2024. <span>“High-Dimensional Bootstrap and Asymptotic Expansion.
 </div>
 <div id="ref-Mammen_1992_Book" class="csl-entry" role="doc-biblioentry">
 Mammen, Enno. 1992. <span>“When Does Bootstrap Work: Asymptotic Results and Simulations.”</span> <em>Lecture Notes in Statistics</em> 77.
+</div>
+<div id="ref-Mammen_1993" class="csl-entry" role="doc-biblioentry">
+———. 1993. <span>“Bootstrap and Wild Bootstrap for High Dimensional Linear Models.”</span> <em>The Annals of Statistics</em> 21 (1): 255–85.
 </div>
 <div id="ref-Shao_Tu_1996" class="csl-entry" role="doc-biblioentry">
 Shao, Jun, and Dongsheng Tu. 1996. <em>The Jackknife and Bootstrap</em>. Springer Science.
