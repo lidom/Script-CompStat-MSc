@@ -91,7 +91,7 @@ What would be a good/reasonable model assumption for $m(x)$ to estimate the cond
 
 # No specific model assumption
 
-In nonparametric regression analysis, we do not make assumptions about the structure of the regression function $m(x).$ We only make the qualitative assumption that $m$ is a sufficiently **smooth** function, i.e. that $m(t)$ is sufficiently often differentiable at every $t\in(a,b)$.
+In nonparametric regression analysis, we do not make assumptions about the specific structure of the regression function $m(x).$ We only make the *qualitative* assumption that $m$ is a sufficiently **smooth** function, i.e. that $m(t)$ is sufficiently often differentiable at every $t\in(a,b)$.
 :::
 
 
@@ -101,17 +101,20 @@ Some frequently used approaches to nonparametric regression rely on expansions o
 $$
 m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 $$
-where $b_1(x),b_2(x),\dots$ are suitable basis functions. 
-
-
-The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the approximation error 
+where $b_1(x),b_2(x),\dots$ are suitable basis functions
 $$
-\min_\beta \left|m(x)-\sum_{j=1}^p \beta_j b_j(x)\right|^a
+b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
 $$ 
-tends to zero as $p\rightarrow\infty$ (approximation theory) for some $a\geq 1$; typically $a=2$.
 
 
-For a fixed value $p$ an estimator $\hat m_p$ is determined by
+The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the squared approximation error 
+$$
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2
+$$ 
+tends to zero as $p\rightarrow\infty$ (approximation theory).
+
+
+For a fixed value $p,$ an estimator $\hat m_p$ is determined by
 $$
 \hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 $$
@@ -120,11 +123,20 @@ $$
 \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 $$
+with
+$$
+\hat\beta = \left(\begin{matrix}\hat\beta_1\\ \vdots\\\hat\beta_p\end{matrix}\right)=\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top Y,
+$$
+where $\mathbf{X}$ denotes the $(n\times p)$-dimensional matrix with elements 
+$$
+X_{ij}=b_j(X_i),
+$$ 
+$i=1,\dots,n$ and $j=1,\dots,p,$ and $Y=(Y_1,\dots,Y_n)^\top.$
 
 
-Examples are approximations by: 
+Examples of basis functions: 
 
-* polynomials
+* polynomials (monomial basis)
 * spline functions
 * wavelets 
 * Fourier expansions (for periodic functions)
@@ -137,7 +149,7 @@ Examples are approximations by:
 
 **Approach:**
 
-* Monomial basis functions $b_j(x) = x^{j-1}$, $j=1,\dots,p-1.$
+* Monomial basis functions $b_j(x) = x^{j-1}$, $\;\;j=1,\dots,p-1.$
 
 * Choose $p$ (polynomial degree) and fit a polynomial of degree $p-1$:
   $$
@@ -158,8 +170,18 @@ Examples are approximations by:
   \end{align*}
   $$
 
-**Note:** It is only assumed that $m$ is well approximated by a polynomial of degree $p$. That is, there will usually still exist an **approximation error** (i.e., bias of $\hat{m}_p \neq 0$).
+::: {.callout-note}
+It is only assumed that $m(x)$ can be approximated by a polynomial $\hat{m}_p(x)$ of degree $p$ as $p\to\infty.$ However, for a given choice of $p,$ there will usually still exist an **approximation error.** 
 
+Therefore, $\hat{m}_p(x)$ is typically a biased estimator for given values of $p,$ 
+$$
+\begin{align*}
+\operatorname{Bias}(\hat{m}_p(x))\quad & \neq 0\\
+\mathbb{E}(\hat{m}_p(x)) - m(x)   & \neq 0\\
+\end{align*}
+$$
+and for $x\in[a,b].$
+:::
 
 **`R`-Code to Compute Polynomial Regressions:**
 
@@ -172,10 +194,13 @@ set.seed(1)
 # Generate some data: 
 n      <- 100     # Sample Size
 x_vec  <- (1:n)/n # Equidistant X 
+
 # Gaussian iid error term 
 e_vec  <- rnorm(n = n, mean = 0, sd = .5)
+
 # Dependent variable Y
 y_vec  <-  sin(x_vec * 5) + e_vec
+
 # Save all in a dataframe
 db     <-  data.frame(x=x_vec,y=y_vec)
 ```
@@ -188,8 +213,10 @@ Compute the ordinary least squares regressions of different polynomial regressio
 # Fitting of polynomials to the data (parametric models):
 # Constant line fit: (Basis function x^0)
 reg_p1 <- lm(y ~ 1, data=db)
+
 # Basis functions: x^0 + ... + x^3
 reg_p3 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
+
 # Basis functions: x^0 + ... + x^6
 reg_p6 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
 ```
@@ -199,15 +226,24 @@ Take a look at the fits:
 ```{r}
 par(mfrow=c(2,2), mar=c(4.1,4.1,3.1,2.1))
 plot(db, main="Truth")
+# True (usually unknown) regression function
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
-##
+
+## Fit by degree 0 polynomial
 plot(db, main="Degree 0")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 lines(y = predict(reg_p1, newdata = db), 
       x = x_vec, col="red", lwd=1.5)
+
+## Fit by degree 3 polynomial
 plot(db, main="Degree 3")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 lines(y = predict(reg_p3, newdata = db), 
       x = x_vec, col="red", lwd=1.5)
+
+## Fit by degree 6 polynomial
 plot(db, main="Degree 6")
+lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 lines(y = predict(reg_p6, newdata = db), 
       x = x_vec, col="red", lwd=1.5)
 ```
@@ -215,7 +251,7 @@ lines(y = predict(reg_p6, newdata = db),
 
 The quality of the approximation obviously depends on the choice of $p$ which serves as a **smoothing parameter**.
 
-Let's look at the fits of 200 Monte Carlo replications: 
+Let's look at the fits across 200 Monte Carlo replications: 
 
 ```{r}
 m_true    <- sin(x_vec * 5)
@@ -266,6 +302,12 @@ lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ```
 
 
+Using the 200 fits from above, we can approximate the
+
+* squared bias $\left(\operatorname{Bias}(\hat{m}_p(x))\right)^2$ and the 
+* variance $Var(\hat{m}_p(x))$
+
+the point-wise at each $x$-value in `x_vec`.
 
 ```{r}
 ## Pointwise (for each x) biases of \hat{m}(x): 
@@ -312,7 +354,7 @@ Polynomial regression is not very popular in practice. Reasons are numerical pro
 ### Regression Splines
 
 
-The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are **local polynomials**, i.e., so-called **spline functions**.  
+The practical disadvantages of global basis functions (like polynomials), explain the success of **local basis functions**. A frequently used system of basis functions are **local polynomials**, i.e., so-called **spline functions**.  
 
 A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ "knots" 
 $$
@@ -321,7 +363,7 @@ $$
 Different specifications of the knot sequence lead to different splines.
 
 
-More precisely, for a given knot sequence a spline function $s(x)$ of degree $k$ is defined by the following properties:
+More precisely, for a given knot sequence, a spline function $s(x)$ of degree $k$ is defined by the following properties:
 
 * $s(x)$ is a polynomial of degree $k$ in every interval $[\tau_j,\tau_{j+1}]$, i.e.
 $$
@@ -333,7 +375,7 @@ with $s_0,\dots,s_k\in\mathbb{R}.$
 
    * $s(x)$ is a *quadratic spline* if $k=2$
 
-   * $s(x)$ is a *cubic spline*  if $k=3$.
+   * $s(x)$ is a *cubic spline*  if $k=3$ 
 
 * $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
 
@@ -341,7 +383,7 @@ with $s_0,\dots,s_k\in\mathbb{R}.$
 
 In practice, the most frequently used splines are **cubic** spline functions based on an equidistant sequence of $q$ knots, i.e.,
 $$
-\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j.
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j=2,\dots,q-1.
 $$
 
 
@@ -351,13 +393,16 @@ a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b
 $$ 
 is a 
 $$
-p:=q+k-1
+\begin{array}{lccccc}
+p & = & \text{number of knots} &+& \text{polynomial degree} & -\;\;1\\
+& = & q & + & k & -\;\;1
+\end{array}
 $$ 
 dimensional linear function space
 $$
 {\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
 $$
-where $b_{1,k},\dots,b_{p,k}$ are **basis-functions**.
+where $b_{1,k},\dots,b_{p,k}$ denote the **basis-functions**.
 
 
 <!-- Possible basis functions are

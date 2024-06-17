@@ -349,7 +349,7 @@ No specific model assumption
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In nonparametric regression analysis, we do not make assumptions about the structure of the regression function <span class="math inline">\(m(x).\)</span> We only make the qualitative assumption that <span class="math inline">\(m\)</span> is a sufficiently <strong>smooth</strong> function, i.e.&nbsp;that <span class="math inline">\(m(t)\)</span> is sufficiently often differentiable at every <span class="math inline">\(t\in(a,b)\)</span>.</p>
+<p>In nonparametric regression analysis, we do not make assumptions about the specific structure of the regression function <span class="math inline">\(m(x).\)</span> We only make the <em>qualitative</em> assumption that <span class="math inline">\(m\)</span> is a sufficiently <strong>smooth</strong> function, i.e.&nbsp;that <span class="math inline">\(m(t)\)</span> is sufficiently often differentiable at every <span class="math inline">\(t\in(a,b)\)</span>.</p>
 </div>
 </div>
 </section>
@@ -358,19 +358,25 @@ No specific model assumption
 <h2 data-number="4.2" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">4.2</span> Basis function expansions</h2>
 <p>Some frequently used approaches to nonparametric regression rely on expansions of the form <span class="math display">\[
 m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
-\]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions.</p>
-<p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the approximation error <span class="math display">\[
-\min_\beta \left|m(x)-\sum_{j=1}^p \beta_j b_j(x)\right|^a
-\]</span> tends to zero as <span class="math inline">\(p\rightarrow\infty\)</span> (approximation theory) for some <span class="math inline">\(a\geq 1\)</span>; typically <span class="math inline">\(a=2\)</span>.</p>
-<p>For a fixed value <span class="math inline">\(p\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> is determined by <span class="math display">\[
+\]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions <span class="math display">\[
+b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
+\]</span></p>
+<p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the squared approximation error <span class="math display">\[
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2
+\]</span> tends to zero as <span class="math inline">\(p\rightarrow\infty\)</span> (approximation theory).</p>
+<p>For a fixed value <span class="math inline">\(p,\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> is determined by <span class="math display">\[
 \hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 \]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are obtained by ordinary least squares <span class="math display">\[
 \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
-\]</span></p>
-<p>Examples are approximations by:</p>
+\]</span> with <span class="math display">\[
+\hat\beta = \left(\begin{matrix}\hat\beta_1\\ \vdots\\\hat\beta_p\end{matrix}\right)=\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top Y,
+\]</span> where <span class="math inline">\(\mathbf{X}\)</span> denotes the <span class="math inline">\((n\times p)\)</span>-dimensional matrix with elements <span class="math display">\[
+X_{ij}=b_j(X_i),
+\]</span> <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(j=1,\dots,p,\)</span> and <span class="math inline">\(Y=(Y_1,\dots,Y_n)^\top.\)</span></p>
+<p>Examples of basis functions:</p>
 <ul>
-<li>polynomials</li>
+<li>polynomials (monomial basis)</li>
 <li>spline functions</li>
 <li>wavelets</li>
 <li>Fourier expansions (for periodic functions)</li>
@@ -380,7 +386,7 @@ m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 <p><strong>Theoretical Justification:</strong> Every smooth function can be well approximated by a polynomial of sufficiently high degree.</p>
 <p><strong>Approach:</strong></p>
 <ul>
-<li><p>Monomial basis functions <span class="math inline">\(b_j(x) = x^{j-1}\)</span>, <span class="math inline">\(j=1,\dots,p-1.\)</span></p></li>
+<li><p>Monomial basis functions <span class="math inline">\(b_j(x) = x^{j-1}\)</span>, <span class="math inline">\(\;\;j=1,\dots,p-1.\)</span></p></li>
 <li><p>Choose <span class="math inline">\(p\)</span> (polynomial degree) and fit a polynomial of degree <span class="math inline">\(p-1\)</span>: <span class="math display">\[
 \min_{\beta_1,\dots,\beta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p {\beta}_{j} X^{j-1}\right)^2
 \]</span> <span class="math display">\[
@@ -397,52 +403,84 @@ b_{p}(x)&amp;=x^{p-1}
 \end{align*}
 \]</span></p></li>
 </ul>
-<p><strong>Note:</strong> It is only assumed that <span class="math inline">\(m\)</span> is well approximated by a polynomial of degree <span class="math inline">\(p\)</span>. That is, there will usually still exist an <strong>approximation error</strong> (i.e., bias of <span class="math inline">\(\hat{m}_p \neq 0\)</span>).</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is only assumed that <span class="math inline">\(m(x)\)</span> can be approximated by a polynomial <span class="math inline">\(\hat{m}_p(x)\)</span> of degree <span class="math inline">\(p\)</span> as <span class="math inline">\(p\to\infty.\)</span> However, for a given choice of <span class="math inline">\(p,\)</span> there will usually still exist an <strong>approximation error.</strong></p>
+<p>Therefore, <span class="math inline">\(\hat{m}_p(x)\)</span> is typically a biased estimator for given values of <span class="math inline">\(p,\)</span> <span class="math display">\[
+\begin{align*}
+\operatorname{Bias}(\hat{m}_p(x))\quad &amp; \neq 0\\
+\mathbb{E}(\hat{m}_p(x)) - m(x)   &amp; \neq 0\\
+\end{align*}
+\]</span> and for <span class="math inline">\(x\in[a,b].\)</span></p>
+</div>
+</div>
 <p><strong><code>R</code>-Code to Compute Polynomial Regressions:</strong></p>
 <p>Generate some data:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-2_802bb37ecb0da7294f5955eeb37117af">
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-2_85b59f810fb01ecfd5c214de9cb0c6e7">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: </span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Save all in a dataframe</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>db     <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">x=</span>x_vec,<span class="at">y=</span>y_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Save all in a dataframe</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>db     <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">x=</span>x_vec,<span class="at">y=</span>y_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Compute the ordinary least squares regressions of different polynomial regression models:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-3_da309c4843ac8883d521d903240e3420">
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-3_d8f19770fa35f7f665be38b0aba5d3c9">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting of polynomials to the data (parametric models):</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constant line fit: (Basis function x^0)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>reg_p1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>db)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^3</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>reg_p3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^6</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>reg_p6 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">6</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^3</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>reg_p3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^6</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>reg_p6 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">6</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Take a look at the fits:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-4_2b1bdc12aaea550ee2bf34149c4a730a">
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-4_b8e15d1f2f8208f921af8aa0a0880141">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">3.1</span>,<span class="fl">2.1</span>))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Truth"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 0"</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p1, <span class="at">newdata =</span> db), </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 3"</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p3, <span class="at">newdata =</span> db), </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># True (usually unknown) regression function</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 0 polynomial</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 0"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p1, <span class="at">newdata =</span> db), </span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 6"</span>)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p6, <span class="at">newdata =</span> db), </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 3 polynomial</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 3"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p3, <span class="at">newdata =</span> db), </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 6 polynomial</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 6"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p6, <span class="at">newdata =</span> db), </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The quality of the approximation obviously depends on the choice of <span class="math inline">\(p\)</span> which serves as a <strong>smoothing parameter</strong>.</p>
-<p>Let’s look at the fits of 200 Monte Carlo replications:</p>
+<p>Let’s look at the fits across 200 Monte Carlo replications:</p>
 <div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-5_07de00eb5b1e0640149d4da290574075">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_true    <span class="ot">&lt;-</span> <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -493,6 +531,12 @@ b_{p}(x)&amp;=x^{p-1}
 <p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Using the 200 fits from above, we can approximate the</p>
+<ul>
+<li>squared bias <span class="math inline">\(\left(\operatorname{Bias}(\hat{m}_p(x))\right)^2\)</span> and the</li>
+<li>variance <span class="math inline">\(Var(\hat{m}_p(x))\)</span></li>
+</ul>
+<p>the point-wise at each <span class="math inline">\(x\)</span>-value in <code>x_vec</code>.</p>
 <div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-6_89706dd77c2e66a9c2b12929ea43a7bf">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) biases of \hat{m}(x): </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p1) <span class="sc">-</span> m_true</span>
@@ -545,11 +589,11 @@ Remark
 </section>
 <section id="regression-splines" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">4.2.2</span> Regression Splines</h3>
-<p>The practical disadvantages of global basis functions (like polynomials), explain the success of local basis functions. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called <strong>spline functions</strong>.</p>
+<p>The practical disadvantages of global basis functions (like polynomials), explain the success of <strong>local basis functions</strong>. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called <strong>spline functions</strong>.</p>
 <p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> “knots” <span class="math display">\[
 a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b.
 \]</span> Different specifications of the knot sequence lead to different splines.</p>
-<p>More precisely, for a given knot sequence a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
+<p>More precisely, for a given knot sequence, a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
 <ul>
 <li><p><span class="math inline">\(s(x)\)</span> is a polynomial of degree <span class="math inline">\(k\)</span> in every interval <span class="math inline">\([\tau_j,\tau_{j+1}]\)</span>, i.e. <span class="math display">\[
 s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
@@ -557,20 +601,23 @@ s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 <ul>
 <li><p><span class="math inline">\(s(x)\)</span> is called a <em>linear spline</em> if <span class="math inline">\(k=1\)</span></p></li>
 <li><p><span class="math inline">\(s(x)\)</span> is a <em>quadratic spline</em> if <span class="math inline">\(k=2\)</span></p></li>
-<li><p><span class="math inline">\(s(x)\)</span> is a <em>cubic spline</em> if <span class="math inline">\(k=3\)</span>.</p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <em>cubic spline</em> if <span class="math inline">\(k=3\)</span></p></li>
 </ul></li>
 <li><p><span class="math inline">\(s(x)\)</span> is <span class="math inline">\(k-1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.</p></li>
 </ul>
 <p>In practice, the most frequently used splines are <strong>cubic</strong> spline functions based on an equidistant sequence of <span class="math inline">\(q\)</span> knots, i.e., <span class="math display">\[
-\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j.
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j=2,\dots,q-1.
 \]</span></p>
 <p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math display">\[
 a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
 \]</span> is a <span class="math display">\[
-p:=q+k-1
+\begin{array}{lccccc}
+p &amp; = &amp; \text{number of knots} &amp;+&amp; \text{polynomial degree} &amp; -\;\;1\\
+&amp; = &amp; q &amp; + &amp; k &amp; -\;\;1
+\end{array}
 \]</span> dimensional linear function space <span class="math display">\[
 {\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
-\]</span> where <span class="math inline">\(b_{1,k},\dots,b_{p,k}\)</span> are <strong>basis-functions</strong>.</p>
+\]</span> where <span class="math inline">\(b_{1,k},\dots,b_{p,k}\)</span> denote the <strong>basis-functions</strong>.</p>
 
 <!-- Possible basis functions are
 $\tilde{b}_1(x)=1,\tilde{b}_2(x)=x,\dots,\tilde{b}_{k}=x^{k-1},\tilde{b}_{k+1}=(x-\tau_1)^k_+,\dots,
