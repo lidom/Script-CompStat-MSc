@@ -253,3 +253,152 @@ persp(x = x, y = y, z = z, xlab="s", ylab="t", zlab="",
 ```{r, echo=FALSE}
 par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1))
 ```
+
+
+## Functional Principal Component Analysis 
+
+Principal Component Analysis (PCA) is effectively an eigendecomposition of the empirical covariance function $\hat{c}_n(t,s)$
+$$
+\begin{align*}
+\hat{c}_n(t,s)
+&=\sum_{j=1}^n\hat{\lambda}_j\hat{v}_j(t)\hat{v}_j(s),\\[2ex]
+&\approx\sum_{j=1}^{p<n}\hat{\lambda}_j\hat{v}_j(t)\hat{v}_j(s),
+\end{align*}
+$$
+where 
+$$
+\hat{\lambda}_1>\hat{\lambda}_2>\dots \geq 0
+$$ 
+denote the estimated eigenvalues and where 
+$$
+\hat{v}_1(t),\dots,\hat{v}_p(t)
+$$
+denote the estimated principal component (or eigen) functions. 
+
+
+The estimated eigenfunctions are orthonormal, i.e. 
+$$
+\int_a^b\hat{v}_j(t)\hat{v}_k(t)dt=
+\begin{cases}
+1, & j=k \\ 
+0, &j\neq k.
+\end{cases}
+$$
+
+
+In FDA, functional PCA is very prominent since the Estimated Functional Principal Components (EFPC's) $\hat{v}_j$ are very well suited as **basis functions** for $X_i$:
+$$
+\begin{align*}
+X_i(t)
+&=\bar{X}_n(t) + \sum_{j=1}^n\hat{\xi}_{ij}\hat{v}_j(t)\\[2ex]
+&\approx\bar{X}_n(t) + \sum_{j=1}^{p<n}\hat{\xi}_{ij}\hat{v}_j(t),
+\end{align*}
+$$
+where 
+$\hat{\xi}_{ij}$ denote the **estimated scores**
+$$
+\hat{\xi}_{ij}=\int_a^b (X_i(t)-\bar{X}_n(t))\hat{v}_j(t)dt.
+$$
+
+Note that
+$$
+\frac{1}{n}\sum_{i=1}^n\hat{\xi}_{ij} = 0,\quad\text{for all }j=1,2,\dots
+$$
+and that 
+$$
+\frac{1}{n}\sum_{i=1}^n\hat{\xi}_{ij}^2 = \hat{\lambda}_j,\quad\text{for all }j=1,2,\dots
+$$
+
+
+**Example: Computing the Functional PCA in `R`:**
+```{r echo=TRUE, fig.align='center', fig.height=3}
+BSPL.basis <- create.bspline.basis(rangeval=c(0,1), nbasis=200)
+BM.fd      <- smooth.basis(argvals=xx, y=BM.mat, fdParobj=BSPL.basis)
+BM.pca     <- pca.fd(BM.fd$fd, nharm=3)
+par(mfrow=c(1,3), mar=c(2.1, 1.1, 4.1, 1.1))
+persp(xx[slct], xx[slct], BM.cov[slct,slct], xlab="s", ylab="t", zlab="",
+      main="Sample Covariance Function", theta = -40, phi = 20, expand = .75, col = "blue", shade = 1.05)
+invisible(plot(BM.pca$values[1:3], type="o", ylab="", main="Estimated Eigenvalues (p=3)"))
+invisible(plot(BM.pca$harmonics, lwd=3, ylab="", main="Estimated FPC's (p=3)"))
+```
+
+
+::: {.callout-note}
+# Population Quantities
+
+$$
+\begin{align*}
+Cov(X(t),X(s)) = c(t,s)
+&=\sum_{j=1}^n \lambda_j v_j(t) v_j(s),\\[2ex]
+&\approx\sum_{j=1}^{p<n} \lambda_j v_j(t) v_j(s),
+\end{align*}
+$$
+where 
+$$
+\lambda_1 > \lambda_2>\dots \geq 0
+$$ 
+denote the **true eigenvalues** and where 
+$$
+v_1(t),\dots,v_p(t)
+$$
+denote the **true principal component (or eigen) functions.** 
+
+
+The eigenfunctions are orthonormal, i.e. 
+$$
+\int_a^b v_j(t)v_k(t)dt=
+\begin{cases}
+1, & j=k \\ 
+0, &j\neq k.
+\end{cases}
+$$
+
+Eigenfunctions as basis functions
+$$
+\begin{align*}
+X_i(t)
+&=\mathbb{E}(X(t)) + \sum_{j=1}^n \xi_{ij}v_j(t)\\[2ex]
+&\approx\mathbb{E}(X(t)) + \sum_{j=1}^{p<n}\xi_{ij}v_j(t),
+\end{align*}
+$$
+where 
+$\xi_{ij}$ denote the **true scores**
+$$
+\xi_{ij}=\int_a^b (X_i(t)-\mathbb{E}(X(t)) )v_j(t)dt.
+$$
+
+Note that
+$$
+\mathbb{E}(\xi_{ij}) = 0,\quad\text{for all }j=1,2,\dots
+$$
+and that 
+$$
+Var(\xi_{ij}) = \lambda_j,\quad\text{for all }j=1,2,\dots.
+$$
+:::
+
+
+**Best basis property:** The EFPC's are the best basis; i.e. they have the smallest approximation error (in the mean square sense).
+
+
+
+$$
+\begin{align}
+X_i(t)&\approx\bar{X}_n(t) + \sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(t)
+\end{align}
+$$
+```{r echo=TRUE, echo=FALSE, fig.align='center', fig.height=4}
+BM.pca <- pca.fd(BM.fd$fd, nharm=15)
+v_hat_mat  <- eval.fd(xx, BM.pca$harmonics)
+xi_hat_mat <- BM.pca$scores
+
+# FPCA-approx
+X_fpca_fit <- BM.Mean + (xi_hat_mat %*% t(v_hat_mat)) 
+
+# plot
+par(mfrow=c(1,1), mar=c(5.1, 4.1, 2.1, 2.1))
+invisible(plot(BM.fd$fd[1], lwd=1.3, main="Approximation of Brownian Motion (p=15)"))
+lines(y=X_fpca_fit[1,], x=xx, col="red", lwd=1.3)
+legend("topright", lty = c(1,1), col=c("black","red"), legend = c("True","Approx"))
+```
+

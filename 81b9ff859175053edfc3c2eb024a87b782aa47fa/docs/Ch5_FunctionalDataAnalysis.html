@@ -219,6 +219,7 @@ div.csl-indent {
   <ul>
   <li><a href="#from-raw-data-to-functional-data" id="toc-from-raw-data-to-functional-data" class="nav-link active" data-scroll-target="#from-raw-data-to-functional-data"><span class="toc-section-number">5.1</span>  From Raw Data to Functional Data</a></li>
   <li><a href="#sample-mean-and-covariance" id="toc-sample-mean-and-covariance" class="nav-link" data-scroll-target="#sample-mean-and-covariance"><span class="toc-section-number">5.2</span>  Sample Mean and Covariance</a></li>
+  <li><a href="#functional-principal-component-analysis" id="toc-functional-principal-component-analysis" class="nav-link" data-scroll-target="#functional-principal-component-analysis"><span class="toc-section-number">5.3</span>  Functional Principal Component Analysis</a></li>
   </ul>
 </nav>
     </div>
@@ -254,7 +255,7 @@ div.csl-indent {
 <ul>
 <li>Functional Data Analysi (<span class="citation" data-cites="RS_2005_book">Ramsay and Silverman (<a href="#ref-RS_2005_book" role="doc-biblioref">2005</a>)</span>)</li>
 <li>Nonparametric Functional Data Analysis: Theory and Practice (<span class="citation" data-cites="FV2006_book">Ferraty and Vieu (<a href="#ref-FV2006_book" role="doc-biblioref">2006</a>)</span>)</li>
-<li>Hsing and Eubank, 2015;</li>
+<li>Theoretical Foundations of Functional Data Analysis, with an Introduction to Linear Operators (@<span class="citation" data-cites="hsing2015theoretical">Hsing and Eubank (<a href="#ref-hsing2015theoretical" role="doc-biblioref">2015</a>)</span>)</li>
 </ul></li>
 </ul>
 <p><code>R</code>-packages used in this chapter:</p>
@@ -516,11 +517,126 @@ S_n(t)=\sqrt{\frac{1}{n-1}\sum_{i=1}^n\Big(X_i(t)-\bar{X}_n(t)\Big)^2}
 <div class="cell" data-hash="Ch5_FunctionalDataAnalysis_cache/html/unnamed-chunk-10_574c5a73e2e8c7b5cdb4b392eca4312a">
 
 </div>
+</section>
+<section id="functional-principal-component-analysis" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="functional-principal-component-analysis"><span class="header-section-number">5.3</span> Functional Principal Component Analysis</h2>
+<p>Principal Component Analysis (PCA) is effectively an eigendecomposition of the empirical covariance function <span class="math inline">\(\hat{c}_n(t,s)\)</span> <span class="math display">\[
+\begin{align*}
+\hat{c}_n(t,s)
+&amp;=\sum_{j=1}^n\hat{\lambda}_j\hat{v}_j(t)\hat{v}_j(s),\\[2ex]
+&amp;\approx\sum_{j=1}^{p&lt;n}\hat{\lambda}_j\hat{v}_j(t)\hat{v}_j(s),
+\end{align*}
+\]</span> where <span class="math display">\[
+\hat{\lambda}_1&gt;\hat{\lambda}_2&gt;\dots \geq 0
+\]</span> denote the estimated eigenvalues and where <span class="math display">\[
+\hat{v}_1(t),\dots,\hat{v}_p(t)
+\]</span> denote the estimated principal component (or eigen) functions.</p>
+<p>The estimated eigenfunctions are orthonormal, i.e.&nbsp; <span class="math display">\[
+\int_a^b\hat{v}_j(t)\hat{v}_k(t)dt=
+\begin{cases}
+1, &amp; j=k \\
+0, &amp;j\neq k.
+\end{cases}
+\]</span></p>
+<p>In FDA, functional PCA is very prominent since the Estimated Functional Principal Components (EFPC’s) <span class="math inline">\(\hat{v}_j\)</span> are very well suited as <strong>basis functions</strong> for <span class="math inline">\(X_i\)</span>: <span class="math display">\[
+\begin{align*}
+X_i(t)
+&amp;=\bar{X}_n(t) + \sum_{j=1}^n\hat{\xi}_{ij}\hat{v}_j(t)\\[2ex]
+&amp;\approx\bar{X}_n(t) + \sum_{j=1}^{p&lt;n}\hat{\xi}_{ij}\hat{v}_j(t),
+\end{align*}
+\]</span> where <span class="math inline">\(\hat{\xi}_{ij}\)</span> denote the <strong>estimated scores</strong> <span class="math display">\[
+\hat{\xi}_{ij}=\int_a^b (X_i(t)-\bar{X}_n(t))\hat{v}_j(t)dt.
+\]</span></p>
+<p>Note that <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n\hat{\xi}_{ij} = 0,\quad\text{for all }j=1,2,\dots
+\]</span> and that <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n\hat{\xi}_{ij}^2 = \hat{\lambda}_j,\quad\text{for all }j=1,2,\dots
+\]</span></p>
+<p><strong>Example: Computing the Functional PCA in <code>R</code>:</strong></p>
+<div class="cell" data-layout-align="center" data-hash="Ch5_FunctionalDataAnalysis_cache/html/unnamed-chunk-11_8e4c3d8d18b6a5e336ea7ef9bb534b4b">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>BSPL.basis <span class="ot">&lt;-</span> <span class="fu">create.bspline.basis</span>(<span class="at">rangeval=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">nbasis=</span><span class="dv">200</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>BM.fd      <span class="ot">&lt;-</span> <span class="fu">smooth.basis</span>(<span class="at">argvals=</span>xx, <span class="at">y=</span>BM.mat, <span class="at">fdParobj=</span>BSPL.basis)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>BM.pca     <span class="ot">&lt;-</span> <span class="fu">pca.fd</span>(BM.fd<span class="sc">$</span>fd, <span class="at">nharm=</span><span class="dv">3</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">2.1</span>, <span class="fl">1.1</span>, <span class="fl">4.1</span>, <span class="fl">1.1</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">persp</span>(xx[slct], xx[slct], BM.cov[slct,slct], <span class="at">xlab=</span><span class="st">"s"</span>, <span class="at">ylab=</span><span class="st">"t"</span>, <span class="at">zlab=</span><span class="st">""</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">main=</span><span class="st">"Sample Covariance Function"</span>, <span class="at">theta =</span> <span class="sc">-</span><span class="dv">40</span>, <span class="at">phi =</span> <span class="dv">20</span>, <span class="at">expand =</span> .<span class="dv">75</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">shade =</span> <span class="fl">1.05</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">plot</span>(BM.pca<span class="sc">$</span>values[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">type=</span><span class="st">"o"</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main=</span><span class="st">"Estimated Eigenvalues (p=3)"</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">plot</span>(BM.pca<span class="sc">$</span>harmonics, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main=</span><span class="st">"Estimated FPC's (p=3)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ch5_FunctionalDataAnalysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Population Quantities
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{align*}
+Cov(X(t),X(s)) = c(t,s)
+&amp;=\sum_{j=1}^n \lambda_j v_j(t) v_j(s),\\[2ex]
+&amp;\approx\sum_{j=1}^{p&lt;n} \lambda_j v_j(t) v_j(s),
+\end{align*}
+\]</span> where <span class="math display">\[
+\lambda_1 &gt; \lambda_2&gt;\dots \geq 0
+\]</span> denote the <strong>true eigenvalues</strong> and where <span class="math display">\[
+v_1(t),\dots,v_p(t)
+\]</span> denote the <strong>true principal component (or eigen) functions.</strong></p>
+<p>The eigenfunctions are orthonormal, i.e.&nbsp; <span class="math display">\[
+\int_a^b v_j(t)v_k(t)dt=
+\begin{cases}
+1, &amp; j=k \\
+0, &amp;j\neq k.
+\end{cases}
+\]</span></p>
+<p>Eigenfunctions as basis functions <span class="math display">\[
+\begin{align*}
+X_i(t)
+&amp;=\mathbb{E}(X(t)) + \sum_{j=1}^n \xi_{ij}v_j(t)\\[2ex]
+&amp;\approx\mathbb{E}(X(t)) + \sum_{j=1}^{p&lt;n}\xi_{ij}v_j(t),
+\end{align*}
+\]</span> where <span class="math inline">\(\xi_{ij}\)</span> denote the <strong>true scores</strong> <span class="math display">\[
+\xi_{ij}=\int_a^b (X_i(t)-\mathbb{E}(X(t)) )v_j(t)dt.
+\]</span></p>
+<p>Note that <span class="math display">\[
+\mathbb{E}(\xi_{ij}) = 0,\quad\text{for all }j=1,2,\dots
+\]</span> and that <span class="math display">\[
+Var(\xi_{ij}) = \lambda_j,\quad\text{for all }j=1,2,\dots.
+\]</span></p>
+</div>
+</div>
+<p><strong>Best basis property:</strong> The EFPC’s are the best basis; i.e.&nbsp;they have the smallest approximation error (in the mean square sense).</p>
+<p><span class="math display">\[
+\begin{align}
+X_i(t)&amp;\approx\bar{X}_n(t) + \sum_{j=1}^p\hat{\xi}_{ij}\hat{v}_j(t)
+\end{align}
+\]</span></p>
+<div class="cell" data-layout-align="center" data-hash="Ch5_FunctionalDataAnalysis_cache/html/unnamed-chunk-12_038322c60639d8a1779dd0892bcd24cf">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ch5_FunctionalDataAnalysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-FV2006_book" class="csl-entry" role="doc-biblioentry">
 Ferraty, Frédéric, and Philippe Vieu. 2006. <em>Nonparametric Functional Data Analysis: Theory and Practice</em>. Springer.
+</div>
+<div id="ref-hsing2015theoretical" class="csl-entry" role="doc-biblioentry">
+Hsing, Tailen, and Randall Eubank. 2015. <em>Theoretical Foundations of Functional Data Analysis, with an Introduction to Linear Operators</em>. John Wiley &amp; Sons.
 </div>
 <div id="ref-Book_KokoszkaReimherr_2017" class="csl-entry" role="doc-biblioentry">
 Kokoszka, Piotr, and Matthew Reimherr. 2017. <em>Introduction to Functional Data Analysis</em>. Chapman; Hall/CRC.

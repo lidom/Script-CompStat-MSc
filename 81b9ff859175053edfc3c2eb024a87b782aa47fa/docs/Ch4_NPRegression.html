@@ -112,7 +112,6 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Ch5_FunctionalDataAnalysis.html" rel="next">
 <link href="./Ch3_Bootstrap.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -204,11 +203,6 @@ div.csl-indent {
   <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Ch5_FunctionalDataAnalysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Functional Data Analysis</span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>
@@ -219,7 +213,7 @@ div.csl-indent {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">4.1</span>  Introduction</a></li>
-  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">4.2</span>  Basis function expansions</a>
+  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">4.2</span>  Basis Function Expansions</a>
   <ul class="collapse">
   <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="toc-section-number">4.2.1</span>  Polynomial Regression</a></li>
   <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">4.2.2</span>  Regression Splines</a></li>
@@ -361,17 +355,20 @@ No specific model assumption
 </section>
 </section>
 <section id="basis-function-expansions" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">4.2</span> Basis function expansions</h2>
+<h2 data-number="4.2" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">4.2</span> Basis Function Expansions</h2>
 <p>Some frequently used approaches to nonparametric regression rely on expansions of the form <span class="math display">\[
 m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
 \]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions <span class="math display">\[
 b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
 \]</span></p>
-<p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the squared approximation error <span class="math display">\[
-\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2
-\]</span> tends to zero as <span class="math inline">\(p\rightarrow\infty\)</span> (approximation theory).</p>
-<p>For a fixed value <span class="math inline">\(p,\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> is determined by <span class="math display">\[
-\hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
+<p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the squared approximation error tends to zero as <span class="math inline">\(p\rightarrow\infty,\)</span><br>
+<span class="math display">\[
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2\to 0,\quad p\to\infty.
+\]</span> However, for every fixed value <span class="math inline">\(p,\)</span> we typically have that <span class="math display">\[
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2 \neq 0
+\]</span> which leads to a <strong>biased estimation procedure</strong>.</p>
+<p>For a fixed value <span class="math inline">\(p,\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> of <span class="math inline">\(m\)</span> is determined by <span class="math display">\[
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 \]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are obtained by ordinary least squares <span class="math display">\[
 \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 =\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
@@ -380,7 +377,7 @@ b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
 \]</span> where <span class="math inline">\(\mathbf{X}\)</span> denotes the <span class="math inline">\((n\times p)\)</span>-dimensional matrix with elements <span class="math display">\[
 X_{ij}=b_j(X_i),
 \]</span> <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(j=1,\dots,p,\)</span> and <span class="math inline">\(Y=(Y_1,\dots,Y_n)^\top.\)</span></p>
-<p>Examples of basis functions:</p>
+<p>Examples of basis functions <span class="math inline">\(b_1(x),\,b_2(x)\,\dots\)</span>:</p>
 <ul>
 <li>polynomials (monomial basis)</li>
 <li>spline functions</li>
@@ -425,11 +422,13 @@ Note
 \operatorname{Bias}(\hat{m}_p(x))\quad &amp; \neq 0\\
 \mathbb{E}(\hat{m}_p(x)) - m(x)   &amp; \neq 0\\
 \end{align*}
-\]</span> and for <span class="math inline">\(x\in[a,b].\)</span></p>
+\]</span> and <span class="math inline">\(x\in[a,b].\)</span></p>
 </div>
 </div>
 <p><strong><code>R</code>-Code to Compute Polynomial Regressions:</strong></p>
-<p>Generate some data:</p>
+<p>Generate some artificial data, where the usually unknown <span class="math display">\[
+m(x)=\sin(5 x)
+\]</span> with <span class="math inline">\(x\in[0,1]\)</span>:</p>
 <div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-2_85b59f810fb01ecfd5c214de9cb0c6e7">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: </span></span>
@@ -485,7 +484,7 @@ Note
 <p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The quality of the approximation obviously depends on the choice of <span class="math inline">\(p\)</span> which serves as a <strong>smoothing parameter</strong>.</p>
+<p>The quality of the approximation obviously depends on the choice of the model selection parameter <span class="math inline">\(p\)</span> which serves as a <strong>smoothing parameter</strong>.</p>
 <p>Let’s look at the fits across 200 Monte Carlo replications:</p>
 <div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-5_07de00eb5b1e0640149d4da290574075">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_true    <span class="ot">&lt;-</span> <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)</span>
@@ -542,7 +541,7 @@ Note
 <li>squared bias <span class="math inline">\(\left(\operatorname{Bias}(\hat{m}_p(x))\right)^2\)</span> and the</li>
 <li>variance <span class="math inline">\(Var(\hat{m}_p(x))\)</span></li>
 </ul>
-<p>the point-wise at each <span class="math inline">\(x\)</span>-value in <code>x_vec</code>.</p>
+<p>point-wise at each <span class="math inline">\(x\)</span>-value in <code>x_vec</code>.</p>
 <div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-6_89706dd77c2e66a9c2b12929ea43a7bf">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) biases of \hat{m}(x): </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p1) <span class="sc">-</span> m_true</span>
@@ -596,7 +595,7 @@ Remark
 <section id="regression-splines" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">4.2.2</span> Regression Splines</h3>
 <p>The practical disadvantages of global basis functions (like polynomials), explain the success of <strong>local basis functions</strong>. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called <strong>spline functions</strong>.</p>
-<p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> “knots” <span class="math display">\[
+<p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> <strong>knots</strong> <span class="math display">\[
 a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b.
 \]</span> Different specifications of the knot sequence lead to different splines.</p>
 <p>More precisely, for a given knot sequence, a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
@@ -605,15 +604,15 @@ a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b.
 s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 \]</span> with <span class="math inline">\(s_0,\dots,s_k\in\mathbb{R}.\)</span></p>
 <ul>
-<li><p><span class="math inline">\(s(x)\)</span> is called a <em>linear spline</em> if <span class="math inline">\(k=1\)</span></p></li>
-<li><p><span class="math inline">\(s(x)\)</span> is a <em>quadratic spline</em> if <span class="math inline">\(k=2\)</span></p></li>
-<li><p><span class="math inline">\(s(x)\)</span> is a <em>cubic spline</em> if <span class="math inline">\(k=3\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is called a <strong>linear</strong> spline if <span class="math inline">\(k=1\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <strong>quadratic</strong> spline if <span class="math inline">\(k=2\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <strong>cubic</strong> spline if <span class="math inline">\(k=3\)</span></p></li>
 </ul></li>
 <li><p><span class="math inline">\(s(x)\)</span> is <span class="math inline">\(k-1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.</p></li>
 </ul>
 <p>In practice, the most frequently used splines are <strong>cubic</strong> spline functions based on an equidistant sequence of <span class="math inline">\(q\)</span> knots, i.e., <span class="math display">\[
-\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j=2,\dots,q-1.
-\]</span></p>
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}
+\]</span> for all <span class="math inline">\(j=2,\dots,q-1.\)</span></p>
 <p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math display">\[
 a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
 \]</span> is a <span class="math display">\[
@@ -641,25 +640,32 @@ and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
 <section id="b-spline-basis-functions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="b-spline-basis-functions">B-Spline Basis Functions</h4>
 <p>The so-called <strong>B-spline</strong> basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.</p>
-<p>The B-Spline basis functions <span class="math display">\[
-b_{j,k},\quad j=1,\dots,p=q+k-1,
-\]</span> for splines of degree <span class="math inline">\(k\)</span> based on a knot sequence <span class="math display">\[
-a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
-\]</span> are calculated by a recursive procedure: <span class="math display">\[
-b_{j,0}(x)=\left\{ \begin{matrix}  1 &amp; \text{ if } \tau_{j}^*\leq x &lt;\tau_{j+1}^*\\
-0 &amp; \text{ else} \end{matrix}\right.,
-\]</span> for <span class="math inline">\(j=1,\dots,p=q+2k-1.\)</span></p>
-<p>And for <span class="math inline">\(l=1,\dots,k\)</span> <span id="eq-BSplineRecursion"><span class="math display">\[
+<p>The B-spline basis functions for splines of degree <span class="math inline">\(k\)</span> are defined with respect to a given knot sequence <span class="math display">\[
+\underbrace{a=\tau_1}_{\text{lower boundary knot}}\quad {\color{red}&lt;}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}&lt;}\quad\underbrace{\tau_q=b}_{\text{upper boundary knot}}.
+\]</span></p>
+<p>To construct the B-spline basis functions, one augments the knot sequences by repeating each of the boundary knots <span class="math inline">\(k+1\)</span> times: <span class="math display">\[
+\underbrace{\tau_{-(k-1)}=\dots=\tau_0=\tau_1}_{\text{$k+1$ lower boundary knots}}\quad {\color{red}&lt;}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}&lt;}\quad\underbrace{\tau_q=\tau_{q+1}=\dots=\tau_{q+k}}_{\text{$k+1$ upper boundary knots}}.
+\]</span> Let <span class="math display">\[
+\tau^\ast_{1}, \dots,\tau^\ast_{q+2k}
+\]</span> denote the augmented knot sequence after resetting index to start at <span class="math inline">\(1.\)</span></p>
+<p>The spline basis functions are then calculated by a recursive procedure. The initial level are piece-wise constant functions <span id="eq-BSplineRecursion1"><span class="math display">\[
+b_{j,0}(x)=\left\{
+\begin{matrix}  
+1 &amp; \text{ if } \tau_{j}^*\leq x &lt;\tau_{j+1}^*\\
+0 &amp; \text{ else}
+\end{matrix}
+\right.,
+\tag{4.1}\]</span></span> for <span class="math inline">\(j=1,\dots,q+2k,\)</span> and <span class="math inline">\(x\in [a,b].\)</span> For <span class="math inline">\(l=1,\dots,k\)</span> the recursive procedure is defined by <span id="eq-BSplineRecursion2"><span class="math display">\[
 b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 \frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
-\tag{4.1}\]</span></span> <span class="math inline">\(j=1,\dots,q+k-1\)</span>, and <span class="math inline">\(x\in [a,b],\)</span> where</p>
-<p>where <span class="math inline">\(\tau_j^\ast\)</span> denotes the augmented knot sequence:</p>
-<ul>
-<li><span class="math inline">\(\tau_1^*=\dots=\tau_{k+1}^*=\tau_1\)</span> (<span class="math inline">\(k+1\)</span> repetitions of the left boundary knot)</li>
-<li><span class="math inline">\(\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q\)</span> (<span class="math inline">\(q-2\)</span> interior knots)</li>
-<li><span class="math inline">\(\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q\)</span> (<span class="math inline">\(k+1\)</span> repetitions of the right boundary knot)</li>
-</ul>
-<p>Note: <a href="#eq-BSplineRecursion">Equation&nbsp;<span>4.1</span></a> is understood that if the denominator is 0, then the function is defined to be 0.</p>
+\tag{4.2}\]</span></span> <span class="math inline">\(j=1,\dots,q+2k\)</span>, and <span class="math inline">\(x\in [a,b].\)</span></p>
+<p><strong>Note:</strong> The definitions in <a href="#eq-BSplineRecursion1">Equation&nbsp;<span>4.1</span></a> and <a href="#eq-BSplineRecursion2">Equation&nbsp;<span>4.2</span></a> are understood that if the denominator is 0, then the function is defined to be 0. The remaining non-degenerated basis functions are then the <span class="math display">\[
+b_{j,k},\quad j=1,\dots,p=q+k-1,
+\]</span> B-spline basis functions.</p>
+<!-- **Note:** At level $l=1,$ the basis functions are piece-wise linear functions; at level $l=2,$ the basis functions are piece-wise quadratic functions; at level $l=3,$ the basis functions are piece-wise cubic functions. -->
+<!-- * $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ ($k+1$ repetitions of the left boundary knot)
+* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) 
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ ($k+1$ repetitions of the right boundary knot) -->
 <p><strong><code>R</code>-Code to Compute B-Spline Basis Functions:</strong></p>
 <p>The following <code>R</code> code generates<br>
 <span class="math display">\[
@@ -714,7 +720,7 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point <span class="math inline">\(x\)</span> is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points.</p>
-<p>Basis functions are positive only over at most <span class="math inline">\(k+1\)</span> intervals and zero over the remaining intervals. This compact support property is important for computational efficiency since the effort required is proportional to <span class="math inline">\(p\)</span> as a consequence, rather than to <span class="math inline">\(p^2\)</span> for basis functions not having this local support property.</p>
+<p>Basis functions are positive only over at most <span class="math inline">\(k+1\)</span> intervals and zero over the remaining intervals. This <strong>compact support property</strong> is important for computational efficiency. <!-- since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property. --></p>
 </div>
 </div>
 </section>
@@ -760,7 +766,7 @@ X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p.
 \]</span></p>
 <p>The matrix <span class="math display">\[
 S_p = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
-\]</span> is referred to as the <strong>smoothing matrix</strong> and the number of B-spline basis function <span class="math inline">\(p\)</span> is referred to as the <strong>smoothing parameter</strong>.</p>
+\]</span> is referred to as the <strong>smoothing matrix</strong>.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1018,7 +1024,7 @@ o_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
 </div>
 <p>In the following we focus on the <strong>MASE</strong> which has the advantage that we can use matrix algebra.</p>
 <p>First, we look at the local bias of <span class="math inline">\(\hat{m}_p(X_i)\)</span> at a single evaluation point <span class="math inline">\(X_i:\)</span> <span class="math display">\[
-\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m_p(X_i),
+\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m(X_i),
 \]</span> where <span class="math display">\[
 \begin{align*}
   \mathbb{E}_\varepsilon(\hat m_p(X_i))&amp;=\mathbb{E}_\varepsilon\Big(\sum_{j=1}^p \hat{\beta}_j b_{j,k}(X_i)\Big)\\
@@ -1136,7 +1142,7 @@ Trace-Trick
 \displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&amp;=O_p(p^{-4})\\[2ex]
 \displaystyle Var_\varepsilon(\hat m_p)&amp;= \sigma^2\frac{p}{n},
 \end{align*}
-\tag{4.2}\]</span></span> where <span class="math inline">\(p=q+2\)</span> is the number of basis functions (i.e.&nbsp;the smoothing parameter).</p>
+\tag{4.3}\]</span></span> where <span class="math inline">\(p=q+2\)</span> is the number of basis functions (i.e.&nbsp;the smoothing parameter).</p>
 <p>This leads to the classical <strong>trade-off between (average) squared bias and (average) variance</strong> that is typical for nonparametric statistics:</p>
 <ul>
 <li><span class="math inline">\(p\)</span> small:<br> <span class="math inline">\(\displaystyle Var_\varepsilon(\hat m_p)\)</span> is small, but squared bias <span class="math inline">\(\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2\)</span> is large.</li>
@@ -1145,7 +1151,7 @@ Trace-Trick
 <!-- p^-4 = p/n
      p^-5 = 1/n
      p    = (1/n)^-1/5  -->
-<p>From <a href="#eq-BiasSqVar">Equation&nbsp;<span>4.2</span></a> we have that <span class="math display">\[
+<p>From <a href="#eq-BiasSqVar">Equation&nbsp;<span>4.3</span></a> we have that <span class="math display">\[
 \begin{align*}
 \operatorname{MASE}(\hat m_{p})
 &amp;= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
@@ -1260,7 +1266,7 @@ p_{opt}
 \]</span> <strong>Motivation:</strong> The average residual sum of squares are given by <span id="eq-ARSS"><span class="math display">\[
 \operatorname{ARSS}(p):=\frac{1}{n}\sum_{i=1}^n\biggl( Y_i-
 \hat{m}_{p}(X_i)\biggr)^2
-\tag{4.3}\]</span></span> which allows us to rewrite <span class="math inline">\(\operatorname{GCV}(p)\)</span> as <span class="math display">\[
+\tag{4.4}\]</span></span> which allows us to rewrite <span class="math inline">\(\operatorname{GCV}(p)\)</span> as <span class="math display">\[
 \operatorname{GCV}(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\operatorname{ARSS}(p)
 \]</span> Some lengthy derivations show that the expected value of <span class="math inline">\(\operatorname{ARSS}(p)\)</span> is <span class="math display">\[
 \begin{align*}
@@ -1297,8 +1303,8 @@ Over-fitting
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that in econometrics (where we assumed to know the model apart from the model parameters) we used <a href="#eq-ARSS">Equation&nbsp;<span>4.3</span></a> as an estimator for <span class="math inline">\(\sigma^2.\)</span></p>
-<p>In non-parametrics, where we do not assume to know the model, but try to learn the model form the data, <a href="#eq-ARSS">Equation&nbsp;<span>4.3</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased for each <span class="math inline">\(p\)</span>.</p>
+<p>Note that in econometrics (where we assumed to know the model apart from the model parameters) we used <a href="#eq-ARSS">Equation&nbsp;<span>4.4</span></a> as an estimator for <span class="math inline">\(\sigma^2.\)</span></p>
+<p>In non-parametrics, where we do not assume to know the model, but try to learn the model form the data, <a href="#eq-ARSS">Equation&nbsp;<span>4.4</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased for each <span class="math inline">\(p\)</span>.</p>
 <p>In fact, for a large enough <span class="math inline">\(p,\)</span> the regression function <span class="math inline">\(\hat{m}_{p}\)</span> becomes so flexible that <span class="math inline">\(Y_i\approx \hat{m}_{p}(X_i)\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span> such that <span class="math inline">\(\operatorname{ARSS}(p)\approx 0.\)</span></p>
 <p>However, an estimate <span class="math inline">\(\hat{m}_{p}\)</span> for which <span class="math inline">\(\operatorname{ARSS}(p)\approx 0\)</span> typically has fitted the noise component <span class="math inline">\(\varepsilon\)</span>—additionally to the signal component <span class="math inline">\(m\)</span>. Such an over-fitted estimate <span class="math inline">\(\hat{m}_{p}\)</span> will typically perform very poorly when used to predict a <em>new</em> <span class="math inline">\(Y_{new}\)</span> for a given new <span class="math inline">\(X_{new}\)</span> by <span class="math inline">\(\hat{Y}_{new} = \hat{m}_{p}(X_{new}),\)</span> i.e. <span class="math display">\[
 Y_{new}\not\approx \hat{m}_{p}(X_{new}).
@@ -1633,9 +1639,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Ch5_FunctionalDataAnalysis.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Functional Data Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

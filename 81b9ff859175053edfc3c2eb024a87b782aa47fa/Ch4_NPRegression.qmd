@@ -95,7 +95,7 @@ In nonparametric regression analysis, we do not make assumptions about the speci
 :::
 
 
-## Basis function expansions
+## Basis Function Expansions
 
 Some frequently used approaches to nonparametric regression rely on expansions of the form
 $$
@@ -107,16 +107,20 @@ b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
 $$ 
 
 
-The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the squared approximation error 
+The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the squared approximation error tends to zero as $p\rightarrow\infty,$  
 $$
-\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2\to 0,\quad p\to\infty. 
 $$ 
-tends to zero as $p\rightarrow\infty$ (approximation theory).
-
-
-For a fixed value $p,$ an estimator $\hat m_p$ is determined by
+However, for every fixed value $p,$ we typically have that 
 $$
-\hat m(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
+\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2 \neq 0
+$$ 
+which leads to a **biased estimation procedure**.
+
+
+For a fixed value $p,$ an estimator $\hat m_p$ of $m$ is determined by
+$$
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
 $$
 where the coefficients  $\hat\beta_j$ are obtained by ordinary least squares
 $$
@@ -134,7 +138,7 @@ $$
 $i=1,\dots,n$ and $j=1,\dots,p,$ and $Y=(Y_1,\dots,Y_n)^\top.$
 
 
-Examples of basis functions: 
+Examples of basis functions $b_1(x),\,b_2(x)\,\dots$: 
 
 * polynomials (monomial basis)
 * spline functions
@@ -180,12 +184,16 @@ $$
 \mathbb{E}(\hat{m}_p(x)) - m(x)   & \neq 0\\
 \end{align*}
 $$
-and for $x\in[a,b].$
+and $x\in[a,b].$
 :::
 
 **`R`-Code to Compute Polynomial Regressions:**
 
-Generate some data:
+Generate some artificial data, where the usually unknown 
+$$
+m(x)=\sin(5 x)
+$$ 
+with $x\in[0,1]$:
 
 ```{r}
 #| eval: true
@@ -249,7 +257,7 @@ lines(y = predict(reg_p6, newdata = db),
 ```
 
 
-The quality of the approximation obviously depends on the choice of $p$ which serves as a **smoothing parameter**.
+The quality of the approximation obviously depends on the choice of the model selection parameter $p$ which serves as a **smoothing parameter**.
 
 Let's look at the fits across 200 Monte Carlo replications: 
 
@@ -307,7 +315,7 @@ Using the 200 fits from above, we can approximate the
 * squared bias $\left(\operatorname{Bias}(\hat{m}_p(x))\right)^2$ and the 
 * variance $Var(\hat{m}_p(x))$
 
-the point-wise at each $x$-value in `x_vec`.
+point-wise at each $x$-value in `x_vec`.
 
 ```{r}
 ## Pointwise (for each x) biases of \hat{m}(x): 
@@ -356,7 +364,7 @@ Polynomial regression is not very popular in practice. Reasons are numerical pro
 
 The practical disadvantages of global basis functions (like polynomials), explain the success of **local basis functions**. A frequently used system of basis functions are **local polynomials**, i.e., so-called **spline functions**.  
 
-A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ "knots" 
+A spline function is a *piece wise* polynomial function. They are defined with respect to a pre-specified sequence of $q$ **knots**
 $$
 a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b.
 $$ 
@@ -371,11 +379,11 @@ s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 $$
 with $s_0,\dots,s_k\in\mathbb{R}.$
 
-   * $s(x)$ is called a *linear spline* if $k=1$
+   * $s(x)$ is called a **linear** spline if $k=1$
 
-   * $s(x)$ is a *quadratic spline* if $k=2$
+   * $s(x)$ is a **quadratic** spline if $k=2$
 
-   * $s(x)$ is a *cubic spline*  if $k=3$ 
+   * $s(x)$ is a **cubic** spline  if $k=3$ 
 
 * $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
 
@@ -383,8 +391,9 @@ with $s_0,\dots,s_k\in\mathbb{R}.$
 
 In practice, the most frequently used splines are **cubic** spline functions based on an equidistant sequence of $q$ knots, i.e.,
 $$
-\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}\quad\text{for all } j=2,\dots,q-1.
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}
 $$
+for all $j=2,\dots,q-1.$
 
 
 The space of all spline functions of degree $k$ defined with respect to a given knot sequence
@@ -424,37 +433,53 @@ and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
 
 The so-called **B-spline** basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.
 
-
-The B-Spline basis functions 
+The B-spline basis functions for splines of degree $k$ are defined with respect to a given knot sequence
 $$
-b_{j,k},\quad j=1,\dots,p=q+k-1,
+\underbrace{a=\tau_1}_{\text{lower boundary knot}}\quad {\color{red}<}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}<}\quad\underbrace{\tau_q=b}_{\text{upper boundary knot}}.
 $$ 
-for splines of degree $k$ based on a knot sequence 
-$$
-a=\tau_1<\tau_2\leq\dots\leq \tau_{q-1}<\tau_q=b
-$$ 
-are calculated by a recursive procedure:
-$$
-b_{j,0}(x)=\left\{ \begin{matrix}  1 & \text{ if } \tau_{j}^*\leq x <\tau_{j+1}^*\\
-0 & \text{ else} \end{matrix}\right., 
-$$
-for $j=1,\dots,p=q+2k-1.$
 
+To construct the B-spline basis functions, one augments the knot sequences by repeating each of the boundary knots $k+1$ times:
+$$
+\underbrace{\tau_{-(k-1)}=\dots=\tau_0=\tau_1}_{\text{$k+1$ lower boundary knots}}\quad {\color{red}<}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}<}\quad\underbrace{\tau_q=\tau_{q+1}=\dots=\tau_{q+k}}_{\text{$k+1$ upper boundary knots}}.
+$$
+Let 
+$$
+\tau^\ast_{1}, \dots,\tau^\ast_{q+2k}
+$$
+denote the augmented knot sequence after resetting index to start at $1.$ 
 
-And for $l=1,\dots,k$
+The spline basis functions are then calculated by a recursive procedure. The initial level are piece-wise constant functions
+$$
+b_{j,0}(x)=\left\{
+\begin{matrix}  
+1 & \text{ if } \tau_{j}^*\leq x <\tau_{j+1}^*\\
+0 & \text{ else}
+\end{matrix}
+\right., 
+$${#eq-BSplineRecursion1}
+for $j=1,\dots,q+2k,$ and $x\in [a,b].$ For $l=1,\dots,k$ the recursive procedure is defined by
 $$
 b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
 \frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
-$${#eq-BSplineRecursion}
-$j=1,\dots,q+k-1$, and $x\in [a,b],$ where 
+$${#eq-BSplineRecursion2}
+$j=1,\dots,q+2k$, and $x\in [a,b].$ 
 
-where $\tau_j^\ast$ denotes the augmented knot sequence: 
+**Note:** The definitions in @eq-BSplineRecursion1 and  @eq-BSplineRecursion2 are understood that if the denominator is 0, then the function is defined to be 0. The remaining non-degenerated basis functions are then the 
+$$
+b_{j,k},\quad j=1,\dots,p=q+k-1,
+$$ 
+B-spline basis functions. 
 
-* $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ ($k+1$ repetitions of the left boundary knot)
+<!-- **Note:** At level $l=1,$ the basis functions are piece-wise linear functions; at level $l=2,$ the basis functions are piece-wise quadratic functions; at level $l=3,$ the basis functions are piece-wise cubic functions. -->
+
+
+
+
+<!-- * $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ ($k+1$ repetitions of the left boundary knot)
 * $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) 
-* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ ($k+1$ repetitions of the right boundary knot)
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ ($k+1$ repetitions of the right boundary knot) -->
 
-Note: @eq-BSplineRecursion is understood that if the denominator is 0, then the function is defined to be 0. 
+
 
 **`R`-Code to Compute B-Spline Basis Functions:**
 
@@ -463,6 +488,7 @@ $$
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
 $$ 
 cubic ($k=3$) B-spline basis functions. Let's take a look at them:
+
 
 ```{r}
 library("splines2")
@@ -500,7 +526,8 @@ dim(X_mat_degree3)
 ::: {.callout-note}
 The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point $x$ is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points. 
 
-Basis functions are positive only over at most $k+1$ intervals and zero over the remaining intervals. This compact support property is important for computational efficiency since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property.
+Basis functions are positive only over at most $k+1$ intervals and zero over the remaining intervals. This **compact support property** is important for computational efficiency. 
+<!-- since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property. -->
 :::
 
 #### Regression Splines {-}
@@ -569,7 +596,7 @@ The matrix
 $$
 S_p = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
 $$ 
-is referred to as the **smoothing matrix** and the number of B-spline basis function $p$ is referred to as the **smoothing parameter**. 
+is referred to as the **smoothing matrix**. 
 
 
 ::: {.callout-note}
@@ -835,7 +862,7 @@ In the following we focus on the **MASE** which has the advantage that we can us
 
 First, we look at the local bias of $\hat{m}_p(X_i)$ at a single evaluation point $X_i:$
 $$
-\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m_p(X_i),
+\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m(X_i),
 $$
 where 
 $$
