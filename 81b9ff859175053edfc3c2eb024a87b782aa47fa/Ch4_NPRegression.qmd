@@ -109,11 +109,11 @@ $$
 
 The basis functions $b_1,b_2,\dots$ have to be chosen in such a way that for *any possible* smooth function $m$ the squared approximation error tends to zero as $p\rightarrow\infty,$  
 $$
-\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2\to 0,\quad p\to\infty. 
+\min_{\vartheta_1,\dots,\vartheta_p} \left(m(x)-\sum_{j=1}^p \vartheta_j b_j(x)\right)^2\to 0,\quad p\to\infty. 
 $$ 
 However, for every fixed value $p,$ we typically have that 
 $$
-\min_{\beta_1,\dots,\beta_p} \left(m(x)-\sum_{j=1}^p \beta_j b_j(x)\right)^2 \neq 0
+\min_{\vartheta_1,\dots,\vartheta_p} \left(m(x)-\sum_{j=1}^p \vartheta_j b_j(x)\right)^2 \neq 0
 $$ 
 which leads to a **biased estimation procedure**.
 
@@ -125,7 +125,7 @@ $$
 where the coefficients  $\hat\beta_j$ are obtained by ordinary least squares
 $$
 \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
-=\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
+=\min_{\vartheta_1,\dots,\vartheta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \vartheta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
 $$
 with
 $$
@@ -157,7 +157,7 @@ Examples of basis functions $b_1(x),\,b_2(x)\,\dots$:
 
 * Choose $p$ (polynomial degree) and fit a polynomial of degree $p-1$:
   $$
-  \min_{\beta_1,\dots,\beta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p {\beta}_{j} X^{j-1}\right)^2
+  \min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X^{j-1}\right)^2
   $$
   $$
   \Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p-1}
@@ -177,15 +177,15 @@ Examples of basis functions $b_1(x),\,b_2(x)\,\dots$:
 ::: {.callout-note}
 It is only assumed that $m(x)$ can be approximated by a polynomial $\hat{m}_p(x)$ of degree $p$ as $p\to\infty.$ However, for a given choice of $p,$ there will usually still exist an **approximation error.** 
 
-Therefore, $\hat{m}_p(x)$ is typically a biased estimator for given values of $p,$ 
+Therefore, $\hat{m}_p(x)$ is typically a biased estimator for given values of $p,$ and a given value of $x\in[a,b],$
 $$
 \begin{align*}
 \operatorname{Bias}(\hat{m}_p(x))\quad & \neq 0\\
-\mathbb{E}(\hat{m}_p(x)) - m(x)   & \neq 0\\
+\mathbb{E}(\hat{m}_p(x)) - m(x)        & \neq 0.
 \end{align*}
 $$
-and $x\in[a,b].$
 :::
+
 
 **`R`-Code to Compute Polynomial Regressions:**
 
@@ -373,7 +373,7 @@ Different specifications of the knot sequence lead to different splines.
 
 More precisely, for a given knot sequence, a spline function $s(x)$ of degree $k$ is defined by the following properties:
 
-* $s(x)$ is a polynomial of degree $k$ in every interval $[\tau_j,\tau_{j+1}]$, i.e.
+* $s(x)$ is a polynomial of degree $k$ (i.e. of order[^1] $k+1$) in every interval $[\tau_j,\tau_{j+1}]$, i.e.
 $$
 s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
 $$
@@ -387,7 +387,7 @@ with $s_0,\dots,s_k\in\mathbb{R}.$
 
 * $s(x)$ is  $k-1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.
 
-
+[^1]: The **degree** $k$ of a polynomial $s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k}$ refers to the highest exponent. The **order** $k+1$ of a polynomial refers to the number coefficients $(s_0,\dots,s_k).$
 
 In practice, the most frequently used splines are **cubic** spline functions based on an equidistant sequence of $q$ knots, i.e.,
 $$
@@ -534,8 +534,8 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise linear ($k=1$) functions with local support over at most $k+1=1+1=2$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s(x)&\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
-s(x)&= \sum_{j=1}^{7}b_{j,1}
+s &\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x)&= \sum_{j=1}^{7}\vartheta_j b_{j,1}(0)
 \end{align*}
 $$ 
 is $k-1=1-1=0$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>
@@ -585,8 +585,8 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise quadratic ($k=2$) functions with local support over at most $k+1=2+1=3$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s(x)&\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
-s(x)&= \sum_{j=1}^{8}b_{j,1}
+s&\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x)&= \sum_{j=1}^{8}\vartheta_j b_{j,1}(x)
 \end{align*}
 $$ 
 is $k-1=2-1=1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>
@@ -637,8 +637,8 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise cubic ($k=3$) functions with local support over at most $k+1=3+1=4$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s(x)&\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
-s(x)&= \sum_{j=1}^{9}b_{j,1}
+s &\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x) &= \sum_{j=1}^{9} \vartheta_j b_{j,1}(x)
 \end{align*}
 $$ 
 is $k-1=3-1=2$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>

@@ -2635,7 +2635,7 @@ for each $n.$
 Note that for a small $0<\varepsilon<1,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n,$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x^{n^\ast}\to 1$ as $x\to 1.$ 
 
 
-<!--
+
 #### Solutions of Exercise 3. {-}
 
 ##### (a) Part 1: {-}
@@ -2666,7 +2666,7 @@ $$
 Usually, we do not know $\sigma$ and have to estimate this parameter using a consistent estimator such as $s^2=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, where $s\to_p\sigma$ as $n\to\infty$.
 
 
-Then by Slusky's Theorem (allows to combine "$\to_d$" and "$\to_p$" statements) we have that: 
+Then by Slusky's Theorem (allows to combine $\to_d$ and $\to_p$-statements) we have that: 
 $$
 \begin{array}{rlc}
 \sqrt{n}\left(\frac{\bar{X}_n-\mu}{s}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
@@ -2798,7 +2798,7 @@ abline(v=mean,col="blue", lwd=1.5)
 ```
 
 
-##### (b) Standard bootstrap confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
+##### (b) Basic Bootstrap Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 Let's generate an iid random sample $S_n$ with $X_i\sim\chi^2_1$ and the corresponding estimate $\bar X_n$:
@@ -2816,19 +2816,22 @@ S_n  <- rchisq(n, df=df)
 ```
 
 
-
 The **standard bootstrap confidence interval** is given by (see lecture script):
 $$
-\left[2\bar{X}_n - \hat{t}_{1-\alpha/2}, 2\bar{X}_n - \hat{t}_{\alpha/2}\right],
+\left[2\bar{X}_n - \hat{q}^\ast_{n,1-\alpha/2}, 2\bar{X}_n - \hat{q}^\ast_{n,\alpha/2}\right],
 $$
-where $\hat{t}_{\alpha/2}$ and $\hat{t}_{1-\alpha/2}$ denote the $(\alpha/2)$ and $(1-\alpha/2)$-quantiles of the conditional distribution of $\bar{X}_n^\ast$ given $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}$, i.e., of the **bootrap distribution** of $\bar{X}_n^\ast$. 
+where $\bar{X}_n$ denotes the estimate computed from the original sample, and $\hat{q}^\ast_{\alpha/2}$ and $\hat{q}^\ast_{1-\alpha/2}$ denote the $(\alpha/2)$ and $(1-\alpha/2)$-quantiles of the conditional distribution of $\bar{X}_n^\ast$ given $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}.$ 
 
-In the following we approximate the bootstrap distribution of $\bar{X}_n^\ast$ using $m=1500$ boostrap resamplings, compute the quantiles $\hat{t}_{\alpha/2}$ and $\hat{t}_{1-\alpha/2}$, and plot all of this:
+In the following we first generate the $m$ bootstrap realizations 
+$$
+\bar{X}_{n,1}^\ast,\dots,\bar{X}_{n,m}^\ast,
+$$ 
+compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2},$ and plot all of this:
 
 ```{r, fig.margin = TRUE,fig.width=4.5, fig.height=3.5}
 ## Bootstr-Setup:
 alpha            <- 0.05
-n.Bootsrap.draws <- 15#1500
+n.Bootsrap.draws <- 1500
 
 ## Generate bootstap samples:
 Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
@@ -2840,20 +2843,20 @@ for(j in 1:n.Bootsrap.draws){
 X.bar.bootstr.vec <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
 
 ## Quantile of the bootstr.-distribution of \bar{X}_n^*:
-t.1 <- quantile(X.bar.bootstr.vec, probs = 1-alpha/2)
-t.2 <- quantile(X.bar.bootstr.vec, probs = alpha/2)
+q.1 <- quantile(X.bar.bootstr.vec, probs = 1-alpha/2)
+q.2 <- quantile(X.bar.bootstr.vec, probs = alpha/2)
 ## plot
 plot(ecdf(X.bar.bootstr.vec), xlab="", ylab="",
      main=expression(paste("Bootstr.-Distr. of ",bar(X)[n]^{" *"})))
-abline(v=c(t.1,t.2),col="red")
+abline(v=c(q.1,q.2),col="red")
 ```
 
+Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:
 
-Using our preparatory work above, the standard bootstrap confidence interval can be computed as following:
 ```{r}
 ## Basic Bootstrap Confidence Interval:
-CI.Basic.Bootstr.lo <- 2*X.bar - t.1
-CI.Basic.Bootstr.up <- 2*X.bar - t.2
+CI.Basic.Bootstr.lo <- 2*X.bar - q.1
+CI.Basic.Bootstr.up <- 2*X.bar - q.2
 
 ## Re-labeling of otherwise false names:
 attr(CI.Basic.Bootstr.lo, "names") <- c("2.5%")
@@ -2870,7 +2873,7 @@ n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
-n.Bootsrap.draws <- 15#1500
+n.Bootsrap.draws <- 1500
 
 ## MC-Setup:
 set.seed(123)
@@ -2891,11 +2894,11 @@ for(b in 1:B){
   }
   X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
   ## (1-alpha/2)-quantile:
-  t.1.MC <- quantile(X.bar.bootstr.MC.vec, probs = 1-alpha/2)
-  t.2.MC <- quantile(X.bar.bootstr.MC.vec, probs = alpha/2)
+  q.1.MC <- quantile(X.bar.bootstr.MC.vec, probs = 1-alpha/2)
+  q.2.MC <- quantile(X.bar.bootstr.MC.vec, probs = alpha/2)
   ## Basic Bootstrap CIs:
-  CI.Basic.Bstr.lo.vec[b] <- 2*X.bar.MC - t.1.MC
-  CI.Basic.Bstr.up.vec[b] <- 2*X.bar.MC - t.2.MC
+  CI.Basic.Bstr.lo.vec[b] <- 2*X.bar.MC - q.1.MC
+  CI.Basic.Bstr.up.vec[b] <- 2*X.bar.MC - q.2.MC
 }
 
 ## How often does the classic CI cover the true mean?
@@ -2925,20 +2928,26 @@ abline(v=mean,col="blue", lwd=1.5)
 ```
 
 
-##### (c) Bootstrap-$t$ confidence interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
+##### (c) Bootstrap-$t$ Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
-The bootstrap-t confidence interval is given by (see lecture script):
+The bootstrap-$t$ confidence interval is given by (see lecture script):
 $$
-\left[\bar{X}_n-\hat{q}_{1-\alpha/2}\hat\sigma,  \bar{X}_n-\hat{q}_{\alpha/2}\hat\sigma\right],
+\left[
+  \bar{X}_n-\hat{q}^\ast_{n,1-\alpha/2}\left(\frac{s_n}{\sqrt{n}}\right),  
+  \bar{X}_n-\hat{q}^\ast_{n,\alpha/2}  \left(\frac{s_n}{\sqrt{n}}\right)
+\right],
 $$
-where $\hat\sigma=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, and where $\hat{q}_{\alpha/2}$ and $\hat{q}_{1-\alpha/2}$ denote the $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles of the bootstrap distribution of: 
+where $\bar{X}_n$ and $s_n=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$ are computed from the original sample, and where $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2}$ denote the empirical $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles compute from the bootstrap estimates: 
 $$
-\frac{\bar{X}_n^\ast-\bar{X}_n}{\hat\sigma^\ast}.
+\sqrt{n}\frac{\bar{X}_{n,j}^\ast-\bar{X}_n}{s_{n,j}^\ast}\quad j=1,\dots,m.
 $$
 
-
-In the following we approximate the bootstrap distribution of $(\bar{X}_n^\ast-\bar{X}_n)/\hat\sigma^\ast$, compute the quantiles $\hat{q}_{\alpha/2}$ and $\hat{q}_{1-\alpha/2}$, and plot all of this:
+In the following we first generate the $m$ bootstrap realizations 
+$$
+\sqrt{n}\frac{\bar{X}_{n,j}^\ast-\bar{X}_n}{s_{n,j}^\ast}\quad j=1,\dots,m,
+$$
+compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2}$, and plot all of this:
 
 ```{r, fig.margin = TRUE, fig.width=4.5, fig.height=3.5}
 ## Setup:
@@ -2955,7 +2964,7 @@ sd.hat  <- sd(S_n)
 
 ## Bootstr-Setup:
 alpha            <- 0.05
-n.Bootsrap.draws <- 15#1500
+n.Bootsrap.draws <- 1500
 
 ## Generate bootstap samples:
 Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
@@ -2967,24 +2976,24 @@ for(j in 1:n.Bootsrap.draws){
 X.bar.bootstr.vec    <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
 sd.bootstr.vec       <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = sd)
 ##
-Bootstr.t.sample.vec <- (X.bar.bootstr.vec - X.bar)/sd.bootstr.vec
+Bootstr.t.sample.vec <- sqrt(n)*(X.bar.bootstr.vec - X.bar)/sd.bootstr.vec
 ## Quantile of the bootstr.-distribution of \bar{X}_n^*:
-tau.1 <- quantile(Bootstr.t.sample.vec, probs = 1-alpha/2)
-tau.2 <- quantile(Bootstr.t.sample.vec, probs = alpha/2)
+q.1 <- quantile(Bootstr.t.sample.vec, probs = 1-alpha/2)
+q.2 <- quantile(Bootstr.t.sample.vec, probs = alpha/2)
 ## plot
 plot(ecdf(Bootstr.t.sample.vec), xlab="", ylab="",
      main=expression(paste("Bootstr.-t-Distr. of ",
-          (bar(X)[n]^{" *"}-bar(X)[n])/hat(sigma)^{"*"})))
-abline(v=c(tau.1,tau.2),col="red")
+          sqrt(n)(bar(X)[n]^{" *"}-bar(X)[n])/s[n]^{"*"})))
+abline(v=c(q.1,q.2),col="red")
 ```
 
 
 
-Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:
+Using our preparatory work above, the bootstrap-$t$ confidence interval can be computed as following:
 ```{r}
 ## Basic Bootstrap Confidence Interval:
-CI.Bstr.t.lo <- X.bar - tau.1 * sd.hat
-CI.Bstr.t.up <- X.bar - tau.2 * sd.hat
+CI.Bstr.t.lo <- X.bar - q.1 * sd.hat/sqrt(n)
+CI.Bstr.t.up <- X.bar - q.2 * sd.hat/sqrt(n)
 
 ## Re-labeling of otherwise false names:
 attr(CI.Bstr.t.lo, "names") <- c("2.5%")
@@ -3002,7 +3011,7 @@ n     <-   20  # Sample Size
 df    <-    1  # (=> mean==1)
 mean  <-   df
 alpha <- 0.05 # Level
-n.Bootsrap.draws <- 15#1500
+n.Bootsrap.draws <- 1500
 
 ## MC-Setup:
 set.seed(123)
@@ -3025,13 +3034,13 @@ for(b in 1:B){
   X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
   sd.bootstr.MC.vec    <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = sd)
   ## Make it a "Bootstrap-t" sample:
-  Bootstr.t.MC.vec <- (X.bar.bootstr.MC.vec - X.bar.MC)/sd.bootstr.MC.vec
+  Bootstr.t.MC.vec     <- sqrt(n)*(X.bar.bootstr.MC.vec - X.bar.MC)/sd.bootstr.MC.vec
   ## (1-alpha/2)-quantile:
-  tau.1.MC <- quantile(Bootstr.t.MC.vec, probs = 1-alpha/2)
-  tau.2.MC <- quantile(Bootstr.t.MC.vec, probs = alpha/2)
+  q.1.MC <- quantile(Bootstr.t.MC.vec, probs = 1-alpha/2)
+  q.2.MC <- quantile(Bootstr.t.MC.vec, probs = alpha/2)
   ## Basic Bootstrap CIs:
-  CI.Bstr.t.lo.vec[b] <- X.bar.MC - tau.1.MC * sd.MC
-  CI.Bstr.t.up.vec[b] <- X.bar.MC - tau.2.MC * sd.MC
+  CI.Bstr.t.lo.vec[b] <- X.bar.MC - q.1.MC * sd.MC/sqrt(n)
+  CI.Bstr.t.up.vec[b] <- X.bar.MC - q.2.MC * sd.MC/sqrt(n)
 }
 
 ## How often does the classic CI cover the true mean?
@@ -3060,7 +3069,6 @@ arrows(x0=CI.Bstr.t.lo.vec[CI.checks==FALSE],
 abline(v=mean,col="blue", lwd=1.5)
 ```
 
--->
 
 #### Solutions of Exercise 4. {-}
 
