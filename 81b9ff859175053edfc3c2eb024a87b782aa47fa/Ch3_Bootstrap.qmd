@@ -2478,7 +2478,6 @@ Computational Statistics, James E. Gentle,  Exercise 13.6.
 
 
 
-<!--
 ## Solutions {-}
 
 #### Solutions of Exercise 1. {-} 
@@ -2498,34 +2497,35 @@ since $1_{(X_i\leq x)}$ is a Bernoulli random variable with parameter
 $$
 \begin{align*}
 p 
-& = P(1_{(X_i\leq x)} = 1) 
-& = P(X_i \leq x) 
+& = P(1_{(X_i\leq x)} = 1)\\[2ex]
+& = P(X_i \leq x)\\[2ex] 
 & = F(x).
 \end{align*}
 $$
+Note that this holds for any distribution of $X_i.$ Therefore, one says that $nF_n(x)$ is **distribution free.**
 
 ##### (b) {-}
 
-From (a), we have that 
+From (a), we have that (using the standard mean and variance expressions for Binomial distributed random variables):
 $$
 \begin{align*}
-\mathbb{E}(nF_n(x)) &= nF(x)\\ 
+\mathbb{E}(nF_n(x)) &= nF(x)\\[2ex] 
 \Leftrightarrow\quad  \mathbb{E}(F_n(x)) &= F(x)
 \end{align*}
 $$
 and that 
 $$
 \begin{align*}
-Var(nF_n(x)) &= nF(x)(1-F(x))\\
+Var(nF_n(x)) &= nF(x)(1-F(x))\\[2ex]
 \Leftrightarrow \quad Var(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
 \end{align*}
 $$
 
-Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT implies 
+Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT (Lindeberg-Lévy) implies that 
 $$
-\frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1).
+\frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1)
 $$
-Or with a slight abuse of notation: 
+as $n\to\infty.$ Or with a slight abuse of notation: 
 $$
 F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
 $$
@@ -2554,7 +2554,9 @@ for all $n.$ Therefore,
 $$
 \operatorname{MSE}(F_n(x)) = Var(F_n(x)) \to 0
 $$
-as $n\to\infty.$ Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
+as $n\to\infty.$ 
+
+Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
 $$
 F_n(x)\to_{ms} F(x)
 $$
@@ -2577,10 +2579,10 @@ $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$
 $$
 |g_n(x) - g(x)| < \varepsilon 
 $$ 
-for all $n\geq N$ and **for all** $x\in\mathcal{X}.$ 
+for all $n\geq N$ and **for all** $x\in\mathcal{X},$ where $\mathcal{X}$ denotes the domain of the functions $g_n$ and $g.$ 
 
 
-I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n.$
+I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n\geq N.$
 ::: 
 
 **Example 1:** $\mathcal{X}=\mathbb{R}$<br>
@@ -2588,15 +2590,16 @@ The function
 $$
 g_n(x) = x\left(1+\frac{1}{n}\right)
 $$ 
-converges point-wise to 
+converges point-wise (for each given $x\in\mathbb{R}$) to 
 $$
 g(x)=x,
 $$ 
 since 
 $$
-|g_n(x)-g(x)|=\frac{|x|}{n}%\to 0\quad \text{as}\quad n\to\infty.
+|g_n(x)-g(x)|=\frac{|x|}{n}\to 0\quad \text{as}\quad n\to\infty.
 $$
-converges to zero as $n\to\infty$ for each given $x\in\mathcal{X}.$
+<!-- converges to zero as $n\to\infty$  -->
+for each given $x\in\mathcal{X}.$
 
 However, $g_n$ does not converge uniformly to $g$ since
 $$
@@ -2604,7 +2607,7 @@ $$
 $$
 for each $n.$ 
 
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n).$ 
+Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n)$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x(1+1/n^\ast)\to\infty$ as $x\to\infty.$ 
 
 
 **Example 2:** $\mathcal{X}=(0,1)$<br>
@@ -2612,15 +2615,16 @@ The function
 $$
 g_n(x) = x^n
 $$ 
-converges point-wise to 
+converges point-wise (for each given $x\in(0,1)$) to 
 $$
 g(x)=0,
 $$ 
 since 
 $$
-|g_n(x)-g(x)|=x^n
+|g_n(x)-g(x)|=x^n\to 0\quad\text{as}\quad n\to\infty 
 $$
-converges to zero as $n\to\infty$ for each given $x\in(0,1).$
+<!-- converges to zero as $n\to\infty$  -->
+for each given $x\in(0,1).$
 
 However, $g_n$ does not converge uniformly to $g$ since
 $$
@@ -2628,13 +2632,11 @@ $$
 $$
 for each $n.$ 
 
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n.$ 
+Note that for a small $0<\varepsilon<1,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n,$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x^{n^\ast}\to 1$ as $x\to 1.$ 
 
 
-
+<!--
 #### Solutions of Exercise 3. {-}
-
-Link to the video: [HERE](https://www.dropbox.com/s/w6pdr98s04hyk4t/Ch3_Ex3.mp4?dl=0)
 
 ##### (a) Part 1: {-}
 
@@ -2650,7 +2652,7 @@ If $F$ is a normal distribution:
 
 $$
 \begin{array}{rlc}
-\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{for all}\;n.
+\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{exactly for all}\;n.
 \end{array}
 $$
 
@@ -3058,11 +3060,11 @@ arrows(x0=CI.Bstr.t.lo.vec[CI.checks==FALSE],
 abline(v=mean,col="blue", lwd=1.5)
 ```
 
-
+-->
 
 #### Solutions of Exercise 4. {-}
 
-Link to the video: [HERE](https://www.dropbox.com/s/upsl5hggr0jcrgb/Ch3_Ex4.mp4?dl=0)
+
 
 ##### (a)  {-}
 
@@ -3094,6 +3096,5 @@ $$
 $$
 since $Y_i^*\sim Y_i\sim F.$ 
 
--->
 
 ## References {-} 

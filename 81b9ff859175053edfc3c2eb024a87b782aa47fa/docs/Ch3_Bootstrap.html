@@ -238,6 +238,7 @@ div.csl-indent {
   <li><a href="#statistical-hypothesis-testing" id="toc-statistical-hypothesis-testing" class="nav-link" data-scroll-target="#statistical-hypothesis-testing"><span class="toc-section-number">3.5.5</span>  Statistical Hypothesis Testing</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -2370,163 +2371,116 @@ http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf
 Computational Statistics, James E. Gentle,  Exercise 13.6. 
 -->
 <!-- {{< include Ch3_Solutions.qmd >}} -->
-<!--
-## Solutions {-}
-
-#### Solutions of Exercise 1. {-} 
-
-##### (a) {-}
-
-The exact point-wise distribution of $nF_n(x)$ for a given $x\in\mathbb{R}.$  
-$$
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solutions-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-1.">Solutions of Exercise 1.</h4>
+<section id="a" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a">(a)</h5>
+<p>The exact point-wise distribution of <span class="math inline">\(nF_n(x)\)</span> for a given <span class="math inline">\(x\in\mathbb{R}.\)</span><br>
+<span class="math display">\[
 \begin{align*}
-F_n(x) 
-& = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
-\Rightarrow nF_n(x) 
-& = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
+F_n(x)
+&amp; = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
+\Rightarrow nF_n(x)
+&amp; = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
 \end{align*}
-$$
-since $1_{(X_i\leq x)}$ is a Bernoulli random variable with parameter 
-$$
+\]</span> since <span class="math inline">\(1_{(X_i\leq x)}\)</span> is a Bernoulli random variable with parameter <span class="math display">\[
 \begin{align*}
-p 
-& = P(1_{(X_i\leq x)} = 1) 
-& = P(X_i \leq x) 
-& = F(x).
+p
+&amp; = P(1_{(X_i\leq x)} = 1)\\[2ex]
+&amp; = P(X_i \leq x)\\[2ex]
+&amp; = F(x).
 \end{align*}
-$$
-
-##### (b) {-}
-
-From (a), we have that 
-$$
+\]</span> Note that this holds for any distribution of <span class="math inline">\(X_i.\)</span> Therefore, one says that <span class="math inline">\(nF_n(x)\)</span> is <strong>distribution free.</strong></p>
+</section>
+<section id="b" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b">(b)</h5>
+<p>From (a), we have that (using the standard mean and variance expressions for Binomial distributed random variables): <span class="math display">\[
 \begin{align*}
-\mathbb{E}(nF_n(x)) &= nF(x)\\ 
-\Leftrightarrow\quad  \mathbb{E}(F_n(x)) &= F(x)
+\mathbb{E}(nF_n(x)) &amp;= nF(x)\\[2ex]
+\Leftrightarrow\quad  \mathbb{E}(F_n(x)) &amp;= F(x)
 \end{align*}
-$$
-and that 
-$$
+\]</span> and that <span class="math display">\[
 \begin{align*}
-Var(nF_n(x)) &= nF(x)(1-F(x))\\
-\Leftrightarrow \quad Var(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
+Var(nF_n(x)) &amp;= nF(x)(1-F(x))\\[2ex]
+\Leftrightarrow \quad Var(F_n(x)) &amp;= \frac{F(x)(1-F(x))}{n}.
 \end{align*}
-$$
-
-Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT implies 
-$$
-\frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1).
-$$
-Or with a slight abuse of notation: 
-$$
+\]</span></p>
+<p>Moreover, since <span class="math inline">\(F_n(x) = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\)</span> is an average over i.i.d. random variables <span class="math inline">\(1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},\)</span> the standard CLT (Lindeberg-Lévy) implies that <span class="math display">\[
+\frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1)
+\]</span> as <span class="math inline">\(n\to\infty.\)</span> Or with a slight abuse of notation: <span class="math display">\[
 F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
-$$
-
-
-##### (c) {-}
-
-
-The mean squared error between $F_n(x)$ and $F(x)$ is given by
-$$
+\]</span></p>
+</section>
+<section id="c" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c">(c)</h5>
+<p>The mean squared error between <span class="math inline">\(F_n(x)\)</span> and <span class="math inline">\(F(x)\)</span> is given by <span class="math display">\[
 \begin{align*}
-\operatorname{MSE}(F_n(x)) 
-&= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
-&= Var(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
+\operatorname{MSE}(F_n(x))
+&amp;= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
+&amp;= Var(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
 \end{align*}
-$$
-It follows from our previous results that for each $x\in\mathbb{R}$
-$$
-Var(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
-$$
-as $n\to\infty,$ and that 
-$$
-\mathbb{E}(F_n(x)) -F(x) = 0 
-$$
-for all $n.$ Therefore, 
-$$
+\]</span> It follows from our previous results that for each <span class="math inline">\(x\in\mathbb{R}\)</span> <span class="math display">\[
+Var(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0
+\]</span> as <span class="math inline">\(n\to\infty,\)</span> and that <span class="math display">\[
+\mathbb{E}(F_n(x)) -F(x) = 0
+\]</span> for all <span class="math inline">\(n.\)</span> Therefore, <span class="math display">\[
 \operatorname{MSE}(F_n(x)) = Var(F_n(x)) \to 0
-$$
-as $n\to\infty.$ Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
-$$
+\]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+<p>Thus we can conclude that <span class="math inline">\(F_n(x)\)</span> converges in the mean-square sense to <span class="math inline">\(F(x)\)</span> for each <span class="math inline">\(x\in\mathbb{R},\)</span> <span class="math display">\[
 F_n(x)\to_{ms} F(x)
-$$
-as $n\to\infty.$ 
-
-Since convergence in the mean square sense implies convergence in probability, we also have that for each $x\in\mathbb{R}$
-$$
+\]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+<p>Since convergence in the mean square sense implies convergence in probability, we also have that for each <span class="math inline">\(x\in\mathbb{R}\)</span> <span class="math display">\[
 F_n(x)\to_{p} F(x)
-$$
-as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
-
-
-
-#### Solutions of Exercise 2. {-} 
-
-::: {.callout-tip}
-Another, equivalent way to define uniform convergence: 
-
-$g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$ there exists an $N$ such that 
-$$
-|g_n(x) - g(x)| < \varepsilon 
-$$ 
-for all $n\geq N$ and **for all** $x\in\mathcal{X}.$ 
-
-
-I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n.$
-::: 
-
-**Example 1:** $\mathcal{X}=\mathbb{R}$<br>
-The function 
-$$
+\]</span> as <span class="math inline">\(n\to\infty\)</span> which shows that <span class="math inline">\(F_n(x)\)</span> is weakly consistent for <span class="math inline">\(F(x)\)</span> for each <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
+</section>
+</section>
+<section id="solutions-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-2.">Solutions of Exercise 2.</h4>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Another, equivalent way to define uniform convergence:</p>
+<p><span class="math inline">\(g_n(\cdot)\)</span> converges <strong>uniformly</strong> to <span class="math inline">\(g(\cdot)\)</span> if for every <span class="math inline">\(\varepsilon&gt;0,\)</span> there exists an <span class="math inline">\(N\)</span> such that <span class="math display">\[
+|g_n(x) - g(x)| &lt; \varepsilon
+\]</span> for all <span class="math inline">\(n\geq N\)</span> and <strong>for all</strong> <span class="math inline">\(x\in\mathcal{X},\)</span> where <span class="math inline">\(\mathcal{X}\)</span> denotes the domain of the functions <span class="math inline">\(g_n\)</span> and <span class="math inline">\(g.\)</span></p>
+<p>I.e., <span class="math inline">\(g_n(\cdot)\)</span> converges <strong>uniformly</strong> to <span class="math inline">\(g(\cdot)\)</span> if it is possible to draw an <span class="math inline">\(\varepsilon\)</span>-band around the graph of <span class="math inline">\(g(x)\)</span> that contains <strong>all of the graphs</strong> of <span class="math inline">\(g_n(x)\)</span> for large enough <span class="math inline">\(n\geq N.\)</span></p>
+</div>
+</div>
+<p><strong>Example 1:</strong> <span class="math inline">\(\mathcal{X}=\mathbb{R}\)</span><br> The function <span class="math display">\[
 g_n(x) = x\left(1+\frac{1}{n}\right)
-$$ 
-converges point-wise to 
-$$
+\]</span> converges point-wise (for each given <span class="math inline">\(x\in\mathbb{R}\)</span>) to <span class="math display">\[
 g(x)=x,
-$$ 
-since 
-$$
-|g_n(x)-g(x)|=\frac{|x|}{n}%\to 0\quad \text{as}\quad n\to\infty.
-$$
-converges to zero as $n\to\infty$ for each given $x\in\mathcal{X}.$
-
-However, $g_n$ does not converge uniformly to $g$ since
-$$
+\]</span> since <span class="math display">\[
+|g_n(x)-g(x)|=\frac{|x|}{n}\to 0\quad \text{as}\quad n\to\infty.
+\]</span> <!-- converges to zero as $n\to\infty$  --> for each given <span class="math inline">\(x\in\mathcal{X}.\)</span></p>
+<p>However, <span class="math inline">\(g_n\)</span> does not converge uniformly to <span class="math inline">\(g\)</span> since <span class="math display">\[
 \sup_{x\in\mathbb{R}}|g_n(x)-g(x)|=\sup_{x\in\mathbb{R}}\frac{|x|}{n}=\infty\neq 0
-$$
-for each $n.$ 
-
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n).$ 
-
-
-**Example 2:** $\mathcal{X}=(0,1)$<br>
-The function 
-$$
+\]</span> for each <span class="math inline">\(n.\)</span></p>
+<p>Note that for a small <span class="math inline">\(\varepsilon&gt; 0,\)</span> an <span class="math inline">\(\varepsilon\)</span>-band around <span class="math inline">\(g(x) = x\)</span> fails to capture the graphs of <span class="math inline">\(g_n(x)=x(1+1/n)\)</span> with <span class="math inline">\(n\geq N,\)</span> since for any <span class="math inline">\(N\)</span> and <span class="math inline">\(n^\ast\geq N\)</span> we have that <span class="math inline">\(g_{n^\ast}(x)=x(1+1/n^\ast)\to\infty\)</span> as <span class="math inline">\(x\to\infty.\)</span></p>
+<p><strong>Example 2:</strong> <span class="math inline">\(\mathcal{X}=(0,1)\)</span><br> The function <span class="math display">\[
 g_n(x) = x^n
-$$ 
-converges point-wise to 
-$$
+\]</span> converges point-wise (for each given <span class="math inline">\(x\in(0,1)\)</span>) to <span class="math display">\[
 g(x)=0,
-$$ 
-since 
-$$
-|g_n(x)-g(x)|=x^n
-$$
-converges to zero as $n\to\infty$ for each given $x\in(0,1).$
-
-However, $g_n$ does not converge uniformly to $g$ since
-$$
+\]</span> since <span class="math display">\[
+|g_n(x)-g(x)|=x^n\to 0\quad\text{as}\quad n\to\infty
+\]</span> <!-- converges to zero as $n\to\infty$  --> for each given <span class="math inline">\(x\in(0,1).\)</span></p>
+<p>However, <span class="math inline">\(g_n\)</span> does not converge uniformly to <span class="math inline">\(g\)</span> since <span class="math display">\[
 \sup_{x\in(0,1)}|g_n(x)-g(x)|=\sup_{x\in(0,1)}x^n=1\neq 0
-$$
-for each $n.$ 
-
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n.$ 
-
-
-
+\]</span> for each <span class="math inline">\(n.\)</span></p>
+<p>Note that for a small <span class="math inline">\(0&lt;\varepsilon&lt;1,\)</span> an <span class="math inline">\(\varepsilon\)</span>-band around <span class="math inline">\(g(x) = 0\)</span> fails to capture the graphs of <span class="math inline">\(g_n(x)=x^n,\)</span> with <span class="math inline">\(n\geq N,\)</span> since for any <span class="math inline">\(N\)</span> and <span class="math inline">\(n^\ast\geq N\)</span> we have that <span class="math inline">\(g_{n^\ast}(x)=x^{n^\ast}\to 1\)</span> as <span class="math inline">\(x\to 1.\)</span></p>
+<!--
 #### Solutions of Exercise 3. {-}
-
-Link to the video: [HERE](https://www.dropbox.com/s/w6pdr98s04hyk4t/Ch3_Ex3.mp4?dl=0)
 
 ##### (a) Part 1: {-}
 
@@ -2542,7 +2496,7 @@ If $F$ is a normal distribution:
 
 $$
 \begin{array}{rlc}
-\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{for all}\;n.
+\sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{exactly for all}\;n.
 \end{array}
 $$
 
@@ -3039,43 +2993,36 @@ abline(v=mean,col="blue", lwd=1.5)
 :::
 
 
-
-
-#### Solutions of Exercise 4. {-}
-
-Link to the video: [HERE](https://www.dropbox.com/s/upsl5hggr0jcrgb/Ch3_Ex4.mp4?dl=0)
-
-##### (a)  {-}
-
-$$
-\begin{align*}
-\mathbb{E}^*(\bar{Y}^*) 
-& = \mathbb{E}\left(\left.\bar{Y}^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \mathbb{E}\left(\left.\frac{1}{n}\sum_{i=1}^n Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \sum_{i=1}^n \frac{1}{n} Y_i
- = \bar{Y}
-\end{align*}
-$$
-since $(Y_i^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}$ and $P(Y_j^*=Y_i|\mathcal{S}_n)=\frac{1}{n}$ for each $i,j\in 1,\dots,n.$
-
-
-##### (b)  {-}
-
-
-$$
-\begin{align*}
-\mathbb{E}(\bar{Y}^*) 
-& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mu
-\end{align*}
-$$
-since $Y_i^*\sim Y_i\sim F.$ 
-
 -->
+</section>
+<section id="solutions-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-4.">Solutions of Exercise 4.</h4>
+<section id="a-1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-1">(a)</h5>
+<p><span class="math display">\[
+\begin{align*}
+\mathbb{E}^*(\bar{Y}^*)
+&amp; = \mathbb{E}\left(\left.\bar{Y}^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \mathbb{E}\left(\left.\frac{1}{n}\sum_{i=1}^n Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \sum_{i=1}^n \frac{1}{n} Y_i
+= \bar{Y}
+\end{align*}
+\]</span> since <span class="math inline">\((Y_i^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}\)</span> and <span class="math inline">\(P(Y_j^*=Y_i|\mathcal{S}_n)=\frac{1}{n}\)</span> for each <span class="math inline">\(i,j\in 1,\dots,n.\)</span></p>
+</section>
+<section id="b-1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-1">(b)</h5>
+<p><span class="math display">\[
+\begin{align*}
+\mathbb{E}(\bar{Y}^*)
+&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
+&amp; = \mathbb{E}\left(Y_i^*\right)\\[2ex]
+&amp; = \mu
+\end{align*}
+\]</span> since <span class="math inline">\(Y_i^*\sim Y_i\sim F.\)</span></p>
+</section>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
