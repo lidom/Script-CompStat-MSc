@@ -223,10 +223,10 @@ Compute the ordinary least squares regressions of different polynomial regressio
 reg_p1 <- lm(y ~ 1, data=db)
 
 # Basis functions: x^0 + ... + x^3
-reg_p3 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
+reg_p4 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
 
 # Basis functions: x^0 + ... + x^6
-reg_p6 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
+reg_p7 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
 ```
 
 Take a look at the fits:
@@ -246,13 +246,13 @@ lines(y = predict(reg_p1, newdata = db),
 ## Fit by degree 3 polynomial
 plot(db, main="Degree 3")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
-lines(y = predict(reg_p3, newdata = db), 
+lines(y = predict(reg_p4, newdata = db), 
       x = x_vec, col="red", lwd=1.5)
 
 ## Fit by degree 6 polynomial
 plot(db, main="Degree 6")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
-lines(y = predict(reg_p6, newdata = db), 
+lines(y = predict(reg_p7, newdata = db), 
       x = x_vec, col="red", lwd=1.5)
 ```
 
@@ -267,8 +267,8 @@ m_true    <- sin(x_vec * 5)
 n_MCrepl  <- 200 # MC-replications
 
 m_hat_p1  <- matrix(NA, n, n_MCrepl)
-m_hat_p3  <- matrix(NA, n, n_MCrepl)
-m_hat_p6  <- matrix(NA, n, n_MCrepl)
+m_hat_p4  <- matrix(NA, n, n_MCrepl)
+m_hat_p7  <- matrix(NA, n, n_MCrepl)
 
 for(r in 1:n_MCrepl){
     # Generate some data: 
@@ -277,12 +277,12 @@ for(r in 1:n_MCrepl){
     db     <-  data.frame(x = x_vec,y = y_vec)
     # Estimations
     reg_p1 <- lm(y ~ 1, data=db)
-    reg_p3 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
-    reg_p6 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
+    reg_p4 <- lm(y ~ poly(x, degree = 3, raw = TRUE), data=db)
+    reg_p7 <- lm(y ~ poly(x, degree = 6, raw = TRUE), data=db)
     # Save predictions (y hat)
     m_hat_p1[,r] <- predict(reg_p1, newdata = db)
-    m_hat_p3[,r] <- predict(reg_p3, newdata = db)
-    m_hat_p6[,r] <- predict(reg_p6, newdata = db)
+    m_hat_p4[,r] <- predict(reg_p4, newdata = db)
+    m_hat_p7[,r] <- predict(reg_p7, newdata = db)
 }
 
 par(mfrow=c(2,2), mar=c(4.1,4.1,3.1,2.1))
@@ -296,15 +296,15 @@ matplot(y = m_hat_p1[,1:subSelect],
         col=rep("red",n), lwd=0.5, main = "Degree p=0")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ##
-matplot(y = m_hat_p3[,1:subSelect], 
+matplot(y = m_hat_p4[,1:subSelect], 
         x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
-        ylim = range(m_hat_p3[,1:subSelect], sin(x_vec * 5)), 
+        ylim = range(m_hat_p4[,1:subSelect], sin(x_vec * 5)), 
         col=rep("red",n), lwd=.5, main = "Degree p=3")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ##
-matplot(y = m_hat_p6[,1:subSelect], 
+matplot(y = m_hat_p7[,1:subSelect], 
         x = x_vec, type = "l", lty = 1, ylab = "", xlab = "x",
-        ylim = range(m_hat_p6[,1:subSelect], sin(x_vec * 5)), 
+        ylim = range(m_hat_p7[,1:subSelect], sin(x_vec * 5)), 
         col=rep("red",n), lwd=.5, main = "Degree p=6")
 lines(y=sin(x_vec * 5), x=x_vec, col="blue", lwd=1.5)
 ```
@@ -320,26 +320,26 @@ point-wise at each $x$-value in `x_vec`.
 ```{r}
 ## Pointwise (for each x) biases of \hat{m}(x): 
 Pt_Bias_p1 <- rowMeans(m_hat_p1) - m_true
-Pt_Bias_p3 <- rowMeans(m_hat_p3) - m_true
-Pt_Bias_p6 <- rowMeans(m_hat_p6) - m_true
+Pt_Bias_p4 <- rowMeans(m_hat_p4) - m_true
+Pt_Bias_p7 <- rowMeans(m_hat_p7) - m_true
 
 ## Pointwise squared biases
 Pt_BiasSq_p1 <- Pt_Bias_p1^2
-Pt_BiasSq_p3 <- Pt_Bias_p3^2
-Pt_BiasSq_p6 <- Pt_Bias_p6^2
+Pt_BiasSq_p4 <- Pt_Bias_p4^2
+Pt_BiasSq_p7 <- Pt_Bias_p7^2
 
 ## Pointwise (for each x) variances \hat{m}(x):
 Pt_Var_p1  <- apply(m_hat_p1, 1, var)
-Pt_Var_p3  <- apply(m_hat_p3, 1, var)
-Pt_Var_p6  <- apply(m_hat_p6, 1, var)
+Pt_Var_p4  <- apply(m_hat_p4, 1, var)
+Pt_Var_p7  <- apply(m_hat_p7, 1, var)
 
 par(mfrow=c(1,2))
-matplot(y = cbind(Pt_BiasSq_p1, Pt_BiasSq_p3, Pt_BiasSq_p6), 
+matplot(y = cbind(Pt_BiasSq_p1, Pt_BiasSq_p4, Pt_BiasSq_p7), 
         x = x_vec, type = "l", col = c(1,2,"darkgreen"), 
         main = "Pointwise Squared Bias", ylab="", xlab="x")
 legend("topleft", col = c(1,2,"darkgreen"), lty = c(1,2,3), 
 legend = c("Degree p=0", "Degree p=3", "Degree p=6"))
-matplot(y = cbind(Pt_Var_p1, Pt_Var_p3, Pt_Var_p6), 
+matplot(y = cbind(Pt_Var_p1, Pt_Var_p4, Pt_Var_p7), 
         x = x_vec, type = "l", col = c(1,2,"darkgreen"), 
         main = "Pointwise Variance", ylab="", xlab="x")
 legend("top", col = c(1,2,"darkgreen"), lty = c(1,2,3), 
@@ -429,7 +429,7 @@ $$
 and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
 
 
-#### B-Spline Basis Functions {-} 
+#### Construction of B-Spline Basis Functions {-} 
 
 The so-called **B-spline** basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.
 
@@ -446,9 +446,11 @@ Let
 $$
 \tau^\ast_{1}, \dots,\tau^\ast_{q+2k}
 $$
-denote the augmented knot sequence after resetting index to start at $1.$ 
+denote the augmented knot sequence after **resetting the index** to start at $1.$ 
 
-The spline basis functions are then calculated by a recursive procedure. The initial level are piece-wise constant functions
+The spline basis functions are calculated by a recursive (over $l=0,1,\dots,k$) procedure. 
+
+The initial level ($l=0$) are piece-wise constant functions
 $$
 b_{j,0}(x)=\left\{
 \begin{matrix}  
@@ -457,10 +459,15 @@ b_{j,0}(x)=\left\{
 \end{matrix}
 \right., 
 $${#eq-BSplineRecursion1}
-for $j=1,\dots,q+2k,$ and $x\in [a,b].$ For $l=1,\dots,k$ the recursive procedure is defined by
+for $j=1,\dots,q+2k,$ and $x\in [a,b].$ 
+
+For $l=1,\dots,k$ the recursion is defined by
 $$
-b_{j,l}(x)=\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)+
-\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
+\begin{align*}
+b_{j,l}(x) 
+& =\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)\\
+& +\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
+\end{align*}
 $${#eq-BSplineRecursion2}
 $j=1,\dots,q+2k$, and $x\in [a,b].$ 
 
@@ -485,9 +492,112 @@ B-spline basis functions.
 
 The following `R` code generates  
 $$
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=1} - 1=7
+$$ 
+linear ($k=1$) B-spline basis functions:
+
+
+```{r}
+library("splines2")
+
+degree         <- 1
+order          <- degree + 1
+internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
+boundary_knots <- c(0, 1)
+all_knots      <- sort(c(rep(boundary_knots[1], order), 
+                         internal_knots, 
+                         rep(boundary_knots[2], order)))
+
+## evaluation points (for plotting)
+x_vec <- seq(from = boundary_knots[1], 
+             to   = boundary_knots[2], len = 100)
+
+X_mat_degree1 <- splines2::bSpline(
+        x              = x_vec, 
+        knots          = internal_knots, 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = boundary_knots)
+
+matplot(x = x_vec, 
+        y = X_mat_degree1, 
+        type = "l", main = "B-Spline Basis Functions \nDegree 1",
+        ylab = "", xlab = "x", axes = FALSE)
+axis(1)
+axis(2)
+abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]), 
+       col = "gray")
+```
+
+::: {.callout-note}
+# Note 
+Here, the basis functions are piecewise linear ($k=1$) functions with local support over at most $k+1=1+1=2$ knot-intervals. Any spline function 
+$$
+\begin{align*}
+s(x)&\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x)&= \sum_{j=1}^{7}b_{j,1}
+\end{align*}
+$$ 
+is $k-1=1-1=0$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>
+:::
+
+The following `R` code generates  
+$$
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=2} - 1=8
+$$ 
+quadratic ($k=2$) B-spline basis functions:
+
+
+```{r}
+library("splines2")
+
+degree         <- 2
+order          <- degree + 1
+internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
+boundary_knots <- c(0, 1)
+all_knots      <- sort(c(rep(boundary_knots[1], order), 
+                         internal_knots, 
+                         rep(boundary_knots[2], order)))
+
+## evaluation points (for plotting)
+x_vec <- seq(from = boundary_knots[1], 
+             to   = boundary_knots[2], len = 100)
+
+X_mat_degree2 <- splines2::bSpline(
+        x              = x_vec, 
+        knots          = internal_knots, 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = boundary_knots)
+
+matplot(x = x_vec, 
+        y = X_mat_degree2, 
+        type = "l", main = "B-Spline Basis Functions \nDegree 2",
+        ylab = "", xlab = "x", axes = FALSE)
+axis(1)
+axis(2)
+abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]), 
+       col = "gray")
+```
+
+::: {.callout-note}
+# Note 
+Here, the basis functions are piecewise quadratic ($k=2$) functions with local support over at most $k+1=2+1=3$ knot-intervals. Any spline function 
+$$
+\begin{align*}
+s(x)&\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x)&= \sum_{j=1}^{8}b_{j,1}
+\end{align*}
+$$ 
+is $k-1=2-1=1$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>
+:::
+
+
+The following `R` code generates  
+$$
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
 $$ 
-cubic ($k=3$) B-spline basis functions. Let's take a look at them:
+cubic ($k=3$) B-spline basis functions:
 
 
 ```{r}
@@ -495,7 +605,7 @@ library("splines2")
 
 degree         <- 3
 order          <- degree + 1
-internal_knots <- seq(from = 0.1, to = 0.9, by = 0.2)
+internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
 boundary_knots <- c(0, 1)
 all_knots      <- sort(c(rep(boundary_knots[1], order), 
                          internal_knots, 
@@ -520,8 +630,19 @@ axis(1)
 axis(2)
 abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]), 
        col = "gray")
-dim(X_mat_degree3)
 ```
+
+::: {.callout-note}
+# Note 
+Here, the basis functions are piecewise cubic ($k=3$) functions with local support over at most $k+1=3+1=4$ knot-intervals. Any spline function 
+$$
+\begin{align*}
+s(x)&\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s(x)&= \sum_{j=1}^{9}b_{j,1}
+\end{align*}
+$$ 
+is $k-1=3-1=2$ times continuously differentiable at each knot point $x=\tau_j$, $j=1,\dots,q$.</br>
+:::
 
 ::: {.callout-note}
 The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point $x$ is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points. 
@@ -548,7 +669,7 @@ $$
 \begin{align*}
 p
 &=q+k-1\\[2ex]
-&=q+2\qquad (k=3)
+&=q+2\qquad (\text{using that}\quad k=3)
 \end{align*}
 $$ 
 serves as the **smoothing parameter** which has to be selected by the statistician.
