@@ -645,11 +645,16 @@ is $k-1=3-1=2$ times continuously differentiable at each knot point $x=\tau_j$, 
 :::
 
 ::: {.callout-note}
-The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point $x$ is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points. 
+**Normalized:** The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point $x$ is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points. 
 
-Basis functions are positive only over at most $k+1$ intervals and zero over the remaining intervals. This **compact support property** is important for computational efficiency. 
+**Compact Support:** Basis functions are positive only over at most $k+1$ intervals and zero over the remaining intervals. This **compact support property** is important for computational efficiency. 
 <!-- since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property. -->
+
+
+**Multiple knots:** A multiple interior knot ($\tau_j=\tau_{j+1}$) reduces the degree of continuity at that knot value. At a normal interior knot, a spline function is $k-1$ times continuously differentiable. Each extra knot with the same value reduces continuity at that knot by one. This is the only way to reduce the continuity of the curve at the knot values. If there are $k$ (or more) equal knots, then you get a discontinuity in the curve at this knot-location.
 :::
+
+
 
 #### Regression Splines {-}
 
@@ -896,7 +901,9 @@ O(r_n)\quad\text{with}\quad r_n>0,\;n=1,2,\dots
 $$
 is a placeholder symbol describing the family of all sequences $x_n$, $n=1,2,\dots,$ such that
 
-* $\dfrac{|x_n|}{r_n}\to c$ as $n\to\infty,$ where $c$ is a constant with $0\leq c < \infty$. 
+* $\dfrac{|x_n|}{r_n}\to c$ as $n\to\infty,$ where $c$ is a constant with $0\leq c < \infty.$ 
+
+**Note:** This includes the case $\dfrac{|x_n|}{r_n}\to 0.$ 
 
 Examples: 
 
@@ -1028,8 +1035,8 @@ $$
 is a least squares solution; namely of the following least squares problem that tries to approximate the unknown vector $m=(m(X_1),\dots,m(X_n))^\top$ using a spline function $s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}:$
 $$
 \begin{align*}
-\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i)\right)^2 
-&=\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i)\right)^2\\
+&\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i)\right)^2\\[2ex] 
+&=\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i)\right)^2\\[2ex]
 &=\min_{s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}} \sum_{i=1}^n \left(m(X_i)-s(X_i)\right)^2.
 \end{align*}
 $$
@@ -1038,7 +1045,7 @@ That is, the mean of the spline regression estimator evaluated at $X_i$
 $$
 \mathbb{E}_\varepsilon(\hat m_p(X_i))=\sum_{j=1}^p \beta_j b_j(X_i)=:\tilde m_p(X_i)
 $$
-is the best ($L_2$) approximation of the true, but unknown, regression function vector $m=(m(X_1),\dots,m(X_n))^\top$ by means of a spline function vector $s=(s(X_1),\dots,s(X_n))^\top$ with $s\in{\cal{S}}_{k,\tau_1,\dots,\tau_q}.$
+is the best least squares ($L_2$) approximation of the true, but unknown, regression function vector $m=(m(X_1),\dots,m(X_n))^\top$ by means of a spline function vector $s=(s(X_1),\dots,s(X_n))^\top$ with $s\in{\cal{S}}_{k,\tau_1,\dots,\tau_q}.$
 
 ::: {.callout-important}
 If the true, but unknown, regression function $m$ happens to be an element of the space of spline functions ${\cal{S}}_{k,\tau_1,\dots,\tau_q},$ then 
@@ -1053,7 +1060,7 @@ For consistency, however, we need that
 $$
 \operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) \to 0,\quad i=1,\dots,n.
 $$
-as $n\to\infty$ and $p\equiv p_n\to\infty.$ 
+as $n\to\infty$ and $p\equiv p_n\to\infty;$ i.e. that $m$ becomes eventually an element of the then very large space ${\cal{S}}_{k,\tau_1,\dots,\tau_{q_n}}$ as $q_n\to\infty$ with $n\to\infty.$ 
 :::
 
 From the general approximation properties of cubic splines ($k=3$) with $q=p-2$ equidistant knots (@DeBoor_1978 or @Eubank_1999), we know that:
@@ -1089,13 +1096,14 @@ Var_\varepsilon(\hat m_p)
 &=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\big((\hat{m}_p(X_i)-\overbrace{\tilde{m}(X_i)}^{=\mathbb{E}_\varepsilon(\hat{m}_p(X_i))})^2\big)\\[2ex]
 %\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 % \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \tilde m_p\Vert_2^2\right)\\
-&=\frac{1}{n}\mathbb{E}_\varepsilon\left(\left\Vert \left(\begin{matrix}\hat{m}_p(X_1)\\\vdots\\\hat{m}_p(X_n)\end{matrix}\right)-\left(\begin{matrix}\tilde{m}_p(X_1)\\\vdots\\\tilde{m}_p(X_n)\end{matrix}\right)\right\Vert_2^2\right)\\[2ex]
+&=\frac{1}{n}\mathbb{E}_\varepsilon\left(\left\Vert \left(\begin{matrix}\hat{m}_p(X_1)\\\vdots\\\hat{m}_p(X_n)\end{matrix}\right)-\left(\begin{matrix}\tilde{m}_p(X_1)\\\vdots\\\tilde{m}_p(X_n)\end{matrix}\right)\right\Vert_{2}^2\right)\\[2ex]
 &=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
 \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
 &=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top (Y-m)\Vert_2^2\right)\\[2ex]
 &=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top}_{(1\times n)}\;\;\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(n\times 1)}\Big)\\[2ex]
-&= \frac{1}{n}\mathbb{E}_\varepsilon\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )}_{(1\times n)}\;\;\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(n\times 1)}\Big)\\[2ex]
+&= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(1\times 1)}\Big)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\right)\\[2ex]
 &= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(  (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\varepsilon^\top\mathbf{X}\right)\right)\\[2ex]
 &=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
@@ -1210,8 +1218,8 @@ Since $m$ is unknown, we cannot directly compute $\operatorname{MASE}(\hat{m}_p)
 **Approach:** 
 Determine an estimate $\hat p_{opt}$ of the unknown optimal smoothing parameter $p_{opt}$ by minimizing a suitable error criterion with the following properties:
 
-* For every possible $p$ the corresponding criterion function can be calculated from the *data*.
-* For any $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}(\hat{m}_p)$.
+* For every possible $p$ the error criterion function can be calculated from the *data*.
+* For every possible $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}(\hat{m}_p)$.
 
 
 Recall: With 
@@ -1321,6 +1329,8 @@ $$
 \mathbb{E}_\varepsilon(\operatorname{GCV}(p))
 &\approx \left(1 + 2\frac{p}{n}\right)\mathbb{E}_\varepsilon(\operatorname{ARSS}(p)) \\[2ex]
 &=\left(1 + 2\frac{p}{n}\right) \left(\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2\right)\\[2ex]
+&= \operatorname{MASE}(\hat m_p) +\sigma^2 +\\[2ex] 
+&+ \underbrace{2\frac{p}{n} \operatorname{MASE}(\hat m_p)}_{=O_p\left(\frac{p}{n}\right)} - \underbrace{4\frac{p^2}{n^2} \sigma^2}_{=O\left(\frac{p^2}{n^2}\right)=o\left(\frac{p}{n}\right)}\\[2ex]
 &= \operatorname{MASE}(\hat m_p) +\sigma^2 + O_p\left(\frac{p}{n}\right)
 \end{align*}
 $$
@@ -1341,13 +1351,13 @@ $$
 
 ::: {.callout-note}
 # Over-fitting 
-Note that in econometrics (where we assumed to know the model apart from the model parameters) we used @eq-ARSS as an estimator for $\sigma^2.$ 
+Note that in econometrics (where we assumed to know the model apart from the model parameters) we used @eq-ARSS as an estimator for $\sigma^2.$ Moreover, @eq-ARSS is the main component to compute the $R^2$ coefficient.  
 
 In non-parametrics, where we do not assume to know the model, but try to learn the model form the data, @eq-ARSS cannot be used as an estimator for $\sigma^2$, firstly, since we do not know $p$, and secondly, since we expect $\hat{m}_{p}$ to be biased for each $p$. 
 
-In fact, for a large enough $p,$ the regression function $\hat{m}_{p}$ becomes so flexible that $Y_i\approx \hat{m}_{p}(X_i)$ for all $i=1,\dots,n$ such that $\operatorname{ARSS}(p)\approx 0.$
+In fact, for a large enough $p,$ the regression function $\hat{m}_{p}$ becomes so flexible that $Y_i\approx \hat{m}_{p}(X_i)$ for all $i=1,\dots,n$ such that $\operatorname{ARSS}(p)\approx 0$ and thus $R^2\approx 1.$ 
 
-However, an estimate $\hat{m}_{p}$ for which $\operatorname{ARSS}(p)\approx 0$ typically has fitted the noise component $\varepsilon$---additionally to the signal component $m$.  Such an over-fitted estimate  $\hat{m}_{p}$ will typically perform very poorly when used to predict a *new* $Y_{new}$ for a given new $X_{new}$ by $\hat{Y}_{new} = \hat{m}_{p}(X_{new}),$ i.e.
+However, an estimate $\hat{m}_{p}$ for which $\operatorname{ARSS}(p)\approx 0,$ typically has fitted the noise component $\varepsilon$---additionally to the signal component $m$.  Such an over-fitted estimate  $\hat{m}_{p}$ will typically perform very poorly when used to predict a *new* outcomes $Y_{new}$ for a given new predictor $X_{new}$ by $\hat{Y}_{new} = \hat{m}_{p}(X_{new}),$ i.e.
 $$
 Y_{new}\not\approx \hat{m}_{p}(X_{new}).
 $$
@@ -1358,7 +1368,7 @@ $$
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 $$
-is called the **optimism** of the model and quantifies the amount by which the in-sample average residual sum of squares (ARSS) systematically  under-estimates the true mean average squared error (MASE) of $\hat m_p.$ 
+is called the **optimism** of the model and quantifies the amount by which the in-sample average residual sum of squares (ARSS) **systematically under-estimates** the true mean average squared error (MASE) of $\hat m_p.$ 
 :::
 
 <!-- 
