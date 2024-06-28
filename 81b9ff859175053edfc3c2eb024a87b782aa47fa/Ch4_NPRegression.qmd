@@ -94,7 +94,6 @@ What would be a good/reasonable model assumption for $m(x)$ to estimate the cond
 In nonparametric regression analysis, we do not make assumptions about the specific structure of the regression function $m(x).$ We only make the *qualitative* assumption that $m$ is a sufficiently **smooth** function, i.e. that $m(t)$ is sufficiently often differentiable at every $t\in(a,b)$.
 :::
 
-
 ## Basis Function Expansions
 
 Some frequently used approaches to nonparametric regression rely on expansions of the form
@@ -359,6 +358,7 @@ Variance of the estimator is large, but (squared) bias is small.
 Polynomial regression is not very popular in practice. Reasons are numerical problems in fitting high dimensional polynomials. Furthermore, high order polynomials often posses an erratic, difficult to interpret behavior at the boundaries.
 :::
 
+
 ### Regression Splines
 
 
@@ -501,12 +501,8 @@ linear ($k=1$) B-spline basis functions:
 library("splines2")
 
 degree         <- 1
-order          <- degree + 1
 internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
 boundary_knots <- c(0, 1)
-all_knots      <- sort(c(rep(boundary_knots[1], order), 
-                         internal_knots, 
-                         rep(boundary_knots[2], order)))
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -552,12 +548,8 @@ quadratic ($k=2$) B-spline basis functions:
 library("splines2")
 
 degree         <- 2
-order          <- degree + 1
 internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
 boundary_knots <- c(0, 1)
-all_knots      <- sort(c(rep(boundary_knots[1], order), 
-                         internal_knots, 
-                         rep(boundary_knots[2], order)))
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -604,12 +596,8 @@ cubic ($k=3$) B-spline basis functions:
 library("splines2")
 
 degree         <- 3
-order          <- degree + 1
 internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
 boundary_knots <- c(0, 1)
-all_knots      <- sort(c(rep(boundary_knots[1], order), 
-                         internal_knots, 
-                         rep(boundary_knots[2], order)))
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -656,7 +644,18 @@ is $k-1=3-1=2$ times continuously differentiable at each knot point $x=\tau_j$, 
 
 
 
-#### Regression Splines {-}
+#### Regression Splines with Equidistant Knots
+
+Remember the nonparametric regression model setup: 
+
+$$
+Y_i=m(X_i)+\varepsilon_i
+$$
+
+* $m(X)=\mathbb{E}(Y_i|X=X_i)$ regression function
+* $\mathbb{E}(\varepsilon_i)=0$
+* $Var(\varepsilon_i|X_i) = Var(\varepsilon_i)=\sigma^2$
+* $\varepsilon_i$ and $X_i$ are independent or at least mean-independent, i.e., $\mathbb{E}(\varepsilon_i|X_i)=0$
 
 
 The so-called **regression spline** (or B-spline) approach to estimating a regression function $m(x)$ is based on fitting a set of spline basis functions to the data. 
@@ -680,28 +679,30 @@ $$
 serves as the **smoothing parameter** which has to be selected by the statistician.
 
 
-An estimator $\hat{m}_p(x)$ is then given by
-$$
-\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
-$$
-and the coefficients $\hat\beta_j$ are determined by ordinary least squares
-$$
-\hat\beta_1,\dots,\hat\beta_p=\arg\min_{\beta_1,\dots,\beta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \beta_j \underbrace{b_{j,k}(X_i)}_{X_{ij}}\right)^2
-$$
-
-I.e., let 
-$$
-Y=(Y_1,\dots,Y_n)^\top 
-$$ 
-denote the vector of response variables and let 
+For a given choice of $p,$ let 
 $$
 \underset{(n\times p)}{\mathbf{X}}
 $$ 
 denote the $n\times p$ matrix with elements 
 $$
-X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p.
+X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p,
 $$
-Then the OLS estimator
+and let 
+$$
+Y=(Y_1,\dots,Y_n)^\top 
+$$ 
+denote the vector of response variables. 
+
+
+An estimator $\hat{m}_p(x)$ of $m(x)$ is then given by
+$$
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
+$$
+where the coefficients $\hat\beta_j$ are determined by ordinary least squares
+$$
+\hat\beta_1,\dots,\hat\beta_p=\arg\min_{\vartheta_1,\dots,\vartheta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \vartheta_j \underbrace{b_{j,k}(X_i)}_{X_{ij}}\right)^2.
+$$
+That is, the vector of coefficients 
 $$
 \hat \beta=(\hat\beta_1,\dots,\hat\beta_p)^\top
 $$ 
@@ -770,6 +771,7 @@ Then, we generate cubic B-spline basis functions with equidistant knot sequence 
 degree      <- 3 # piecewise cubic splines
 
 knot_seq_5  <- seq(from = 0, to = 1, len = 5)# knots
+
 X_mat_p7    <- splines2::bSpline(
         x              = x_vec, # evaluation points
         knots          = knot_seq_5[-c(1, length(knot_seq_5))], 
@@ -779,6 +781,7 @@ X_mat_p7    <- splines2::bSpline(
     )
 
 knot_seq_15  <- seq(from = 0, to = 1, len = 15)# knots
+
 X_mat_p17    <- splines2::bSpline(
         x              = x_vec, # evaluation points
         knots          = knot_seq_15[-c(1, length(knot_seq_15))], 
@@ -816,7 +819,38 @@ legend("bottomleft",
          "Regr.-Spline Fit with p=17"), 
        col=c("red","blue", "darkorange"), 
        lty=c(2,1,1), lwd=c(2,2,2))
+```
 
+
+The following plot shows the regression spline fit (with $p=7$) 
+$$
+\hat{m}_{7}(x)=\sum_{j=1}^{7}\hat\beta_j b_{j,3}(x)
+$$
+along with the $p=7$ basis functions each multiplied by the fitted linear coefficient 
+$$
+\hat\beta_j b_{j,3}(x),\quad j=1,\dots,7.
+$$
+
+```{r}
+beta_hat_p7 <- solve(t(X_mat_p7)  %*% X_mat_p7)  %*% t(X_mat_p7) %*% y_vec
+plot(y=m_hat_p7, x=x_vec, ylim = c(-3.5,1.5),
+     col="blue", lwd=1.5, type = "l", xlab="x", ylab="")
+abline(v = knot_seq_5, col = gray(0.5))     
+matlines(X_mat_p7 * matrix(rep(beta_hat_p7, each = n), ncol=7), 
+         x = x_vec, type="l", lty = 2, col = c(1,2,3,4,5,6,7))
+legend("topright", 
+       c("Regr.-Spline Fit with p=7"), 
+       col = "blue", lty= 1, lwd= 2)
+legend("bottomleft", 
+       c(expression(paste("1. basis function times ",hat(beta)[1])),
+         expression(paste("2. basis function times ",hat(beta)[2])),
+         expression(paste("3. basis function times ",hat(beta)[3])),
+         expression(paste("4. basis function times ",hat(beta)[4])),
+         expression(paste("5. basis function times ",hat(beta)[5])),
+         expression(paste("6. basis function times ",hat(beta)[6])),
+         expression(paste("7. basis function times ",hat(beta)[7]))
+       ), 
+       col = c(1,2,3,4,5,6,7), lty = 2, lwd = 1)       
 ```
 
 
