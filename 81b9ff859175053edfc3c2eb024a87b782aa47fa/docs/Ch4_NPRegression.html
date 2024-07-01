@@ -1443,9 +1443,9 @@ p_{opt}
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, compute the CV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-17_5a181a1c87b96eef3ee9d9bf4b156119">
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-17_c6eaf5d6efd002aa4d3a2b9d6e3b3ee2">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>LOOCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -1461,51 +1461,19 @@ p_{opt}
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>CV_scoreSq <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>LOOCV_scoreSq <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
 <span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
 <span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>m_hat_p_i  <span class="ot">&lt;-</span> X_mat[i,] <span class="sc">%*%</span> </span>
 <span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">solve</span>(<span class="fu">t</span>(X_mat[<span class="sc">-</span>i,])  <span class="sc">%*%</span> X_mat[<span class="sc">-</span>i,])  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat[<span class="sc">-</span>i,]) <span class="sc">%*%</span> y_vec[<span class="sc">-</span>i] </span>
 <span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>CV_scoreSq[i] <span class="ot">&lt;-</span> (y_vec[i] <span class="sc">-</span> m_hat_p_i)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>LOOCV_scoreSq[i] <span class="ot">&lt;-</span> (y_vec[i] <span class="sc">-</span> m_hat_p_i)<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>CV_p[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(CV_scoreSq)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>LOOCV_p[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(LOOCV_scoreSq)</span>
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> CV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> LOOCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>Compute the nonparametric regression estimate using the LOOCV optimal smoothing parameter <span class="math inline">\(\hat{p}_{LOOCV}=8.\)</span></p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-18_fb23a2f48993e9b5776f38d282b95628">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Let’s plot the result:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-19_39abd181718f26926df5af75fcdbab20">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with GCV optimal p=8"</span>), </span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -1596,75 +1564,75 @@ $$
 -->
 <p><strong><code>R</code>-Code to Compute an Estimate of the Optimal Smoothing Parameter using GCV</strong></p>
 <p>First, we generate some data.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-20_7fcc808a77e9ac44f54ae7ada527167c">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-18_5bea552ed4ea122944bb86c10c087e11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, compute the GCV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-21_b5d70c6973fecdba78e26f2af24703e8">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>GCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> p_vec[j] <span class="co"># number of basis functions</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>ARSS     <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(y_vec <span class="sc">-</span> m_hat_p)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>GCV_p[j] <span class="ot">&lt;-</span> ARSS<span class="sc">/</span>((<span class="dv">1</span><span class="sc">-</span>p<span class="sc">/</span>n)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> GCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-19_fe8bff2d462ccd9d809e2ca5ae7bd8be">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>GCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> p_vec[j] <span class="co"># number of basis functions</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>ARSS     <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(y_vec <span class="sc">-</span> m_hat_p)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>GCV_p[j] <span class="ot">&lt;-</span> ARSS<span class="sc">/</span>((<span class="dv">1</span><span class="sc">-</span>p<span class="sc">/</span>n)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> GCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Compute the nonparametric regression estimate using the GCV optimal smoothing parameter <span class="math inline">\(p=8.\)</span></p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-22_0fca1c1215b4e913fc909144aef3ee1a">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-20_fa53218fce679a16a5109858125d3bb5">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot the results:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-23_08b8d9ec2f9d5dbc788f2a5f8d1a1b35">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with GCV optimal p=8"</span>), </span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-21_66d738114eab4ac95968b09b137d289b">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with GCV optimal p=8"</span>), </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>

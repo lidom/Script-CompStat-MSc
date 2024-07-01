@@ -1345,7 +1345,7 @@ Then, compute the CV scores for different numbers of basis functions $p$ and plo
 
 ```{r}
 p_vec <- 6:12 
-CV_p <- numeric(length(p_vec))
+LOOCV_p <- numeric(length(p_vec))
 
 for(j in 1:length(p_vec)){
 
@@ -1361,51 +1361,17 @@ X_mat     <- splines2::bSpline(
         Boundary.knots = knot_seq[ c(1, length(knot_seq))]
     )
 
-CV_scoreSq <- numeric(n)
+LOOCV_scoreSq <- numeric(n)
 
 for(i in 1:n){
 m_hat_p_i  <- X_mat[i,] %*% 
               solve(t(X_mat[-i,])  %*% X_mat[-i,])  %*% t(X_mat[-i,]) %*% y_vec[-i] 
 
-CV_scoreSq[i] <- (y_vec[i] - m_hat_p_i)^2
+LOOCV_scoreSq[i] <- (y_vec[i] - m_hat_p_i)^2
 }
-CV_p[j] <- mean(CV_scoreSq)
+LOOCV_p[j] <- mean(LOOCV_scoreSq)
 }
-plot(y = CV_p, x = p_vec, type="o")
-```
-
-Compute the nonparametric regression estimate using the LOOCV optimal smoothing parameter $\hat{p}_{LOOCV}=8.$
-
-```{r}
-p         <- 8
-q         <- p - 2    # number of equidistant knots 
-knot_seq  <- seq(from = 0, to = 1, len = q)# knots
-
-X_mat     <- splines2::bSpline(
-        x              = x_vec, # evaluation points
-        knots          = knot_seq[-c(1, length(knot_seq))], 
-        degree         = degree,
-        intercept      = TRUE, 
-        Boundary.knots = knot_seq[ c(1, length(knot_seq))]
-    )
-
-S_p      <- X_mat %*% solve(t(X_mat)  %*% X_mat)  %*% t(X_mat) 
-m_hat_p  <- S_p   %*% y_vec
-```
-
-Let's plot the result:
-
-```{r}
-plot(y=y_vec, x=x_vec, xlab="X", ylab="Y", 
-     main="Regression Splines")
-lines(y=sin(x_vec * 5), x=x_vec, col="red", lty=2, lwd=1.5)
-lines(y=m_hat_p, x=x_vec, col="blue", lwd=1.5)
-legend("bottomleft", 
-       c("(Unknown) Regression Function m", 
-         "Regr.-Spline Fit with GCV optimal p=8"), 
-       col=c("red","blue"), 
-       lty=c(2,1,1), lwd=c(2,2,2))
-
+plot(y = LOOCV_p, x = p_vec, type="o")
 ```
 
 
