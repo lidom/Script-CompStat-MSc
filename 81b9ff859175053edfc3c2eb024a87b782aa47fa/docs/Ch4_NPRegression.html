@@ -1645,24 +1645,25 @@ $$
 R^2(p) = 1- \frac{\operatorname{ARSS}(p)}{\frac{1}{n}\sum_{i=1}^n(Y_i - \bar{Y})^2}.
 \]</span></p>
 <p>In non-parametrics, however, we do not assume to know the model, but try to learn the model (including the smoothing parameter <span class="math inline">\(p\)</span>) form the data. Therefore, <a href="#eq-ARSS2">Equation&nbsp;<span>4.6</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased.</p>
-<p>In fact, if we would mimimize <span class="math inline">\(\operatorname{ARSS}(p)\)</span> with respect to <span class="math inline">\(p,\)</span> we would minimize the so-called <strong>in-sample prediction error</strong>. On average, this would result in minimizing <span id="eq-MeanARSS"><span class="math display">\[
+<p>In fact, if we would mimimize <span class="math inline">\(\operatorname{ARSS}(p)\)</span> with respect to <span class="math inline">\(p,\)</span> we would minimize the so-called <strong>in-sample prediction error</strong>. On average, this would result in minimizing <span class="math display">\[
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-\tag{4.7}\]</span></span> which leads to a too large choice of <span class="math inline">\(p\)</span> due to the distorting <strong>optimism</strong> term <span class="math display">\[
+\]</span> which leads to a too large choice of <span class="math inline">\(p\)</span> due to the distorting <strong>optimism</strong> term <span class="math display">\[
 -2\sigma^2\frac{p}{n}.
 \]</span></p>
-<p>In fact, for a too large <span class="math inline">\(p,\)</span> the non-parametric estimate is <strong>over-fitted</strong>; i.e.&nbsp;<span class="math inline">\(\hat{m}_{p}\)</span> becomes so flexible such that <span class="math display">\[
+<p>In fact, for a too large <span class="math inline">\(p,\)</span> the non-parametric estimate is <strong>over-fits</strong> the data; i.e.&nbsp;<span class="math inline">\(\hat{m}_{p}\)</span> becomes so flexible such that <span class="math display">\[
 \begin{align*}
 Y_i &amp; \approx \hat{m}_{p}(X_i)\;\;\text{ for all}\; i=1,\dots,n\\[2ex]
 \Rightarrow\;\operatorname{ARSS}(p)&amp;\approx 0\;(\neq\sigma^2)\\[2ex]
 \Rightarrow\;R^2&amp;\approx 1.
 \end{align*}
 \]</span></p>
-<p>However, an <strong>over-fitted</strong> estimate <span class="math inline">\(\hat{m}_{p}\)</span> typically has fitted the noise component <span class="math inline">\(\varepsilon\)</span>—additionally to the signal component <span class="math inline">\(m.\)</span></p>
-<p>Therefore, an over-fitted estimate <span class="math inline">\(\hat{m}_{p}\)</span> will typically perform very poorly when used to predict new <strong>out-of-sample data</strong>. I.e. for a <em>new</em> outcome <span class="math inline">\(Y_{new}\)</span> with a new predictor <span class="math inline">\(X_{new},\)</span> where <span class="math display">\[
+<p>However, an <strong>over-fitted</strong> estimate <span class="math inline">\(\hat{m}_{p}\)</span> typically has fitted the noise component <span class="math inline">\(\varepsilon\)</span>—additionally to the signal component <span class="math inline">\(m.\)</span> Therefore, an over-fitted estimate <span class="math inline">\(\hat{m}_{p}\)</span> will typically perform very poorly when used to predict new <strong>out-of-sample data</strong>. I.e. for a <em>new</em> outcome <span class="math display">\[
 Y_{new} = m(X_{new}) + \varepsilon_{new},
 \]</span> we’ll have that <span class="math display">\[
+Y_i \not\approx \hat{m}_{p}(X_i)
+\]</span> since <span class="math display">\[
 |Y_{new} - \hat{m}_{p}(X_{new})| \gg |\varepsilon_{new}|.
 \]</span></p>
 <div class="callout-note callout callout-style-default callout-captioned">
