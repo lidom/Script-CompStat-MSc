@@ -942,6 +942,7 @@ is a placeholder symbol describing the family of all sequences $x_n$, $n=1,2,\do
 Examples: 
 
 * $-\dfrac{1}{n}=O(n^{-1})$
+* $\dfrac{1}{n^2}=O(n^{-2})$
 * $\dfrac{1}{n^2}=O(n^{-1})$
 * $\displaystyle\frac{1}{m}\sum_{j=1}^{m-1} g\left(x_j\right)(x_{j+1}-x_j) = \int_a^b g(x)dx + O(m^{-1})$, <br> where $x_j=a+\dfrac{j-1}{m-1}(b-a)$ for sufficiently smooth (continuously differentiable over $(a,b)$) $g$. 
 :::
@@ -1217,11 +1218,12 @@ Setting zero and solving for $p_{opt}$ yields
 $$
 p_{opt}=\texttt{const}\cdot\left(\frac{1}{n}\right)^{-1/5},
 $$
-where $\texttt{const}$ collects all constant factors; i.e., 
+where $\texttt{const}$ denotes here a generic factor collecting all factors that do not depend on $p$ or $n.$ 
+
+The optimal rate of $p$ is thus
 $$
-p_{opt}=\texttt{const} \cdot n^{1/5}
+p_{opt}=\texttt{const} \cdot n^{1/5}.
 $$ 
-for some finite and positive constant $0 <\texttt{const}<\infty.$
 
 Thus
 $$
@@ -1256,15 +1258,14 @@ Determine an estimate $\hat p_{opt}$ of the unknown optimal smoothing parameter 
 * For every possible $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}(\hat{m}_p)$.
 
 
-Recall: With 
+Recall: We have
 $$
-\hat m_p=(\hat m_p(X_1),\dots,\hat m_p(X_n))^\top 
-$$ 
-we have
+\hat m_p=
+\left(\begin{matrix}
+\hat m_p(X_1)\\ \vdots\\\hat m_p(X_n)
+\end{matrix}\right)=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY,
 $$
-\hat m_p=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY.
-$$
-Note that 
+where  
 $$
 \begin{align*}
 \operatorname{trace}(S_p)
@@ -1278,12 +1279,13 @@ $$
 That is, for given $p$, the number of parameters to estimate by the spline method (one also speaks of the "degrees of freedom" of the smoothing procedure) is equal to $p$ which corresponds to the trace of the **smoother matrix** $S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.$ 
 
 
-Most frequently used error criteria are **Cross-Validation (CV)** and **Generalized Cross-Validation (GCV)**: 
+Most frequently used error criteria are **Cross-Validation (CV)** and **Generalized Cross-Validation (GCV).** 
 
-* **Cross-Validation (CV):** <br>
+### Leave One Out Cross-Validation (LOOCV)
+
 For a given value $p,$ cross-validation tries to approximate the out-of-sample prediction error
 $$
-\operatorname{CV}(p)=\frac{1}{n} \sum_{i=1}^n\biggl( Y_i-
+\operatorname{LOOCV}(p)=\frac{1}{n} \sum_{i=1}^n\biggl( Y_i-
 {\hat m}_{p,-i}(X_i)\biggr)^2
 $$
 Here, for any $i=1,\dots,n$, ${\hat m}_{p,-i}(\cdot)$ is the "leave-one-out" estimator of $m(\cdot)$ to be obtained when a spline function is fitted using the $n-1$ observations:
@@ -1294,8 +1296,8 @@ $$
 We have
 $$
 \begin{align*}
-&\mathbb{E}_\varepsilon(\operatorname{CV}(p))
-= \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\biggl( \overbrace{m(X_i)+\varepsilon_i}^{=Y_i}-
+&\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p))\\[2ex]
+= & \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\biggl( \overbrace{m(X_i)+\varepsilon_i}^{=Y_i}-
 {\hat m}_{p,-i}(X_i)\biggr)^2\right]\\[2ex]
 = & \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\left(\left( m(X_i)-
 {\hat m}_{p,-i}(X_i) \right)^2 +2\left( m(X_i)-
@@ -1310,21 +1312,106 @@ $$
 Thus, 
 $$
 \begin{align*}
-\mathbb{E}_\varepsilon(\operatorname{CV}(p)) = \operatorname{MASE}(\hat m_p) + \sigma^2,
+\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p)) = \operatorname{MASE}(\hat m_p) + \sigma^2,
 \end{align*}
 $$
 such that
 $$
 \begin{align*}
 p_{opt} 
-&= \arg\min_p\mathbb{E}_\varepsilon(\operatorname{CV}(p))\\[2ex]
+&= \arg\min_p\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p))\\[2ex]
 &= \arg\min_p\operatorname{MASE}(\hat m_p).
 \end{align*}
 $$
 That is, at least on average, minimizing $CV(p)$ is equivalent to minimizing $\operatorname{MASE}(\hat m_p)$. 
 
 
-* **$k$-fold Cross-Validation (CV):** <br>
+
+**`R`-Code to Compute an Estimate of the Optimal Smoothing Parameter using LOOCV**
+
+First, we generate some data.
+```{r}
+set.seed(1)
+# Generate some data: #################
+n      <- 100     # Sample Size
+x_vec  <- (1:n)/n # Equidistant X 
+# Gaussian iid error term 
+e_vec  <- rnorm(n = n, mean = 0, sd = .5)
+# Dependent variable Y
+y_vec  <-  sin(x_vec * 5) + e_vec
+```
+
+Then, compute the CV scores for different numbers of basis functions $p$ and plot them to select an estimate for the optimal value of the smoothing parameter $p$. 
+
+```{r}
+p_vec <- 6:12 
+CV_p <- numeric(length(p_vec))
+
+for(j in 1:length(p_vec)){
+
+p         <- p_vec[j] # number of basis functions
+q         <- p - 2    # number of equidistant knots 
+knot_seq  <- seq(from = 0, to = 1, len = q)# knots
+
+X_mat     <- splines2::bSpline(
+        x              = x_vec, # evaluation points
+        knots          = knot_seq[-c(1, length(knot_seq))], 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = knot_seq[ c(1, length(knot_seq))]
+    )
+
+CV_scoreSq <- numeric(n)
+
+for(i in 1:n){
+m_hat_p_i  <- X_mat[i,] %*% 
+              solve(t(X_mat[-i,])  %*% X_mat[-i,])  %*% t(X_mat[-i,]) %*% y_vec[-i] 
+
+CV_scoreSq[i] <- (y_vec[i] - m_hat_p_i)^2
+}
+CV_p[j] <- mean(CV_scoreSq)
+}
+plot(y = CV_p, x = p_vec, type="o")
+```
+
+Compute the nonparametric regression estimate using the LOOCV optimal smoothing parameter $\hat{p}_{LOOCV}=8.$
+
+```{r}
+p         <- 8
+q         <- p - 2    # number of equidistant knots 
+knot_seq  <- seq(from = 0, to = 1, len = q)# knots
+
+X_mat     <- splines2::bSpline(
+        x              = x_vec, # evaluation points
+        knots          = knot_seq[-c(1, length(knot_seq))], 
+        degree         = degree,
+        intercept      = TRUE, 
+        Boundary.knots = knot_seq[ c(1, length(knot_seq))]
+    )
+
+S_p      <- X_mat %*% solve(t(X_mat)  %*% X_mat)  %*% t(X_mat) 
+m_hat_p  <- S_p   %*% y_vec
+```
+
+Let's plot the result:
+
+```{r}
+plot(y=y_vec, x=x_vec, xlab="X", ylab="Y", 
+     main="Regression Splines")
+lines(y=sin(x_vec * 5), x=x_vec, col="red", lty=2, lwd=1.5)
+lines(y=m_hat_p, x=x_vec, col="blue", lwd=1.5)
+legend("bottomleft", 
+       c("(Unknown) Regression Function m", 
+         "Regr.-Spline Fit with GCV optimal p=8"), 
+       col=c("red","blue"), 
+       lty=c(2,1,1), lwd=c(2,2,2))
+
+```
+
+
+
+### $k$-fold Cross-Validation 
+
 In practice, one usually works with $k$-fold CV ($k=5$ or $k=10$). For this the index set $I=\{1,\dots,n\}$ is partitioned into $k$ disjoint index sets $I_1,\dots,I_k$ of (roughly) equal sizes, i.e. $|I_1|\approx|I_2|\approx\dots\approx|I_k|$, such that $I_1\cup I_1\cup \dots \cup I_k=I$ and $I_j\cap I_k=\emptyset$ for all $j\neq k$.
 $$
 \operatorname{CV}_k(p)=\frac{1}{k}\sum_{k=1}^K\frac{1}{|I_k|} \sum_{i\in I_k}\left( Y_i-
@@ -1332,7 +1419,9 @@ $$
 $$
 
 
-* **Generalized Cross-Validation (GCV):**
+
+### Generalized Cross-Validation (GCV)
+
 $$
 \operatorname{GCV}(p)=\frac{1}{n\left(1-\frac{p}{n}\right)^2}\sum_{i=1}^n \left( Y_i-
 {\hat m}_p(X_i)\right)^2
@@ -1352,7 +1441,7 @@ $$
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-$$
+$${#eq-optimism}
 Moreover, a Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields that 
 $$
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
@@ -1383,27 +1472,6 @@ $$
 -->
 
 
-::: {.callout-note}
-# Over-fitting 
-Note that in econometrics (where we assumed to know the model apart from the model parameters) we used @eq-ARSS as an estimator for $\sigma^2.$ Moreover, @eq-ARSS is the main component to compute the $R^2$ coefficient.  
-
-In non-parametrics, where we do not assume to know the model, but try to learn the model form the data, @eq-ARSS cannot be used as an estimator for $\sigma^2$, firstly, since we do not know $p$, and secondly, since we expect $\hat{m}_{p}$ to be biased for each $p$. 
-
-In fact, for a large enough $p,$ the regression function $\hat{m}_{p}$ becomes so flexible that $Y_i\approx \hat{m}_{p}(X_i)$ for all $i=1,\dots,n$ such that $\operatorname{ARSS}(p)\approx 0$ and thus $R^2\approx 1.$ 
-
-However, an estimate $\hat{m}_{p}$ for which $\operatorname{ARSS}(p)\approx 0,$ typically has fitted the noise component $\varepsilon$---additionally to the signal component $m$.  Such an over-fitted estimate  $\hat{m}_{p}$ will typically perform very poorly when used to predict a *new* outcomes $Y_{new}$ for a given new predictor $X_{new}$ by $\hat{Y}_{new} = \hat{m}_{p}(X_{new}),$ i.e.
-$$
-Y_{new}\not\approx \hat{m}_{p}(X_{new}).
-$$
-
-The term $2\sigma^2\frac{p}{n}$ in 
-$$
-\begin{align*}
-\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
-\end{align*}
-$$
-is called the **optimism** of the model and quantifies the amount by which the in-sample average residual sum of squares (ARSS) **systematically under-estimates** the true mean average squared error (MASE) of $\hat m_p.$ 
-:::
 
 <!-- 
 $$
@@ -1450,7 +1518,7 @@ $$
 
 
 
-**`R`-Code to Compute an Estimate of the Optimal Smoothing Parameter**
+**`R`-Code to Compute an Estimate of the Optimal Smoothing Parameter using GCV**
 
 First, we generate some data.
 ```{r}
@@ -1525,6 +1593,69 @@ legend("bottomleft",
        lty=c(2,1,1), lwd=c(2,2,2))
 
 ```
+
+
+
+### Over-Fitting and Optimism
+
+Remember that in our econometrics lecture, where we assumed to know the model apart from the model parameters, we used the average squared residuals $\operatorname{ARSS}(p)$ 
+$$
+\operatorname{ARSS}(p)=\frac{1}{n}\sum_{i=1}^n\biggl( Y_i-
+\hat{m}_{p}(X_i)\biggr)^2 
+$${#eq-ARSS2}
+as an estimator for $\sigma^2.$ Moreover, $\operatorname{ARSS}(p)$ was the main component to compute the $R^2$-coefficient
+$$
+R^2(p) = 1- \frac{\operatorname{ARSS}(p)}{\frac{1}{n}\sum_{i=1}^n(Y_i - \bar{Y})^2}.
+$$  
+
+In non-parametrics, however, we do not assume to know the model, but try to learn the model (including the smoothing parameter $p$) form the data. Therefore, @eq-ARSS2 cannot be used as an estimator for $\sigma^2$, firstly, since we do not know $p$, and secondly, since we expect $\hat{m}_{p}$ to be biased. 
+
+In fact, if we would mimimize $\operatorname{ARSS}(p)$ with respect to $p,$ we would minimize the so-called **in-sample prediction error**. On average, this would result in minimizing 
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$${#eq-MeanARSS}
+which leads to a too large choice of $p$ due to the distorting **optimism** term 
+$$
+-2\sigma^2\frac{p}{n}.
+$$
+
+In fact, for a too large $p,$ the non-parametric estimate is **over-fitted**; i.e. $\hat{m}_{p}$ becomes so flexible such that 
+$$
+\begin{align*}
+Y_i & \approx \hat{m}_{p}(X_i)\;\;\text{ for all}\; i=1,\dots,n\\[2ex]
+\Rightarrow\;\operatorname{ARSS}(p)&\approx 0\;(\neq\sigma^2)\\[2ex]
+\Rightarrow\;R^2&\approx 1.
+\end{align*}
+$$ 
+
+
+However, an **over-fitted** estimate $\hat{m}_{p}$ typically has fitted the noise component $\varepsilon$---additionally to the signal component $m.$ 
+
+Therefore, an over-fitted estimate  $\hat{m}_{p}$ will typically perform very poorly when used to predict new **out-of-sample data**. I.e. for a *new* outcome $Y_{new}$ with a new predictor $X_{new},$ where 
+$$
+Y_{new} = m(X_{new}) + \varepsilon_{new},
+$$
+we'll have that 
+$$
+|Y_{new} - \hat{m}_{p}(X_{new})| \gg |\varepsilon_{new}|.
+$$
+
+::: {.callout-note}
+
+# Optimism
+
+The term $2\sigma^2\frac{p}{n}$ in 
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$
+is called the **optimism** of the fit and quantifies the amount by which the in-sample average residual sum of squares (ARSS) **systematically under-estimates** the true mean average squared error (MASE) of $\hat m_p.$ 
+::: 
+
+
 
 ## Exercises {-}
 
