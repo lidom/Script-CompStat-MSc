@@ -984,9 +984,9 @@ Examples:
 $$
 O_P(r_n)\quad\text{with}\quad r_n>0,\;n=1,2,\dots
 $$
-is a placeholder symbol describing the family of all *stochastic* sequences $X_n$, $n=1,2,\dots,$ such that 
+is a placeholder symbol describing the family of all *stochastic* sequences $X_n$, $n=1,2,\dots,$ for which 
 
-* $\displaystyle P\left(\frac{|X_n|}{r_n}>\delta\right)<\epsilon$ for all sufficiently large $n$ and all $\delta>0$ and $\epsilon>0$. <br>
+* there exists for each (small) $\epsilon>0$ a sufficiently large threshold $\delta>0$ such that $\displaystyle P\left(\frac{|X_n|}{r_n}>\delta\right)<\epsilon$ for all sufficiently large $n$. <br>
 Plain English: "such that $\frac{|X_n|}{r_n}$ is **bounded in probability** for all large enough $n$"
 
 Example: 
@@ -1103,18 +1103,28 @@ From the general approximation properties of cubic splines ($k=3$) with $q=p-2$ 
 * If $m$ is twice continuously differentiable over $(a,b)$, then
 $$
 \begin{align*}
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\[2ex]
 &=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-4})
+&=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-4})&\quad\text{fixed design}\\
+O_p(p^{-4})&\quad\text{random design}\\
+\end{array}
+\right.
 \end{align*}
 $$
 
 * If $m$ is four times continuously differentiable, then
 $$
 \begin{align*}
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\
 &=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-8})
+&=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-8})&\quad\text{fixed design}\\
+O_p(p^{-8})&\quad\text{random design}\\
+\end{array}
+\right.
 \end{align*}
 $$
 
@@ -1162,7 +1172,11 @@ For cubic ($k=3$) splines with $q$ equidistant knots and a twice differentiable 
 
 $$
 \begin{align*}
-\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&=O_p(p^{-4})\\[2ex]
+\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&=\left\{\begin{array}{ll}
+O(p^{-4})&\quad\text{fixed design}\\
+O_p(p^{-4})&\quad\text{random design}\\
+\end{array}
+\right.\\[2ex]
 \displaystyle Var_\varepsilon(\hat m_p)&= \sigma^2\frac{p}{n},
 \end{align*}
 $${#eq-BiasSqVar}
@@ -1180,12 +1194,12 @@ $\displaystyle Var_\varepsilon(\hat m_p)$ is large, but squared bias $\displayst
      p^-5 = 1/n
      p    = (1/n)^-1/5  -->
 
-From @eq-BiasSqVar we have that 
+Focus now, on the case of a **fixed design**. From @eq-BiasSqVar we have that 
 $$
 \begin{align*}
 \operatorname{MASE}(\hat m_{p}) 
 &= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
-&=O_p(p^{-4}) + \sigma^2\frac{p}{n}
+&=O(p^{-4}) + \sigma^2\frac{p}{n}
 \end{align*}
 $$
 

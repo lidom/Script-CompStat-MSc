@@ -1150,9 +1150,9 @@ Stochastic Landau symbol “Big Oh P” <span class="math inline">\(O_P(r_n)\)</
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[
 O_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
-\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> for which</p>
 <ul>
-<li><span class="math inline">\(\displaystyle P\left(\frac{|X_n|}{r_n}&gt;\delta\right)&lt;\epsilon\)</span> for all sufficiently large <span class="math inline">\(n\)</span> and all <span class="math inline">\(\delta&gt;0\)</span> and <span class="math inline">\(\epsilon&gt;0\)</span>. <br> Plain English: “such that <span class="math inline">\(\frac{|X_n|}{r_n}\)</span> is <strong>bounded in probability</strong> for all large enough <span class="math inline">\(n\)</span>”</li>
+<li>there exists for each (small) <span class="math inline">\(\epsilon&gt;0\)</span> a sufficiently large threshold <span class="math inline">\(\delta&gt;0\)</span> such that <span class="math inline">\(\displaystyle P\left(\frac{|X_n|}{r_n}&gt;\delta\right)&lt;\epsilon\)</span> for all sufficiently large <span class="math inline">\(n\)</span>. <br> Plain English: “such that <span class="math inline">\(\frac{|X_n|}{r_n}\)</span> is <strong>bounded in probability</strong> for all large enough <span class="math inline">\(n\)</span>”</li>
 </ul>
 <p>Example:</p>
 <ul>
@@ -1252,16 +1252,26 @@ Important
 <ul>
 <li><p>If <span class="math inline">\(m\)</span> is twice continuously differentiable over <span class="math inline">\((a,b)\)</span>, then <span class="math display">\[
 \begin{align*}
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&amp;(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\[2ex]
 &amp;=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
-&amp;=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-4})
+&amp;=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-4})&amp;\quad\text{fixed design}\\
+O_p(p^{-4})&amp;\quad\text{random design}\\
+\end{array}
+\right.
 \end{align*}
 \]</span></p></li>
 <li><p>If <span class="math inline">\(m\)</span> is four times continuously differentiable, then <span class="math display">\[
 \begin{align*}
-(\operatorname{Bias}_\varepsilon(\hat m_p))^2
+&amp;(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\
 &amp;=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
-&amp;=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2=O_p(p^{-8})
+&amp;=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-8})&amp;\quad\text{fixed design}\\
+O_p(p^{-8})&amp;\quad\text{random design}\\
+\end{array}
+\right.
 \end{align*}
 \]</span></p></li>
 </ul>
@@ -1309,7 +1319,11 @@ Trace-Trick
 <p>For cubic (<span class="math inline">\(k=3\)</span>) splines with <span class="math inline">\(q\)</span> equidistant knots and a twice differentiable function <span class="math inline">\(m\)</span> we have that:</p>
 <p><span id="eq-BiasSqVar"><span class="math display">\[
 \begin{align*}
-\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&amp;=O_p(p^{-4})\\[2ex]
+\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&amp;=\left\{\begin{array}{ll}
+O(p^{-4})&amp;\quad\text{fixed design}\\
+O_p(p^{-4})&amp;\quad\text{random design}\\
+\end{array}
+\right.\\[2ex]
 \displaystyle Var_\varepsilon(\hat m_p)&amp;= \sigma^2\frac{p}{n},
 \end{align*}
 \tag{4.3}\]</span></span> where <span class="math inline">\(p=q+2\)</span> is the number of basis functions (i.e.&nbsp;the smoothing parameter).</p>
@@ -1321,11 +1335,11 @@ Trace-Trick
 <!-- p^-4 = p/n
      p^-5 = 1/n
      p    = (1/n)^-1/5  -->
-<p>From <a href="#eq-BiasSqVar">Equation&nbsp;<span>4.3</span></a> we have that <span class="math display">\[
+<p>Focus now, on the case of a <strong>fixed design</strong>. From <a href="#eq-BiasSqVar">Equation&nbsp;<span>4.3</span></a> we have that <span class="math display">\[
 \begin{align*}
 \operatorname{MASE}(\hat m_{p})
 &amp;= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
-&amp;=O_p(p^{-4}) + \sigma^2\frac{p}{n}
+&amp;=O(p^{-4}) + \sigma^2\frac{p}{n}
 \end{align*}
 \]</span></p>
 <p>Thus, if <span class="math display">\[
