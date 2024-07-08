@@ -1395,12 +1395,14 @@ Note
 </section>
 <section id="selecting-the-smoothing-parameter-p" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="selecting-the-smoothing-parameter-p"><span class="header-section-number">4.3</span> Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></h2>
-<p><strong>Problem:</strong> Since <span class="math inline">\(m\)</span> is unknown, we cannot directly compute <span class="math inline">\(\operatorname{MASE}(\hat{m}_p)\)</span> and thus cannot compute the exact value of <span class="math inline">\(p_{opt}\)</span>. However, we need to choose the smoothing parameter <span class="math inline">\(p\)</span> in an (somehow) optimal and objective manner.</p>
+<p><strong>Aim:</strong> We need to choose the smoothing parameter <span class="math inline">\(p\)</span> in an (somehow) optimal and objective manner.</p>
+<p><strong>Problem:</strong> Since <span class="math inline">\(m\)</span> is unknown, we cannot directly compute the <span class="math inline">\(\operatorname{Bias}(\hat{m}_p)\)</span> and thus not <span class="math inline">\(\operatorname{MASE}(\hat{m}_p).\)</span> This renders a direct computation of the optimal smoothing parameter <span class="math inline">\(p_{opt}\)</span> impossible.</p>
 <p><strong>Approach:</strong> Determine an estimate <span class="math inline">\(\hat p_{opt}\)</span> of the unknown optimal smoothing parameter <span class="math inline">\(p_{opt}\)</span> by minimizing a suitable error criterion with the following properties:</p>
 <ul>
 <li>For every possible <span class="math inline">\(p\)</span> the error criterion function can be calculated from the <em>data</em>.</li>
 <li>For every possible <span class="math inline">\(p\)</span> the error criterion provides “information” about the respective <span class="math inline">\(\operatorname{MASE}(\hat{m}_p)\)</span>.</li>
 </ul>
+<p><br> <br></p>
 <p>Recall: We have <span class="math display">\[
 \hat m_p=
 \left(\begin{matrix}
@@ -1415,7 +1417,7 @@ Note
 &amp;=\operatorname{trace}\big(I_p\big)=p
 \end{align*}
 \]</span></p>
-<p>That is, for given <span class="math inline">\(p\)</span>, the number of parameters to estimate by the spline method (one also speaks of the “degrees of freedom” of the smoothing procedure) is equal to <span class="math inline">\(p\)</span> which corresponds to the trace of the <strong>smoother matrix</strong> <span class="math inline">\(S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.\)</span></p>
+<p>That is, for given <span class="math inline">\(p\)</span>, the number of parameters to estimate by the spline method (one also speaks of the <strong>degrees of freedom of the smoothing procedure</strong>) is equal to <span class="math inline">\(p\)</span> which corresponds to the <strong>trace of the smoother matrix</strong> <span class="math inline">\(S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.\)</span></p>
 <p>Most frequently used error criteria are <strong>Cross-Validation (CV)</strong> and <strong>Generalized Cross-Validation (GCV).</strong></p>
 <section id="leave-one-out-cross-validation-loocv" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="leave-one-out-cross-validation-loocv"><span class="header-section-number">4.3.1</span> Leave One Out Cross-Validation (LOOCV)</h3>

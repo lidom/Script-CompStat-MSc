@@ -1269,14 +1269,22 @@ $$
 
 ## Selecting the Smoothing Parameter $p$ 
 
+
+**Aim:** 
+We need to choose the smoothing parameter $p$ in an (somehow) optimal and objective manner.
+
 **Problem:** 
-Since $m$ is unknown, we cannot directly compute $\operatorname{MASE}(\hat{m}_p)$ and thus cannot compute the exact value of $p_{opt}$. However, we need to choose the smoothing parameter $p$ in an (somehow) optimal and objective manner.
+Since $m$ is unknown, we cannot directly compute the $\operatorname{Bias}(\hat{m}_p)$ and thus not $\operatorname{MASE}(\hat{m}_p).$ This renders a direct computation of the optimal smoothing parameter $p_{opt}$ impossible. 
+
 
 **Approach:** 
 Determine an estimate $\hat p_{opt}$ of the unknown optimal smoothing parameter $p_{opt}$ by minimizing a suitable error criterion with the following properties:
 
 * For every possible $p$ the error criterion function can be calculated from the *data*.
 * For every possible $p$ the error criterion provides "information" about the respective  $\operatorname{MASE}(\hat{m}_p)$.
+
+</br>
+</br>
 
 
 Recall: We have
@@ -1297,7 +1305,7 @@ $$
 $$ 
 
 
-That is, for given $p$, the number of parameters to estimate by the spline method (one also speaks of the "degrees of freedom" of the smoothing procedure) is equal to $p$ which corresponds to the trace of the **smoother matrix** $S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.$ 
+That is, for given $p$, the number of parameters to estimate by the spline method (one also speaks of the **degrees of freedom of the smoothing procedure**) is equal to $p$ which corresponds to the **trace of the smoother matrix** $S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.$ 
 
 
 Most frequently used error criteria are **Cross-Validation (CV)** and **Generalized Cross-Validation (GCV).** 
