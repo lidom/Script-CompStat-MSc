@@ -501,8 +501,9 @@ linear ($k=1$) B-spline basis functions:
 library("splines2")
 
 degree         <- 1
-internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
-boundary_knots <- c(0, 1)
+knots          <- seq(from = 0, to = 1, len = 7)
+internal_knots <- knots[-c(1, length(knots))]
+boundary_knots <- knots[ c(1, length(knots))]
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -530,7 +531,7 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise linear ($k=1$) functions with local support over at most $k+1=1+1=2$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s &\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s &\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
 s(x)&= \sum_{j=1}^{7}\vartheta_j b_{j,1}(0)
 \end{align*}
 $$ 
@@ -548,8 +549,9 @@ quadratic ($k=2$) B-spline basis functions:
 library("splines2")
 
 degree         <- 2
-internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
-boundary_knots <- c(0, 1)
+knots          <- seq(from = 0, to = 1, len = 7)
+internal_knots <- knots[-c(1, length(knots))]
+boundary_knots <- knots[ c(1, length(knots))]
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -577,7 +579,7 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise quadratic ($k=2$) functions with local support over at most $k+1=2+1=3$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s&\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s&\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
 s(x)&= \sum_{j=1}^{8}\vartheta_j b_{j,1}(x)
 \end{align*}
 $$ 
@@ -596,8 +598,10 @@ cubic ($k=3$) B-spline basis functions:
 library("splines2")
 
 degree         <- 3
-internal_knots <- seq(from = 0.1, to = 0.9, len = 5)
-boundary_knots <- c(0, 1)
+knots          <- seq(from = 0, to = 1, len = 7)
+internal_knots <- knots[-c(1, length(knots))]
+boundary_knots <- knots[ c(1, length(knots))]
+
 
 ## evaluation points (for plotting)
 x_vec <- seq(from = boundary_knots[1], 
@@ -625,7 +629,7 @@ abline(v   = c(boundary_knots[1], internal_knots, boundary_knots[2]),
 Here, the basis functions are piecewise cubic ($k=3$) functions with local support over at most $k+1=3+1=4$ knot-intervals. Any spline function 
 $$
 \begin{align*}
-s &\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=5)\\[2ex]
+s &\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
 s(x) &= \sum_{j=1}^{9} \vartheta_j b_{j,1}(x)
 \end{align*}
 $$ 
@@ -1409,7 +1413,7 @@ plot(y = LOOCV_p, x = p_vec, type="o")
 
 In practice, one usually works with $k$-fold CV ($k=5$ or $k=10$). For this the index set $I=\{1,\dots,n\}$ is partitioned into $k$ disjoint index sets $I_1,\dots,I_k$ of (roughly) equal sizes, i.e. $|I_1|\approx|I_2|\approx\dots\approx|I_k|$, such that $I_1\cup I_1\cup \dots \cup I_k=I$ and $I_j\cap I_k=\emptyset$ for all $j\neq k$.
 $$
-\operatorname{CV}_k(p)=\frac{1}{k}\sum_{k=1}^K\frac{1}{|I_k|} \sum_{i\in I_k}\left( Y_i-
+\operatorname{CV}_k(p)=\frac{1}{K}\sum_{k=1}^K\frac{1}{|I_k|} \sum_{i\in I_k}\left( Y_i-
 {\hat m}_{p,-I_k}(X_i)\right)^2.
 $$
 
