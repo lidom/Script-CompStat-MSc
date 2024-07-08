@@ -227,6 +227,7 @@ div.csl-indent {
   <li><a href="#over-fitting-and-optimism" id="toc-over-fitting-and-optimism" class="nav-link" data-scroll-target="#over-fitting-and-optimism"><span class="toc-section-number">4.3.4</span>  Over-Fitting and Optimism</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -1516,7 +1517,7 @@ p_{opt}
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-\tag{4.5}\]</span></span> Moreover, a Taylor expansion of <span class="math inline">\(f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\)</span> around <span class="math inline">\(f(0)\)</span> yields that <span class="math display">\[
+\tag{4.5}\]</span></span> Moreover, a Taylor expansion of <span class="math inline">\(f(p/n)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\)</span> around <span class="math inline">\(p/n=0\)</span> yields that <span class="math display">\[
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
 \]</span> where the approximation becomes precise as <span class="math inline">\(\frac{p}{n}\to 0.\)</span> Thus <span class="math display">\[
 \begin{align*}
@@ -1718,76 +1719,69 @@ Optimism
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 \]</span></p>
-<!--
-
-## Solutions {-}
-
-
-#### Solution for Exercise 1. {-} 
-
-A Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields
-$$
+<!-- -->
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solution-for-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-1.">Solution for Exercise 1.</h4>
+<p>Let <span class="math inline">\(x=\frac{p}{n}\)</span>.</p>
+<p>A Taylor expansion of <span class="math display">\[
+f(p/n)=f(x)=\frac{1}{\left(1-x\right)^2}
+\]</span> around <span class="math inline">\(x=0\)</span> yields <span class="math display">\[
 \begin{align*}
-f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}
-&=\overbrace{1}^{f(0)}+p\;\overbrace{(-2)\cdot\left(1-\frac{0}{n}\right)^{-3}\cdot\left(-\frac{1}{n}\right)}^{=f'(p)|_{p=0}}\\[2ex]
-&\phantom{\overbrace{1}^{f(0)}} + p^2\;\overbrace{6\cdot\left(1-\frac{0}{n}\right)^{-4}\cdot\left(-\frac{1}{n}\right)^2}^{=f''(p)|_{p=0}}\\[2ex]
-&=1+ 2\,p\frac{1}{n}+O\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
+&amp;=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(x)|_{x=0}}\\[2ex]
+&amp;\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(x)|_{x=0}}\\[2ex]
+&amp;\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
+&amp;=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
+&amp;=1+ 2 x +O\left(x^2\right)\\[2ex]
+\Rightarrow\quad f(p/n)&amp;=1+ 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
 \end{align*}
-$$
-Thus, 
-$$
+\]</span> Thus, <span class="math display">\[
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
-$$
-where the approximation becomes precise as $\frac{p}{n}\to 0.$
-
-
-
-#### Solution for Exercise 2. {-} 
-
-
-$$
+\]</span> where the approximation becomes precise as <span class="math inline">\(\frac{p}{n}\to 0.\)</span></p>
+</section>
+<section id="solution-for-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-2.">Solution for Exercise 2.</h4>
+<p><span class="math display">\[
 \begin{align*}
-\operatorname{ARSS}(p)&=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) - 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+\operatorname{ARSS}(p)&amp;=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) + 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
 \mathbb{E}_\varepsilon\big(\operatorname{ARSS}(p)\big)
-&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
-&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
-&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
-&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
+&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
+&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
 \end{align*}
-$$
-
-In the following, we focus on the second term:
-$$
+\]</span></p>
+<p>In the following, we focus on the second term: <span class="math display">\[
 \begin{align*}
-&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i))\\[2ex]
-&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
-&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
-&=- 2\sigma^2 \frac{p}{n}
+&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i))\\[2ex]
+&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
+&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
+&amp;=- 2\sigma^2 \frac{p}{n}
 \end{align*}
-$$
-where $e_i^\top$ is a $(1\times p)$ vector with a $1$ at the $i$th element and $0$s else.
-
-Thus, 
-$$
+\]</span> where <span class="math inline">\(e_i^\top\)</span> is a <span class="math inline">\((1\times p)\)</span> vector with a <span class="math inline">\(1\)</span> at the <span class="math inline">\(i\)</span>th element and <span class="math inline">\(0\)</span>s else.</p>
+<p>Thus, <span class="math display">\[
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-$$
-
--->
+\]</span></p>
+<!-- -->
 </section>
 </section>
 <section id="references" class="level2 unnumbered">

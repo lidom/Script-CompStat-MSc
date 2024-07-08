@@ -1429,7 +1429,7 @@ $$
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 $${#eq-optimism}
-Moreover, a Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields that 
+Moreover, a Taylor expansion of $f(p/n)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $p/n=0$ yields that 
 $$
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
 $$
@@ -1667,20 +1667,30 @@ $$
 $$
 
 
-<!--
+<!-- -->
 
 ## Solutions {-}
 
 
 #### Solution for Exercise 1. {-} 
 
-A Taylor expansion of $f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}$ around $f(0)$ yields
+
+Let $x=\frac{p}{n}$. 
+
+A Taylor expansion of 
+$$
+f(p/n)=f(x)=\frac{1}{\left(1-x\right)^2}
+$$ 
+around $x=0$ yields
 $$
 \begin{align*}
-f(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}
-&=\overbrace{1}^{f(0)}+p\;\overbrace{(-2)\cdot\left(1-\frac{0}{n}\right)^{-3}\cdot\left(-\frac{1}{n}\right)}^{=f'(p)|_{p=0}}\\[2ex]
-&\phantom{\overbrace{1}^{f(0)}} + p^2\;\overbrace{6\cdot\left(1-\frac{0}{n}\right)^{-4}\cdot\left(-\frac{1}{n}\right)^2}^{=f''(p)|_{p=0}}\\[2ex]
-&=1+ 2\,p\frac{1}{n}+O\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+f(x)&=\frac{1}{\left(1-x\right)^2}\\[2ex]
+&=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(x)|_{x=0}}\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(x)|_{x=0}}\\[2ex]
+&\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)\\[2ex]
+\Rightarrow\quad f(p/n)&=1+ 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
 \end{align*}
 $$
 Thus, 
@@ -1699,12 +1709,12 @@ $$
 \operatorname{ARSS}(p)&=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
 &=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
 &=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
-&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) - 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) + 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
 \mathbb{E}_\varepsilon\big(\operatorname{ARSS}(p)\big)
-&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
 &=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
 &=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
-&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
 \end{align*}
 $$
 
@@ -1736,6 +1746,6 @@ $$
 \end{align*}
 $$
 
--->
+<!-- -->
 
 ## References {-}
