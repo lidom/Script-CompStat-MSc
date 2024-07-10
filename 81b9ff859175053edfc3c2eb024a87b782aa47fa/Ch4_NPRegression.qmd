@@ -1679,6 +1679,10 @@ $$
 $$
 
 
+#### Exercise 3. {-}
+
+Show that the core-part of the optimism term, i.e. $\sigma^2\frac{p}{n},$ quantifies the average covariance between the error terms $\varepsilon_i$ and the fitts $\hat{m}_p(X_i)$ over $i=1,\dots,n.$
+
 <!-- -->
 
 ## Solutions {-}
@@ -1691,7 +1695,7 @@ Let $x=\frac{p}{n}$.
 
 A Taylor expansion of 
 $$
-f(p/n)=f(x)=\frac{1}{\left(1-x\right)^2}
+\overbrace{f(x)}^{=f(p/n)}=\frac{1}{\left(1-x\right)^2}
 $$ 
 around $x=0$ yields
 $$
@@ -1702,14 +1706,21 @@ f(x)&=\frac{1}{\left(1-x\right)^2}\\[2ex]
 &\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
 &=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
 &=1+ 2 x +O\left(x^2\right)\\[2ex]
-\Rightarrow\quad f(p/n)&=1+ 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
+\end{align*}
+$$
+With $x=\frac{p}{n},$ we thus have that
+$$
+\begin{align*}
+f(p/n)
+&=\frac{1}{\left(1-\frac{p}{n}\right)^2}\\[2ex]
+&=1 + 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
 \end{align*}
 $$
 Thus, 
 $$
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
 $$
-where the approximation becomes precise as $\frac{p}{n}\to 0.$
+where the approximation error goes to zero with the rate $\left(\frac{p}{n}\right)^2\to 0.$  
 
 
 
@@ -1733,7 +1744,7 @@ $$
 In the following, we focus on the second term:
 $$
 \begin{align*}
-&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i))\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
 &=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
 &=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
 &=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
@@ -1757,6 +1768,29 @@ $$
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 $$
+
+
+#### Solution for Exercise 3. {-} 
+
+Alternative view on the second term: 
+
+$$
+\begin{align*}
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat{m}_p(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \overbrace{\Big[\mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - \underbrace{\mathbb{E}_\varepsilon(\varepsilon_i)}_{=0} \cdot \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\Big]}^{=Cov_\varepsilon(\varepsilon_i, \hat{m}_p(X_i))}\\[2ex]
+&-2\cdot \underbrace{\frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right)}_{=\sigma^2\frac{p}{n}}\\[2ex]
+\end{align*}
+$$
+Thus
+$$
+\sigma^2\frac{p}{n} = \frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right).
+$$
+
+That is, the core-part of the second term, namely $\sigma^2\frac{p}{n},$ equals the average covariance between the noise $\varepsilon_i$ and the fitted value $\hat{m}_p(X_i)$ across $i=1,\dots,n.$ 
+
+This observation explains the name **optimism** term. Of course, the fits $\hat{m}_p(X_i)$ should only be driven by the signal-components $m(X_i)$ and not by the noise-components $\varepsilon_i.$  
+
 
 <!-- -->
 

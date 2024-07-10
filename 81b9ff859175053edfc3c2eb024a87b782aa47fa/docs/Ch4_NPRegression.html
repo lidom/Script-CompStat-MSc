@@ -1725,6 +1725,10 @@ Optimism
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 \]</span></p>
+</section>
+<section id="exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-3.">Exercise 3.</h4>
+<p>Show that the core-part of the optimism term, i.e.&nbsp;<span class="math inline">\(\sigma^2\frac{p}{n},\)</span> quantifies the average covariance between the error terms <span class="math inline">\(\varepsilon_i\)</span> and the fitts <span class="math inline">\(\hat{m}_p(X_i)\)</span> over <span class="math inline">\(i=1,\dots,n.\)</span></p>
 <!-- -->
 </section>
 </section>
@@ -1734,7 +1738,7 @@ Optimism
 <h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-1.">Solution for Exercise 1.</h4>
 <p>Let <span class="math inline">\(x=\frac{p}{n}\)</span>.</p>
 <p>A Taylor expansion of <span class="math display">\[
-f(p/n)=f(x)=\frac{1}{\left(1-x\right)^2}
+\overbrace{f(x)}^{=f(p/n)}=\frac{1}{\left(1-x\right)^2}
 \]</span> around <span class="math inline">\(x=0\)</span> yields <span class="math display">\[
 \begin{align*}
 f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
@@ -1743,11 +1747,16 @@ f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
 &amp;\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
 &amp;=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
 &amp;=1+ 2 x +O\left(x^2\right)\\[2ex]
-\Rightarrow\quad f(p/n)&amp;=1+ 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
+\end{align*}
+\]</span> With <span class="math inline">\(x=\frac{p}{n},\)</span> we thus have that <span class="math display">\[
+\begin{align*}
+f(p/n)
+&amp;=\frac{1}{\left(1-\frac{p}{n}\right)^2}\\[2ex]
+&amp;=1 + 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
 \end{align*}
 \]</span> Thus, <span class="math display">\[
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
-\]</span> where the approximation becomes precise as <span class="math inline">\(\frac{p}{n}\to 0.\)</span></p>
+\]</span> where the approximation error goes to zero with the rate <span class="math inline">\(\left(\frac{p}{n}\right)^2\to 0.\)</span></p>
 </section>
 <section id="solution-for-exercise-2." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-2.">Solution for Exercise 2.</h4>
@@ -1766,7 +1775,7 @@ f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
 \]</span></p>
 <p>In the following, we focus on the second term: <span class="math display">\[
 \begin{align*}
-&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i))\\[2ex]
+&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
 &amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
 &amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
 &amp;=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
@@ -1787,6 +1796,22 @@ f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
 \]</span></p>
+</section>
+<section id="solution-for-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-3.">Solution for Exercise 3.</h4>
+<p>Alternative view on the second term:</p>
+<p><span class="math display">\[
+\begin{align*}
+&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat{m}_p(X_i)\right)\\[2ex]
+&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \overbrace{\Big[\mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - \underbrace{\mathbb{E}_\varepsilon(\varepsilon_i)}_{=0} \cdot \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\Big]}^{=Cov_\varepsilon(\varepsilon_i, \hat{m}_p(X_i))}\\[2ex]
+&amp;-2\cdot \underbrace{\frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right)}_{=\sigma^2\frac{p}{n}}\\[2ex]
+\end{align*}
+\]</span> Thus <span class="math display">\[
+\sigma^2\frac{p}{n} = \frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right).
+\]</span></p>
+<p>That is, the core-part of the second term, namely <span class="math inline">\(\sigma^2\frac{p}{n},\)</span> equals the average covariance between the noise <span class="math inline">\(\varepsilon_i\)</span> and the fitted value <span class="math inline">\(\hat{m}_p(X_i)\)</span> across <span class="math inline">\(i=1,\dots,n.\)</span></p>
+<p>This observation explains the name <strong>optimism</strong> term. Of course, the fits <span class="math inline">\(\hat{m}_p(X_i)\)</span> should only be driven by the signal-components <span class="math inline">\(m(X_i)\)</span> and not by the noise-components <span class="math inline">\(\varepsilon_i.\)</span></p>
 <!-- -->
 </section>
 </section>
