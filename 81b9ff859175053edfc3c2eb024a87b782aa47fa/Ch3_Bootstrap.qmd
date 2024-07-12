@@ -1981,14 +1981,14 @@ where $\hat\sigma^2_n\to\sigma^2_0$ as $n\to\infty.$
 
 An appropriate central limit theorem argument implies that 
 $$
-\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M\right),
+\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right),
 $$
-as $n\to\infty,$ assuming that $\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M$ as $n\to\infty.$
+as $n\to\infty,$ assuming that $\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M$ as $n\to\infty$ with $M$ being invertible. 
 
 That is, for large $n$, we have that
 $$
 \text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
-\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M\right)}
+\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right)}
 $$
 
 
@@ -2193,10 +2193,10 @@ $$
 $$
 denotes the $j$-th diagonal element of the $(p\times p)$-dimensional matrix $\widehat{M}_n^{-1}=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}.$ 
 
-In case of heteroskedastic errors, one can use 
+In the case of heteroskedastic errors, one can use 
 $$
 \widehat{\operatorname{SE}}(\hat\beta_{j,n})
-=\sqrt{\left[\widehat{M}_n^{-1}\widehat{Q}_n\widehat{M}_n^{-1}\right]_{jj}}
+=\frac{\sqrt{\left[\widehat{M}_n^{-1}\widehat{Q}_n\widehat{M}_n^{-1}\right]_{jj}}}{\sqrt{n}}
 $$
 where 
 
@@ -2205,7 +2205,7 @@ where
 
 Note that $T_n$ is an asymptotically pivotal statistic; i.e.,
 $$
-T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\widehat{\operatorname{SE}}(\hat\beta_{j,n})}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+T_n= \frac{(\hat\beta_{n,j}-\beta_{0,j})}{\widehat{\operatorname{SE}}(\hat\beta_{j,n})}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 $$ 
 
 A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be constructed as follows:

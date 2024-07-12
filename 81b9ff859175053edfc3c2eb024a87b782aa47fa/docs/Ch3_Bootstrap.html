@@ -1971,11 +1971,11 @@ Y_i^*=X_i^T\hat\beta_n + \hat\varepsilon_i^*,\quad i=1,\dots,n
 Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 = \hat\sigma^2_n,
 \]</span> where <span class="math inline">\(\hat\sigma^2_n\to\sigma^2_0\)</span> as <span class="math inline">\(n\to\infty.\)</span></p>
 <p>An appropriate central limit theorem argument implies that <span class="math display">\[
-\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M\right),
-\]</span> as <span class="math inline">\(n\to\infty,\)</span> assuming that <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M\)</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right),
+\]</span> as <span class="math inline">\(n\to\infty,\)</span> assuming that <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M\)</span> as <span class="math inline">\(n\to\infty\)</span> with <span class="math inline">\(M\)</span> being invertible.</p>
 <p>That is, for large <span class="math inline">\(n\)</span>, we have that <span class="math display">\[
 \text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
-\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M\right)}
+\approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right)}
 \]</span></p>
 </section>
 </section>
@@ -2135,16 +2135,16 @@ T_n = \frac{\hat\beta_{j,n} -\beta_{0,j}}{\widehat{\operatorname{SE}}(\hat\beta_
 =\left[\widehat{M}_n^{-1}\right]_{jj}
 =\left[\left(\frac{1}{n}\sum_{i=1}^n X_iX_i^\top\right)^{-1}\right]_{jj}
 \]</span> denotes the <span class="math inline">\(j\)</span>-th diagonal element of the <span class="math inline">\((p\times p)\)</span>-dimensional matrix <span class="math inline">\(\widehat{M}_n^{-1}=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}.\)</span></p>
-<p>In case of heteroskedastic errors, one can use <span class="math display">\[
+<p>In the case of heteroskedastic errors, one can use <span class="math display">\[
 \widehat{\operatorname{SE}}(\hat\beta_{j,n})
-=\sqrt{\left[\widehat{M}_n^{-1}\widehat{Q}_n\widehat{M}_n^{-1}\right]_{jj}}
+=\frac{\sqrt{\left[\widehat{M}_n^{-1}\widehat{Q}_n\widehat{M}_n^{-1}\right]_{jj}}}{\sqrt{n}}
 \]</span> where</p>
 <ul>
 <li><span class="math inline">\(\widehat{M}_n^{-1}=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}\)</span></li>
 <li><span class="math inline">\(\widehat{Q}_n=\widehat{\mathbb{E}}(\varepsilon_i^2X_iX_i^\top)\)</span> denotes a Heteroskedasticity Consistent (HC) estimators of <span class="math inline">\(\mathbb{E}(\varepsilon_i^2X_iX_i^\top);\)</span> e.g.&nbsp;the HC2-estimator <span class="math inline">\(\widehat{\mathbb{E}}(\varepsilon_i^2X_iX_i^\top)=\frac{1}{n-p}\sum_{i=1}^n\hat\varepsilon_i^2X_iX_i^\top.\)</span></li>
 </ul>
 <p>Note that <span class="math inline">\(T_n\)</span> is an asymptotically pivotal statistic; i.e., <span class="math display">\[
-T_n=\sqrt{n}\frac{(\hat\beta_{n,j}-\beta_{0,j})}{\widehat{\operatorname{SE}}(\hat\beta_{j,n})}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
+T_n= \frac{(\hat\beta_{n,j}-\beta_{0,j})}{\widehat{\operatorname{SE}}(\hat\beta_{j,n})}\rightarrow_d\mathcal{N}(0,1),\quad n\to\infty.
 \]</span></p>
 <p>A bootstrap-<span class="math inline">\(t\)</span> interval for <span class="math inline">\(\beta_{0,j}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, can thus be constructed as follows:</p>
 <ol type="1">
