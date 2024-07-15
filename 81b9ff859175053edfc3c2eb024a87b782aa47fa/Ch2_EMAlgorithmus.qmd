@@ -566,7 +566,7 @@ The EM algorithm allows maximum likelihood problems to be simplified by **adding
 
 # Remember:
 
-We were note able to maximize the log-likelihood function
+We were not able to maximize the log-likelihood function
 $$
 \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
   =\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)
@@ -757,7 +757,7 @@ From this, we can calculate the conditional expected value (using @eq-posteriorM
 $$
 \begin{align*}
 &\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})|\mathbf{X}=\mathbf{x}\right)\\[2ex]
-&\quad =\sum_{i=1}^n\sum_{k=1}^K\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+&\quad =\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
 &\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\},
 \end{align*}
 $$
@@ -799,8 +799,8 @@ For $r=1,2,\dots$
     \begin{align*}
     &\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
     =\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex]
-    &=\sum_{i=1}^n\sum_{k=1}^K\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
-    &=\sum_{i=1}^n\sum_{k=1}^K\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
+    &=\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+    &=\sum_{i=1}^n\sum_{g=1}^G\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
     \end{align*}
     $$
     where

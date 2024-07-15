@@ -199,6 +199,11 @@ div.csl-indent {
   <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -727,7 +732,7 @@ Remember:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We were note able to maximize the log-likelihood function <span class="math display">\[
+<p>We were not able to maximize the log-likelihood function <span class="math display">\[
 \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
   =\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)
 \]</span> directly. In fact, the <span class="math inline">\(\ln(\sum_{g=1}^G[\dots])\)</span>-construction makes life difficult here.</p>
@@ -898,7 +903,7 @@ p_{ig}
 <p>From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean">Equation&nbsp;<span>2.6</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
 \begin{align*}
 &amp;\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})|\mathbf{X}=\mathbf{x}\right)\\[2ex]
-&amp;\quad =\sum_{i=1}^n\sum_{k=1}^K\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+&amp;\quad =\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
 &amp;\quad =\sum_{i=1}^n\sum_{g=1}^Gp_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\},
 \end{align*}
 \]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the parameter vector.</p>
@@ -936,8 +941,8 @@ Tip
 \begin{align*}
 &amp;\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
 =\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex]
-&amp;=\sum_{i=1}^n\sum_{k=1}^K\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
-&amp;=\sum_{i=1}^n\sum_{k=1}^K\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
+&amp;=\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+&amp;=\sum_{i=1}^n\sum_{g=1}^G\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span> where <span class="math display">\[
 \hat{p}_{ig}^{(r-1)} = \frac{\hat{\pi}_g^{(r-1)} \varphi(x_i;\hat{\mu}_g^{(r-1)},\hat{\sigma}_g^{(r-1)})}{f_{GMM}(x_i;\boldsymbol{\hat{\pi}}^{(r-1)},\boldsymbol{\hat{\mu}}^{(r-1)},\boldsymbol{\hat{\sigma}}^{(r-1)})}
