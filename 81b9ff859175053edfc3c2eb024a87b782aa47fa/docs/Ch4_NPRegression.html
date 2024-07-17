@@ -396,11 +396,11 @@ X_{ij}=b_j(X_i),
 <p><strong>Theoretical Justification:</strong> Every smooth function can be well approximated by a polynomial of sufficiently high degree.</p>
 <p><strong>Approach:</strong></p>
 <ul>
-<li><p>Monomial basis functions <span class="math inline">\(b_j(x) = x^{j-1}\)</span>, <span class="math inline">\(\;\;j=1,\dots,p-1.\)</span></p></li>
-<li><p>Choose <span class="math inline">\(p\)</span> (polynomial degree) and fit a polynomial of degree <span class="math inline">\(p-1\)</span>: <span class="math display">\[
-\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X^{j-1}\right)^2
+<li><p>Monomial basis functions <span class="math inline">\(b_j(x) = x^{j-1}\)</span>, <span class="math inline">\(\;\;j=1,\dots,p.\)</span></p></li>
+<li><p>Choose <span class="math inline">\(p\)</span> (polynomial degree) and fit a polynomial of degree <span class="math inline">\(p\)</span>: <span class="math display">\[
+\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X_i^{j-1}\right)^2
 \]</span> <span class="math display">\[
-\Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p-1}
+\Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p}
 {\hat \beta}_{j} X_i^{j-1}
 \]</span></p></li>
 <li><p>This corresponds to an approximation with basis functions <span class="math display">\[
@@ -1750,12 +1750,21 @@ Optimism
 <h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-1.">Solution for Exercise 1.</h4>
 <p>Let <span class="math inline">\(x=\frac{p}{n}\)</span>.</p>
 <p>A Taylor expansion of <span class="math display">\[
-\overbrace{f(x)}^{=f(p/n)}=\frac{1}{\left(1-x\right)^2}
-\]</span> around <span class="math inline">\(x=0\)</span> yields <span class="math display">\[
+f(x)=\frac{1}{\left(1-x\right)^2}
+\]</span> around some point <span class="math inline">\(a\)</span> yields</p>
+<p><span class="math display">\[
 \begin{align*}
-f(x)&amp;=\frac{1}{\left(1-x\right)^2}\\[2ex]
-&amp;=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(x)|_{x=0}}\\[2ex]
-&amp;\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(x)|_{x=0}}\\[2ex]
+f(x)
+&amp;=f(a)+\frac{1}{1!}\;(x-a)\;\; f'(a)\\[2ex]
+&amp;\hspace{1.5cm} + \frac{1}{2!}\;(x-a)^2\;f''(a)\\[2ex]
+&amp;\hspace{1.5cm} + o\left((x-a)^2\right)
+\end{align*}
+\]</span></p>
+<p>Thus, for <span class="math inline">\(a = 0,\)</span> we have that <span class="math display">\[
+\begin{align*}
+f(x)
+&amp;=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(0)}\\[2ex]
+&amp;\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(0)}\\[2ex]
 &amp;\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
 &amp;=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
 &amp;=1+ 2 x +O\left(x^2\right)\\[2ex]

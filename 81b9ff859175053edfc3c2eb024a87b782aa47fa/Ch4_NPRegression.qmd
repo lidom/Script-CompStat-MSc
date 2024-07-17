@@ -152,14 +152,14 @@ Examples of basis functions $b_1(x),\,b_2(x)\,\dots$:
 
 **Approach:**
 
-* Monomial basis functions $b_j(x) = x^{j-1}$, $\;\;j=1,\dots,p-1.$
+* Monomial basis functions $b_j(x) = x^{j-1}$, $\;\;j=1,\dots,p.$
 
 * Choose $p$ (polynomial degree) and fit a polynomial of degree $p$:
   $$
-  \min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X^{j-1}\right)^2
+  \min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X_i^{j-1}\right)^2
   $$
   $$
-  \Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p-1}
+  \Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p}
   {\hat \beta}_{j} X_i^{j-1}
   $$
 * This corresponds to an approximation with basis functions
@@ -1706,14 +1706,25 @@ Let $x=\frac{p}{n}$.
 
 A Taylor expansion of 
 $$
-\overbrace{f(x)}^{=f(p/n)}=\frac{1}{\left(1-x\right)^2}
+f(x)=\frac{1}{\left(1-x\right)^2}
 $$ 
-around $x=0$ yields
+around some point $a$ yields
+
 $$
 \begin{align*}
-f(x)&=\frac{1}{\left(1-x\right)^2}\\[2ex]
-&=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(x)|_{x=0}}\\[2ex]
-&\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(x)|_{x=0}}\\[2ex]
+f(x)
+&=f(a)+\frac{1}{1!}\;(x-a)\;\; f'(a)\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;(x-a)^2\;f''(a)\\[2ex]
+&\hspace{1.5cm} + o\left((x-a)^2\right)
+\end{align*}
+$$
+
+Thus, for $a = 0,$ we have that
+$$
+\begin{align*}
+f(x)
+&=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(0)}\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(0)}\\[2ex]
 &\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
 &=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
 &=1+ 2 x +O\left(x^2\right)\\[2ex]
