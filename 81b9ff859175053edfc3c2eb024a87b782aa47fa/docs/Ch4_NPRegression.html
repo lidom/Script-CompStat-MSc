@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computational Statistics (M.Sc.) - 4&nbsp; Nonparametric Regression</title>
+<title>4&nbsp; Nonparametric Regression – Computational Statistics (M.Sc.)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,11 +17,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -32,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -46,48 +47,20 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -101,8 +74,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -128,7 +100,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -137,12 +115,42 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -150,11 +158,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Ch4_NPRegression.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -162,72 +175,77 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./" class="sidebar-logo-link">
+      <a href="./index.html" class="sidebar-logo-link">
       <img src="./images/Uni_Bonn_Logo.jpeg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Computational Statistics (M.Sc.)</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Organization of the Course</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Organization of the Course</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch1_MaximumLikelihood.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></a>
+  <a href="./Ch1_MaximumLikelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></a>
+  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></a>
+  <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a>
+  <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">4.1</span>  Introduction</a></li>
-  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="toc-section-number">4.2</span>  Basis Function Expansions</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="header-section-number">4.2</span> Basis Function Expansions</a>
   <ul class="collapse">
-  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="toc-section-number">4.2.1</span>  Polynomial Regression</a></li>
-  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="toc-section-number">4.2.2</span>  Regression Splines</a></li>
-  <li><a href="#mean-average-squared-error-of-regression-splines" id="toc-mean-average-squared-error-of-regression-splines" class="nav-link" data-scroll-target="#mean-average-squared-error-of-regression-splines"><span class="toc-section-number">4.2.3</span>  Mean Average Squared Error of Regression Splines</a></li>
+  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="header-section-number">4.2.1</span> Polynomial Regression</a></li>
+  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="header-section-number">4.2.2</span> Regression Splines</a></li>
+  <li><a href="#mean-average-squared-error-of-regression-splines" id="toc-mean-average-squared-error-of-regression-splines" class="nav-link" data-scroll-target="#mean-average-squared-error-of-regression-splines"><span class="header-section-number">4.2.3</span> Mean Average Squared Error of Regression Splines</a></li>
   </ul></li>
-  <li><a href="#selecting-the-smoothing-parameter-p" id="toc-selecting-the-smoothing-parameter-p" class="nav-link" data-scroll-target="#selecting-the-smoothing-parameter-p"><span class="toc-section-number">4.3</span>  Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></a>
+  <li><a href="#selecting-the-smoothing-parameter-p" id="toc-selecting-the-smoothing-parameter-p" class="nav-link" data-scroll-target="#selecting-the-smoothing-parameter-p"><span class="header-section-number">4.3</span> Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></a>
   <ul class="collapse">
-  <li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="toc-section-number">4.3.1</span>  Leave One Out Cross-Validation (LOOCV)</a></li>
-  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation"><span class="toc-section-number">4.3.2</span>  <span class="math inline">\(k\)</span>-fold Cross-Validation</a></li>
-  <li><a href="#generalized-cross-validation-gcv" id="toc-generalized-cross-validation-gcv" class="nav-link" data-scroll-target="#generalized-cross-validation-gcv"><span class="toc-section-number">4.3.3</span>  Generalized Cross-Validation (GCV)</a></li>
-  <li><a href="#over-fitting-and-optimism" id="toc-over-fitting-and-optimism" class="nav-link" data-scroll-target="#over-fitting-and-optimism"><span class="toc-section-number">4.3.4</span>  Over-Fitting and Optimism</a></li>
+  <li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="header-section-number">4.3.1</span> Leave One Out Cross-Validation (LOOCV)</a></li>
+  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation"><span class="header-section-number">4.3.2</span> <span class="math inline">\(k\)</span>-fold Cross-Validation</a></li>
+  <li><a href="#generalized-cross-validation-gcv" id="toc-generalized-cross-validation-gcv" class="nav-link" data-scroll-target="#generalized-cross-validation-gcv"><span class="header-section-number">4.3.3</span> Generalized Cross-Validation (GCV)</a></li>
+  <li><a href="#over-fitting-and-optimism" id="toc-over-fitting-and-optimism" class="nav-link" data-scroll-target="#over-fitting-and-optimism"><span class="header-section-number">4.3.4</span> Over-Fitting and Optimism</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
-  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -237,7 +255,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></h1>
 </div>
 
 
@@ -245,11 +263,14 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
 
+
 </header>
+
 
 <section id="introduction" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
@@ -286,12 +307,12 @@ m(X)=\beta_0+\beta_1 X
 \]</span></p></li>
 </ul>
 <p>Many important applications lead to regression functions possessing a complicated structure. Standard models then are “too simple” and do not provide useful approximations of <span class="math inline">\(m(x)\)</span>.</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 As George Box is saying it:
 </div>
 </div>
@@ -318,12 +339,12 @@ X_{i+1}-X_i=\frac{b-a}{n}.
 m(x)=\mathbb{E}(Y|\ X=x)
 \]</span></p>
 <p>and <span class="math inline">\(Var(\varepsilon_i|X_i)=\sigma^2\)</span>.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -331,27 +352,31 @@ Note
 <p>For random design all expectations (as well as variances) have to be interpreted as <em>conditional</em> expectations (variances) given <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
 </div>
 </div>
-<p><strong>Example:</strong> Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13); see <a href="#fig-CanadianIncome">Figure&nbsp;<span>4.1</span></a>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/fig-CanadianIncome_617304093f43a7e79cdef59764489ee6">
+<p><strong>Example:</strong> Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13); see <a href="#fig-CanadianIncome" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"np"</span>))</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"cps71"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cps71<span class="sc">$</span>age, cps71<span class="sc">$</span>logwage, <span class="at">xlab=</span><span class="st">"Age"</span>, <span class="at">ylab=</span><span class="st">"log(wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fig-CanadianIncome" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="Ch4_NPRegression_files/figure-html/fig-CanadianIncome-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.1: Canadian cross-section wage data.</figcaption><p></p>
+<div id="fig-CanadianIncome" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CanadianIncome-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NPRegression_files/figure-html/fig-CanadianIncome-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CanadianIncome-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Canadian cross-section wage data.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>What would be a good/reasonable model assumption for <span class="math inline">\(m(x)\)</span> to estimate the conditional mean function for the data shown in <a href="#fig-CanadianIncome">Figure&nbsp;<span>4.1</span></a>?</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<p>What would be a good/reasonable model assumption for <span class="math inline">\(m(x)\)</span> to estimate the conditional mean function for the data shown in <a href="#fig-CanadianIncome" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>?</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 No specific model assumption
 </div>
 </div>
@@ -413,12 +438,12 @@ b_{p}(x)&amp;=x^{p-1}
 \end{align*}
 \]</span></p></li>
 </ul>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -436,7 +461,7 @@ Note
 <p>Generate some artificial data, where the usually unknown <span class="math display">\[
 m(x)=\sin(5 x)
 \]</span> with <span class="math inline">\(x\in[0,1]\)</span>:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-2_85b59f810fb01ecfd5c214de9cb0c6e7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: </span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
@@ -452,7 +477,7 @@ m(x)=\sin(5 x)
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>db     <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">x=</span>x_vec,<span class="at">y=</span>y_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Compute the ordinary least squares regressions of different polynomial regression models:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-3_1c974fec40b09b65370f3ad0ede1c46b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting of polynomials to the data (parametric models):</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constant line fit: (Basis function x^0)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>reg_p1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>db)</span>
@@ -464,7 +489,7 @@ m(x)=\sin(5 x)
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>reg_p7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">6</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Take a look at the fits:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-4_9d815b8da2804d0814894ae176e966b7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">3.1</span>,<span class="fl">2.1</span>))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Truth"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># True (usually unknown) regression function</span></span>
@@ -488,12 +513,16 @@ m(x)=\sin(5 x)
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p7, <span class="at">newdata =</span> db), </span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The quality of the approximation obviously depends on the choice of the model selection parameter <span class="math inline">\(p\)</span> which serves as a <strong>smoothing parameter</strong>.</p>
 <p>Let’s look at the fits across 200 Monte Carlo replications:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-5_b0864854bf2f5c639ae070cff0826c0a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_true    <span class="ot">&lt;-</span> <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n_MCrepl  <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># MC-replications</span></span>
@@ -540,7 +569,11 @@ m(x)=\sin(5 x)
 <span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree p=6"</span>)</span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Using the 200 fits from above, we can approximate the</p>
@@ -549,7 +582,7 @@ m(x)=\sin(5 x)
 <li>variance <span class="math inline">\(Var(\hat{m}_p(x))\)</span></li>
 </ul>
 <p>point-wise at each <span class="math inline">\(x\)</span>-value in <code>x_vec</code>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-6_687042d68d011cb8554ebbcc9afd4302">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) biases of \hat{m}(x): </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p1) <span class="sc">-</span> m_true</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p4 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p4) <span class="sc">-</span> m_true</span>
@@ -577,7 +610,11 @@ m(x)=\sin(5 x)
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"top"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">"darkgreen"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), </span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree p=0"</span>, <span class="st">"Degree p=3"</span>, <span class="st">"Degree p=6"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><strong>The Bias-Variance Trade-Off:</strong></p>
@@ -585,12 +622,12 @@ m(x)=\sin(5 x)
 <li><span class="math inline">\(p\)</span> small:<br> Variance of the estimator is small, but (squared) bias is large.</li>
 <li><span class="math inline">\(p\)</span> large:<br> Variance of the estimator is large, but (squared) bias is small.</li>
 </ul>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Remark
 </div>
 </div>
@@ -630,7 +667,6 @@ p &amp; = &amp; \text{number of knots} &amp;+&amp; \text{polynomial degree} &amp
 \]</span> dimensional linear function space <span class="math display">\[
 {\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
 \]</span> where <span class="math inline">\(b_{1,k},\dots,b_{p,k}\)</span> denote the <strong>basis-functions</strong>.</p>
-
 <!-- Possible basis functions are
 $\tilde{b}_1(x)=1,\tilde{b}_2(x)=x,\dots,\tilde{b}_{k}=x^{k-1},\tilde{b}_{k+1}=(x-\tau_1)^k_+,\dots,
 \tilde{b}_{k+q-1}=(x-\tau_{q-1})^k_+$, where
@@ -671,7 +707,7 @@ b_{j,l}(x)
 &amp; +\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
 \end{align*}
 \tag{4.2}\]</span></span> <span class="math inline">\(j=1,\dots,q+2k\)</span>, and <span class="math inline">\(x\in [a,b].\)</span></p>
-<p><strong>Note:</strong> The definitions in <a href="#eq-BSplineRecursion1">Equation&nbsp;<span>4.1</span></a> and <a href="#eq-BSplineRecursion2">Equation&nbsp;<span>4.2</span></a> are understood that if the denominator is 0, then the function is defined to be 0. The remaining non-degenerated basis functions are then the <span class="math display">\[
+<p><strong>Note:</strong> The definitions in <a href="#eq-BSplineRecursion1" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> and <a href="#eq-BSplineRecursion2" class="quarto-xref">Equation&nbsp;<span>4.2</span></a> are understood that if the denominator is 0, then the function is defined to be 0. The remaining non-degenerated basis functions are then the <span class="math display">\[
 b_{j,k},\quad j=1,\dots,p=q+k-1,
 \]</span> B-spline basis functions.</p>
 <!-- **Note:** At level $l=1,$ the basis functions are piece-wise linear functions; at level $l=2,$ the basis functions are piece-wise quadratic functions; at level $l=3,$ the basis functions are piece-wise cubic functions. -->
@@ -683,7 +719,7 @@ b_{j,k},\quad j=1,\dots,p=q+k-1,
 <span class="math display">\[
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=1} - 1=7
 \]</span> linear (<span class="math inline">\(k=1\)</span>) B-spline basis functions:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-7_39b08f2cabd79a89940f78513014c38c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">1</span></span>
@@ -711,15 +747,19 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=1
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Degree 1
 </div>
 </div>
@@ -736,7 +776,7 @@ s(x)&amp;= \sum_{j=1}^{7}\vartheta_j b_{j,1}(0)
 <span class="math display">\[
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=2} - 1=8
 \]</span> quadratic (<span class="math inline">\(k=2\)</span>) B-spline basis functions:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-8_b73064723741d17ff79b5a19ba86f9e0">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">2</span></span>
@@ -764,15 +804,19 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=2
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Degree 2
 </div>
 </div>
@@ -789,7 +833,7 @@ s(x)&amp;= \sum_{j=1}^{8}\vartheta_j b_{j,1}(x)
 <span class="math display">\[
 p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
 \]</span> cubic (<span class="math inline">\(k=3\)</span>) B-spline basis functions:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-9_a5624b9fc7f38a1cdc8701a21184da15">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">3</span></span>
@@ -818,15 +862,19 @@ p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3
 <span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
 <span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Degree 3 (usual case)
 </div>
 </div>
@@ -839,12 +887,12 @@ s(x) &amp;= \sum_{j=1}^{9} \vartheta_j b_{j,1}(x)
 \]</span> is <span class="math inline">\(k-1=3-1=2\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.<br></p>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -908,12 +956,12 @@ Y=(Y_1,\dots,Y_n)^\top
 <p>The matrix <span class="math display">\[
 S_p = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
 \]</span> is referred to as the <strong>smoothing matrix</strong>.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Remark
 </div>
 </div>
@@ -937,7 +985,7 @@ m(X_1)\\
 </div>
 <p><strong><code>R</code> Code to Compute Regression Splines:</strong></p>
 <p>First, we generate some data.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-10_6adeb8296074628dd499ce05ab766d31">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
@@ -948,7 +996,7 @@ m(X_1)\\
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we generate cubic B-spline basis functions with equidistant knot sequence (different to <code>x_vec</code>) and evaluate them at <code>x_vec</code>:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-11_ca458c6b7541cae67c01f6468c9024f1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>degree      <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># piecewise cubic splines</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>knot_seq_5  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">5</span>)<span class="co"># knots</span></span>
@@ -972,17 +1020,17 @@ m(X_1)\\
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    )    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Computing the smoothing matrices <span class="math inline">\(S_p\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-12_a77981e67a12c691996892175e6ddea7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_p7  <span class="ot">&lt;-</span> X_mat_p7  <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p7)  <span class="sc">%*%</span> X_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p7) </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S_p17 <span class="ot">&lt;-</span> X_mat_p17 <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p17) <span class="sc">%*%</span> X_mat_p17) <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p17) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Computing the estimates <span class="math inline">\(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-13_0f0b55ef0fa8611d2d248fee2af4e99f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>m_hat_p7  <span class="ot">&lt;-</span> S_p7  <span class="sc">%*%</span> y_vec</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>m_hat_p17 <span class="ot">&lt;-</span> S_p17 <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Plotting the estimation results:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-14_943e83d308156cec6b0b6fc13fb2db6b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
@@ -995,7 +1043,11 @@ m(X_1)\\
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>, <span class="st">"darkorange"</span>), </span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The following plot shows the regression spline fit (with <span class="math inline">\(p=7\)</span>) <span class="math display">\[
@@ -1003,7 +1055,7 @@ m(X_1)\\
 \]</span> along with the <span class="math inline">\(p=7\)</span> basis functions each multiplied by the fitted linear coefficient <span class="math display">\[
 \hat\beta_j b_{j,3}(x),\quad j=1,\dots,7.
 \]</span></p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-15_49090f5563e74203e49e53ce24d87a1a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_hat_p7 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p7)  <span class="sc">%*%</span> X_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p7) <span class="sc">%*%</span> y_vec</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>m_hat_p7, <span class="at">x=</span>x_vec, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">3.5</span>,<span class="fl">1.5</span>),</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
@@ -1024,7 +1076,11 @@ m(X_1)\\
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>       ), </span>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">1</span>)       </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1073,12 +1129,12 @@ Var(\cdot|X_1,\dots,X_n)
 (b-a)\operatorname{MASE}(\hat m_p)=\int_a^b \mathbb{E}_\varepsilon\left(m(x)-\hat m_p(x)\right)^2 f(x)dx + O_P(n^{-1}).
 \]</span></li>
 </ul>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Landau symbol “Big Oh” <span class="math inline">\(O(r_n)\)</span>
 </div>
 </div>
@@ -1099,12 +1155,12 @@ O(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
 </ul>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Landau symbol “Small oh” <span class="math inline">\(o(r_n)\)</span>
 </div>
 </div>
@@ -1123,12 +1179,12 @@ o(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
 <p><strong>Note:</strong> For every sequence <span class="math inline">\(x_n=o(r_n)\)</span> it holds that <span class="math inline">\(x_n=O(r_n),\)</span> but not the other way round.</p>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Special Cases <span class="math inline">\(O(1)\)</span> and <span class="math inline">\(o(1)\)</span>
 </div>
 </div>
@@ -1143,12 +1199,12 @@ O(1)\quad \text{and}\quad o(1)
 </ul>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Stochastic Landau symbol “Big Oh P” <span class="math inline">\(O_P(r_n)\)</span>
 </div>
 </div>
@@ -1170,12 +1226,12 @@ O_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
 </ul>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Stochastic Landau symbol “Small oh P” <span class="math inline">\(o_P(r_n)\)</span>
 </div>
 </div>
@@ -1233,12 +1289,12 @@ m=\left(\begin{matrix}m(X_1)\\\vdots\\m(X_n)\end{matrix}\right)
 <p>That is, the mean of the spline regression estimator evaluated at <span class="math inline">\(X_i\)</span> <span class="math display">\[
 \mathbb{E}_\varepsilon(\hat m_p(X_i))=\sum_{j=1}^p \beta_j b_j(X_i)=:\tilde m_p(X_i)
 \]</span> is the best least squares (<span class="math inline">\(L_2\)</span>) approximation of the true, but unknown, regression function vector <span class="math inline">\(m=(m(X_1),\dots,m(X_n))^\top\)</span> by means of a spline function vector <span class="math inline">\(s=(s(X_1),\dots,s(X_n))^\top\)</span> with <span class="math inline">\(s\in{\cal{S}}_{k,\tau_1,\dots,\tau_q}.\)</span></p>
-<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Important
 </div>
 </div>
@@ -1305,12 +1361,12 @@ Var_\varepsilon(\hat m_p)
 &amp;=\sigma^2  \frac{p}{n}
 \end{align*}
 \]</span></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Trace-Trick
 </div>
 </div>
@@ -1340,7 +1396,7 @@ O_p(p^{-4})&amp;\quad\text{random design}\\
 <!-- p^-4 = p/n
      p^-5 = 1/n
      p    = (1/n)^-1/5  -->
-<p>Let us focus now on the case of a <strong>fixed design</strong>. From <a href="#eq-BiasSqVar">Equation&nbsp;<span>4.3</span></a> we have that <span class="math display">\[
+<p>Let us focus now on the case of a <strong>fixed design</strong>. From <a href="#eq-BiasSqVar" class="quarto-xref">Equation&nbsp;<span>4.3</span></a> we have that <span class="math display">\[
 \begin{align*}
 \operatorname{MASE}(\hat m_{p})
 &amp;= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
@@ -1376,12 +1432,12 @@ p_{opt}=\texttt{const}\cdot n^{1/5},
 <p>In the case of a random design <span class="math display">\[
 \operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-4/5}).
 \]</span></p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -1457,7 +1513,7 @@ p_{opt}
 \]</span> That is, at least on average, minimizing <span class="math inline">\(CV(p)\)</span> is equivalent to minimizing <span class="math inline">\(\operatorname{MASE}(\hat m_p)\)</span>.</p>
 <p><strong><code>R</code>-Code to Compute an Estimate of the Optimal Smoothing Parameter using LOOCV</strong></p>
 <p>First, we generate some data.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-16_33a4290ae6f098ac6ed9476aca73bf80">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
@@ -1468,7 +1524,7 @@ p_{opt}
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, compute the CV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-17_c6eaf5d6efd002aa4d3a2b9d6e3b3ee2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>LOOCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1498,7 +1554,11 @@ p_{opt}
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> LOOCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1595,7 +1655,7 @@ $$
 -->
 <p><strong><code>R</code>-Code to Compute an Estimate of the Optimal Smoothing Parameter using GCV</strong></p>
 <p>First, we generate some data.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-18_5bea552ed4ea122944bb86c10c087e11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
@@ -1606,7 +1666,7 @@ $$
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, compute the GCV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-19_fe8bff2d462ccd9d809e2ca5ae7bd8be">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>GCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1631,11 +1691,15 @@ $$
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> GCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Compute the nonparametric regression estimate using the GCV optimal smoothing parameter <span class="math inline">\(p=8.\)</span></p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-20_fa53218fce679a16a5109858125d3bb5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
@@ -1652,7 +1716,7 @@ $$
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s plot the results:</p>
-<div class="cell" data-hash="Ch4_NPRegression_cache/html/unnamed-chunk-21_66d738114eab4ac95968b09b137d289b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
@@ -1663,7 +1727,11 @@ $$
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Ch4_NPRegression_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1675,7 +1743,7 @@ $$
 \tag{4.6}\]</span></span> as an estimator for <span class="math inline">\(\sigma^2.\)</span> Moreover, <span class="math inline">\(\operatorname{ARSS}(p)\)</span> was the main component to compute the <span class="math inline">\(R^2\)</span>-coefficient <span class="math display">\[
 R^2(p) = 1- \frac{\operatorname{ARSS}(p)}{\frac{1}{n}\sum_{i=1}^n(Y_i - \bar{Y})^2}.
 \]</span></p>
-<p>In non-parametrics, however, we do not assume to know the model, but try to learn the model (including the smoothing parameter <span class="math inline">\(p\)</span>) form the data. Therefore, <a href="#eq-ARSS2">Equation&nbsp;<span>4.6</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased.</p>
+<p>In non-parametrics, however, we do not assume to know the model, but try to learn the model (including the smoothing parameter <span class="math inline">\(p\)</span>) form the data. Therefore, <a href="#eq-ARSS2" class="quarto-xref">Equation&nbsp;<span>4.6</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased.</p>
 <p>In fact, if we would mimimize <span class="math inline">\(\operatorname{ARSS}(p)\)</span> with respect to <span class="math inline">\(p,\)</span> we would minimize the so-called <strong>in-sample prediction error</strong>. On average, this would result in minimizing <span class="math display">\[
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
@@ -1694,19 +1762,23 @@ Y_i &amp; \approx \hat{m}_{p}(X_i)\;\;\text{ for all}\; i=1,\dots,n\\[2ex]
 Y_{new} = m(X_{new}) + \varepsilon_{new},
 \]</span> we’ll have that <span class="math display">\[
 |m(X_{new}) - \hat{m}_{p}(X_{new})| \gg 0;
-\]</span> see <a href="#fig-overfitting">Figure&nbsp;<span>4.2</span></a>.</p>
-<div id="fig-overfitting" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/OverFitting.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4.2: Over-fitting can lead to unusable out-of-sample predictions.</figcaption><p></p>
+\]</span> see <a href="#fig-overfitting" class="quarto-xref">Figure&nbsp;<span>4.2</span></a>.</p>
+<div id="fig-overfitting" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-overfitting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/OverFitting.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overfitting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: Over-fitting can lead to unusable out-of-sample predictions.
+</figcaption>
 </figure>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Optimism
 </div>
 </div>
@@ -1741,110 +1813,138 @@ Optimism
 <p>Show that the core-part of the optimism term, i.e.&nbsp; <span class="math display">\[
 \sigma^2\frac{p}{n},
 \]</span> quantifies the average covariance between the error terms <span class="math inline">\(\varepsilon_i\)</span> and the fits <span class="math inline">\(\hat{m}_p(X_i)\)</span> over <span class="math inline">\(i=1,\dots,n.\)</span></p>
-<!-- -->
-</section>
-</section>
-<section id="solutions" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
-<section id="solution-for-exercise-1." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-1.">Solution for Exercise 1.</h4>
-<p>Let <span class="math inline">\(x=\frac{p}{n}\)</span>.</p>
-<p>A Taylor expansion of <span class="math display">\[
+<!-- 
+
+## Solutions {-}
+
+
+#### Solution for Exercise 1. {-} 
+
+
+Let $x=\frac{p}{n}$. 
+
+A Taylor expansion of 
+$$
 f(x)=\frac{1}{\left(1-x\right)^2}
-\]</span> around some point <span class="math inline">\(a\)</span> yields</p>
-<p><span class="math display">\[
+$$ 
+around some point $a$ yields
+
+$$
 \begin{align*}
 f(x)
-&amp;=f(a)+\frac{1}{1!}\;(x-a)\;\; f'(a)\\[2ex]
-&amp;\hspace{1.5cm} + \frac{1}{2!}\;(x-a)^2\;f''(a)\\[2ex]
-&amp;\hspace{1.5cm} + o\left((x-a)^2\right)
+&=f(a)+\frac{1}{1!}\;(x-a)\;\; f'(a)\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;(x-a)^2\;f''(a)\\[2ex]
+&\hspace{1.5cm} + o\left((x-a)^2\right)
 \end{align*}
-\]</span></p>
-<p>Thus, for <span class="math inline">\(a = 0,\)</span> we have that <span class="math display">\[
+$$
+
+Thus, for $a = 0,$ we have that
+$$
 \begin{align*}
 f(x)
-&amp;=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(0)}\\[2ex]
-&amp;\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(0)}\\[2ex]
-&amp;\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
-&amp;=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
-&amp;=1+ 2 x +O\left(x^2\right)\\[2ex]
+&=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(0)}\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(0)}\\[2ex]
+&\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)\\[2ex]
 \end{align*}
-\]</span> With <span class="math inline">\(x=\frac{p}{n},\)</span> we thus have that <span class="math display">\[
+$$
+With $x=\frac{p}{n},$ we thus have that
+$$
 \begin{align*}
 f(p/n)
-&amp;=\frac{1}{\left(1-\frac{p}{n}\right)^2}\\[2ex]
-&amp;=1 + 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
+&=\frac{1}{\left(1-\frac{p}{n}\right)^2}\\[2ex]
+&=1 + 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
 \end{align*}
-\]</span> Thus, <span class="math display">\[
+$$
+Thus, 
+$$
 \frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
-\]</span> where the approximation error goes to zero with the rate <span class="math inline">\(\left(\frac{p}{n}\right)^2\to 0.\)</span></p>
-</section>
-<section id="solution-for-exercise-2." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-2.">Solution for Exercise 2.</h4>
-<p><span class="math display">\[
+$$
+where the approximation error goes to zero with the rate $\left(\frac{p}{n}\right)^2\to 0.$  
+
+
+
+#### Solution for Exercise 2. {-} 
+
+
+$$
 \begin{align*}
-\operatorname{ARSS}(p)&amp;=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
-&amp;=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
-&amp;=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
-&amp;=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) + 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+\operatorname{ARSS}(p)&=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) + 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
 \mathbb{E}_\varepsilon\big(\operatorname{ARSS}(p)\big)
-&amp;=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
-&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
-&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
-&amp;=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
 \end{align*}
-\]</span></p>
-<p>In the following, we focus on the second term: <span class="math display">\[
+$$
+
+In the following, we focus on the second term:
+$$
 \begin{align*}
-&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
-&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
-&amp;=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
-&amp;=- 2\sigma^2 \frac{p}{n},
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
+&=- 2\sigma^2 \frac{p}{n},
 \end{align*}
-\]</span> where <span class="math inline">\(e_i^\top\)</span> is a <span class="math inline">\((1\times p)\)</span> vector with a <span class="math inline">\(1\)</span> at the <span class="math inline">\(i\)</span>th element and <span class="math inline">\(0\)</span>s else.</p>
-<p>Thus, <span class="math display">\[
+$$
+where $e_i^\top$ is a $(1\times p)$ vector with a $1$ at the $i$th element and $0$s else.
+
+Thus, 
+$$
 \begin{align*}
 \mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
 \end{align*}
-\]</span></p>
-</section>
-<section id="solution-for-exercise-3." class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="solution-for-exercise-3.">Solution for Exercise 3.</h4>
-<p>Alternative view on the second term:</p>
-<p><span class="math display">\[
+$$
+
+
+#### Solution for Exercise 3. {-} 
+
+Alternative view on the second term: 
+
+$$
 \begin{align*}
-&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
-&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat{m}_p(X_i)\right)\\[2ex]
-&amp;-\frac{1}{n}\sum_{i=1}^n 2\cdot \overbrace{\Big[\mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - \underbrace{\mathbb{E}_\varepsilon(\varepsilon_i)}_{=0} \cdot \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\Big]}^{=Cov_\varepsilon(\varepsilon_i, \hat{m}_p(X_i))}\\[2ex]
-&amp;-2\cdot \underbrace{\frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right)}_{=\sigma^2\frac{p}{n}}\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat{m}_p(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \overbrace{\Big[\mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - \underbrace{\mathbb{E}_\varepsilon(\varepsilon_i)}_{=0} \cdot \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\Big]}^{=Cov_\varepsilon(\varepsilon_i, \hat{m}_p(X_i))}\\[2ex]
+&-2\cdot \underbrace{\frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right)}_{=\sigma^2\frac{p}{n}}\\[2ex]
 \end{align*}
-\]</span> Thus <span class="math display">\[
+$$
+Thus
+$$
 \sigma^2\frac{p}{n} = \frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right).
-\]</span></p>
-<p>That is, the core-part of the second term, namely <span class="math inline">\(\sigma^2\frac{p}{n},\)</span> equals the average covariance between the noise <span class="math inline">\(\varepsilon_i\)</span> and the fitted value <span class="math inline">\(\hat{m}_p(X_i)\)</span> across <span class="math inline">\(i=1,\dots,n.\)</span></p>
-<p>This observation explains the name <strong>optimism</strong> term. Of course, the fits <span class="math inline">\(\hat{m}_p(X_i)\)</span> should only be driven by the signal-components <span class="math inline">\(m(X_i)\)</span> and not by the noise-components <span class="math inline">\(\varepsilon_i.\)</span></p>
-<!-- -->
+$$
+
+That is, the core-part of the second term, namely $\sigma^2\frac{p}{n},$ equals the average covariance between the noise $\varepsilon_i$ and the fitted value $\hat{m}_p(X_i)$ across $i=1,\dots,n.$ 
+
+This observation explains the name **optimism** term. Of course, the fits $\hat{m}_p(X_i)$ should only be driven by the signal-components $m(X_i)$ and not by the noise-components $\varepsilon_i.$  
+
+
+-->
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-DeBoor_1978" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-DeBoor_1978" class="csl-entry" role="listitem">
 De Boor, Carl, and Carl De Boor. 1978. <em>A Practical Guide to Splines</em>. Vol. 27. springer.
 </div>
-<div id="ref-Eubank_1999" class="csl-entry" role="doc-biblioentry">
+<div id="ref-Eubank_1999" class="csl-entry" role="listitem">
 Eubank, Randall L. 1999. <em>Nonparametric Regression and Spline Smoothing</em>. CRC press.
 </div>
 </div>
@@ -1884,12 +1984,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1898,17 +2001,73 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1918,8 +2077,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1931,33 +2099,287 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Ch3_Bootstrap.html" class="pagination-link">
+      <a href="./Ch3_Bootstrap.html" class="pagination-link" aria-label="The Bootstrap">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></span>
       </a>          
   </div>
@@ -1965,6 +2387,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

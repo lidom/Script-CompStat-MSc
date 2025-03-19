@@ -1545,15 +1545,14 @@ $$
 where $\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}\left(H_{\ell_n}(\theta_0)\right)$ is the $(p\times p)$ Fisher information matrix with $H_{\ell_n}(\theta_0)$ denoting the Hesse matrix of $\ell_n(\cdot)$ evaluated at $\theta_0.$ 
 :::
 
-
 ::: {.callout-tip}
-
 # ML-Theory and Machine learning
 
 The Fisher information is used in machine learning techniques such as elastic weight consolidation, which reduces catastrophic forgetting in artificial neural networks (@Kirkpatrick_2017).
 
 Fisher information can be used as an alternative to the Hessian of the loss function in second-order gradient descent network training (@Martens_2020).
 :::
+
 
 
 ## Invariance Property of the ML-Estimator 
@@ -1722,7 +1721,8 @@ for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}$. This is
 
 
 
-## Solutions {-}
+<!-- 
+## Solutions {-} 
 
 #### Solutions of Exercise 1. {-} 
 
@@ -1850,6 +1850,8 @@ $$
 \end{align*}
 $$
 This approximation is good for largish sample sizes (roughly $n\geq 30$). 
+
+Note: The above asymptotic normality result coincides with the result obtained by the delta-method.
 
 #### Solutions of Exercise 3. {-}
 
@@ -2061,7 +2063,6 @@ $$
 
 In the following, we show that the Newton-Raphson algorithm converges under this setup. 
 
-<!-- We'll see that it is a **quadratic** (i.e. very fast) convergence.  -->
 
 By the second-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with the mean-value form of the remainder term, we have that 
 $$
@@ -2166,7 +2167,14 @@ even when $|e_{(0)}|\gg 0.$
 This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\ell'(\theta)$ has no curvature; i.e. $\ell'(\theta)$ is a straight line for all $x\in I$ which implies that the Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).
 
 
+-->
+
 ## References {-}
+
+
+
+
+
 
 
 <!-- DO NOT DELETE! -->
@@ -2174,16 +2182,6 @@ This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\e
 <!-- DO NOT DELETE! -->
 
 
-<!-- **Example::** Assume an i.i.d. sample $X_1,\dots,X_n$ from an exponential distribution, i.e. the underlying density of $X_i$ is given by $f(x;\theta)=\theta\exp(-\theta x)$. We then have $\mu:=E(X_i)=\frac{1}{\theta}$ as well as $\sigma^2_X:=\textrm{var}(X_i)=\frac{1}{\theta^2}$. The -->
-<!-- log-likelihood functions is given by  -->
-<!-- $$l(\theta)=\sum_{i=1}^n \ln (\theta\exp(-\theta X_i)))=n \ln \theta -\sum_{i=1}^n \theta X_i$$ -->
-<!-- $$\Rightarrow \quad \ell_n'(\theta)=n\frac{1}{\theta} + \sum_{i=1}^n X_i.$$ -->
-<!-- As already mentioned above, the maximum-likelihood estimator of $\theta$ then is $\hat\theta_n=\frac{1}{\bar X}$. -->
-<!-- Inference may then be based on likelihood-theory. We have -->
-<!-- $$\mathcal{J}(\theta)=-\frac{1}{n}E(\ell''(\theta))=\frac{1}{\theta^2},$$ -->
-<!-- and by the above theorem -->
-<!-- $$\frac{1}{\bar X}-\theta\sim AN(0,\frac{1}{n \mathcal{J}(\theta)})\overset{a}{\sim}AN(0,\frac{\theta^2}{n}).$$ -->
-<!-- This obviously coincides with the result obtained by the delta-method. -->
 
 
 
