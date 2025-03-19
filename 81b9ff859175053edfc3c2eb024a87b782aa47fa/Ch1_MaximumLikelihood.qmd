@@ -1526,7 +1526,7 @@ $$
 or equivalently
 $$
 \begin{align*}
-\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d N\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
+\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
 $${#eq-AsymNormMLE}
 where $1/\mathcal{I}(\theta_0)$ is the **asymptotic variance** of the ML estimator $\hat{\theta}_n$ and equals the inverse of the (here scalar valued) Fisher information 
@@ -1552,6 +1552,22 @@ The Fisher information is used in machine learning techniques such as elastic we
 
 Fisher information can be used as an alternative to the Hessian of the loss function in second-order gradient descent network training (@Martens_2020).
 :::
+
+
+
+## Cramér–Rao Lower Bound
+
+Harald Cramér and Calyampudi Radhakrishna Rao showed that for any unbiased estimator $\hat\theta$, its asymptotic variance-covariance matrix cannot be smaller than 
+$$
+\mathcal{I}^{-1}(\theta_0),
+$$ 
+where $\mathcal{I}(\theta_0)$ is the **Fisher information matrix** 
+$$
+\mathcal{I}(\theta) = -\frac{1}{n}\mathbb{E}\left(H_{\ell_n}(\theta)\right)
+$$
+evaluated at the true parameter value $\theta_0.$ 
+
+Thus, maximum likelihood estimators attain the Cramer-Rao lower bound and will therefore be asymptotically efficient. 
 
 
 
@@ -2254,14 +2270,11 @@ This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\e
 <!-- The square roots of the diagonals of this matrix will give us the -->
 <!-- **standard errors** of the estimates. -->
 
-<!-- \frametitle{Cramer-Rao Lower Bound} -->
 
-<!-- Fisher, Cramer, and Rao showed that for any unbiased estimator $\hat\theta$, its variance-covariance -->
-<!-- matrix cannot be smaller than $I^{-1}(\theta)$ where $I(\theta)$ is the **information matrix** -->
-<!-- of the estimator, given by  -->
-<!-- $$I(\theta) \equiv E[s(y,\theta)s(y,\theta)']$$ -->
-<!-- where $s(\cdot)$ is the gradient or score.  Thus, the MLE attains the Cramer-Rao lower bound and will therefore be asymptotically efficient. -->
-<!-- \end{frame} -->
+
+
+
+
 
 
 
