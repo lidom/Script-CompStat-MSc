@@ -246,6 +246,7 @@ window.Quarto = {
 </header>
 
 
+<!-- LTeX: language=en-US -->
 <!-- For updating: Elements of Statistical Learning and All of Statistics -->
 <section id="likelihood-principle" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="likelihood-principle"><span class="header-section-number">1.1</span> Likelihood Principle</h2>
@@ -253,11 +254,16 @@ window.Quarto = {
 <p>In (classical) maximum likelihood estimation we must be rather specific about the process that generated the data. This is a trade off – by imposing a fair amount of structure on the data, we get in return a very desirable estimator. The question remains, however, whether we have made the right decision about the specific distribution/density function.</p>
 <section id="properties-of-maximum-likelihood-estimators" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="properties-of-maximum-likelihood-estimators">Properties of Maximum Likelihood Estimators</h3>
-<p>Why do we like maximum likelihood as an estimation method? The answer is that: A maximum likelihood estimator <span class="math inline">\(\hat\theta_n\)</span> of some parameter <span class="math inline">\(\theta_0\in\mathbb{R}\)</span> is</p>
+<p>Why do we like maximum likelihood as an estimation method? The answer is that: A maximum likelihood estimator <span class="math inline">\(\hat\theta_n\)</span> of some parameter, e.g.&nbsp;<span class="math inline">\(\theta_0\in\mathbb{R}\)</span>, is</p>
 <ul>
-<li><strong>Consistent:</strong> <span class="math inline">\(\hat\theta_n\rightarrow_p\theta_0\)</span> as <span class="math inline">\(n\to\infty\)</span></li>
-<li><strong>Asymptotically normal:</strong> <span class="math inline">\(\sqrt{n}(\hat\theta_n-\theta_0) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)\)</span></li>
-<li><strong>Asymptotically efficient:</strong> This means that no consistent estimator has lower asymptotic mean squared error than the maximum likelihood estimator.</li>
+<li><strong>Consistent:</strong><br>
+<span class="math display">\[
+\hat\theta_n\rightarrow_p\theta_0,\quad n\to\infty
+\]</span></li>
+<li><strong>Asymptotically normal:</strong> <span class="math display">\[
+\sqrt{n}(\hat\theta_n-\theta_0) \stackrel{a}{\sim} \mathcal{N}(0, \sigma^2)
+\]</span></li>
+<li><strong>Asymptotically efficient:</strong> This means that no other consistent estimator has a lower asymptotic mean squared error than the maximum likelihood estimator.</li>
 </ul>
 <p>Likewise for multivariate parameter <span class="math inline">\(\theta_0\in\mathbb{R}^p.\)</span></p>
 <p>Thus, maximum likelihood estimators can be very appealing, provided that the assumption on the general distribution family is correct.</p>
@@ -271,7 +277,7 @@ ML-estimation requires to fix the family of distributions <span class="math inli
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Classic ML-estimation requires us to fix the general family of density/probability mass functions <span class="math inline">\(f\)</span> of the random variables in the (i.i.d.) random sample <span class="math inline">\(X_1,\dots,X_n\)</span> such that <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> where <span class="math inline">\(\theta\in\mathbb{R}^K\)</span> is allowed to be a <em>finite</em> (<span class="math inline">\(1\leq K&lt;\infty\)</span>) dimensional vector.</p>
+<p>Classic ML-estimation requires us to fix the general family of density/probability mass functions <span class="math inline">\(f\)</span> of the random variables in the (i.i.d.) random sample <span class="math inline">\(X_1,\dots,X_n\)</span> such that <span class="math inline">\(X_i\sim f\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> and where <span class="math inline">\(\theta\in\mathbb{R}^K\)</span> is allowed to be a <em>finite</em> (<span class="math inline">\(1\leq K&lt;\infty\)</span>) dimensional vector.</p>
 <p>Examples:</p>
 <ul>
 <li><span class="math inline">\(f\)</span> being the probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta)\)</span> with <span class="math display">\[
@@ -337,7 +343,7 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 0\leq n-N_{H,obs} \leq n
 \]</span> many tails.</p>
 <section id="the-log-likelihood-function" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="the-log-likelihood-function">The (Log-)Likelihood Function</h4>
+<h4 class="unnumbered anchored" data-anchor-id="the-log-likelihood-function"><strong>The (Log-)Likelihood Function</strong></h4>
 <p>How do we combine the information from the <span class="math inline">\(n\)</span> observations <span class="math display">\[
 \{X_{1,obs},\dots,X_{n,obs}\}
 \]</span> to estimate the unknown <span class="math inline">\(\theta_0\)</span>?</p>
@@ -347,20 +353,16 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 &amp;=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
 %&amp;=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
 %&amp;= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
-&amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
+&amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}},
 \end{align*}
-\]</span></p>
+\]</span> where <span class="math inline">\(f(\cdot,\theta)\)</span> denotes here the probability mass function of the Bernoulli distribution with parameter <span class="math inline">\(p=\theta.\)</span></p>
 <p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-LikelihoodFunction" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.1 (Likelihood Function)</strong></span> More generally, when the observations <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> are a realization of an i.i.d. sample <span class="math inline">\(\{X_1,\dots,X_n\}\)</span> with <span class="math inline">\(X_i\sim f\)</span> for all <span class="math inline">\(i=1,\dots,n\)</span>, we have that <span class="math display">\[
 \mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
@@ -368,20 +370,17 @@ Note
 </div>
 </div>
 </div>
+</div>
 </section>
 <section id="estimation-idea" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="estimation-idea">Estimation Idea</h4>
+<h4 class="unnumbered anchored" data-anchor-id="estimation-idea"><strong>Estimation Idea</strong></h4>
 <p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values. The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-MLEstimator" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.2 (Maximum Likelihood (ML) Estimator)</strong></span> <span class="math display">\[
 \begin{align*}
@@ -390,6 +389,7 @@ Note
 &amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
 \end{align*}
 \]</span> where <span class="math inline">\(\Theta\)</span> denotes the <strong>parameter space</strong>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -410,7 +410,23 @@ Note
 &amp;=\arg\max_{\theta\in\Theta} \ell_n(\theta).
 \end{align*}
 \]</span> <!-- but $\ell_n(\theta)$ gives a more simple structure simplifying the maximization problem.  --></p>
-<p>In our coin flipping example, taking the natural logarithm (<span class="math inline">\(\ln\)</span>) yields, <span class="math display">\[
+<div class="callout callout-style-default callout-note callout-titled" title="Log-likelihoods instead of the likelihoods">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Log-likelihoods instead of the likelihoods
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>From a standpoint of computational complexity, you can imagine that summing is less expensive than multiplication (although nowadays these are almost equal).</p></li>
+<li><p>More important: likelihoods would become very small and you will run out of your <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">floating point</a> precision very quickly, yielding an underflow. That’s why it is way more convenient to use the logarithm of the likelihood. Simply try to calculate the likelihood by hand, using pocket calculator—it’s almost impossible.</p></li>
+</ul>
+</div>
+</div>
+<p>In our coin flipping example, taking the natural logarithm yields, <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\theta) &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
 \Rightarrow\quad \ell_n(\theta)
@@ -423,7 +439,7 @@ Note
 \ell'_n(\theta)&amp;=\sum_{i=1}^n \left(X_{i,obs}\dfrac{1}{\theta} - (1-X_{i,obs})\dfrac{1}{1-\theta}\right)\\[2ex]
 &amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta}
 \end{align*}
-\]</span> Setting the first derivative to zero determines the maximum likelihood estimator (MLE): <span id="eq-MLECoinFlipp"><span class="math display">\[
+\]</span> Setting the first derivative to zero determines the maximum likelihood estimator (MLE) <span class="math inline">\(\hat\theta_{ML}\)</span>: <span id="eq-MLECoinFlipp"><span class="math display">\[
 \begin{array}{rrcl}
 &amp;\ell_n'(\hat\theta_{ML})&amp;\overset{!}{=}&amp;0\\[2ex]
 \Leftrightarrow&amp;\dfrac{N_{H,obs}}{\hat\theta_{ML}} &amp;=&amp; \dfrac{n-N_{H,obs}}{1-\hat\theta_{ML}} \\[2ex]
@@ -439,10 +455,12 @@ Note
 <h2 data-number="1.2" class="anchored" data-anchor-id="numeric-optimization"><span class="header-section-number">1.2</span> Numeric Optimization</h2>
 <p>Usually we are not so fortunate as to have an analytical solution for the MLE, and must rely on the computer to find the maximizing arguments of the log-likelihood function. Various methods exist for finding the maximum (or minimum) of a function.</p>
 <!-- [numerically with the help of the computer](https://jaimemosg.github.io/EstimationTools/index.html) -->
-<p><strong>General idea:</strong></p>
+<p><strong>General idea: Try to find the root of <span class="math inline">\(\ell'\)</span></strong></p>
 <ol type="1">
 <li>Start at some value, <span class="math inline">\(\theta_{(0)},\)</span> in the parameter space <span class="math inline">\(\Theta.\)</span></li>
-<li>Search across the parameter space <span class="math inline">\(\Theta\)</span> using a step-wise procedure until a updated parameter value <span class="math inline">\(\ell'(\theta_{(m)})\)</span> is found that yield a derivative of the log likelihood that is effectively zero (i.e.&nbsp;smaller than some convergence/stopping criterion), <span class="math inline">\(\ell'(\theta_{(m)})\approx 0.\)</span></li>
+<li>Search across the parameter space <span class="math inline">\(\Theta\)</span> using a step-wise procedure until an updated parameter value <span class="math inline">\(\theta_{(m)}\)</span> is found that yields a derivative of the log likelihood that is effectively zero (i.e.&nbsp;smaller than some convergence/stopping criterion), <span class="math display">\[
+\ell'(\theta_{(m)})\approx 0.
+\]</span></li>
 </ol>
 <section id="newton-raphson-optimization" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="newton-raphson-optimization"><span class="header-section-number">1.2.1</span> Newton-Raphson Optimization</h3>
@@ -654,12 +672,12 @@ Tip
 <div class="callout-body-container callout-body">
 <ul>
 <li><p>For problems that are globally concave, the starting value <span class="math inline">\(\theta_0\)</span> doesn’t matter. For more complex problems, however, the Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to <strong>try multiple starting values</strong>.</p></li>
-<li><p>In actual practice, implementation of the Newton-Raphson algorithm can be tricky. We may have <span class="math inline">\(\ell_n''(\theta_{(m)})=0,\)</span> in which case the function looks locally like a straight line, with no solution to the Taylor series approximation <span class="math display">\[
+<li><p>In practice, the implementation of the Newton-Raphson algorithm can be tricky. We may have <span class="math inline">\(\ell_n''(\theta_{(m)})=0,\)</span> in which case the function looks locally like a straight line, with no solution to the Taylor series approximation <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(m)} + h) &amp; \approx \ell_n'(\theta_{(m)}) + \ell_n''(\theta_{(m)})h.
+\ell_n'(\theta_{(m)} + h) &amp; \approx \ell_n'(\theta_{(m)}) + \ell_n''(\theta_{(m)})h = \ell_n'(\theta_{(m)}).
 \end{align*}
 \]</span> In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on <span class="math inline">\(\ell_n'(\theta_m).\)</span></p></li>
-<li><p>In other cases where <span class="math inline">\(\theta_{(m)}\)</span> is too far from the true maximizer <span class="math inline">\(\theta\)</span>, the Taylor approximation may be so inaccurate that <span class="math inline">\(\ell_n(\theta_{(m+1)})\)</span> is actually <em>smaller</em> than <span class="math inline">\(\ell_n(\theta_{(m)}).\)</span> When this happens one may replace <span class="math inline">\(\theta_{(m+1)}\)</span> with <span class="math inline">\((\theta_{(m+1)}+\theta_{(m)})/2\)</span> (or some other value between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{(m+1)}\)</span>) in the hope that a smaller step will produce better results.</p></li>
+<li><p>In other cases where <span class="math inline">\(\theta_{(m)}\)</span> is too far from the true root <span class="math inline">\(\theta_{root}\)</span>, the Taylor approximation may be so inaccurate that <span class="math inline">\(\ell_n(\theta_{(m+1)})\)</span> is actually <em>more distant</em> from zero than <span class="math inline">\(\ell_n(\theta_{(m)}).\)</span> When this happens one may replace <span class="math inline">\(\theta_{(m+1)}\)</span> with <span class="math inline">\((\theta_{(m+1)}+\theta_{(m)})/2\)</span> (or some other value between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{(m+1)}\)</span>) in the hope that a smaller step will produce a better result.</p></li>
 </ul>
 </div>
 </div>
@@ -790,16 +808,12 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})'\in\mathbb{R}^K
 <span class="math display">\[
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 \]</span> follows a <strong>random design with homoskedastic errors</strong> (see <a href="#def-RandomDesign" class="quarto-xref">Definition&nbsp;<span>1.3</span></a>).</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-RandomDesign" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.3 (Random Design (Regression Analysis))</strong></span> <br></p>
 <p>A <strong>random desgin</strong> in regression analysis is given by the following setup:</p>
@@ -818,6 +832,7 @@ Note
 </div>
 </div>
 </div>
+</div>
 <p>For the following, it is convenient to write <a href="#eq-LinMod" class="quarto-xref">Equation&nbsp;<span>1.2</span></a> using matrix notation <span class="math display">\[
 \begin{eqnarray*}
   \underset{(n\times 1)}{Y}&amp;=&amp;\underset{(n\times K)}{X}\underset{(K\times 1)}{\beta_0} + \underset{(n\times 1)}{\varepsilon},
@@ -827,12 +842,14 @@ Note
 Y=\left(\begin{matrix}Y_1\\ \vdots\\Y_n\end{matrix}\right),\quad X=\left(\begin{matrix}X_{11}&amp;\dots&amp;X_{1K}\\\vdots&amp;\ddots&amp;\vdots\\ X_{n1}&amp;\dots&amp;X_{nK}\\\end{matrix}\right),\quad\text{and}\quad \varepsilon=\left(\begin{matrix}\varepsilon_1\\ \vdots\\ \varepsilon_n\end{matrix}\right).
 \end{equation*}
 \]</span></p>
-<p>Under <strong>normally distributed</strong> (and homoskedastic) error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
+<p>Under <strong>normally distributed and homoskedastic</strong> error terms, <span class="math inline">\(\varepsilon_i,\)</span> we have that <span class="math display">\[
 \begin{align}
 \underset{(n\times 1)}{\varepsilon} &amp;\sim \mathcal{N}_n\left(0, \sigma_0^2I_n\right)\\[2ex]
 \Rightarrow\quad
-(Y-X\beta_0)|X &amp;\sim \mathcal{N}_n\left(0, \sigma^2_0I_n\right)\\[2ex]
-\Rightarrow\quad
+(Y-X\beta_0)|X &amp;\sim \mathcal{N}_n\left(0, \sigma^2_0I_n\right).
+\end{align}
+\]</span> That is, for each <span class="math inline">\(i=1,\dots,n,\)</span> we have that <span id="eq-OLSnormAss"><span class="math display">\[
+\begin{align}
 (Y_i-X_i'\beta_0)|X_i &amp;\sim \mathcal{N}\left(0, \sigma^2_0\right)\\[2ex]
 \Rightarrow\quad
 Y_i|X_i &amp;\sim \mathcal{N}\left(X_i'\beta_0, \sigma^2_0\right)
@@ -852,7 +869,7 @@ f(Y_i|X_i;\beta_0',\sigma_0^2)=
 \frac{1}{(2\pi\sigma^2)^{1/2}}\exp\left(-\frac{(Y_i-X_i'\beta_0)^2}{2\sigma_0^2}\right),
 \]</span> where <span class="math display">\[
 \theta_0=(\beta_0',\sigma_0^2)'\in\mathbb{R}^K\times\mathbb{R}_{&gt;0}
-\]</span> denotes the unknown parameter vector.</p>
+\]</span> denotes the <span class="math inline">\(((K+1)\times 1)\)</span> dimensional unknown parameter vector.</p>
 <p>This allows us to setup the likelihood function, <span class="math display">\[
 \begin{align*}
 \mathcal{L}_n(\beta',\sigma^2)
@@ -884,36 +901,52 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 &amp;=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)'(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}}\\
 %&amp;=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)'(Y-X\beta)-n\right]
 \end{align*}
-\]</span> Putting the above derivative functions into one column vector yields the <span class="math inline">\(((K+1)\times 1)\)</span>-dimensional gradient called <strong>score function</strong> in ML-theory: <span id="eq-LinRegScoreFun"><span class="math display">\[
+\]</span> Putting the above derivative functions into one column vector yields the <span class="math inline">\(((K+1)\times 1)\)</span>-dimensional <strong>gradient</strong> called <strong>score function</strong> in ML-theory: <span id="eq-LinRegScoreFun"><span class="math display">\[
 \nabla\ell_n(\theta')=
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\beta',\sigma^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta',\sigma^2)
 \end{matrix}\right)
 \tag{1.4}\]</span></span></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="def-ScoreFunction" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1.4 (Score Function)</strong></span> More generally, let <span class="math inline">\(\ell_n(\theta)\)</span> denote the log-likelihood function evaluated at a <span class="math inline">\(p\)</span>-dimensional parameter vector <span class="math inline">\(\theta=(\theta_1,\dots,\theta_p)'.\)</span></p>
+<p>Then the <span class="math inline">\((p\times 1)\)</span> dimensional gradient <span class="math display">\[
+\nabla\ell_n(\theta')=\left(\begin{matrix}
+  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\
+  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
+  \end{matrix}
+  \right)
+\]</span> is called the <strong>score-function</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div id="def-ScoreFunction" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1.4 (Score Function)</strong></span> More generally, let <span class="math inline">\(\ell_n(\theta)\)</span> denote the log-likelihood function evaluated at a <span class="math inline">\(p\)</span>-dimensional parameter vector <span class="math inline">\(\theta=(\theta_1,\dots,\theta_p)'.\)</span></p>
-<p>Then the gradient vector <span class="math display">\[\nabla\ell_n(\theta')=\left(\begin{matrix}
-  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\
-  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
-  \end{matrix}
-  \right)
-\]</span> is called the <strong>score-function</strong>.</p>
-<p>The score function is <strong>random</strong>, since it depends on the random sample.</p>
+<p>The score function is <strong>random</strong>, since it depends on the random sample. For a given set of observed data, we compute one realization of the score function.</p>
 <p>At the <strong>true parameter</strong> vector <span class="math inline">\(\theta_0\in\mathbb{R}^p,\)</span> the score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
-\]</span> for all <span class="math inline">\(j=1,\dots,p.\)</span> We show this below in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>.</p>
-</div>
+\]</span> for all <span class="math inline">\(j=1,\dots,p;\)</span> i.e.&nbsp; <span class="math display">\[
+\mathbb{E}\left(\nabla\ell_n(\theta')\right)=\left(\begin{matrix}
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\right)\\ \vdots\\
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta')\right)
+  \end{matrix}
+  \right) = \underset{(p\times 1)}{0}
+\]</span> We prove this below in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>.</p>
 </div>
 </div>
 <p>Setting the score function in <a href="#eq-LinRegScoreFun" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
@@ -1048,20 +1081,17 @@ Computing the Asymptotic Variance
 \end{array}\right]
 \end{align*}
 \]</span></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-FisherInformMat" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.5 (Fisher Information Matrix)</strong></span> The matrix <span class="math display">\[
 \mathcal{I}(\theta) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta)\right)
 \]</span> is called <strong>Fisher Information Matrix</strong>.</p>
+</div>
 </div>
 </div>
 </div>
