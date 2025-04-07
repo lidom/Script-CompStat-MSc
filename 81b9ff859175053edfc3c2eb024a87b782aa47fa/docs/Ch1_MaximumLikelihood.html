@@ -360,14 +360,14 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 \]</span> to estimate the unknown <span class="math inline">\(\theta_0\)</span>?</p>
 <p>If the observations are realizations of an i.i.d. sample, then the joint probability of observing <span class="math inline">\(h\)</span> heads <span class="math inline">\(H\)</span> and <span class="math inline">\(n-h\)</span> tails <span class="math inline">\(T\)</span> in <span class="math inline">\(n\)</span> coin flips is: <span class="math display">\[
 \begin{align*}
-\mathcal{L}_n(\theta)
+\mathcal{L}_{n,obs}(\theta)
 &amp;=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
 %&amp;=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
 %&amp;= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
 &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}},
 \end{align*}
 \]</span> where <span class="math inline">\(f(\,\cdot\,|\theta)\)</span> denotes here the probability mass function of the Bernoulli distribution with parameter candidate <span class="math inline">\(p=\theta.\)</span></p>
-<p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>.</p>
+<p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write <span class="math inline">\(\mathcal{L}_{,obs}(\theta)\)</span>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -376,10 +376,14 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <div class="callout-body-container">
 <div id="def-LikelihoodFunction" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.1 (Likelihood Function)</strong></span> Let <span class="math display">\[
+\{X_{1},\dots,X_{n}\}
+\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\]</span> the (random) <strong>likelihood function</strong>. Let <span class="math display">\[
 \{X_{1,obs},\dots,X_{n,obs}\}
-\]</span> denote a realization of a (i.i.d.) random sample <span class="math inline">\(\{X_1,\dots,X_n\}\)</span> with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
-\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
-\]</span> the <strong>likelihood function</strong>.</p>
+\]</span> denote a (observed) realization of <span class="math inline">\(\{X_1,\dots,X_n\}\)</span>. Then, we call <span class="math display">\[
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\]</span> a (observed) realization of the <strong>likelihood function</strong>.</p>
 <p>(Note: A definition for dependent data (e.g., time series) is also possible.)</p>
 </div>
 </div>
@@ -389,7 +393,11 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 </section>
 <section id="estimation-idea" class="level3" data-number="1.1.3">
 <h3 data-number="1.1.3" class="anchored" data-anchor-id="estimation-idea"><span class="header-section-number">1.1.3</span> <strong>Estimation Idea</strong></h3>
-<p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values. The value <span class="math inline">\(\hat\theta\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></p>
+<p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values.</p>
+<ul>
+<li>The value <span class="math inline">\(\hat\theta_{ML}\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></li>
+<li>The value <span class="math inline">\(\hat\theta_{ML,obs}\)</span> at which the observed likelihood function <span class="math inline">\(\mathcal{L}_{n,obs}(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimate</strong>; i.e., <span class="math inline">\(\hat\theta_{ML,obs}\)</span> is a specific realization of the ML-estimator computed from the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}.\)</span></li>
+</ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -397,31 +405,34 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 </div>
 <div class="callout-body-container">
 <div id="def-MLEstimator" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1.2 (Maximum Likelihood (ML) Estimator)</strong></span> <span class="math display">\[
+<p><span class="theorem-title"><strong>Definition 1.2 (Maximum Likelihood (ML) Estimator)</strong></span> Let <span class="math display">\[
+\{X_{1},\dots,X_{n}\}
+\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
 \begin{align*}
 \hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
+&amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i}|\theta),
 \end{align*}
-\]</span> where <span class="math inline">\(\Theta\)</span> denotes the <strong>parameter space</strong>.</p>
+\]</span> the Maximum Likelihood (ML) Estimator, where <span class="math inline">\(\Theta\)</span> denotes the <strong>parameter space</strong>.</p>
+<p>(Note: A definition for dependent data (e.g., time series) is also possible.)</p>
 </div>
 </div>
 </div>
 </div>
-<p>In our coin flip example this means to estimate the unknown <span class="math inline">\(\theta_0\)</span> by the value <span class="math inline">\(\hat\theta\)</span> at which the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> is maximal, <span class="math display">\[
+<p>Thus, to derive the estimator for the unknown <span class="math inline">\(\theta_0\)</span> in our coin flip example, we need to maximize the likelihood function, <span class="math display">\[
 \begin{align*}
 \hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in[0,1]} \mathcal{L}_n(\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
+&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
+&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i,obs}}.
 \end{align*}
 \]</span></p>
 <p>Usually it’s easier to work with sums rather than products—also for doing the asymptotics in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
 \begin{align*}
 \ell_n(\theta)
 &amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
-&amp;=\ln\prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
-&amp;=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+&amp;=\ln\prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
+&amp;=\sum_{i=1}^n \ln f(X_{i}|\theta).
 \end{align*}
 \]</span> Since this is only a monotonic transformation, we have that <span class="math display">\[
 \begin{align*}
@@ -441,32 +452,39 @@ Log-likelihoods instead of the likelihoods
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>From a standpoint of computational complexity, you can imagine that summing is less expensive than multiplication (although nowadays these are almost equal).</p></li>
+<li><p>From a standpoint of computational complexity, you can imagine that summing is less expensive than multiplication (although nowadays, these are almost equal).</p></li>
 <li><p>More important: likelihoods would become very small and you will run out of your <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">floating point</a> precision very quickly, yielding an underflow. That’s why it is way more convenient to use the logarithm of the likelihood. Simply try to calculate the likelihood by hand, using pocket calculator—it’s almost impossible.</p></li>
 </ul>
 </div>
 </div>
 <p>In our coin flipping example, taking the natural logarithm yields, <span class="math display">\[
 \begin{align*}
-\mathcal{L}_n(\theta) &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
+\mathcal{L}_n(\theta) &amp;= \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i}} \\[2ex]
 \Rightarrow\quad \ell_n(\theta)
 &amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
-&amp;=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right).
+&amp;=\sum_{i=1}^n\left( X_{i} \ln(\theta) + (1-X_{i})\ln(1-\theta)\right).
 \end{align*}
 \]</span></p>
 <p>The coin flip example is actually so simple that we can maximize <span class="math inline">\(\ell_n(\theta)\)</span> analytically. Computing the first derivative yields <span class="math display">\[
 \begin{align*}
-\ell'_n(\theta)&amp;=\sum_{i=1}^n \left(X_{i,obs}\dfrac{1}{\theta} - (1-X_{i,obs})\dfrac{1}{1-\theta}\right)\\[2ex]
-&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta}
+\ell'_n(\theta)&amp;=\sum_{i=1}^n \left(X_{i}\dfrac{1}{\theta} - (1-X_{i})\dfrac{1}{1-\theta}\right)\\[2ex]
+&amp;=\dfrac{N_{H}}{\theta} - \dfrac{n-N_{H}}{1-\theta}
 \end{align*}
 \]</span> Setting the first derivative to zero determines the maximum likelihood estimator (MLE) <span class="math inline">\(\hat\theta_{ML}\)</span>: <span id="eq-MLECoinFlipp"><span class="math display">\[
 \begin{array}{rrcl}
 &amp;\ell_n'(\hat\theta_{ML})&amp;\overset{!}{=}&amp;0\\[2ex]
-\Leftrightarrow&amp;\dfrac{N_{H,obs}}{\hat\theta_{ML}} &amp;=&amp; \dfrac{n-N_{H,obs}}{1-\hat\theta_{ML}} \\[2ex]
-\Leftrightarrow&amp;N_{H,obs}-N_{H,obs}\hat\theta_{ML}  &amp;=&amp; n\hat\theta_{ML}-N_{H,obs}\hat\theta_{ML}\\[2ex]
-\Leftrightarrow&amp;\hat\theta_{ML}&amp;=&amp;\dfrac{N_{H,obs}}{n}
+\Leftrightarrow&amp;\dfrac{N_{H}}{\hat\theta_{ML}} &amp;=&amp; \dfrac{n-N_{H}}{1-\hat\theta_{ML}} \\[2ex]
+\Leftrightarrow&amp;N_{H}-N_{H}\hat\theta_{ML}  &amp;=&amp; n\hat\theta_{ML}-N_{H}\hat\theta_{ML}\\[2ex]
+\Leftrightarrow&amp;\hat\theta_{ML}
+&amp;=&amp;\dfrac{N_{H}}{n}\\[2ex]
+&amp;&amp;=&amp;\dfrac{1}{n}\sum_{i=1}^n X_i
 \end{array}
 \tag{1.1}\]</span></span></p>
+<p>Given observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\},\)</span> a specific estimate of <span class="math inline">\(\theta_0\)</span> can thus be computed from the observed data using <span class="math display">\[
+\begin{align*}
+\hat{\theta}_{ML,obs}=\dfrac{1}{n}\sum_{i=1}^n X_{i,obs}.
+\end{align*}
+\]</span></p>
 <p>Usually, however, the log-likelihood function is <strong>way more complicated</strong> and one needs to apply <strong>numeric optimization</strong> algorithms to find the MLE, <span class="math inline">\(\hat\theta_{ML}.\)</span></p>
 </section>
 </section>

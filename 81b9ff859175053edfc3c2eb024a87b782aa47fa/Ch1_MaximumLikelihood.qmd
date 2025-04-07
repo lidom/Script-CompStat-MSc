@@ -154,7 +154,7 @@ to estimate the unknown $\theta_0$?
 If the observations are realizations of an i.i.d. sample, then the joint probability of observing $h$ heads $H$ and $n-h$ tails $T$ in  $n$ coin flips is:
 $$
 \begin{align*}
-\mathcal{L}_n(\theta)
+\mathcal{L}_{n,obs}(\theta)
 &=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
 %&=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
 %&= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
@@ -163,7 +163,7 @@ $$
 $$
 where $f(\,\cdot\,|\theta)$ denotes here the probability mass function of the Bernoulli distribution with parameter candidate $p=\theta.$
 
-The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. 
+The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write $\mathcal{L}_{,obs}(\theta)$. 
 
 
 ::: {.callout-note appearance="minimal"} 
@@ -172,14 +172,22 @@ The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**.
 # Likelihood Function
 Let 
 $$
-\{X_{1,obs},\dots,X_{n,obs}\}
+\{X_{1},\dots,X_{n}\}
 $$ 
-denote a realization of a (i.i.d.) random sample $\{X_1,\dots,X_n\}$ with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
+denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
 Then, we call 
 $$
-\mathcal{L}_n(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
 $$
-the **likelihood function**.
+the (random) **likelihood function**. Let 
+$$
+\{X_{1,obs},\dots,X_{n,obs}\}
+$$ 
+denote a (observed) realization of $\{X_1,\dots,X_n\}$. Then, we call 
+$$
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+$$
+a (observed) realization of the **likelihood function**.
 
 (Note: A definition for dependent data (e.g., time series) is also possible.)
 :::
@@ -187,30 +195,41 @@ the **likelihood function**.
 
 ### **Estimation Idea**
 
-We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values. The value $\hat\theta$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values. 
+
+* The value $\hat\theta_{ML}$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
+* The value $\hat\theta_{ML,obs}$ at which the observed likelihood function $\mathcal{L}_{n,obs}(\cdot)$ is maximized is called the **maximum likelihood (ML) estimate**; i.e., $\hat\theta_{ML,obs}$ is a specific realization of the ML-estimator computed from the observed data $\{X_{1,obs},\dots,X_{n,obs}\}.$ 
 
 ::: {.callout-note appearance="minimal"} 
 ## 
 ::: {#def-MLEstimator}
 # Maximum Likelihood (ML) Estimator
+Let 
+$$
+\{X_{1},\dots,X_{n}\}
+$$ 
+denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
+Then, we call 
 $$
 \begin{align*}
 \hat{\theta}_{ML}
 &=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
-&=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i,obs}|\theta),
+&=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i}|\theta),
 \end{align*}
 $$
-where $\Theta$ denotes the **parameter space**.
+the Maximum Likelihood (ML) Estimator, where $\Theta$ denotes the **parameter space**.
+
+(Note: A definition for dependent data (e.g., time series) is also possible.)
 :::
 :::
 
-In our coin flip example this means to estimate the unknown $\theta_0$ by the value $\hat\theta$ at which the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ is maximal, 
+Thus, to derive the estimator for the unknown $\theta_0$ in our coin flip example, we need to maximize the likelihood function,
 $$
 \begin{align*}
 \hat{\theta}_{ML}
 &=\arg\max_{\theta\in[0,1]} \mathcal{L}_n(\theta)\\[2ex]
-&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
-&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}.
+&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
+&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i,obs}}.
 \end{align*}
 $$
 
@@ -219,8 +238,8 @@ $$
 \begin{align*}
 \ell_n(\theta)
 &=\ln\mathcal{L}_n(\theta)\\[2ex]
-&=\ln\prod_{i=1}^n f(X_{i,obs}|\theta)\\[2ex]
-&=\sum_{i=1}^n \ln f(X_{i,obs}|\theta).
+&=\ln\prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
+&=\sum_{i=1}^n \ln f(X_{i}|\theta).
 \end{align*}
 $$
 Since this is only a monotonic transformation, we have that
@@ -236,7 +255,7 @@ $$
 
 ::: {.callout-note title="Log-likelihoods instead of the likelihoods"} 
 
-* From a standpoint of computational complexity, you can imagine that summing is less expensive than multiplication (although nowadays these are almost equal). 
+* From a standpoint of computational complexity, you can imagine that summing is less expensive than multiplication (although nowadays, these are almost equal). 
 
 * More important: likelihoods would become very small and you will run out of your [floating point](https://en.wikipedia.org/wiki/Floating-point_arithmetic) precision very quickly, yielding an underflow. That's why it is way more convenient to use the logarithm of the likelihood. Simply try to calculate the likelihood by hand, using pocket calculator---it's almost impossible.
 :::
@@ -245,29 +264,40 @@ $$
 In our coin flipping example, taking the natural logarithm yields,
 $$
 \begin{align*}
-\mathcal{L}_n(\theta) &= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}} \\[2ex]
+\mathcal{L}_n(\theta) &= \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i}} \\[2ex]
 \Rightarrow\quad \ell_n(\theta)
 &=\ln\mathcal{L}_n(\theta)\\[2ex]
-&=\sum_{i=1}^n\left( X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\right).
+&=\sum_{i=1}^n\left( X_{i} \ln(\theta) + (1-X_{i})\ln(1-\theta)\right).
 \end{align*}
 $$
 
 The coin flip example is actually so simple that we can maximize $\ell_n(\theta)$ analytically. Computing the first derivative yields
 $$
 \begin{align*}
-\ell'_n(\theta)&=\sum_{i=1}^n \left(X_{i,obs}\dfrac{1}{\theta} - (1-X_{i,obs})\dfrac{1}{1-\theta}\right)\\[2ex]
-&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} 
+\ell'_n(\theta)&=\sum_{i=1}^n \left(X_{i}\dfrac{1}{\theta} - (1-X_{i})\dfrac{1}{1-\theta}\right)\\[2ex]
+&=\dfrac{N_{H}}{\theta} - \dfrac{n-N_{H}}{1-\theta} 
 \end{align*}
 $$
 Setting the first derivative to zero determines the maximum likelihood estimator (MLE) $\hat\theta_{ML}$:
 $$
 \begin{array}{rrcl}
 &\ell_n'(\hat\theta_{ML})&\overset{!}{=}&0\\[2ex]
-\Leftrightarrow&\dfrac{N_{H,obs}}{\hat\theta_{ML}} &=& \dfrac{n-N_{H,obs}}{1-\hat\theta_{ML}} \\[2ex]
-\Leftrightarrow&N_{H,obs}-N_{H,obs}\hat\theta_{ML}  &=& n\hat\theta_{ML}-N_{H,obs}\hat\theta_{ML}\\[2ex]
-\Leftrightarrow&\hat\theta_{ML}&=&\dfrac{N_{H,obs}}{n}
+\Leftrightarrow&\dfrac{N_{H}}{\hat\theta_{ML}} &=& \dfrac{n-N_{H}}{1-\hat\theta_{ML}} \\[2ex]
+\Leftrightarrow&N_{H}-N_{H}\hat\theta_{ML}  &=& n\hat\theta_{ML}-N_{H}\hat\theta_{ML}\\[2ex]
+\Leftrightarrow&\hat\theta_{ML}
+&=&\dfrac{N_{H}}{n}\\[2ex]
+&&=&\dfrac{1}{n}\sum_{i=1}^n X_i
 \end{array}
 $${#eq-MLECoinFlipp}
+
+Given observed data $\{X_{1,obs},\dots,X_{n,obs}\},$ a specific estimate of $\theta_0$ can thus be computed from the observed data using
+$$
+\begin{align*}
+\hat{\theta}_{ML,obs}=\dfrac{1}{n}\sum_{i=1}^n X_{i,obs}.
+\end{align*}
+$$
+
+
 
 Usually, however, the log-likelihood function is **way more complicated** and one needs to apply **numeric optimization** algorithms to find the MLE, $\hat\theta_{ML}.$  
 
