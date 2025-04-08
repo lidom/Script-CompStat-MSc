@@ -1,0 +1,223 @@
+<!-- LTeX: language=en-US -->
+# Nonparametric Density Estimation
+
+## Introduction
+
+
+```{r}
+#| echo: false
+data_path <- "81b9ff859175053edfc3c2eb024a87b782aa47fa/data/"
+data_path <- "data/"
+# Libraries
+suppressPackageStartupMessages(library("ggplot2"))    # Plotting 
+suppressPackageStartupMessages(library("np"))         # Nonparametric Statistics
+suppressPackageStartupMessages(library("KernSmooth")) #
+suppressPackageStartupMessages(library("gridExtra"))  # To arrange multiple plots 
+suppressPackageStartupMessages(library("gtable")) 
+suppressPackageStartupMessages(library("scales"))     # Transparent colors 
+```
+
+
+#### **Example: Income Data Analysis** {-}
+
+
+```{r}
+#| echo: false
+inc76 <- read.table(paste0(data_path,"inc76.txt"), col.names="income")
+```
+
+```{r}
+c(inc76$income)[1:6]
+```
+
+Typical aim: Characterizing the income distribution (density function) $f$ given a random sample 
+$$
+\{X_1,\dots,X_n\}
+$$
+with 
+$$
+X_i\overset{\text{i.i.d.}}{\sim} f
+$$
+
+
+Traditional statistical key figures such as 
+
+* Empirical mean 
+* Empirical median
+* Empirical variance 
+* Empirical interquartile distance, etc. 
+
+**Problem:** Such key figures only summarize single aspects of a distribution. 
+
+Estimating the total density function $f$ can provide more detailed, more wholistic information. 
+
+
+#### **Simplest density estimator: Histogram** {-}
+
+Histogramm für  FES Einkommensdaten im Jahr 1976:
+
+```{r}
+#| echo: false
+#| fig-cap: Histrogram of income data
+hist(inc76$income, 
+     freq = FALSE,
+     xlab = "Income", 
+     ylab = "Density", main = "")
+```
+
+
+Disadvantages of the histogram: 
+
+* Choice of the bin width (and of the start point)
+* Discontinuous, locally constant $\Rightarrow$ A histogram cannot be a very efficient estimator for a (continuous) density function $f(x).$
+
+
+**Example:** Too small or too large bin widths
+
+```{r}
+#| echo: false
+#| fig-cap: Histrograms of income data for different choices of the bin width. 
+par(mfrow = c(1,2))
+hist(inc76$income, 
+     freq = FALSE,
+     breaks = 25,
+     xlab = "Income", 
+     ylab = "Density", main = "")
+hist(inc76$income, 
+     freq = FALSE,
+     breaks = 4,
+     xlab = "Income", 
+     ylab = "Density", main = "")
+par(mfrow = c(1,1))
+```
+
+
+### From the Histogram to Kernel Density Estimation
+
+Comparison: Histogram versus a kernel density estimation 
+
+```{r}
+#| echo: false
+#| fig-cap: Histogram versus a nonparametric kernel density estimation (green solid line).
+hist(inc76$income, 
+     freq = FALSE,
+     xlab = "Income", 
+     ylab = "Density", main = "")
+lines(density(inc76$income), col = "darkgreen")
+```
+
+Consider a histogram with $J$ (e.g., $J=8$) bins all having the same bin-width $2h,$ defined by equidistant intervals
+$$
+(x_{j-1},x_j]
+$$ 
+with 
+$$
+x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
+$$
+The bin-height is determined **locally** at the $j$th interval mid-point 
+$$
+\bar{x}_j=(x_{j-1}+x_j)/2
+$$
+by the relative frequency of data points $X_1,\dots,X_n$ that fall within the $j$th interval $(x_{j-1},x_j],$
+$$ 
+\begin{align*}
+\hat f_{hist}(\bar{x}_j)
+& =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
+& =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right)
+\end{align*}
+$$
+with
+$$
+K(z)=\left\{
+\begin{array}{ll}
+1/2 & \hbox{ if } z\in (-1,1] \\
+0   & \hbox{ else}.
+\end{array}\right.
+$$
+
+Note: The scaling by $2hn$ is necessary to guarantee that the area of each bin equals the relative frquency of data points $X_1,\dots,X_n$ that fall into the interval $(x_{j-1},x_j]$
+$$
+\begin{align*}
+\text{Area of $j$th Bin} 
+& = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
+& = \qquad 2h\quad\, \cdot \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
+& = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}%\\[2ex]
+\end{align*}
+$$
+This guarantees that the bin areas of the histogram sum up to one.  
+
+
+A kernel density estimator generalizes the histogram by estimating the unknown density $f$ at **every** $x$ using 
+$$
+\begin{align*}
+{\hat{f}}_{h}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
+\frac{x-X_{i}}{h}\right)
+\end{align*}
+$$
+
+* $K$ kernel function 
+* $h$ bandwidth 
+
+
+## Motivating the Kernel Density Estimator
+
+
+Let 
+$$
+\{X_1, \ldots, X_n\}
+$$
+denote a random sample with 
+$$
+X_i\overset{\text{i.i.d.}}{\sim} f\quad\text{for}\quad i=1,\dots,n.
+$$
+
+
+Aim: Find a density estimator $\hat{f}$ for the true, unknown density $f$ without making a parametric assumption such as assuming that $f$ is the density of a normal distribution with unknown mean and unknown variance. 
+
+
+**Qualitative assumption on $f:$**
+
+The density function $f(x)$ is sufficiently smooth (i.e., is sufficiently often differentiable) for all $x$.  
+
+
+Starting point: 
+
+We use the connection between density functions $f$ and distribution functions $F(x) = P(X \leq x),$ 
+$$
+\begin{equation*}
+  f(x) = \frac{d}{dx} F(x) = F'(x), \qquad x \in \mathbb{R}
+\end{equation*}
+$$
+
+**Idea:** 
+
+Approximate the derivative of the distribution function using the difference quotient. For (small) $h > 0,$ we have 
+$$
+\begin{align*}
+  F'(x) &\approx \frac{F(x+h) - F(x)}{h}\\[2ex]
+  F'(x) &= \frac{F(x+h) - F(x)}{h} + O(h)
+\end{align*}
+$$
+or
+$$
+\begin{align*}
+F'(x) &\approx \frac{F(x) - F(x-h)}{h}\\[2ex]
+F'(x)      &= \frac{F(x) - F(x-h)}{h} + O(h)
+\end{align*}
+$$
+
+In both cases, the approximation error is of the order $O(h)$ for $h\to 0,$
+$$
+\begin{align*}
+F'(x) - \frac{F(x) - F(x-h)}{h} = O(h)
+\end{align*}
+$$
+(Pronounce "Big-Oh $h$"). This means that the approximation error goes, in absolute values, to zero as fast as $h\to 0$ or faster; i.e.
+$$
+\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|\to 0\quad\text{as}\quad h\to 0 
+$$
+such that
+$$
+\frac{\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|}{h}\to c,
+$$
+where $0\leq c < \infty.$
