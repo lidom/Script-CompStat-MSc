@@ -761,11 +761,11 @@ Pseudo-Code: Newton-Raphson Algorithm
 \hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 \]</span> but let us, nevertheless, apply the Newton-Raphson algorithm.</p>
 <p>The first and second derivatives of <span class="math display">\[
-\ell_n(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
+\ell_{n,obs}(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
 \]</span> are <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta)&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
-\ell_n''(\theta) &amp;= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
+\ell_{n,obs}'(\theta)&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
+\ell_{n,obs}''(\theta) &amp;= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
 &amp;= -\dfrac{N_{H,obs}}{\theta^2} - \dfrac{n-N_{H,obs}}{(1-\theta)^2}.
 \end{align*}
 \]</span></p>
@@ -792,8 +792,8 @@ Table&nbsp;1.1: Result of applying the Newton Raphson optimization algorithm to 
 <tr class="header">
 <th><span class="math inline">\(m\)</span></th>
 <th><span class="math inline">\(\hat\theta_{(m)}\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(h_{{(m)}}=\frac{-\ell_n'(\hat\theta_{(m)})}{\ell_n''(\hat\theta_{(m)})}\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(\ell_n'(\hat\theta_{(m)})\gtrless \varepsilon\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(h_{{(m)}}=\frac{-\ell_{n,obs}'(\hat\theta_{(m)})}{\ell_{n,obs}''(\hat\theta_{(m)})}\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\ell_{n,obs}'(\hat\theta_{(m)})\gtrless \varepsilon\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1901,7 +1901,6 @@ Below I use the same data (one H, four T) that was used to produce the results i
 
 
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -1976,7 +1975,6 @@ results
 
 :::
 :::
-
 
 
 
@@ -2110,7 +2108,6 @@ $\mathcal{L}_n(\theta)$ is strictly decreasing over the interval $[X_{(n)},\inft
 
 
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -2143,7 +2140,6 @@ axis(1, at = X_max, labels = expression(X[(n)]))
 ![Graph of the likelihood function $\mathcal{L}_n(\theta)$ given in @eq-MLMaxestim.](Ch1_MaximumLikelihood_files/figure-html/fig-MLMaxestim-1.png){#fig-MLMaxestim width=672}
 :::
 :::
-
 
 
 
@@ -2219,7 +2215,6 @@ $$
 
 
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -2236,7 +2231,6 @@ axis(1, at = 4)
 ![](Ch1_MaximumLikelihood_files/figure-html/unnamed-chunk-5-1.png){width=672}
 :::
 :::
-
 
 
 

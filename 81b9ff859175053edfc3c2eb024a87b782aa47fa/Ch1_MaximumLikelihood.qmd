@@ -674,13 +674,13 @@ but let us, nevertheless, apply the Newton-Raphson algorithm.
 
 The first and second derivatives of 
 $$
-\ell_n(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
+\ell_{n,obs}(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
 $$ 
 are 
 $$
 \begin{align*}
-\ell_n'(\theta)&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
-\ell_n''(\theta) &= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
+\ell_{n,obs}'(\theta)&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
+\ell_{n,obs}''(\theta) &= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
 &= -\dfrac{N_{H,obs}}{\theta^2} - \dfrac{n-N_{H,obs}}{(1-\theta)^2}.
 \end{align*}
 $$
@@ -693,7 +693,7 @@ We consider a sample size of $n=5$ with the following observed outcome:
 Setting $\varepsilon=10^{-10}$ as our stopping criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in @tbl-NR. The numeric optimization solution is $\hat\theta_{ML} = 0.2$ which equals the analytic solution. 
 
 
-|$m$ 	|	$\hat\theta_{(m)}$	|	$h_{{(m)}}=\frac{-\ell_n'(\hat\theta_{(m)})}{\ell_n''(\hat\theta_{(m)})}$ |$\ell_n'(\hat\theta_{(m)})\gtrless \varepsilon$	 |  
+|$m$ 	|	$\hat\theta_{(m)}$	|	$h_{{(m)}}=\frac{-\ell_{n,obs}'(\hat\theta_{(m)})}{\ell_{n,obs}''(\hat\theta_{(m)})}$ |$\ell_{n,obs}'(\hat\theta_{(m)})\gtrless \varepsilon$	 |  
 |-------------------|-------------------|:--------------------------:|---------------------------------------------:|
 |$0$| $0.40$| $-2.4\cdot 10^{-1}$| ${\color{red}-4.2 > \varepsilon}$                        |
 |$1$| $0.16$| $\phantom{-}3.3\cdot 10^{-2}$ |${\color{red}\phantom{-}1.5 > \varepsilon}$              |
