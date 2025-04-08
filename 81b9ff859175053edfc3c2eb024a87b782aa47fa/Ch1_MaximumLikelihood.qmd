@@ -29,7 +29,7 @@ Thus, maximum likelihood estimators can be very appealing, provided that the ass
 
 
 ::: {.callout-important}
-## ML-estimation requires fixing the family of distributions $f(\cdot|\theta)$
+## ML-estimation requires fixing the family of distributions $f(\cdot;\theta)$
 
 Let 
 $$
@@ -37,35 +37,35 @@ X_1,\dots,X_n
 $$
 denote a (i.i.d.) random sample, such that $X_i\overset{\text{i.i.d.}}{\sim} f$, for all $i=1,\dots,n.$
 
-Classic ML-estimation requires us to fix the general family of density functions or probability mass functions $f,$ where $f$ is known up to an unknown parameter $\theta,$ and where $\theta\in\mathbb{R}^K$ is a *finite* ($1\leq K<\infty$) dimensional parameter vector.  
+Classic ML-estimation requires us to fix the general family of density functions or probability mass functions $f,$ where $f$ is known up to an unknown parameter value $\theta_0,$ and where $\theta_0\in\mathbb{R}^K$ is a *finite* ($1\leq K<\infty$) dimensional parameter vector.  
 
 **Examples:** 
 
 * $f$ being the probability mass function of the Bernoulli distribution $\mathcal{Bern}(\theta)$ with 
 $$
-f(x|\theta)=
+f(x;\theta_0)=
 \left\{
   \begin{array}{ll}
-  \theta,   & \text{if } x=1\\
-  1-\theta, & \text{if } x=0
+  \theta_0,   & \text{if } x=1\\
+  1-\theta_0, & \text{if } x=0
   \end{array}
 \right.
 $$ 
 and **unknown** parameter $0\leq \theta\leq 1.$
 * The density function of the exponential distribution 
 $$
-f(x;\theta)=\left\{
+f(x;\theta_0)=\left\{
     \begin{matrix}
-    \theta\exp(- \theta x)& \text{for }x\geq 0\\
+    \theta_0\exp(- \theta_0 x)& \text{for }x\geq 0\\
     0                     & \text{for }x < 0\\
     \end{matrix}\right.
 $$
-with unknown rate parameter $\theta>0$ and $x\in\mathbb{R}.$ 
+with unknown rate parameter $\theta_0>0$ and $x\in\mathbb{R}.$ 
 * $f$ is the normal density 
 $$
-f(x|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2\right)
+f(x;\theta_0)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_0}{\sigma_0}\right)^2\right)
 $$ 
-with **unknown** parameter vector $\theta=(\mu,\sigma^2)^T$ and $x\in\mathbb{R}.$
+with **unknown** parameter vector $\theta_0=(\mu_0,\sigma_0^2)^T$ and $x\in\mathbb{R}.$
 
 This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the family of $f.$ To address this issue, the **quasi maximum likelihood theory** generalizes classic maximum likelihood estimation to cases where $f$ is misspecified (see @White1982).   
 :::
@@ -91,7 +91,7 @@ X=\left\{
 $$ 
 The probability mass function of the Bernoulli distribution $\mathcal{Bern}(\theta_0),$ with **unknown** probability of success parameter $0<\theta_0<1,$ is given by 
 $$
-f(x|\theta_0)=
+f(x;\theta_0)=
 \left\{
   \begin{array}{ll}
   \theta_0,&\text{if } x=1\\
@@ -101,11 +101,11 @@ f(x|\theta_0)=
 $$ 
 I.e., the probability that we get Head $H$ is 
 $$
-\theta_0 = f(1|\theta_0) = P(X=1) = P(\text{Coin}=H),
+\theta_0 = f(1;\theta_0) = P(X=1) = P(\text{Coin}=H),
 $$
 and the probability that we get Tail $T$ is 
 $$
-1-\theta_0 = f(0|\theta_0) = P(X=0) = P(\text{Coin}=T).
+1-\theta_0 = f(0;\theta_0) = P(X=0) = P(\text{Coin}=T).
 $$ 
 
 
@@ -155,13 +155,13 @@ If the observations are realizations of an i.i.d. sample, then the joint probabi
 $$
 \begin{align*}
 \mathcal{L}_{n,obs}(\theta)
-&=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
+&=\prod_{i=1}^nf(X_{i,obs};\theta)\\[2ex]
 %&=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
 %&= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
 &= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}}, 
 \end{align*} 
 $$
-where $f(\,\cdot\,|\theta)$ denotes here the probability mass function of the Bernoulli distribution with parameter candidate $p=\theta.$
+where $f(\,\cdot\,;\theta)$ denotes here the probability mass function of the Bernoulli distribution with parameter candidate $p=\theta.$
 
 The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write $\mathcal{L}_{,obs}(\theta)$. 
 
@@ -174,10 +174,10 @@ Let
 $$
 \{X_{1},\dots,X_{n}\}
 $$ 
-denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
+denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
 Then, we call 
 $$
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
 $$
 the (random) **likelihood function**. Let 
 $$
@@ -185,7 +185,7 @@ $$
 $$ 
 denote a (observed) realization of $\{X_1,\dots,X_n\}$. Then, we call 
 $$
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
 $$
 a (observed) realization of the **likelihood function**.
 
@@ -193,7 +193,7 @@ a (observed) realization of the **likelihood function**.
 :::
 :::
 
-### **Estimation Idea**
+### Estimation Idea
 
 We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values. 
 
@@ -208,13 +208,13 @@ Let
 $$
 \{X_{1},\dots,X_{n}\}
 $$ 
-denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
+denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
 Then, we call 
 $$
 \begin{align*}
 \hat{\theta}_{ML}
 &=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
-&=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i}|\theta),
+&=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i};\theta),
 \end{align*}
 $$
 the Maximum Likelihood (ML) Estimator, where $\Theta$ denotes the **parameter space**.
@@ -228,8 +228,8 @@ $$
 \begin{align*}
 \hat{\theta}_{ML}
 &=\arg\max_{\theta\in[0,1]} \mathcal{L}_n(\theta)\\[2ex]
-&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
-&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i,obs}}.
+&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i};\theta)\\[2ex]
+&=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i}}.
 \end{align*}
 $$
 
@@ -238,8 +238,8 @@ $$
 \begin{align*}
 \ell_n(\theta)
 &=\ln\mathcal{L}_n(\theta)\\[2ex]
-&=\ln\prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
-&=\sum_{i=1}^n \ln f(X_{i}|\theta).
+&=\ln\prod_{i=1}^n f(X_{i};\theta)\\[2ex]
+&=\sum_{i=1}^n \ln f(X_{i};\theta).
 \end{align*}
 $$
 Since this is only a monotonic transformation, we have that
@@ -290,7 +290,7 @@ $$
 \end{array}
 $${#eq-MLECoinFlipp}
 
-Given observed data $\{X_{1,obs},\dots,X_{n,obs}\},$ a specific estimate of $\theta_0$ can thus be computed from the observed data using
+Given observed data $\{X_{1,obs},\dots,X_{n,obs}\},$ a specific estimate of $\theta_0$ can thus be computed as
 $$
 \begin{align*}
 \hat{\theta}_{ML,obs}=\dfrac{1}{n}\sum_{i=1}^n X_{i,obs}.
@@ -299,7 +299,7 @@ $$
 
 
 
-Usually, however, the log-likelihood function is **way more complicated** and one needs to apply **numeric optimization** algorithms to find the MLE, $\hat\theta_{ML}.$  
+Usually, however, the log-likelihood function is **way more complicated** such that it is impossible to derive an explicit expression for the ML-estimator $\hat\theta_{ML}.$ In such cases, one needs to apply **numeric optimization** algorithms to compute the ML-estimates, $\hat\theta_{ML,obs}.$  
 
 
 ## Numeric Optimization
@@ -476,7 +476,7 @@ $$
 :::
 
 
-#### Optimization Idea {-}
+#### **Optimization Idea** {-}
 
 Let $\ell_n$ be a log-likelihood function with continuous first, $\ell_n',$ and second, $\ell_n'',$ derivative. 
 
@@ -746,7 +746,7 @@ $$
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
 $$
 denote a (i.i.d.) random sample with 
-$\mathbb{E}(\varepsilon_i|X_i)=0$, intertable $(K\times K)$ matrix $\mathbb{E}(X_iX_i')=\Sigma_{X'X}$, $i=1,\dots,n,$ 
+$\mathbb{E}(\varepsilon_i|X_i)=0$, intertable $(K\times K)$ matrix $\mathbb{E}(X_iX_i^T)=\Sigma_{X^TX}$, $i=1,\dots,n,$ 
 and with either
 
 * **homoskedastic** errors: $0<\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0<\infty$
@@ -844,7 +844,7 @@ Taking first derivatives gives
 $$
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
 \underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T,\sigma^2)} 
 %&= -\dfrac{n}{2\sigma^2}+ \dfrac{1}{2\sigma^4}(Y-X\beta)^T(Y-X\beta)
 &=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)^T(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}}\\
@@ -853,7 +853,7 @@ $$
 $$
 Putting the above derivative functions into one column vector yields the $((K+1)\times 1)$-dimensional **gradient** called **score function** in ML-theory:
 $$
-\nabla\ell_n(\theta')=
+\nabla\ell_n(\theta^T)=
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T,\sigma^2)
@@ -871,9 +871,9 @@ More generally, let $\ell_n(\theta)$ denote the log-likelihood function evaluate
 
 Then the $(p\times 1)$ dimensional gradient 
 $$
-\nabla\ell_n(\theta')=\left(\begin{matrix}
-  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\ 
-  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
+\nabla\ell_n(\theta^T)=\left(\begin{matrix}
+  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\\ \vdots\\ 
+  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T)
   \end{matrix}
   \right)
 $$ 
@@ -891,41 +891,58 @@ $$
 $$ 
 for all $j=1,\dots,p;$ i.e. 
 $$
-\mathbb{E}\left(\nabla\ell_n(\theta')\right)=\left(\begin{matrix}
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\right)\\ \vdots\\ 
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta')\right)
+\mathbb{E}\left(\nabla\ell_n(\theta^T)\right)=\left(\begin{matrix}
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\right)\\ \vdots\\ 
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T)\right)
   \end{matrix}
   \right) = \underset{(p\times 1)}{0}
 $$ 
 We prove this below in @sec-MLAsymp.
 :::
 
-Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, which we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}:$
+Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, which identifies the ML-estimators, 
+$$
+\begin{align*}
+&\nabla\ell_n(\hat\theta^T_{ML})
+=
+\left(\begin{matrix}
+\dfrac{\partial \ell_n}{\partial \beta}(\hat\beta^T_{ML},s_{ML}^2)\\
+\dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta^T_{ML},s_{ML}^2),
+\end{matrix}\right)=\\[2ex]
+&=
+\left(\begin{matrix}
+- \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})\\
+-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}
+\end{matrix}\right)
+\overset{!}{=} \underset{((K+1)\times 1)}{0}
+\end{align*}
+$$
+and which we can solve for the maximum likelihood estimators $\hat\beta_{ML}$ and $s^2_{ML}.$
 
 Solving for $\hat\beta_{ML}:$
 $$
 \begin{align*}
-& \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-\Leftrightarrow\quad& - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
-\Rightarrow\quad & \hat\beta_{ML}=(X'X)^{-1}X'Y\\[2ex]
+%& \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',s^2_{ML}) \overset{!}{=}0\\[2ex]\Leftrightarrow\quad
+& - \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
+\Rightarrow\quad & \hat\beta_{ML}=(X^TX)^{-1}X^TY\\[2ex]
 \end{align*}
 $$
 Solving for $s^2_{ML}:$
 $$
 \begin{align*}
-& \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-\Leftrightarrow\quad&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
+%& \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',s^2_{ML}) \overset{!}{=}0\\[2ex]\Leftrightarrow\quad
+&-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
 \Rightarrow\quad  &
 s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\\[2ex]
 &\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2,
 \end{align*}
 $$
 where 
-$\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.$
+$\hat\varepsilon_i = Y_i - X_i^T\hat{\beta}_{ML}.$
 
 **Observations:**
 
-* $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta=(X'X)^{-1}X'Y.$  </br>
+* $\hat\beta_{ML}$ equals the OLS estimator $\hat\beta=(X^TX)^{-1}X^TY.$  </br>
 Since the ML estimator $\hat\beta_{ML}$ is here equivalent to the OLS estimator we can use the classic inference machinery ($t$-test, $F$-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class). 
 
 * $s_{ML}^2$ differs from the unbiased variance estimator $s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.$
@@ -948,26 +965,26 @@ Let's do this preliminary work in the following:
 $$
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
 \Rightarrow\quad 
 \underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)}
-&= - \dfrac{1}{\sigma^2}(X'X)
+&= - \dfrac{1}{\sigma^2}(X^TX)
 \end{align*}
 $$
 $$
 \begin{align*}
 \Rightarrow\quad 
 &-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)\right)\\[2ex]
-&=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X'X)\right)\\[2ex]
-&=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X'X}\right)\\[2ex]
-&=  \dfrac{1}{\sigma^2} \Sigma_{X'X},
+&=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X^TX)\right)\\[2ex]
+&=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X^TX}\right)\\[2ex]
+&=  \dfrac{1}{\sigma^2} \Sigma_{X^TX},
 \end{align*}
 $$
 where  
 $$
-\mathbb{E}\left(X'X\right)
-=\mathbb{E}\left(\sum_{i=1}^nX_iX_i'\right)
-=n\underbrace{\mathbb{E}\left(X_iX_i'\right)}_{=:\Sigma_{X'X}} = n\Sigma_{X'X}.
+\mathbb{E}\left(X^TX\right)
+=\mathbb{E}\left(\sum_{i=1}^nX_iX_i^T\right)
+=n\underbrace{\mathbb{E}\left(X_iX_i^T\right)}_{=:\Sigma_{X^TX}} = n\Sigma_{X^TX}.
 $$ 
 
 * Second derivative with respect to $\sigma^2:$
@@ -995,9 +1012,9 @@ $$
 $$
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
-&= \dfrac{1}{\sigma^2}(X')(Y - X\beta)\\[2ex]
-&= \dfrac{1}{\sigma^2}X'\varepsilon\\[2ex]
+&= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
+&= \dfrac{1}{\sigma^2}(X^T)(Y - X\beta)\\[2ex]
+&= \dfrac{1}{\sigma^2}X^T\varepsilon\\[2ex]
 \end{align*}
 $$
 
@@ -1006,7 +1023,7 @@ $$
 \Rightarrow\quad 
 \underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta^T,\sigma^2)}
 =   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T,\sigma^2)\right)^T
-& = -\frac{X'\varepsilon}{\sigma^4}\\
+& = -\frac{X^T\varepsilon}{\sigma^4}\\
 \end{align*}
 $$
 $$
@@ -1014,9 +1031,9 @@ $$
 \Rightarrow\quad 
 &-\frac{1}{n}\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta^T,\sigma^2)\right)\\[2ex]
 &=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T,\sigma^2)\right)\right)^T\\[2ex]
-&=\frac{1}{n}\cdot\frac{\mathbb{E}(X'\varepsilon)}{\sigma^4}\\[2ex]
-&=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X'\varepsilon|X))}{\sigma^4}\\[2ex]
-&=\frac{1}{n}\cdot\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
+&=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\varepsilon)}{\sigma^4}\\[2ex]
+&=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X^T\varepsilon|X))}{\sigma^4}\\[2ex]
+&=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
 &=\frac{1}{n}\cdot 0=0,
 \end{align*}
 $$
@@ -1036,7 +1053,7 @@ $$
 \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2) \right)
 \end{array}\right]\\[2ex]
 &=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X'X}}
+\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X^TX}}
 & 
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} & 
@@ -1059,7 +1076,7 @@ is called **Fisher Information Matrix**.
 :::
 :::
 
-#### Asymptotic Variance and Fisher Information Matrix {-}
+#### **Asymptotic Variance and Fisher Information Matrix** {-}
 
 The asymptotic variance of the MLE 
 $$
@@ -1080,14 +1097,14 @@ $$
 -\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0) \right)
 \end{array}\right]^{-1}\\[2ex]
 &=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X'X}}
+\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X^TX}}
 & 
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} & 
 \underset{(1\times 1)}{\frac{1}{2\sigma^4_0}}
 \end{array}\right]^{-1}\\[2ex]
 &=\left[\begin{array}{cc}
-\underset{(K\times K)}{\sigma^2_0\Sigma_{X'X}^{-1}}
+\underset{(K\times K)}{\sigma^2_0\Sigma_{X^TX}^{-1}}
 & 
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} & 
@@ -1111,12 +1128,12 @@ $$
 \end{array}\right]\\[2ex]
 % &=
 % \left[\begin{array}{cc}
-% \frac{1}{\sigma^2}E(X'X) & 0 \\
+% \frac{1}{\sigma^2}E(X^TX) & 0 \\
 % 0 & \frac{n}{2\sigma^4}
 % \end{array}\right]\\[2ex]
 &=
 \left[\begin{array}{cc}
-\dfrac{n}{\sigma^2}\Sigma_{X'X} & 0 \\[2ex]
+\dfrac{n}{\sigma^2}\Sigma_{X^TX} & 0 \\[2ex]
 0 & \ \dfrac{n}{2\sigma^4}
 \end{array}\right],
 \end{align*}
@@ -1129,7 +1146,7 @@ AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 &=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex] 
 &=
 \left[\begin{array}{cc}
-\sigma^2_0\Sigma_{X'X}^{-1} & 0 \\[2ex]
+\sigma^2_0\Sigma_{X^TX}^{-1} & 0 \\[2ex]
 0 & \ 2\sigma^4_0
 \end{array}\right].
 \end{align*}
@@ -1146,14 +1163,14 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 & \approx \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
 & =
 \left[\begin{array}{cc}
-\dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1} & 0 \\
+\dfrac{\sigma^2}{n}\Sigma_{X^TX}^{-1} & 0 \\
 0 & \ \dfrac{2\sigma^4}{n}
 \end{array}\right],
 \end{align*}
 $${#eq-FIMVar}
 where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
-n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
+n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
 $$
 and
 $$
@@ -1173,15 +1190,15 @@ s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 $$
 and
 $$
-S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\quad \Sigma_{X'X}^{-1}.
+S_{X^TX}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1} \quad \text{for}\quad \Sigma_{X^TX}^{-1}.
 $$
 
 This leads to estimators of the asymptotic variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$
 $$
 \begin{align}
 \widehat{AVar}(\hat{\beta}_{ML})
-&=s_{ML}^2 S_{X'X}^{-1}\\[2ex]
-&=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1}\\[2ex]
+&=s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
+&=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{AVar}(s^2_{ML})
 &=2\left(s_{ML}^2\right)^2
 \end{align}
@@ -1191,8 +1208,8 @@ $$
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})
 =\frac{1}{n}\widehat{AVar}(\hat{\beta}_{ML})
-&=s_{ML}^2 \frac{1}{n}S_{X'X}^{-1}\\[2ex]
-&=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i'\right)^{-1}\\[2ex]
+&=s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\\[2ex]
+&=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{Var}(s^2_{ML})
 =\frac{1}{n}\widehat{AVar}(s^2_{ML})
 &=\frac{1}{n}2\left(s_{ML}^2\right)^2.
@@ -1204,11 +1221,11 @@ $$
 If $E[\varepsilon|X]=0$ (strict exogeneity, follows from the random design (@def-RandomFixedDesign) assumption), then the bias of $\hat\beta$ is zero since $E[\hat\beta_{ML}]=\beta$
 $$
 \begin{align*}
-E[\hat\beta_{ML}]&=E[(X'X)^{-1}X'(X\beta + \varepsilon)] \\
-                 &=E[E[(X'X)^{-1}X'(X\beta + \varepsilon)|X]] \\
-                 &=E[E[(X'X)^{-1}X'X\beta|X]] + E[E[(X'X)^{-1}X'\varepsilon|X]] \\
-                 &=E[E[\beta|X]] + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
-                 &=        \beta + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
+E[\hat\beta_{ML}]&=E[(X^TX)^{-1}X^T(X\beta + \varepsilon)] \\
+                 &=E[E[(X^TX)^{-1}X^T(X\beta + \varepsilon)|X]] \\
+                 &=E[E[(X^TX)^{-1}X^TX\beta|X]] + E[E[(X^TX)^{-1}X^T\varepsilon|X]] \\
+                 &=E[E[\beta|X]] + E[(X^TX)^{-1}X^TE[\varepsilon|X]] \\
+                 &=        \beta + E[(X^TX)^{-1}X^TE[\varepsilon|X]] \\
                  &=        \beta  \\
 \Leftrightarrow E[\hat\beta_{ML}]-\beta&=\operatorname{Bias}(\hat\beta_{ML})=0
 \end{align*}
@@ -1246,6 +1263,112 @@ $$ -->
 <!-- In practice, however, one usually works with the unbiased (and consistent) alternative $s_{UB}^2=\dfrac{1}{n-K}\sum_{i=1}^n \hat{\varepsilon}_i^2$ even though one can show that $\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(\hat\sigma^2_{UB})$ for sufficiently large $n$. -->
 
 
+### Asymptotic Distribution and Single Parameter Testing
+
+It follows from asymptotic maximum likelihood theory (see @sec-MLAsymp) that the probability distribution of the vector of parameter estimates
+$$
+\begin{pmatrix}
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
+\end{pmatrix}
+$$
+can be approximated (for largish $n$) by the following multivariate normal distribution 
+$$
+\begin{align*}
+\sqrt{n}\left(
+\hat\theta_{ML,n}-\theta_0
+\right)
+&\to_d
+\mathcal{N}_{p}\left(
+0,
+\left(\mathcal{I}(\beta^T_0,\sigma^2_0)\right)^{-1}
+\right)\\[2ex]
+\sqrt{n}\left(
+\begin{pmatrix}
+\hat\beta_{ML}\\
+\hat s_{ML}^2
+\end{pmatrix}-
+\begin{pmatrix}
+\beta_0\\
+\sigma_0^2
+\end{pmatrix}\right)
+&\to_d
+\mathcal{N}_{K+1}\left(\begin{pmatrix}
+0\\
+0
+\end{pmatrix},
+\begin{pmatrix}
+\sigma_0^2\Sigma_{X^TX} & 0\\
+0 & 2\sigma_0^4
+\end{pmatrix}
+\right)\\[2ex]
+\Leftrightarrow
+\begin{pmatrix}
+\hat\beta_{ML}\\
+\hat s_{ML}^2
+\end{pmatrix}
+&\overset{a}{\sim}
+\mathcal{N}_{K+1}\left(
+\begin{pmatrix}
+\beta_0\\
+\sigma_0^2
+\end{pmatrix},
+\begin{pmatrix}
+\frac{1}{n}\sigma_0^2\Sigma_{X^TX} & 0\\
+0 & \frac{1}{n}2\sigma_0^4
+\end{pmatrix}
+\right)
+\end{align*}
+$$ 
+
+Plugging-in estimators for the unknown variance components, i.e.
+
+* $s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\quad$ for $\quad\sigma_0^2 \frac{1}{n} \Sigma_{X^TX}$
+
+and 
+
+* $\frac{1}{n}2\left(s_{ML}^2\right)^2\quad$ for $\quad\frac{1}{n}2\sigma_0^4$
+
+allows using this asymptotic normality result in testing. 
+
+
+#### **Single Parameter Testing** {-}
+
+For instance, we can do a single-parameter test for 
+
+$$
+\begin{align*}
+H_0\colon \beta_{0,k} & =   \beta_{0,k}^{(0)}\\
+H_1\colon \beta_{0,k} &\neq \beta_{0,k}^{(0)},\\
+\end{align*}
+$$
+where $\beta_{0,k}^{(0)}$ denotes the null-hypothetical value (typically, $\beta_{0,k}^{(0)}=0$), 
+using the Wald statistic
+$$
+T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - 0}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
+\mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
+$$
+
+Likewise, for 
+$$
+\begin{align*}
+H_0\colon \sigma_0^2 & = (\sigma_0^{(0)})^2\\
+H_1\colon \sigma_0^2 &\neq (\sigma_0^{(0)})^2,\\
+\end{align*}
+$$
+where $(\sigma_0^{(0)})^2$ denotes the null-hypothetical value, 
+using the Wald statistic
+$$
+T_{\sigma_0,n}=\frac{s_{ML}^2 - (\sigma_0^{(0)})^2}{\sqrt{\frac{1}{n}2\left(s_{ML}^2\right)^2}}\overset{H_0}{\to_d}
+\mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
+$$
+
+**Testing:** 
+We reject $H_0,$ if the observed value $T_{n,obs},$ computed from the observed realization of the random sample, is in absolute values larger than the $(1-\alpha/2)$-qantile of the standard normal distribution; i.e. if 
+$$
+|T_{n,obs}| > z_{1-\alpha/2},
+$$ 
+where $\alpha\in(0,1)$ denotes the chosen significance level, such as $\alpha=0.01.$ 
 
 ## Asymptotic Theory of Maximum-Likelihood Estimators {#sec-MLAsymp}
 
@@ -1324,7 +1447,7 @@ $$
 around $\theta_0$ (see @eq-MVT). To derive this expression, we use the mean value theorem (@thm-MVT).
 
 
-::: {.callout-note icon=false} 
+::: {.callout-note appearance="minimal"} 
 ## 
 ::: {#thm-MVT}
 
@@ -1435,7 +1558,7 @@ $$
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\
 &=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\
-&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X;\theta_0)}{f(X|\theta)}\right)\quad[\text{chain rule}]\\
+&=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X;\theta_0)}{f(X;\theta)}\right)\quad[\text{chain rule}]\\
 &=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
 &=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
@@ -1745,7 +1868,7 @@ showing that the ML-estimator of $\tau(\theta_0)$ is $\tau(\hat\theta_n).$
 <!-- 
 Moreover, using the multivariate version (for $\tau(\theta_0)\in\mathcal{K}$) of the first-order Taylor expansion of $\tau$ around $\theta_0,$ one can show that
 $$
-\sqrt{n}\left(\tau(\hat\theta_n) - \tau(\theta_0)\right)\sim\mathcal{N}\left(0,\left(\mathcal{I}(\theta_0)\right)^{-1}\right) \nabla\ell_n(\theta')
+\sqrt{n}\left(\tau(\hat\theta_n) - \tau(\theta_0)\right)\sim\mathcal{N}\left(0,\left(\mathcal{I}(\theta_0)\right)^{-1}\right) \nabla\ell_n(\theta^T)
 $$ 
 -->
 
@@ -2321,7 +2444,7 @@ This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\e
 <!-- \item<1->$\hat\beta$ is the Best Linear Unbiased (BLUE) estimator of $\beta$ -->
 <!-- \item<2-> The best linear unbiased estimator of any linear combination of the $\beta$'s is the same linear combination -->
 <!-- of the $\hat\beta$'s. -->
-<!-- \item<3-> The Best Linear Unbiased Predictor (BLUP) of $Y$ based on the vector $X_s$ is $\hat y_s=X'_s\hat\beta$ -->
+<!-- \item<3-> The Best Linear Unbiased Predictor (BLUP) of $Y$ based on the vector $X_s$ is $\hat y_s=X^T_s\hat\beta$ -->
 <!-- \end{itemize} -->
 
 <!-- \end{frame} -->

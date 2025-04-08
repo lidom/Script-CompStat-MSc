@@ -202,7 +202,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#properties-of-maximum-likelihood-estimators" id="toc-properties-of-maximum-likelihood-estimators" class="nav-link" data-scroll-target="#properties-of-maximum-likelihood-estimators"><span class="header-section-number">1.1.1</span> Properties of Maximum Likelihood Estimators</a></li>
   <li><a href="#example-coin-flipping-bernoulli-trial" id="toc-example-coin-flipping-bernoulli-trial" class="nav-link" data-scroll-target="#example-coin-flipping-bernoulli-trial"><span class="header-section-number">1.1.2</span> Example: Coin Flipping (Bernoulli Trial)</a></li>
-  <li><a href="#estimation-idea" id="toc-estimation-idea" class="nav-link" data-scroll-target="#estimation-idea"><span class="header-section-number">1.1.3</span> <strong>Estimation Idea</strong></a></li>
+  <li><a href="#estimation-idea" id="toc-estimation-idea" class="nav-link" data-scroll-target="#estimation-idea"><span class="header-section-number">1.1.3</span> Estimation Idea</a></li>
   </ul></li>
   <li><a href="#numeric-optimization" id="toc-numeric-optimization" class="nav-link" data-scroll-target="#numeric-optimization"><span class="header-section-number">1.2</span> Numeric Optimization</a>
   <ul class="collapse">
@@ -213,6 +213,7 @@ window.Quarto = {
   <li><a href="#sec-LinRegNorm" id="toc-sec-LinRegNorm" class="nav-link" data-scroll-target="#sec-LinRegNorm"><span class="header-section-number">1.3</span> Linear Regression under Normality</a>
   <ul class="collapse">
   <li><a href="#sec-varMLE" id="toc-sec-varMLE" class="nav-link" data-scroll-target="#sec-varMLE"><span class="header-section-number">1.3.1</span> Variance of ML-Estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}\)</span></a></li>
+  <li><a href="#asymptotic-distribution-and-single-parameter-testing" id="toc-asymptotic-distribution-and-single-parameter-testing" class="nav-link" data-scroll-target="#asymptotic-distribution-and-single-parameter-testing"><span class="header-section-number">1.3.2</span> Asymptotic Distribution and Single Parameter Testing</a></li>
   </ul></li>
   <li><a href="#sec-MLAsymp" id="toc-sec-MLAsymp" class="nav-link" data-scroll-target="#sec-MLAsymp"><span class="header-section-number">1.4</span> Asymptotic Theory of Maximum-Likelihood Estimators</a></li>
   <li><a href="#cramérrao-lower-bound" id="toc-cramérrao-lower-bound" class="nav-link" data-scroll-target="#cramérrao-lower-bound"><span class="header-section-number">1.5</span> Cramér–Rao Lower Bound</a></li>
@@ -274,35 +275,35 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-ML-estimation requires fixing the family of distributions <span class="math inline">\(f(\cdot|\theta)\)</span>
+ML-estimation requires fixing the family of distributions <span class="math inline">\(f(\cdot;\theta)\)</span>
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Let <span class="math display">\[
 X_1,\dots,X_n
 \]</span> denote a (i.i.d.) random sample, such that <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\)</span>, for all <span class="math inline">\(i=1,\dots,n.\)</span></p>
-<p>Classic ML-estimation requires us to fix the general family of density functions or probability mass functions <span class="math inline">\(f,\)</span> where <span class="math inline">\(f\)</span> is known up to an unknown parameter <span class="math inline">\(\theta,\)</span> and where <span class="math inline">\(\theta\in\mathbb{R}^K\)</span> is a <em>finite</em> (<span class="math inline">\(1\leq K&lt;\infty\)</span>) dimensional parameter vector.</p>
+<p>Classic ML-estimation requires us to fix the general family of density functions or probability mass functions <span class="math inline">\(f,\)</span> where <span class="math inline">\(f\)</span> is known up to an unknown parameter value <span class="math inline">\(\theta_0,\)</span> and where <span class="math inline">\(\theta_0\in\mathbb{R}^K\)</span> is a <em>finite</em> (<span class="math inline">\(1\leq K&lt;\infty\)</span>) dimensional parameter vector.</p>
 <p><strong>Examples:</strong></p>
 <ul>
 <li><span class="math inline">\(f\)</span> being the probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta)\)</span> with <span class="math display">\[
-f(x|\theta)=
+f(x;\theta_0)=
 \left\{
 \begin{array}{ll}
-\theta,   &amp; \text{if } x=1\\
-1-\theta, &amp; \text{if } x=0
+\theta_0,   &amp; \text{if } x=1\\
+1-\theta_0, &amp; \text{if } x=0
 \end{array}
 \right.
 \]</span> and <strong>unknown</strong> parameter <span class="math inline">\(0\leq \theta\leq 1.\)</span></li>
 <li>The density function of the exponential distribution <span class="math display">\[
-f(x;\theta)=\left\{
+f(x;\theta_0)=\left\{
   \begin{matrix}
-  \theta\exp(- \theta x)&amp; \text{for }x\geq 0\\
+  \theta_0\exp(- \theta_0 x)&amp; \text{for }x\geq 0\\
   0                     &amp; \text{for }x &lt; 0\\
   \end{matrix}\right.
-\]</span> with unknown rate parameter <span class="math inline">\(\theta&gt;0\)</span> and <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
+\]</span> with unknown rate parameter <span class="math inline">\(\theta_0&gt;0\)</span> and <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
 <li><span class="math inline">\(f\)</span> is the normal density <span class="math display">\[
-f(x|\theta)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2\right)
-\]</span> with <strong>unknown</strong> parameter vector <span class="math inline">\(\theta=(\mu,\sigma^2)^T\)</span> and <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
+f(x;\theta_0)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_0}{\sigma_0}\right)^2\right)
+\]</span> with <strong>unknown</strong> parameter vector <span class="math inline">\(\theta_0=(\mu_0,\sigma_0^2)^T\)</span> and <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
 </ul>
 <p>This requirement (fixing the family of density functions) can be overly restrictive. In many applications we typically do not know the family of <span class="math inline">\(f.\)</span> To address this issue, the <strong>quasi maximum likelihood theory</strong> generalizes classic maximum likelihood estimation to cases where <span class="math inline">\(f\)</span> is misspecified (see <span class="citation" data-cites="White1982">White (<a href="#ref-White1982" role="doc-biblioref">1982</a>)</span>).</p>
 </div>
@@ -322,7 +323,7 @@ X=\left\{
     \end{matrix}
     \right.
 \]</span> The probability mass function of the Bernoulli distribution <span class="math inline">\(\mathcal{Bern}(\theta_0),\)</span> with <strong>unknown</strong> probability of success parameter <span class="math inline">\(0&lt;\theta_0&lt;1,\)</span> is given by <span class="math display">\[
-f(x|\theta_0)=
+f(x;\theta_0)=
 \left\{
   \begin{array}{ll}
   \theta_0,&amp;\text{if } x=1\\
@@ -330,9 +331,9 @@ f(x|\theta_0)=
   \end{array}
 \right.
 \]</span> I.e., the probability that we get Head <span class="math inline">\(H\)</span> is <span class="math display">\[
-\theta_0 = f(1|\theta_0) = P(X=1) = P(\text{Coin}=H),
+\theta_0 = f(1;\theta_0) = P(X=1) = P(\text{Coin}=H),
 \]</span> and the probability that we get Tail <span class="math inline">\(T\)</span> is <span class="math display">\[
-1-\theta_0 = f(0|\theta_0) = P(X=0) = P(\text{Coin}=T).
+1-\theta_0 = f(0;\theta_0) = P(X=0) = P(\text{Coin}=T).
 \]</span></p>
 <p>Our goal is to <strong>estimate the unknown</strong> <span class="math inline">\(\theta_0\)</span> using a random (i.i.d.) sample of size <span class="math inline">\(n\)</span> <span class="math display">\[
 \{X_1,\dots,X_n\}
@@ -361,12 +362,12 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <p>If the observations are realizations of an i.i.d. sample, then the joint probability of observing <span class="math inline">\(h\)</span> heads <span class="math inline">\(H\)</span> and <span class="math inline">\(n-h\)</span> tails <span class="math inline">\(T\)</span> in <span class="math inline">\(n\)</span> coin flips is: <span class="math display">\[
 \begin{align*}
 \mathcal{L}_{n,obs}(\theta)
-&amp;=\prod_{i=1}^nf(X_{i,obs}|\theta)\\[2ex]
+&amp;=\prod_{i=1}^nf(X_{i,obs};\theta)\\[2ex]
 %&amp;=\left(P(X=1)\right)^{N_{H,obs}}\left(P(X=0)\right)^{n-N_{H,obs}}\\[2ex]
 %&amp;= \theta^{N_{H,obs}}(1-\theta)^{n-N_{H,obs}}  \\[2ex]
 &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}},
 \end{align*}
-\]</span> where <span class="math inline">\(f(\,\cdot\,|\theta)\)</span> denotes here the probability mass function of the Bernoulli distribution with parameter candidate <span class="math inline">\(p=\theta.\)</span></p>
+\]</span> where <span class="math inline">\(f(\,\cdot\,;\theta)\)</span> denotes here the probability mass function of the Bernoulli distribution with parameter candidate <span class="math inline">\(p=\theta.\)</span></p>
 <p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write <span class="math inline">\(\mathcal{L}_{,obs}(\theta)\)</span>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -377,12 +378,12 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <div id="def-LikelihoodFunction" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.1 (Likelihood Function)</strong></span> Let <span class="math display">\[
 \{X_{1},\dots,X_{n}\}
-\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
 \]</span> the (random) <strong>likelihood function</strong>. Let <span class="math display">\[
 \{X_{1,obs},\dots,X_{n,obs}\}
 \]</span> denote a (observed) realization of <span class="math inline">\(\{X_1,\dots,X_n\}\)</span>. Then, we call <span class="math display">\[
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs}|\theta),
+\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
 \]</span> a (observed) realization of the <strong>likelihood function</strong>.</p>
 <p>(Note: A definition for dependent data (e.g., time series) is also possible.)</p>
 </div>
@@ -392,7 +393,7 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 </section>
 </section>
 <section id="estimation-idea" class="level3" data-number="1.1.3">
-<h3 data-number="1.1.3" class="anchored" data-anchor-id="estimation-idea"><span class="header-section-number">1.1.3</span> <strong>Estimation Idea</strong></h3>
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="estimation-idea"><span class="header-section-number">1.1.3</span> Estimation Idea</h3>
 <p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values.</p>
 <ul>
 <li>The value <span class="math inline">\(\hat\theta_{ML}\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></li>
@@ -407,11 +408,11 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <div id="def-MLEstimator" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.2 (Maximum Likelihood (ML) Estimator)</strong></span> Let <span class="math display">\[
 \{X_{1},\dots,X_{n}\}
-\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,|\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
+\]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
 \begin{align*}
 \hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in\Theta} \mathcal{L}_n(\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i}|\theta),
+&amp;=\arg\max_{\theta\in\Theta} \prod_{i=1}^n f(X_{i};\theta),
 \end{align*}
 \]</span> the Maximum Likelihood (ML) Estimator, where <span class="math inline">\(\Theta\)</span> denotes the <strong>parameter space</strong>.</p>
 <p>(Note: A definition for dependent data (e.g., time series) is also possible.)</p>
@@ -423,16 +424,16 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 \begin{align*}
 \hat{\theta}_{ML}
 &amp;=\arg\max_{\theta\in[0,1]} \mathcal{L}_n(\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
-&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i,obs}}.
+&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n f(X_{i};\theta)\\[2ex]
+&amp;=\arg\max_{\theta\in[0,1]} \prod_{i=1}^n \theta^{X_{i}}(1-\theta)^{1-X_{i}}.
 \end{align*}
 \]</span></p>
 <p>Usually it’s easier to work with sums rather than products—also for doing the asymptotics in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>. So we apply a monotonic transformation by taking the logarithm of the likelihood which leads to the <strong>log-likelihood function</strong>: <span class="math display">\[
 \begin{align*}
 \ell_n(\theta)
 &amp;=\ln\mathcal{L}_n(\theta)\\[2ex]
-&amp;=\ln\prod_{i=1}^n f(X_{i}|\theta)\\[2ex]
-&amp;=\sum_{i=1}^n \ln f(X_{i}|\theta).
+&amp;=\ln\prod_{i=1}^n f(X_{i};\theta)\\[2ex]
+&amp;=\sum_{i=1}^n \ln f(X_{i};\theta).
 \end{align*}
 \]</span> Since this is only a monotonic transformation, we have that <span class="math display">\[
 \begin{align*}
@@ -480,12 +481,12 @@ Log-likelihoods instead of the likelihoods
 &amp;&amp;=&amp;\dfrac{1}{n}\sum_{i=1}^n X_i
 \end{array}
 \tag{1.1}\]</span></span></p>
-<p>Given observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\},\)</span> a specific estimate of <span class="math inline">\(\theta_0\)</span> can thus be computed from the observed data using <span class="math display">\[
+<p>Given observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\},\)</span> a specific estimate of <span class="math inline">\(\theta_0\)</span> can thus be computed as <span class="math display">\[
 \begin{align*}
 \hat{\theta}_{ML,obs}=\dfrac{1}{n}\sum_{i=1}^n X_{i,obs}.
 \end{align*}
 \]</span></p>
-<p>Usually, however, the log-likelihood function is <strong>way more complicated</strong> and one needs to apply <strong>numeric optimization</strong> algorithms to find the MLE, <span class="math inline">\(\hat\theta_{ML}.\)</span></p>
+<p>Usually, however, the log-likelihood function is <strong>way more complicated</strong> such that it is impossible to derive an explicit expression for the ML-estimator <span class="math inline">\(\hat\theta_{ML}.\)</span> In such cases, one needs to apply <strong>numeric optimization</strong> algorithms to compute the ML-estimates, <span class="math inline">\(\hat\theta_{ML,obs}.\)</span></p>
 </section>
 </section>
 <section id="numeric-optimization" class="level2" data-number="1.2">
@@ -617,7 +618,7 @@ M_{k,x}(h)=o\big(|h|^k\big)
 </div>
 </div>
 <section id="optimization-idea" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="optimization-idea">Optimization Idea</h4>
+<h4 class="unnumbered anchored" data-anchor-id="optimization-idea"><strong>Optimization Idea</strong></h4>
 <p>Let <span class="math inline">\(\ell_n\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell_n',\)</span> and second, <span class="math inline">\(\ell_n'',\)</span> derivative.</p>
 <p>To optimize the log-likelihood function <span class="math inline">\(\ell_n,\)</span> we try to find the root of <span class="math inline">\(\ell_n',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\in\Theta\)</span> such that <span class="math display">\[
 \ell_n'(\theta)=0.
@@ -864,7 +865,7 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^K
 (Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
 \]</span> or equivalently <span class="math display">\[
 (X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
-\]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, intertable <span class="math inline">\((K\times K)\)</span> matrix <span class="math inline">\(\mathbb{E}(X_iX_i')=\Sigma_{X'X}\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
+\]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, intertable <span class="math inline">\((K\times K)\)</span> matrix <span class="math inline">\(\mathbb{E}(X_iX_i^T)=\Sigma_{X^TX}\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
 <ul>
 <li><strong>homoskedastic</strong> errors: <span class="math inline">\(0&lt;\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0&lt;\infty\)</span></li>
 </ul>
@@ -938,14 +939,14 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 <p>Taking first derivatives gives <span class="math display">\[
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&amp;= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&amp;= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
 \underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T,\sigma^2)}
 %&amp;= -\dfrac{n}{2\sigma^2}+ \dfrac{1}{2\sigma^4}(Y-X\beta)^T(Y-X\beta)
 &amp;=-\frac{n}{2 \sigma^{2}}+\left[\frac{1}{2}(Y-X\beta)^T(Y-X\beta)\right]\frac{1}{\left(\sigma^{2}\right)^{2}}\\
 %&amp;=\frac{1}{2 \sigma^{2}}\left[\frac{1}{\sigma^{2}} (Y-X\beta)^T(Y-X\beta)-n\right]
 \end{align*}
 \]</span> Putting the above derivative functions into one column vector yields the <span class="math inline">\(((K+1)\times 1)\)</span>-dimensional <strong>gradient</strong> called <strong>score function</strong> in ML-theory: <span id="eq-LinRegScoreFun"><span class="math display">\[
-\nabla\ell_n(\theta')=
+\nabla\ell_n(\theta^T)=
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T,\sigma^2)
@@ -960,9 +961,9 @@ $$ --> <!-- Noting that $\varepsilon=Y-X\beta$, we get the  --> and the log-like
 <div id="def-ScoreFunction" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.4 (Score Function)</strong></span> More generally, let <span class="math inline">\(\ell_n(\theta)\)</span> denote the log-likelihood function evaluated at a <span class="math inline">\(p\)</span>-dimensional parameter vector <span class="math inline">\(\theta=(\theta_1,\dots,\theta_p)^T.\)</span></p>
 <p>Then the <span class="math inline">\((p\times 1)\)</span> dimensional gradient <span class="math display">\[
-\nabla\ell_n(\theta')=\left(\begin{matrix}
-  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\\ \vdots\\
-  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta')
+\nabla\ell_n(\theta^T)=\left(\begin{matrix}
+  \dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\\ \vdots\\
+  \dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T)
   \end{matrix}
   \right)
 \]</span> is called the <strong>score-function</strong>.</p>
@@ -984,33 +985,48 @@ Note
 <p>At the <strong>true parameter</strong> vector <span class="math inline">\(\theta_0\in\mathbb{R}^p,\)</span> the score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
 \]</span> for all <span class="math inline">\(j=1,\dots,p;\)</span> i.e.&nbsp; <span class="math display">\[
-\mathbb{E}\left(\nabla\ell_n(\theta')\right)=\left(\begin{matrix}
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta')\right)\\ \vdots\\
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta')\right)
+\mathbb{E}\left(\nabla\ell_n(\theta^T)\right)=\left(\begin{matrix}
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\right)\\ \vdots\\
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T)\right)
   \end{matrix}
   \right) = \underset{(p\times 1)}{0}
 \]</span> We prove this below in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>.</p>
 </div>
 </div>
-<p>Setting the score function in <a href="#eq-LinRegScoreFun" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}:\)</span></p>
+<p>Setting the score function in <a href="#eq-LinRegScoreFun" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which identifies the ML-estimators, <span class="math display">\[
+\begin{align*}
+&amp;\nabla\ell_n(\hat\theta^T_{ML})
+=
+\left(\begin{matrix}
+\dfrac{\partial \ell_n}{\partial \beta}(\hat\beta^T_{ML},s_{ML}^2)\\
+\dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta^T_{ML},s_{ML}^2),
+\end{matrix}\right)=\\[2ex]
+&amp;=
+\left(\begin{matrix}
+- \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})\\
+-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}
+\end{matrix}\right)
+\overset{!}{=} \underset{((K+1)\times 1)}{0}
+\end{align*}
+\]</span> and which we can solve for the maximum likelihood estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML}.\)</span></p>
 <p>Solving for <span class="math inline">\(\hat\beta_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
-&amp; \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-\Leftrightarrow\quad&amp; - \dfrac{1}{\hat\sigma^2_{ML}}(-X'Y + X'X\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
-\Rightarrow\quad &amp; \hat\beta_{ML}=(X'X)^{-1}X'Y\\[2ex]
+%&amp; \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta_{ML}',s^2_{ML}) \overset{!}{=}0\\[2ex]\Leftrightarrow\quad
+&amp; - \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})  \overset{!}{=}0\\[2ex]
+\Rightarrow\quad &amp; \hat\beta_{ML}=(X^TX)^{-1}X^TY\\[2ex]
 \end{align*}
 \]</span> Solving for <span class="math inline">\(s^2_{ML}:\)</span> <span class="math display">\[
 \begin{align*}
-&amp; \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',\hat\sigma^2_{ML}) \overset{!}{=}0\\[2ex]
-\Leftrightarrow\quad&amp;-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
+%&amp; \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta_{ML}',s^2_{ML}) \overset{!}{=}0\\[2ex]\Leftrightarrow\quad
+&amp;-\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}  \overset{!}{=}0\ \\[2ex]
 \Rightarrow\quad  &amp;
 s_{ML}^2 =\dfrac{1}{n}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\\[2ex]
 &amp;\phantom{s_{ML}^2}=\dfrac{1}{n}\sum_i^n \hat\varepsilon_i^2,
 \end{align*}
-\]</span> where <span class="math inline">\(\hat\varepsilon_i = Y_i - X_i'\hat{\beta}_{ML}.\)</span></p>
+\]</span> where <span class="math inline">\(\hat\varepsilon_i = Y_i - X_i^T\hat{\beta}_{ML}.\)</span></p>
 <p><strong>Observations:</strong></p>
 <ul>
-<li><p><span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta=(X'X)^{-1}X'Y.\)</span> <br> Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p></li>
+<li><p><span class="math inline">\(\hat\beta_{ML}\)</span> equals the OLS estimator <span class="math inline">\(\hat\beta=(X^TX)^{-1}X^TY.\)</span> <br> Since the ML estimator <span class="math inline">\(\hat\beta_{ML}\)</span> is here equivalent to the OLS estimator we can use the classic inference machinery (<span class="math inline">\(t\)</span>-test, <span class="math inline">\(F\)</span>-test, confidence intervals) developed for the classic OLS estimator (see your econometrics class).</p></li>
 <li><p><span class="math inline">\(s_{ML}^2\)</span> differs from the unbiased variance estimator <span class="math inline">\(s_{UB}^2=\frac{1}{n-K}\hat{\varepsilon}_i^2.\)</span></p></li>
 </ul>
 <section id="sec-varMLE" class="level3" data-number="1.3.1">
@@ -1039,24 +1055,24 @@ Computing the Asymptotic Variance
 <li><p>Partial second derivatives with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&amp;= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
+&amp;= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
 \Rightarrow\quad
 \underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)}
-&amp;= - \dfrac{1}{\sigma^2}(X'X)
+&amp;= - \dfrac{1}{\sigma^2}(X^TX)
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
 &amp;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)\right)\\[2ex]
-&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X'X)\right)\\[2ex]
-&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X'X}\right)\\[2ex]
-&amp;=  \dfrac{1}{\sigma^2} \Sigma_{X'X},
+&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X^TX)\right)\\[2ex]
+&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X^TX}\right)\\[2ex]
+&amp;=  \dfrac{1}{\sigma^2} \Sigma_{X^TX},
 \end{align*}
 \]</span> where<br>
 <span class="math display">\[
-\mathbb{E}\left(X'X\right)
-=\mathbb{E}\left(\sum_{i=1}^nX_iX_i'\right)
-=n\underbrace{\mathbb{E}\left(X_iX_i'\right)}_{=:\Sigma_{X'X}} = n\Sigma_{X'X}.
+\mathbb{E}\left(X^TX\right)
+=\mathbb{E}\left(\sum_{i=1}^nX_iX_i^T\right)
+=n\underbrace{\mathbb{E}\left(X_iX_i^T\right)}_{=:\Sigma_{X^TX}} = n\Sigma_{X^TX}.
 \]</span></p></li>
 <li><p>Second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
@@ -1079,9 +1095,9 @@ Computing the Asymptotic Variance
 <li><p>First derivative with respect to <span class="math inline">\(\beta,\)</span> second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
 \underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&amp;= - \dfrac{1}{\sigma^2}(-X'Y + X'X\beta)\\[2ex]
-&amp;= \dfrac{1}{\sigma^2}(X')(Y - X\beta)\\[2ex]
-&amp;= \dfrac{1}{\sigma^2}X'\varepsilon\\[2ex]
+&amp;= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2}(X^T)(Y - X\beta)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2}X^T\varepsilon\\[2ex]
 \end{align*}
 \]</span></p></li>
 </ul>
@@ -1090,16 +1106,16 @@ Computing the Asymptotic Variance
 \Rightarrow\quad
 \underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta^T,\sigma^2)}
 =   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T,\sigma^2)\right)^T
-&amp; = -\frac{X'\varepsilon}{\sigma^4}\\
+&amp; = -\frac{X^T\varepsilon}{\sigma^4}\\
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
 &amp;-\frac{1}{n}\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta^T,\sigma^2)\right)\\[2ex]
 &amp;=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T,\sigma^2)\right)\right)^T\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X'\varepsilon)}{\sigma^4}\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X'\varepsilon|X))}{\sigma^4}\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X'\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\varepsilon)}{\sigma^4}\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X^T\varepsilon|X))}{\sigma^4}\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
 &amp;=\frac{1}{n}\cdot 0=0,
 \end{align*}
 \]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p>
@@ -1116,7 +1132,7 @@ Computing the Asymptotic Variance
 \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2) \right)
 \end{array}\right]\\[2ex]
 &amp;=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X'X}}
+\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X^TX}}
 &amp;
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} &amp;
@@ -1139,7 +1155,7 @@ Computing the Asymptotic Variance
 </div>
 </div>
 <section id="asymptotic-variance-and-fisher-information-matrix" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="asymptotic-variance-and-fisher-information-matrix">Asymptotic Variance and Fisher Information Matrix</h4>
+<h4 class="unnumbered anchored" data-anchor-id="asymptotic-variance-and-fisher-information-matrix"><strong>Asymptotic Variance and Fisher Information Matrix</strong></h4>
 <p>The asymptotic variance of the MLE <span class="math display">\[
 \hat{\theta}_{ML}=\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 \]</span> is given by the <strong>inverse of the Fisher information matrix</strong> evaluated at the true parameter values <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma^2_0.\)</span> <span class="math display">\[
@@ -1156,14 +1172,14 @@ Computing the Asymptotic Variance
 -\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0) \right)
 \end{array}\right]^{-1}\\[2ex]
 &amp;=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X'X}}
+\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X^TX}}
 &amp;
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} &amp;
 \underset{(1\times 1)}{\frac{1}{2\sigma^4_0}}
 \end{array}\right]^{-1}\\[2ex]
 &amp;=\left[\begin{array}{cc}
-\underset{(K\times K)}{\sigma^2_0\Sigma_{X'X}^{-1}}
+\underset{(K\times K)}{\sigma^2_0\Sigma_{X^TX}^{-1}}
 &amp;
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} &amp;
@@ -1186,12 +1202,12 @@ $$
 \end{array}\right]\\[2ex]
 % &=
 % \left[\begin{array}{cc}
-% \frac{1}{\sigma^2}E(X'X) & 0 \\
+% \frac{1}{\sigma^2}E(X^TX) & 0 \\
 % 0 & \frac{n}{2\sigma^4}
 % \end{array}\right]\\[2ex]
 &=
 \left[\begin{array}{cc}
-\dfrac{n}{\sigma^2}\Sigma_{X'X} & 0 \\[2ex]
+\dfrac{n}{\sigma^2}\Sigma_{X^TX} & 0 \\[2ex]
 0 & \ \dfrac{n}{2\sigma^4}
 \end{array}\right],
 \end{align*}
@@ -1202,7 +1218,7 @@ AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 &amp;=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
 &amp;=
 \left[\begin{array}{cc}
-\sigma^2_0\Sigma_{X'X}^{-1} &amp; 0 \\[2ex]
+\sigma^2_0\Sigma_{X^TX}^{-1} &amp; 0 \\[2ex]
 0 &amp; \ 2\sigma^4_0
 \end{array}\right].
 \end{align*}
@@ -1216,14 +1232,14 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 & \approx \left(\mathcal{I}\left(\beta, \sigma^2\right)\right)^{-1}\\[2ex]
 & =
 \left[\begin{array}{cc}
-\dfrac{\sigma^2}{n}\Sigma_{X'X}^{-1} & 0 \\
+\dfrac{\sigma^2}{n}\Sigma_{X^TX}^{-1} & 0 \\
 0 & \ \dfrac{2\sigma^4}{n}
 \end{array}\right],
 \end{align*}
 $${#eq-FIMVar}
 where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
-n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X'X}^{-1}\quad\text{as}\quad n\to\infty,
+n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
 $$
 and
 $$
@@ -1239,13 +1255,13 @@ as $n\to\infty$. -->
 <p>Of course, the variance expressions in <a href="#eq-FIMVar" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities; namely <span class="math display">\[
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 \]</span> and <span class="math display">\[
-S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\quad \Sigma_{X'X}^{-1}.
+S_{X^TX}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1} \quad \text{for}\quad \Sigma_{X^TX}^{-1}.
 \]</span></p>
 <p>This leads to estimators of the asymptotic variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <span class="math display">\[
 \begin{align}
 \widehat{AVar}(\hat{\beta}_{ML})
-&amp;=s_{ML}^2 S_{X'X}^{-1}\\[2ex]
-&amp;=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1}\\[2ex]
+&amp;=s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
+&amp;=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{AVar}(s^2_{ML})
 &amp;=2\left(s_{ML}^2\right)^2
 \end{align}
@@ -1253,8 +1269,8 @@ S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})
 =\frac{1}{n}\widehat{AVar}(\hat{\beta}_{ML})
-&amp;=s_{ML}^2 \frac{1}{n}S_{X'X}^{-1}\\[2ex]
-&amp;=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i'\right)^{-1}\\[2ex]
+&amp;=s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\\[2ex]
+&amp;=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{Var}(s^2_{ML})
 =\frac{1}{n}\widehat{AVar}(s^2_{ML})
 &amp;=\frac{1}{n}2\left(s_{ML}^2\right)^2.
@@ -1265,11 +1281,11 @@ S_{X'X}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i'\right)^{-1} \quad \text{for}\
 If $E[\varepsilon|X]=0$ (strict exogeneity, follows from the random design (@def-RandomFixedDesign) assumption), then the bias of $\hat\beta$ is zero since $E[\hat\beta_{ML}]=\beta$
 $$
 \begin{align*}
-E[\hat\beta_{ML}]&=E[(X'X)^{-1}X'(X\beta + \varepsilon)] \\
-                 &=E[E[(X'X)^{-1}X'(X\beta + \varepsilon)|X]] \\
-                 &=E[E[(X'X)^{-1}X'X\beta|X]] + E[E[(X'X)^{-1}X'\varepsilon|X]] \\
-                 &=E[E[\beta|X]] + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
-                 &=        \beta + E[(X'X)^{-1}X'E[\varepsilon|X]] \\
+E[\hat\beta_{ML}]&=E[(X^TX)^{-1}X^T(X\beta + \varepsilon)] \\
+                 &=E[E[(X^TX)^{-1}X^T(X\beta + \varepsilon)|X]] \\
+                 &=E[E[(X^TX)^{-1}X^TX\beta|X]] + E[E[(X^TX)^{-1}X^T\varepsilon|X]] \\
+                 &=E[E[\beta|X]] + E[(X^TX)^{-1}X^TE[\varepsilon|X]] \\
+                 &=        \beta + E[(X^TX)^{-1}X^TE[\varepsilon|X]] \\
                  &=        \beta  \\
 \Leftrightarrow E[\hat\beta_{ML}]-\beta&=\operatorname{Bias}(\hat\beta_{ML})=0
 \end{align*}
@@ -1303,6 +1319,95 @@ $$
 s^2_{ML}\to_p \sigma^2\quad\text{as}\quad n\to\infty.
 $$ -->
 <!-- In practice, however, one usually works with the unbiased (and consistent) alternative $s_{UB}^2=\dfrac{1}{n-K}\sum_{i=1}^n \hat{\varepsilon}_i^2$ even though one can show that $\operatorname{MSE}(s^2_{ML})<\operatorname{MSE}(\hat\sigma^2_{UB})$ for sufficiently large $n$. -->
+</section>
+</section>
+<section id="asymptotic-distribution-and-single-parameter-testing" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="asymptotic-distribution-and-single-parameter-testing"><span class="header-section-number">1.3.2</span> Asymptotic Distribution and Single Parameter Testing</h3>
+<p>It follows from asymptotic maximum likelihood theory (see <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) that the probability distribution of the vector of parameter estimates <span class="math display">\[
+\begin{pmatrix}
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
+\end{pmatrix}
+\]</span> can be approximated (for largish <span class="math inline">\(n\)</span>) by the following multivariate normal distribution <span class="math display">\[
+\begin{align*}
+\sqrt{n}\left(
+\hat\theta_{ML,n}-\theta_0
+\right)
+&amp;\to_d
+\mathcal{N}_{p}\left(
+0,
+\left(\mathcal{I}(\beta^T_0,\sigma^2_0)\right)^{-1}
+\right)\\[2ex]
+\sqrt{n}\left(
+\begin{pmatrix}
+\hat\beta_{ML}\\
+\hat s_{ML}^2
+\end{pmatrix}-
+\begin{pmatrix}
+\beta_0\\
+\sigma_0^2
+\end{pmatrix}\right)
+&amp;\to_d
+\mathcal{N}_{K+1}\left(\begin{pmatrix}
+0\\
+0
+\end{pmatrix},
+\begin{pmatrix}
+\sigma_0^2\Sigma_{X^TX} &amp; 0\\
+0 &amp; 2\sigma_0^4
+\end{pmatrix}
+\right)\\[2ex]
+\Leftrightarrow
+\begin{pmatrix}
+\hat\beta_{ML}\\
+\hat s_{ML}^2
+\end{pmatrix}
+&amp;\overset{a}{\sim}
+\mathcal{N}_{K+1}\left(
+\begin{pmatrix}
+\beta_0\\
+\sigma_0^2
+\end{pmatrix},
+\begin{pmatrix}
+\frac{1}{n}\sigma_0^2\Sigma_{X^TX} &amp; 0\\
+0 &amp; \frac{1}{n}2\sigma_0^4
+\end{pmatrix}
+\right)
+\end{align*}
+\]</span></p>
+<p>Plugging-in estimators for the unknown variance components, i.e.</p>
+<ul>
+<li><span class="math inline">\(s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\quad\)</span> for <span class="math inline">\(\quad\sigma_0^2 \frac{1}{n} \Sigma_{X^TX}\)</span></li>
+</ul>
+<p>and</p>
+<ul>
+<li><span class="math inline">\(\frac{1}{n}2\left(s_{ML}^2\right)^2\quad\)</span> for <span class="math inline">\(\quad\frac{1}{n}2\sigma_0^4\)</span></li>
+</ul>
+<p>allows using this asymptotic normality result in testing.</p>
+<section id="single-parameter-testing" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="single-parameter-testing"><strong>Single Parameter Testing</strong></h4>
+<p>For instance, we can do a single-parameter test for</p>
+<p><span class="math display">\[
+\begin{align*}
+H_0\colon \beta_{0,k} &amp; =   \beta_{0,k}^{(0)}\\
+H_1\colon \beta_{0,k} &amp;\neq \beta_{0,k}^{(0)},\\
+\end{align*}
+\]</span> where <span class="math inline">\(\beta_{0,k}^{(0)}\)</span> denotes the null-hypothetical value (typically, <span class="math inline">\(\beta_{0,k}^{(0)}=0\)</span>), using the Wald statistic <span class="math display">\[
+T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - 0}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
+\mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
+\]</span></p>
+<p>Likewise, for <span class="math display">\[
+\begin{align*}
+H_0\colon \sigma_0^2 &amp; = (\sigma_0^{(0)})^2\\
+H_1\colon \sigma_0^2 &amp;\neq (\sigma_0^{(0)})^2,\\
+\end{align*}
+\]</span> where <span class="math inline">\((\sigma_0^{(0)})^2\)</span> denotes the null-hypothetical value, using the Wald statistic <span class="math display">\[
+T_{\sigma_0,n}=\frac{s_{ML}^2 - (\sigma_0^{(0)})^2}{\sqrt{\frac{1}{n}2\left(s_{ML}^2\right)^2}}\overset{H_0}{\to_d}
+\mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
+\]</span></p>
+<p><strong>Testing:</strong> We reject <span class="math inline">\(H_0,\)</span> if the observed value <span class="math inline">\(T_{n,obs},\)</span> computed from the observed realization of the random sample, is in absolute values larger than the <span class="math inline">\((1-\alpha/2)\)</span>-qantile of the standard normal distribution; i.e.&nbsp;if <span class="math display">\[
+|T_{n,obs}| &gt; z_{1-\alpha/2},
+\]</span> where <span class="math inline">\(\alpha\in(0,1)\)</span> denotes the chosen significance level, such as <span class="math inline">\(\alpha=0.01.\)</span></p>
 </section>
 </section>
 </section>
@@ -1366,22 +1471,19 @@ f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 <p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
 \]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT" class="quarto-xref">Theorem&nbsp;<span>1.2</span></a>).</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="thm-MVT" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 1.2 (Mean Value Theorem)</strong></span> <em>Let <span class="math inline">\(f\)</span> be continuous over the closed interval <span class="math inline">\([a,b]\)</span> and differentiable over the open interval <span class="math inline">\((a,b).\)</span> Then, there exists at least one point <span class="math inline">\(c\in(a,b)\)</span> such that</em> <span class="math display">\[
 f'(c) = \frac{f(b)-f(a)}{b-a}
 \]</span> <em>or equivalently</em> <span class="math display">\[
 f(b)=f(a) + f'(c)(b-a).
 \]</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -1447,7 +1549,7 @@ f(b)=f(a) + f'(c)(b-a).
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\
 &amp;=\frac{1}{n}Var\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\
-&amp;=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X;\theta_0)}{f(X|\theta)}\right)\quad[\text{chain rule}]\\
+&amp;=\frac{1}{n}Var\left(\frac{\frac{\partial}{\partial \theta} f(X;\theta_0)}{f(X;\theta)}\right)\quad[\text{chain rule}]\\
 &amp;=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
 &amp;=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
@@ -1713,7 +1815,7 @@ Example:
 <!-- 
 Moreover, using the multivariate version (for $\tau(\theta_0)\in\mathcal{K}$) of the first-order Taylor expansion of $\tau$ around $\theta_0,$ one can show that
 $$
-\sqrt{n}\left(\tau(\hat\theta_n) - \tau(\theta_0)\right)\sim\mathcal{N}\left(0,\left(\mathcal{I}(\theta_0)\right)^{-1}\right) \nabla\ell_n(\theta')
+\sqrt{n}\left(\tau(\hat\theta_n) - \tau(\theta_0)\right)\sim\mathcal{N}\left(0,\left(\mathcal{I}(\theta_0)\right)^{-1}\right) \nabla\ell_n(\theta^T)
 $$ 
 -->
 <div class="callout callout-style-default callout-note callout-titled">
@@ -2311,7 +2413,7 @@ This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\e
 <!-- \item<1->$\hat\beta$ is the Best Linear Unbiased (BLUE) estimator of $\beta$ -->
 <!-- \item<2-> The best linear unbiased estimator of any linear combination of the $\beta$'s is the same linear combination -->
 <!-- of the $\hat\beta$'s. -->
-<!-- \item<3-> The Best Linear Unbiased Predictor (BLUP) of $Y$ based on the vector $X_s$ is $\hat y_s=X'_s\hat\beta$ -->
+<!-- \item<3-> The Best Linear Unbiased Predictor (BLUP) of $Y$ based on the vector $X_s$ is $\hat y_s=X^T_s\hat\beta$ -->
 <!-- \end{itemize} -->
 <!-- \end{frame} -->
 <!-- ## Hypothesis Testing -->
