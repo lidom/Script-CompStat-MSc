@@ -368,7 +368,7 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 &amp;= \prod_{i=1}^n \theta^{X_{i,obs}}(1-\theta)^{1-X_{i,obs}},
 \end{align*}
 \]</span> where <span class="math inline">\(f(\,\cdot\,;\theta)\)</span> denotes here the probability mass function of the Bernoulli distribution with parameter candidate <span class="math inline">\(p=\theta.\)</span></p>
-<p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write <span class="math inline">\(\mathcal{L}_{,obs}(\theta)\)</span>.</p>
+<p>The function <span class="math inline">\(\mathcal{L}_n(\theta)\)</span> is called the <strong>likelihood function</strong>. The likelihood function depends on the random sample <span class="math inline">\(\{X_{1},\dots,X_{n}\}\)</span> and is thus itself random. If we want to emphasize that we look at a given realization of the random sample <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span>, we write <span class="math inline">\(\mathcal{L}_{,obs}(\theta)\)</span>.</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -379,7 +379,7 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 <p><span class="theorem-title"><strong>Definition 1.1 (Likelihood Function)</strong></span> Let <span class="math display">\[
 \{X_{1},\dots,X_{n}\}
 \]</span> denote a random sample with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)\)</span> for all <span class="math inline">\(i=1,\dots,n,\)</span> where <span class="math inline">\(\theta\)</span> denotes the unknown finite dimensional parameter vector of <span class="math inline">\(f.\)</span> Then, we call <span class="math display">\[
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
+\mathcal{L}_{n}(\theta)=\prod_{i=1}^n f(X_{i};\theta),
 \]</span> the (random) <strong>likelihood function</strong>. Let <span class="math display">\[
 \{X_{1,obs},\dots,X_{n,obs}\}
 \]</span> denote a (observed) realization of <span class="math inline">\(\{X_1,\dots,X_n\}\)</span>. Then, we call <span class="math display">\[
@@ -394,11 +394,30 @@ N_{H,obs}=\sum_{i=1}^n X_{i,obs}
 </section>
 <section id="estimation-idea" class="level3" data-number="1.1.3">
 <h3 data-number="1.1.3" class="anchored" data-anchor-id="estimation-idea"><span class="header-section-number">1.1.3</span> Estimation Idea</h3>
-<p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values.</p>
+<p>We estimate the unknown parameter <span class="math inline">\(\theta_0\)</span> by maximizing the likelihood of the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}\)</span> over the range of possible parameter values <span class="math inline">\(\theta\in\Omega.\)</span></p>
 <ul>
 <li>The value <span class="math inline">\(\hat\theta_{ML}\)</span> at which the likelihood function <span class="math inline">\(\mathcal{L}_n(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimator</strong></li>
 <li>The value <span class="math inline">\(\hat\theta_{ML,obs}\)</span> at which the observed likelihood function <span class="math inline">\(\mathcal{L}_{n,obs}(\cdot)\)</span> is maximized is called the <strong>maximum likelihood (ML) estimate</strong>; i.e., <span class="math inline">\(\hat\theta_{ML,obs}\)</span> is a specific realization of the ML-estimator computed from the observed data <span class="math inline">\(\{X_{1,obs},\dots,X_{n,obs}\}.\)</span></li>
 </ul>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the rest of this chapter, I follow the usual convention and generally write <span class="math display">\[
+\{X_{1},\dots,X_{n}\}\quad\text{and}\quad
+\mathcal{L}_{n}(\theta)=\prod_{i=1}^n f(X_{i};\theta)
+\]</span> to convey <strong>both</strong> the random variables point of view and the realization point of view (<span class="math inline">\(obs\)</span>), since often both points of view can make sense in the same object. Only if I want to stress that the realization point of view applies, I write “<span class="math inline">\(obs.\)</span>”</p>
+<p>Take, for instance, the ML-estimator <span class="math display">\[
+\hat\theta_{ML}.
+\]</span> Of course, we can only compute a specific value <span class="math inline">\((\hat\theta_{ML,obs})\)</span> given an observed realization of the random sample. Using the random variable type of notation <span class="math inline">\(\hat\theta_{ML}\)</span> to denote both the random variables point of view and the realization point of view reminds ourselves that any specific value <span class="math inline">\((\hat\theta_{ML,obs})\)</span> is just <strong>a possible realization</strong> of the estimator.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -633,9 +652,13 @@ M_{k,x}(h)=o\big(|h|^k\big)
 <!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
 <p>The first-order Taylor-series approximation of <span class="math inline">\(\ell_n'\)</span> around our first guess <span class="math inline">\(\theta_{(0)}\)</span> gives <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(0)} + h) &amp; \approx \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
+\ell_n'(\theta_{(0)} + h) &amp; = \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h + o(|h|)\\[2ex]
+{\color{gray}\big(f(\theta_{(0)} + h) }\,&amp;\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
-\]</span> Thus, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_n',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
+\]</span> Thus, in a small <span class="math inline">\(h\)</span>-neigborhood (<span class="math inline">\(h\to 0\)</span>) around <span class="math inline">\(\theta_{(0)},\)</span> <span class="math inline">\(\ell_n'(\theta_{(0)} + h)\)</span> equals the linear function (in <span class="math inline">\(h\)</span>) <span class="math display">\[
+\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
+\]</span> plus terms, <span class="math inline">\((o(|h|)),\)</span> that are of a smaller order of magnitude.</p>
+<p>Therefore, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_n',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
 \begin{align*}
 \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
 \Rightarrow h_{(0)} = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.

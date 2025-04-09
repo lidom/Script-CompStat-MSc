@@ -163,7 +163,7 @@ $$
 $$
 where $f(\,\cdot\,;\theta)$ denotes here the probability mass function of the Bernoulli distribution with parameter candidate $p=\theta.$
 
-The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. The likelihood function depends on the random sample and is thus itself random. If we want to emphasize that we look at a given realization, we write $\mathcal{L}_{,obs}(\theta)$. 
+The function $\mathcal{L}_n(\theta)$ is called the **likelihood function**. The likelihood function depends on the random sample $\{X_{1},\dots,X_{n}\}$ and is thus itself random. If we want to emphasize that we look at a given realization of the random sample $\{X_{1,obs},\dots,X_{n,obs}\}$, we write $\mathcal{L}_{,obs}(\theta)$. 
 
 
 ::: {.callout-note appearance="minimal"} 
@@ -177,7 +177,7 @@ $$
 denote a random sample with $X_i\overset{\text{i.i.d.}}{\sim} f\equiv f(\,\cdot\,;\theta)$ for all $i=1,\dots,n,$ where $\theta$ denotes the unknown finite dimensional parameter vector of $f.$
 Then, we call 
 $$
-\mathcal{L}_{n,obs}(\theta)=\prod_{i=1}^n f(X_{i,obs};\theta),
+\mathcal{L}_{n}(\theta)=\prod_{i=1}^n f(X_{i};\theta),
 $$
 the (random) **likelihood function**. Let 
 $$
@@ -193,12 +193,34 @@ a (observed) realization of the **likelihood function**.
 :::
 :::
 
+
+
+
 ### Estimation Idea
 
-We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values. 
+We estimate the unknown parameter $\theta_0$ by maximizing the likelihood of the observed data $\{X_{1,obs},\dots,X_{n,obs}\}$ over the range of possible parameter values $\theta\in\Omega.$ 
 
 * The value $\hat\theta_{ML}$ at which the likelihood function $\mathcal{L}_n(\cdot)$ is maximized is called the **maximum likelihood (ML) estimator**
 * The value $\hat\theta_{ML,obs}$ at which the observed likelihood function $\mathcal{L}_{n,obs}(\cdot)$ is maximized is called the **maximum likelihood (ML) estimate**; i.e., $\hat\theta_{ML,obs}$ is a specific realization of the ML-estimator computed from the observed data $\{X_{1,obs},\dots,X_{n,obs}\}.$ 
+
+
+
+::: {.callout-caution}
+For the rest of this chapter, I follow the usual convention and generally write 
+$$
+\{X_{1},\dots,X_{n}\}\quad\text{and}\quad
+\mathcal{L}_{n}(\theta)=\prod_{i=1}^n f(X_{i};\theta)
+$$
+to convey **both** the random variables point of view and the realization point of view ($obs$), since often both points of view can make sense in the same object. Only if I want to stress that the realization point of view applies, I write "$obs.$"
+
+Take, for instance, the ML-estimator 
+$$
+\hat\theta_{ML}.
+$$
+Of course, we can only compute a specific value $(\hat\theta_{ML,obs})$ given an observed realization of the random sample. Using the random variable type of notation $\hat\theta_{ML}$ to denote both the random variables point of view and the realization point of view reminds ourselves that any specific value $(\hat\theta_{ML,obs})$ is just **a possible realization** of the estimator. 
+:::
+
+
 
 ::: {.callout-note appearance="minimal"} 
 ## 
@@ -222,6 +244,11 @@ the Maximum Likelihood (ML) Estimator, where $\Theta$ denotes the **parameter sp
 (Note: A definition for dependent data (e.g., time series) is also possible.)
 :::
 :::
+
+
+
+
+
 
 Thus, to derive the estimator for the unknown $\theta_0$ in our coin flip example, we need to maximize the likelihood function,
 $$
@@ -501,10 +528,17 @@ $$
 The first-order Taylor-series approximation of $\ell_n'$ around our first guess $\theta_{(0)}$ gives 
 $$
 \begin{align*}
-\ell_n'(\theta_{(0)} + h) & \approx \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h 
+\ell_n'(\theta_{(0)} + h) & = \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h + o(|h|)\\[2ex]
+{\color{gray}\big(f(\theta_{(0)} + h) }\,&\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
 $$
-Thus, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
+Thus, in a small $h$-neigborhood ($h\to 0$) around $\theta_{(0)},$ $\ell_n'(\theta_{(0)} + h)$ equals the linear function (in $h$) 
+$$
+\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
+$$ 
+plus terms, $(o(|h|)),$ that are of a smaller order of magnitude.  
+
+Therefore, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
 $$
 \begin{align*}
 \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
