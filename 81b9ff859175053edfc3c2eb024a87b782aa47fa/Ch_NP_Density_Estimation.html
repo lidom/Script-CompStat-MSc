@@ -114,8 +114,8 @@ window.Quarto = {
 <h1>Nonparametric Density Estimation</h1>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<section id="example-income-data-analysis" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="example-income-data-analysis"><strong>Example: Income Data Analysis</strong></h4>
+<section id="example-income-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="example-income-data-analysis">Example: Income Data Analysis</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(inc76<span class="sc">$</span>income)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -137,15 +137,14 @@ X_i\overset{\text{i.i.d.}}{\sim} f
 <p><strong>Problem:</strong> Such key figures only summarize single aspects of a distribution.</p>
 <p>Estimating the total density function <span class="math inline">\(f\)</span> can provide more detailed, more wholistic information.</p>
 </section>
-<section id="simplest-density-estimator-histogram" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="simplest-density-estimator-histogram"><strong>Simplest density estimator: Histogram</strong></h4>
-<p>Histogramm für FES Einkommensdaten im Jahr 1976:</p>
+<section id="from-the-histogram-to-the-kernel-density-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="from-the-histogram-to-the-kernel-density-estimator">From the Histogram to the Kernel Density Estimator</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Ch_NP_Density_Estimation_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Histrogram of income data</figcaption>
+<figcaption>Histrogram of the income data.</figcaption>
 </figure>
 </div>
 </div>
@@ -166,96 +165,229 @@ X_i\overset{\text{i.i.d.}}{\sim} f
 </div>
 </div>
 </div>
-</section>
-<section id="from-the-histogram-to-kernel-density-estimation" class="level3">
-<h3 class="anchored" data-anchor-id="from-the-histogram-to-kernel-density-estimation">From the Histogram to Kernel Density Estimation</h3>
-<p>Comparison: Histogram versus a kernel density estimation</p>
+<p><a href="#fig-HistKDE" class="quarto-xref">Figure&nbsp;1</a> shows a comparison of the histogram versus the density estimate from a kernel density estimatior.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="Ch_NP_Density_Estimation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Histogram versus a nonparametric kernel density estimation (green solid line).</figcaption>
+<div id="fig-HistKDE" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-HistKDE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch_NP_Density_Estimation_files/figure-html/fig-HistKDE-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-HistKDE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Histogram versus a nonparametric kernel density estimation (green solid line).
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Consider a histogram with <span class="math inline">\(J\)</span> (e.g., <span class="math inline">\(J=8\)</span>) bins all having the same bin-width <span class="math inline">\(2h,\)</span> defined by equidistant intervals <span class="math display">\[
+<p>Consider a histogram with <span class="math inline">\(J\)</span> (e.g., <span class="math inline">\(J=8\)</span> as in <a href="#fig-HistKDE" class="quarto-xref">Figure&nbsp;1</a>) bins all having the same bin-width <span class="math inline">\(2h,\)</span> defined by equidistant intervals <span class="math display">\[
 (x_{j-1},x_j]
 \]</span> with <span class="math display">\[
 x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
 \]</span> The bin-height is determined <strong>locally</strong> at the <span class="math inline">\(j\)</span>th interval mid-point <span class="math display">\[
 \bar{x}_j=(x_{j-1}+x_j)/2
-\]</span> by the relative frequency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall within the <span class="math inline">\(j\)</span>th interval <span class="math inline">\((x_{j-1},x_j],\)</span> <span class="math display">\[
+\]</span> by the relative frequency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall within the <span class="math inline">\(j\)</span>th interval <span class="math inline">\((x_{j-1},x_j],\)</span></p>
+<p><span id="eq-fHist"><span class="math display">\[
+\begin{align*}
+\hat f_{hist}(\bar{x}_j)
+&amp; =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}
+\end{align*}
+\tag{1}\]</span></span> Note: The scaling by <span class="math inline">\(2hn\)</span> is necessary to guarantee that the area of each bin equals the relative frquency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall into the interval <span class="math inline">\((x_{j-1},x_j],\)</span> <span class="math display">\[
+\begin{align*}
+\text{Area of $j$th Bin}
+&amp; = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
+&amp; = \qquad 2h\quad\, \cdot \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
+&amp; = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])},
+\end{align*}
+\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function, i.e., <span class="math inline">\(1_{(\text{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\text{FALSE})}=0.\)</span> This guarantees that the bin areas of the histogram sum up to one <span class="math display">\[
+\begin{align*}
+\sum_{j=1}^J\text{Area of $j$th Bin}
+&amp;=\sum_{j=1}^J \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
+&amp;=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}=\frac{n}{n}=1.
+\end{align*}
+\]</span></p>
+<p>Doing some smart rearrangements of <a href="#eq-fHist" class="quarto-xref">Equation&nbsp;1</a>, allows writing the histogram as a type of kernel density estimator:<br>
+<span class="math display">\[
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)
 &amp; =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-&amp; =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right)
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h &lt; X_i\leq x+h\right)}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1&lt;\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+&amp; =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right),
 \end{align*}
-\]</span> with <span class="math display">\[
+\]</span> where <span class="math inline">\(K(z)\)</span> denotes the symmetric <span class="math inline">\((K(z)=K(-z))\)</span> kernel function <span class="math display">\[
 K(z)=\left\{
 \begin{array}{ll}
 1/2 &amp; \hbox{ if } z\in (-1,1] \\
 0   &amp; \hbox{ else}.
 \end{array}\right.
 \]</span></p>
-<p>Note: The scaling by <span class="math inline">\(2hn\)</span> is necessary to guarantee that the area of each bin equals the relative frquency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall into the interval <span class="math inline">\((x_{j-1},x_j]\)</span> <span class="math display">\[
+<p>A kernel density estimator generalizes the histogram <span class="math inline">\(\hat f_{hist}(\bar{x}_j)\)</span> by estimating the unknown density <span class="math inline">\(f\)</span> not only at the mid-points <span class="math inline">\(\bar{x}_j,\)</span> but at <em>every</em> <span class="math inline">\(x,\)</span> which yields the <strong>moving histogram</strong> <span id="eq-MovHist"><span class="math display">\[
 \begin{align*}
-\text{Area of $j$th Bin}
-&amp; = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
-&amp; = \qquad 2h\quad\, \cdot \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-&amp; = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}%\\[2ex]
-\end{align*}
-\]</span> This guarantees that the bin areas of the histogram sum up to one.</p>
-<p>A kernel density estimator generalizes the histogram by estimating the unknown density <span class="math inline">\(f\)</span> at <strong>every</strong> <span class="math inline">\(x\)</span> using <span class="math display">\[
-\begin{align*}
-{\hat{f}}_{h}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
+{\hat{f}}_{nh}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
 \frac{x-X_{i}}{h}\right)
 \end{align*}
-\]</span></p>
+\tag{2}\]</span></span> where</p>
 <ul>
-<li><span class="math inline">\(K\)</span> kernel function</li>
-<li><span class="math inline">\(h\)</span> bandwidth</li>
+<li><span class="math inline">\(K\)</span> denotes the kernel function and<br>
+</li>
+<li><span class="math inline">\(h&gt;0\)</span> the bandwidth</li>
 </ul>
 </section>
 </section>
-<section id="motivating-the-kernel-density-estimator" class="level2">
-<h2 class="anchored" data-anchor-id="motivating-the-kernel-density-estimator">Motivating the Kernel Density Estimator</h2>
+<section id="a-more-formal-motivation-of-the-kernel-density-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="a-more-formal-motivation-of-the-kernel-density-estimator">A More Formal Motivation of the Kernel Density Estimator</h2>
 <p>Let <span class="math display">\[
 \{X_1, \ldots, X_n\}
 \]</span> denote a random sample with <span class="math display">\[
 X_i\overset{\text{i.i.d.}}{\sim} f\quad\text{for}\quad i=1,\dots,n.
 \]</span></p>
-<p>Aim: Find a density estimator <span class="math inline">\(\hat{f}\)</span> for the true, unknown density <span class="math inline">\(f\)</span> without making a parametric assumption such as assuming that <span class="math inline">\(f\)</span> is the density of a normal distribution with unknown mean and unknown variance.</p>
-<p><strong>Qualitative assumption on <span class="math inline">\(f:\)</span></strong></p>
-<p>The density function <span class="math inline">\(f(x)\)</span> is sufficiently smooth (i.e., is sufficiently often differentiable) for all <span class="math inline">\(x\)</span>.</p>
-<p>Starting point:</p>
-<p>We use the connection between density functions <span class="math inline">\(f\)</span> and distribution functions <span class="math inline">\(F(x) = P(X \leq x),\)</span> <span class="math display">\[
+<p><strong>Aim:</strong> Find a density estimator <span class="math display">\[
+\hat{f}
+\]</span> for the true, unknown density <span class="math inline">\(f\)</span> <strong>without</strong> making a parametric assumption on <span class="math inline">\(f\)</span> such as assuming that <span class="math inline">\(f\)</span> is the density of a normal distribution with unknown mean and unknown variance.</p>
+<p>The only assumption on <span class="math inline">\(f\)</span> is the following <strong>qualitative smoothness assumption:</strong> The density function <span class="math inline">\(f(x)\)</span> is assumed to be sufficiently smooth—i.e., to be sufficiently often differentiable for all <span class="math inline">\(x.\)</span></p>
+<p><strong>Starting point:</strong> We use the connection between density functions <span class="math inline">\(f\)</span> and distribution functions <span class="math inline">\(F(x) = P(X \leq x);\)</span> namely,<br>
+<span class="math display">\[
 \begin{equation*}
-  f(x) = \frac{d}{dx} F(x) = F'(x), \qquad x \in \mathbb{R}
+  f(x) = \frac{d}{dx} F(x) = F'(x), \qquad x \in \mathbb{R}.
 \end{equation*}
 \]</span></p>
-<p><strong>Idea:</strong></p>
-<p>Approximate the derivative of the distribution function using the difference quotient. For (small) <span class="math inline">\(h &gt; 0,\)</span> we have <span class="math display">\[
+<p><strong>Idea:</strong> Approximate the derivative of the distribution function using the difference quotient. For small <span class="math inline">\(h &gt; 0,\)</span> we have that <span id="eq-DiffQ1"><span class="math display">\[
 \begin{align*}
-  F'(x) &amp;\approx \frac{F(x+h) - F(x)}{h}\\[2ex]
-  F'(x) &amp;= \frac{F(x+h) - F(x)}{h} + O(h)
+f(x) =   F'(x) &amp;\approx \frac{F(x+h) - F(x)}{h}%\\[2ex]
+%  F'(x) &amp;= \frac{F(x+h) - F(x)}{h} + O(h)
 \end{align*}
-\]</span> or <span class="math display">\[
+\tag{3}\]</span></span> or <span id="eq-DiffQ2"><span class="math display">\[
 \begin{align*}
-F'(x) &amp;\approx \frac{F(x) - F(x-h)}{h}\\[2ex]
-F'(x)      &amp;= \frac{F(x) - F(x-h)}{h} + O(h)
+f(x) = F'(x) &amp;\approx \frac{F(x) - F(x-h)}{h}.%\\[2ex]
+%F'(x)      &amp;= \frac{F(x) - F(x-h)}{h} + O(h),
+\end{align*}
+\tag{4}\]</span></span> <!-- where the "Big-Oh" term $O(h)$ refers to a $h\to 0$ with $h>0$ asymptotic.  --></p>
+<p>In both the right-hand (<a href="#eq-DiffQ1" class="quarto-xref">Equation&nbsp;3</a>) and the left-hand difference quotient (<a href="#eq-DiffQ2" class="quarto-xref">Equation&nbsp;4</a>) have an approximation error of the order <span class="math inline">\(O(h)\)</span> for <span class="math inline">\(h\to 0\)</span> with <span class="math inline">\(h&gt;0.\)</span></p>
+<!-- 
+$$
+\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|\to 0\quad\text{as}\quad h\to 0 
+$$
+such that
+$$
+\frac{\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|}{h}\to c,
+$$
+where $0\leq c < \infty.$
+ -->
+<p>In his seminal work on the kernel density estimator, <span class="citation" data-cites="Rosenblatt_1956">@Rosenblatt_1956</span> uses an even better derivative approximation based on the symmetric difference quotient <span id="eq-DiffQ3"><span class="math display">\[
+\begin{equation*}
+    f(x) = F'(x) = \frac{F(x+h) - F(x-h)}{2h} + O(h^2),
+\end{equation*}
+\tag{5}\]</span></span> where the approximation error is of the order <span class="math inline">\(O(h^2)\)</span> for <span class="math inline">\(h\to 0\)</span> with <span class="math inline">\(h&gt;0.\)</span> This means that the approximation error goes, in absolute values, to zero as fast as <span class="math inline">\(h^2\to 0\)</span> <em>or faster</em>; i.e. <span class="math display">\[
+\begin{align*}
+&amp; O\big(h^2\big)=\\[2ex]
+=&amp;\left\{\text{Any function}\;g(h)\text{ such that }\frac{|g(h)|}{h^2}\to c\;\text{ as }\;h\to 0\text{, where }0\leq c&lt;\infty\right\}.
 \end{align*}
 \]</span></p>
-<p>In both cases, the approximation error is of the order <span class="math inline">\(O(h)\)</span> for <span class="math inline">\(h\to 0,\)</span> <span class="math display">\[
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Deriving the approximation error in <a href="#eq-DiffQ3" class="quarto-xref">Equation&nbsp;5</a>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(F\)</span> be three times continuously differentiable; i.e.&nbsp;<span class="math inline">\(F^{(3)}(x)\)</span> is a continuous function for all <span class="math inline">\(x.\)</span> <span class="math display">\[
 \begin{align*}
-F'(x) - \frac{F(x) - F(x-h)}{h} = O(h)
+&amp;\frac{F(x+h) - F(x-h)}{2h}=\\[2ex]
+&amp;[\text{Taylor polynomial approximations for $F(x+h)$ and $F(x-h)$ around $x\colon$}]\\[2ex]
+=&amp;\frac{\left(F(x)+F^{(1)}(x)h + \frac{1}{2}\,F^{(2)}(x) h^2 +\frac{1}{6}\,F^{(3)}(x)h^3 + o(h^3)\right)}{2h}-\\[2ex]
+&amp;\frac{\left(F(x)-F^{(1)}(x)h+ \frac{1}{2}\,F^{(2)}(x) h^2-\frac{1}{6}\,F^{(3)}(x)h^3+o(h^3)\right)}{2h}\\[2ex]
+&amp;[\text{Applying straight forward simplifications:}]\\[2ex]
+=&amp;\frac{2\,F^{(1)}(x)h+\frac{2}{6}\,F^{(3)}(x)h^3+o(h^3)}{2h}\\[2ex]
+=&amp;\frac{2\,F^{(1)}(x)h}{2h}+\frac{\frac{1}{3}\,F^{(3)}(x)h^3}{2h}+\frac{o(h^3)}{2h}\\[2ex]
+&amp;[\text{Using that $h^{-1}o(h^3)=o(h^2)\colon$}]\\[2ex]
+=&amp;F'(x)
++\frac{1}{6}\,F^{(3)}(x)h^2
++\frac{1}{2}\,o(h^2)\\[2ex]
+&amp;[\text{Using that $\texttt{constant}\times h^2=O(h^2)$ and that $\texttt{constant}\times o(h^2)=o(h^2)\colon$}]\\[2ex]
+=&amp;F'(x)+O(h^2) + o(h^2)\\[2ex]
+&amp;[\text{Using that $o(h^2)=O(h^2)$ and that $2O(h^2)=O(h^2)\colon$}]\\[2ex]
+=&amp;F'(x)+O(h^2)
 \end{align*}
-\]</span> (Pronounce “Big-Oh <span class="math inline">\(h\)</span>”). This means that the approximation error goes, in absolute values, to zero as fast as <span class="math inline">\(h\to 0\)</span> or faster; i.e. <span class="math display">\[
-\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|\to 0\quad\text{as}\quad h\to 0
-\]</span> such that <span class="math display">\[
-\frac{\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|}{h}\to c,
-\]</span> where <span class="math inline">\(0\leq c &lt; \infty.\)</span></p>
+\]</span></p>
+</div>
+</div>
+</div>
+<p>Using the definition of the distribution function <span class="math inline">\(F(x)=P(X\leq x)\)</span> we get <span class="math display">\[
+\begin{align*}
+    f(x) &amp; = \frac{F(x+h) - F(x-h)}{2h} + O(h^2) \\[2ex]
+    &amp; = \frac{P(X \leq x+h) - P(X \leq x-h)}{2h} + O(h^2)\\[2ex]
+    &amp; =\frac{1}{2h} P(x-h &lt; X \leq x+h) + O(h^2)\\[2ex]
+\Rightarrow\quad        f(x) &amp; \approx \frac{1}{2h} P(x-h &lt; X \leq x+h) ,
+\end{align*}
+\]</span> where the approximation is very good for smallish <span class="math inline">\(h&gt;0.\)</span></p>
+<p>Estimating the unknown probability <span class="math inline">\(P(x-h &lt; X \leq x+h)\)</span> by its empirical counterpart (relative frequency) yields the <strong>moving histogram</strong> estimator as in <a href="#eq-MovHist" class="quarto-xref">Equation&nbsp;2</a>: <span class="math display">\[
+\begin{align*}
+\hat{f}_{nh}(x)
+&amp;=\frac{1}{2h}\hat{P}\left(x-h &lt; X \leq x+h\right)\\[2ex]
+&amp;=\frac{1}{2h}\frac{\text{Number of $X_i$ in $(x-h, x+h]$}}{n}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h &lt; X_i\leq x+h\right)}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1&lt;\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^nK\left(\frac{x-X_{i}}{h}\right)
+\end{align*}
+\]</span> where <span class="math inline">\(K(z)\)</span> denotes the symmetric <span class="math inline">\((K(z)=K(-z))\)</span> kernel function <span class="math display">\[
+K(z)=\left\{
+\begin{array}{ll}
+1/2 &amp; \hbox{ if } z\in (-1,1] \\
+0   &amp; \hbox{ else}.
+\end{array}\right.
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_movhist <span class="ot">&lt;-</span> <span class="cf">function</span>(x, data, h){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>      n      <span class="ot">&lt;-</span> <span class="fu">length</span>(data)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>      dat_x  <span class="ot">&lt;-</span> data[data <span class="sc">&gt;</span> x<span class="sc">-</span>h <span class="sc">&amp;</span> data <span class="sc">&lt;=</span> x<span class="sc">+</span>h]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      result <span class="ot">&lt;-</span> <span class="fu">length</span>(dat_x)<span class="sc">/</span>(n<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span>h)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(result)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>my_movhist <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(my_movhist, <span class="st">"x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="dv">12</span>  <span class="co"># bandwidth</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>xx    <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span>(<span class="fu">min</span>(data)), <span class="at">to=</span>(<span class="fu">max</span>(data)), <span class="at">len=</span><span class="dv">750</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>yy    <span class="ot">&lt;-</span> <span class="fu">my_movhist</span>(<span class="at">x =</span> xx, <span class="at">data =</span> data, <span class="at">h =</span> h)                </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> xx, <span class="at">y =</span> yy, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Density"</span>, <span class="at">xlab=</span><span class="st">"Income"</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Density Estimation using the Moving Histogram"</span>, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-MovHistInc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-MovHistInc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch_NP_Density_Estimation_files/figure-html/fig-MovHistInc-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-MovHistInc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Income density estimate based on the moving histogram density estimator.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Density estimates of the moving histrogram estimator are discontinuous—even though, we aim to estimate a smooth (e.g.&nbsp;three times continuously differentiable) denstiy function <span class="math inline">\(f.\)</span></p>
+<p><strong>Kernel Density Estimator:</strong></p>
+<p>Replacing the discontinuous rectengular kernel function of the naive moving histogram estimator by a symmetric, continuous, differentiable function, such as</p>
+<ul>
+<li><span class="math inline">\(K(z) = \frac{3}{4}(1-z^2)\)</span> for <span class="math inline">\(z \in [-1,1]\)</span> and <span class="math inline">\(0\)</span> else</li>
+<li>or the density function of the standard normal distribution: <span class="math display">\[
+K(z) = \phi(z) = \frac{1}{\sqrt{2\pi}} \exp( -z^2 / 2 )
+\]</span> yields to the <strong>kernel density estimator</strong> with kernel <span class="math inline">\(K\)</span> and bandwidth <span class="math inline">\(h\colon\)</span> <span class="math display">\[
+\begin{equation*}
+\hat{f}_{nh}(x)=\frac{1}{n} \sum_{i=1}^{n} \frac{1}{h} K\left(\frac{x - X_i}{h} \right),
+\quad\text{for}\quad x \in \mathbb{R}.
+\end{equation*}
+\]</span></li>
+</ul>
 </section>
 </section>
 

@@ -3,7 +3,6 @@
 
 ## Introduction
 
-
 ```{r}
 #| echo: false
 data_path <- "81b9ff859175053edfc3c2eb024a87b782aa47fa/data/"
@@ -18,7 +17,7 @@ suppressPackageStartupMessages(library("scales"))     # Transparent colors
 ```
 
 
-#### **Example: Income Data Analysis** {-}
+### Example: Income Data Analysis
 
 
 ```{r}
@@ -52,13 +51,12 @@ Traditional statistical key figures such as
 Estimating the total density function $f$ can provide more detailed, more wholistic information. 
 
 
-#### **Simplest density estimator: Histogram** {-}
+### From the Histogram to the Kernel Density Estimator
 
-Histogramm für  FES Einkommensdaten im Jahr 1976:
 
 ```{r}
 #| echo: false
-#| fig-cap: Histrogram of income data
+#| fig-cap: Histrogram of the income data.
 hist(inc76$income, 
      freq = FALSE,
      xlab = "Income", 
@@ -92,13 +90,12 @@ par(mfrow = c(1,1))
 ```
 
 
-### From the Histogram to Kernel Density Estimation
-
-Comparison: Histogram versus a kernel density estimation 
+@fig-HistKDE shows a comparison of the histogram versus the density estimate from a kernel density estimatior. 
 
 ```{r}
 #| echo: false
 #| fig-cap: Histogram versus a nonparametric kernel density estimation (green solid line).
+#| label: fig-HistKDE
 hist(inc76$income, 
      freq = FALSE,
      xlab = "Income", 
@@ -106,7 +103,8 @@ hist(inc76$income,
 lines(density(inc76$income), col = "darkgreen")
 ```
 
-Consider a histogram with $J$ (e.g., $J=8$) bins all having the same bin-width $2h,$ defined by equidistant intervals
+
+Consider a histogram with $J$ (e.g., $J=8$ as in @fig-HistKDE) bins all having the same bin-width $2h,$ defined by equidistant intervals
 $$
 (x_{j-1},x_j]
 $$ 
@@ -119,14 +117,46 @@ $$
 \bar{x}_j=(x_{j-1}+x_j)/2
 $$
 by the relative frequency of data points $X_1,\dots,X_n$ that fall within the $j$th interval $(x_{j-1},x_j],$
+
+
+$$ 
+\begin{align*}
+\hat f_{hist}(\bar{x}_j)
+& =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}
+\end{align*}
+$${#eq-fHist}
+Note: The scaling by $2hn$ is necessary to guarantee that the area of each bin equals the relative frquency of data points $X_1,\dots,X_n$ that fall into the interval $(x_{j-1},x_j],$
+$$
+\begin{align*}
+\text{Area of $j$th Bin} 
+& = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
+& = \qquad 2h\quad\, \cdot \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
+& = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}\\[2ex]
+& = \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}, 
+\end{align*}
+$$
+where $1_{(\cdot)}$ denotes the indicator function, i.e., 
+$1_{(\text{TRUE})}=1$ and $1_{(\text{FALSE})}=0.$ This guarantees that the bin areas of the histogram sum up to one
+$$
+\begin{align*}
+\sum_{j=1}^J\text{Area of $j$th Bin}
+&=\sum_{j=1}^J \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
+&=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}=\frac{n}{n}=1.
+\end{align*}
+$$
+
+
+Doing some smart rearrangements of @eq-fHist, allows writing the histogram as a type of kernel density estimator:  
 $$ 
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)
 & =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-& =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right)
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h < X_i\leq x+h\right)}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1<\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+& =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right),
 \end{align*}
 $$
-with
+where $K(z)$ denotes the symmetric $(K(z)=K(-z))$ kernel function
 $$
 K(z)=\left\{
 \begin{array}{ll}
@@ -135,31 +165,21 @@ K(z)=\left\{
 \end{array}\right.
 $$
 
-Note: The scaling by $2hn$ is necessary to guarantee that the area of each bin equals the relative frquency of data points $X_1,\dots,X_n$ that fall into the interval $(x_{j-1},x_j]$
+
+A kernel density estimator generalizes the histogram $\hat f_{hist}(\bar{x}_j)$ by estimating the unknown density $f$ not only at the mid-points $\bar{x}_j,$ but at *every* $x,$ which yields the **moving histogram**
 $$
 \begin{align*}
-\text{Area of $j$th Bin} 
-& = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
-& = \qquad 2h\quad\, \cdot \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-& = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}%\\[2ex]
-\end{align*}
-$$
-This guarantees that the bin areas of the histogram sum up to one.  
-
-
-A kernel density estimator generalizes the histogram by estimating the unknown density $f$ at **every** $x$ using 
-$$
-\begin{align*}
-{\hat{f}}_{h}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
+{\hat{f}}_{nh}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
 \frac{x-X_{i}}{h}\right)
 \end{align*}
-$$
+$${#eq-MovHist}
+where 
 
-* $K$ kernel function 
-* $h$ bandwidth 
+* $K$ denotes the kernel function and  
+* $h>0$ the bandwidth  
 
 
-## Motivating the Kernel Density Estimator
+## A More Formal Motivation of the Kernel Density Estimator
 
 
 Let 
@@ -172,47 +192,44 @@ X_i\overset{\text{i.i.d.}}{\sim} f\quad\text{for}\quad i=1,\dots,n.
 $$
 
 
-Aim: Find a density estimator $\hat{f}$ for the true, unknown density $f$ without making a parametric assumption such as assuming that $f$ is the density of a normal distribution with unknown mean and unknown variance. 
+**Aim:** Find a density estimator 
+$$
+\hat{f}
+$$ 
+for the true, unknown density $f$ **without** making a parametric assumption on $f$ such as assuming that $f$ is the density of a normal distribution with unknown mean and unknown variance. 
 
 
-**Qualitative assumption on $f:$**
-
-The density function $f(x)$ is sufficiently smooth (i.e., is sufficiently often differentiable) for all $x$.  
+The only assumption on $f$ is the following **qualitative smoothness assumption:** The density function $f(x)$ is assumed to be sufficiently smooth---i.e., to be sufficiently often differentiable for all $x.$  
 
 
-Starting point: 
-
-We use the connection between density functions $f$ and distribution functions $F(x) = P(X \leq x),$ 
+**Starting point:** We use the connection between density functions $f$ and distribution functions $F(x) = P(X \leq x);$ namely,  
 $$
 \begin{equation*}
-  f(x) = \frac{d}{dx} F(x) = F'(x), \qquad x \in \mathbb{R}
+  f(x) = \frac{d}{dx} F(x) = F'(x), \qquad x \in \mathbb{R}.
 \end{equation*}
 $$
 
-**Idea:** 
 
-Approximate the derivative of the distribution function using the difference quotient. For (small) $h > 0,$ we have 
+**Idea:** Approximate the derivative of the distribution function using the difference quotient. For small $h > 0,$ we have that 
 $$
 \begin{align*}
-  F'(x) &\approx \frac{F(x+h) - F(x)}{h}\\[2ex]
-  F'(x) &= \frac{F(x+h) - F(x)}{h} + O(h)
+f(x) =   F'(x) &\approx \frac{F(x+h) - F(x)}{h}%\\[2ex]
+%  F'(x) &= \frac{F(x+h) - F(x)}{h} + O(h)
 \end{align*}
-$$
+$${#eq-DiffQ1}
 or
 $$
 \begin{align*}
-F'(x) &\approx \frac{F(x) - F(x-h)}{h}\\[2ex]
-F'(x)      &= \frac{F(x) - F(x-h)}{h} + O(h)
+f(x) = F'(x) &\approx \frac{F(x) - F(x-h)}{h}.%\\[2ex]
+%F'(x)      &= \frac{F(x) - F(x-h)}{h} + O(h),
 \end{align*}
-$$
+$${#eq-DiffQ2}
+<!-- where the "Big-Oh" term $O(h)$ refers to a $h\to 0$ with $h>0$ asymptotic.  -->
 
-In both cases, the approximation error is of the order $O(h)$ for $h\to 0,$
-$$
-\begin{align*}
-F'(x) - \frac{F(x) - F(x-h)}{h} = O(h)
-\end{align*}
-$$
-(Pronounce "Big-Oh $h$"). This means that the approximation error goes, in absolute values, to zero as fast as $h\to 0$ or faster; i.e.
+
+In both the right-hand (@eq-DiffQ1) and the left-hand difference quotient (@eq-DiffQ2) have an approximation error of the order $O(h)$ for $h\to 0$ with $h>0.$ 
+
+<!-- 
 $$
 \left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|\to 0\quad\text{as}\quad h\to 0 
 $$
@@ -221,3 +238,117 @@ $$
 \frac{\left|F'(x)-\frac{F(x) - F(x-h)}{h}\right|}{h}\to c,
 $$
 where $0\leq c < \infty.$
+ -->
+
+
+In his seminal work on the kernel density estimator, @Rosenblatt_1956 uses an even better derivative approximation based on the symmetric difference quotient
+$$
+\begin{equation*}
+    f(x) = F'(x) = \frac{F(x+h) - F(x-h)}{2h} + O(h^2),
+\end{equation*}
+$${#eq-DiffQ3}
+where the approximation error is of the order $O(h^2)$ for $h\to 0$ with $h>0.$ This means that the approximation error goes, in absolute values, to zero as fast as $h^2\to 0$ *or faster*; i.e.
+$$
+\begin{align*}
+& O\big(h^2\big)=\\[2ex]
+=&\left\{\text{Any function}\;g(h)\text{ such that }\frac{|g(h)|}{h^2}\to c\;\text{ as }\;h\to 0\text{, where }0\leq c<\infty\right\}.
+\end{align*}
+$$
+
+::: {.callout-note collapse="true"}
+## Deriving the approximation error in @eq-DiffQ3 
+Let $F$ be three times continuously differentiable; i.e. $F^{(3)}(x)$ is a continuous function for all $x.$ 
+$$
+\begin{align*}
+&\frac{F(x+h) - F(x-h)}{2h}=\\[2ex]
+&[\text{Taylor polynomial approximations for $F(x+h)$ and $F(x-h)$ around $x\colon$}]\\[2ex]
+=&\frac{\left(F(x)+F^{(1)}(x)h + \frac{1}{2}\,F^{(2)}(x) h^2 +\frac{1}{6}\,F^{(3)}(x)h^3 + o(h^3)\right)}{2h}-\\[2ex]
+&\frac{\left(F(x)-F^{(1)}(x)h+ \frac{1}{2}\,F^{(2)}(x) h^2-\frac{1}{6}\,F^{(3)}(x)h^3+o(h^3)\right)}{2h}\\[2ex]
+&[\text{Applying straight forward simplifications:}]\\[2ex]
+=&\frac{2\,F^{(1)}(x)h+\frac{2}{6}\,F^{(3)}(x)h^3+o(h^3)}{2h}\\[2ex]
+=&\frac{2\,F^{(1)}(x)h}{2h}+\frac{\frac{1}{3}\,F^{(3)}(x)h^3}{2h}+\frac{o(h^3)}{2h}\\[2ex]
+&[\text{Using that $h^{-1}o(h^3)=o(h^2)\colon$}]\\[2ex]
+=&F'(x)
++\frac{1}{6}\,F^{(3)}(x)h^2
++\frac{1}{2}\,o(h^2)\\[2ex]
+&[\text{Using that $\texttt{constant}\times h^2=O(h^2)$ and that $\texttt{constant}\times o(h^2)=o(h^2)\colon$}]\\[2ex]
+=&F'(x)+O(h^2) + o(h^2)\\[2ex]
+&[\text{Using that $o(h^2)=O(h^2)$ and that $2O(h^2)=O(h^2)\colon$}]\\[2ex]
+=&F'(x)+O(h^2)
+\end{align*}
+$$
+:::
+
+Using the definition of the distribution function $F(x)=P(X\leq x)$ we get
+$$
+\begin{align*}
+    f(x) & = \frac{F(x+h) - F(x-h)}{2h} + O(h^2) \\[2ex]
+    & = \frac{P(X \leq x+h) - P(X \leq x-h)}{2h} + O(h^2)\\[2ex]
+    & =\frac{1}{2h} P(x-h < X \leq x+h) + O(h^2)\\[2ex]
+\Rightarrow\quad        f(x) & \approx \frac{1}{2h} P(x-h < X \leq x+h) ,
+\end{align*}
+$$
+where the approximation is very good for smallish $h>0.$
+
+Estimating the unknown probability $P(x-h < X \leq x+h)$ by its empirical counterpart (relative frequency) yields the **moving histogram** estimator as in @eq-MovHist:
+$$
+\begin{align*}
+\hat{f}_{nh}(x) 
+&=\frac{1}{2h}\hat{P}\left(x-h < X \leq x+h\right)\\[2ex]
+&=\frac{1}{2h}\frac{\text{Number of $X_i$ in $(x-h, x+h]$}}{n}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h < X_i\leq x+h\right)}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1<\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^nK\left(\frac{x-X_{i}}{h}\right)
+\end{align*}
+$$
+where $K(z)$ denotes the symmetric $(K(z)=K(-z))$ kernel function
+$$
+K(z)=\left\{
+\begin{array}{ll}
+1/2 & \hbox{ if } z\in (-1,1] \\
+0   & \hbox{ else}.
+\end{array}\right.
+$$
+
+
+```{r}
+my_movhist <- function(x, data, h){
+      n      <- length(data)
+      dat_x  <- data[data > x-h & data <= x+h]
+      result <- length(dat_x)/(n*2*h)
+      return(result)
+}
+my_movhist <- Vectorize(my_movhist, "x")
+```
+
+```{r}
+#| fig-cap: Income density estimate based on the moving histogram density estimator.
+#| label: fig-MovHistInc
+data  <- inc76$income
+h     <- 12  # bandwidth
+xx    <- seq(from=(min(data)), to=(max(data)), len=750)
+yy    <- my_movhist(x = xx, data = data, h = h)                
+
+plot(x = xx, y = yy, 
+     ylab="Density", xlab="Income", 
+     main = "Density Estimation using the Moving Histogram", type="l")
+```
+
+Density estimates of the moving histrogram estimator are discontinuous---even though, we aim to estimate a smooth (e.g. three times continuously differentiable) denstiy function $f.$
+
+**Kernel Density Estimator:**
+
+Replacing the discontinuous rectengular kernel function of the naive moving histogram estimator by a symmetric, continuous, differentiable function, such as
+
+* $K(z) = \frac{3}{4}(1-z^2)$ for $z \in [-1,1]$ and $0$ else
+* or the density function of the standard normal distribution:
+$$
+K(z) = \phi(z) = \frac{1}{\sqrt{2\pi}} \exp( -z^2 / 2 )
+$$
+yields to the **kernel density estimator** with kernel $K$ and bandwidth $h\colon$
+$$
+\begin{equation*}
+  \hat{f}_{nh}(x)=\frac{1}{n} \sum_{i=1}^{n} \frac{1}{h} K\left(\frac{x - X_i}{h} \right),
+  \quad\text{for}\quad x \in \mathbb{R}.
+\end{equation*}
+$$
