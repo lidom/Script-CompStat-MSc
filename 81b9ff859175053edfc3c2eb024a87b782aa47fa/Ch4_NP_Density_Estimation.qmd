@@ -39,24 +39,24 @@ X_i\overset{\text{i.i.d.}}{\sim} f
 $$
 
 
-Traditional statistical key figures such as 
+Traditional statistical key figures:
 
 * Empirical mean 
 * Empirical median
 * Empirical variance 
 * Empirical interquartile distance, etc. 
 
-**Problem:** Such key figures only summarize single aspects of a distribution. 
+Only summarize single aspects of a distribution. 
 
 Estimating the total density function $f$ can provide more detailed, more wholistic information. 
 
 
-### From the Histogram to the Kernel Density Estimator
-
+@fig-HistOrdinary shows a histogram (i.e., a very simple density estimator) of the income data.
 
 ```{r}
-#| echo: false
+#| echo: true
 #| fig-cap: Histrogram of the income data.
+#| label: fig-HistOrdinary
 hist(inc76$income, 
      freq = FALSE,
      xlab = "Income", 
@@ -70,11 +70,12 @@ Disadvantages of the histogram:
 * Discontinuous, locally constant $\Rightarrow$ A histogram cannot be a very efficient estimator for a (continuous) density function $f(x).$
 
 
-**Example:** Too small or too large bin widths
+The choice of the bin width is crucial. @fig-HistBinWidths shows examples for a too small and a too large bin width choice.
 
 ```{r}
 #| echo: false
 #| fig-cap: Histrograms of income data for different choices of the bin width. 
+#| label: fig-HistBinWidths
 par(mfrow = c(1,2))
 hist(inc76$income, 
      freq = FALSE,
@@ -90,7 +91,7 @@ par(mfrow = c(1,1))
 ```
 
 
-@fig-HistKDE shows a comparison of the histogram versus the density estimate from a kernel density estimatior. 
+@fig-HistKDE shows a comparison of the histogram versus the density estimate from a kernel density estimator. 
 
 ```{r}
 #| echo: false
@@ -102,6 +103,15 @@ hist(inc76$income,
      ylab = "Density", main = "")
 lines(density(inc76$income), col = "darkgreen")
 ```
+
+
+Advantages of the kernel density estimator: 
+
+* Choice of the bandwidth (similar to bin width) can be done using statistical theory
+* Continuous estimate for a (continuous) density function $f.$
+
+
+### From the Histogram to the Kernel Density Estimator
 
 
 Consider a histogram with $J$ (e.g., $J=8$ as in @fig-HistKDE) bins all having the same bin-width $2h,$ defined by equidistant intervals
@@ -125,7 +135,7 @@ $$
 & =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}
 \end{align*}
 $${#eq-fHist}
-Note: The scaling by $2hn$ is necessary to guarantee that the area of each bin equals the relative frquency of data points $X_1,\dots,X_n$ that fall into the interval $(x_{j-1},x_j],$
+**Note:** The scaling by $2hn$ is necessary to guarantee that the area of each bin equals the relative frquency of data points $X_1,\dots,X_n$ that fall into the interval $(x_{j-1},x_j],$
 $$
 \begin{align*}
 \text{Area of $j$th Bin} 
@@ -136,17 +146,18 @@ $$
 \end{align*}
 $$
 where $1_{(\cdot)}$ denotes the indicator function, i.e., 
-$1_{(\text{TRUE})}=1$ and $1_{(\text{FALSE})}=0.$ This guarantees that the bin areas of the histogram sum up to one
+$1_{(\text{TRUE})}=1$ and $1_{(\text{FALSE})}=0.$ Thus, the scaling guarantees that the bin areas of the histogram sum up to one
 $$
 \begin{align*}
 \sum_{j=1}^J\text{Area of $j$th Bin}
 &=\sum_{j=1}^J \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
-&=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}=\frac{n}{n}=1.
+&=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
+&=\frac{n}{n}=1.
 \end{align*}
 $$
 
 
-Doing some smart rearrangements of @eq-fHist, allows writing the histogram as a type of kernel density estimator:  
+Doing some rearrangements of @eq-fHist, allows writing the histogram as a type of kernel density estimator:  
 $$ 
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)
@@ -338,7 +349,7 @@ Density estimates of the moving histrogram estimator are discontinuous---even th
 
 **Kernel Density Estimator:**
 
-Replacing the discontinuous rectengular kernel function of the naive moving histogram estimator by a symmetric, continuous, differentiable function, such as
+Replacing the symmetric, discontinuous rectengular kernel function of the naive moving histogram by a symmetric, continuous and differentiable function, such as
 
 * $K(z) = \frac{3}{4}(1-z^2)$ for $z \in [-1,1]$ and $0$ else
 * or the density function of the standard normal distribution:
@@ -352,3 +363,64 @@ $$
   \quad\text{for}\quad x \in \mathbb{R}.
 \end{equation*}
 $$
+
+
+The kernel density estimator yields a smooth density estimate. It is more efficient than the (moving) histrogram and provides a flexible adjustment to the data. 
+
+* Bandwidth $h$ is also called **smoothing parameter**. The bandwidth (and the kernel $k$) need to be selected by the user (or autmatically by the computer). 
+* New, compact notation for the scaled kernel function: $K_h(u) := K(u / h) / h$.
+$$
+\begin{align*}
+\hat{f}_{nh}(x) 
+&=  n^{-1} \sum_{i=1}^{n} \frac{1}{h}  K\left(\frac{x - X_i}{h}\right)\\[2ex]
+&=  n^{-1} \sum_{i=1}^{n} K_h(x - X_i)
+\end{align*}
+$$
+
+
+::: {.callout-note}
+## Notation 
+
+* $\hat{f}_{nh}:$ the index $nh$ means here that the estimator depends on the sample size $n$ and the bandwidth $h$. 
+* $K_h:$ the index $h$ is here an abbreviation for $K( \cdot / h) / h$.
+::::
+
+
+## Properties of the Kernel Density Estimator
+
+::: {.callout-tip}
+## Reminder: Definition of a Density Function
+We call a function $f$ a density function if it fulfilles the following properties: 
+
+* Non-negative: $f(x)\geq 0$ for all $x\in\mathbb{R}$
+* Normed: $\int f(x)dx = 1$
+:::
+
+
+It can be shown that $f_{nh}$ is a density function if the kernel function $K$ is 
+
+* Non-negative: $K(x) \geq 0$ for all $x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}_{nh}(x) \geq 0$  for all $x\in\mathbb{R}$
+* Normed: $\int K(x)dx = 1\quad \Rightarrow\quad \int \hat{f}_{nh}(x)dx = 1$
+
+That is, if $K$ is a density function, then also $f_{nh}$ is a density function. 
+
+This inheritance of the properties of $K$ to the properties of $f_{nh}$ also holds for the smoothness properties: 
+
+* Smoothness of $K$: If $K$ is continuously differentiable $\quad\Rightarrow\quad$ $\hat{f}_h$ is continuously differentiable
+
+
+### Theoretical Requirements on the Kernel Function
+
+* **Normed:** 
+$$
+\int K(x)dx=1
+$$
+* **Symmetric around zero:** 
+$$
+\int xK(x)dx=0
+$$ 
+
+
+Typical choices for the kernel function $K$ are: 
+
+* Smooth density functions that are symmetric around zero. 

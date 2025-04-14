@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Nonparametric Regression – Computational Statistics (M.Sc.)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Ch4_NP_Density_Estimation.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Ch5_NPRegression.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./images/Uni_Bonn_Logo.jpeg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Computational Statistics (M.Sc.)</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Organization of the Course</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch1_MaximumLikelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Maximum Likelihood</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch2_EMAlgorithmus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">EM Algorithm &amp; Cluster Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch3_Bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The Bootstrap</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch4_NP_Density_Estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Density Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch5_NPRegression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#basis-function-expansions" id="toc-basis-function-expansions" class="nav-link" data-scroll-target="#basis-function-expansions"><span class="header-section-number">5.2</span> Basis Function Expansions</a>
+  <ul class="collapse">
+  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression"><span class="header-section-number">5.2.1</span> Polynomial Regression</a></li>
+  <li><a href="#regression-splines" id="toc-regression-splines" class="nav-link" data-scroll-target="#regression-splines"><span class="header-section-number">5.2.2</span> Regression Splines</a></li>
+  <li><a href="#mean-average-squared-error-of-regression-splines" id="toc-mean-average-squared-error-of-regression-splines" class="nav-link" data-scroll-target="#mean-average-squared-error-of-regression-splines"><span class="header-section-number">5.2.3</span> Mean Average Squared Error of Regression Splines</a></li>
+  </ul></li>
+  <li><a href="#selecting-the-smoothing-parameter-p" id="toc-selecting-the-smoothing-parameter-p" class="nav-link" data-scroll-target="#selecting-the-smoothing-parameter-p"><span class="header-section-number">5.3</span> Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></a>
+  <ul class="collapse">
+  <li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="header-section-number">5.3.1</span> Leave One Out Cross-Validation (LOOCV)</a></li>
+  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation"><span class="header-section-number">5.3.2</span> <span class="math inline">\(k\)</span>-fold Cross-Validation</a></li>
+  <li><a href="#generalized-cross-validation-gcv" id="toc-generalized-cross-validation-gcv" class="nav-link" data-scroll-target="#generalized-cross-validation-gcv"><span class="header-section-number">5.3.3</span> Generalized Cross-Validation (GCV)</a></li>
+  <li><a href="#over-fitting-and-optimism" id="toc-over-fitting-and-optimism" class="nav-link" data-scroll-target="#over-fitting-and-optimism"><span class="header-section-number">5.3.4</span> Over-Fitting and Optimism</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- LTeX: language=en-US -->
+<section id="introduction" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.1</span> Introduction</h2>
+<p>Let us consider the case of univariate nonparametric regression, i.e., with one single explanatory variable <span class="math inline">\(X\in\mathbb{R}\)</span>.</p>
+<p><strong>Data:</strong> <span class="math display">\[
+(Y_{1},X_{1}),\dots,(Y_{n},X_{n})\overset{\text{i.i.d}}{\sim}(Y,X)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(Y_{i}\in \mathbb{R}\)</span> real response variable</li>
+<li><span class="math inline">\(X_{i}\in [a,b]\subset \mathbb{R}\)</span> real explanatory variable</li>
+<li><span class="math inline">\(n\)</span> sufficiently large sample size (e.g., <span class="math inline">\(n\geq 40\)</span>)</li>
+</ul>
+<section id="the-nonparametric-regression-model" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="the-nonparametric-regression-model">The Nonparametric Regression Model</h4>
+<p><span class="math display">\[
+Y_i=m(X_i)+\varepsilon_i
+\]</span></p>
+<ul>
+<li><span class="math inline">\(m(X)=\mathbb{E}(Y_i|X=X_i)\)</span> regression function</li>
+<li><span class="math inline">\(\mathbb{E}(\varepsilon_i)=0\)</span></li>
+<li><span class="math inline">\(Var(\varepsilon_i|X_i) = Var(\varepsilon_i)=\sigma^2\)</span></li>
+<li><span class="math inline">\(\varepsilon_i\)</span> and <span class="math inline">\(X_i\)</span> are independent or at least mean-independent, i.e., <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span></li>
+</ul>
+<p>Special cases of <strong>parametric</strong> regression models:</p>
+<ul>
+<li><p>Linear regression: <span class="math inline">\(m\)</span> is a straight line <span class="math display">\[
+m(X)=\beta_0+\beta_1 X
+\]</span></p></li>
+<li><p>Polynomial generalizations: <span class="math inline">\(m\)</span> is a quadratic or cubic polynomial <span class="math display">\[
+\begin{align*}
+              m(X)&amp;=\beta_0 +\beta_1 X+\beta_2 X^2\\
+\text{or} \quad m(X)&amp;=\beta_0+\beta_1 X+\beta_2 X^2+\beta_3 X^3
+\end{align*}
+\]</span></p></li>
+</ul>
+<p>Many important applications lead to regression functions possessing a complicated structure. Standard models then are “too simple” and do not provide useful approximations of <span class="math inline">\(m(x)\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+As George Box is saying it:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“All models are false, but some are useful” (G. Box)</p>
+</div>
+</div>
+<p>An important point in theoretical analysis is the way how the observations <span class="math inline">\(X_1,\dots,X_n\)</span> have been generated. One distinguishes between <strong>fixed</strong> and <strong>random</strong> design.</p>
+<ul>
+<li><strong>Fixed design:</strong> The observation points <span class="math inline">\(X_1,\dots,X_n\)</span> are fixed (non stochastic) values.
+<ul>
+<li><strong>Example:</strong> Crop yield (<span class="math inline">\(Y\)</span>) in dependence of the amount of fertilizer (<span class="math inline">\(X\)</span>) used, when the amount is determined deterministically by the experimenter.</li>
+<li><strong>Equidistant Design:</strong> (Most important special case of fixed design)<br>
+<span class="math display">\[
+X_{i+1}-X_i=\frac{b-a}{n}.
+\]</span></li>
+</ul></li>
+<li><strong>Random design:</strong> The observation points <span class="math inline">\(X_1,\dots,X_n\)</span> are (realizations of) i.i.d. random variables with density <span class="math inline">\(f\)</span>. The density <span class="math inline">\(f\)</span> is called “design density”. Throughout this chapter it will be assumed that <span class="math inline">\(f(x)&gt;0\)</span> for all <span class="math inline">\(x\in [a,b]\)</span>.
+<ul>
+<li><strong>Example:</strong> Sample <span class="math inline">\((Y_1,X_1),\dots,(Y_n,X_n)\)</span> of log-wages (<span class="math inline">\(Y\)</span>) and age (<span class="math inline">\(X\)</span>) of randomly selected individuals.</li>
+</ul></li>
+</ul>
+<p>In the case of random design, <span class="math inline">\(m(x)\)</span> is the <em>conditional</em> expectation of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X=x\)</span>, <span class="math display">\[
+m(x)=\mathbb{E}(Y|\ X=x)
+\]</span></p>
+<p>and <span class="math inline">\(Var(\varepsilon_i|X_i)=\sigma^2\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For random design all expectations (as well as variances) have to be interpreted as <em>conditional</em> expectations (variances) given <span class="math inline">\(X_1,\dots,X_n\)</span>.</p>
+</div>
+</div>
+<p><strong>Example:</strong> Canadian cross-section wage data consisting of a random sample taken from the 1971 Canadian Census Public Use Tapes for male individuals having common education (grade 13); see <a href="#fig-CanadianIncome" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(<span class="st">"np"</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"cps71"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cps71<span class="sc">$</span>age, cps71<span class="sc">$</span>logwage, <span class="at">xlab=</span><span class="st">"Age"</span>, <span class="at">ylab=</span><span class="st">"log(wage)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-CanadianIncome" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CanadianIncome-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch5_NPRegression_files/figure-html/fig-CanadianIncome-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CanadianIncome-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Canadian cross-section wage data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>What would be a good/reasonable model assumption for <span class="math inline">\(m(x)\)</span> to estimate the conditional mean function for the data shown in <a href="#fig-CanadianIncome" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+No specific model assumption
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In nonparametric regression analysis, we do not make assumptions about the specific structure of the regression function <span class="math inline">\(m(x).\)</span> We only make the <em>qualitative</em> assumption that <span class="math inline">\(m\)</span> is a sufficiently <strong>smooth</strong> function, i.e.&nbsp;that <span class="math inline">\(m(t)\)</span> is sufficiently often differentiable at every <span class="math inline">\(t\in(a,b)\)</span>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="basis-function-expansions" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="basis-function-expansions"><span class="header-section-number">5.2</span> Basis Function Expansions</h2>
+<p>Some frequently used approaches to nonparametric regression rely on expansions of the form <span class="math display">\[
+m(x)\approx \sum_{j=1}^p \beta_j b_j(x),
+\]</span> where <span class="math inline">\(b_1(x),b_2(x),\dots\)</span> are suitable basis functions <span class="math display">\[
+b_j:\mathbb{R}\to\mathbb{R},\quad j=1,\dots,p.
+\]</span></p>
+<p>The basis functions <span class="math inline">\(b_1,b_2,\dots\)</span> have to be chosen in such a way that for <em>any possible</em> smooth function <span class="math inline">\(m\)</span> the squared approximation error tends to zero as <span class="math inline">\(p\rightarrow\infty,\)</span><br>
+<span class="math display">\[
+\min_{\vartheta_1,\dots,\vartheta_p} \left(m(x)-\sum_{j=1}^p \vartheta_j b_j(x)\right)^2\to 0,\quad p\to\infty.
+\]</span> However, for every fixed value <span class="math inline">\(p,\)</span> we typically have that <span class="math display">\[
+\min_{\vartheta_1,\dots,\vartheta_p} \left(m(x)-\sum_{j=1}^p \vartheta_j b_j(x)\right)^2 \neq 0
+\]</span> which leads to a <strong>biased estimation procedure</strong>.</p>
+<p>For a fixed value <span class="math inline">\(p,\)</span> an estimator <span class="math inline">\(\hat m_p\)</span> of <span class="math inline">\(m\)</span> is determined by <span class="math display">\[
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_j(x),
+\]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are obtained by ordinary least squares <span class="math display">\[
+\sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \hat\beta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
+=\min_{\vartheta_1,\dots,\vartheta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \vartheta_j \underbrace{b_j(X_i)}_{X_{ij}}\right)^2
+\]</span> with <span class="math display">\[
+\hat\beta = \left(\begin{matrix}\hat\beta_1\\ \vdots\\\hat\beta_p\end{matrix}\right)=\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top Y,
+\]</span> where <span class="math inline">\(\mathbf{X}\)</span> denotes the <span class="math inline">\((n\times p)\)</span>-dimensional matrix with elements <span class="math display">\[
+X_{ij}=b_j(X_i),
+\]</span> <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(j=1,\dots,p,\)</span> and <span class="math inline">\(Y=(Y_1,\dots,Y_n)^\top.\)</span></p>
+<p>Examples of basis functions <span class="math inline">\(b_1(x),\,b_2(x)\,\dots\)</span>:</p>
+<ul>
+<li>polynomials (monomial basis)</li>
+<li>spline functions</li>
+<li>wavelets</li>
+<li>Fourier expansions (for periodic functions)</li>
+</ul>
+<section id="polynomial-regression" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="polynomial-regression"><span class="header-section-number">5.2.1</span> Polynomial Regression</h3>
+<p><strong>Theoretical Justification:</strong> Every smooth function can be well approximated by a polynomial of sufficiently high degree.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li><p>Monomial basis functions <span class="math inline">\(b_j(x) = x^{j-1}\)</span>, <span class="math inline">\(\;\;j=1,\dots,p.\)</span></p></li>
+<li><p>Choose <span class="math inline">\(p\)</span> and fit a polynomial of degree <span class="math inline">\(p-1\)</span> (order <span class="math inline">\(p\)</span>): <span class="math display">\[
+\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(Y_i-\sum_{j=1}^p \vartheta_{j} X_i^{j-1}\right)^2
+\]</span> <span class="math display">\[
+\Rightarrow\quad {\hat m}_p(X)={\hat \beta}_{1}+\sum_{j=2}^{p}
+{\hat \beta}_{j} X_i^{j-1}
+\]</span></p></li>
+<li><p>This corresponds to an approximation with basis functions <span class="math display">\[
+\begin{align*}
+b_1(x)&amp;=1\\[2ex]
+b_2(x)&amp;=x\\[2ex]
+b_3(x)&amp;=x^2\\[2ex]
+\vdots\\[2ex]
+b_{p}(x)&amp;=x^{p-1}
+\end{align*}
+\]</span></p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is only assumed that <span class="math inline">\(m(x)\)</span> can be approximated by a polynomial <span class="math inline">\(\hat{m}_p(x)\)</span> as <span class="math inline">\(p\to\infty.\)</span> However, for a given choice of <span class="math inline">\(p,\)</span> there will usually still exist an <strong>approximation error.</strong></p>
+<p>Therefore, <span class="math inline">\(\hat{m}_p(x)\)</span> is typically a biased estimator for given values of <span class="math inline">\(p,\)</span> and a given value of <span class="math inline">\(x\in[a,b],\)</span> <span class="math display">\[
+\begin{align*}
+\operatorname{Bias}(\hat{m}_p(x))\quad &amp; \neq 0\\
+\mathbb{E}(\hat{m}_p(x)) - m(x)        &amp; \neq 0.
+\end{align*}
+\]</span></p>
+</div>
+</div>
+<p><strong><code>R</code>-Code to Compute Polynomial Regressions:</strong></p>
+<p>Generate some artificial data, where the usually unknown <span class="math display">\[
+m(x)=\sin(5 x)
+\]</span> with <span class="math inline">\(x\in[0,1]\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Save all in a dataframe</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>db     <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">x=</span>x_vec,<span class="at">y=</span>y_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compute the ordinary least squares regressions of different polynomial regression models:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting of polynomials to the data (parametric models):</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constant line fit: (Basis function x^0)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>reg_p1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>db)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^3</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>reg_p4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Basis functions: x^0 + ... + x^6</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>reg_p7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">6</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Take a look at the fits:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">3.1</span>,<span class="fl">2.1</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Truth"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># True (usually unknown) regression function</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 0 polynomial</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 0"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p1, <span class="at">newdata =</span> db), </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 3 polynomial</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 3"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p4, <span class="at">newdata =</span> db), </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Fit by degree 6 polynomial</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Degree 6"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y =</span> <span class="fu">predict</span>(reg_p7, <span class="at">newdata =</span> db), </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The quality of the approximation obviously depends on the choice of the model selection parameter <span class="math inline">\(p\)</span> which serves as a <strong>smoothing parameter</strong>.</p>
+<p>Let’s look at the fits across 200 Monte Carlo replications:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>m_true    <span class="ot">&lt;-</span> <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n_MCrepl  <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># MC-replications</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>m_hat_p1  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, n_MCrepl)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>m_hat_p4  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, n_MCrepl)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>m_hat_p7  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, n_MCrepl)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_MCrepl){</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate some data: </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    db     <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">x =</span> x_vec,<span class="at">y =</span> y_vec)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Estimations</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    reg_p1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data=</span>db)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    reg_p4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    reg_p7 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="at">degree =</span> <span class="dv">6</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>), <span class="at">data=</span>db)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save predictions (y hat)</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    m_hat_p1[,r] <span class="ot">&lt;-</span> <span class="fu">predict</span>(reg_p1, <span class="at">newdata =</span> db)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    m_hat_p4[,r] <span class="ot">&lt;-</span> <span class="fu">predict</span>(reg_p4, <span class="at">newdata =</span> db)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    m_hat_p7[,r] <span class="ot">&lt;-</span> <span class="fu">predict</span>(reg_p7, <span class="at">newdata =</span> db)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">mar=</span><span class="fu">c</span>(<span class="fl">4.1</span>,<span class="fl">4.1</span>,<span class="fl">3.1</span>,<span class="fl">2.1</span>))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(db, <span class="at">main=</span><span class="st">"Truth"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>subSelect <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p1[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,  </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p1[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span><span class="fl">0.5</span>, <span class="at">main =</span> <span class="st">"Degree p=0"</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p4[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p4[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree p=3"</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> m_hat_p7[,<span class="dv">1</span><span class="sc">:</span>subSelect], </span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">range</span>(m_hat_p7[,<span class="dv">1</span><span class="sc">:</span>subSelect], <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>)), </span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="fu">rep</span>(<span class="st">"red"</span>,n), <span class="at">lwd=</span>.<span class="dv">5</span>, <span class="at">main =</span> <span class="st">"Degree p=6"</span>)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using the 200 fits from above, we can approximate the</p>
+<ul>
+<li>squared bias <span class="math inline">\(\left(\operatorname{Bias}(\hat{m}_p(x))\right)^2\)</span> and the</li>
+<li>variance <span class="math inline">\(Var(\hat{m}_p(x))\)</span></li>
+</ul>
+<p>point-wise at each <span class="math inline">\(x\)</span>-value in <code>x_vec</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) biases of \hat{m}(x): </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p1 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p1) <span class="sc">-</span> m_true</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p4 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p4) <span class="sc">-</span> m_true</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Pt_Bias_p7 <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(m_hat_p7) <span class="sc">-</span> m_true</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise squared biases</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Pt_BiasSq_p1 <span class="ot">&lt;-</span> Pt_Bias_p1<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>Pt_BiasSq_p4 <span class="ot">&lt;-</span> Pt_Bias_p4<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Pt_BiasSq_p7 <span class="ot">&lt;-</span> Pt_Bias_p7<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Pointwise (for each x) variances \hat{m}(x):</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>Pt_Var_p1  <span class="ot">&lt;-</span> <span class="fu">apply</span>(m_hat_p1, <span class="dv">1</span>, var)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>Pt_Var_p4  <span class="ot">&lt;-</span> <span class="fu">apply</span>(m_hat_p4, <span class="dv">1</span>, var)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>Pt_Var_p7  <span class="ot">&lt;-</span> <span class="fu">apply</span>(m_hat_p7, <span class="dv">1</span>, var)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> <span class="fu">cbind</span>(Pt_BiasSq_p1, Pt_BiasSq_p4, Pt_BiasSq_p7), </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">"darkgreen"</span>), </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Pointwise Squared Bias"</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">"x"</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">"darkgreen"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree p=0"</span>, <span class="st">"Degree p=3"</span>, <span class="st">"Degree p=6"</span>))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">y =</span> <span class="fu">cbind</span>(Pt_Var_p1, Pt_Var_p4, Pt_Var_p7), </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x_vec, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">"darkgreen"</span>), </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Pointwise Variance"</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xlab=</span><span class="st">"x"</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"top"</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">"darkgreen"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Degree p=0"</span>, <span class="st">"Degree p=3"</span>, <span class="st">"Degree p=6"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>The Bias-Variance Trade-Off:</strong></p>
+<ul>
+<li><span class="math inline">\(p\)</span> small:<br> Variance of the estimator is small, but (squared) bias is large.</li>
+<li><span class="math inline">\(p\)</span> large:<br> Variance of the estimator is large, but (squared) bias is small.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Remark
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Polynomial regression is not very popular in practice. Reasons are numerical problems in fitting high dimensional polynomials. Furthermore, high order polynomials often posses an erratic, difficult to interpret behavior at the boundaries.</p>
+</div>
+</div>
+</section>
+<section id="regression-splines" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="regression-splines"><span class="header-section-number">5.2.2</span> Regression Splines</h3>
+<p>The practical disadvantages of global basis functions (like polynomials), explain the success of <strong>local basis functions</strong>. A frequently used system of basis functions are <strong>local polynomials</strong>, i.e., so-called <strong>spline functions</strong>.</p>
+<p>A spline function is a <em>piece wise</em> polynomial function. They are defined with respect to a pre-specified sequence of <span class="math inline">\(q\)</span> <strong>knots</strong> <span class="math display">\[
+a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b.
+\]</span> Different specifications of the knot sequence lead to different splines.</p>
+<p>More precisely, for a given knot sequence, a spline function <span class="math inline">\(s(x)\)</span> of degree <span class="math inline">\(k\)</span> is defined by the following properties:</p>
+<ul>
+<li><p><span class="math inline">\(s(x)\)</span> is a polynomial of degree <span class="math inline">\(k\)</span> (i.e.&nbsp;of order<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math inline">\(k+1\)</span>) in every interval <span class="math inline">\([\tau_j,\tau_{j+1}]\)</span>, i.e. <span class="math display">\[
+s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k},\quad x\in[\tau_j,\tau_{j+1}]
+\]</span> with <span class="math inline">\(s_0,\dots,s_k\in\mathbb{R}.\)</span></p>
+<ul>
+<li><p><span class="math inline">\(s(x)\)</span> is called a <strong>linear</strong> spline if <span class="math inline">\(k=1\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <strong>quadratic</strong> spline if <span class="math inline">\(k=2\)</span></p></li>
+<li><p><span class="math inline">\(s(x)\)</span> is a <strong>cubic</strong> spline if <span class="math inline">\(k=3\)</span></p></li>
+</ul></li>
+<li><p><span class="math inline">\(s(x)\)</span> is <span class="math inline">\(k-1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.</p></li>
+</ul>
+<p>In practice, the most frequently used splines are <strong>cubic</strong> spline functions based on an equidistant sequence of <span class="math inline">\(q\)</span> knots, i.e., <span class="math display">\[
+\tau_{j+1}-\tau_j=\tau_j-\tau_{j-1}
+\]</span> for all <span class="math inline">\(j=2,\dots,q-1.\)</span></p>
+<p>The space of all spline functions of degree <span class="math inline">\(k\)</span> defined with respect to a given knot sequence <span class="math display">\[
+a=\tau_1&lt;\tau_2\leq\dots\leq \tau_{q-1}&lt;\tau_q=b
+\]</span> is a <span class="math display">\[
+\begin{array}{lccccc}
+p &amp; = &amp; \text{number of knots} &amp;+&amp; \text{polynomial degree} &amp; -\;\;1\\
+&amp; = &amp; q &amp; + &amp; k &amp; -\;\;1
+\end{array}
+\]</span> dimensional linear function space <span class="math display">\[
+{\cal{S}}_{k,\tau_1,\dots,\tau_q}=\operatorname{span}(b_{1,k},\dots,b_{p,k}),
+\]</span> where <span class="math inline">\(b_{1,k},\dots,b_{p,k}\)</span> denote the <strong>basis-functions</strong>.</p>
+<!-- Possible basis functions are
+$\tilde{b}_1(x)=1,\tilde{b}_2(x)=x,\dots,\tilde{b}_{k}=x^{k-1},\tilde{b}_{k+1}=(x-\tau_1)^k_+,\dots,
+\tilde{b}_{k+q-1}=(x-\tau_{q-1})^k_+$, where
+$$
+(x-\tau_j)^k_+=
+\left\{ \begin{matrix}  (x-\tau_j)^k & \text{ if } x\geq  \tau_j\\
+0 & \text{ else} \end{matrix}\right.
+$$
+Each spline function $s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}$ can then be written as
+$$
+s(x)=\sum_{j=1}^{k} \beta_{j} x^{j-1} +\sum_{j=1}^{q-1}\beta_{j+k}(x-\tau_j)^k_+\quad\text{ for } x\in[a,b]
+$$
+and suitable parameters $\beta_1,\dots,\beta_{k+q-2}$. -->
+<section id="construction-of-b-spline-basis-functions" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="construction-of-b-spline-basis-functions">Construction of B-Spline Basis Functions</h4>
+<p>The so-called <strong>B-spline</strong> basis functions are almost always used in practice, since they possess a number of advantages from a numerical point of view.</p>
+<p>The B-spline basis functions for splines of degree <span class="math inline">\(k\)</span> are defined with respect to a given knot sequence <span class="math display">\[
+\underbrace{a=\tau_1}_{\text{lower boundary knot}}\quad {\color{red}&lt;}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}&lt;}\quad\underbrace{\tau_q=b}_{\text{upper boundary knot}}.
+\]</span></p>
+<p>To construct the B-spline basis functions, one <strong>augments the knot sequence</strong> by repeating each of the boundary knots <span class="math inline">\(k+1\)</span> times: <span class="math display">\[
+\underbrace{\tau_{-(k-1)}=\dots=\tau_0=\tau_1}_{\text{$k+1$ lower boundary knots}}\quad {\color{red}&lt;}\quad\overbrace{\tau_2\leq\dots\leq \tau_{q-1}}^{\text{interior knots}}\quad{\color{red}&lt;}\quad\underbrace{\tau_q=\tau_{q+1}=\dots=\tau_{q+k}}_{\text{$k+1$ upper boundary knots}}.
+\]</span> Let <span class="math display">\[
+\tau^\ast_{1}, \dots,\tau^\ast_{q+2k}
+\]</span> denote the augmented knot sequence after <strong>resetting the index</strong> to start at <span class="math inline">\(1.\)</span></p>
+<p>The spline basis functions are calculated by a recursive (over <span class="math inline">\(l=0,1,\dots,k\)</span>) procedure.</p>
+<p>The initial level (<span class="math inline">\(l=0\)</span>) are piece-wise constant functions <span id="eq-BSplineRecursion1"><span class="math display">\[
+b_{j,0}(x)=\left\{
+\begin{matrix}  
+1 &amp; \text{ if } \tau_{j}^*\leq x &lt;\tau_{j+1}^*\\
+0 &amp; \text{ else}
+\end{matrix}
+\right.,
+\tag{5.1}\]</span></span> for <span class="math inline">\(j=1,\dots,q+2k,\)</span> and <span class="math inline">\(x\in [a,b].\)</span></p>
+<p>For <span class="math inline">\(l=1,\dots,k\)</span> the recursion is defined by <span id="eq-BSplineRecursion2"><span class="math display">\[
+\begin{align*}
+b_{j,l}(x)
+&amp; =\frac{x-\tau_j^*}{\tau_{l+j}^*-\tau_j^*}b_{j,l-1}(x)\\
+&amp; +\frac{\tau_{l+j+1}^*-x}{\tau_{l+j+1}^*-\tau_{j+1}^*}b_{j+1,l-1}(x),
+\end{align*}
+\tag{5.2}\]</span></span> <span class="math inline">\(j=1,\dots,q+2k\)</span>, and <span class="math inline">\(x\in [a,b].\)</span></p>
+<p><strong>Note:</strong> The definitions in <a href="#eq-BSplineRecursion1" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> and <a href="#eq-BSplineRecursion2" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> are understood that if the denominator is 0, then the function is defined to be 0. The remaining non-degenerated basis functions are then the <span class="math display">\[
+b_{j,k},\quad j=1,\dots,p=q+k-1,
+\]</span> B-spline basis functions.</p>
+<!-- **Note:** At level $l=1,$ the basis functions are piece-wise linear functions; at level $l=2,$ the basis functions are piece-wise quadratic functions; at level $l=3,$ the basis functions are piece-wise cubic functions. -->
+<!-- * $\tau_1^*=\dots=\tau_{k+1}^*=\tau_1$ ($k+1$ repetitions of the left boundary knot)
+* $\tau_{k+2}^*=\tau_2,\dots,\tau^*_{k+q}=\tau_q$ ($q-2$ interior knots) 
+* $\tau_{k+q+1}^*=\dots=\tau_{2k+q}^*=\tau_q$ ($k+1$ repetitions of the right boundary knot) -->
+<p><strong><code>R</code>-Code to Compute B-Spline Basis Functions:</strong></p>
+<p>The following <code>R</code> code generates<br>
+<span class="math display">\[
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=1} - 1=7
+\]</span> linear (<span class="math inline">\(k=1\)</span>) B-spline basis functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>knots          <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">7</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>internal_knots <span class="ot">&lt;-</span> knots[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>boundary_knots <span class="ot">&lt;-</span> knots[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## evaluation points (for plotting)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>x_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> boundary_knots[<span class="dv">1</span>], </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">to   =</span> boundary_knots[<span class="dv">2</span>], <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>X_mat_degree1 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> internal_knots, </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> boundary_knots)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">x =</span> x_vec, </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> X_mat_degree1, </span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">main =</span> <span class="st">"B-Spline Basis Functions </span><span class="sc">\n</span><span class="st">Degree 1"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Degree 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here, the basis functions are piecewise linear (<span class="math inline">\(k=1\)</span>) functions with local support over at most <span class="math inline">\(k+1=1+1=2\)</span> knot-intervals. Any spline function <span class="math display">\[
+\begin{align*}
+s &amp;\in\mathcal{S}_{k=1,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
+s(x)&amp;= \sum_{j=1}^{7}\vartheta_j b_{j,1}(0)
+\end{align*}
+\]</span> is <span class="math inline">\(k-1=1-1=0\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.<br></p>
+</div>
+</div>
+<p>The following <code>R</code> code generates<br>
+<span class="math display">\[
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=2} - 1=8
+\]</span> quadratic (<span class="math inline">\(k=2\)</span>) B-spline basis functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>knots          <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">7</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>internal_knots <span class="ot">&lt;-</span> knots[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>boundary_knots <span class="ot">&lt;-</span> knots[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="do">## evaluation points (for plotting)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>x_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> boundary_knots[<span class="dv">1</span>], </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">to   =</span> boundary_knots[<span class="dv">2</span>], <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>X_mat_degree2 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> internal_knots, </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> boundary_knots)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">x =</span> x_vec, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> X_mat_degree2, </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">main =</span> <span class="st">"B-Spline Basis Functions </span><span class="sc">\n</span><span class="st">Degree 2"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Degree 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here, the basis functions are piecewise quadratic (<span class="math inline">\(k=2\)</span>) functions with local support over at most <span class="math inline">\(k+1=2+1=3\)</span> knot-intervals. Any spline function <span class="math display">\[
+\begin{align*}
+s&amp;\in\mathcal{S}_{k=2,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
+s(x)&amp;= \sum_{j=1}^{8}\vartheta_j b_{j,1}(x)
+\end{align*}
+\]</span> is <span class="math inline">\(k-1=2-1=1\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.<br></p>
+</div>
+</div>
+<p>The following <code>R</code> code generates<br>
+<span class="math display">\[
+p=\underbrace{\texttt{Numbr.of Knots}}_{q=7} + \underbrace{\texttt{degree}}_{k=3} - 1=9
+\]</span> cubic (<span class="math inline">\(k=3\)</span>) B-spline basis functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"splines2"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>degree         <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>knots          <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">7</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>internal_knots <span class="ot">&lt;-</span> knots[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>boundary_knots <span class="ot">&lt;-</span> knots[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knots))]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="do">## evaluation points (for plotting)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>x_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> boundary_knots[<span class="dv">1</span>], </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">to   =</span> boundary_knots[<span class="dv">2</span>], <span class="at">len =</span> <span class="dv">100</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>X_mat_degree3 <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> internal_knots, </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> boundary_knots)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="at">x =</span> x_vec, </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> X_mat_degree3, </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">main =</span> <span class="st">"B-Spline Basis Functions </span><span class="sc">\n</span><span class="st">Degree 3"</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="fu">c</span>(boundary_knots[<span class="dv">1</span>], internal_knots, boundary_knots[<span class="dv">2</span>]), </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Degree 3 (usual case)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here, the basis functions are piecewise cubic (<span class="math inline">\(k=3\)</span>) functions with local support over at most <span class="math inline">\(k+1=3+1=4\)</span> knot-intervals. Any spline function <span class="math display">\[
+\begin{align*}
+s &amp;\in\mathcal{S}_{k=3,\tau_1,\dots,\tau_q}\quad(\text{with}\;\;q=7)\\[2ex]
+s(x) &amp;= \sum_{j=1}^{9} \vartheta_j b_{j,1}(x)
+\end{align*}
+\]</span> is <span class="math inline">\(k-1=3-1=2\)</span> times continuously differentiable at each knot point <span class="math inline">\(x=\tau_j\)</span>, <span class="math inline">\(j=1,\dots,q\)</span>.<br></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Normalized:</strong> The B-spline basis system has a property that is often useful: the sum of the B-spline basis function values at any point <span class="math inline">\(x\)</span> is equal to one. Note, for example, that the first and last basis functions are exactly one at the boundaries. This is because all the other basis functions go to zero at these end points.</p>
+<p><strong>Compact Support:</strong> Basis functions are positive only over at most <span class="math inline">\(k+1\)</span> intervals and zero over the remaining intervals. This <strong>compact support property</strong> is important for computational efficiency. <!-- since the effort required is proportional to $p$ as a consequence, rather than to $p^2$ for basis functions not having this local support property. --></p>
+<p><strong>Multiple knots:</strong> A multiple interior knot (<span class="math inline">\(\tau_j=\tau_{j+1}\)</span>) reduces the degree of continuity at that knot value. At a normal interior knot, a spline function is <span class="math inline">\(k-1\)</span> times continuously differentiable. Each extra knot with the same value reduces continuity at that knot by one. This is the only way to reduce the continuity of the curve at the knot values. If there are <span class="math inline">\(k\)</span> (or more) equal knots, then you get a discontinuity in the curve at this knot-location.</p>
+</div>
+</div>
+</section>
+<section id="regression-splines-with-equidistant-knots" class="level4" data-number="5.2.2.1">
+<h4 data-number="5.2.2.1" class="anchored" data-anchor-id="regression-splines-with-equidistant-knots"><span class="header-section-number">5.2.2.1</span> Regression Splines with Equidistant Knots</h4>
+<p>Remember the nonparametric regression model setup:</p>
+<p><span class="math display">\[
+Y_i=m(X_i)+\varepsilon_i
+\]</span></p>
+<ul>
+<li><span class="math inline">\(m(X)=\mathbb{E}(Y_i|X=X_i)\)</span> regression function</li>
+<li><span class="math inline">\(\mathbb{E}(\varepsilon_i)=0\)</span></li>
+<li><span class="math inline">\(Var(\varepsilon_i|X_i) = Var(\varepsilon_i)=\sigma^2\)</span></li>
+<li><span class="math inline">\(\varepsilon_i\)</span> and <span class="math inline">\(X_i\)</span> are independent or at least mean-independent, i.e., <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span></li>
+</ul>
+<p>The so-called <strong>regression spline</strong> (or B-spline) approach to estimating a regression function <span class="math inline">\(m(x)\)</span> is based on fitting a set of spline basis functions to the data.</p>
+<p>Typically, cubic splines (<span class="math inline">\(k=3\)</span>) with equidistant knots are applied:</p>
+<ul>
+<li><span class="math inline">\(k=3\)</span> (cubic splines)</li>
+<li><span class="math inline">\(\tau_1=a\)</span></li>
+<li><span class="math inline">\(\tau_{j+1}=\tau_j + (b-a)/(q-1),\quad j=1,\dots,q-1\)</span><br>
+</li>
+<li>such that <span class="math inline">\(\tau_q=b\)</span></li>
+</ul>
+<p>In this case the number of knots <span class="math inline">\(q,\)</span> or more precisely the total number of basis functions <span class="math inline">\(p\)</span> <span class="math display">\[
+\begin{align*}
+p
+&amp;=q+k-1\\[2ex]
+&amp;=q+2\qquad (\text{using that}\quad k=3)
+\end{align*}
+\]</span> serves as the <strong>smoothing parameter</strong> which has to be selected by the statistician.</p>
+<p>For a given choice of <span class="math inline">\(p,\)</span> let <span class="math display">\[
+\underset{(n\times p)}{\mathbf{X}}
+\]</span> denote the <span class="math inline">\(n\times p\)</span> matrix with elements <span class="math display">\[
+X_{ij}=b_{j,k}(X_i),\quad i=1,\dots,n,\quad j=1,\dots,p,
+\]</span> and let <span class="math display">\[
+Y=(Y_1,\dots,Y_n)^\top
+\]</span> denote the vector of response variables.</p>
+<p>An estimator <span class="math inline">\(\hat{m}_p(x)\)</span> of <span class="math inline">\(m(x)\)</span> is then given by <span class="math display">\[
+\hat m_p(x)=\sum_{j=1}^p \hat\beta_j b_{j,k}(x),
+\]</span> where the coefficients <span class="math inline">\(\hat\beta_j\)</span> are determined by ordinary least squares <span class="math display">\[
+\hat\beta_1,\dots,\hat\beta_p=\arg\min_{\vartheta_1,\dots,\vartheta_p} \sum_{i=1}^n \left( Y_i-\sum_{j=1}^p \vartheta_j \underbrace{b_{j,k}(X_i)}_{X_{ij}}\right)^2.
+\]</span> That is, the vector of coefficients <span class="math display">\[
+\hat \beta=(\hat\beta_1,\dots,\hat\beta_p)^\top
+\]</span> can be written as <span class="math display">\[
+\hat\beta=(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top Y.
+\]</span> The fitted values are given by <span class="math display">\[
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=\mathbf{X}\hat\beta=\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top}_{=:S_p}Y = S_p Y
+\]</span></p>
+<p>The matrix <span class="math display">\[
+S_p = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
+\]</span> is referred to as the <strong>smoothing matrix</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Remark
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Quite generally, the most important nonparametric regression procedures are <strong>linear smoothing methods</strong>. This means that in dependence of some smoothing parameter (here <span class="math inline">\(p\)</span>), estimates of the vector <span class="math display">\[
+(m(X_1),\dots,m(X_n))^\top
+\]</span> are obtained by multiplying a <strong>smoother matrix</strong> <span class="math inline">\(S_p\)</span> with <span class="math inline">\(Y\)</span>.</p>
+<p>That is, <span class="math display">\[
+\left(\begin{array}{c}
+m(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ m(X_n)
+\end{array}\right)\approx
+\left(\begin{array}{c}
+{\hat m}_p(X_1)\\
+\vdots%\\ \cdot\\ \cdot
+\\ {\hat m}_p(X_n)
+\end{array}\right)=S_p Y
+\]</span></p>
+</div>
+</div>
+<p><strong><code>R</code> Code to Compute Regression Splines:</strong></p>
+<p>First, we generate some data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we generate cubic B-spline basis functions with equidistant knot sequence (different to <code>x_vec</code>) and evaluate them at <code>x_vec</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>degree      <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co"># piecewise cubic splines</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>knot_seq_5  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">5</span>)<span class="co"># knots</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>X_mat_p7    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_5[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_5))], </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq_5[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_5))]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>knot_seq_15  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> <span class="dv">15</span>)<span class="co"># knots</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>X_mat_p17    <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq_15[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_15))], </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq_15[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq_15))]</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    )    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Computing the smoothing matrices <span class="math inline">\(S_p\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>S_p7  <span class="ot">&lt;-</span> X_mat_p7  <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p7)  <span class="sc">%*%</span> X_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p7) </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S_p17 <span class="ot">&lt;-</span> X_mat_p17 <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p17) <span class="sc">%*%</span> X_mat_p17) <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p17) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Computing the estimates <span class="math inline">\(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n)\)</span> for <span class="math inline">\(p=7\)</span> and <span class="math inline">\(p=17\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>m_hat_p7  <span class="ot">&lt;-</span> S_p7  <span class="sc">%*%</span> y_vec</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>m_hat_p17 <span class="ot">&lt;-</span> S_p17 <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plotting the estimation results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p7, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p17, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"darkorange"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with p=7"</span>, </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with p=17"</span>), </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>, <span class="st">"darkorange"</span>), </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The following plot shows the regression spline fit (with <span class="math inline">\(p=7\)</span>) <span class="math display">\[
+\hat{m}_{7}(x)=\sum_{j=1}^{7}\hat\beta_j b_{j,3}(x)
+\]</span> along with the <span class="math inline">\(p=7\)</span> basis functions each multiplied by the fitted linear coefficient <span class="math display">\[
+\hat\beta_j b_{j,3}(x),\quad j=1,\dots,7.
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beta_hat_p7 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat_p7)  <span class="sc">%*%</span> X_mat_p7)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat_p7) <span class="sc">%*%</span> y_vec</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>m_hat_p7, <span class="at">x=</span>x_vec, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">3.5</span>,<span class="fl">1.5</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">xlab=</span><span class="st">"x"</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> knot_seq_5, <span class="at">col =</span> <span class="fu">gray</span>(<span class="fl">0.5</span>))     </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">matlines</span>(X_mat_p7 <span class="sc">*</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(beta_hat_p7, <span class="at">each =</span> n), <span class="at">ncol=</span><span class="dv">7</span>), </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> x_vec, <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"Regr.-Spline Fit with p=7"</span>), </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty=</span> <span class="dv">1</span>, <span class="at">lwd=</span> <span class="dv">2</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"1. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">1</span>])),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"2. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">2</span>])),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"3. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">3</span>])),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"4. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">4</span>])),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"5. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">5</span>])),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"6. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">6</span>])),</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>         <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"7. basis function times "</span>,<span class="fu">hat</span>(beta)[<span class="dv">7</span>]))</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>       ), </span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">1</span>)       </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="mean-average-squared-error-of-regression-splines" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="mean-average-squared-error-of-regression-splines"><span class="header-section-number">5.2.3</span> Mean Average Squared Error of Regression Splines</h3>
+<p>In a nonparametric regression context we do <strong>not</strong> assume that the unknown true regression function <span class="math inline">\(m(x)\)</span> exactly corresponds to a spline function. Thus, <span class="math display">\[
+\hat m_p=(\hat{m}_p(X_1),\dots,\hat{m}_p(X_n))^\top
+\]</span> typically possesses a systematic estimation error (bias). That is, <span class="math display">\[
+\mathbb{E}_\varepsilon(\hat{m}_p(X_i))\neq m(X_i).
+\]</span></p>
+<p>To simplify notation, we will in the following write <span class="math display">\[
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+\]</span> to denote expectation and variance “with respect to the random variable <span class="math inline">\(\varepsilon\)</span>, only”.</p>
+<p>In the case of random design, <span class="math display">\[
+\mathbb{E}_\varepsilon(\cdot)\quad\text{and}\quad Var_\varepsilon(\cdot)
+\]</span> thus denote the conditional expectation <span class="math display">\[
+\mathbb{E}(\cdot|X_1,\dots,X_n)
+\]</span> and the conditional variance <span class="math display">\[
+Var(\cdot|X_1,\dots,X_n)
+\]</span> given the observed <span class="math inline">\(X\)</span>-values.</p>
+<p>For random design, these conditional expectations depend on the observed sample, and thus are random. For fixed design, such expectations are of course fixed values.</p>
+<p>It will always be assumed that the matrix <span class="math display">\[
+\mathbf{X}^\top \mathbf{X},
+\]</span> with <span class="math inline">\(\mathbf{X}=(b_{j,k}(X_i))_{i,j}\)</span>, is invertible (under our conditions on the design density this holds with probability 1 for the random design).</p>
+<p>The behavior of nonparametric function estimates is usually evaluated with respect to <strong>quadratic risk</strong> (i.e.&nbsp;mean squared error).</p>
+<p>A commonly used <strong>global</strong> measure of accuracy of a spline estimator <span class="math inline">\(\hat m_p\)</span> is the <strong>Mean Average Squared Error (MASE),</strong> which averages the <strong>local</strong> (at each <span class="math inline">\(X_i\)</span>) mean squared errors over all <span class="math inline">\(X_i,\)</span> <span class="math inline">\(i=1,\dots,n:\)</span> <span class="math display">\[
+\begin{align*}
+&amp;\operatorname{MASE}(\hat m_p):=\frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left(m(X_i)-\hat{m}_p(X_i)\right)^2\\
+= &amp;\frac{1}{n}\sum_{i=1}^n \underbrace{\left(\mathbb{E}_\varepsilon(\hat{m}_p(X_i))-m(X_i)\right)^2}_{(\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i)))^2} + \\[2ex]
+&amp;\frac{1}{n}\sum_{i=1}^n \underbrace{\mathbb{E}_\varepsilon\left((\hat{m}_p(X_i)-\mathbb{E}_\varepsilon(\hat{m}_p(X_i))\right)^2}_{Var_\varepsilon(\hat{m}_p(X_i))}
+\end{align*}
+\]</span></p>
+<p>Another frequently used measure is the <strong>Mean Integrated Squared Error (MISE):</strong> <span class="math display">\[
+\begin{align*}
+\operatorname{MISE}(\hat m_p):=\int_a^b \mathbb{E}_\varepsilon\left(m(x)-\hat m_p(x)\right)^2dx
+\end{align*}
+\]</span></p>
+<section id="mase-versus-mise" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="mase-versus-mise">MASE versus MISE:</h5>
+<ul>
+<li>Equidistant design: <span class="math display">\[
+(b-a)\operatorname{MASE}(\hat m_p)=\operatorname{MISE}(\hat m_p) + O(n^{-1})
+\]</span></li>
+<li>MISE and MASE are generally not asymptotically equivalent in the case of random design <span class="math display">\[
+(b-a)\operatorname{MASE}(\hat m_p)=\int_a^b \mathbb{E}_\varepsilon\left(m(x)-\hat m_p(x)\right)^2 f(x)dx + O_P(n^{-1}).
+\]</span></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Landau symbol “Big Oh” <span class="math inline">\(O(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all sequences <span class="math inline">\(x_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\dfrac{|x_n|}{r_n}\to c\)</span> as <span class="math inline">\(n\to\infty,\)</span> where <span class="math inline">\(c\)</span> is a constant with <span class="math inline">\(0\leq c &lt; \infty.\)</span></li>
+</ul>
+<p><strong>Note:</strong> This includes the case <span class="math inline">\(\dfrac{|x_n|}{r_n}\to 0.\)</span></p>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(-\dfrac{1}{n}=O(n^{-1})\)</span></li>
+<li><span class="math inline">\(\dfrac{1}{n^2}=O(n^{-2})\)</span></li>
+<li><span class="math inline">\(\dfrac{1}{n^2}=O(n^{-1})\)</span></li>
+<li><span class="math inline">\(\displaystyle\sum_{j=1}^{m} g\left(x_j\right)(x_{j}-x_{j-1}) = \int_a^b g(x)dx + O(m^{-1})\)</span>, <br> for every sufficiently smooth function <span class="math inline">\(g\)</span> (<span class="math inline">\(g\)</span> being continuously differentiable over <span class="math inline">\((a,b)\)</span>), where <span class="math inline">\(x_0=a\)</span> and <span class="math inline">\(x_j=x_{0}+j(b-a)/m,\)</span> for <span class="math inline">\(j=1,\dots,m\)</span> such that <span class="math inline">\(x_{j}-x_{j-1}=(b-a)/m.\)</span></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Landau symbol “Small oh” <span class="math inline">\(o(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+o(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all sequences <span class="math inline">\(x_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\dfrac{|x_n|}{r_n}\to 0\)</span> as <span class="math inline">\(n\to\infty.\)</span></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(\dfrac{1}{n^2}=o(n^{-1})\)</span></li>
+<li><span class="math inline">\(n^{-a}=o(n^{-b})\)</span> for all <span class="math inline">\(a&gt;b&gt;0.\)</span></li>
+</ul>
+<p><strong>Note:</strong> For every sequence <span class="math inline">\(x_n=o(r_n)\)</span> it holds that <span class="math inline">\(x_n=O(r_n),\)</span> but not the other way round.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Special Cases <span class="math inline">\(O(1)\)</span> and <span class="math inline">\(o(1)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O(1)\quad \text{and}\quad o(1)
+\]</span></p>
+<p>Examples:</p>
+<ul>
+<li><span class="math inline">\(1 + \dfrac{1}{n} = O(1)\)</span></li>
+<li><span class="math inline">\(\dfrac{1}{n^2}=o(1)\)</span></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stochastic Landau symbol “Big Oh P” <span class="math inline">\(O_P(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+O_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> for which</p>
+<ul>
+<li>there exists for each (small) <span class="math inline">\(\epsilon&gt;0\)</span> a sufficiently large threshold <span class="math inline">\(\delta&gt;0\)</span> such that <span class="math inline">\(\displaystyle P\left(\frac{|X_n|}{r_n}&gt;\delta\right)&lt;\epsilon\)</span> for all sufficiently large <span class="math inline">\(n\)</span>. <br> Plain English: “such that <span class="math inline">\(\frac{|X_n|}{r_n}\)</span> is <strong>bounded in probability</strong> for all large enough <span class="math inline">\(n\)</span>”</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>If <span class="math inline">\(\displaystyle \sqrt{n}(\bar{X}_n-\mu)\to_d\mathcal{N}(0,\sigma^2),\)</span> then <span class="math display">\[
+\begin{align*}
+\sqrt{n}(\bar{X}_n-\mu) &amp;= O_P(1)\\[2ex]
+(\bar{X}_n-\mu) &amp;= O_P(n^{-1/2})
+\end{align*}
+\]</span></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stochastic Landau symbol “Small oh P” <span class="math inline">\(o_P(r_n)\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+o_P(r_n)\quad\text{with}\quad r_n&gt;0,\;n=1,2,\dots
+\]</span> is a placeholder symbol describing the family of all <em>stochastic</em> sequences <span class="math inline">\(X_n\)</span>, <span class="math inline">\(n=1,2,\dots,\)</span> such that</p>
+<ul>
+<li><span class="math inline">\(\displaystyle \frac{|X_n|}{r_n}\to_P 0\quad\)</span> as <span class="math inline">\(\quad n\to\infty\)</span></li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>If <span class="math inline">\(\displaystyle \sqrt{n}(\bar{X}_n-\mu)\to_d\mathcal{N}(0,\sigma^2),\)</span> then <span class="math display">\[
+\begin{align*}
+(\bar{X}_n-\mu)         &amp;= o_P(1)
+\end{align*}
+\]</span></li>
+</ul>
+</div>
+</div>
+<p>In the following we focus on the <strong>MASE</strong> which has the advantage that we can use matrix algebra.</p>
+<p>First, we look at the local bias of <span class="math inline">\(\hat{m}_p(X_i)\)</span> at a single evaluation point <span class="math inline">\(X_i:\)</span> <span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat{m}_p(X_i))=\mathbb{E}_\varepsilon(\hat m_p(X_i))-m(X_i),
+\]</span> where <span class="math display">\[
+\begin{align*}
+  \mathbb{E}_\varepsilon(\hat m_p(X_i))&amp;=\mathbb{E}_\varepsilon\Big(\sum_{j=1}^p \hat{\beta}_j b_{j,k}(X_i)\Big)\\
+&amp;=\sum_{j=1}^p\mathbb{E}_\varepsilon(\hat{\beta}_j) b_{j,k}(X_i),
+\end{align*}
+\]</span> with <span class="math display">\[
+\hat{\beta}=\left(\begin{matrix}\hat{\beta}_1\\\vdots\\\hat{\beta}_p\end{matrix}\right)=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top Y
+\]</span> and with <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\hat\beta)
+&amp;=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  (\overbrace{m+\varepsilon}^{=Y})\Big)\\[2ex]
+&amp;=\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m\Big)\;+\;\mathbb{E}_\varepsilon\Big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \varepsilon\Big)\\[2ex]
+&amp;=\overbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m}^{=(\beta_1,\dots,\beta_p)^\top=\beta}\;+\;\underbrace{(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \overbrace{\mathbb{E}_\varepsilon(\varepsilon)}^{=0}}_{=0}\\[2ex]
+&amp;=(\beta_1,\dots,\beta_p)^\top=\beta
+\end{align*}
+\]</span> where <span class="math display">\[
+m=\left(\begin{matrix}m(X_1)\\\vdots\\m(X_n)\end{matrix}\right)
+\]</span> denotes the vector of true function values, and <span class="math display">\[
+\varepsilon=\left(\begin{matrix}\varepsilon_1\\\vdots\\\varepsilon_n\end{matrix}\right)
+\]</span> denotes the vector of error terms.</p>
+<p>That is, the mean of the spline regression estimator evaluated at <span class="math inline">\(X_i\)</span> is given by <span class="math display">\[
+\mathbb{E}_\varepsilon(\hat m_p(X_i)) = \sum_{j=1}^p\beta_j b_{j,k}(X_i),
+\]</span> where <span class="math display">\[
+\beta=\left(\begin{matrix}\beta_1\\\vdots\\\beta_p\end{matrix}\right)=(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  m
+\]</span> is a least squares solution; namely of the following least squares problem that tries to approximate the unknown vector <span class="math inline">\(m=(m(X_1),\dots,m(X_n))^\top\)</span> using a spline function <span class="math inline">\(s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}:\)</span> <span class="math display">\[
+\begin{align*}
+&amp;\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \beta_j b_{j,k}(X_i)\right)^2\\[2ex]
+&amp;=\min_{\vartheta_1,\dots,\vartheta_p}\sum_{i=1}^n \left(m(X_i)-\sum_{j=1}^p \vartheta_j  b_{j,k}(X_i)\right)^2\\[2ex]
+&amp;=\min_{s\in {\cal{S}}_{k,\tau_1,\dots,\tau_q}} \sum_{i=1}^n \left(m(X_i)-s(X_i)\right)^2.
+\end{align*}
+\]</span></p>
+<p>That is, the mean of the spline regression estimator evaluated at <span class="math inline">\(X_i\)</span> <span class="math display">\[
+\mathbb{E}_\varepsilon(\hat m_p(X_i))=\sum_{j=1}^p \beta_j b_j(X_i)=:\tilde m_p(X_i)
+\]</span> is the best least squares (<span class="math inline">\(L_2\)</span>) approximation of the true, but unknown, regression function vector <span class="math inline">\(m=(m(X_1),\dots,m(X_n))^\top\)</span> by means of a spline function vector <span class="math inline">\(s=(s(X_1),\dots,s(X_n))^\top\)</span> with <span class="math inline">\(s\in{\cal{S}}_{k,\tau_1,\dots,\tau_q}.\)</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the true, but unknown, regression function <span class="math inline">\(m\)</span> happens to be an element of the space of spline functions <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_q},\)</span> then <span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) = 0,\quad i=1,\dots,n.
+\]</span> However, generally we do not expect that <span class="math inline">\(m\)</span> is actually an element of <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_q},\)</span> such that<br>
+<span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) \neq  0,\quad i=1,\dots,n.
+\]</span> For consistency, however, we need that <span class="math display">\[
+\operatorname{Bias}_\varepsilon(\hat m_p(X_i)) = \tilde m_p(X_i) - m(X_i) \to 0,\quad i=1,\dots,n.
+\]</span> as <span class="math inline">\(n\to\infty\)</span> and <span class="math inline">\(p\equiv p_n\to\infty;\)</span> i.e.&nbsp;that <span class="math inline">\(m\)</span> becomes eventually an element of the then very large space <span class="math inline">\({\cal{S}}_{k,\tau_1,\dots,\tau_{q_n}}\)</span> as <span class="math inline">\(q_n\to\infty\)</span> with <span class="math inline">\(n\to\infty.\)</span></p>
+</div>
+</div>
+<p>From the general approximation properties of cubic splines (<span class="math inline">\(k=3\)</span>) with <span class="math inline">\(q=p-2\)</span> equidistant knots (<span class="citation" data-cites="DeBoor_1978">De Boor and De Boor (<a href="#ref-DeBoor_1978" role="doc-biblioref">1978</a>)</span> or <span class="citation" data-cites="Eubank_1999">Eubank (<a href="#ref-Eubank_1999" role="doc-biblioref">1999</a>)</span>), we know that:</p>
+<ul>
+<li><p>If <span class="math inline">\(m\)</span> is twice continuously differentiable over <span class="math inline">\((a,b)\)</span>, then <span class="math display">\[
+\begin{align*}
+&amp;(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n \left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-4})&amp;\quad\text{fixed design}\\
+O_p(p^{-4})&amp;\quad\text{random design}\\
+\end{array}
+\right.
+\end{align*}
+\]</span></p></li>
+<li><p>If <span class="math inline">\(m\)</span> is four times continuously differentiable, then <span class="math display">\[
+\begin{align*}
+&amp;(\operatorname{Bias}_\varepsilon(\hat m_p))^2\\
+&amp;=\frac{1}{n}\sum_{i=1}^n (\operatorname{Bias}_\varepsilon(\hat m_p(X_i)))^2\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\left(\tilde m_p(X_i) - m(X_i)\right)^2
+=\left\{\begin{array}{ll}
+O(p^{-8})&amp;\quad\text{fixed design}\\
+O_p(p^{-8})&amp;\quad\text{random design}\\
+\end{array}
+\right.
+\end{align*}
+\]</span></p></li>
+</ul>
+<p>The next step is to compute the (average) <strong>variance</strong> of the estimator, which can be obtained by the usual type of arguments applied in parametric regression: <!-- % Let
+% $\tilde m_p=(\tilde m(X_1),\dots,\tilde m(X_n))^\top $ and $\varepsilon=(\varepsilon_1,\dots,\varepsilon_n)^\top $. Then
+%{\small --> <span class="math display">\[
+\begin{align*}
+Var_\varepsilon(\hat m_p)
+&amp;=\frac{1}{n}\sum_{i=1}^nVar_\varepsilon(\hat{m}_p(X_i))\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\big((\hat{m}_p(X_i)-\overbrace{\tilde{m}(X_i)}^{=\mathbb{E}_\varepsilon(\hat{m}_p(X_i))})^2\big)\\[2ex]
+%\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+% \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \tilde m_p\Vert_2^2\right)\\
+&amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\left\Vert \left(\begin{matrix}\hat{m}_p(X_1)\\\vdots\\\hat{m}_p(X_n)\end{matrix}\right)-\left(\begin{matrix}\tilde{m}_p(X_1)\\\vdots\\\tilde{m}_p(X_n)\end{matrix}\right)\right\Vert_{2}^2\right)\\[2ex]
+&amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y-
+\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top m\Vert_2^2\right)\\[2ex]
+&amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top (Y-m)\Vert_2^2\right)\\[2ex]
+&amp;=\frac{1}{n}\mathbb{E}_\varepsilon\left(\Vert \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\Vert_2^2\right)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )^\top}_{(1\times n)}\;\;\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(n\times 1)}\Big)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  (\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top )}_{(1\times n)}\;\;\underbrace{\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(n\times 1)}\Big)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\Big(\underbrace{\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon}_{(1\times 1)}\Big)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(\varepsilon^\top  \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\right)\right)\\[2ex]
+&amp;= \frac{1}{n}\mathbb{E}_\varepsilon\left(\operatorname{trace}\left(  (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \varepsilon\varepsilon^\top\mathbf{X}\right)\right)\\[2ex]
+&amp;=\frac{1}{n}\operatorname{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top ) \mathbf{X}\right)\quad(\text{with }\mathbb{E}_\varepsilon(\varepsilon\varepsilon^\top )=I_n\sigma_\varepsilon)\\[2ex]
+&amp;=\frac{1}{n} \sigma^2 \text{trace}\left((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top  \mathbf{X}\right)\\[2ex]
+&amp;=\frac{1}{n} \sigma^2 \text{trace}\left(I_p\right)\\[2ex]
+&amp;=\sigma^2  \frac{p}{n}
+\end{align*}
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Trace-Trick
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For any <span class="math inline">\((m\times n)\)</span> matrix <span class="math inline">\(A\)</span> and any <span class="math inline">\((n\times m)\)</span> matrix <span class="math inline">\(B\)</span> we have the identity <span class="math display">\[\text{trace}(AB)=\text{trace}(BA)\]</span></p>
+</div>
+</div>
+</section>
+<section id="summary" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="summary">Summary</h4>
+<p>For cubic (<span class="math inline">\(k=3\)</span>) splines with <span class="math inline">\(q\)</span> equidistant knots and a twice differentiable function <span class="math inline">\(m\)</span> we have that:</p>
+<p><span id="eq-BiasSqVar"><span class="math display">\[
+\begin{align*}
+\displaystyle(\operatorname{Bias}_\varepsilon(\hat m_p))^2&amp;=\left\{\begin{array}{ll}
+O(p^{-4})&amp;\quad\text{fixed design}\\
+O_p(p^{-4})&amp;\quad\text{random design}\\
+\end{array}
+\right.\\[2ex]
+\displaystyle Var_\varepsilon(\hat m_p)&amp;= \sigma^2\frac{p}{n},
+\end{align*}
+\tag{5.3}\]</span></span> where <span class="math inline">\(p=q+2\)</span> is the number of basis functions (i.e.&nbsp;the smoothing parameter).</p>
+<p>This leads to the classical <strong>trade-off between (average) squared bias and (average) variance</strong> that is typical for nonparametric statistics:</p>
+<ul>
+<li><span class="math inline">\(p\)</span> small:<br> <span class="math inline">\(\displaystyle Var_\varepsilon(\hat m_p)\)</span> is small, but squared bias <span class="math inline">\(\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2\)</span> is large.</li>
+<li><span class="math inline">\(p\)</span> large:<br> <span class="math inline">\(\displaystyle Var_\varepsilon(\hat m_p)\)</span> is large, but squared bias <span class="math inline">\(\displaystyle (\operatorname{Bias}_\varepsilon(\hat m_p))^2\)</span> is small.</li>
+</ul>
+<!-- p^-4 = p/n
+     p^-5 = 1/n
+     p    = (1/n)^-1/5  -->
+<p>Let us focus now on the case of a <strong>fixed design</strong>. From <a href="#eq-BiasSqVar" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> we have that <span class="math display">\[
+\begin{align*}
+\operatorname{MASE}(\hat m_{p})
+&amp;= (\operatorname{Bias}_\varepsilon(\hat m_p))^2 + Var_\varepsilon(\hat m_p)\\[2ex]
+&amp;=O(p^{-4}) + \sigma^2\frac{p}{n}
+\end{align*}
+\]</span> I.e., using the definition of <span class="math inline">\(O(\cdot)\)</span>, we have that <span class="math display">\[
+\begin{align*}
+\underbrace{\operatorname{MASE}(\hat m_{p})}_{\geq 0}
+&amp;\leq \underbrace{\texttt{const}}_{&gt;0}\;\; p^{-4} + \sigma^2\frac{p}{n}
+\end{align*}
+\]</span></p>
+<p>Thus, if <span class="math display">\[
+p\equiv p_n\to\infty\quad\text{as}\quad n\to\infty,
+\]</span> but sufficiently slow, such that <span class="math display">\[
+\dfrac{p_n}{n}\to 0,
+\]</span> then <span class="math display">\[
+\begin{align*}
+\operatorname{MASE}(\hat m_{p}) \to 0
+\end{align*}
+\]</span> as <span class="math inline">\(n\to 0.\)</span></p>
+<p>An <strong>optimal smoothing parameter</strong> <span class="math inline">\(p_{opt}\)</span> that minimizes <span class="math inline">\(\operatorname{MASE}(\hat m_{p})\)</span> will balance the squared bias and variance: <span class="math display">\[
+\begin{align*}
+\frac{d}{d\,p}\operatorname{MASE}(\hat m_{p})
+&amp;=\frac{d}{d\,p}\left(\texttt{const}\cdot p^{-4}+\sigma^2\frac{p}{n}\right)\\[2ex]
+&amp;=-4\cdot\texttt{const}\cdot p^{-5}+\sigma^2\frac{1}{n}.
+\end{align*}
+\]</span> Setting zero and solving for <span class="math inline">\(p_{opt}\)</span> yields <span class="math display">\[
+p_{opt}=\texttt{const}\cdot n^{1/5},
+\]</span> where <span class="math inline">\(\texttt{const}\)</span> denotes here a generic factor collecting all factors that do not depend on <span class="math inline">\(p_n\)</span> or <span class="math inline">\(n.\)</span></p>
+<p>Thus <span class="math display">\[
+\operatorname{MASE}(\hat m_{p_{opt}})=O(n^{-4/5}).
+\]</span></p>
+<p>In the case of a random design <span class="math display">\[
+\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-4/5}).
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For an estimator <span class="math inline">\(\hat m\)</span> based on a <strong>valid</strong> (!) parametric model we have <span class="math display">\[
+\operatorname{MASE}(\hat m_{p_{opt}})=O_p(n^{-1}),
+\]</span> since parametric models have no bias—provided, the model assumption is correct.</p>
+</div>
+</div>
+<p>Similar results can be obtained for the mean integrated squared error (MISE): If <span class="math inline">\(m\)</span> is twice continuously differentiable, and <span class="math inline">\(p_{opt} \sim n^{1/5}\)</span>, then <span class="math display">\[
+\operatorname{MISE}(\hat m_{p_{opt}})=\mathbb{E}_\varepsilon\left(\int_a^b(m(x)-\hat m_{p_{opt}}(x))^2dx\right)=O_p(n^{-4/5}).
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="selecting-the-smoothing-parameter-p" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="selecting-the-smoothing-parameter-p"><span class="header-section-number">5.3</span> Selecting the Smoothing Parameter <span class="math inline">\(p\)</span></h2>
+<p><strong>Aim:</strong> We need to choose the smoothing parameter <span class="math inline">\(p\)</span> in an (somehow) optimal and objective manner.</p>
+<p><strong>Problem:</strong> Since <span class="math inline">\(m\)</span> is unknown, we cannot directly compute the <span class="math inline">\(\operatorname{Bias}(\hat{m}_p)\)</span> and thus not <span class="math inline">\(\operatorname{MASE}(\hat{m}_p).\)</span> This renders a direct computation of the optimal smoothing parameter <span class="math inline">\(p_{opt}\)</span> impossible.</p>
+<p><strong>Approach:</strong> Determine an estimate <span class="math inline">\(\hat p_{opt}\)</span> of the unknown optimal smoothing parameter <span class="math inline">\(p_{opt}\)</span> by minimizing a suitable error criterion with the following properties:</p>
+<ul>
+<li>For every possible <span class="math inline">\(p\)</span> the error criterion function can be calculated from the <em>data</em>.</li>
+<li>For every possible <span class="math inline">\(p\)</span> the error criterion provides “information” about the respective <span class="math inline">\(\operatorname{MASE}(\hat{m}_p)\)</span>.</li>
+</ul>
+<p><br> <br></p>
+<p>Recall: We have <span class="math display">\[
+\hat m_p=
+\left(\begin{matrix}
+\hat m_p(X_1)\\ \vdots\\\hat m_p(X_n)
+\end{matrix}\right)=\mathbf{X}\hat\beta=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top Y=S_pY,
+\]</span> where<br>
+<span class="math display">\[
+\begin{align*}
+\operatorname{trace}(S_p)
+&amp;=\operatorname{trace}\big(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\big)\\[2ex]
+&amp;=\operatorname{trace}\big((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\big)\\[2ex]
+&amp;=\operatorname{trace}\big(I_p\big)=p
+\end{align*}
+\]</span></p>
+<p>That is, for given <span class="math inline">\(p\)</span>, the number of parameters to estimate by the spline method (one also speaks of the <strong>degrees of freedom of the smoothing procedure</strong>) is equal to <span class="math inline">\(p\)</span> which corresponds to the <strong>trace of the smoother matrix</strong> <span class="math inline">\(S_p=\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.\)</span></p>
+<p>Most frequently used error criteria are <strong>Cross-Validation (CV)</strong> and <strong>Generalized Cross-Validation (GCV).</strong></p>
+<section id="leave-one-out-cross-validation-loocv" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="leave-one-out-cross-validation-loocv"><span class="header-section-number">5.3.1</span> Leave One Out Cross-Validation (LOOCV)</h3>
+<p>For a given value <span class="math inline">\(p,\)</span> cross-validation tries to approximate the out-of-sample prediction error <span class="math display">\[
+\operatorname{LOOCV}(p)=\frac{1}{n} \sum_{i=1}^n\biggl( Y_i-
+{\hat m}_{p,-i}(X_i)\biggr)^2
+\]</span> Here, for any <span class="math inline">\(i=1,\dots,n\)</span>, <span class="math inline">\({\hat m}_{p,-i}(\cdot)\)</span> is the “leave-one-out” estimator of <span class="math inline">\(m(\cdot)\)</span> to be obtained when a spline function is fitted using the <span class="math inline">\(n-1\)</span> observations: <span class="math display">\[
+(Y_1,X_1),\dots,(Y_{i-1},X_{i-1}),(Y_{i+1},X_{i+1}),\dots,(Y_{n},X_{n}).
+\]</span> <strong>Motivation:</strong> We have <span class="math display">\[
+\begin{align*}
+&amp;\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p))\\[2ex]
+= &amp; \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\biggl( \overbrace{m(X_i)+\varepsilon_i}^{=Y_i}-
+{\hat m}_{p,-i}(X_i)\biggr)^2\right]\\[2ex]
+= &amp; \frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\left(\left( m(X_i)-
+{\hat m}_{p,-i}(X_i) \right)^2 +2\left( m(X_i)-
+{\hat m}_{p,-i}(X_i) \right)\varepsilon_i +\varepsilon_i^2\right)\right]\\[2ex]
+= &amp;\underbrace{\frac{1}{n}\sum_{i=1}^n \mathbb{E}_\varepsilon\left[\left(m(X_i)-
+{\hat m}_{p,-i}(X_i)\right)^2\right]}_{\approx\operatorname{MASE}(\hat m_p)} \\[2ex]
+&amp;+ 2\frac{1}{n} \sum_{i=1}^n
+\underbrace{\mathbb{E}_\varepsilon\left[( m(X_i)-
+{\hat m}_{p,-i}(X_i))\varepsilon_i\right]}_{=0}+\sigma^2
+\end{align*}
+\]</span> Thus, <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p)) = \operatorname{MASE}(\hat m_p) + \sigma^2,
+\end{align*}
+\]</span> such that <span class="math display">\[
+\begin{align*}
+p_{opt}
+&amp;= \arg\min_p\mathbb{E}_\varepsilon(\operatorname{LOOCV}(p))\\[2ex]
+&amp;= \arg\min_p\operatorname{MASE}(\hat m_p).
+\end{align*}
+\]</span> That is, at least on average, minimizing <span class="math inline">\(CV(p)\)</span> is equivalent to minimizing <span class="math inline">\(\operatorname{MASE}(\hat m_p)\)</span>.</p>
+<p><strong><code>R</code>-Code to Compute an Estimate of the Optimal Smoothing Parameter using LOOCV</strong></p>
+<p>First, we generate some data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, compute the CV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>LOOCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> p_vec[j] <span class="co"># number of basis functions</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>LOOCV_scoreSq <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>m_hat_p_i  <span class="ot">&lt;-</span> X_mat[i,] <span class="sc">%*%</span> </span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">solve</span>(<span class="fu">t</span>(X_mat[<span class="sc">-</span>i,])  <span class="sc">%*%</span> X_mat[<span class="sc">-</span>i,])  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat[<span class="sc">-</span>i,]) <span class="sc">%*%</span> y_vec[<span class="sc">-</span>i] </span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>LOOCV_scoreSq[i] <span class="ot">&lt;-</span> (y_vec[i] <span class="sc">-</span> m_hat_p_i)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>LOOCV_p[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>(LOOCV_scoreSq)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> LOOCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="k-fold-cross-validation" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="k-fold-cross-validation"><span class="header-section-number">5.3.2</span> <span class="math inline">\(k\)</span>-fold Cross-Validation</h3>
+<p>In practice, one usually works with <span class="math inline">\(k\)</span>-fold CV (<span class="math inline">\(k=5\)</span> or <span class="math inline">\(k=10\)</span>). For this the index set <span class="math inline">\(I=\{1,\dots,n\}\)</span> is partitioned into <span class="math inline">\(k\)</span> disjoint index sets <span class="math inline">\(I_1,\dots,I_k\)</span> of (roughly) equal sizes, i.e.&nbsp;<span class="math inline">\(|I_1|\approx|I_2|\approx\dots\approx|I_k|\)</span>, such that <span class="math inline">\(I_1\cup I_1\cup \dots \cup I_k=I\)</span> and <span class="math inline">\(I_j\cap I_k=\emptyset\)</span> for all <span class="math inline">\(j\neq k\)</span>. <span class="math display">\[
+\operatorname{CV}_k(p)=\frac{1}{K}\sum_{k=1}^K\frac{1}{|I_k|} \sum_{i\in I_k}\left( Y_i-
+{\hat m}_{p,-I_k}(X_i)\right)^2.
+\]</span></p>
+</section>
+<section id="generalized-cross-validation-gcv" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="generalized-cross-validation-gcv"><span class="header-section-number">5.3.3</span> Generalized Cross-Validation (GCV)</h3>
+<p><span class="math display">\[
+\operatorname{GCV}(p)=\frac{1}{n\left(1-\frac{p}{n}\right)^2}\sum_{i=1}^n \left( Y_i-
+{\hat m}_p(X_i)\right)^2
+\]</span> <strong>Motivation:</strong> The average residual sum of squares are given by <span id="eq-ARSS"><span class="math display">\[
+\operatorname{ARSS}(p):=\frac{1}{n}\sum_{i=1}^n\biggl( Y_i-
+\hat{m}_{p}(X_i)\biggr)^2
+\tag{5.4}\]</span></span> which allows us to rewrite <span class="math inline">\(\operatorname{GCV}(p)\)</span> as <span class="math display">\[
+\operatorname{GCV}(p)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\operatorname{ARSS}(p)
+\]</span> Some lengthy derivations show that the expected value of <span class="math inline">\(\operatorname{ARSS}(p)\)</span> is <span id="eq-optimism"><span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2,
+\end{align*}
+\tag{5.5}\]</span></span> where</p>
+<ul>
+<li><span class="math inline">\(\operatorname{MASE}(\hat m_p)\)</span> denotes the mean average squared error,</li>
+<li><span class="math inline">\(-2\sigma^2\frac{p}{n}\)</span> denotes the optimism term, and</li>
+<li><span class="math inline">\(\sigma^2\)</span> denotes the irreducible component of the (prediction-)error.</li>
+</ul>
+<p>Moreover, a Taylor expansion of <span class="math inline">\(f(p/n)=\frac{1}{\left(1-\frac{p}{n}\right)^2}\)</span> around <span class="math inline">\(p/n=0\)</span> yields that <span class="math display">\[
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+\]</span> where the approximation becomes precise as <span class="math inline">\(\frac{p}{n}\to 0.\)</span> Thus <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{GCV}(p))
+&amp;\approx \left(1 + 2\frac{p}{n}\right)\mathbb{E}_\varepsilon(\operatorname{ARSS}(p)) \\[2ex]
+&amp;=\left(1 + 2\frac{p}{n}\right) \left(\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2\right)\\[2ex]
+&amp;= \operatorname{MASE}(\hat m_p) +\sigma^2 +\\[2ex]
+&amp;+ \underbrace{2\frac{p}{n} \operatorname{MASE}(\hat m_p)}_{=O_p\left(\frac{p}{n}\right)} - \underbrace{4\frac{p^2}{n^2} \sigma^2}_{=O\left(\frac{p^2}{n^2}\right)=o\left(\frac{p}{n}\right)}\\[2ex]
+&amp;= \operatorname{MASE}(\hat m_p) +\sigma^2 + O_p\left(\frac{p}{n}\right)
+\end{align*}
+\]</span></p>
+<p>Thus, at least on average, minimizing <span class="math inline">\(\operatorname{GCV}(p)\)</span> is approximately (for <span class="math inline">\(p_n/n\to 0\)</span> as <span class="math inline">\(n\to\infty\)</span>) equivalent to minimizing <span class="math inline">\(\operatorname{MASE}(\hat m_p),\)</span> since <span class="math inline">\(\sigma^2\)</span> does not depend on <span class="math inline">\(p.\)</span></p>
+<!-- 
+$$
+\begin{align*}
+\operatorname{GCV}(p)= 
+&\operatorname{ARSS}(p)+2\frac{p}{n}\overbrace{\text{ARSS}(p)}^{=\sigma^2+o_p(1)}+O_p\left(\left(\frac{p}{n}\right)^2\right)\\[2ex]
+&\operatorname{ARSS}(p)+2\sigma^2\frac{p}{n}+o_p(1)
+\end{align*}
+$$ 
+-->
+<!-- 
+$$
+\begin{align*}
+&\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))
+=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left( Y_i - \hat{m}_{p}(X_i)\right)^2\right]\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left[Y_i - \hat{m}_{p}(X_i)\right] + \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n \underbrace{Var_\varepsilon\left(Y_i\right)}_{=\sigma^2} + \frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left(\hat{m}_{p}(X_i)\right)\\[2ex] 
+&\phantom{=}-2\frac{1}{n}\sum_{i=1}^n Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right)\\[2ex] 
+&\phantom{=}+ \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2\\[2ex]
+\end{align*}
+$$
+Using that $\hat{m}_{p}(X_i)=[S_pY]_{ii}$, one can show that 
+$$
+Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right) = \sigma^2[S_p]_{ii}
+$$
+such that
+$$
+\begin{align*}
+2\frac{1}{n}\sum_{i=1}^n Cov_{\varepsilon}\left(Y_i,\hat{m}_{p}(X_i)\right)
+&=2\sigma^2\frac{1}{n}\operatorname{trace}(S_p)\\[2ex]
+&=2\sigma^2\frac{p}{n}.
+\end{align*}
+$$
+Thus
+$$
+\begin{align*}
+&\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))= \sigma^2 - 2\sigma^2\frac{p}{n} +\\[2ex]
+&\underbrace{\frac{1}{n}\sum_{i=1}^n Var_\varepsilon\left(\hat{m}_{p}(X_i)\right) + \frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon\left[ Y_i - \hat{m}_{p}(X_i)\right] \right)^2}_{test}  
+\end{align*}
+$$
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\Big[\big( \overbrace{m(X_i) +\varepsilon_i}^{=Y_i} - \hat{m}_{p}(X_i)\big)^2\Big]\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left(\varepsilon_i - \left( \hat{m}_{p}(X_i) - m(X_i) \right) \right)^2\right]\\[2ex] 
+&=\frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\left(\hat{m}_{p}(X_i) - m(X_i)\right)^2\right]\\[2ex] 
+&\phantom{=} - \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[2\varepsilon_i (\hat{m}_{p}(X_i)  - m(X_i) ) \right] \\[2ex] 
+&\phantom{=} + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon\left[\varepsilon_i^2\right]\\[2ex]
+&=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$ 
+-->
+<p><strong><code>R</code>-Code to Compute an Estimate of the Optimal Smoothing Parameter using GCV</strong></p>
+<p>First, we generate some data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate some data: #################</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n      <span class="ot">&lt;-</span> <span class="dv">100</span>     <span class="co"># Sample Size</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>x_vec  <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)<span class="sc">/</span>n <span class="co"># Equidistant X </span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Gaussian iid error term </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>e_vec  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> .<span class="dv">5</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dependent variable Y</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y_vec  <span class="ot">&lt;-</span>  <span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">+</span> e_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, compute the GCV scores for different numbers of basis functions <span class="math inline">\(p\)</span> and plot them to select an estimate for the optimal value of the smoothing parameter <span class="math inline">\(p\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p_vec <span class="ot">&lt;-</span> <span class="dv">6</span><span class="sc">:</span><span class="dv">12</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>GCV_p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(p_vec))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(p_vec)){</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> p_vec[j] <span class="co"># number of basis functions</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>ARSS     <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(y_vec <span class="sc">-</span> m_hat_p)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>GCV_p[j] <span class="ot">&lt;-</span> ARSS<span class="sc">/</span>((<span class="dv">1</span><span class="sc">-</span>p<span class="sc">/</span>n)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y =</span> GCV_p, <span class="at">x =</span> p_vec, <span class="at">type=</span><span class="st">"o"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compute the nonparametric regression estimate using the GCV optimal smoothing parameter <span class="math inline">\(p=8.\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p         <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>q         <span class="ot">&lt;-</span> p <span class="sc">-</span> <span class="dv">2</span>    <span class="co"># number of equidistant knots </span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>knot_seq  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">len =</span> q)<span class="co"># knots</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>X_mat     <span class="ot">&lt;-</span> splines2<span class="sc">::</span><span class="fu">bSpline</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x              =</span> x_vec, <span class="co"># evaluation points</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">knots          =</span> knot_seq[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))], </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">degree         =</span> degree,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">intercept      =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">Boundary.knots =</span> knot_seq[ <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(knot_seq))]</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>S_p      <span class="ot">&lt;-</span> X_mat <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X_mat)  <span class="sc">%*%</span> X_mat)  <span class="sc">%*%</span> <span class="fu">t</span>(X_mat) </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>m_hat_p  <span class="ot">&lt;-</span> S_p   <span class="sc">%*%</span> y_vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span>y_vec, <span class="at">x=</span>x_vec, <span class="at">xlab=</span><span class="st">"X"</span>, <span class="at">ylab=</span><span class="st">"Y"</span>, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Regression Splines"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span><span class="fu">sin</span>(x_vec <span class="sc">*</span> <span class="dv">5</span>), <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">y=</span>m_hat_p, <span class="at">x=</span>x_vec, <span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">c</span>(<span class="st">"(Unknown) Regression Function m"</span>, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Regr.-Spline Fit with GCV optimal p=8"</span>), </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch5_NPRegression_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="over-fitting-and-optimism" class="level3" data-number="5.3.4">
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="over-fitting-and-optimism"><span class="header-section-number">5.3.4</span> Over-Fitting and Optimism</h3>
+<p>Remember that in our econometrics lecture, where we assumed to know the model apart from the model parameters, we used the average squared residuals <span class="math inline">\(\operatorname{ARSS}(p)\)</span> <span id="eq-ARSS2"><span class="math display">\[
+\operatorname{ARSS}(p)=\frac{1}{n}\sum_{i=1}^n\biggl( Y_i-
+\hat{m}_{p}(X_i)\biggr)^2
+\tag{5.6}\]</span></span> as an estimator for <span class="math inline">\(\sigma^2.\)</span> Moreover, <span class="math inline">\(\operatorname{ARSS}(p)\)</span> was the main component to compute the <span class="math inline">\(R^2\)</span>-coefficient <span class="math display">\[
+R^2(p) = 1- \frac{\operatorname{ARSS}(p)}{\frac{1}{n}\sum_{i=1}^n(Y_i - \bar{Y})^2}.
+\]</span></p>
+<p>In non-parametrics, however, we do not assume to know the model, but try to learn the model (including the smoothing parameter <span class="math inline">\(p\)</span>) form the data. Therefore, <a href="#eq-ARSS2" class="quarto-xref">Equation&nbsp;<span>5.6</span></a> cannot be used as an estimator for <span class="math inline">\(\sigma^2\)</span>, firstly, since we do not know <span class="math inline">\(p\)</span>, and secondly, since we expect <span class="math inline">\(\hat{m}_{p}\)</span> to be biased.</p>
+<p>In fact, if we would mimimize <span class="math inline">\(\operatorname{ARSS}(p)\)</span> with respect to <span class="math inline">\(p,\)</span> we would minimize the so-called <strong>in-sample prediction error</strong>. On average, this would result in minimizing <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+\]</span> which leads to a too large choice of <span class="math inline">\(p\)</span> due to the distorting <strong>optimism</strong> term <span class="math display">\[
+-2\sigma^2\frac{p}{n}.
+\]</span></p>
+<p>In fact, for a too large <span class="math inline">\(p,\)</span> the non-parametric estimate <strong>over-fits</strong> the data; i.e.&nbsp;<span class="math inline">\(\hat{m}_{p}\)</span> becomes so flexible such that <span class="math display">\[
+\begin{align*}
+Y_i &amp; \approx \hat{m}_{p}(X_i)\;\;\text{ for all}\; i=1,\dots,n\\[2ex]
+\Rightarrow\;\operatorname{ARSS}(p)&amp;\approx 0\;(\neq\sigma^2)\\[2ex]
+\Rightarrow\;R^2&amp;\approx 1.
+\end{align*}
+\]</span></p>
+<p>However, an <strong>over-fitted</strong> estimate <span class="math inline">\(\hat{m}_{p}\)</span> typically has fitted the noise component <span class="math inline">\(\varepsilon\)</span>—additionally to the signal component <span class="math inline">\(m.\)</span> Therefore, an over-fitted estimate <span class="math inline">\(\hat{m}_{p}\)</span> will typically perform very poorly when used to predict new <strong>out-of-sample data</strong>. I.e. for a <em>new</em> outcome <span class="math display">\[
+Y_{new} = m(X_{new}) + \varepsilon_{new},
+\]</span> we’ll have that <span class="math display">\[
+|m(X_{new}) - \hat{m}_{p}(X_{new})| \gg 0;
+\]</span> see <a href="#fig-overfitting" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>.</p>
+<div id="fig-overfitting" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-overfitting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/OverFitting.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-overfitting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Over-fitting can lead to unusable out-of-sample predictions.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optimism
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The term <span class="math inline">\(2\sigma^2\frac{p}{n}\)</span> in <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+\]</span> is called the <strong>optimism</strong> of the fit and quantifies the amount by which the in-sample average residual sum of squares (ARSS) <strong>systematically under-estimates</strong> the true mean average squared error (MASE) of <span class="math inline">\(\hat m_p.\)</span></p>
+</div>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
+<p>Show that <span class="math display">\[
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+\]</span> where the approximation becomes precise as <span class="math inline">\(\frac{p}{n}\to 0.\)</span></p>
+</section>
+<section id="exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
+<p>Show that <span class="math display">\[
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+\]</span></p>
+</section>
+<section id="exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-3.">Exercise 3.</h4>
+<p>Show that the core-part of the optimism term, i.e.&nbsp; <span class="math display">\[
+\sigma^2\frac{p}{n},
+\]</span> quantifies the average covariance between the error terms <span class="math inline">\(\varepsilon_i\)</span> and the fits <span class="math inline">\(\hat{m}_p(X_i)\)</span> over <span class="math inline">\(i=1,\dots,n.\)</span></p>
+<!-- 
+
+## Solutions {-}
+
+
+#### Solution for Exercise 1. {-} 
+
+
+Let $x=\frac{p}{n}$. 
+
+A Taylor expansion of 
+$$
+f(x)=\frac{1}{\left(1-x\right)^2}
+$$ 
+around some point $a$ yields
+
+$$
+\begin{align*}
+f(x)
+&=f(a)+\frac{1}{1!}\;(x-a)\;\; f'(a)\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;(x-a)^2\;f''(a)\\[2ex]
+&\hspace{1.5cm} + o\left((x-a)^2\right)
+\end{align*}
+$$
+
+Thus, for $a = 0,$ we have that
+$$
+\begin{align*}
+f(x)
+&=\overbrace{1}^{f(0)}+\frac{1}{1!}\;x\;\;\overbrace{\;\cdot\;(-2)\;\cdot\left(1-0\right)^{-3}\cdot\left(-1\right)}^{=f'(0)}\\[2ex]
+&\hspace{1.5cm} + \frac{1}{2!}\;x^2\;\overbrace{\;\cdot\; 6\cdot\left(1-0\right)^{-4}\cdot\left(-1\right)^2}^{=f''(0)}\\[2ex]
+&\hspace{1.5cm} + o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)+ o\left(x^2\right)\\[2ex]
+&=1+ 2 x +O\left(x^2\right)\\[2ex]
+\end{align*}
+$$
+With $x=\frac{p}{n},$ we thus have that
+$$
+\begin{align*}
+f(p/n)
+&=\frac{1}{\left(1-\frac{p}{n}\right)^2}\\[2ex]
+&=1 + 2\,\frac{p}{n}+O\left(\left(\frac{p}{n}\right)^2\right).\\[2ex]
+\end{align*}
+$$
+Thus, 
+$$
+\frac{1}{\left(1-\frac{p}{n}\right)^2}\approx 1 + 2\frac{p}{n},
+$$
+where the approximation error goes to zero with the rate $\left(\frac{p}{n}\right)^2\to 0.$  
+
+
+
+#### Solution for Exercise 2. {-} 
+
+
+$$
+\begin{align*}
+\operatorname{ARSS}(p)&=\frac{1}{n}\sum_{i=1}^n\left(Y_i - \hat{m}_p(X_i)\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left((Y_i - m(X_i)) - (\hat{m}_p(X_i) - m(X_i))\right)^2\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i (\hat{m}_p(X_i) - m(X_i)) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+&=\frac{1}{n}\sum_{i=1}^n\left(\varepsilon_i^2 - 2\cdot \varepsilon_i \cdot \hat{m}_p(X_i) + 2\cdot \varepsilon_i\cdot m(X_i) + (\hat{m}_p(X_i)-m(X_i))^2\right)\\[2ex]
+\mathbb{E}_\varepsilon\big(\operatorname{ARSS}(p)\big)
+&=\frac{1}{n}\sum_{i=1}^n\left(\mathbb{E}_\varepsilon(\varepsilon_i^2) - 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + 0 + \mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\right)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \frac{1}{n}\sum_{i=1}^n\mathbb{E}_\varepsilon((\hat{m}_p(X_i)-m(X_i))^2)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+&=\sigma^2 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right) + \operatorname{MASE}(\hat{m}_p)\\[2ex]
+\end{align*}
+$$
+
+In the following, we focus on the second term:
+$$
+\begin{align*}
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat\beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot (\beta+(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \beta^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right) + \varepsilon_i \cdot((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=-\frac{1}{n}\sum_{i=1}^n 2\cdot 0 - \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot ((\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\varepsilon)^\top \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- \frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \varepsilon^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  e_i^\top \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left(\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right) (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\sum_{i=1}^n  \operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \sum_{i=1}^n\left(\begin{matrix}b_{1,k}(X_i)\\\vdots\\ b_{p,k}(X_i)\end{matrix}\right)\left(b_{1,k}(X_i),\dots,b_{p,k}(X_i)\right)\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left( (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{X}^\top\mathbf{X}\right)\\[2ex]
+&=- 2\sigma^2 \cdot \frac{1}{n}\operatorname{trace}\left(I_p\right)\\[2ex]
+&=- 2\sigma^2 \frac{p}{n},
+\end{align*}
+$$
+where $e_i^\top$ is a $(1\times p)$ vector with a $1$ at the $i$th element and $0$s else.
+
+Thus, 
+$$
+\begin{align*}
+\mathbb{E}_\varepsilon(\operatorname{ARSS}(p))=\operatorname{MASE}(\hat m_p)-2\sigma^2\frac{p}{n}+\sigma^2
+\end{align*}
+$$
+
+
+#### Solution for Exercise 3. {-} 
+
+Alternative view on the second term: 
+
+$$
+\begin{align*}
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \sum_{j=1}^p\hat\beta_j b_{j,k}(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \mathbb{E}_\varepsilon\left(\varepsilon_i \cdot \hat{m}_p(X_i)\right)\\[2ex]
+&-\frac{1}{n}\sum_{i=1}^n 2\cdot \overbrace{\Big[\mathbb{E}_\varepsilon(\varepsilon_i \cdot \hat{m}_p(X_i)) - \underbrace{\mathbb{E}_\varepsilon(\varepsilon_i)}_{=0} \cdot \mathbb{E}_\varepsilon(\hat{m}_p(X_i))\Big]}^{=Cov_\varepsilon(\varepsilon_i, \hat{m}_p(X_i))}\\[2ex]
+&-2\cdot \underbrace{\frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right)}_{=\sigma^2\frac{p}{n}}\\[2ex]
+\end{align*}
+$$
+Thus
+$$
+\sigma^2\frac{p}{n} = \frac{1}{n}\sum_{i=1}^n  Cov_\varepsilon\left(\varepsilon_i, \hat{m}_p(X_i)\right).
+$$
+
+That is, the core-part of the second term, namely $\sigma^2\frac{p}{n},$ equals the average covariance between the noise $\varepsilon_i$ and the fitted value $\hat{m}_p(X_i)$ across $i=1,\dots,n.$ 
+
+This observation explains the name **optimism** term. Of course, the fits $\hat{m}_p(X_i)$ should only be driven by the signal-components $m(X_i)$ and not by the noise-components $\varepsilon_i.$  
+
+
+-->
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-DeBoor_1978" class="csl-entry" role="listitem">
+De Boor, Carl, and Carl De Boor. 1978. <em>A Practical Guide to Splines</em>. Vol. 27. springer.
+</div>
+<div id="ref-Eubank_1999" class="csl-entry" role="listitem">
+Eubank, Randall L. 1999. <em>Nonparametric Regression and Spline Smoothing</em>. CRC press.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The <strong>degree</strong> <span class="math inline">\(k\)</span> of a polynomial <span class="math inline">\(s(x)=s_0+s_1x+s_2x^2+\dots+s_kx^{k}\)</span> refers to the highest exponent. The <strong>order</strong> <span class="math inline">\(k+1\)</span> of a polynomial refers to the number coefficients <span class="math inline">\((s_0,\dots,s_k).\)</span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Ch4_NP_Density_Estimation.html" class="pagination-link" aria-label="Nonparametric Density Estimation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Density Estimation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
