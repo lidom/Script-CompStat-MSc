@@ -616,7 +616,7 @@ f(x)
 + \sum_{\ell=1}^k \frac{f^{(\ell)}(x)}{\ell!} h^\ell
 + o\big(|h|^k\big),
 \end{align*}
-\]</span> where <span class="math inline">\(o\big(|h|^k\big)\)</span> denotes the family of real-valued functions, <span class="math inline">\(g(h)\)</span> say, that are of a <strong>strictly smaller <span class="math inline">\(o\)</span>rder of magnitude</strong> than the function <span class="math inline">\(|h|^k\)</span> as <span class="math inline">\(h\to 0;\)</span> i.e.<br>
+\]</span> where <span class="math inline">\(o\big(|h|^k\big)\)</span> denotes the family of real-valued functions, <span class="math inline">\(g(h)\)</span> say, that are in absolute values of a <strong>strictly smaller <span class="math inline">\(o\)</span>rder of magnitude</strong> than the function <span class="math inline">\(|h|^k\)</span> as <span class="math inline">\(|h|\to 0;\)</span> i.e.<br>
 <span class="math display">\[
 \begin{align*}
 &amp; o\big(|h|^k\big)=\\[2ex]
@@ -628,13 +628,13 @@ P_{k,x}(h)\cdot h^k=o\big(|h|^k\big)
 \]</span> since <span class="math display">\[
 \frac{|P_{k,x}(h)\;h^k|}{|h|^k}
 %=\frac{|P_k(x+h)|\cdot |h|^k|}{|h|^k}
-=|P_{k,x}(h)|\to 0\quad\text{as}\quad h\to 0.
+=|P_{k,x}(h)|\to 0\quad\text{as}\quad |h|\to 0.
 \]</span></p>
 <p><strong>2. Note: Mean-value form of the remainder term:</strong><br> <span class="math display">\[
 M_{k,x}(h)=o\big(|h|^k\big)
 \]</span> since <span class="math display">\[
 \frac{|M_{k,x}(h)|}{|h|^k}=
-\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad h\to 0.
+\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad |h|\to 0.
 \]</span></p>
 </div>
 </div>
@@ -661,9 +661,9 @@ M_{k,x}(h)=o\big(|h|^k\big)
 \ell_n'(\theta_{(0)} + h) &amp; = \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h + o(|h|)\\[2ex]
 {\color{gray}\big(f(\theta_{(0)} + h) }\,&amp;\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
-\]</span> Thus, in a small <span class="math inline">\(h\)</span>-neigborhood (<span class="math inline">\(h\to 0\)</span>) around <span class="math inline">\(\theta_{(0)},\)</span> <span class="math inline">\(\ell_n'(\theta_{(0)} + h)\)</span> equals the linear function (in <span class="math inline">\(h\)</span>) <span class="math display">\[
+\]</span> Thus, in a small <span class="math inline">\(h\)</span>-neigborhood (<span class="math inline">\(|h|\to 0\)</span>) around <span class="math inline">\(\theta_{(0)},\)</span> <span class="math inline">\(\ell_n'(\theta_{(0)} + h)\)</span> equals the linear function (in <span class="math inline">\(h\)</span>) <span class="math display">\[
 \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
-\]</span> plus terms, <span class="math inline">\((o(|h|)),\)</span> that are of a smaller order of magnitude.</p>
+\]</span> plus negligible terms, <span class="math inline">\((o(|h|)),\)</span> that are of a smaller order of magnitude.</p>
 <p>Therefore, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_n',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
 \begin{align*}
 \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
@@ -730,7 +730,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is “well behaved” and we usually don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
+<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is “well behaved,” and we usually also don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -793,7 +793,10 @@ Pseudo-Code: Newton-Raphson Algorithm
 \ell_{n,obs}(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
 \]</span> are <span class="math display">\[
 \begin{align*}
-\ell_{n,obs}'(\theta)&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
+\ell_{n,obs}'(\theta)&amp;=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta}
+\end{align*}
+\]</span> and <span class="math display">\[
+\begin{align*}
 \ell_{n,obs}''(\theta) &amp;= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
 &amp;= -\dfrac{N_{H,obs}}{\theta^2} - \dfrac{n-N_{H,obs}}{(1-\theta)^2}.
 \end{align*}
@@ -803,7 +806,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 <li>One Head: <span class="math inline">\(\quad N_{H,obs}=1\)</span></li>
 <li>Four Tails: <span class="math inline">\(\quad n-N_{H,obs}=4\)</span></li>
 </ul>
-<p>Setting <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our stopping criterion and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in <a href="#tbl-NR" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution,<br>
+<p>Setting <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our <strong>stopping criterion</strong> and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our <strong>starting value</strong> allows us to run the Newton-Raphson algorithm which gives us the results shown in <a href="#tbl-NR" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution,<br>
 <span class="math display">\[
 \hat\theta_{ML} = \hat\theta_{(5)} = 0.2,
 \]</span> equals the analytic solution.</p>
@@ -894,9 +897,9 @@ X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^K
 <p><span class="theorem-title"><strong>Definition 1.3 (Random Design (Regression Analysis))</strong></span> <br></p>
 <p>A <strong>random desgin</strong> in regression analysis is given by the following setup:</p>
 <p>Let <span class="math display">\[
-(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
+(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n),
 \]</span> or equivalently <span class="math display">\[
-(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
+(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n),
 \]</span> denote a (i.i.d.) random sample with <span class="math inline">\(\mathbb{E}(\varepsilon_i|X_i)=0\)</span>, intertable <span class="math inline">\((K\times K)\)</span> matrix <span class="math inline">\(\mathbb{E}(X_iX_i^T)=\Sigma_{X^TX}\)</span>, <span class="math inline">\(i=1,\dots,n,\)</span> and with either</p>
 <ul>
 <li><strong>homoskedastic</strong> errors: <span class="math inline">\(0&lt;\mathbb{E}(\varepsilon_i^2|X_i)=\sigma^2_0&lt;\infty\)</span></li>
@@ -1015,7 +1018,7 @@ Note
 <div class="callout-body-container callout-body">
 <p>The score function is <strong>random</strong>, since it depends on the random sample. For a given set of observed data, we compute one realization of the score function.</p>
 <p>At the <strong>true parameter</strong> vector <span class="math inline">\(\theta_0\in\mathbb{R}^p,\)</span> the score function satisfies <span class="math display">\[
-\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
+\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0^T)\right)=0
 \]</span> for all <span class="math inline">\(j=1,\dots,p;\)</span> i.e.&nbsp; <span class="math display">\[
 \mathbb{E}\left(\nabla\ell_n(\theta^T)\right)=\left(\begin{matrix}
   \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\right)\\ \vdots\\
@@ -1025,7 +1028,7 @@ Note
 \]</span> We prove this below in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>.</p>
 </div>
 </div>
-<p>Setting the score function in <a href="#eq-LinRegScoreFun" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which identifies the ML-estimators, <span class="math display">\[
+<p>Setting the score function in <a href="#eq-LinRegScoreFun" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> equal to zero yields a system of <span class="math inline">\(K+1\)</span> equations with <span class="math inline">\(K+1\)</span> unknowns, which identifies the ML-estimators <span class="math inline">\((\hat\beta_{ML}\)</span> and <span class="math inline">\(s_{ML}^2),\)</span> <span class="math display">\[
 \begin{align*}
 &amp;\nabla\ell_n(\hat\theta^T_{ML})
 =
@@ -1078,7 +1081,7 @@ Computing the Asymptotic Variance
 <li>compute the Hessian matrix (i.e.&nbsp;all second partial derivatives) of <span class="math inline">\(\ell_n,\)</span><br>
 </li>
 <li>take the expectation of this Hessian matrix and multiply it by <span class="math inline">\(-1/n\)</span>, which gives us the <strong>Fisher Information matrix</strong>.</li>
-<li>Inverting the Fisher information matrix give the <strong>asymptotic variance</strong> expression.</li>
+<li>Inverting the Fisher information matrix gives the <strong>asymptotic variance</strong> expression.</li>
 </ol>
 </div>
 </div>

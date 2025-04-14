@@ -372,7 +372,7 @@ x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
 \hat f_{hist}(\bar{x}_j)
 &amp; =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}
 \end{align*}
-\tag{4.1}\]</span></span> Note: The scaling by <span class="math inline">\(2hn\)</span> is necessary to guarantee that the area of each bin equals the relative frquency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall into the interval <span class="math inline">\((x_{j-1},x_j],\)</span> <span class="math display">\[
+\tag{4.1}\]</span></span> <strong>Note:</strong> The scaling by <span class="math inline">\(2hn\)</span> is necessary to guarantee that the area of each bin equals the relative frquency of data points <span class="math inline">\(X_1,\dots,X_n\)</span> that fall into the interval <span class="math inline">\((x_{j-1},x_j],\)</span> <span class="math display">\[
 \begin{align*}
 \text{Area of $j$th Bin}
 &amp; = (\text{bin-width}) \cdot (\text{bin-height of $j$th bin})\\[2ex]
@@ -380,14 +380,15 @@ x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
 &amp; = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}\\[2ex]
 &amp; = \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])},
 \end{align*}
-\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function, i.e., <span class="math inline">\(1_{(\text{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\text{FALSE})}=0.\)</span> This guarantees that the bin areas of the histogram sum up to one <span class="math display">\[
+\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function, i.e., <span class="math inline">\(1_{(\text{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\text{FALSE})}=0.\)</span> Thus, the scaling guarantees that the bin areas of the histogram sum up to one <span class="math display">\[
 \begin{align*}
 \sum_{j=1}^J\text{Area of $j$th Bin}
 &amp;=\sum_{j=1}^J \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
-&amp;=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}=\frac{n}{n}=1.
+&amp;=\frac{1}{n} \sum_{j=1}^J \sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
+&amp;=\frac{n}{n}=1.
 \end{align*}
 \]</span></p>
-<p>Doing some smart rearrangements of <a href="#eq-fHist" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, allows writing the histogram as a type of kernel density estimator:<br>
+<p>Doing some rearrangements of <a href="#eq-fHist" class="quarto-xref">Equation&nbsp;<span>4.1</span></a>, allows writing the histogram as a type of kernel density estimator:<br>
 <span class="math display">\[
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)

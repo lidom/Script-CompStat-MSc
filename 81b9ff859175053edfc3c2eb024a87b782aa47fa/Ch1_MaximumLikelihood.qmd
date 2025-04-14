@@ -470,7 +470,7 @@ f(x)
 + o\big(|h|^k\big),
 \end{align*}
 $$
-where $o\big(|h|^k\big)$ denotes the family of real-valued functions, $g(h)$ say, that are of a **strictly smaller $o$rder of magnitude** than the function $|h|^k$ as $h\to 0;$ i.e.  
+where $o\big(|h|^k\big)$ denotes the family of real-valued functions, $g(h)$ say, that are in absolute values of a **strictly smaller $o$rder of magnitude** than the function $|h|^k$ as $|h|\to 0;$ i.e.  
 $$
 \begin{align*}
 & o\big(|h|^k\big)=\\[2ex]
@@ -486,7 +486,7 @@ since
 $$
 \frac{|P_{k,x}(h)\;h^k|}{|h|^k}
 %=\frac{|P_k(x+h)|\cdot |h|^k|}{|h|^k}
-=|P_{k,x}(h)|\to 0\quad\text{as}\quad h\to 0.
+=|P_{k,x}(h)|\to 0\quad\text{as}\quad |h|\to 0.
 $$
 
 **2. Note: Mean-value form of the remainder term:**</br>
@@ -496,7 +496,7 @@ $$
 since 
 $$
 \frac{|M_{k,x}(h)|}{|h|^k}=
-\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad h\to 0.
+\left|\frac{f^{(k+1)}(\xi)}{(k+1)!}\right|\cdot|h|\to 0\quad\text{as}\quad |h|\to 0.
 $$
 :::
 :::
@@ -532,11 +532,11 @@ $$
 {\color{gray}\big(f(\theta_{(0)} + h) }\,&\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
 $$
-Thus, in a small $h$-neigborhood ($h\to 0$) around $\theta_{(0)},$ $\ell_n'(\theta_{(0)} + h)$ equals the linear function (in $h$) 
+Thus, in a small $h$-neigborhood ($|h|\to 0$) around $\theta_{(0)},$ $\ell_n'(\theta_{(0)} + h)$ equals the linear function (in $h$) 
 $$
 \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
 $$ 
-plus terms, $(o(|h|)),$ that are of a smaller order of magnitude.  
+plus negligible terms, $(o(|h|)),$ that are of a smaller order of magnitude.  
 
 Therefore, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
 $$
@@ -651,7 +651,7 @@ $$
 then $\theta_{(m)}$ will converge to $\theta_{root}$ as $m\to\infty.$ 
 
 ::: {.callout-warning}
-Unfortunately, we typically don't know if $\ell_n'$ is "well behaved" and we usually don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
+Unfortunately, we typically don't know if $\ell_n'$ is "well behaved," and we usually also don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method -->
 :::
 
@@ -713,7 +713,12 @@ $$
 are 
 $$
 \begin{align*}
-\ell_{n,obs}'(\theta)&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} \\[2ex]
+\ell_{n,obs}'(\theta)&=\dfrac{N_{H,obs}}{\theta} - \dfrac{n-N_{H,obs}}{1-\theta} 
+\end{align*}
+$$
+and
+$$
+\begin{align*}
 \ell_{n,obs}''(\theta) &= -\dfrac{N_{H,obs}}{\theta^2} + \dfrac{n}{(1-\theta)^2}(-1)-\dfrac{N_{H,obs}}{(1-\theta)^2}(-1)\\[2ex]
 &= -\dfrac{N_{H,obs}}{\theta^2} - \dfrac{n-N_{H,obs}}{(1-\theta)^2}.
 \end{align*}
@@ -724,7 +729,7 @@ We consider a sample size of $n=5$ with the following observed outcome:
 * One Head:   $\quad N_{H,obs}=1$ 
 * Four Tails: $\quad n-N_{H,obs}=4$
 
-Setting $\varepsilon=10^{-10}$ as our stopping criterion and $\theta_{(0)}=0.4$ as our starting value allows us to run the Newton-Raphson algorithm which gives us the results shown in @tbl-NR. The numeric optimization solution,  
+Setting $\varepsilon=10^{-10}$ as our **stopping criterion** and $\theta_{(0)}=0.4$ as our **starting value** allows us to run the Newton-Raphson algorithm which gives us the results shown in @tbl-NR. The numeric optimization solution,  
 $$
 \hat\theta_{ML} = \hat\theta_{(5)} = 0.2,
 $$ 
@@ -777,11 +782,11 @@ A **random desgin** in regression analysis is given by the following setup:
 
 Let 
 $$
-(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n)
+(Y_1,X_1), (Y_2,X_2), \dots, (Y_n,X_n),
 $$
 or equivalently 
 $$
-(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n)
+(X_1,\varepsilon_1), (X_2,\varepsilon_2), \dots, (X_n,\varepsilon_n),
 $$
 denote a (i.i.d.) random sample with 
 $\mathbb{E}(\varepsilon_i|X_i)=0$, intertable $(K\times K)$ matrix $\mathbb{E}(X_iX_i^T)=\Sigma_{X^TX}$, $i=1,\dots,n,$ 
@@ -925,7 +930,7 @@ The score function is **random**, since it depends on the random sample. For a g
 
 At the **true parameter** vector $\theta_0\in\mathbb{R}^p,$ the score function satisfies 
 $$
-\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0')\right)=0
+\mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0^T)\right)=0
 $$ 
 for all $j=1,\dots,p;$ i.e. 
 $$
@@ -938,7 +943,7 @@ $$
 We prove this below in @sec-MLAsymp.
 :::
 
-Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, which identifies the ML-estimators, 
+Setting the score function in @eq-LinRegScoreFun equal to zero yields a system of $K+1$ equations with $K+1$ unknowns, which identifies the ML-estimators $(\hat\beta_{ML}$ and $s_{ML}^2),$ 
 $$
 \begin{align*}
 &\nabla\ell_n(\hat\theta^T_{ML})
@@ -994,7 +999,7 @@ To compute the **asymptotic variance** of the ML-estimators $\hat\beta_{ML}$ and
 
 1. compute the Hessian matrix (i.e. all second partial derivatives) of $\ell_n,$  
 2. take the expectation of this Hessian matrix and multiply it by $-1/n$, which gives us the **Fisher Information matrix**. 
-3. Inverting the Fisher information matrix give the **asymptotic variance** expression. 
+3. Inverting the Fisher information matrix gives the **asymptotic variance** expression. 
 :::
 
 Let's do this preliminary work in the following:
