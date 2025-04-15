@@ -505,17 +505,17 @@ $$
 
 #### **Optimization Idea** {-}
 
-Let $\ell_n$ be a log-likelihood function with continuous first, $\ell_n',$ and second, $\ell_n'',$ derivative. 
+Let $\ell_{n,obs}$ be an observed realization of the log-likelihood function with continuous first, $\ell_n',$ and second, $\ell_n'',$ derivative. 
 
-To optimize the log-likelihood function $\ell_n,$ we try to find the root of $\ell_n',$ i.e. the value of $\theta\in\Theta$ such that 
+To optimize the log-likelihood function $\ell_{n,obs},$ we try to find the root of $\ell_{n,obs}',$ i.e. the value of $\theta\in\Theta$ such that 
 $$
-\ell_n'(\theta)=0.
+\ell_{n,obs}'(\theta)=0.
 $$ 
 That is, we try to find the value of $\theta$ that fulfills the **first order condition** of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size $h.$ 
 
-**Initialization:** Let $\theta_{(0)}\in\Theta$ be our first guess of the root of $\ell'_n.$ 
+**Initialization:** Let $\theta_{(0)}\in\Theta$ be our first guess of the root of $\ell'_{n,obs}.$ 
 
-**$h$-Steps:** Typically, our guess is not perfect and thus $\ell_n'(\theta_{(0)})\neq 0.$ Therefore, we want to move from $\theta_{(0)}$ to a new root-candidate $\theta_{(1)}$ by doing an $h$-step update 
+**$h$-Steps:** Typically, our guess is not perfect and thus $\ell_{n,obs}'(\theta_{(0)})\neq 0.$ Therefore, we want to move from $\theta_{(0)}$ to a new root-candidate $\theta_{(1)}$ by doing an $h$-step update 
 $$
 \theta_{(1)} = \theta_{(0)} + h.
 $$
@@ -525,24 +525,24 @@ $$
 3. In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta,$ for which the previous second-order Taylor polynomial was maximal.  -->
 
 <!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
-The first-order Taylor-series approximation of $\ell_n'$ around our first guess $\theta_{(0)}$ gives 
+The first-order Taylor-series approximation of $\ell_{n,obs}'$ around our first guess $\theta_{(0)}$ gives 
 $$
 \begin{align*}
-\ell_n'(\theta_{(0)} + h) & = \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h + o(|h|)\\[2ex]
+\ell_{n,obs}'(\theta_{(0)} + h) & = \ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)})h + o(|h|)\\[2ex]
 {\color{gray}\big(f(\theta_{(0)} + h) }\,&\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
 $$
-Thus, in a small $h$-neigborhood ($|h|\to 0$) around $\theta_{(0)},$ $\ell_n'(\theta_{(0)} + h)$ equals the linear function (in $h$) 
+Thus, in a small $h$-neigborhood ($|h|\to 0$) around $\theta_{(0)},$ $\ell_{n,obs}'(\theta_{(0)} + h)$ approximately equals the linear function (in $h$) 
 $$
-\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
+\ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)})h
 $$ 
 plus negligible terms, $(o(|h|)),$ that are of a smaller order of magnitude.  
 
-Therefore, to find the $h$-step that brings us closer to the root of $\ell_n',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
+Therefore, to find the $h$-step that brings us closer to the root of $\ell_{n,obs}',$ we can (approximatively) use the $h$-step that brings us to the root of its first-order approximation, i.e.
 $$
 \begin{align*}
-\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
-\Rightarrow h_{(0)} = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+\ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
+\Rightarrow h_{(0)} = -\frac{\ell_{n,obs}'(\theta_{(0)})}{\ell_{n,obs}''(\theta_{(0)})}.
 \end{align*}
 $$
 Based on this $h$-step, the new root-candidate is 
@@ -550,7 +550,7 @@ $$
 \begin{align*}
 \theta_{(1)} 
 & = \theta_{(0)} + h_{(0)}\\[2ex]
-& = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+& = \theta_{(0)} - \frac{\ell_{n,obs}'(\theta_{(0)})}{\ell_{n,obs}''(\theta_{(0)})}.
 \end{align*}
 $$
 Likewise, the $m$th root-candidate is 
@@ -558,7 +558,7 @@ $$
 \begin{align*}
 \theta_{(m)}
 & = \theta_{(m-1)} + h_{(m-1)}\\[2ex]
-& = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
+& = \theta_{(m-1)} - \frac{\ell_{n,obs}'(\theta_{(m-1)})}{\ell_{n,obs}''(\theta_{(m-1)})};
 \end{align*}
 $$
 see also @fig-NR.
@@ -619,9 +619,9 @@ box()
 
 ### Convergence of the Newton-Raphson Algorithm {#sec-ConvNR}
 
-Let $\theta_{root}$ denote the root of $\ell_n';$ i.e. 
+Let $\theta_{root}$ denote the root of $\ell_{n,obs}';$ i.e. 
 $$
-\ell_n'(\theta_{root})=0.
+\ell_{n,obs}'(\theta_{root})=0.
 $$ 
 We aim to find $\theta_{root}$ using the Newton-Raphson algorithm and call our best approximation of $\theta_{root}$ the maximum likelihood estimate; i.e. $\hat{\theta}_{ML}\approx\theta_{root}.$ 
 
@@ -635,23 +635,23 @@ I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 $$
 denote the start value error neighborhood around $\theta_{root}.$   
 
-One can shown that if $\ell_n'$ is "well behaved" over $I;$ i.e. 
+One can shown that if $\ell_{n,obs}'$ is "well behaved" over $I;$ i.e. 
 
-* if $\ell_n''(\theta)\neq 0$ for all $\theta\in I$ and 
-* if $\ell_n'''(\theta)$ is finite and continuous for all $\theta\in I,$ 
+* if $\ell_{n,obs}''(\theta)\neq 0$ for all $\theta\in I$ and 
+* if $\ell_{n,obs}'''(\theta)$ is finite and continuous for all $\theta\in I,$ 
 
 and if our first guess $\theta_{(0)}$ is "close enough;" i.e. 
 
 * if $M|e_{(0)}|<1,$ 
 where 
 $$
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_{n,obs}'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_{n,obs}''(\theta)|}\right)\geq 0,
 $$ 
 
 then $\theta_{(m)}$ will converge to $\theta_{root}$ as $m\to\infty.$ 
 
 ::: {.callout-warning}
-Unfortunately, we typically don't know if $\ell_n'$ is "well behaved," and we usually also don't know whether our first guess is "close enough". So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭
+Unfortunately, we may not know if $\ell_{n,obs}'$ is "well behaved," and we may also don't know whether our first guess is "close enough". So, we may not be able to guarantee convergence of the Newton-Raphson algorithm. 😭
 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method -->
 :::
 
@@ -659,21 +659,21 @@ Unfortunately, we typically don't know if $\ell_n'$ is "well behaved," and we us
 ::: {.callout-tip}
 * For problems that are globally concave, the starting value $\theta_0$ doesn't matter.  For more complex problems, however, the  Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to **try multiple starting values**.
 
-* In practice, the implementation of the Newton-Raphson algorithm can be tricky. We may have $\ell_n''(\theta_{(m)})=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
+* In practice, the implementation of the Newton-Raphson algorithm can be tricky. We may have $\ell_{n,obs}''(\theta_{(m)})=0,$ in which case the function looks locally like a straight line, with no solution to the Taylor series approximation 
 $$
 \begin{align*}
-\ell_n'(\theta_{(m)} + h) & \approx \ell_n'(\theta_{(m)}) + \ell_n''(\theta_{(m)})h = \ell_n'(\theta_{(m)}). 
+\ell_{n,obs}'(\theta_{(m)} + h) & \approx \ell_{n,obs}'(\theta_{(m)}) + \ell_{n,obs}''(\theta_{(m)})h = \ell_{n,obs}'(\theta_{(m)}). 
 \end{align*}
 $$
-In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell_n'(\theta_m).$
+In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on $\ell_{n,obs}'(\theta_m).$
 
 
-* In other cases where $\theta_{(m)}$ is too far from the true root $\theta_{root}$, the Taylor approximation may be so inaccurate that $\ell_n(\theta_{(m+1)})$ is actually *more distant* from zero than $\ell_n(\theta_{(m)}).$ When this happens one may replace $\theta_{(m+1)}$ with $(\theta_{(m+1)}+\theta_{(m)})/2$ (or some other value between $\theta_{(m)}$ and $\theta_{(m+1)}$) in the hope that a smaller step will produce a better result.
+* In other cases where $\theta_{(m)}$ is too far from the true root $\theta_{root}$, the Taylor approximation may be so inaccurate that $\ell_{n,obs}(\theta_{(m+1)})$ is actually *more distant* from zero than $\ell_{n,obs}(\theta_{(m)}).$ When this happens one may replace $\theta_{(m+1)}$ with $(\theta_{(m+1)}+\theta_{(m)})/2$ (or some other value between $\theta_{(m)}$ and $\theta_{(m+1)}$) in the hope that a smaller step will produce a better result.
 :::
 
-**Stopping Criterion:** Since we are expecting that $\ell_n'(\theta_{(m)})\to 0,$ as $m\to\infty,$ a good stopping condition for the Newton-Raphson algorithm is 
+**Stopping Criterion:** Since we are expecting that $\ell_{n,obs}'(\theta_{(m)})\to 0,$ as $m\to\infty,$ a good stopping condition for the Newton-Raphson algorithm is 
 $$
-|\ell_n'(\theta_{(m)})|\leq \varepsilon
+|\ell_{n,obs}'(\theta_{(m)})|\leq \varepsilon
 $$ 
 for some (small) tolerance $\varepsilon>0.$ 
 
@@ -683,10 +683,10 @@ $$
 \begin{array}{ll}
 \texttt{\textbf{select }} \theta_{(0)}\in\Theta\;\;\text{ and}&\varepsilon>0 \\[2ex]
 \texttt{\textbf{let }} m=0         &  \\
-\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | >\varepsilon & \texttt{\textbf{do}}\\
+\texttt{\textbf{while }}  | \ell_{n,obs}'(\theta_{(m)}) | >\varepsilon & \texttt{\textbf{do}}\\
 &\left[
                                     \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
-                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
+                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_{n,obs}'(\theta_{(m-1)})}{\ell_{n,obs}''(\theta_{(m-1)})} \\
                                     \end{array} \right.\\
 \texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} & \\
 \texttt{\textbf{return }} \hat\theta_{ML} &  \\
@@ -702,7 +702,7 @@ Let's return to our earlier coin flipping example.
 
 If we observe, for instance, only one head $N_{H,obs}=1$ for a sample size of $n=5,$ we already know from @eq-MLECoinFlipp that 
 $$
-\hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
+\hat\theta_{ML,obs}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 $$
 but let us, nevertheless, apply the Newton-Raphson algorithm.  
 
@@ -731,19 +731,19 @@ We consider a sample size of $n=5$ with the following observed outcome:
 
 Setting $\varepsilon=10^{-10}$ as our **stopping criterion** and $\theta_{(0)}=0.4$ as our **starting value** allows us to run the Newton-Raphson algorithm which gives us the results shown in @tbl-NR. The numeric optimization solution,  
 $$
-\hat\theta_{ML} = \hat\theta_{(5)} = 0.2,
+\hat\theta_{ML,obs} = \hat\theta_{(5)} = 0.2,
 $$ 
 equals the analytic solution. 
 
 
-|$m$ 	|	$\hat\theta_{(m)}$	|	$h_{{(m)}}=\frac{-\ell_{n,obs}'(\hat\theta_{(m)})}{\ell_{n,obs}''(\hat\theta_{(m)})}$ |$\ell_{n,obs}'(\hat\theta_{(m)})\gtrless \varepsilon$	 |  
+|$m$ 	|	$\hat\theta_{(m)}$	|	$h_{{(m)}}=\frac{-\ell_{n,obs}'(\hat\theta_{(m)})}{\ell_{n,obs}''(\hat\theta_{(m)})}$ |$|\ell_{n,obs}'(\hat\theta_{(m)})|\gtrless \varepsilon$	 |  
 |-------------------|-------------------|:--------------------------:|---------------------------------------------:|
-|$0$| $0.40$| $-2.4\cdot 10^{-1}$| ${\color{red}-4.2 > \varepsilon}$                        |
-|$1$| $0.16$| $\phantom{-}3.3\cdot 10^{-2}$ |${\color{red}\phantom{-}1.5 > \varepsilon}$              |
-|$2$| $0.19$| $\phantom{-}6.6\cdot 10^{-3}$ |${\color{red}\phantom{-}2.2\cdot 10^{-1} > \varepsilon}$ |
-|$3$| $0.19$| $\phantom{-}1.7\cdot 10^{-4}$ |${\color{red}\phantom{-}5.4\cdot 10^{-3} > \varepsilon}$ |
-|$4$| $0.19$| $\phantom{-}1.1\cdot 10^{-7}$ |${\color{red}\phantom{-}3.5\cdot 10^{-6} > \varepsilon}$ |
-|$5$| $0.20$| $\phantom{-}4.8\cdot 10^{-14}$|${\color{darkgreen}\phantom{-}1.5\cdot 10^{-12} < \varepsilon}$|
+|$0$| $0.40$| $-2.4\cdot 10^{-1}$| ${\color{red}|4.2| > \varepsilon}$                        |
+|$1$| $0.16$| $\phantom{-}3.3\cdot 10^{-2}$ |${\color{red}|1.5| > \varepsilon}$              |
+|$2$| $0.19$| $\phantom{-}6.6\cdot 10^{-3}$ |${\color{red}|2.2\cdot 10^{-1}| > \varepsilon}$ |
+|$3$| $0.19$| $\phantom{-}1.7\cdot 10^{-4}$ |${\color{red}|5.4\cdot 10^{-3}| > \varepsilon}$ |
+|$4$| $0.19$| $\phantom{-}1.1\cdot 10^{-7}$ |${\color{red}|3.5\cdot 10^{-6}| > \varepsilon}$ |
+|$5$| $0.20$| $\phantom{-}4.8\cdot 10^{-14}$|${\color{darkgreen}|1.5\cdot 10^{-12}| < \varepsilon}$|
 
 : Result of applying the Newton Raphson optimization algorithm to our coin flipping example for given data with $N_{H,obs}=1,$ sample size $n=5,$ starting value $\theta_{(0)}=0.4,$ and convergence criterion $\varepsilon=10^{-10}.$ {#tbl-NR}
 
@@ -951,8 +951,8 @@ $$
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta^T_{ML},s_{ML}^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta^T_{ML},s_{ML}^2),
-\end{matrix}\right)=\\[2ex]
-&=
+\end{matrix}\right)\overset{!}{=}0\\[2ex]
+\Leftrightarrow &
 \left(\begin{matrix}
 - \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})\\
 -\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}
@@ -1002,7 +1002,6 @@ To compute the **asymptotic variance** of the ML-estimators $\hat\beta_{ML}$ and
 3. Inverting the Fisher information matrix gives the **asymptotic variance** expression. 
 :::
 
-Let's do this preliminary work in the following:
 
 * Partial second derivatives with respect to $\beta:$
 $$
@@ -1086,7 +1085,7 @@ Collecting the above results, allows us to write down the expression for $(-1/n)
 
 $$
 \begin{align*}
-&\mathcal{I}(\theta) :=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T,\sigma^2)\right)\\[2ex] 
+\mathcal{I}(\theta) &:=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T,\sigma^2)\right)\\[2ex] 
 &=
 -\frac{1}{n}\cdot \mathbb{E}
 \left[\begin{array}{cc}
@@ -1129,7 +1128,7 @@ is given by the **inverse of the Fisher information matrix** evaluated at the tr
 $$
 \begin{align*}
 &AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
-=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
 &=\left(\mathcal{I}(\beta^T_0,\sigma^2_0)\right)^{-1}\\[2ex]
 &=\left(-\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T_0,\sigma^2_0)\right)\right)^{-1}\\[2ex] 
 &=
@@ -1186,7 +1185,7 @@ That is,
 $$
 \begin{align*}
 AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right) 
-&=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex] 
+&=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex] 
 &=
 \left[\begin{array}{cc}
 \sigma^2_0\Sigma_{X^TX}^{-1} & 0 \\[2ex]
@@ -1195,6 +1194,21 @@ AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 \end{align*}
 $${#eq-FIMVar}
 
+@eq-FIMVar means that
+$$
+\begin{align*}
+\underset{(K\times K)}{Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)} 
+&\approx 
+\left[\begin{array}{cc}
+\underset{(K\times K)}{\frac{1}{n}\,\sigma^2_0\Sigma_{X^TX}^{-1}}
+& 
+\underset{(K\times 1)}{0}\\
+\underset{(1\times K)}{0} & 
+\underset{(1\times 1)}{\frac{1}{n}\,2\sigma^4_0}
+\end{array}\right],
+\end{align*}
+$${#eq-FIMVar2}
+where the approximation is good for largish sample sizes $n.$
 
 <!-- While the upper left element of the Fisher information matrix is easily seen, the derivation of the lower right element is rather tedious and thus omitted.
 [^1]: See [https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood) for more details. -->
@@ -1213,11 +1227,11 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 $${#eq-FIMVar}
 where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
-n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
+n\cdot Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
 $$
 and
 $$
-n Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
+n\cdot Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
 $$
 
 
@@ -1227,7 +1241,7 @@ Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$. -->
 
-Of course, the variance expressions in @eq-FIMVar contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities; namely 
+Of course, the variance expressions in @eq-FIMVar and @eq-FIMVar2, respectively, contain unknown quantities and are, therefore, not directly usable in practice. However, we can plug in estimates for the unknown quantities; namely 
 $$
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 $$
@@ -1236,8 +1250,8 @@ $$
 S_{X^TX}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1} \quad \text{for}\quad \Sigma_{X^TX}^{-1}.
 $$
 
-This leads to estimators of the asymptotic variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$
-$$
+This leads to estimators for the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$
+<!-- $$
 \begin{align}
 \widehat{AVar}(\hat{\beta}_{ML})
 &=s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
@@ -1246,12 +1260,12 @@ $$
 &=2\left(s_{ML}^2\right)^2
 \end{align}
 $$
-and thus to estimators of the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$ 
+and thus to estimators of the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$  -->
 $$
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})
 =\frac{1}{n}\widehat{AVar}(\hat{\beta}_{ML})
-&=s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\\[2ex]
+&=\frac{1}{n} \,s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
 &=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{Var}(s^2_{ML})
 =\frac{1}{n}\widehat{AVar}(s^2_{ML})
@@ -1328,8 +1342,8 @@ $$
 \right)\\[2ex]
 \sqrt{n}\left(
 \begin{pmatrix}
-\hat\beta_{ML}\\
-\hat s_{ML}^2
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
 \end{pmatrix}-
 \begin{pmatrix}
 \beta_0\\
@@ -1347,8 +1361,8 @@ $$
 \right)\\[2ex]
 \Leftrightarrow
 \begin{pmatrix}
-\hat\beta_{ML}\\
-\hat s_{ML}^2
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
 \end{pmatrix}
 &\overset{a}{\sim}
 \mathcal{N}_{K+1}\left(
@@ -1366,7 +1380,7 @@ $$
 
 Plugging-in estimators for the unknown variance components, i.e.
 
-* $s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\quad$ for $\quad\sigma_0^2 \frac{1}{n} \Sigma_{X^TX}$
+* $\frac{1}{n}\,s_{ML}^2 S_{X^TX}^{-1}\quad$ for $\quad\frac{1}{n}\,\sigma_0^2 \Sigma_{X^TX}$
 
 and 
 
@@ -1391,6 +1405,13 @@ $$
 T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - 0}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
 \mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
 $$
+**Testing:** 
+We reject $H_0,$ if the observed value $T_{\beta_{0,k},n,obs}$ is in absolute values larger than the $(1-\alpha/2)$-qantile of the standard normal distribution, 
+$$
+|T_{\beta_{0,k},n,obs}| > z_{1-\alpha/2},
+$$ 
+where $\alpha\in(0,1)$ denotes the chosen significance level, such as $\alpha=0.01.$ 
+
 
 Likewise, for 
 $$
@@ -1407,9 +1428,9 @@ T_{\sigma_0,n}=\frac{s_{ML}^2 - (\sigma_0^{(0)})^2}{\sqrt{\frac{1}{n}2\left(s_{M
 $$
 
 **Testing:** 
-We reject $H_0,$ if the observed value $T_{n,obs},$ computed from the observed realization of the random sample, is in absolute values larger than the $(1-\alpha/2)$-qantile of the standard normal distribution; i.e. if 
+We reject $H_0,$ if the observed value $T_{\sigma_{0},n,obs}$ is in absolute values larger than the $(1-\alpha/2)$-qantile of the standard normal distribution, 
 $$
-|T_{n,obs}| > z_{1-\alpha/2},
+|T_{\sigma_{0},n,obs}| > z_{1-\alpha/2},
 $$ 
 where $\alpha\in(0,1)$ denotes the chosen significance level, such as $\alpha=0.01.$ 
 
@@ -1462,8 +1483,7 @@ $$
 $$
 for all $\theta\in\Theta.$
 
-::: {.callout-note}
-# Example
+::: {.callout-note appearance="minimal"}
 An **example** that fits into the above setup is the density of the exponential distribution 
 $$
 f(x;\theta)=\left\{
@@ -1483,19 +1503,17 @@ where $h:$ $\mathbb{R}\to\mathbb{R},$ $T:$ $\mathbb{R}\to\mathbb{R},$ $\eta:$ $\
 :::
 
 
-The derivation of the asymptotic distribution of the ML estimator, $\hat\theta_n,$ relies on a Taylor expansion of the derivative of the log-likelihood function, 
+The derivation of the asymptotic distribution of the ML estimator, $\hat\theta_n,$ relies on an expansion of the derivative of the log-likelihood function, 
 $$
 \ell_n'(\cdot),
 $$ 
-around $\theta_0$ (see @eq-MVT). To derive this expression, we use the mean value theorem (@thm-MVT).
+around $\theta_0$ (see @eq-MVT below) using the **Mean Value Theorem** (@thm-MVT).
 
 
 ::: {.callout-note appearance="minimal"} 
 ## 
 ::: {#thm-MVT}
-
 # Mean Value Theorem 
-
 *Let $f$ be continuous over the closed interval $[a,b]$ and differentiable over the open interval $(a,b).$ Then, there exists at least one point $c\in(a,b)$ such that*
 $$
 f'(c) = \frac{f(b)-f(a)}{b-a}
@@ -1517,7 +1535,6 @@ for some $\psi_n$ between $\hat{\theta}_n$ and $\theta_0;$ i.e.
 * $\psi_n\in(\theta_0,\hat{\theta}_n)\quad$ if $\quad\theta_0<\hat{\theta}_n$
 * $\psi_n\in(\hat{\theta}_n,\theta_0)\quad$ if $\quad\hat{\theta}_n<\theta_0$
 
-> Note: @eq-MVT is simply the first-order version of the mean-value form of Taylor's theorem (@thm-TaylorThm).
 
 Since $\hat{\theta}_n$ maximizes the log-Likelihood function it follows that 
 $$

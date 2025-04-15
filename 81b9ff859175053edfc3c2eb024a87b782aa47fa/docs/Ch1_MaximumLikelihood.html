@@ -644,42 +644,42 @@ M_{k,x}(h)=o\big(|h|^k\big)
 </div>
 <section id="optimization-idea" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="optimization-idea"><strong>Optimization Idea</strong></h4>
-<p>Let <span class="math inline">\(\ell_n\)</span> be a log-likelihood function with continuous first, <span class="math inline">\(\ell_n',\)</span> and second, <span class="math inline">\(\ell_n'',\)</span> derivative.</p>
-<p>To optimize the log-likelihood function <span class="math inline">\(\ell_n,\)</span> we try to find the root of <span class="math inline">\(\ell_n',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\in\Theta\)</span> such that <span class="math display">\[
-\ell_n'(\theta)=0.
+<p>Let <span class="math inline">\(\ell_{n,obs}\)</span> be an observed realization of the log-likelihood function with continuous first, <span class="math inline">\(\ell_n',\)</span> and second, <span class="math inline">\(\ell_n'',\)</span> derivative.</p>
+<p>To optimize the log-likelihood function <span class="math inline">\(\ell_{n,obs},\)</span> we try to find the root of <span class="math inline">\(\ell_{n,obs}',\)</span> i.e.&nbsp;the value of <span class="math inline">\(\theta\in\Theta\)</span> such that <span class="math display">\[
+\ell_{n,obs}'(\theta)=0.
 \]</span> That is, we try to find the value of <span class="math inline">\(\theta\)</span> that fulfills the <strong>first order condition</strong> of the optimization problem. We do so using a step-wise optimization approach, where each step has a smallish size <span class="math inline">\(h.\)</span></p>
-<p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_{(0)}\in\Theta\)</span> be our first guess of the root of <span class="math inline">\(\ell'_n.\)</span></p>
-<p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, our guess is not perfect and thus <span class="math inline">\(\ell_n'(\theta_{(0)})\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_{(0)}\)</span> to a new root-candidate <span class="math inline">\(\theta_{(1)}\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
+<p><strong>Initialization:</strong> Let <span class="math inline">\(\theta_{(0)}\in\Theta\)</span> be our first guess of the root of <span class="math inline">\(\ell'_{n,obs}.\)</span></p>
+<p><strong><span class="math inline">\(h\)</span>-Steps:</strong> Typically, our guess is not perfect and thus <span class="math inline">\(\ell_{n,obs}'(\theta_{(0)})\neq 0.\)</span> Therefore, we want to move from <span class="math inline">\(\theta_{(0)}\)</span> to a new root-candidate <span class="math inline">\(\theta_{(1)}\)</span> by doing an <span class="math inline">\(h\)</span>-step update <span class="math display">\[
 \theta_{(1)} = \theta_{(0)} + h.
 \]</span></p>
 <!-- 1. We select some starting value $\theta_0.$ 
 2. Optimize the second-order Taylor polynomial of $f$ around $\theta_0$ with respect to $h.$ 
 3. In each of the following steps, we optimize new second-order Taylor polynomials of $f$ at those values $\theta,$ for which the previous second-order Taylor polynomial was maximal.  -->
 <!-- **Implementation-Idea:** The second-order Taylor-series approximation gives -->
-<p>The first-order Taylor-series approximation of <span class="math inline">\(\ell_n'\)</span> around our first guess <span class="math inline">\(\theta_{(0)}\)</span> gives <span class="math display">\[
+<p>The first-order Taylor-series approximation of <span class="math inline">\(\ell_{n,obs}'\)</span> around our first guess <span class="math inline">\(\theta_{(0)}\)</span> gives <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(0)} + h) &amp; = \ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h + o(|h|)\\[2ex]
+\ell_{n,obs}'(\theta_{(0)} + h) &amp; = \ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)})h + o(|h|)\\[2ex]
 {\color{gray}\big(f(\theta_{(0)} + h) }\,&amp;\,{\color{gray} = f(\theta_{(0)}) + f'(\theta_{(0)})h \,+\, o(|h|)\big)}
 \end{align*}
-\]</span> Thus, in a small <span class="math inline">\(h\)</span>-neigborhood (<span class="math inline">\(|h|\to 0\)</span>) around <span class="math inline">\(\theta_{(0)},\)</span> <span class="math inline">\(\ell_n'(\theta_{(0)} + h)\)</span> equals the linear function (in <span class="math inline">\(h\)</span>) <span class="math display">\[
-\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)})h
+\]</span> Thus, in a small <span class="math inline">\(h\)</span>-neigborhood (<span class="math inline">\(|h|\to 0\)</span>) around <span class="math inline">\(\theta_{(0)},\)</span> <span class="math inline">\(\ell_{n,obs}'(\theta_{(0)} + h)\)</span> approximately equals the linear function (in <span class="math inline">\(h\)</span>) <span class="math display">\[
+\ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)})h
 \]</span> plus negligible terms, <span class="math inline">\((o(|h|)),\)</span> that are of a smaller order of magnitude.</p>
-<p>Therefore, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_n',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
+<p>Therefore, to find the <span class="math inline">\(h\)</span>-step that brings us closer to the root of <span class="math inline">\(\ell_{n,obs}',\)</span> we can (approximatively) use the <span class="math inline">\(h\)</span>-step that brings us to the root of its first-order approximation, i.e. <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(0)}) + \ell_n''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
-\Rightarrow h_{(0)} = -\frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+\ell_{n,obs}'(\theta_{(0)}) + \ell_{n,obs}''(\theta_{(0)}) h_{(0)} = 0\\[2ex]
+\Rightarrow h_{(0)} = -\frac{\ell_{n,obs}'(\theta_{(0)})}{\ell_{n,obs}''(\theta_{(0)})}.
 \end{align*}
 \]</span> Based on this <span class="math inline">\(h\)</span>-step, the new root-candidate is <span class="math display">\[
 \begin{align*}
 \theta_{(1)}
 &amp; = \theta_{(0)} + h_{(0)}\\[2ex]
-&amp; = \theta_{(0)} - \frac{\ell_n'(\theta_{(0)})}{\ell_n''(\theta_{(0)})}.
+&amp; = \theta_{(0)} - \frac{\ell_{n,obs}'(\theta_{(0)})}{\ell_{n,obs}''(\theta_{(0)})}.
 \end{align*}
 \]</span> Likewise, the <span class="math inline">\(m\)</span>th root-candidate is <span class="math display">\[
 \begin{align*}
 \theta_{(m)}
 &amp; = \theta_{(m-1)} + h_{(m-1)}\\[2ex]
-&amp; = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})};
+&amp; = \theta_{(m-1)} - \frac{\ell_{n,obs}'(\theta_{(m-1)})}{\ell_{n,obs}''(\theta_{(m-1)})};
 \end{align*}
 \]</span> see also <a href="#fig-NR" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>.</p>
 <div class="cell">
@@ -700,23 +700,23 @@ Figure&nbsp;1.2: The <span class="math inline">\(m\)</span>th update step in the
 </section>
 <section id="sec-ConvNR" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="sec-ConvNR"><span class="header-section-number">1.2.2</span> Convergence of the Newton-Raphson Algorithm</h3>
-<p>Let <span class="math inline">\(\theta_{root}\)</span> denote the root of <span class="math inline">\(\ell_n';\)</span> i.e.&nbsp; <span class="math display">\[
-\ell_n'(\theta_{root})=0.
+<p>Let <span class="math inline">\(\theta_{root}\)</span> denote the root of <span class="math inline">\(\ell_{n,obs}';\)</span> i.e.&nbsp; <span class="math display">\[
+\ell_{n,obs}'(\theta_{root})=0.
 \]</span> We aim to find <span class="math inline">\(\theta_{root}\)</span> using the Newton-Raphson algorithm and call our best approximation of <span class="math inline">\(\theta_{root}\)</span> the maximum likelihood estimate; i.e.&nbsp;<span class="math inline">\(\hat{\theta}_{ML}\approx\theta_{root}.\)</span></p>
 <p>Let <span class="math display">\[
 e_{(0)}=\theta_{root}-\theta_{(0)}
 \]</span> denote the start value error and let <span class="math display">\[
 I=[\theta_{root}-|e_{(0)}|, \theta_{root}+|e_{(0)}|]
 \]</span> denote the start value error neighborhood around <span class="math inline">\(\theta_{root}.\)</span></p>
-<p>One can shown that if <span class="math inline">\(\ell_n'\)</span> is “well behaved” over <span class="math inline">\(I;\)</span> i.e.&nbsp;</p>
+<p>One can shown that if <span class="math inline">\(\ell_{n,obs}'\)</span> is “well behaved” over <span class="math inline">\(I;\)</span> i.e.&nbsp;</p>
 <ul>
-<li>if <span class="math inline">\(\ell_n''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I\)</span> and</li>
-<li>if <span class="math inline">\(\ell_n'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I,\)</span></li>
+<li>if <span class="math inline">\(\ell_{n,obs}''(\theta)\neq 0\)</span> for all <span class="math inline">\(\theta\in I\)</span> and</li>
+<li>if <span class="math inline">\(\ell_{n,obs}'''(\theta)\)</span> is finite and continuous for all <span class="math inline">\(\theta\in I,\)</span></li>
 </ul>
 <p>and if our first guess <span class="math inline">\(\theta_{(0)}\)</span> is “close enough;” i.e.&nbsp;</p>
 <ul>
 <li>if <span class="math inline">\(M|e_{(0)}|&lt;1,\)</span> where <span class="math display">\[
-M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_n'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_n''(\theta)|}\right)\geq 0,
+M=\frac{1}{2}\left(\sup_{\theta\in I}|\ell_{n,obs}'''(\theta)|\right)\left(\sup_{\theta\in I}\frac{1}{|\ell_{n,obs}''(\theta)|}\right)\geq 0,
 \]</span></li>
 </ul>
 <p>then <span class="math inline">\(\theta_{(m)}\)</span> will converge to <span class="math inline">\(\theta_{root}\)</span> as <span class="math inline">\(m\to\infty.\)</span></p>
@@ -730,7 +730,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Unfortunately, we typically don’t know if <span class="math inline">\(\ell_n'\)</span> is “well behaved,” and we usually also don’t know whether our first guess is “close enough”. So, typically we cannot guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
+<p>Unfortunately, we may not know if <span class="math inline">\(\ell_{n,obs}'\)</span> is “well behaved,” and we may also don’t know whether our first guess is “close enough”. So, we may not be able to guarantee convergence of the Newton-Raphson algorithm. 😭 <!-- Exercise: Let this be proofen: https://en.wikipedia.org/wiki/Newton%27s_method --></p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -745,17 +745,17 @@ Tip
 <div class="callout-body-container callout-body">
 <ul>
 <li><p>For problems that are globally concave, the starting value <span class="math inline">\(\theta_0\)</span> doesn’t matter. For more complex problems, however, the Newton-Raphson algorithm can get stuck into a local maximum. In such cases, it is usually a good idea to <strong>try multiple starting values</strong>.</p></li>
-<li><p>In practice, the implementation of the Newton-Raphson algorithm can be tricky. We may have <span class="math inline">\(\ell_n''(\theta_{(m)})=0,\)</span> in which case the function looks locally like a straight line, with no solution to the Taylor series approximation <span class="math display">\[
+<li><p>In practice, the implementation of the Newton-Raphson algorithm can be tricky. We may have <span class="math inline">\(\ell_{n,obs}''(\theta_{(m)})=0,\)</span> in which case the function looks locally like a straight line, with no solution to the Taylor series approximation <span class="math display">\[
 \begin{align*}
-\ell_n'(\theta_{(m)} + h) &amp; \approx \ell_n'(\theta_{(m)}) + \ell_n''(\theta_{(m)})h = \ell_n'(\theta_{(m)}).
+\ell_{n,obs}'(\theta_{(m)} + h) &amp; \approx \ell_{n,obs}'(\theta_{(m)}) + \ell_{n,obs}''(\theta_{(m)})h = \ell_{n,obs}'(\theta_{(m)}).
 \end{align*}
-\]</span> In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on <span class="math inline">\(\ell_n'(\theta_m).\)</span></p></li>
-<li><p>In other cases where <span class="math inline">\(\theta_{(m)}\)</span> is too far from the true root <span class="math inline">\(\theta_{root}\)</span>, the Taylor approximation may be so inaccurate that <span class="math inline">\(\ell_n(\theta_{(m+1)})\)</span> is actually <em>more distant</em> from zero than <span class="math inline">\(\ell_n(\theta_{(m)}).\)</span> When this happens one may replace <span class="math inline">\(\theta_{(m+1)}\)</span> with <span class="math inline">\((\theta_{(m+1)}+\theta_{(m)})/2\)</span> (or some other value between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{(m+1)}\)</span>) in the hope that a smaller step will produce a better result.</p></li>
+\]</span> In this case a simple strategy is to move a small step in the direction which decreases the function value, based only on <span class="math inline">\(\ell_{n,obs}'(\theta_m).\)</span></p></li>
+<li><p>In other cases where <span class="math inline">\(\theta_{(m)}\)</span> is too far from the true root <span class="math inline">\(\theta_{root}\)</span>, the Taylor approximation may be so inaccurate that <span class="math inline">\(\ell_{n,obs}(\theta_{(m+1)})\)</span> is actually <em>more distant</em> from zero than <span class="math inline">\(\ell_{n,obs}(\theta_{(m)}).\)</span> When this happens one may replace <span class="math inline">\(\theta_{(m+1)}\)</span> with <span class="math inline">\((\theta_{(m+1)}+\theta_{(m)})/2\)</span> (or some other value between <span class="math inline">\(\theta_{(m)}\)</span> and <span class="math inline">\(\theta_{(m+1)}\)</span>) in the hope that a smaller step will produce a better result.</p></li>
 </ul>
 </div>
 </div>
-<p><strong>Stopping Criterion:</strong> Since we are expecting that <span class="math inline">\(\ell_n'(\theta_{(m)})\to 0,\)</span> as <span class="math inline">\(m\to\infty,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
-|\ell_n'(\theta_{(m)})|\leq \varepsilon
+<p><strong>Stopping Criterion:</strong> Since we are expecting that <span class="math inline">\(\ell_{n,obs}'(\theta_{(m)})\to 0,\)</span> as <span class="math inline">\(m\to\infty,\)</span> a good stopping condition for the Newton-Raphson algorithm is <span class="math display">\[
+|\ell_{n,obs}'(\theta_{(m)})|\leq \varepsilon
 \]</span> for some (small) tolerance <span class="math inline">\(\varepsilon&gt;0.\)</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -771,10 +771,10 @@ Pseudo-Code: Newton-Raphson Algorithm
 \begin{array}{ll}
 \texttt{\textbf{select }} \theta_{(0)}\in\Theta\;\;\text{ and}&amp;\varepsilon&gt;0 \\[2ex]
 \texttt{\textbf{let }} m=0         &amp;  \\
-\texttt{\textbf{while }}  | \ell_n'(\theta_{(m)}) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
+\texttt{\textbf{while }}  | \ell_{n,obs}'(\theta_{(m)}) | &gt;\varepsilon &amp; \texttt{\textbf{do}}\\
 &amp;\left[
                                     \begin{array}{l}\texttt{\textbf{let }} m = m+1 \\
-                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_n'(\theta_{(m-1)})}{\ell_n''(\theta_{(m-1)})} \\
+                                    \texttt{\textbf{let }} \theta_{(m)} = \theta_{(m-1)} - \frac{\ell_{n,obs}'(\theta_{(m-1)})}{\ell_{n,obs}''(\theta_{(m-1)})} \\
                                     \end{array} \right.\\
 \texttt{\textbf{let }}\hat\theta_{ML}=\theta_{(m)} &amp; \\
 \texttt{\textbf{return }} \hat\theta_{ML} &amp;  \\
@@ -787,7 +787,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 <h3 data-number="1.2.3" class="anchored" data-anchor-id="newton-raphson-algorithm-coin-flipping-example"><span class="header-section-number">1.2.3</span> Newton-Raphson Algorithm: Coin-Flipping Example</h3>
 <p>Let’s return to our earlier coin flipping example.</p>
 <p>If we observe, for instance, only one head <span class="math inline">\(N_{H,obs}=1\)</span> for a sample size of <span class="math inline">\(n=5,\)</span> we already know from <a href="#eq-MLECoinFlipp" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> that <span class="math display">\[
-\hat\theta_{ML}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
+\hat\theta_{ML,obs}=\frac{N_{H,obs}}{n}=\frac{1}{5}=0.2,
 \]</span> but let us, nevertheless, apply the Newton-Raphson algorithm.</p>
 <p>The first and second derivatives of <span class="math display">\[
 \ell_{n,obs}(\theta)=\sum_{i=1}^n\big(X_{i,obs} \ln(\theta) + (1-X_{i,obs})\ln(1-\theta)\big)
@@ -808,7 +808,7 @@ Pseudo-Code: Newton-Raphson Algorithm
 </ul>
 <p>Setting <span class="math inline">\(\varepsilon=10^{-10}\)</span> as our <strong>stopping criterion</strong> and <span class="math inline">\(\theta_{(0)}=0.4\)</span> as our <strong>starting value</strong> allows us to run the Newton-Raphson algorithm which gives us the results shown in <a href="#tbl-NR" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. The numeric optimization solution,<br>
 <span class="math display">\[
-\hat\theta_{ML} = \hat\theta_{(5)} = 0.2,
+\hat\theta_{ML,obs} = \hat\theta_{(5)} = 0.2,
 \]</span> equals the analytic solution.</p>
 <div id="tbl-NR" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -828,7 +828,7 @@ Table&nbsp;1.1: Result of applying the Newton Raphson optimization algorithm to 
 <th><span class="math inline">\(m\)</span></th>
 <th><span class="math inline">\(\hat\theta_{(m)}\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(h_{{(m)}}=\frac{-\ell_{n,obs}'(\hat\theta_{(m)})}{\ell_{n,obs}''(\hat\theta_{(m)})}\)</span></th>
-<th style="text-align: right;"><span class="math inline">\(\ell_{n,obs}'(\hat\theta_{(m)})\gtrless \varepsilon\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(|\ell_{n,obs}'(\hat\theta_{(m)})|\gtrless \varepsilon\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -836,37 +836,37 @@ Table&nbsp;1.1: Result of applying the Newton Raphson optimization algorithm to 
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(0.40\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(-2.4\cdot 10^{-1}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{red}-4.2 &gt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{red}|4.2| &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(0.16\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\phantom{-}3.3\cdot 10^{-2}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{red}\phantom{-}1.5 &gt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{red}|1.5| &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(2\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\phantom{-}6.6\cdot 10^{-3}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{red}\phantom{-}2.2\cdot 10^{-1} &gt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{red}|2.2\cdot 10^{-1}| &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(3\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\phantom{-}1.7\cdot 10^{-4}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{red}\phantom{-}5.4\cdot 10^{-3} &gt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{red}|5.4\cdot 10^{-3}| &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(4\)</span></td>
 <td><span class="math inline">\(0.19\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\phantom{-}1.1\cdot 10^{-7}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{red}\phantom{-}3.5\cdot 10^{-6} &gt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{red}|3.5\cdot 10^{-6}| &gt; \varepsilon}\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(5\)</span></td>
 <td><span class="math inline">\(0.20\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\phantom{-}4.8\cdot 10^{-14}\)</span></td>
-<td style="text-align: right;"><span class="math inline">\({\color{darkgreen}\phantom{-}1.5\cdot 10^{-12} &lt; \varepsilon}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\({\color{darkgreen}|1.5\cdot 10^{-12}| &lt; \varepsilon}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -1035,8 +1035,8 @@ Note
 \left(\begin{matrix}
 \dfrac{\partial \ell_n}{\partial \beta}(\hat\beta^T_{ML},s_{ML}^2)\\
 \dfrac{\partial \ell_n}{\partial \sigma^2}(\hat\beta^T_{ML},s_{ML}^2),
-\end{matrix}\right)=\\[2ex]
-&amp;=
+\end{matrix}\right)\overset{!}{=}0\\[2ex]
+\Leftrightarrow &amp;
 \left(\begin{matrix}
 - \dfrac{1}{s_{ML}^2}(-X^TY + X^TX\hat\beta_{ML})\\
 -\frac{n}{2 s_{ML}^2}+\left[\frac{1}{2}(Y-X\hat\beta_{ML})^T(Y-X\hat\beta_{ML})\right]\frac{1}{\left(s_{ML}^2\right)^{2}}
@@ -1085,7 +1085,6 @@ Computing the Asymptotic Variance
 </ol>
 </div>
 </div>
-<p>Let’s do this preliminary work in the following:</p>
 <ul>
 <li><p>Partial second derivatives with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
@@ -1157,7 +1156,7 @@ Computing the Asymptotic Variance
 <p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the <strong>Hessian matrix</strong> of <span class="math inline">\(\ell_n\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
 <p><span class="math display">\[
 \begin{align*}
-&amp;\mathcal{I}(\theta) :=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T,\sigma^2)\right)\\[2ex]
+\mathcal{I}(\theta) &amp;:=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T,\sigma^2)\right)\\[2ex]
 &amp;=
 -\frac{1}{n}\cdot \mathbb{E}
 \left[\begin{array}{cc}
@@ -1196,7 +1195,7 @@ Computing the Asymptotic Variance
 \]</span> is given by the <strong>inverse of the Fisher information matrix</strong> evaluated at the true parameter values <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma^2_0.\)</span> <span class="math display">\[
 \begin{align*}
 &amp;AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
 &amp;=\left(\mathcal{I}(\beta^T_0,\sigma^2_0)\right)^{-1}\\[2ex]
 &amp;=\left(-\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T_0,\sigma^2_0)\right)\right)^{-1}\\[2ex]
 &amp;=
@@ -1250,7 +1249,7 @@ $$ -->
 <p>That is, <span id="eq-FIMVar"><span class="math display">\[
 \begin{align*}
 AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-&amp;=\lim_{n\to\infty} n Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+&amp;=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
 &amp;=
 \left[\begin{array}{cc}
 \sigma^2_0\Sigma_{X^TX}^{-1} &amp; 0 \\[2ex]
@@ -1258,6 +1257,19 @@ AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 \end{array}\right].
 \end{align*}
 \tag{1.5}\]</span></span></p>
+<p><a href="#eq-FIMVar" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> means that <span id="eq-FIMVar2"><span class="math display">\[
+\begin{align*}
+\underset{(K\times K)}{Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)}
+&amp;\approx
+\left[\begin{array}{cc}
+\underset{(K\times K)}{\frac{1}{n}\,\sigma^2_0\Sigma_{X^TX}^{-1}}
+&amp;
+\underset{(K\times 1)}{0}\\
+\underset{(1\times K)}{0} &amp;
+\underset{(1\times 1)}{\frac{1}{n}\,2\sigma^4_0}
+\end{array}\right],
+\end{align*}
+\tag{1.6}\]</span></span> where the approximation is good for largish sample sizes <span class="math inline">\(n.\)</span></p>
 <!-- While the upper left element of the Fisher information matrix is easily seen, the derivation of the lower right element is rather tedious and thus omitted.
 [^1]: See [https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood](https://www.statlect.com/fundamentals-of-statistics/linear-regression-maximum-likelihood) for more details. -->
 <!-- Taking the inverse of the Fisher information matrix $\mathcal{I}\left(\beta, \sigma^2\right)$ gives the variance-covariance matrix of the vector of estimators $(\hat\beta_{ML}, s_{ML}^2)$
@@ -1274,11 +1286,11 @@ Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 $${#eq-FIMVar}
 where the approximation error becomes small as $n\to\infty.$ That is, 
 $$
-n Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
+n\cdot Var\left(\hat\beta_{ML}\right) \to \sigma^2\Sigma_{X^TX}^{-1}\quad\text{as}\quad n\to\infty,
 $$
 and
 $$
-n Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
+n\cdot Var\left(s_{ML}^2\right) \to 2\sigma^4\quad\text{as}\quad n\to\infty.
 $$
 
 
@@ -1287,24 +1299,25 @@ $$
 Var(\hat\beta_{ML}) \to 0\quad\text{and}\quad Var(s_{ML}^2) \to 0
 $$ 
 as $n\to\infty$. -->
-<p>Of course, the variance expressions in <a href="#eq-FIMVar" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> contain unknown quantities and thus are not directly usable in practice. However, we can plug in estimates of the unknown quantities; namely <span class="math display">\[
+<p>Of course, the variance expressions in <a href="#eq-FIMVar" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> and <a href="#eq-FIMVar2" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>, respectively, contain unknown quantities and are, therefore, not directly usable in practice. However, we can plug in estimates for the unknown quantities; namely <span class="math display">\[
 s_{ML}^2                         \quad\text{for}\quad \sigma^2_0
 \]</span> and <span class="math display">\[
 S_{X^TX}^{-1}=\left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1} \quad \text{for}\quad \Sigma_{X^TX}^{-1}.
 \]</span></p>
-<p>This leads to estimators of the asymptotic variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <span class="math display">\[
+<p>This leads to estimators for the variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <!-- $$
 \begin{align}
 \widehat{AVar}(\hat{\beta}_{ML})
-&amp;=s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
-&amp;=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
+&=s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
+&=s_{ML}^2 \left(\frac{1}{n}\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{AVar}(s^2_{ML})
-&amp;=2\left(s_{ML}^2\right)^2
+&=2\left(s_{ML}^2\right)^2
 \end{align}
-\]</span> and thus to estimators of the variances of <span class="math inline">\(\hat{\beta}_{ML}\)</span> and <span class="math inline">\(s_{ML}^2:\)</span> <span class="math display">\[
+$$
+and thus to estimators of the variances of $\hat{\beta}_{ML}$ and $s_{ML}^2:$  --> <span class="math display">\[
 \begin{align}
 \widehat{Var}(\hat{\beta}_{ML})
 =\frac{1}{n}\widehat{AVar}(\hat{\beta}_{ML})
-&amp;=s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\\[2ex]
+&amp;=\frac{1}{n} \,s_{ML}^2 S_{X^TX}^{-1}\\[2ex]
 &amp;=s_{ML}^2 \left(\sum_{i=1}^nX_i X_i^T\right)^{-1}\\[2ex]
 \widehat{Var}(s^2_{ML})
 =\frac{1}{n}\widehat{AVar}(s^2_{ML})
@@ -1375,8 +1388,8 @@ $$ -->
 \right)\\[2ex]
 \sqrt{n}\left(
 \begin{pmatrix}
-\hat\beta_{ML}\\
-\hat s_{ML}^2
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
 \end{pmatrix}-
 \begin{pmatrix}
 \beta_0\\
@@ -1394,8 +1407,8 @@ $$ -->
 \right)\\[2ex]
 \Leftrightarrow
 \begin{pmatrix}
-\hat\beta_{ML}\\
-\hat s_{ML}^2
+\hat\beta_{ML,n}\\
+\hat s_{ML,n}^2
 \end{pmatrix}
 &amp;\overset{a}{\sim}
 \mathcal{N}_{K+1}\left(
@@ -1412,7 +1425,7 @@ $$ -->
 \]</span></p>
 <p>Plugging-in estimators for the unknown variance components, i.e.</p>
 <ul>
-<li><span class="math inline">\(s_{ML}^2 \frac{1}{n}S_{X^TX}^{-1}\quad\)</span> for <span class="math inline">\(\quad\sigma_0^2 \frac{1}{n} \Sigma_{X^TX}\)</span></li>
+<li><span class="math inline">\(\frac{1}{n}\,s_{ML}^2 S_{X^TX}^{-1}\quad\)</span> for <span class="math inline">\(\quad\frac{1}{n}\,\sigma_0^2 \Sigma_{X^TX}\)</span></li>
 </ul>
 <p>and</p>
 <ul>
@@ -1430,7 +1443,9 @@ H_1\colon \beta_{0,k} &amp;\neq \beta_{0,k}^{(0)},\\
 \]</span> where <span class="math inline">\(\beta_{0,k}^{(0)}\)</span> denotes the null-hypothetical value (typically, <span class="math inline">\(\beta_{0,k}^{(0)}=0\)</span>), using the Wald statistic <span class="math display">\[
 T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - 0}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
 \mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
-\]</span></p>
+\]</span> <strong>Testing:</strong> We reject <span class="math inline">\(H_0,\)</span> if the observed value <span class="math inline">\(T_{\beta_{0,k},n,obs}\)</span> is in absolute values larger than the <span class="math inline">\((1-\alpha/2)\)</span>-qantile of the standard normal distribution, <span class="math display">\[
+|T_{\beta_{0,k},n,obs}| &gt; z_{1-\alpha/2},
+\]</span> where <span class="math inline">\(\alpha\in(0,1)\)</span> denotes the chosen significance level, such as <span class="math inline">\(\alpha=0.01.\)</span></p>
 <p>Likewise, for <span class="math display">\[
 \begin{align*}
 H_0\colon \sigma_0^2 &amp; = (\sigma_0^{(0)})^2\\
@@ -1440,8 +1455,8 @@ H_1\colon \sigma_0^2 &amp;\neq (\sigma_0^{(0)})^2,\\
 T_{\sigma_0,n}=\frac{s_{ML}^2 - (\sigma_0^{(0)})^2}{\sqrt{\frac{1}{n}2\left(s_{ML}^2\right)^2}}\overset{H_0}{\to_d}
 \mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
 \]</span></p>
-<p><strong>Testing:</strong> We reject <span class="math inline">\(H_0,\)</span> if the observed value <span class="math inline">\(T_{n,obs},\)</span> computed from the observed realization of the random sample, is in absolute values larger than the <span class="math inline">\((1-\alpha/2)\)</span>-qantile of the standard normal distribution; i.e.&nbsp;if <span class="math display">\[
-|T_{n,obs}| &gt; z_{1-\alpha/2},
+<p><strong>Testing:</strong> We reject <span class="math inline">\(H_0,\)</span> if the observed value <span class="math inline">\(T_{\sigma_{0},n,obs}\)</span> is in absolute values larger than the <span class="math inline">\((1-\alpha/2)\)</span>-qantile of the standard normal distribution, <span class="math display">\[
+|T_{\sigma_{0},n,obs}| &gt; z_{1-\alpha/2},
 \]</span> where <span class="math inline">\(\alpha\in(0,1)\)</span> denotes the chosen significance level, such as <span class="math inline">\(\alpha=0.01.\)</span></p>
 </section>
 </section>
@@ -1480,16 +1495,12 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 \end{align*}
 \]</span> for all <span class="math inline">\(\theta\in\Theta.\)</span></li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Example
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>An <strong>example</strong> that fits into the above setup is the density of the exponential distribution <span class="math display">\[
 f(x;\theta)=\left\{
     \begin{matrix}
@@ -1503,9 +1514,10 @@ f(x;\theta)=h(x)\exp(\eta(\theta) T(x) - B(\theta))
 \]</span> where <span class="math inline">\(h:\)</span> <span class="math inline">\(\mathbb{R}\to\mathbb{R},\)</span> <span class="math inline">\(T:\)</span> <span class="math inline">\(\mathbb{R}\to\mathbb{R},\)</span> <span class="math inline">\(\eta:\)</span> <span class="math inline">\(\Theta\to\mathbb{R},\)</span> and <span class="math inline">\(B:\)</span> <span class="math inline">\(\Theta\to\mathbb{R}.\)</span></p>
 </div>
 </div>
-<p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on a Taylor expansion of the derivative of the log-likelihood function, <span class="math display">\[
+</div>
+<p>The derivation of the asymptotic distribution of the ML estimator, <span class="math inline">\(\hat\theta_n,\)</span> relies on an expansion of the derivative of the log-likelihood function, <span class="math display">\[
 \ell_n'(\cdot),
-\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>). To derive this expression, we use the mean value theorem (<a href="#thm-MVT" class="quarto-xref">Theorem&nbsp;<span>1.2</span></a>).</p>
+\]</span> around <span class="math inline">\(\theta_0\)</span> (see <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.7</span></a> below) using the <strong>Mean Value Theorem</strong> (<a href="#thm-MVT" class="quarto-xref">Theorem&nbsp;<span>1.2</span></a>).</p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1524,21 +1536,18 @@ f(b)=f(a) + f'(c)(b-a).
 </div>
 <p>By the Mean Value Theorem (<a href="#thm-MVT" class="quarto-xref">Theorem&nbsp;<span>1.2</span></a>), we know that <span id="eq-MVT"><span class="math display">\[
 \ell_n'(\hat{\theta}_n)=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
-\tag{1.6}\]</span></span> for some <span class="math inline">\(\psi_n\)</span> between <span class="math inline">\(\hat{\theta}_n\)</span> and <span class="math inline">\(\theta_0;\)</span> i.e.</p>
+\tag{1.7}\]</span></span> for some <span class="math inline">\(\psi_n\)</span> between <span class="math inline">\(\hat{\theta}_n\)</span> and <span class="math inline">\(\theta_0;\)</span> i.e.</p>
 <ul>
 <li><span class="math inline">\(\psi_n\in(\theta_0,\hat{\theta}_n)\quad\)</span> if <span class="math inline">\(\quad\theta_0&lt;\hat{\theta}_n\)</span></li>
 <li><span class="math inline">\(\psi_n\in(\hat{\theta}_n,\theta_0)\quad\)</span> if <span class="math inline">\(\quad\hat{\theta}_n&lt;\theta_0\)</span></li>
 </ul>
-<blockquote class="blockquote">
-<p>Note: <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.6</span></a> is simply the first-order version of the mean-value form of Taylor’s theorem (<a href="#thm-TaylorThm" class="quarto-xref">Theorem&nbsp;<span>1.1</span></a>).</p>
-</blockquote>
 <p>Since <span class="math inline">\(\hat{\theta}_n\)</span> maximizes the log-Likelihood function it follows that <span class="math display">\[
 \ell_n'(\hat{\theta}_n)=0.
-\]</span> Together with <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>, this implies that <span class="math display">\[
+\]</span> Together with <a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.7</span></a>, this implies that <span class="math display">\[
 \overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \]</span> <span id="eq-ml2"><span class="math display">\[
 \Rightarrow\quad \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
-\tag{1.7}\]</span></span> Now, note that necessarily <span class="math display">\[
+\tag{1.8}\]</span></span> Now, note that necessarily <span class="math display">\[
 \int_{-\infty}^{\infty} f(x;\theta)dx=1
 \]</span> for <em>all possible values</em> of <span class="math inline">\(\theta\in\Theta,\)</span> since <span class="math inline">\(f\)</span> is a density function.</p>
 <p>Therefore, <span class="math display">\[
@@ -1549,7 +1558,7 @@ f(b)=f(a) + f'(c)(b-a).
 \int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx
 =\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx
 =0
-\tag{1.8}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
+\tag{1.9}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
 <p>Likewise, <span class="math display">\[
 \begin{align*}
 \frac{\partial^2}{\partial \theta^2}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&amp;=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
@@ -1558,8 +1567,8 @@ f(b)=f(a) + f'(c)(b-a).
 \int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
 =\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx
 =0
-\tag{1.9}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
-<p>Using <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.8</span></a> and <a href="#eq-zero2" class="quarto-xref">Equation&nbsp;<span>1.9</span></a>, we can now show that the average <span class="math display">\[
+\tag{1.10}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
+<p>Using <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a> and <a href="#eq-zero2" class="quarto-xref">Equation&nbsp;<span>1.10</span></a>, we can now show that the average <span class="math display">\[
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 \]</span> is <strong>asymptotically normal</strong>. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem.</p>
 <p>Firstly, the average <span class="math display">\[
@@ -1578,7 +1587,7 @@ f(b)=f(a) + f'(c)(b-a).
 &amp;=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex]
 &amp;=0,
 \end{align*}
-\tag{1.10}\]</span></span> where the last step follows from <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.8</span></a>.</p>
+\tag{1.11}\]</span></span> where the last step follows from <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a>.</p>
 <p>Thirdly, for the variance one gets: <span class="math display">\[
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
@@ -1588,9 +1597,9 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
 &amp;=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
-\]</span> where the simplification of the variance expression to a second moment expression follows from <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.10</span></a>. <br></p>
+\]</span> where the simplification of the variance expression to a second moment expression follows from <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>. <br></p>
 <blockquote class="blockquote">
-<p>We can write the last expression using the Fisher Information <span class="math inline">\(\mathcal{I}(\theta_0)-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))\)</span> since below in <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> we’ll see that <span class="math display">\[
+<p>We can write the last expression using the Fisher Information <span class="math inline">\(\mathcal{I}(\theta_0)-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))\)</span> since below in <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> we’ll see that <span class="math display">\[
 \begin{align*}
 \mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
 &amp; =-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)) = \mathcal{I}(\theta_0).
@@ -1605,17 +1614,17 @@ $$
 <p>Thus, we can apply the <strong>Lindeberg-Lévy central limit theorem</strong> from which it follows that <span class="math display">\[
 \frac{\frac{1}{n}\ell_n'(\theta_0)-\overbrace{\mathbb{E}\left(\frac{1}{n}\ell_n'(\theta_0)\right)}^{=0}}{\sqrt{\frac{1}{n}\mathcal{I}(\theta_0)} } = \frac{\ell_n'(\theta_0)}{\sqrt{n\mathcal{I}(\theta_0)} } \to_d \mathcal{N}(0,1)
 \]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
-<p>By our mean value expression in <a href="#eq-ml2" class="quarto-xref">Equation&nbsp;<span>1.7</span></a> <span class="math display">\[
+<p>By our mean value expression in <a href="#eq-ml2" class="quarto-xref">Equation&nbsp;<span>1.8</span></a> <span class="math display">\[
 \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \]</span> we thus have <span class="math display">\[
 \frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{I}(\theta_0)}}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1),
 \]</span> which is equivalent to <span id="eq-MLNorm"><span class="math display">\[
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1).
-\tag{1.11}\]</span></span> The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.11</span></a> is our object of interest.</p>
+\tag{1.12}\]</span></span> The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> is our object of interest.</p>
 <p>The further analysis requires us to study the asymptotic behavior of<br>
 <span class="math display">\[
 -\frac{1}{n}\ell_n''(\psi_n)
-\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>.</p>
+\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1660,7 +1669,7 @@ Important
 &amp;=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}
 {f(X;\theta_0)}\right)^2\right)
 \end{align*}
-\]</span> From <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.10</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
+\]</span> From <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
 \begin{align*}
 \underbrace{\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)}_{=\mathcal{I}(\theta_0)}
 &amp;=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
@@ -1669,11 +1678,11 @@ Important
 \Rightarrow \qquad
 \mathcal{I}(\theta_0) =
 \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
-\tag{1.12}\]</span></span></p>
+\tag{1.13}\]</span></span></p>
 <p>This means that <span class="math display">\[
 -\frac{1}{n}\ell_n''(\theta_0)
 \]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
-<p>Moreover, <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> provides an alternative expression for the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
+<p>Moreover, <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> provides an alternative expression for the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1722,7 +1731,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.11</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span> Studying <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> was only the simpler thing to do.</p>
+<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span> Studying <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> was only the simpler thing to do.</p>
 <p>Luckily, we are actually close now.</p>
 </div>
 </div>
@@ -1732,7 +1741,7 @@ Important
 <blockquote class="blockquote">
 <p><strong>Example:</strong> Our results in <a href="#sec-LinRegNorm" class="quarto-xref"><span>Section 1.3</span></a> imply, for instance, that the ML estimator <span class="math inline">\(\hat{\beta}_n\)</span> is consistent for <span class="math inline">\(\beta.\)</span></p>
 </blockquote>
-<p>Since <span class="math inline">\(\psi_n\)</span> is a <strong>mean value</strong> between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>), consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that <span class="math display">\[
+<p>Since <span class="math inline">\(\psi_n\)</span> is a <strong>mean value</strong> between <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\hat{\theta}_n\)</span> (<a href="#eq-MVT" class="quarto-xref">Equation&nbsp;<span>1.7</span></a>), consistency of <span class="math inline">\(\hat{\theta}_n\)</span> implies that <span class="math display">\[
 \psi_n\to_p\theta_0\quad\text{as}\quad n\to\infty.
 \]</span></p>
 <p>Therefore, we have by the <strong>continuous mapping theorem</strong> that <span class="math display">\[
@@ -1742,7 +1751,7 @@ Important
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)&amp;\to_p \sqrt{\mathcal{I}(\theta_0)} \quad \hbox{ as }\quad n\to\infty.
 \end{align}
 \]</span></p>
-<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.11</span></a> such that <span class="math display">\[
+<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> such that <span class="math display">\[
 \begin{align*}
 \underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)}_{\to_p \sqrt{\mathcal{I}(\theta_0)} }\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d\mathcal{N}(0,1)
 \end{align*}
@@ -1750,10 +1759,10 @@ Important
 \begin{align*}
 \sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
-\tag{1.13}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the <strong>asymptotic variance</strong> of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math display">\[
+\tag{1.14}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the <strong>asymptotic variance</strong> of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math display">\[
 \mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).
 \]</span></p>
-<p><a href="#eq-AsymNormMLE" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> is the asymptotic normality result we aimed for.</p>
+<p><a href="#eq-AsymNormMLE" class="quarto-xref">Equation&nbsp;<span>1.14</span></a> is the asymptotic normality result we aimed for.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
