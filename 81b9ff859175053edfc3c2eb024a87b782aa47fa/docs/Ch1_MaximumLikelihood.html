@@ -1547,28 +1547,32 @@ f(b)=f(a) + f'(c)(b-a).
 \overbrace{\ell_n'(\hat{\theta}_n)}^{=0}=\ell_n'(\theta_0)+\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0)
 \]</span> <span id="eq-ml2"><span class="math display">\[
 \Rightarrow\quad \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
-\tag{1.8}\]</span></span> Now, note that necessarily <span class="math display">\[
-\int_{-\infty}^{\infty} f(x;\theta)dx=1
+\tag{1.8}\]</span></span></p>
+<blockquote class="blockquote">
+<p><a href="#eq-ml2" class="quarto-xref">Equation&nbsp;<span>1.8</span></a> provides a useful expression that allows us to derive the asymptotic distribution of <span class="math inline">\(\hat{\theta}_n.\)</span></p>
+</blockquote>
+<p>Let us derive two (<a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a> and <a href="#eq-zero2" class="quarto-xref">Equation&nbsp;<span>1.10</span></a>) auxiliary results. Note that necessarily, <span class="math display">\[
+\int f(x;\theta)dx=1
 \]</span> for <em>all possible values</em> of <span class="math inline">\(\theta\in\Theta,\)</span> since <span class="math inline">\(f\)</span> is a density function.</p>
 <p>Therefore, <span class="math display">\[
 \begin{align*}
-\frac{\partial}{\partial \theta}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&amp;=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial}{\partial \theta}\underbrace{\int f(x;\theta)dx}_{=1}&amp;=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 \]</span> Using that we can here pass the partial derivative under the integral sign, we thus have <span id="eq-zero1"><span class="math display">\[
-\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx
-=\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx
+\int \frac{\partial}{\partial \theta}f(x;\theta)dx
+=\frac{\partial}{\partial \theta}\int f(x;\theta)dx
 =0
 \tag{1.9}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
 <p>Likewise, <span class="math display">\[
 \begin{align*}
-\frac{\partial^2}{\partial \theta^2}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&amp;=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial^2}{\partial \theta^2}\underbrace{\int f(x;\theta)dx}_{=1}&amp;=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 \]</span> Using again that we can here pass the partial derivative under the integral sign, we thus have <span id="eq-zero2"><span class="math display">\[
-\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
-=\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx
+\int \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
+=\frac{\partial^2}{\partial \theta^2}\int f(x;\theta)dx
 =0
 \tag{1.10}\]</span></span> for all <span class="math inline">\(\theta\in\Theta.\)</span></p>
-<p>Using <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a> and <a href="#eq-zero2" class="quarto-xref">Equation&nbsp;<span>1.10</span></a>, we can now show that the average <span class="math display">\[
+<p>Using <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a>, we can now show that the average <span class="math display">\[
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 \]</span> is <strong>asymptotically normal</strong>. This is done in the following by checking the three conditions for applying the Lindeberg-Lévy central limit theorem.</p>
 <p>Firstly, the average <span class="math display">\[
@@ -1582,13 +1586,13 @@ f(b)=f(a) + f'(c)(b-a).
 &amp;=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\[2ex]
 &amp;=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\[2ex]
 &amp;=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X;\theta_0)}{f(X;\theta_0)}\right)\quad[\text{chain rule}]\\[2ex]
-&amp;=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
+&amp;=\int \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
 {f(x;\theta_0)}f(x;\theta_0)dx\quad[\text{Def. of $\mathbb{E}$}]\\[2ex]
-&amp;=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex]
+&amp;=\int \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex]
 &amp;=0,
 \end{align*}
 \tag{1.11}\]</span></span> where the last step follows from <a href="#eq-zero1" class="quarto-xref">Equation&nbsp;<span>1.9</span></a>.</p>
-<p>Thirdly, for the variance one gets: <span class="math display">\[
+<p>Thirdly, for the variance one gets: <span id="eq-Var"><span class="math display">\[
 \begin{align*}
 Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=Var\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\
@@ -1597,9 +1601,9 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &amp;=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
 &amp;=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
-\]</span> where the simplification of the variance expression to a second moment expression follows from <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>. <br></p>
+\tag{1.12}\]</span></span> where the simplification of the variance expression to a second moment expression follows from <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>. <br></p>
 <blockquote class="blockquote">
-<p>We can write the last expression using the Fisher Information <span class="math inline">\(\mathcal{I}(\theta_0)-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))\)</span> since below in <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> we’ll see that <span class="math display">\[
+<p>We can write the last expression in <a href="#eq-Var" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> using the Fisher Information <span class="math inline">\(\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))\)</span> since below in <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.14</span></a> we’ll see that <span class="math display">\[
 \begin{align*}
 \mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
 &amp; =-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)) = \mathcal{I}(\theta_0).
@@ -1620,11 +1624,11 @@ $$
 \frac{-\ell_n''(\psi_n)}{\sqrt{n \mathcal{I}(\theta_0)}}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1),
 \]</span> which is equivalent to <span id="eq-MLNorm"><span class="math display">\[
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\;\sqrt{n}\left(\hat{\theta}_n-\theta_0\right) \to_d \mathcal{N}(0,1).
-\tag{1.12}\]</span></span> The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> is our object of interest.</p>
+\tag{1.13}\]</span></span> The <span class="math inline">\(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\)</span>-part in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> is our object of interest.</p>
 <p>The further analysis requires us to study the asymptotic behavior of<br>
 <span class="math display">\[
 -\frac{1}{n}\ell_n''(\psi_n)
-\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a>.</p>
+\]</span> which will help us to understand the behavior of <span class="math inline">\(\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.13</span></a>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1669,7 +1673,7 @@ Important
 &amp;=\frac{n}{n}\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)+\mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}
 {f(X;\theta_0)}\right)^2\right)
 \end{align*}
-\]</span> From <a href="#eq-Mean" class="quarto-xref">Equation&nbsp;<span>1.11</span></a>, we know that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
+\]</span> <a href="#eq-zero2" class="quarto-xref">Equation&nbsp;<span>1.10</span></a> implies that <span class="math inline">\(\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0\)</span> thus <span class="math display">\[
 \begin{align*}
 \underbrace{\mathbb{E}\left(-\frac{1}{n}\ell_n''(\theta_0)\right)}_{=\mathcal{I}(\theta_0)}
 &amp;=0 + \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
@@ -1678,11 +1682,11 @@ Important
 \Rightarrow \qquad
 \mathcal{I}(\theta_0) =
 \mathbb{E}\left(\left( \frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
-\tag{1.13}\]</span></span></p>
+\tag{1.14}\]</span></span></p>
 <p>This means that <span class="math display">\[
 -\frac{1}{n}\ell_n''(\theta_0)
 \]</span> is an <strong>unbiased estimator</strong> of the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
-<p>Moreover, <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> provides an alternative expression for the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
+<p>Moreover, <a href="#eq-FisherInfoDeriv" class="quarto-xref">Equation&nbsp;<span>1.14</span></a> provides an alternative expression for the Fisher information <span class="math inline">\(\mathcal{I}(\theta_0).\)</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1731,7 +1735,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span> Studying <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> was only the simpler thing to do.</p>
+<p>🤔 Remember, we wanted to study <span class="math inline">\(-\frac{1}{n}\ell_n''(\psi_n)\)</span> in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> <strong>not</strong> <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0).\)</span> Studying <span class="math inline">\(-\frac{1}{n}\ell_n''(\theta_0)\)</span> was only the simpler thing to do.</p>
 <p>Luckily, we are actually close now.</p>
 </div>
 </div>
@@ -1751,7 +1755,7 @@ Important
 \left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)&amp;\to_p \sqrt{\mathcal{I}(\theta_0)} \quad \hbox{ as }\quad n\to\infty.
 \end{align}
 \]</span></p>
-<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.12</span></a> such that <span class="math display">\[
+<p>Now, using <strong>Slutsky’s theorem</strong>, we can connect the above consistency result with the asymptotic normality result in <a href="#eq-MLNorm" class="quarto-xref">Equation&nbsp;<span>1.13</span></a> such that <span class="math display">\[
 \begin{align*}
 \underbrace{\left(\frac{-\frac{1}{n}\ell_n''(\psi_n)}{\sqrt{\mathcal{I}(\theta_0)}}\right)}_{\to_p \sqrt{\mathcal{I}(\theta_0)} }\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d\mathcal{N}(0,1)
 \end{align*}
@@ -1759,10 +1763,10 @@ Important
 \begin{align*}
 \sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\to_d \mathcal{N}\left(0,\frac{1}{\mathcal{I}(\theta_0)}\right),
 \end{align*}
-\tag{1.14}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the <strong>asymptotic variance</strong> of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math display">\[
+\tag{1.15}\]</span></span> where <span class="math inline">\(1/\mathcal{I}(\theta_0)\)</span> is the <strong>asymptotic variance</strong> of the ML estimator <span class="math inline">\(\hat{\theta}_n\)</span> and equals the inverse of the (here scalar valued) Fisher information <span class="math display">\[
 \mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0)).
 \]</span></p>
-<p><a href="#eq-AsymNormMLE" class="quarto-xref">Equation&nbsp;<span>1.14</span></a> is the asymptotic normality result we aimed for.</p>
+<p><a href="#eq-AsymNormMLE" class="quarto-xref">Equation&nbsp;<span>1.15</span></a> is the asymptotic normality result we aimed for.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

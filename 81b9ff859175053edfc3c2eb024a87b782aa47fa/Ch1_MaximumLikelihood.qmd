@@ -1547,22 +1547,25 @@ $$
 $$
 \Rightarrow\quad \ell_n'(\theta_0)=-\ell_n''(\psi_n)(\hat{\theta}_n-\theta_0).
 $${#eq-ml2}
-Now, note that necessarily
+
+> @eq-ml2 provides a useful expression that allows us to derive the asymptotic distribution of $\hat{\theta}_n.$
+
+Let us derive two (@eq-zero1 and @eq-zero2) auxiliary results. Note that necessarily,
 $$
-\int_{-\infty}^{\infty} f(x;\theta)dx=1
+\int f(x;\theta)dx=1
 $$ 
 for *all possible values* of $\theta\in\Theta,$ since $f$ is a density function. 
 
 Therefore,
 $$
 \begin{align*}
-\frac{\partial}{\partial \theta}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial}{\partial \theta}\underbrace{\int f(x;\theta)dx}_{=1}&=\frac{\partial}{\partial \theta}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$
 Using that we can here pass the partial derivative under the integral sign, we thus have 
 $$
-\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}f(x;\theta)dx
-=\frac{\partial}{\partial \theta}\int_{-\infty}^{\infty} f(x;\theta)dx
+\int \frac{\partial}{\partial \theta}f(x;\theta)dx
+=\frac{\partial}{\partial \theta}\int f(x;\theta)dx
 =0 
 $${#eq-zero1} 
 for all $\theta\in\Theta.$ 
@@ -1570,18 +1573,18 @@ for all $\theta\in\Theta.$
 Likewise, 
 $$
 \begin{align*}
-\frac{\partial^2}{\partial \theta^2}\underbrace{\int_{-\infty}^{\infty} f(x;\theta)dx}_{=1}&=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
+\frac{\partial^2}{\partial \theta^2}\underbrace{\int f(x;\theta)dx}_{=1}&=\frac{\partial^2}{\partial \theta^2}1 = 0,\quad\text{for all}\quad\theta\in\Theta.
 \end{align*}
 $$ 
 Using again that we can here pass the partial derivative under the integral sign, we thus have
 $$
-\int_{-\infty}^{\infty} \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
-=\frac{\partial^2}{\partial \theta^2}\int_{-\infty}^{\infty} f(x;\theta)dx
+\int \frac{\partial^2}{\partial \theta^2}f(x;\theta)dx
+=\frac{\partial^2}{\partial \theta^2}\int f(x;\theta)dx
 =0
 $${#eq-zero2} 
 for all $\theta\in\Theta.$
 
-Using @eq-zero1 and @eq-zero2, we can now show that the average 
+Using @eq-zero1, we can now show that the average 
 $$
 \frac{1}{n}\ell_n'(\theta_0)=\frac{1}{n}\underbrace{\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)}_{\ell_n'(\theta_0)}
 $$ 
@@ -1604,9 +1607,9 @@ $$
 &=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n\frac{\partial}{\partial \theta} \ln f(X_i;\theta_0)\right)\\[2ex]
 &=\frac{n}{n}\mathbb{E}\left(\frac{\partial}{\partial \theta} \ln f(X;\theta_0)\right)\quad[\text{i.i.d.}]\\[2ex]
 &=\mathbb{E}\left(\frac{\frac{\partial}{\partial \theta}f(X;\theta_0)}{f(X;\theta_0)}\right)\quad[\text{chain rule}]\\[2ex]
-&=\int_{-\infty}^{\infty} \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
+&=\int \frac{\frac{\partial}{\partial \theta}  f(x;\theta_0)}
 {f(x;\theta_0)}f(x;\theta_0)dx\quad[\text{Def. of $\mathbb{E}$}]\\[2ex] 
-&=\int_{-\infty}^{\infty} \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex] 
+&=\int \frac{\partial}{\partial \theta}  f(x;\theta_0)dx\\[2ex] 
 &=0,
 \end{align*}
 $${#eq-Mean}
@@ -1622,10 +1625,10 @@ Var\left(\frac{1}{n}\ell_n'(\theta_0)\right)
 &=\frac{1}{n}\mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)\\
 &=\frac{1}{n}\mathcal{I}(\theta_0),
 \end{align*}
-$$
+$${#eq-Var}
 where the simplification of the variance expression to a second moment expression follows from @eq-Mean. </br>
 
-> We can write the last expression using the Fisher Information $\mathcal{I}(\theta_0)-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))$ since below in @eq-FisherInfoDeriv we'll see that 
+> We can write the last expression in @eq-Var using the Fisher Information $\mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell_n''(\theta_0))$ since below in @eq-FisherInfoDeriv we'll see that 
 $$
 \begin{align*}
 \mathbb{E}\left(\left(\frac{\frac{\partial}{\partial \theta}  f(X;\theta_0)}{f(X;\theta_0)}\right)^2\right)
@@ -1709,7 +1712,7 @@ $$
 {f(X;\theta_0)}\right)^2\right)
 \end{align*}
 $$
-From @eq-Mean, we know that 
+@eq-zero2 implies that 
 $\mathbb{E}\left(-\frac{\frac{\partial^2}{\partial \theta^2}  f(X;\theta_0)}{f(X;\theta_0)}\right)=0$
 thus
 $$
