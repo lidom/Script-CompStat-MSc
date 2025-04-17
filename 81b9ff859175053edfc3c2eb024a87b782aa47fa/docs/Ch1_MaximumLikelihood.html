@@ -1020,9 +1020,9 @@ Note
 <p>At the <strong>true parameter</strong> vector <span class="math inline">\(\theta_0\in\mathbb{R}^p,\)</span> the score function satisfies <span class="math display">\[
 \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_j}(\theta_0^T)\right)=0
 \]</span> for all <span class="math inline">\(j=1,\dots,p;\)</span> i.e.&nbsp; <span class="math display">\[
-\mathbb{E}\left(\nabla\ell_n(\theta^T)\right)=\left(\begin{matrix}
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T)\right)\\ \vdots\\
-  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T)\right)
+\mathbb{E}\left(\nabla\ell_n(\theta^T_0)\right)=\left(\begin{matrix}
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_1}(\theta^T_0)\right)\\ \vdots\\
+  \mathbb{E}\left(\dfrac{\partial \ell_n}{\partial \theta_p}(\theta^T_0)\right)
   \end{matrix}
   \right) = \underset{(p\times 1)}{0}
 \]</span> We prove this below in <a href="#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>.</p>
@@ -1078,7 +1078,7 @@ Computing the Asymptotic Variance
 <div class="callout-body-container callout-body">
 <p>To compute the <strong>asymptotic variance</strong> of the ML-estimators <span class="math inline">\(\hat\beta_{ML}\)</span> and <span class="math inline">\(s^2_{ML},\)</span> we need to</p>
 <ol type="1">
-<li>compute the Hessian matrix (i.e.&nbsp;all second partial derivatives) of <span class="math inline">\(\ell_n,\)</span><br>
+<li>compute the <strong>Hessian matrix</strong> (i.e.&nbsp;all second partial derivatives) of <span class="math inline">\(\ell_n\)</span> and evaluate it <strong>at the true parameter values</strong> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma_0,\)</span><br>
 </li>
 <li>take the expectation of this Hessian matrix and multiply it by <span class="math inline">\(-1/n\)</span>, which gives us the <strong>Fisher Information matrix</strong>.</li>
 <li>Inverting the Fisher information matrix gives the <strong>asymptotic variance</strong> expression.</li>
@@ -1088,19 +1088,19 @@ Computing the Asymptotic Variance
 <ul>
 <li><p>Partial second derivatives with respect to <span class="math inline">\(\beta:\)</span> <span class="math display">\[
 \begin{align*}
-\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&amp;= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T_0,\sigma^2_0)}    
+&amp;= - \dfrac{1}{\sigma^2_0}(-X^TY + X^TX\beta_0)\\[2ex]
 \Rightarrow\quad
-\underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)}
-&amp;= - \dfrac{1}{\sigma^2}(X^TX)
+\underset{(K\times K)}{\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T_0,\sigma^2_0)}
+&amp;= - \dfrac{1}{\sigma^2_0}(X^TX)
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
-&amp;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)\right)\\[2ex]
-&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2} \mathbb{E}(X^TX)\right)\\[2ex]
-&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2} \Sigma_{X^TX}\right)\\[2ex]
-&amp;=  \dfrac{1}{\sigma^2} \Sigma_{X^TX},
+&amp;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T_0,\sigma^2_0)\right)\\[2ex]
+&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{1}{\sigma^2_0} \mathbb{E}(X^TX)\right)\\[2ex]
+&amp;=  -\frac{1}{n}\cdot \left(-\dfrac{n}{\sigma^2_0} \Sigma_{X^TX}\right)\\[2ex]
+&amp;=  \dfrac{1}{\sigma^2_0} \Sigma_{X^TX},
 \end{align*}
 \]</span> where<br>
 <span class="math display">\[
@@ -1110,67 +1110,67 @@ Computing the Asymptotic Variance
 \]</span></p></li>
 <li><p>Second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
-\underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T,\sigma^2)}
-&amp;=-\frac{n}{2 \sigma^{2}}+\frac{1}{2}\frac{(Y-X\beta)^T(Y-X\beta)}{\left(\sigma^{2}\right)^{2}}\\[2ex]
-\Rightarrow\quad\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2)}
-&amp;=\frac{n}{2 \left(\sigma^{2}\right)^2}-\dfrac{(Y-X\beta)^T(Y-X\beta)}{\left(\sigma^{2}\right)^{3}} \\[2ex]
-&amp;=\frac{n}{2\sigma^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^{6}} \\[2ex]
+\underset{(1\times 1)}{\dfrac{\partial \ell_n}{\partial \sigma^2}(\beta^T_0,\sigma^2_0)}
+&amp;=-\frac{n}{2 \sigma^{2}}+\frac{1}{2}\frac{(Y-X\beta_0)^T(Y-X\beta_0)}{\left(\sigma^2_0\right)^{2}}\\[2ex]
+\Rightarrow\quad\underset{(1\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0)}
+&amp;=\frac{n}{2 \left(\sigma^2_0\right)^2}-\dfrac{(Y-X\beta_0)^T(Y-X\beta_0)}{\left(\sigma^2_0\right)^{3}} \\[2ex]
+&amp;=\frac{n}{2\sigma_0^{4}}-\frac{\sum_{i=1}^n\varepsilon_i^2}{\sigma^6_0} \\[2ex]
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
-&amp;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2)\right)\\[2ex]
-&amp;=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma^{4}}-\frac{\mathbb{E}\left(\sum_{i=1}^n\varepsilon_i^2\right)}{\sigma^{6}} \right)\\[2ex]
-&amp;=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma^{4}}-\frac{n\sigma^2}{\sigma^{6}}\right)\\[2ex]
-&amp;=\left(-\frac{1}{2\sigma^{4}}+\frac{1}{\sigma^{4}}\right)\\[2ex]
-&amp;=\frac{1}{2\sigma^{4}}\\[2ex]
+&amp;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0)\right)\\[2ex]
+&amp;=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma_0^4}-\frac{\mathbb{E}\left(\sum_{i=1}^n\varepsilon_i^2\right)}{\sigma_0^6} \right)\\[2ex]
+&amp;=-\frac{1}{n}\cdot \left(\frac{n}{2\sigma_0^4}-\frac{n\sigma_0^2}{\sigma^6_0}\right)\\[2ex]
+&amp;=\left(-\frac{1}{2\sigma^4_0}+\frac{1}{\sigma^4_0}\right)\\[2ex]
+&amp;=\frac{1}{2\sigma^4_0}\\[2ex]
 \end{align*}
 \]</span></p></li>
 <li><p>First derivative with respect to <span class="math inline">\(\beta,\)</span> second derivative with respect to <span class="math inline">\(\sigma^2:\)</span> <span class="math display">\[
 \begin{align*}
-\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T,\sigma^2)}    
-&amp;= - \dfrac{1}{\sigma^2}(-X^TY + X^TX\beta)\\[2ex]
-&amp;= \dfrac{1}{\sigma^2}(X^T)(Y - X\beta)\\[2ex]
-&amp;= \dfrac{1}{\sigma^2}X^T\varepsilon\\[2ex]
+\underset{(K\times 1)}{\dfrac{\partial \ell_n}{\partial \beta}(\beta^T_0,\sigma^2_0)}    
+&amp;= - \dfrac{1}{\sigma^2_0}(-X^TY + X^TX\beta_0)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2_0}X^T(Y - X\beta_0)\\[2ex]
+&amp;= \dfrac{1}{\sigma^2_0}X^T\varepsilon\\[2ex]
 \end{align*}
 \]</span></p></li>
 </ul>
 <p><span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
-\underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta^T,\sigma^2)}
-=   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T,\sigma^2)\right)^T
-&amp; = -\frac{X^T\varepsilon}{\sigma^4}\\
+\underset{(K\times 1)}{\dfrac{\partial^2 \ell_n}{\partial \beta \partial \sigma^2}(\beta^T_0,\sigma^2_0)}
+=   \left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T_0,\sigma^2_0)\right)^T
+&amp; = -\frac{X^T\varepsilon}{\sigma_0^4}\\
 \end{align*}
 \]</span> <span class="math display">\[
 \begin{align*}
 \Rightarrow\quad
-&amp;-\frac{1}{n}\cdot  \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta^T,\sigma^2)\right)\\[2ex]
-&amp;=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T,\sigma^2)\right)\right)^T\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\varepsilon)}{\sigma^4}\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X^T\varepsilon|X))}{\sigma^4}\\[2ex]
-&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\mathbb{E}(\varepsilon|X))}{\sigma^4}\\[2ex]
+&amp;\;\;\;\;-\frac{1}{n}\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2}(\beta^T_0,\sigma^2_0)\right)\\[2ex]
+&amp;=-\frac{1}{n}\cdot\left(\mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T_0,\sigma^2_0)\right)\right)^T\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\varepsilon)}{\sigma^4_0}\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(\mathbb{E}(X^T\varepsilon|X))}{\sigma^4_0}\\[2ex]
+&amp;=\frac{1}{n}\cdot\frac{\mathbb{E}(X^T\mathbb{E}(\varepsilon|X))}{\sigma^4_0}\\[2ex]
 &amp;=\frac{1}{n}\cdot 0=0,
 \end{align*}
 \]</span> since <span class="math inline">\(\mathbb{E}(\varepsilon|X)=0\)</span> is an <span class="math inline">\((n\times 1)\)</span> zero vector.</p>
-<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the <strong>Hessian matrix</strong> of <span class="math inline">\(\ell_n\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
+<p>Collecting the above results, allows us to write down the expression for <span class="math inline">\((-1/n)\)</span> times the expectation of the <strong>Hessian matrix</strong> of <span class="math inline">\(\ell_n,\)</span> evaluated at the true parameter values <span class="math inline">\(\theta_0=(\beta_0^T,\sigma_0)^T,\)</span> which yields the <strong>Fisher Information (Matrix):</strong></p>
 <p><span class="math display">\[
 \begin{align*}
-\mathcal{I}(\theta) &amp;:=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T,\sigma^2)\right)\\[2ex]
+\mathcal{I}(\theta_0) &amp;:=\; -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T_0,\sigma^2_0)\right)\\[2ex]
 &amp;=
 -\frac{1}{n}\cdot \mathbb{E}
 \left[\begin{array}{cc}
-\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)\right) &amp;
-\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2 }(\beta^T,\sigma^2)\right)\\
-\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T,\sigma^2)\right) &amp;
-\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2) \right)
+\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T_0,\sigma^2_0)\right) &amp;
+\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \sigma^2 }(\beta^T_0,\sigma^2_0)\right)\\
+\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta^T}(\beta^T_0,\sigma^2_0)\right) &amp;
+\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0) \right)
 \end{array}\right]\\[2ex]
 &amp;=\left[\begin{array}{cc}
-\underset{(K\times K)}{\frac{1}{\sigma^2}\Sigma_{X^TX}}
+\underset{(K\times K)}{\frac{1}{\sigma^2_0}\Sigma_{X^TX}}
 &amp;
 \underset{(K\times 1)}{0}\\
 \underset{(1\times K)}{0} &amp;
-\underset{(1\times 1)}{\frac{1}{2\sigma^4}}
+\underset{(1\times 1)}{\frac{1}{2\sigma^4_0}}
 \end{array}\right]
 \end{align*}
 \]</span></p>
@@ -1182,7 +1182,7 @@ Computing the Asymptotic Variance
 <div class="callout-body-container">
 <div id="def-FisherInformMat" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1.5 (Fisher Information Matrix)</strong></span> The matrix <span class="math display">\[
-\mathcal{I}(\theta) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta)\right)
+\mathcal{I}(\theta_0) := -\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\theta_0)\right)
 \]</span> is called <strong>Fisher Information Matrix</strong>.</p>
 </div>
 </div>
@@ -1191,11 +1191,11 @@ Computing the Asymptotic Variance
 <section id="asymptotic-variance-and-fisher-information-matrix" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="asymptotic-variance-and-fisher-information-matrix"><strong>Asymptotic Variance and Fisher Information Matrix</strong></h4>
 <p>The asymptotic variance of the MLE <span class="math display">\[
-\hat{\theta}_{ML}=\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
+\hat{\theta}_{ML}=\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)
 \]</span> is given by the <strong>inverse of the Fisher information matrix</strong> evaluated at the true parameter values <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma^2_0.\)</span> <span class="math display">\[
 \begin{align*}
-&amp;AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+&amp;AVar\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)
+=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)\\[2ex]
 &amp;=\left(\mathcal{I}(\beta^T_0,\sigma^2_0)\right)^{-1}\\[2ex]
 &amp;=\left(-\frac{1}{n}\cdot\mathbb{E}\left(H_{\ell_n}(\beta^T_0,\sigma^2_0)\right)\right)^{-1}\\[2ex]
 &amp;=
@@ -1221,7 +1221,7 @@ Computing the Asymptotic Variance
 \end{array}\right]
 \end{align*}
 \]</span></p>
-<!-- where $\mathcal{I}(\beta^T,\sigma^2)$ is called the **Fisher information matrix**. 
+<!-- where $\mathcal{I}(\beta^T_0,\sigma^2_0)$ is called the **Fisher information matrix**. 
 
 From our above derivations we know that
 $$
@@ -1229,10 +1229,10 @@ $$
 &\mathcal{I}\left(\beta, \sigma^2\right)\\[2ex]
 &=
 \left[\begin{array}{cc}
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T,\sigma^2)\right) & 
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T,\sigma^2)\right)\\
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T,\sigma^2)\right) & 
-(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T,\sigma^2) \right)
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \beta\partial \beta^T}(\beta^T_0,\sigma^2_0)\right) & 
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T_0,\sigma^2_0)\right)\\
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2 \partial \beta}(\beta^T_0,\sigma^2_0)\right) & 
+(-1)\cdot \mathbb{E}\left(\dfrac{\partial^2 \ell_n}{\partial \sigma^2\partial \sigma^2}(\beta^T_0,\sigma^2_0) \right)
 \end{array}\right]\\[2ex]
 % &=
 % \left[\begin{array}{cc}
@@ -1248,8 +1248,8 @@ $$
 $$ -->
 <p>That is, <span id="eq-FIMVar"><span class="math display">\[
 \begin{align*}
-AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
-&amp;=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)\\[2ex]
+AVar\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)
+&amp;=\lim_{n\to\infty} n\cdot Var\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)\\[2ex]
 &amp;=
 \left[\begin{array}{cc}
 \sigma^2_0\Sigma_{X^TX}^{-1} &amp; 0 \\[2ex]
@@ -1259,7 +1259,7 @@ AVar\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)
 \tag{1.5}\]</span></span></p>
 <p><a href="#eq-FIMVar" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> means that <span id="eq-FIMVar2"><span class="math display">\[
 \begin{align*}
-\underset{(K\times K)}{Var\left(\begin{array}{c}\hat\beta_{ML} \\ s_{ML}^2\end{array}\right)}
+\underset{(K\times K)}{Var\left(\begin{array}{c}\hat\beta_{ML,n} \\ s_{ML,n}^2\end{array}\right)}
 &amp;\approx
 \left[\begin{array}{cc}
 \underset{(K\times K)}{\frac{1}{n}\,\sigma^2_0\Sigma_{X^TX}^{-1}}
@@ -1401,7 +1401,7 @@ $$ -->
 0
 \end{pmatrix},
 \begin{pmatrix}
-\sigma_0^2\Sigma_{X^TX} &amp; 0\\
+\sigma_0^2\Sigma_{X^TX}^{-1} &amp; 0\\
 0 &amp; 2\sigma_0^4
 \end{pmatrix}
 \right)\\[2ex]
@@ -1417,7 +1417,7 @@ $$ -->
 \sigma_0^2
 \end{pmatrix},
 \begin{pmatrix}
-\frac{1}{n}\sigma_0^2\Sigma_{X^TX} &amp; 0\\
+\frac{1}{n}\sigma_0^2\Sigma_{X^TX}^{-1} &amp; 0\\
 0 &amp; \frac{1}{n}2\sigma_0^4
 \end{pmatrix}
 \right)
@@ -1425,7 +1425,7 @@ $$ -->
 \]</span></p>
 <p>Plugging-in estimators for the unknown variance components, i.e.</p>
 <ul>
-<li><span class="math inline">\(\frac{1}{n}\,s_{ML}^2 S_{X^TX}^{-1}\quad\)</span> for <span class="math inline">\(\quad\frac{1}{n}\,\sigma_0^2 \Sigma_{X^TX}\)</span></li>
+<li><span class="math inline">\(\frac{1}{n}\,s_{ML}^2 S_{X^TX}^{-1}\quad\)</span> for <span class="math inline">\(\quad\frac{1}{n}\,\sigma_0^2 \Sigma_{X^TX}^{-1}\)</span></li>
 </ul>
 <p>and</p>
 <ul>
@@ -1441,7 +1441,7 @@ H_0\colon \beta_{0,k} &amp; =   \beta_{0,k}^{(0)}\\
 H_1\colon \beta_{0,k} &amp;\neq \beta_{0,k}^{(0)},\\
 \end{align*}
 \]</span> where <span class="math inline">\(\beta_{0,k}^{(0)}\)</span> denotes the null-hypothetical value (typically, <span class="math inline">\(\beta_{0,k}^{(0)}=0\)</span>), using the Wald statistic <span class="math display">\[
-T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - 0}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
+T_{\beta_{0,k},n}=\frac{\hat\beta_{ML,k} - \beta_{0,k}^{(0)}}{\sqrt{s_{ML}^2 \frac{1}{n}\left[S_{X^TX}^{-1}\right]_{(k,k)}}}\overset{H_0}{\to_d}
 \mathcal{N}(0,1)\quad \text{as}\quad n\to\infty.
 \]</span> <strong>Testing:</strong> We reject <span class="math inline">\(H_0,\)</span> if the observed value <span class="math inline">\(T_{\beta_{0,k},n,obs}\)</span> is in absolute values larger than the <span class="math inline">\((1-\alpha/2)\)</span>-qantile of the standard normal distribution, <span class="math display">\[
 |T_{\beta_{0,k},n,obs}| &gt; z_{1-\alpha/2},
@@ -1890,7 +1890,7 @@ More general (not one-to-one) functions
 </section>
 <section id="exercise-2." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
-<p>Assume an i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> from an exponential distribution, i.e.&nbsp;the underlying density of <span class="math inline">\(X_i\)</span> is given by <span class="math display">\[
+<p>Assume an i.i.d. random sample <span class="math inline">\(X_1,\dots,X_n\)</span> from an exponential distribution, i.e.&nbsp;the density of <span class="math inline">\(X_i\)</span> is given by <span class="math display">\[
 f(x;\theta_0)=
 \left\{\begin{array}{ll}\theta_0\exp(-\theta_0 x),&amp;x\geq 0\\0,&amp;x&lt;0\end{array}\right.
 \]</span> with <span class="math inline">\(\theta_0&gt;0,\)</span> where <span class="math display">\[
