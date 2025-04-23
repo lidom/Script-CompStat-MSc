@@ -218,8 +218,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
+  <a href="./Ch4_NP_Density_Estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Density Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch5_NPRegression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
   </div>
 </li>
     </ul>
@@ -283,7 +289,7 @@ window.Quarto = {
 <ul>
 <li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>). For instance: Automatic video editing (e.g., separation of back- and foreground)<br>
 </li>
-<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to solve the maximization problem.</li>
+<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to solve the maximization problem.</li>
 </ul>
 </section>
 <section id="some-literature" class="level4 unnumbered">
@@ -316,7 +322,7 @@ window.Quarto = {
 <section id="motivation-cluster-analysis-using-gaussian-mixture-models" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="motivation-cluster-analysis-using-gaussian-mixture-models"><span class="header-section-number">2.1</span> Motivation: Cluster Analysis using Gaussian Mixture Models</h2>
 <p>As a data example we use the <a href="https://allisonhorst.github.io/palmerpenguins/articles/intro.html"><code>palmerpenguins</code></a> data (<span class="citation" data-cites="palmerpenguins">Horst, Hill, and Gorman (<a href="#ref-palmerpenguins" role="doc-biblioref">2020</a>)</span>).</p>
-<p>These data are from surveys of penguin populations on the Palmer Archipelago (Antarctic Peninsula). Penguins are often difficult to distinguish from one another (<a href="#fig-cheekypenguin" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-cheekypenguin</span></a>). We will try to find groupings in the penguin data (fin length) using a Gaussian mixture distribution. To be able to estimate such mixing distributions, we introduce the EM algorithm.</p>
+<p>These data are from surveys of penguin populations on the Palmer Archipelago (Antarctic Peninsula). Penguins are often difficult to distinguish from one another (<a href="#fig-cheekypenguin" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>). We will try to find groupings in the penguin data (fin length) using a Gaussian mixture distribution. To be able to estimate such mixing distributions, we introduce the EM algorithm.</p>
 <div id="fig-cheekypenguin" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cheekypenguin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -389,7 +395,7 @@ Caution
 <p>At the end of this chapter, we’ll be able to</p>
 <ol type="1">
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-GMM-plot1</span></a> and <a href="#sec-PriorPosterior" class="quarto-xref"><span class="quarto-unresolved-ref">sec-PriorPosterior</span></a>)</li>
+<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> and <a href="#sec-PriorPosterior" class="quarto-xref"><span>Section 2.3.2</span></a>)</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -405,8 +411,8 @@ Figure&nbsp;2.2: Cluster analysis based on a mixture distribution with two weigh
 </div>
 </div>
 </div>
-<p>Figure <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-GMM-plot1</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
-<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-GMM-plot1</span></a>:</p>
+<p>Figure <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
+<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
@@ -532,7 +538,7 @@ Maximization constraints
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The maximization must take into account the parameter constraints in <a href="#eq-GMMdens" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-GMMdens</span></a>; namely,</p>
+<p>The maximization must take into account the parameter constraints in <a href="#eq-GMMdens" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>; namely,</p>
 <ul>
 <li><span class="math inline">\(\sigma_g&gt;0\)</span> and</li>
 <li><span class="math inline">\(\pi_g&gt;0\)</span> for all <span class="math inline">\(g=1,\dots,G\)</span> such that</li>
@@ -552,7 +558,7 @@ Maximization constraints
 \sigma_g\to 0.
 \]</span> This degenerating situation leads to <strong>very large</strong> density function values, <span class="math display">\[
 \varphi(x_i;\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
-\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-dirac1</span></a>).</p>
+\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-dirac1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -568,7 +574,7 @@ Figure&nbsp;2.3: Gaussian density with <span class="math inline">\(\mu_g=x_i\)</
 </div>
 </div>
 <p>Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible, non-useful estimation results.</p>
-<p>🤓 <strong>Analytic solution:</strong> It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see <a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-logLikGMM</span></a>) analytically. If you do this, you will get the following expressions: <span id="eq-AnalyticSol1"><span class="math display">\[
+<p>🤓 <strong>Analytic solution:</strong> It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see <a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>) analytically. If you do this, you will get the following expressions: <span id="eq-AnalyticSol1"><span class="math display">\[
 \begin{align*}
 \hat\pi_g&amp;=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
 \hat\mu_g=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}x_i\\[2ex]
@@ -587,7 +593,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Deriving the expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol1</span></a> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
+<p>Deriving the expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
 <!-- In one of the exercises, you may derive the expression for $\hat\mu_g$. --></p>
 </div>
 </div>
@@ -597,8 +603,8 @@ Note
 <li><span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and</li>
 <li><span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span>,</li>
 </ul>
-<p>because the probabilities <span class="math inline">\(0\leq p_{ig}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol2</span></a>) depend on these unknown parameters.</p>
-<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol1</span></a> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
+<p>because the probabilities <span class="math inline">\(0\leq p_{ig}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>) depend on these unknown parameters.</p>
+<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -613,12 +619,12 @@ Prior and Posterior Probabilities
 <li>The probability <span class="math display">\[
 \pi_g = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g\right)
 \]</span><br>
-in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol2</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
+in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
 <li>The conditional probability <span class="math display">\[
 p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)
-\]</span> in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol2</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
+\]</span> in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
 </ul>
-<p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior" class="quarto-xref"><span class="quarto-unresolved-ref">sec-PriorPosterior</span></a>.</p>
+<p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior" class="quarto-xref"><span>Section 2.3.2</span></a>.</p>
 </div>
 </div>
 <p>🥳 <span style="color:#138D75"><strong>Solution: The EM Algorithm</strong></span></p>
@@ -626,7 +632,7 @@ p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right
 </section>
 <section id="sec-EM1" class="level3" data-number="2.2.3">
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-EM1"><span class="header-section-number">2.2.3</span> The EM Algorithm for GMMs</h3>
-<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol1</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
+<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
 <ul>
 <li><p>the (unknown) posterior probabilities <span class="math display">\[
 \begin{align*}
@@ -649,8 +655,8 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Given an estimate <span class="math inline">\(\hat{p}_{ig},\)</span> you can compute <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g)\)</span> using <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol1</span></a>.</p>
-<p>Given the estimates <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g),\)</span> you can compute <span class="math inline">\(\hat{p}_{ig}\)</span> using <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-AnalyticSol2</span></a>.</p>
+<p>Given an estimate <span class="math inline">\(\hat{p}_{ig},\)</span> you can compute <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g)\)</span> using <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>.</p>
+<p>Given the estimates <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g),\)</span> you can compute <span class="math inline">\(\hat{p}_{ig}\)</span> using <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>.</p>
 </div>
 </div>
 <p><strong>The EM Algorithm:</strong></p>
@@ -852,7 +858,7 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 <p><br></p>
 <strong>Posterior Probability</strong><br> <span class="math display">\[
 p_{ig}=P(Z_{ig}=1|X_i=x_i)
-\]</span> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-posteriorGMD</span></a>) which leads to the posterior probability: <br>
+\]</span> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) which leads to the posterior probability: <br>
 <center>
 “With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
 </center>
@@ -893,7 +899,7 @@ p_{ig}
 &amp;= 1\cdot P(Z_{ig}=1|X_i=x_i)+0\cdot P(Z_{ig}=0|X_i=x_i)\\[2ex]
 &amp;= \mathbb{E}(Z_{ig}|X_i=x_i)\\
 \end{align*}
-\tag{2.6}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> is the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1" class="quarto-xref"><span class="quarto-unresolved-ref">sec-EM1</span></a>).</p>
+\tag{2.6}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> is the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1" class="quarto-xref"><span>Section 2.2.3</span></a>).</p>
 </div>
 </div>
 </section>
@@ -912,7 +918,7 @@ p_{ig}
 &amp;=\sum_{g=1}^G\left(\sum_{i=1}^nz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\right)
 \end{align*}
 \]</span></p>
-<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-logLikGMM</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>: We can effectively maximize separately for each group <span class="math inline">\(g,\)</span> which then involves only a single normal density function and not a too flexible mixture of density functions. This simplifies the maximization problem considerably, since the normal density belongs to the exponential family (see <a href="#sec-MLAsymp" class="quarto-xref"><span class="quarto-unresolved-ref">sec-MLAsymp</span></a>) which is not the case for the normal mixture distribution.</p>
+<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>: We can effectively maximize separately for each group <span class="math inline">\(g,\)</span> which then involves only a single normal density function and not a too flexible mixture of density functions. This simplifies the maximization problem considerably, since the normal density belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) which is not the case for the normal mixture distribution.</p>
 <p>However, we do not observe the realizations <span class="math display">\[
 \mathbf{z}=(z_{11},\dots,z_{nG}),
 \]</span> but only know the distribution of the random variables <span class="math display">\[
@@ -923,14 +929,14 @@ p_{ig}
 <p>We do not know <span class="math inline">\(Z_{ig},\)</span> but we can compute the best (in the mean square sense) predition of <span class="math inline">\(Z_{ig}\)</span> using the conditional mean <span class="math display">\[
 \mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)
 =\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|X_i=x_i\right)=p_{ig},
-\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the parameter vector, and where (by <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-posteriorGMD</span></a>) <span class="math display">\[
+\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the parameter vector, and where (by <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) <span class="math display">\[
 \begin{align*}
 p_{ig}
 &amp;=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}\\[2ex]
 &amp;=\frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}.
 \end{align*}
 \]</span></p>
-<p>From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-posteriorMean</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
+<p>From this, we can calculate the conditional expected value (using <a href="#eq-posteriorMean" class="quarto-xref">Equation&nbsp;<span>2.6</span></a>), which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
 \begin{align*}
 &amp;\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})|\mathbf{X}=\mathbf{x}\right)\\[2ex]
 &amp;\quad =\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
@@ -955,7 +961,7 @@ Tip
 \]</span></p>
 </div>
 </div>
-<p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1" class="quarto-xref"><span class="quarto-unresolved-ref">sec-EM1</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step.</p>
+<p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1" class="quarto-xref"><span>Section 2.2.3</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step.</p>
 <p>The chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. <br></p>
 <ol type="1">
 <li><p><strong>Initialization:</strong><br> Set starting values <span class="math inline">\(\boldsymbol{\hat{\theta}}^{(0)}=(\boldsymbol{\hat{\pi}}^{(0)}, \boldsymbol{\hat{\mu}}^{(0)}, \boldsymbol{\hat{\sigma}}^{(0)}),\)</span> where <span class="math display">\[
@@ -1016,7 +1022,7 @@ Tip
 <li><span class="math inline">\(Y_i\)</span> takes values in some finite set <span class="math inline">\(\mathcal{Y}.\)</span></li>
 </ul>
 <blockquote class="blockquote">
-<p><strong>Note:</strong> Above in <a href="#sec-TrueViewEM" class="quarto-xref"><span class="quarto-unresolved-ref">sec-TrueViewEM</span></a>, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
+<p><strong>Note:</strong> Above in <a href="#sec-TrueViewEM" class="quarto-xref"><span>Section 2.3</span></a>, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
 </blockquote>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1168,7 +1174,7 @@ Note
 <div id="thm-BayesOptimal" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 2.1 (Optimality of the Bayes decision rule)</strong></span> <br> The Bayes decision rule is optimal. That is, if <span class="math inline">\(h\)</span> is any other classification rule then <span class="math display">\[
 L(h^\ast)\leq L(h),
-\]</span> where <span class="math inline">\(L(h)=P(h(X)\neq Y)\)</span> denotes the error rate loss function defined in <a href="#def-errorRate" class="quarto-xref">Definition&nbsp;<span class="quarto-unresolved-ref">def-errorRate</span></a>.</p>
+\]</span> where <span class="math inline">\(L(h)=P(h(X)\neq Y)\)</span> denotes the error rate loss function defined in <a href="#def-errorRate" class="quarto-xref">Definition&nbsp;<span>2.1</span></a>.</p>
 </div>
 </div>
 </div>
@@ -1178,7 +1184,7 @@ L(h^\ast)\leq L(h),
 <li><p><strong>Empirical Risk Minimization:</strong> Choose a set of classifiers <span class="math inline">\(\mathcal{H}\)</span> and try to find <span class="math inline">\(\hat{h}\in\mathcal{H}\)</span> such that <span class="math display">\[
 \hat{h}:=\arg\min_{h\in\mathcal{H}}L(h)
 \]</span> <strong>Example:</strong> Random forests, neural nets, etc.</p></li>
-<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> in <a href="#eq-RegFun" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-RegFun</span></a> and then use <span class="math display">\[
+<li><p><strong>Regression:</strong> Find an estimate <span class="math inline">\(\hat{m}(x)\)</span> of the regression function <span class="math inline">\(m(x)=\mathbb{E}(Y|X=x)\)</span> in <a href="#eq-RegFun" class="quarto-xref">Equation&nbsp;<span>2.8</span></a> and then use <span class="math display">\[
 \hat{h}(x) = \left\{\begin{array}{ll}
 1&amp;\text{if }\hat{m}(x)&gt;\frac{1}{2}\\
 0&amp;\text{otherwise}.
@@ -1231,7 +1237,7 @@ f_{X|Y}(x|Y=g) = \varphi(x|\mu_g,\sigma_g) = \frac{1}{\sqrt{2\pi}\sigma_g}\exp\l
 &amp; = \arg\max_{g}\hat{\pi}_g \varphi(x_i|\hat{\mu}_g,\hat{\sigma}_g),\\[2ex]
 \end{align*}
 \]</span></p>
-<p><a href="#fig-EMGif" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-EMGif</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
+<p><a href="#fig-EMGif" class="quarto-xref">Figure&nbsp;<span>2.4</span></a> shows the iterative progress when estimating a Gaussian mixture distribution using the EM algorithm:</p>
 <ul>
 <li>The vertical line shows the decision boundary</li>
 <li>The two Gaussian density functions (dashed lines) show the conditional densities <span class="math inline">\(\varphi(x|\hat{\mu}_g,\hat{\sigma}_g),\)</span> <span class="math inline">\(g=1,2.\)</span></li>
@@ -1251,7 +1257,7 @@ Figure&nbsp;2.4: Iterative estimation of the Gaussian mixture distribution using
 </div>
 </div>
 </div>
-<p>The final estimation result replicates <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-GMM-plot1</span></a>.</p>
+<p>The final estimation result replicates <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>.</p>
 <p>The average penguin probably doesn’t care about our EM Algorithm.</p>
 <div id="fig-agressivepenguin" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1299,6 +1305,7 @@ The famouse minst data set.
 
 
 
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -1329,6 +1336,7 @@ ggplot(aes(x, y, fill = value)) +  geom_tile() +  facet_wrap(~ instance + label)
 ![](Ch2_EMAlgorithmus_files/figure-html/unnamed-chunk-10-1.png){width=672}
 :::
 :::
+
 
 
 
