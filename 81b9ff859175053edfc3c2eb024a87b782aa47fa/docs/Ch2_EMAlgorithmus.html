@@ -283,13 +283,14 @@ window.Quarto = {
 </header>
 
 
+<!-- LTeX: language=en-US -->
 <p>The Expectation Maximization (EM) algorithm is often used to simplify or to facilitate complex maximum likelihood estimation problems. In this chapter, we present the EM algorithm for estimating <strong>Gaussian mixture distributions</strong>, as this is probably its most well-known application. Even the original work on the EM algorithm <span class="citation" data-cites="Dempster_1977">(<a href="#ref-Dempster_1977" role="doc-biblioref">Dempster, Laird, and Rubin 1977</a>)</span> already dealt with the estimation of Gaussian mixture distributions.</p>
 <section id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions">Possible Applications of the EM-Algorithm and Gaussian mixture distributions</h4>
 <ul>
 <li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>). For instance: Automatic video editing (e.g., separation of back- and foreground)<br>
 </li>
-<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to solve the maximization problem.</li>
+<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to stabilize the maximization problem.</li>
 </ul>
 </section>
 <section id="some-literature" class="level4 unnumbered">
@@ -333,7 +334,7 @@ Figure&nbsp;2.1: Cheeky penguin in action.
 </figcaption>
 </figure>
 </div>
-<p>The following code chunk prepares the data</p>
+<p>The following code chunk prepares the dataset and visualizes it using a histogram.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -392,10 +393,10 @@ Caution
 </div>
 <section id="clustering-using-gaussian-mixture-distributions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions">Clustering using Gaussian Mixture Distributions</h4>
-<p>At the end of this chapter, we’ll be able to</p>
+<p>At the end of this chapter (<a href="#sec-CA" class="quarto-xref"><span>Section 2.4</span></a>), we’ll be able to</p>
 <ol type="1">
 <li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> and <a href="#sec-CA" class="quarto-xref"><span>Section 2.4</span></a>)</li>
+<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>)</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -411,8 +412,8 @@ Figure&nbsp;2.2: Cluster analysis based on a mixture distribution with two weigh
 </div>
 </div>
 </div>
-<p>Figure <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. Cluster result: 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
-<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> package <code>mclust</code>) and <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>:</p>
+<p>Figure <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> shows the result of a cluster analysis based on a mixture distribution of two weighted normal distributions. <strong>Cluster result (training data):</strong> 95% of the penguins could be correctly assigned - based only on their flipper lengths.</p>
+<p>The following <code>R</code> codes can be used to reproduce the above cluster analysis (using the <code>R</code> function <code>Mclust</code> of the package <code>mclust</code>) and <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mclust R package:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Cluster analysis using Gaussian mixture distributions</span></span>
@@ -474,7 +475,7 @@ Figure&nbsp;2.2: Cluster analysis based on a mixture distribution with two weigh
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>           <span class="at">method =</span> <span class="st">"jitter"</span>, <span class="at">jitter =</span> .<span class="dv">0005</span>, <span class="at">at =</span> .<span class="dv">001</span>,</span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>           <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">col=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">bg=</span><span class="fu">alpha</span>(col_v[<span class="dv">2</span>],.<span class="dv">5</span>), <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>But coding is nothing without understanding. We’ll learn the underlying statistical method it in this chapter.</p>
+<p>But coding without understanding is dangerous. We’ll learn the statistical method implemented in the <code>R</code> function <code>Mclust</code> it in this chapter.</p>
 </section>
 </section>
 <section id="the-em-algorithm-for-maximum-likelihood-estimation-of-gaussian-mixture-distributions" class="level2" data-number="2.2">
@@ -482,26 +483,32 @@ Figure&nbsp;2.2: Cluster analysis based on a mixture distribution with two weigh
 <section id="gaussian-mixture-models-gmm" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="gaussian-mixture-models-gmm"><span class="header-section-number">2.2.1</span> Gaussian Mixture Models (GMM)</h3>
 <p>We denote a random variable <span class="math inline">\(X\)</span> that follows a Gaussian mixture distribution as <span class="math display">\[
-X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
+X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)
 \]</span></p>
 <p>The corresponding density function of a Gaussian mixture distribution is defined as follows: <span id="eq-GMMdens"><span class="math display">\[
-f_{GMM}(x;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g \varphi(x;\mu_g,\sigma_g)
+f_{GMM}(x;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)=\sum_{g=1}^G\pi_{g,0}\varphi(x;\mu_{g,0},\sigma_{g,0})
 \tag{2.1}\]</span></span></p>
 <ul>
-<li><strong>Weights:</strong> <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span> with <span class="math inline">\(\pi_g&gt;0\)</span> and <span class="math inline">\(\sum_{g=1}^G\pi_g=1\)</span></li>
-<li><strong>Means:</strong> <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> with <span class="math inline">\(\mu_g\in\mathbb{R}\)</span></li>
-<li><strong>Standard deviations:</strong> <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span> with <span class="math inline">\(\sigma_g&gt;0\)</span></li>
+<li><strong>Weights:</strong> <span class="math inline">\(\boldsymbol{\pi}_0=(\pi_{1,0},\dots,\pi_{G,0})\)</span> with <span class="math inline">\(\pi_{g,0}&gt;0\)</span> and <span class="math inline">\(\sum_{g=1}^G\pi_{g,0}=1\)</span></li>
+<li><strong>Means:</strong> <span class="math inline">\(\boldsymbol{\mu}_0=(\mu_{1,0},\dots,\mu_{G,0})\)</span> with <span class="math inline">\(\mu_{g,0}\in\mathbb{R}\)</span></li>
+<li><strong>Standard deviations:</strong> <span class="math inline">\(\boldsymbol{\sigma}_0=(\sigma_{1,0},\dots,\sigma_{G,0})\)</span> with <span class="math inline">\(\sigma_{g,0}&gt;0\)</span></li>
 <li><strong>Normal density of group <span class="math inline">\(g=1,\dots,G\)</span>:</strong> <span class="math display">\[
-\varphi(x;\mu_g,\sigma_g)=\frac{1}{\sqrt{2\pi}\sigma_g}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_g}{\sigma_g}\right)^2\right)
+\varphi(x;\mu_{g,0},\sigma_{g,0})=\frac{1}{\sqrt{2\pi}\sigma_{g,0}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu_{g,0}}{\sigma_{g,0}}\right)^2\right)
 \]</span></li>
 <li><strong>Unknown parameters:</strong> <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\pi}\)</span></span>, <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\mu}\)</span></span> und <span style="color:#FF5733"><span class="math inline">\(\boldsymbol{\sigma}\)</span></span></li>
 </ul>
 </section>
 <section id="maximum-likelihood-ml-estimation" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="maximum-likelihood-ml-estimation"><span class="header-section-number">2.2.2</span> Maximum Likelihood (ML) Estimation</h3>
-<p>We could try to estimate the unknown parameters <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>, <span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and <span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span> using the maximum likelihood method.</p>
+<p>We could try estimating the unknown parameters</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\pi}_0=(\pi_{1,0},\dots,\pi_{G,0})\)</span>,</li>
+<li><span class="math inline">\(\boldsymbol{\mu}_0=(\mu_1,\dots,\mu_G)\)</span> and</li>
+<li><span class="math inline">\(\boldsymbol{\sigma}_0=(\sigma_1,\dots,\sigma_G)\)</span></li>
+</ul>
+<p>using the maximum likelihood method.</p>
 <blockquote class="blockquote">
-<p>I’ll say it right away: The attempt will fail.</p>
+<p>I’ll say it right away: This attempt generally fails.</p>
 </blockquote>
 <section id="basic-idea-of-ml-estimation" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="basic-idea-of-ml-estimation">Basic Idea of ML Estimation</h4>
@@ -509,24 +516,30 @@ f_{GMM}(x;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi
 <li><strong>Assumption:</strong> The data <span class="math inline">\(\mathbf{x}=(x_1,\dots,x_n)\)</span> is a realization of a random sample <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X
 \]</span> with <span class="math display">\[
-X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}).
+X\sim\mathcal{N}_{\mathcal{mix}}(G,\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0).
 \]</span></li>
 </ul>
 <!-- 
 > That is, in a certain sense, the observed data $\mathbf{x}=(x_1,\dots,x_n)$ "know" the unknown parameters $\boldsymbol{\pi},$ $\boldsymbol{\mu}$ und $\boldsymbol{\sigma}$ and we "only" have to elicit this information from them. 
 -->
+<!-- * **Estimation Idea:** 
+Choose $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$ such that $f_{GMM}(\cdot;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})$ **"optimally"** fits the observed data $\mathbf{x}$. 
+-->
 <ul>
-<li><p><strong>Estimation Idea:</strong> Choose <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span> such that <span class="math inline">\(f_{GMM}(\cdot;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> <strong>“optimally”</strong> fits the observed data <span class="math inline">\(\mathbf{x}\)</span>.</p></li>
-<li><p><strong>Implementation of the Estimation Idea:</strong> Maximize (with respect to <span class="math inline">\(\boldsymbol{\pi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\sigma}\)</span>) the likelihood function <span class="math display">\[
+<li><strong>Estimate</strong> the unknown parameters <span class="math inline">\(\boldsymbol{\pi}_0\)</span>, <span class="math inline">\(\boldsymbol{\mu}_0\)</span> and <span class="math inline">\(\boldsymbol{\sigma}_0\)</span> by maximizing the <!-- 
+likelihood function with respect to $\boldsymbol{\pi}$, $\boldsymbol{\mu}$ and $\boldsymbol{\sigma}$
+$$
 \mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})=\prod_{i=1}^nf_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})
-\]</span> Or, equivalently, maximize the log-likelihood function (simpler maximization) <span id="eq-logLikGMM"><span class="math display">\[
+$$
+or, equivalently, by maximizing the  
+--> log-likelihood function <span id="eq-logLikGMM"><span class="math display">\[
 \begin{align*}
 %\ln\left(\mathcal{L}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})\right)=
 \ell(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x})
 =&amp;\sum_{i=1}^n\ln\left(f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\right)\\
 =&amp;\sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\varphi(x_i;\mu_g,\sigma_g)\right)
 \end{align*}
-\tag{2.2}\]</span></span></p></li>
+\tag{2.2}\]</span></span> taking into account the following <strong>maximization constraints:</strong></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -558,7 +571,7 @@ Maximization constraints
 \sigma_g\to 0.
 \]</span> This degenerating situation leads to <strong>very large</strong> density function values, <span class="math display">\[
 \varphi(x_i;\mu_g=x_i,\sigma_g)\to\infty\quad\text{for}\quad \sigma_g\to 0,
-\]</span> and thus maximize the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>).</p>
+\]</span> and thus “maximizes” the log-likelihood in an <em>undesirable</em> way (see <a href="#fig-dirac1" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-dirac1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -581,7 +594,7 @@ Figure&nbsp;2.3: Gaussian density with <span class="math inline">\(\mu_g=x_i\)</
 \hat\sigma_g&amp;=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(x_i-\hat\mu_g\right)^2},
 \end{align*}
 \tag{2.3}\]</span></span> where <span id="eq-AnalyticSol2"><span class="math display">\[
-p_{ig}=\frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+p_{ig}=\frac{\pi_{g,0}\varphi(x_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(x_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
 \tag{2.4}\]</span></span> for <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -593,18 +606,18 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Deriving the expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> is really a bit tedious (multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints) but in principle doable.<br>
+<p>Deriving the expressions for <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> and <span class="math inline">\(\hat{\pi}_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> requires multiple applications of the chain rule, product rule, etc., as well as an application of the Lagrange multiplier method for optimization under side-constraints to take into account the maximization constraints.<br>
 <!-- In one of the exercises, you may derive the expression for $\hat\mu_g$. --></p>
 </div>
 </div>
 <p>🙈 <span style="color:#FF5733"><strong>However:</strong></span> The above expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span> and <span class="math inline">\(\hat\sigma_g\)</span> depend themselves on the <span style="color: #FF5733"><strong>unknown</strong></span> parameters</p>
 <ul>
-<li><span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span>,</li>
-<li><span class="math inline">\(\boldsymbol{\mu}=(\mu_1,\dots,\mu_G)\)</span> and</li>
-<li><span class="math inline">\(\boldsymbol{\sigma}=(\sigma_1,\dots,\sigma_G)\)</span>,</li>
+<li><span class="math inline">\(\boldsymbol{\pi}_0=(\pi_{1,0},\dots,\pi_{G,0})\)</span>,</li>
+<li><span class="math inline">\(\boldsymbol{\mu}_0=(\mu_{1,0},\dots,\mu_{G,0})\)</span> and</li>
+<li><span class="math inline">\(\boldsymbol{\sigma}_0=(\sigma_{1,0},\dots,\sigma_{G,0})\)</span>,</li>
 </ul>
 <p>because the probabilities <span class="math inline">\(0\leq p_{ig}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>) depend on these unknown parameters.</p>
-<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> do not allow direct estimation of the unknown parameters <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(\mu_g\)</span>, and <span class="math inline">\(\sigma_g\)</span>.</p>
+<p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> do not allow a direct estimation of the unknown parameters <span class="math inline">\(\pi_{g,0}\)</span>, <span class="math inline">\(\mu_{g,0}\)</span>, and <span class="math inline">\(\sigma_{g,0}\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -616,12 +629,12 @@ Prior and Posterior Probabilities
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>The probability <span class="math display">\[
-\pi_g = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g\right)
+<li><strong>Prior Probability:</strong> The probability <span class="math display">\[
+\pi_g = P\left(\text{Penguine $i$ belongs to group}\;g\right)
 \]</span><br>
 in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
-<li>The conditional probability <span class="math display">\[
-p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)
+<li><strong>Posterior Probability:</strong> The conditional probability. <span class="math display">\[
+p_{ig} = P\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)
 \]</span> in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguine <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
 </ul>
 <p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior" class="quarto-xref"><span>Section 2.3.2</span></a>.</p>
@@ -632,31 +645,31 @@ p_{ig} = \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right
 </section>
 <section id="sec-EM1" class="level3" data-number="2.2.3">
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-EM1"><span class="header-section-number">2.2.3</span> The EM Algorithm for GMMs</h3>
-<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>, however, suggest a simple iterative maximum likelihood estimation procedure: An <strong>alternating estimation</strong> of</p>
+<p>The expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> suggest a simple iterative maximum likelihood estimation procedure; namely, an <strong>alternating estimation</strong> of</p>
 <ul>
-<li><p>the (unknown) posterior probabilities <span class="math display">\[
+<li>the posterior probabilities <span class="math display">\[
 \begin{align*}
 p_{ig}
-&amp;= \mathbb{P}\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)\\[2ex]
-&amp; = \frac{\pi_g\varphi(x_i;\mu_g,\sigma_g)}{f_{GMM}(x_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+&amp;= P\left(\text{Penguine $i$ belongs to group}\;g|X_i = x_i\right)\\[2ex]
+&amp; = \frac{\pi_{g,0}\varphi(x_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(x_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
 \end{align*}
-\]</span> for <span class="math inline">\(i=1,\dots,n,\)</span> and <span class="math inline">\(g=1,\dots,G,\)</span> and of</p></li>
-<li><p>the (unknown) parameters <span class="math display">\[
-(\pi_g,\mu_g,\sigma_g) \quad\text{for}\quad g=1,\dots,G
-\]</span></p></li>
+\]</span> for <span class="math inline">\(i=1,\dots,n,\)</span> and <span class="math inline">\(g=1,\dots,G,\)</span> using estimates <span class="math inline">\(\hat{\boldsymbol{\pi}}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\mu}}\)</span>, and <span class="math inline">\(\hat{\boldsymbol{\sigma}}\)</span> of the unknown <span class="math inline">\(\boldsymbol{\pi}_0\)</span>, <span class="math inline">\(\boldsymbol{\mu}_0\)</span>, and <span class="math inline">\(\boldsymbol{\sigma}_0.\)</span></li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<p>and of</p>
+<ul>
+<li>the model parameters <span class="math display">\[
+(\pi_{g,0},\mu_{g,0},\sigma_{g,0}) \quad\text{for}\quad g=1,\dots,G
+\]</span> using <span class="math inline">\(\hat{\pi}_g\)</span>, <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> defined in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> using estimates <span class="math inline">\(\hat{p}_{ig}\)</span> for the unknown <span class="math inline">\(p_{ig}.\)</span></li>
+</ul>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Given an estimate <span class="math inline">\(\hat{p}_{ig},\)</span> you can compute <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g)\)</span> using <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a>.</p>
 <p>Given the estimates <span class="math inline">\((\hat\pi_g, \hat\mu_g,\hat\sigma_g),\)</span> you can compute <span class="math inline">\(\hat{p}_{ig}\)</span> using <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>.</p>
+</div>
 </div>
 </div>
 <p><strong>The EM Algorithm:</strong></p>
@@ -679,9 +692,9 @@ Tip
 <p><span class="math inline">\(\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{\hat{p}_{ig}^{(r-1)}}{\left(\sum_{j=1}^n\hat{p}_{jg}^{(r-1)}\right)}\left(x_i-\hat\mu_g^{(r)}\right)^2}\)</span></p>
 </center></li>
 </ul></li>
-<li><p><strong>Check Convergence:</strong> <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})\)</span>, does not change anymore substantially.</p></li>
+<li><p><strong>Check Convergence:</strong> <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})\)</span>, does not change any more substantially. Or, equivalently, of the parameter estimates do not change any more substantially.</p></li>
 </ol>
-<p>The above pseudo code is implemented in the following code chunk:</p>
+<p>The above pseudocode is implemented in the following code chunk:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"MASS"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"mclust"</span>)</span>
@@ -826,16 +839,16 @@ Note
 </div>
 </div>
 <p>Unfortunately, the true group labels <span class="math inline">\(z_{ig}\)</span> are missing. However, we nevertheless know at least something about their group-assignments. The weights <span class="math display">\[
-\pi_1,\dots,\pi_G
+\pi_{1,0},\dots,\pi_{G,0}
 \]</span> of the Gaussian mixture distribution <span class="math display">\[
-f_{GMM}(x;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})=\sum_{g=1}^G\pi_g\varphi(x;\mu_g,\sigma_g),
-\]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot;\mu_g,\sigma_g)\)</span> in the total distribution <span class="math inline">\(f_{GMM}\)</span>. Therefore, we know that, on average, <span class="math display">\[
-\pi_g\cdot 100\%
+f_{GMM}(x;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)=\sum_{g=1}^G\pi_{g,0}\varphi(x;\mu_{g,0},\sigma_{g,0}),
+\]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot;\mu_{g,0},\sigma_{g,0})\)</span> in the total distribution <span class="math inline">\(f_{GMM}.\)</span> Therefore, we know that, on average, <span class="math display">\[
+\pi_{g,0}\cdot 100\%
 \]</span> of the data points <span class="math inline">\(i=1,\dots,n\)</span> come from group <span class="math inline">\(g.\)</span></p>
 <p>Thus, we can consider the missing group label <span class="math inline">\(z_{ig}\)</span> as a <strong>unobserved realization of a binary random variable</strong> <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probabilities <span class="math display">\[
 \begin{align*}
-P(Z_{ig}=1)&amp;=\pi_g\\[2ex]
-P(Z_{ig}=0)&amp;=(1-\pi_g)\\[2ex]
+P(Z_{ig}=1)&amp;=\pi_{g,0}\\[2ex]
+P(Z_{ig}=0)&amp;=(1-\pi_{g,0})\\[2ex]
 \end{align*}
 \]</span> and with the restriction that <span class="math display">\[
 \sum_{g=1}^GZ_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
@@ -850,7 +863,7 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 <section id="sec-PriorPosterior" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="sec-PriorPosterior"><span class="header-section-number">2.3.2</span> Prior and Posterior Probabilities</h3>
 <strong>Prior Probability</strong> <span class="math display">\[
-\pi_g = P(Z_{ig}=1)
+\pi_{g,0} = P(Z_{ig}=1)
 \]</span> If we know nothing about the flipper length of penguin <span class="math inline">\(i\)</span> then we are left with the prior probability: <br>
 <center>
 “With probability <span class="math inline">\(\pi_g=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
@@ -860,7 +873,7 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 p_{ig}=P(Z_{ig}=1|X_i=x_i)
 \]</span> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) which leads to the posterior probability: <br>
 <center>
-“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
+“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i=x_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(x_i\)</span> belongs to group <span class="math inline">\(g.\)</span>”
 </center>
 <p><br></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -905,7 +918,7 @@ p_{ig}
 </section>
 <section id="the-abstract-version-of-the-em-algorithm" class="level3" data-number="2.3.3">
 <h3 data-number="2.3.3" class="anchored" data-anchor-id="the-abstract-version-of-the-em-algorithm"><span class="header-section-number">2.3.3</span> The Abstract Version of the EM-Algorithm</h3>
-<p>If, in addition to the data points (i.e.&nbsp;the predictors like the flipper lengths), <span class="math display">\[
+<p>If, in addition to the data points (i.e.&nbsp;the predictors such as the flipper lengths), <span class="math display">\[
 \mathbf{x}=(x_1,\dots,x_n),
 \]</span> we had also observed the group assignments, <span class="math display">\[
 \mathbf{z}=(z_{11},\dots,z_{nG}),
@@ -918,7 +931,7 @@ p_{ig}
 &amp;=\sum_{g=1}^G\left(\sum_{i=1}^nz_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\right)
 \end{align*}
 \]</span></p>
-<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> would be <strong>easy to maximize</strong>: We can effectively maximize separately for each group <span class="math inline">\(g,\)</span> which then involves only a single normal density function and not a too flexible mixture of density functions. This simplifies the maximization problem considerably, since the normal density belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) which is not the case for the normal mixture distribution.</p>
+<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> is <strong>easy to maximize</strong>: We can effectively maximize separately for each group <span class="math inline">\(g,\)</span> which then involves only a single normal density function and not a too flexible mixture of density functions. This simplifies and stabelizes the maximization problem considerably, since the normal density belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) which is not the case for the normal mixture distribution.</p>
 <p>However, we do not observe the realizations <span class="math display">\[
 \mathbf{z}=(z_{11},\dots,z_{nG}),
 \]</span> but only know the distribution of the random variables <span class="math display">\[
@@ -929,7 +942,7 @@ p_{ig}
 <p>We do not know <span class="math inline">\(Z_{ig},\)</span> but we can compute the best (in the mean square sense) predition of <span class="math inline">\(Z_{ig}\)</span> using the conditional mean <span class="math display">\[
 \mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|\mathbf{X}=\mathbf{x}\right)
 =\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|X_i=x_i\right)=p_{ig},
-\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the parameter vector, and where (by <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) <span class="math display">\[
+\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the vector of potential parameter values, and where (by <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) <span class="math display">\[
 \begin{align*}
 p_{ig}
 &amp;=\overbrace{P(Z_{ig}=1|X_i=x_i)}^{\text{Posterior-prob}}\\[2ex]
@@ -976,7 +989,7 @@ Tip
 <li><p><span style="color:#FF5733"><strong>(Expectation)</strong> </span> Compute: <span class="math display">\[
 \begin{align*}
 &amp;\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
-=\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex]
+=\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\Big(\tilde{\ell}(\underbrace{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}_{\boldsymbol{\theta}};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\Big)\\[2ex]
 &amp;=\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i=x_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
 &amp;=\sum_{i=1}^n\sum_{g=1}^G\hat{p}_{ig}^{(r-1)}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(x_i;\mu_g,\sigma_g)\right)\right\}
 \end{align*}
@@ -1006,14 +1019,16 @@ Tip
 \]</span> does not change anymore substantially; i.e., if <span class="math display">\[
 \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r)},\boldsymbol{\hat{\theta}}^{(r-1)})
 \approx
-\mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r+1)},\boldsymbol{\hat{\theta}}^{(r-1+1)})
+\mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r+1)},\boldsymbol{\hat{\theta}}^{(r-1+1)}),
+\]</span> or, equivalently, if <span class="math display">\[
+\left|\boldsymbol{\hat{\theta}}^{(r+1)} - \boldsymbol{\hat{\theta}}^{(r)}\right|\approx 0.
 \]</span></p></li>
 </ol>
 </section>
 </section>
 <section id="sec-CA" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-CA"><span class="header-section-number">2.4</span> Cluster Analysis</h2>
-<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor random variable <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
+<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
 <p>Consider iid data <span class="math display">\[
 (Y_1,X_1),\dots,(Y_n,X_n)\overset{\text{i.i.d.}}{\sim}(Y,X)
 \]</span> where</p>
@@ -1063,22 +1078,19 @@ X_1,\dots,X_n
 <section id="bayes-classifier" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="bayes-classifier"><span class="header-section-number">2.4.1</span> Bayes Classifier</h3>
 <p>We would like to find a classification rule <span class="math inline">\(h\)</span> that makes accurate predictions. The most often used quantity to measure the accuracy of classification methods is the <strong>error rate</strong>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-errorRate" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 2.1 (Error rate)</strong></span> The <strong>true error rate</strong> of the classifier <span class="math inline">\(h\)</span> is the loss function <span id="eq-ErrorRate"><span class="math display">\[
 L(h) = P(h(X)\neq Y).
 \tag{2.7}\]</span></span> The <strong>empirical error rate</strong> is <span class="math display">\[
 \hat{L}_n(h)=\frac{1}{n}\sum_{i=1}^n 1_{(h(X_i)\neq Y_i)},
 \]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function with <span class="math inline">\(1_{(\texttt{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\texttt{FALSE})}=0.\)</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -1122,16 +1134,12 @@ f_X(x)=\pi_1\;\; f_{X|Y}(x|Y=1) + \pi_0\;\; f_{X|Y}(x|Y=0)
 </ol>
 <p><strong>Note:</strong> Here <span class="math inline">\(f\)</span> denotes here some (unknown) density function, not necessarily the Gaussian density or a Gaussian mixture.</p>
 <p>The <strong>Bayes classifier</strong>, <span class="math inline">\(h^\ast,\)</span> classifies data according to the <strong>Bayes classification rule</strong></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-BayesCR" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 2.2 (Bayes Classification Rule and Decision Boundary)</strong></span> <br> The <strong>Bayes classification rule</strong> <span class="math inline">\(h^\ast\)</span> is given by <span class="math display">\[
 h^\ast(x) = \left\{\begin{array}{ll}
@@ -1141,6 +1149,7 @@ h^\ast(x) = \left\{\begin{array}{ll}
 \]</span> The <strong>decision boundary</strong> of a classifier <span class="math inline">\(h\)</span> is given by the set <span class="math display">\[
 \mathcal{D}(h)=\{x : P(Y=1|X=x)=P(Y=0|X=x)\}.
 \]</span></p>
+</div>
 </div>
 </div>
 </div>
