@@ -417,10 +417,192 @@ $$
 $$
 * **Symmetric around zero:** 
 $$
-\int xK(x)dx=0
+K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 $$ 
 
 
-Typical choices for the kernel function $K$ are: 
+Typically, one uses smooth density functions that are symmetric around zero.  
 
-* Smooth density functions that are symmetric around zero. 
+**Examples:**
+
+
+* The family of the **symmetric beta density** functions; for $p = 0,1,2,\ldots$
+   $$
+   K(u; p) = \mathrm{Const}_p \left(1 - u^2 \right)^p
+   $$
+   for $u \in [-1,1]$ and $0$ else, where the $p$-specific constant is chosen such that the kernel integrates to one. 
+   * $p=0$ yields the **uniform kernel:** 
+     $$
+     K(u) = \frac{1}{2}
+     $$
+    * $p=1$ yields the (important) **Epanechnikov kernel:** 
+     $$
+     K(u) = \frac{3}{4}\,(1-u^2)
+     $$
+    * $p=2$ yields the **biweight kernel:** 
+     $$
+     K(u) = \frac{15}{16}\,(1-u^2)^2
+     $$
+    * $p=3$ yields the **triweight kernel:** 
+     $$
+     K(u) = \frac{35}{32}\,(1-u^2)^3
+     $$
+* **Normal (Gaussian) kernel:** 
+  $$
+  K(u) = \phi(u) = \frac{1}{\sqrt{2\pi}} \exp(-u^2 / 2)
+  $$
+  for $u \in\mathbb{R}.$
+* Triangular kernel:
+  $$
+  K(u) = 1-|u|
+  $$
+  for $u\in[-1,1]$ and $0$ else.
+
+
+
+### Choice of the Bandwidth Parameter
+
+
+Using a too small bandwidth (here $h=$ `r round(bw.SJ(inc76$income) * .25,  2)`):
+
+
+```{r}
+#| fig-cap: Kernel density estimate with a too small bandwidth.
+#| label: fig-KDEhsmall
+data  <- inc76$income
+h     <- bw.SJ(inc76$income) * .25  # too small bandwidth
+KDE   <- density(data, bw = h, from = min(data), to = max(data))
+
+plot(x = KDE$x, y = KDE$y, 
+     ylab="Density", xlab="Income", 
+     main = "Kernels Density Estimtion With a too Small Bandwidth", type="l")
+```
+
+
+
+Too a too large bandwidth (here $h=$ `r round(bw.SJ(inc76$income) * 5.5,  2)`):
+
+
+```{r}
+#| fig-cap: Kernel density estimate with a too large bandwidth.
+#| label: fig-KDEhlarge
+data  <- inc76$income
+h     <- bw.SJ(inc76$income) * 2.5  # too large bandwidth
+KDE   <- density(data, bw = h, from = min(data), to = max(data))
+
+plot(x = KDE$x, y = KDE$y, 
+     ylab="Density", xlab="Income", 
+     main = "Kernels Density Estimtion With a Too Large Bandwidth", type="l")
+```
+
+
+
+<!-- Way too a too large bandwidth (here $h=$ `r round(bw.SJ(inc76$income) * 60,  2)`):
+
+
+```{r}
+#| fig-cap: Kernel density estimate with a way too large bandwidth.
+#| label: fig-KDEhLARGE
+data  <- inc76$income
+h     <- bw.SJ(inc76$income) * 60  # way too large bandwidth
+KDE   <- density(data, bw = h, from = min(data), to = max(data))
+
+plot(x = KDE$x, y = KDE$y, 
+     ylab="Density", xlab="Income", 
+     main = "Kernels Density Estimtion With a VERY Large Bandwidth", type="l")
+``` 
+-->
+
+Using an estimated bandwidth (here $h=$ `r round(bw.SJ(inc76$income),  2)`) based on the method proposed by @sheather1991reliable:
+
+
+```{r}
+#| fig-cap: Kernel density estimate with a good bandwidth choice.
+#| label: fig-KDEhgood
+data  <- inc76$income
+h     <- bw.SJ(inc76$income) # good bandwidth
+KDE   <- density(data, bw = h, from = min(data), to = max(data))
+
+plot(x = KDE$x, y = KDE$y, 
+     ylab="Density", xlab="Income", 
+     main = "Kernels Density Estimtion With a Good Bandwidth Choice", type="l")
+```
+
+
+
+## Accuracy of the Kernel Density Estimator
+
+The accuracy of kernel desnity estimator depends on 
+
+1. the choice of the kernel function $K,$ 
+2. the choice of the bandwidth $h,$ and 
+3. the complexity of the unknown density $f$ to be estimated. 
+
+The choice of the kernel function $K$ is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth $h.$
+
+**Most common goal:** Automatic data-dependent bandwidth selection that is **"globally optimal"** ; i.e. optimal for relevant all $x$ in $f(x).$
+
+We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors. 
+
+Commonly used loss-functions: 
+
+* **Integrated Squared Error (ISE)**
+  $$
+  \mathrm{ISE}(\hat{f}_h(x))=\int (\hat{f}_h(x)-f(x))^2\,dx
+  $$ 
+  Caution: The $\mathrm{ISE}(\hat{f}_h(x))$ is a random quantity.
+* **Mean Integrated Squared Error (MISE):**
+  $$
+  \mathrm{MISE}(\hat{f}_h)=\int\mathrm{MSE}(\hat{f}_h(x))\,dx=\int \mathbb{E}(\hat{f}_h(x)-f(x))^2\,dx
+  $$
+* **Asymptotic Mean Integrated Squared Error (AMISE):** 
+  $$
+  \mathrm{AMISE}(\hat{f}_h) = \mathrm{MISE}(\hat{f}_h) + o_P(1)
+  $$
+  I.e. the asymptotic approximation of the $\mathrm{MISE}.$
+
+
+
+The minimum requirement on $\hat{f}_h$ is **consistency**. That is, the estimated density function $\hat{f}_h$ should approach the true (unknown!) density $f$, under the hypothetical assumption that the sample size grows indefinitely ($n \to \infty$),
+
+
+Remember: We'll call an estimator $\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)$ **consistent,** if 
+$$
+\hat\theta_n\to_p\theta.
+$$ 
+Unless a different notion of convergence (such as MSE or "almost surely") has been specified. 
+
+
+When estimating functions, such as density functions $f(x),$ a distinction is made between the following concepts of consistency:
+
+* **Pointwise consistency:** 
+  $$
+  \hat{f}_{nh}(x)\to_P f(x),\quad \text{as}\quad n\to\infty
+  $$
+  for an arbitrary, given $x\in\mathbb{R}.$
+* **Uniform consistency:**
+  $$
+  \sup_{x}\left|\hat{f}_{nh}(x) - f(x)\right|\to_P 0,\quad \text{as}\quad n\to\infty.
+  $$
+
+
+
+For **pointwise consistency** the following Assumptions are needed:
+
+* Sequence of bandwidth parameters $h = h_n:$
+   *  $h_n \to 0$ as $n\to\infty$, 
+   *  $n h_n \to \infty$ as $n \to \infty$
+* True density function $f:$
+   * $f$ consistent and sufficiently often differentiable in $x$
+* Kernel function $K$: 
+    * consistent and $K(z)\geq 0$ for all $z$,
+    * $K$ symmetric around $0$ 
+    * $\lim_{|y| \to \infty} | y K(y) | = 0$ 
+    * $K$ bounded ($\int |K(z)|dz < \infty$), 
+    * $\int K(z)dz = 1$
+ 
+<!-- %(Erfüllt, falls $K$ eine um $0$ symmetrische Dichte auf einer kompakten Menge, z.B., $K:[-1,1]\to[0,\infty[$, ist.  
+-->
+
+
+## References {-}

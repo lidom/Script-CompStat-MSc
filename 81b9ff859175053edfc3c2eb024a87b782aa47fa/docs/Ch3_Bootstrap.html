@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Ch4_NPRegression.html" rel="next">
+<link href="./Ch4_NP_Density_Estimation.html" rel="next">
 <link href="./Ch2_EMAlgorithmus.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -218,8 +218,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Ch4_NPRegression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
+  <a href="./Ch4_NP_Density_Estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Density Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Ch5_NPRegression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span></a>
   </div>
 </li>
     </ul>
@@ -283,6 +289,7 @@ window.Quarto = {
 </header>
 
 
+<!-- LTeX: language=en-US -->
 <!-- TO-DO: 
 1. Rework this chapter using the overview article of Horowitz
 BOOTSTRAP METHODS IN ECONOMETRICS 
@@ -340,7 +347,7 @@ Var\left(\alpha X + (1-\alpha)Y\right).
 \]</span></p>
 <p>For instance, to construct a confidence interval we need to know the standard error of the estimator <span class="math inline">\(\hat\alpha\)</span>, <span class="math display">\[
 \sqrt{Var(\hat\alpha)} = \operatorname{SE}(\hat\alpha)=?
-\]</span> However, computing <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> is here difficult due to the definition of <span class="math inline">\(\hat\alpha\)</span> in <a href="#eq-alphahat" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-alphahat</span></a> which contains variance estimates also in the denominator.</p>
+\]</span> However, computing <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> is here difficult due to the definition of <span class="math inline">\(\hat\alpha\)</span> in <a href="#eq-alphahat" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> which contains variance estimates also in the denominator.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -351,8 +358,8 @@ Conclusion: Why Bootstrap?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap" class="quarto-xref"><span class="quarto-unresolved-ref">sec-BasicBootstrap</span></a>) which allows us to approximate <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> simply by resampling from the data observed; i.e.&nbsp;without the need of an explicite formula of a consistent estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> to become useful.</p>
-<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> (<a href="#sec-BootT" class="quarto-xref"><span class="quarto-unresolved-ref">sec-BootT</span></a>). The Bootstrap-<span class="math inline">\(t\)</span> Method is found to be <strong>more accurate</strong> than the standard asymptotic Normality results.</p>
+<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap" class="quarto-xref"><span>Section 3.3</span></a>) which allows us to approximate <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> simply by resampling from the data observed; i.e.&nbsp;without the need of an explicite formula of a consistent estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> to become useful.</p>
+<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> (<a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>). The Bootstrap-<span class="math inline">\(t\)</span> Method is found to be <strong>more accurate</strong> than the standard asymptotic Normality results.</p>
 </div>
 </div>
 </section>
@@ -415,7 +422,7 @@ F_n(x)=\left\{
 \]</span> where <span class="math display">\[
 X_{(1)}\leq X_{(2)}\leq \dots \leq X_{(n)}
 \]</span> denotes the <strong>order-statistic</strong>.</p>
-<p><span class="math inline">\(F_n\)</span> is itself a <strong>distribution function according to <a href="#def-cdf" class="quarto-xref">Definition&nbsp;<span class="quarto-unresolved-ref">def-cdf</span></a></strong>; namely, the distribution function of the <strong>discrete random variable</strong> <span class="math inline">\(X^*,\)</span> where</p>
+<p><span class="math inline">\(F_n\)</span> is itself a <strong>distribution function according to <a href="#def-cdf" class="quarto-xref">Definition&nbsp;<span>3.1</span></a></strong>; namely, the distribution function of the <strong>discrete random variable</strong> <span class="math inline">\(X^*,\)</span> where</p>
 <p><span class="math display">\[
 X^*\in\{X_1,\dots,X_n\}
 \]</span> and <span class="math display">\[
@@ -521,7 +528,7 @@ nF_n(x)\sim B(n, p=F(x))\quad\text{for each}\quad x\in\mathbb{R}
 <li><span class="math inline">\(p=F(x)\)</span> (“probability of success on a single trial”).</li>
 </ul>
 <blockquote class="blockquote">
-<p><strong>Note:</strong> The result in <a href="#eq-ecdfDistr" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-ecdfDistr</span></a> holds for any <span class="math inline">\(F.\)</span> Therefore, <span class="math inline">\(nF_n\)</span> and thus also <span class="math inline">\(F_n\)</span> is called <strong>distribution free</strong></p>
+<p><strong>Note:</strong> The result in <a href="#eq-ecdfDistr" class="quarto-xref">Equation&nbsp;<span>3.3</span></a> holds for any <span class="math inline">\(F.\)</span> Therefore, <span class="math inline">\(nF_n\)</span> and thus also <span class="math inline">\(F_n\)</span> is called <strong>distribution free</strong></p>
 </blockquote>
 <p>Thus, <span class="math display">\[
 \begin{align*}
@@ -548,7 +555,7 @@ F_n(x) &amp; \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
 \end{align*}
 \]</span> for each <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
 <p>That is, <span class="math inline">\(F_n(x)\)</span> is <strong>point-wise</strong> for each <span class="math inline">\(x\in\mathbb{R}\)</span> a weakly consistent estimator of <span class="math inline">\(F(x).\)</span></p>
-<p>The Clivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a> states that <span class="math inline">\(F_n\)</span> is even <strong>uniformly</strong> over <span class="math inline">\(\mathbb{R}\)</span> a consistent estimator of <span class="math inline">\(F.\)</span></p>
+<p>The Clivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a> states that <span class="math inline">\(F_n\)</span> is even <strong>uniformly</strong> over <span class="math inline">\(\mathbb{R}\)</span> a consistent estimator of <span class="math inline">\(F.\)</span></p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -582,7 +589,7 @@ P(X\in [a,b])=F(b)-F(a).
 \]</span> with <span class="math inline">\(m\to\infty\)</span> and do inference about <span class="math inline">\(\theta_0\)</span> using these realizations. Unfortunately, we don’t know <span class="math inline">\(F,\)</span> thus Monte Carlo inference is infeasible.</p>
 <p><strong>The idea of the bootstrap is to make the infeasible Monte Carlo inference feasible:</strong> <br> Instead of random sampling from <span class="math inline">\(F,\)</span> which is infeasible, the bootstrap uses random sampling from the known empirical distribution function <span class="math inline">\(F_n\)</span> to generate arbitrarily many <strong>bootstrap realizations</strong> of the estimator <span class="math inline">\(\hat{\theta}_n\)</span> <span class="math display">\[
 \hat{\theta}^*_{n,1}, \hat{\theta}^*_{n,2}, \dots, \hat{\theta}^*_{n,m}
-\]</span> with <span class="math inline">\(m\to\infty\)</span> and do inference about <span class="math inline">\(\theta_0\)</span> using these bootstrap realizations.<br> This is justified asymptotically since for large <span class="math inline">\(n,\)</span> the empirical distribution <span class="math inline">\(F_n\)</span> is “close” to the unknown distribution <span class="math inline">\(F\)</span> (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a>). That is, for <span class="math inline">\(n\rightarrow\infty\)</span> the relative frequency of observations <span class="math inline">\(X_i\)</span> in <span class="math inline">\([a,b]\)</span> converges to <span class="math inline">\(P(X\in [a,b])\)</span><br>
+\]</span> with <span class="math inline">\(m\to\infty\)</span> and do inference about <span class="math inline">\(\theta_0\)</span> using these bootstrap realizations.<br> This is justified asymptotically since for large <span class="math inline">\(n,\)</span> the empirical distribution <span class="math inline">\(F_n\)</span> is “close” to the unknown distribution <span class="math inline">\(F\)</span> (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>). That is, for <span class="math inline">\(n\rightarrow\infty\)</span> the relative frequency of observations <span class="math inline">\(X_i\)</span> in <span class="math inline">\([a,b]\)</span> converges to <span class="math inline">\(P(X\in [a,b])\)</span><br>
 <span class="math display">\[
   \begin{align*}
   \underbrace{\frac{1}{n}\sum_{i=1}^n1_{(X_i\in[a,b])}}_{=F_n(b)-F_n(a)}&amp;\to_p \underbrace{P(X\in [a,b])}_{=F(b)-F(a)}
@@ -617,7 +624,7 @@ P(X\in [a,b])=F(b)-F(a).
 H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty.
 \]</span></p>
 <p>We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of <span class="math inline">\(H_{n}(x)\)</span> is the distribution function of the Normal distribution with mean zero and asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).\)</span></p>
-<p>However, deriving a useful, explicit expression of the asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)\)</span> can be <em>very</em> hard (see <a href="#sec-Illustration" class="quarto-xref"><span class="quarto-unresolved-ref">sec-Illustration</span></a>). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result.</p>
+<p>However, deriving a useful, explicit expression of the asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)\)</span> can be <em>very</em> hard (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -641,7 +648,7 @@ X_1^*,\dots,X_n^*
 </ol>
 </div>
 </div>
-<p>By the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a>) the bootstrap estimates <span class="math display">\[
+<p>By the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>) the bootstrap estimates <span class="math display">\[
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 \]</span> allow us to approximate the <strong>bootstrap distribution</strong><br>
 <span class="math display">\[
@@ -755,7 +762,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 <p>Yes, the asymptotic result is simple here (boring 🥱), but can we alternatively use the Bootstrap to approximate this limit result? I.e., is <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 \]</span> able to approximate <span class="math inline">\(\Phi_{\sigma_0}(x)\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span>?</p>
-<p>Before we answer this question theoretically (see <a href="#sec-Theory1" class="quarto-xref"><span class="quarto-unresolved-ref">sec-Theory1</span></a> and <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-Theory2BootstrapConsist</span></a>), we check it empirically.</p>
+<p>Before we answer this question theoretically (see <a href="#sec-Theory1" class="quarto-xref"><span>Section 3.3.1.2</span></a> and <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span>Section 3.3.1.3</span></a>), we check it empirically.</p>
 <section id="sec-PracticeXbar" class="level4" data-number="3.3.1.1">
 <h4 data-number="3.3.1.1" class="anchored" data-anchor-id="sec-PracticeXbar"><span class="header-section-number">3.3.1.1</span> Practice: Empirical Consideration of the Bootstrap distribution</h4>
 <p>In this chapter we investigate the distribution of <span class="math display">\[
@@ -766,7 +773,7 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\
 <blockquote class="blockquote">
 <p><strong>Question to be checked:</strong> Is <span class="math inline">\(H^{Boot}_{n}(x)\)</span> able to approximate the asymptotic distribution <span class="math inline">\(\Phi_{\sigma_0}(x)\)</span>?</p>
 </blockquote>
-<p>Let us consider the following <strong>observed sample</strong> <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> with a rather smallish sample size of <span class="math inline">\(n=8\)</span> shown in <a href="#tbl-ChiSqSample" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-ChiSqSample</span></a>. The data was generated by drawing from a <span class="math inline">\(\chi^2\)</span>-distribution with <span class="math inline">\(\operatorname{df}=2.\)</span> That is, <span class="math inline">\(Var(X)=\sigma_0^2=2\cdot \operatorname{df}=4.\)</span></p>
+<p>Let us consider the following <strong>observed sample</strong> <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> with a rather smallish sample size of <span class="math inline">\(n=8\)</span> shown in <a href="#tbl-ChiSqSample" class="quarto-xref">Table&nbsp;<span>3.1</span></a>. The data was generated by drawing from a <span class="math inline">\(\chi^2\)</span>-distribution with <span class="math inline">\(\operatorname{df}=2.\)</span> That is, <span class="math inline">\(Var(X)=\sigma_0^2=2\cdot \operatorname{df}=4.\)</span></p>
 <blockquote class="blockquote">
 <p>The bootstrap is justified asymptotically <span class="math inline">\((n\to\infty).\)</span> Choosing a smallish data size of <span class="math inline">\(n=8\)</span> is done out of curiosity. The approximation of <span class="math inline">\(\Phi_{\sigma_0}(x)\)</span> by <span class="math inline">\(H^{Boot}_{n}(x)\)</span> will become better for larger sample sizes.</p>
 </blockquote>
@@ -1165,7 +1172,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 <li><span class="math inline">\(\mathbb{E}(W_{i,n})=0\)</span> and</li>
 <li><span class="math inline">\(Var(W_{i,n})=\frac{1}{n}\sigma_0^2.\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacFctSum</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacFctBillingsley</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1187,7 +1194,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 \frac{1}{2}\,\frac{1}{n}\sigma_0^2 &amp; = O(n^{-1})
 \end{align*}
 \]</span></p>
-<p>Thus, by <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacNormal</span></a> <span class="math display">\[
+<p>Thus, by <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.4</span></a> <span class="math display">\[
 \begin{align*}
 \lim_{n\to\infty}\psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;= \lim_{n\to\infty}\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1211,7 +1218,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 <li><span class="math inline">\(\mathbb{E}(W^*_{1,n}|\mathcal{S}_n)=0\)</span> and</li>
 <li><span class="math inline">\(Var(W^*_{1,n}|\mathcal{S}_n)=\frac{1}{n}\hat{\sigma}_n^2=\frac{1}{n}\left(\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\right)\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacFctSum</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacFctBillingsley</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}|\mathcal{S}_n}(t)\\[2ex]
@@ -1230,7 +1237,7 @@ n{\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0\quad\text{as}\quad n\to\infty,
 <p>Moreover, <span class="math display">\[
 {\color{darkgreen}\hat\sigma_n^2} = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\to_{a.s.}\sigma_0^2
 \]</span></p>
-<p>Thus, we have that (using <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-CharacNormal</span></a>) <span class="math display">\[
+<p>Thus, we have that (using <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.4</span></a>) <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 \to_{a.s.}&amp;
@@ -1446,8 +1453,8 @@ Recall: Confidence Interval for <span class="math inline">\(\theta_0\)</span> us
 \]</span> where <span class="math inline">\(z_{1-\frac{\alpha}{2}}\)</span> denotes the <span class="math inline">\((1-\alpha)/2\)</span> quantile of the standard Normal distribution <span class="math inline">\((z_{0.975}=1.96).\)</span> This confidence interval is approximate, since it is only asymptotically justified, and, thus, is generally not exact in finite samples.</p>
 </div>
 </div>
-<p>In some cases it is, however, very difficult to obtain approximations <span class="math inline">\(\hat v_n\)</span> of <span class="math inline">\(v_0\)</span> (see <a href="#sec-Illustration" class="quarto-xref"><span class="quarto-unresolved-ref">sec-Illustration</span></a>). Statistical inference is then usually based on the <strong>bootstrap confidence intervals</strong>.</p>
-<p>In many situations it can be shown that bootstrap confidence intervals (or tests) are even <strong>more precise</strong> than asymptotic normality based confidence intervals. (This applies to the bootstrap-<span class="math inline">\(t\)</span> method discussed in <a href="#sec-BootT" class="quarto-xref"><span class="quarto-unresolved-ref">sec-BootT</span></a>.)</p>
+<p>In some cases it is, however, very difficult to obtain approximations <span class="math inline">\(\hat v_n\)</span> of <span class="math inline">\(v_0\)</span> (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Statistical inference is then usually based on the <strong>bootstrap confidence intervals</strong>.</p>
+<p>In many situations it can be shown that bootstrap confidence intervals (or tests) are even <strong>more precise</strong> than asymptotic normality based confidence intervals. (This applies to the bootstrap-<span class="math inline">\(t\)</span> method discussed in <a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>.)</p>
 <section id="algorithm-of-the-basic-bootstrap-confidence-interval-for-theta_0" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="algorithm-of-the-basic-bootstrap-confidence-interval-for-theta_0">Algorithm of the Basic Bootstrap Confidence Interval for <span class="math inline">\(\theta_0:\)</span></h4>
 <p><strong>Setup:</strong></p>
@@ -1515,10 +1522,10 @@ Note
 G_{n,m}^{Boot}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\hat{\theta}^*_{n,j}\leq x\right)}.
 \]</span> However, we’ll treat the quantiles <span class="math inline">\(\hat q^*_{n,p}\)</span> as quantiles of the distribution <span class="math display">\[
 G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
-\]</span> since for large <span class="math inline">\(m\)</span> (<span class="math inline">\(m\to\infty\)</span>) the difference between <span class="math inline">\(G_{n,m}^{Boot}\)</span> and <span class="math inline">\(G_{n}^{Boot}\)</span> is negligible (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a>) and we can choose <span class="math inline">\(m\)</span> to be large.</p>
+\]</span> since for large <span class="math inline">\(m\)</span> (<span class="math inline">\(m\to\infty\)</span>) the difference between <span class="math inline">\(G_{n,m}^{Boot}\)</span> and <span class="math inline">\(G_{n}^{Boot}\)</span> is negligible (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>) and we can choose <span class="math inline">\(m\)</span> to be large.</p>
 </div>
 </div>
-<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-NPBootCI</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
+<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
 <p>The following three approximate statements <span class="math inline">\((\approx (1-\alpha))\)</span> are exact for <span class="math inline">\(m\to\infty:\)</span> <span class="math display">\[
 \begin{align*}
 &amp;P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
@@ -1544,7 +1551,7 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \Rightarrow &amp;P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
 \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
 \end{align*}
-\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-NPBootCI</span></a> <span class="math display">\[
+\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a> <span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 \]</span> is indeed an asymptotically valid (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval.</p>
 </section>
@@ -1592,13 +1599,13 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 </div>
 </div>
 <p><strong>Algorithm of the basic bootstrap confidence interval for <span class="math inline">\(\mu_0\)</span>:</strong></p>
-<p>The bootstrap offers an alternative method for constructing approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence intervals. We already know that the bootstrap is consistent in this situation (see <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-Theory2BootstrapConsist</span></a>).</p>
+<p>The bootstrap offers an alternative method for constructing approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence intervals. We already know that the bootstrap is consistent in this situation (see <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span>Section 3.3.1.3</span></a>).</p>
 <ol type="1">
 <li><p>Draw <span class="math inline">\(m\)</span> bootstrap samples (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) and calculate the corresponding estimates <span class="math display">\[
 \bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.
 \]</span></p></li>
 <li><p>Compute the empirical quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math inline">\(\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.\)</span></p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> basic bootstrap confidence interval according to <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-NPBootCI</span></a>: <span class="math display">\[
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> basic bootstrap confidence interval according to <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
 \left[2\bar X_n -\hat q^*_{n,1-\frac{\alpha}{2}},
    2\bar X_n -\hat q^*_{n,\frac{\alpha}{2}}\right],
 \]</span> where <span class="math inline">\(\bar{X}_n\)</span> is computed from the original sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.\)</span></p></li>
@@ -1718,21 +1725,21 @@ T_n^*&amp;=\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}.
 \]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) many bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
 \]</span></p></li>
-<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-empiricalQuantile</span></a>).</p></li>
+<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>).</p></li>
 <li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval<br>
 <span id="eq-Boot_tCI"><span class="math display">\[
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
    \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 \tag{3.9}\]</span></span> where <span class="math inline">\(\hat\theta_n\)</span> and <span class="math inline">\(\hat v_n\)</span> are the estimates of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(v_0\)</span> based on the original sample <span class="math inline">\(\mathcal{S}_n=\left\{X_1,\dots,X_n\right\},\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.\)</span></p></li>
 </ol>
-<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-Boot_tCI</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
+<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
 <p>The bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*
 \]</span> yield the empirical bootstrap distribution <span class="math display">\[
 H_{n,m}^{Boot}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(T_{n,j}^*\;\leq\; x\right)}
 \]</span> which approximates the bootstrap distribution <span class="math display">\[
 H_{n}^{Boot}(x)=P\left(\left.T_{n}^*\leq x\;\right|\;\mathcal{S}_n\right)
-\]</span> arbitrarily precise as <span class="math inline">\(m\to\infty\)</span> (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a>).</p>
+\]</span> arbitrarily precise as <span class="math inline">\(m\to\infty\)</span> (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>).</p>
 <p>Thus, the empirical bootstrap quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of <span class="math inline">\(H_{n,m}^{Boot}\)</span> are indeed consistent (<span class="math inline">\(m\to\infty\)</span>) for the quantiles <span class="math inline">\(\hat q_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap distribution <span class="math inline">\(H_{n}^{Boot}.\)</span> This implies, for large <span class="math inline">\(m,\)</span> <span class="math display">\[
 P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}} \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha.
@@ -1751,7 +1758,7 @@ P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta
 \Rightarrow &amp; P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha
 \end{align*}
-\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-Boot_tCI</span></a>) <span class="math display">\[
+\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>) <span class="math display">\[
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
       \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 \]</span> is indeed an asymptotic (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> CI.</p>
@@ -1768,8 +1775,8 @@ s_n^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2.
 \]</span></li>
 <li>Determine <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math display">\[
 \sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
-\]</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-empiricalQuantile</span></a>.</li>
-<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-Boot_tCI</span></a>): <span class="math display">\[
+\]</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>.</li>
+<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>): <span class="math display">\[
 \left[\bar X_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
     \bar X_n - \hat q^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
 \]</span> where <span class="math inline">\(\bar X_n\)</span> and <span class="math inline">\(s_n\)</span> are computed from the original sample, i.e., <span class="math display">\[
@@ -1829,7 +1836,7 @@ Note
 </section>
 <section id="bootstrap-and-linear-regression-analysis" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="bootstrap-and-linear-regression-analysis"><span class="header-section-number">3.5</span> Bootstrap and Linear Regression Analysis</h2>
-<p>In this chapter we consider two different bootstrap resampling procedures that can be applied in linear regression analysis. <a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a> considers the <strong>Bootstrapping Pairs</strong> algorithm and <a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a> considers the <strong>Residual Bootstrap</strong> algorithm. We begin with outlining the general setup.</p>
+<p>In this chapter we consider two different bootstrap resampling procedures that can be applied in linear regression analysis. <a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a> considers the <strong>Bootstrapping Pairs</strong> algorithm and <a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a> considers the <strong>Residual Bootstrap</strong> algorithm. We begin with outlining the general setup.</p>
 <p>Consider the linear regression model <span class="math display">\[
 Y_i=X_i^T\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 \]</span> where <span class="math inline">\(Y_i\in\mathbb{R}\)</span> denotes the response (or “dependent”) variable and <span class="math display">\[
@@ -1874,7 +1881,7 @@ X_1, X_2, \dots, X_n
 \]</span></p>
 <section id="sec-bootPairs" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="sec-bootPairs"><span class="header-section-number">3.5.1</span> Bootstrap under Random Design: Bootstrapping Pairs</h3>
-<p>Under a random design (<a href="#def-RandomFixedDesign" class="quarto-xref">Definition&nbsp;<span class="quarto-unresolved-ref">def-RandomFixedDesign</span></a>), we assume that there exists a non-singular (thus invertible) matrix <span class="math inline">\(M\)</span> <span class="math display">\[
+<p>Under a random design (<a href="#def-RandomFixedDesign" class="quarto-xref">Definition&nbsp;<span>3.6</span></a>), we assume that there exists a non-singular (thus invertible) matrix <span class="math inline">\(M\)</span> <span class="math display">\[
 M=\mathbb{E}(X_iX_i^T).
 \]</span> This implies that the following matrix <span class="math inline">\(Q\)</span> is also non-singular: <span class="math display">\[
 \begin{align*}
@@ -1931,12 +1938,12 @@ Q
 <h3 data-number="3.5.2" class="anchored" data-anchor-id="sec-bootResid"><span class="header-section-number">3.5.2</span> Bootstrap under Fixed Design: The Residual Bootstrap</h3>
 <p>If the sample <span class="math display">\[
 (Y_1,X_1),\dots,(Y_n,X_n)
-\]</span> is <strong>not</strong> an i.i.d. sample, the bootstrapping pairs procedure (<a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) proposed above will generally not be consistent. Therefore, bootstrapping pairs is not necessarily applicable for <strong>fixed designs</strong> and also generally not in time-series regression contexts. However, if error terms are <strong>homoskedastic</strong>, then it is possible to rely on the <strong>residual bootstrap</strong>.</p>
+\]</span> is <strong>not</strong> an i.i.d. sample, the bootstrapping pairs procedure (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) proposed above will generally not be consistent. Therefore, bootstrapping pairs is not necessarily applicable for <strong>fixed designs</strong> and also generally not in time-series regression contexts. However, if error terms are <strong>homoskedastic</strong>, then it is possible to rely on the <strong>residual bootstrap</strong>.</p>
 <p>In the following we will formally assume a regression model <span class="math display">\[
 Y_i=X_i^T\beta_0 + \varepsilon_i, \quad i=1,\dots,n,
 \]</span> with <span class="math display">\[
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p,
-\]</span> under <strong>fixed design</strong> (<a href="#def-RandomFixedDesign" class="quarto-xref">Definition&nbsp;<span class="quarto-unresolved-ref">def-RandomFixedDesign</span></a>), where <span class="math display">\[
+\]</span> under <strong>fixed design</strong> (<a href="#def-RandomFixedDesign" class="quarto-xref">Definition&nbsp;<span>3.6</span></a>), where <span class="math display">\[
 \varepsilon_1,\dots,\varepsilon_n
 \]</span> are i.i.d. with zero mean <span class="math display">\[
 \mathbb{E}(\varepsilon_i)=0
@@ -2013,7 +2020,7 @@ Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i
 </section>
 <section id="sec-bootWild" class="level3" data-number="3.5.3">
 <h3 data-number="3.5.3" class="anchored" data-anchor-id="sec-bootWild"><span class="header-section-number">3.5.3</span> Bootstrap under Fixed Design: The Wild Bootstrap</h3>
-<p>The wild bootstrap is a method for generating bootstrap samples that do not consist of resampling the original data (bootstrapping pairs in <a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) or residuals (bootstrapping residuals in <a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>). Rather, the wild bootstrap combines the data with random variables drawn from a known distribution to form a bootstrap sample.</p>
+<p>The wild bootstrap is a method for generating bootstrap samples that do not consist of resampling the original data (bootstrapping pairs in <a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) or residuals (bootstrapping residuals in <a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>). Rather, the wild bootstrap combines the data with random variables drawn from a known distribution to form a bootstrap sample.</p>
 <p>The wild bootstrap provides a way to deal with issues such as <strong>heteroskedasticity of unknown form in fixed-design</strong> regression models or random-design models in which one conditions on the predictors.</p>
 <p>In the following we will formally assume a regression model <span class="math display">\[
 Y_i=X_i^T\beta_0 + \varepsilon_i, \quad i=1,\dots,n,
@@ -2043,7 +2050,7 @@ Applicability of the Wild Bootstrap under Random Designs
 <p>The above assumptions on the error terms then, of course, also have to be satisfied <em>conditionally</em> on <span class="math inline">\(X_1,\dots,X_n.\)</span></p>
 </div>
 </div>
-<p>As the residual bootstrap (<a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>), the wild bootstrap uses the <span class="math inline">\(X_i\)</span>’s from the original data. I.e., the <span class="math inline">\(X_i\)</span>’s are not resampled. The wild bootstrap generates bootstrap samples <span class="math display">\[
+<p>As the residual bootstrap (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>), the wild bootstrap uses the <span class="math inline">\(X_i\)</span>’s from the original data. I.e., the <span class="math inline">\(X_i\)</span>’s are not resampled. The wild bootstrap generates bootstrap samples <span class="math display">\[
 \{(Y_1^\ast,X_1),\dots,(Y_n^\ast,X_n)\}
 \]</span> from <span class="math display">\[
 Y_i^\ast=X_i^\top\hat\beta_n + \varepsilon^\ast_i,\quad i=1,\dots,n,
@@ -2082,8 +2089,8 @@ P\left(W_i = \left(1+\sqrt{5}\right)\frac{\hat\varepsilon_i}{2}\right)&amp;=1 - 
 </section>
 <section id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j" class="level3" data-number="3.5.4">
 <h3 data-number="3.5.4" class="anchored" data-anchor-id="bootstrap-confidence-intervals-for-the-jth-component-of-the-regression-coefficient-beta_0j"><span class="header-section-number">3.5.4</span> Bootstrap Confidence Intervals for the <span class="math inline">\(j\)</span>th Component of the Regression Coefficient <span class="math inline">\(\beta_{0,j}\)</span></h3>
-<p>This chapter introduces two confidence intervals. The first uses the basic bootstrap method (<a href="#sec-BasicBootstrap" class="quarto-xref"><span class="quarto-unresolved-ref">sec-BasicBootstrap</span></a>); the second uses the bootstrap-<span class="math inline">\(t\)</span> method (<a href="#sec-BootT" class="quarto-xref"><span class="quarto-unresolved-ref">sec-BootT</span></a>).</p>
-<p>Both confidence intervals can be constructed either via bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) or via bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>).</p>
+<p>This chapter introduces two confidence intervals. The first uses the basic bootstrap method (<a href="#sec-BasicBootstrap" class="quarto-xref"><span>Section 3.3</span></a>); the second uses the bootstrap-<span class="math inline">\(t\)</span> method (<a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>).</p>
+<p>Both confidence intervals can be constructed either via bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) or via bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>).</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2094,7 +2101,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>While the bootstrap confidence intervals based on bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) are heteroskedasticity robust, the bootstrap confidence intervals based on bootstrapping residuals are only valid for homoskedastic errors.</p>
+<p>While the bootstrap confidence intervals based on bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) are heteroskedasticity robust, the bootstrap confidence intervals based on bootstrapping residuals are only valid for homoskedastic errors.</p>
 </div>
 </div>
 <section id="basic-bootstrap-confidence-intervals-for-beta_0j" class="level4" data-number="3.5.4.1">
@@ -2102,11 +2109,11 @@ Tip
 <p>Let <span class="math inline">\(\beta_{0,j}\in\mathbb{R}\)</span>, <span class="math inline">\(j=1,\dots,p\)</span>, denote the <span class="math inline">\(j\)</span>th component of <span class="math inline">\(\beta_0\in\mathbb{R}^p,\)</span> and let <span class="math inline">\(\hat{\beta}_{j,n}\in\mathbb{R}\)</span> denote the <span class="math inline">\(j\)</span>th component of the estimator <span class="math inline">\(\hat\beta_n\in\mathbb{R}^p.\)</span></p>
 <p>The basic bootstrap confidence interval for <span class="math inline">\(\beta_{0,j}\in\mathbb{R}\)</span> can be constructed as following:</p>
 <ol type="1">
-<li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) or bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>) or the wild bootstrap (<a href="#sec-bootWild" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootWild</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
+<li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) or bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>) or the wild bootstrap (<a href="#sec-bootWild" class="quarto-xref"><span>Section 3.5.3</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
 \hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.
 \]</span></p></li>
-<li><p>Determine the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast\)</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-empiricalQuantile</span></a>.</p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval as in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-NPBootCI</span></a>: <span class="math display">\[
+<li><p>Determine the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast\)</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>.</p></li>
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval as in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
 \left[2\hat\beta_{nj}-\hat q^\ast_{n,1-\frac{\alpha}{2},j},
    2\hat\beta_{nj}-\hat q^\ast_{n,\frac{\alpha}{2},j}\right],
 \]</span> where <span class="math inline">\(\hat\beta_{nj}\)</span> denotes the <span class="math inline">\(j\)</span>th component of <span class="math inline">\(\hat\beta_{n}\)</span> computed from the original sample <span class="math inline">\(\mathcal{S}_n,\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.\)</span></p></li>
@@ -2183,9 +2190,9 @@ T_n= \frac{(\hat\beta_{n,j}-\beta_{0,j})}{\widehat{\operatorname{SE}}(\hat\beta_
 <li>Use</li>
 </ol>
 <ul>
-<li><p>bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootPairs</span></a>) for random designs,</p></li>
-<li><p>bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>) for fixed designs and homoskedastic errors, or</p></li>
-<li><p>wild bootstrap (<a href="#sec-bootWild" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootWild</span></a>) for fixed desgins and heteroskedastic errors, to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
+<li><p>bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) for random designs,</p></li>
+<li><p>bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>) for fixed designs and homoskedastic errors, or</p></li>
+<li><p>wild bootstrap (<a href="#sec-bootWild" class="quarto-xref"><span>Section 3.5.3</span></a>) for fixed desgins and heteroskedastic errors, to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
 \]</span> with <span class="math display">\[
 T^*_{n,k}=\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})},\quad k=1,\dots,m,
@@ -2198,8 +2205,8 @@ T^*_{n,k}=\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\widehat{\operatorname{SE}}(\
 </ul></li>
 </ul>
 <ol start="2" type="1">
-<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-empiricalQuantile</span></a>) from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
-<li><p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-Boot_tCI</span></a>: <span class="math display">\[
+<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>) from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
+<li><p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>: <span class="math display">\[
 \left[
   \hat\beta_{j,n}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\widehat{\operatorname{SE}}(\hat\beta_{j,n})\right),\;
   \hat\beta_{j,n}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\widehat{\operatorname{SE}}(\hat\beta_{j,n})\right)
@@ -2223,7 +2230,7 @@ Remark
 </section>
 <section id="statistical-hypothesis-testing" class="level3" data-number="3.5.5">
 <h3 data-number="3.5.5" class="anchored" data-anchor-id="statistical-hypothesis-testing"><span class="header-section-number">3.5.5</span> Statistical Hypothesis Testing</h3>
-<p>In the following, we consider a fixed design, where one can use the <strong>residual bootstrap</strong> (<a href="#sec-bootResid" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootResid</span></a>) or the <strong>wild bootstrap</strong> (<a href="#sec-bootWild" class="quarto-xref"><span class="quarto-unresolved-ref">sec-bootWild</span></a>).</p>
+<p>In the following, we consider a fixed design, where one can use the <strong>residual bootstrap</strong> (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>) or the <strong>wild bootstrap</strong> (<a href="#sec-bootWild" class="quarto-xref"><span>Section 3.5.3</span></a>).</p>
 <p>Suppose we want to test the hypothesis <span class="math display">\[
 \begin{align*}
 H_0                    &amp;: \beta_{0,j}    = 0\\[2ex]
@@ -2351,7 +2358,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Exercise 1 shows that the empirical distribution function is a <strong>point-wise</strong> consistent estimator for each given <span class="math inline">\(x\in\mathbb{R}.\)</span> However, point-wise consistency generally does not imply <strong>uniformly</strong> consistency for all <span class="math inline">\(x\in\mathbb{R},\)</span> and therefore the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-Clivenko-Cantelli</span></a>) is so famous.</p>
+<p>Exercise 1 shows that the empirical distribution function is a <strong>point-wise</strong> consistent estimator for each given <span class="math inline">\(x\in\mathbb{R}.\)</span> However, point-wise consistency generally does not imply <strong>uniformly</strong> consistency for all <span class="math inline">\(x\in\mathbb{R},\)</span> and therefore the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>) is so famous.</p>
 <p>This exercise is intended to show that that point-wise convergence does generally not imply uniform convergence.</p>
 </div>
 </div>
@@ -3631,8 +3638,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Ch4_NPRegression.html" class="pagination-link" aria-label="Nonparametric Regression">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Ch4_NP_Density_Estimation.html" class="pagination-link" aria-label="Nonparametric Density Estimation">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nonparametric Density Estimation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

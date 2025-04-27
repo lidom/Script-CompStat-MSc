@@ -247,7 +247,10 @@ window.Quarto = {
   <li><a href="#properties-of-the-kernel-density-estimator" id="toc-properties-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#properties-of-the-kernel-density-estimator"><span class="header-section-number">4.3</span> Properties of the Kernel Density Estimator</a>
   <ul class="collapse">
   <li><a href="#theoretical-requirements-on-the-kernel-function" id="toc-theoretical-requirements-on-the-kernel-function" class="nav-link" data-scroll-target="#theoretical-requirements-on-the-kernel-function"><span class="header-section-number">4.3.1</span> Theoretical Requirements on the Kernel Function</a></li>
+  <li><a href="#choice-of-the-bandwidth-parameter" id="toc-choice-of-the-bandwidth-parameter" class="nav-link" data-scroll-target="#choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</a></li>
   </ul></li>
+  <li><a href="#accuracy-of-the-kernel-density-estimator" id="toc-accuracy-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -633,21 +636,206 @@ Reminder: Definition of a Density Function
 \int K(x)dx=1
 \]</span></li>
 <li><strong>Symmetric around zero:</strong> <span class="math display">\[
-\int xK(x)dx=0
+K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 \]</span></li>
 </ul>
-<p>Typical choices for the kernel function <span class="math inline">\(K\)</span> are:</p>
+<p>Typically, one uses smooth density functions that are symmetric around zero.</p>
+<p><strong>Examples:</strong></p>
 <ul>
-<li>Smooth density functions that are symmetric around zero.</li>
+<li>The family of the <strong>symmetric beta density</strong> functions; for <span class="math inline">\(p = 0,1,2,\ldots\)</span> <span class="math display">\[
+K(u; p) = \mathrm{Const}_p \left(1 - u^2 \right)^p
+\]</span> for <span class="math inline">\(u \in [-1,1]\)</span> and <span class="math inline">\(0\)</span> else, where the <span class="math inline">\(p\)</span>-specific constant is chosen such that the kernel integrates to one.
+<ul>
+<li><span class="math inline">\(p=0\)</span> yields the <strong>uniform kernel:</strong> <span class="math display">\[
+K(u) = \frac{1}{2}
+\]</span></li>
+<li><span class="math inline">\(p=1\)</span> yields the (important) <strong>Epanechnikov kernel:</strong> <span class="math display">\[
+   K(u) = \frac{3}{4}\,(1-u^2)
+   \]</span></li>
+<li><span class="math inline">\(p=2\)</span> yields the <strong>biweight kernel:</strong> <span class="math display">\[
+   K(u) = \frac{15}{16}\,(1-u^2)^2
+   \]</span></li>
+<li><span class="math inline">\(p=3\)</span> yields the <strong>triweight kernel:</strong> <span class="math display">\[
+   K(u) = \frac{35}{32}\,(1-u^2)^3
+   \]</span></li>
+</ul></li>
+<li><strong>Normal (Gaussian) kernel:</strong> <span class="math display">\[
+K(u) = \phi(u) = \frac{1}{\sqrt{2\pi}} \exp(-u^2 / 2)
+\]</span> for <span class="math inline">\(u \in\mathbb{R}.\)</span></li>
+<li>Triangular kernel: <span class="math display">\[
+K(u) = 1-|u|
+\]</span> for <span class="math inline">\(u\in[-1,1]\)</span> and <span class="math inline">\(0\)</span> else.</li>
 </ul>
+</section>
+<section id="choice-of-the-bandwidth-parameter" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</h3>
+<p>Using a too small bandwidth (here <span class="math inline">\(h=\)</span> 2.14):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="sc">*</span> .<span class="dv">25</span>  <span class="co"># too small bandwidth</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>KDE   <span class="ot">&lt;-</span> <span class="fu">density</span>(data, <span class="at">bw =</span> h, <span class="at">from =</span> <span class="fu">min</span>(data), <span class="at">to =</span> <span class="fu">max</span>(data))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> KDE<span class="sc">$</span>x, <span class="at">y =</span> KDE<span class="sc">$</span>y, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Density"</span>, <span class="at">xlab=</span><span class="st">"Income"</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Kernels Density Estimtion With a too Small Bandwidth"</span>, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-KDEhsmall" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-KDEhsmall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhsmall-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhsmall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.5: Kernel density estimate with a too small bandwidth.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Too a too large bandwidth (here <span class="math inline">\(h=\)</span> 47):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="sc">*</span> <span class="fl">2.5</span>  <span class="co"># too large bandwidth</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>KDE   <span class="ot">&lt;-</span> <span class="fu">density</span>(data, <span class="at">bw =</span> h, <span class="at">from =</span> <span class="fu">min</span>(data), <span class="at">to =</span> <span class="fu">max</span>(data))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> KDE<span class="sc">$</span>x, <span class="at">y =</span> KDE<span class="sc">$</span>y, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Density"</span>, <span class="at">xlab=</span><span class="st">"Income"</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Kernels Density Estimtion With a Too Large Bandwidth"</span>, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-KDEhlarge" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-KDEhlarge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhlarge-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhlarge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.6: Kernel density estimate with a too large bandwidth.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<!-- Way too a too large bandwidth (here $h=$ 512.77):
+
+
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+data  <- inc76$income
+h     <- bw.SJ(inc76$income) * 60  # way too large bandwidth
+KDE   <- density(data, bw = h, from = min(data), to = max(data))
+
+plot(x = KDE$x, y = KDE$y, 
+     ylab="Density", xlab="Income", 
+     main = "Kernels Density Estimtion With a VERY Large Bandwidth", type="l")
+```
+
+::: {.cell-output-display}
+![Kernel density estimate with a way too large bandwidth.](Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhLARGE-1.png){#fig-KDEhLARGE width=672}
+:::
+:::
+
+
+
+
+-->
+<p>Using an estimated bandwidth (here <span class="math inline">\(h=\)</span> 8.55) based on the method proposed by <span class="citation" data-cites="sheather1991reliable">Sheather and Jones (<a href="#ref-sheather1991reliable" role="doc-biblioref">1991</a>)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="co"># good bandwidth</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>KDE   <span class="ot">&lt;-</span> <span class="fu">density</span>(data, <span class="at">bw =</span> h, <span class="at">from =</span> <span class="fu">min</span>(data), <span class="at">to =</span> <span class="fu">max</span>(data))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> KDE<span class="sc">$</span>x, <span class="at">y =</span> KDE<span class="sc">$</span>y, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"Density"</span>, <span class="at">xlab=</span><span class="st">"Income"</span>, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Kernels Density Estimtion With a Good Bandwidth Choice"</span>, <span class="at">type=</span><span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-KDEhgood" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-KDEhgood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhgood-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhgood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="accuracy-of-the-kernel-density-estimator" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</h2>
+<p>The accuracy of kernel desnity estimator depends on</p>
+<ol type="1">
+<li>the choice of the kernel function <span class="math inline">\(K,\)</span></li>
+<li>the choice of the bandwidth <span class="math inline">\(h,\)</span> and</li>
+<li>the complexity of the unknown density <span class="math inline">\(f\)</span> to be estimated.</li>
+</ol>
+<p>The choice of the kernel function <span class="math inline">\(K\)</span> is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth <span class="math inline">\(h.\)</span></p>
+<p><strong>Most common goal:</strong> Automatic data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for relevant all <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
+<p>We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors.</p>
+<p>Commonly used loss-functions:</p>
+<ul>
+<li><strong>Integrated Squared Error (ISE)</strong> <span class="math display">\[
+\mathrm{ISE}(\hat{f}_h(x))=\int (\hat{f}_h(x)-f(x))^2\,dx
+\]</span> Caution: The <span class="math inline">\(\mathrm{ISE}(\hat{f}_h(x))\)</span> is a random quantity.</li>
+<li><strong>Mean Integrated Squared Error (MISE):</strong> <span class="math display">\[
+\mathrm{MISE}(\hat{f}_h)=\int\mathrm{MSE}(\hat{f}_h(x))\,dx=\int \mathbb{E}(\hat{f}_h(x)-f(x))^2\,dx
+\]</span></li>
+<li><strong>Asymptotic Mean Integrated Squared Error (AMISE):</strong> <span class="math display">\[
+\mathrm{AMISE}(\hat{f}_h) = \mathrm{MISE}(\hat{f}_h) + o_P(1)
+\]</span> I.e. the asymptotic approximation of the <span class="math inline">\(\mathrm{MISE}.\)</span></li>
+</ul>
+<p>The minimum requirement on <span class="math inline">\(\hat{f}_h\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_h\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows indefinitely (<span class="math inline">\(n \to \infty\)</span>),</p>
+<p>Remember: We’ll call an estimator <span class="math inline">\(\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)\)</span> <strong>consistent,</strong> if <span class="math display">\[
+\hat\theta_n\to_p\theta.
+\]</span> Unless a different notion of convergence (such as MSE or “almost surely”) has been specified.</p>
+<p>When estimating functions, such as density functions <span class="math inline">\(f(x),\)</span> a distinction is made between the following concepts of consistency:</p>
+<ul>
+<li><strong>Pointwise consistency:</strong> <span class="math display">\[
+\hat{f}_{nh}(x)\to_P f(x),\quad \text{as}\quad n\to\infty
+\]</span> for an arbitrary, given <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
+<li><strong>Uniform consistency:</strong> <span class="math display">\[
+\sup_{x}\left|\hat{f}_{nh}(x) - f(x)\right|\to_P 0,\quad \text{as}\quad n\to\infty.
+\]</span></li>
+</ul>
+<p>For <strong>pointwise consistency</strong> the following Assumptions are needed:</p>
+<ul>
+<li>Sequence of bandwidth parameters <span class="math inline">\(h = h_n:\)</span>
+<ul>
+<li><span class="math inline">\(h_n \to 0\)</span> as <span class="math inline">\(n\to\infty\)</span>,</li>
+<li><span class="math inline">\(n h_n \to \infty\)</span> as <span class="math inline">\(n \to \infty\)</span></li>
+</ul></li>
+<li>True density function <span class="math inline">\(f:\)</span>
+<ul>
+<li><span class="math inline">\(f\)</span> consistent and sufficiently often differentiable in <span class="math inline">\(x\)</span></li>
+</ul></li>
+<li>Kernel function <span class="math inline">\(K\)</span>:
+<ul>
+<li>consistent and <span class="math inline">\(K(z)\geq 0\)</span> for all <span class="math inline">\(z\)</span>,</li>
+<li><span class="math inline">\(K\)</span> symmetric around <span class="math inline">\(0\)</span></li>
+<li><span class="math inline">\(\lim_{|y| \to \infty} | y K(y) | = 0\)</span></li>
+<li><span class="math inline">\(K\)</span> bounded (<span class="math inline">\(\int |K(z)|dz &lt; \infty\)</span>),</li>
+<li><span class="math inline">\(\int K(z)dz = 1\)</span></li>
+</ul></li>
+</ul>
+<!-- %(Erfüllt, falls $K$ eine um $0$ symmetrische Dichte auf einer kompakten Menge, z.B., $K:[-1,1]\to[0,\infty[$, ist.  
+-->
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Rosenblatt_1956" class="csl-entry" role="listitem">
 Rosenblatt, Murray. 1956. <span>“Remarks on Some Nonparametric Estimates of a Density Function.”</span> <em>The Annals of Mathematical Statistics</em> 27 (3): 832—837.
 </div>
+<div id="ref-sheather1991reliable" class="csl-entry" role="listitem">
+Sheather, Simon J, and Michael C Jones. 1991. <span>“A Reliable Data-Based Bandwidth Selection Method for Kernel Density Estimation.”</span> <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 53 (3): 683–90.
 </div>
-</section>
+</div>
 </section>
 
 </main> <!-- /main -->
