@@ -540,7 +540,7 @@ The accuracy of kernel desnity estimator depends on
 
 The choice of the kernel function $K$ is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth $h.$
 
-**Most common goal:** Automatic data-dependent bandwidth selection that is **"globally optimal"** ; i.e. optimal for relevant all $x$ in $f(x).$
+**Most common goal:** Automatic data-dependent bandwidth selection that is **"globally optimal"** ; i.e. optimal for all relevant $x$ in $f(x).$
 
 We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors. 
 
@@ -589,13 +589,17 @@ When estimating functions, such as density functions $f(x),$ a distinction is ma
 
 For **pointwise consistency** the following Assumptions are needed:
 
+::: {.callout-note}
+
+## Assumptions for Showing Pointwise Consistency and Asymptotic Normality
+
 * Sequence of bandwidth parameters $h = h_n:$
    *  $h_n \to 0$ as $n\to\infty$, 
    *  $n h_n \to \infty$ as $n \to \infty$
 * True density function $f:$
-   * $f$ consistent and sufficiently often differentiable in $x$
+   * $f$ continuouse and sufficiently often differentiable for all $x$
 * Kernel function $K$: 
-    * consistent and $K(z)\geq 0$ for all $z$,
+    * continuouse and non-negative $K(z)\geq 0$ for all $z$,
     * $K$ symmetric around $0$ 
     * $\lim_{|y| \to \infty} | y K(y) | = 0$ 
     * $K$ bounded ($\int |K(z)|dz < \infty$), 
@@ -603,6 +607,53 @@ For **pointwise consistency** the following Assumptions are needed:
  
 <!-- %(Erfüllt, falls $K$ eine um $0$ symmetrische Dichte auf einer kompakten Menge, z.B., $K:[-1,1]\to[0,\infty[$, ist.  
 -->
+:::
 
+**Proof-Strategy for showing pointwise consistency:** Show that the pointwise Mean Squared Error (MSE) for a given $x,$
+$$
+\mathrm{MSE}(\hat{f}_h(x)),
+$$
+converges to zero as $n\to\infty$ under the above assumptions. I.e., that
+$$
+\begin{align*}
+\mathrm{MSE}\left(\hat{f}_{h_n}(x) \right)
+&=
+\mathbb{E}\left(\hat{f}_{h_n}(x) - f(x) \right)^2\\[2ex]
+&=
+\mathbb{V}\left(\hat{f}_{h_n}(x)  \right)
++
+\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2
+\underset{n\to\infty}\longrightarrow 0.
+\end{align*}
+$$
+
+**Remember:** Convergence in quadratic mean implies convergence in probability.
+
+Under the above pointwise consistency assumptions one can also show pointwise asymptotic normality:
+$$
+\begin{equation*}
+\frac{ \sqrt{n\,h_n}\left(\hat{f}_{nh}(x) - \mathbb{E} \left( \hat{f}_{nh}(x) \right)\right)}{
+     \sqrt{ \mathbb{V} \left( \hat{f}_{nh}(x) \right) }}
+   \overset{a}{\sim}\mathcal{N}(0,1)
+\end{equation*}
+$$
+for $n\to\infty,$ which implies that we can construct pointwise confidence intervals (etc.)
+
+**Caution:** Generally, we have for finite $n$ that:
+$$
+\mathbb{E} \left( \hat{f}_{h_n}(x) \right)\neq f(x);
+$$ 
+i.e. for finite $n$ there is generally a non-negligible estimation bias. 
+
+**Note:** Under the additional, more restrictive bandwidth assumption that
+$$
+h_n \to 0\quad\text{and}\quad n h_{n}^{\textcolor{red}{2}} \to \infty,\quad\text{as}\quad n\to\infty,
+$$
+one can also show **uniform** consistency (see @parzen1962estimation) 
+$$
+\begin{equation*}
+ \sup_{x} \left| \hat{f}_{nh}(x) - f(x) \right| \rightarrow_P 0.
+\end{equation*}
+$$
 
 ## References {-}

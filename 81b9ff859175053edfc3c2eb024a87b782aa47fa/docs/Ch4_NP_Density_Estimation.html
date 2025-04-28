@@ -774,7 +774,7 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 <li>the complexity of the unknown density <span class="math inline">\(f\)</span> to be estimated.</li>
 </ol>
 <p>The choice of the kernel function <span class="math inline">\(K\)</span> is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth <span class="math inline">\(h.\)</span></p>
-<p><strong>Most common goal:</strong> Automatic data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for relevant all <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
+<p><strong>Most common goal:</strong> Automatic data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for all relevant <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
 <p>We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors.</p>
 <p>Commonly used loss-functions:</p>
 <ul>
@@ -802,6 +802,16 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 \]</span></li>
 </ul>
 <p>For <strong>pointwise consistency</strong> the following Assumptions are needed:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Assumptions for Showing Pointwise Consistency and Asymptotic Normality
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Sequence of bandwidth parameters <span class="math inline">\(h = h_n:\)</span>
 <ul>
@@ -810,11 +820,11 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 </ul></li>
 <li>True density function <span class="math inline">\(f:\)</span>
 <ul>
-<li><span class="math inline">\(f\)</span> consistent and sufficiently often differentiable in <span class="math inline">\(x\)</span></li>
+<li><span class="math inline">\(f\)</span> continuouse and sufficiently often differentiable for all <span class="math inline">\(x\)</span></li>
 </ul></li>
 <li>Kernel function <span class="math inline">\(K\)</span>:
 <ul>
-<li>consistent and <span class="math inline">\(K(z)\geq 0\)</span> for all <span class="math inline">\(z\)</span>,</li>
+<li>continuouse and non-negative <span class="math inline">\(K(z)\geq 0\)</span> for all <span class="math inline">\(z\)</span>,</li>
 <li><span class="math inline">\(K\)</span> symmetric around <span class="math inline">\(0\)</span></li>
 <li><span class="math inline">\(\lim_{|y| \to \infty} | y K(y) | = 0\)</span></li>
 <li><span class="math inline">\(K\)</span> bounded (<span class="math inline">\(\int |K(z)|dz &lt; \infty\)</span>),</li>
@@ -823,12 +833,49 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 </ul>
 <!-- %(Erfüllt, falls $K$ eine um $0$ symmetrische Dichte auf einer kompakten Menge, z.B., $K:[-1,1]\to[0,\infty[$, ist.  
 -->
+</div>
+</div>
+<p><strong>Proof-Strategy for showing pointwise consistency:</strong> Show that the pointwise Mean Squared Error (MSE) for a given <span class="math inline">\(x,\)</span> <span class="math display">\[
+\mathrm{MSE}(\hat{f}_h(x)),
+\]</span> converges to zero as <span class="math inline">\(n\to\infty\)</span> under the above assumptions. I.e., that <span class="math display">\[
+\begin{align*}
+\mathrm{MSE}\left(\hat{f}_{h_n}(x) \right)
+&amp;=
+\mathbb{E}\left(\hat{f}_{h_n}(x) - f(x) \right)^2\\[2ex]
+&amp;=
+\mathbb{V}\left(\hat{f}_{h_n}(x)  \right)
++
+\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2
+\underset{n\to\infty}\longrightarrow 0.
+\end{align*}
+\]</span></p>
+<p><strong>Remember:</strong> Convergence in quadratic mean implies convergence in probability.</p>
+<p>Under the above pointwise consistency assumptions one can also show pointwise asymptotic normality: <span class="math display">\[
+\begin{equation*}
+\frac{ \sqrt{n\,h_n}\left(\hat{f}_{nh}(x) - \mathbb{E} \left( \hat{f}_{nh}(x) \right)\right)}{
+     \sqrt{ \mathbb{V} \left( \hat{f}_{nh}(x) \right) }}
+   \overset{a}{\sim}\mathcal{N}(0,1)
+\end{equation*}
+\]</span> for <span class="math inline">\(n\to\infty,\)</span> which implies that we can construct pointwise confidence intervals (etc.)</p>
+<p><strong>Caution:</strong> Generally, we have for finite <span class="math inline">\(n\)</span> that: <span class="math display">\[
+\mathbb{E} \left( \hat{f}_{h_n}(x) \right)\neq f(x);
+\]</span> i.e.&nbsp;for finite <span class="math inline">\(n\)</span> there is generally a non-negligible estimation bias.</p>
+<p><strong>Note:</strong> Under the additional, more restrictive bandwidth assumption that <span class="math display">\[
+h_n \to 0\quad\text{and}\quad n h_{n}^{\textcolor{red}{2}} \to \infty,\quad\text{as}\quad n\to\infty,
+\]</span> one can also show <strong>uniform</strong> consistency (see <span class="citation" data-cites="parzen1962estimation">Parzen (<a href="#ref-parzen1962estimation" role="doc-biblioref">1962</a>)</span>) <span class="math display">\[
+\begin{equation*}
+\sup_{x} \left| \hat{f}_{nh}(x) - f(x) \right| \rightarrow_P 0.
+\end{equation*}
+\]</span></p>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-parzen1962estimation" class="csl-entry" role="listitem">
+Parzen, Emanuel. 1962. <span>“On Estimation of a Probability Density Function and Mode.”</span> <em>The Annals of Mathematical Statistics</em> 33 (3): 1065–76.
+</div>
 <div id="ref-Rosenblatt_1956" class="csl-entry" role="listitem">
 Rosenblatt, Murray. 1956. <span>“Remarks on Some Nonparametric Estimates of a Density Function.”</span> <em>The Annals of Mathematical Statistics</em> 27 (3): 832—837.
 </div>
