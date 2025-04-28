@@ -288,9 +288,9 @@ window.Quarto = {
 <section id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="possible-applications-of-the-em-algorithm-and-gaussian-mixture-distributions">Possible Applications of the EM-Algorithm and Gaussian mixture distributions</h4>
 <ul>
-<li>General: Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>). For instance: Automatic video editing (e.g., separation of back- and foreground)<br>
+<li>Finding grouping structures (two or more) in data (<strong>cluster analysis</strong>). For instance: Automatic video editing (e.g., separation of back- and foreground)<br>
 </li>
-<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to stabilize the maximization problem.</li>
+<li><span class="citation" data-cites="Traiberman_AER2019">Traiberman (<a href="#ref-Traiberman_AER2019" role="doc-biblioref">2019</a>)</span> uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to simplify the likelihood function.</li>
 </ul>
 </section>
 <section id="some-literature" class="level4 unnumbered">
@@ -335,21 +335,6 @@ Figure&nbsp;2.1: Cheeky penguin in action.
 </figure>
 </div>
 <p>The following code chunk prepares the dataset and visualizes it using a histogram.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Caution
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>We have the information about the different penguin species (<code>penguin_species</code>) but in the following we pretend not to know this information.</p>
-<p>We want to determine the group memberships (species) by cluster analysis on the basis of the fin lengths (<code>penguin_flipper</code>) alone.</p>
-<p>Afterwards we can use the data in <code>penguin_species</code> to check how good our cluster analysis is.</p>
-</div>
-</div>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Select a color palette</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>col_v <span class="ot">&lt;-</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">name =</span> <span class="st">"Set2"</span>)</span>
@@ -391,12 +376,27 @@ Caution
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution: We do not use the grouping label (penguin species)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We have the information about the different penguin species (<code>penguin_species</code>) but in the following we pretend not to know this information.</p>
+<p>We want to determine the group memberships (species) by cluster analysis on the basis of the fin lengths (<code>penguin_flipper</code>) alone.</p>
+<p>Afterward we can use the grouping label in <code>penguin_species</code> to check how good our cluster analysis is.</p>
+</div>
+</div>
 <section id="clustering-using-gaussian-mixture-distributions" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="clustering-using-gaussian-mixture-distributions">Clustering using Gaussian Mixture Distributions</h4>
 <p>At the end of this chapter (<a href="#sec-CA" class="quarto-xref"><span>Section 2.4</span></a>), we’ll be able to</p>
 <ol type="1">
-<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong></li>
-<li>Assign the predictors <span class="math inline">\(x_i\)</span> (flipper length) to the group (penguine species) that maximizes the <strong>“posterior probability”</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>)</li>
+<li>Estimate the Gaussian mixture distribution using the <strong>EM algorithm</strong> (see <a href="#fig-GMM-plot1" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>).</li>
+<li>Assign each penguin <span class="math inline">\(i\)</span> to one of the two species groups according to its predictor value <span class="math inline">\(x_i\)</span> (flipper length).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -1315,7 +1315,6 @@ The famouse minst data set.
 
 
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -1346,7 +1345,6 @@ ggplot(aes(x, y, fill = value)) +  geom_tile() +  facet_wrap(~ instance + label)
 ![](Ch2_EMAlgorithmus_files/figure-html/unnamed-chunk-10-1.png){width=672}
 :::
 :::
-
 
 
 

@@ -6,8 +6,8 @@ The Expectation Maximization (EM) algorithm is often used to simplify or to faci
 
 #### Possible Applications of the EM-Algorithm and Gaussian mixture distributions {-}
 
-* General: Finding grouping structures (two or more) in data (**cluster analysis**). For instance: Automatic video editing (e.g., separation of back- and foreground)  
-* @Traiberman_AER2019 uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to stabilize the maximization problem. 
+* Finding grouping structures (two or more) in data (**cluster analysis**). For instance: Automatic video editing (e.g., separation of back- and foreground)  
+* @Traiberman_AER2019 uses the EM-Algorithm to compute the maximum likelihood estimators. Since he has no information about the beliefs over aggregate shocks (missing data), the maximum likelihood function is very complex. The EM-Algorithm can help here to simplify the likelihood function. 
 
 
 #### Some literature {-}
@@ -62,17 +62,6 @@ These data are from surveys of penguin populations on the Palmer Archipelago (An
 The following code chunk prepares the dataset and visualizes it using a histogram.  
 
 
-::: {.callout-caution}
-
-# Caution
-We have the information about the different penguin species (`penguin_species`) but in the following we pretend not to know this information.  
-
-We want to determine the group memberships (species) by cluster analysis on the basis of the fin lengths (`penguin_flipper`) alone. 
-
-Afterwards we can use the data in `penguin_species` to check how good our cluster analysis is.
-:::
-
-
 ```{r, fig.align='center', out.width="100%", echo=TRUE, eval=TRUE}
 ## Select a color palette
 col_v <- RColorBrewer::brewer.pal(n = 3, name = "Set2")
@@ -109,12 +98,26 @@ stripchart(x = penguin_flipper, method = "jitter",
 ```
 
 
+
+::: {.callout-caution}
+
+# Caution: We do not use the grouping label (penguin species)
+
+We have the information about the different penguin species (`penguin_species`) but in the following we pretend not to know this information.  
+
+We want to determine the group memberships (species) by cluster analysis on the basis of the fin lengths (`penguin_flipper`) alone. 
+
+Afterward we can use the grouping label in `penguin_species` to check how good our cluster analysis is.
+:::
+
+
+
 #### Clustering using Gaussian Mixture Distributions {-}
 
 At the end of this chapter (@sec-CA), we'll be able to 
 
-1. Estimate the Gaussian mixture distribution using the **EM algorithm**
-2. Assign the predictors $x_i$ (flipper length) to the group (penguine species) that maximizes the **"posterior probability"** (see @fig-GMM-plot1)
+1. Estimate the Gaussian mixture distribution using the **EM algorithm** (see @fig-GMM-plot1).
+2. Assign each penguin $i$ to one of the two species groups according to its predictor value $x_i$ (flipper length).
 
 
 ```{r}
@@ -183,6 +186,7 @@ stripchart(penguin_flipper[class==2],
            method = "jitter", jitter = .0005, at = .001,
            pch = 21, col=alpha(col_v[2],.5), bg=alpha(col_v[2],.5), cex=1.3, add = TRUE)
 ```
+
 
 
 
