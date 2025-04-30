@@ -357,7 +357,7 @@ $$
 
 For real GMMs (i.e. GMMs with more than one group $G>1$), problems with singularities occur very easily during a numerical maximization. This happens, for instance, when one of the normal distribution components tries to describe only one single data point $X_i.$ This leads to a Gaussian density function centered around the **single data point** $X_i$ such that   
 $$
-\varphi(X_i_;{\color{red}\mu_g=X_i},\sigma_g),
+\varphi(X_i;{\color{red}\mu_g=X_i},\sigma_g),
 $$ 
 where 
 $$
@@ -494,7 +494,7 @@ For $r=1,2,\dots$
     <center>$\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{\hat{p}_{ig}^{(r-1)}}{\left(\sum_{j=1}^n\hat{p}_{jg}^{(r-1)}\right)}\left(X_i-\hat\mu_g^{(r)}\right)^2}$</center> 
 
 3. **Check Convergence:** <br>
-    Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})$, does not change any more substantially. Or, equivalently, of the parameter estimates do not change any more substantially. 
+    Stop if the value of the maximized log-likelihood function, $\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})$, does not change any more substantially. Or, equivalently, if the parameter estimates do not change any more substantially. 
 
 The above pseudocode is implemented in the following code chunk:
 
@@ -590,9 +590,9 @@ directly. In fact, the $\ln(\sum_{g=1}^G[\dots])$-construction makes life diffic
 
 In our penguin data there are two groups $g\in\{1,2\}.$ 
 
-Thus, in principle (albeit unobserved) there are $G=2$ dimensional dummy variable vectors $(z_{i1},z_{i2}),$ $i=1,\dots,n,$ which encode the group-labels,
+Thus, in principle (albeit unobserved) there are $G=2$ dimensional dummy variable vectors $(Z_{i1},Z_{i2}),$ $i=1,\dots,n,$ which encode the group-labels,
 $$
-(z_{i1},z_{i2})=
+(Z_{i1},Z_{i2})=
 \left\{\begin{array}{ll}
 (1,0)&\text{if penguin }i\text{ belongs to group }g=1\\
 (0,1)&\text{if penguin }i\text{ belongs to group }g=2\\
@@ -603,7 +603,7 @@ $$
 # Case of more than two $G>2$ groups:  
 $$
 \begin{align*}
-&(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
+&(Z_{i1},\dots,Z_{ig},\dots,Z_{iG})=\\[2ex]
 &=\left\{\begin{array}{ll}
 (1,0,\dots,0)&\text{if data point }i\text{ belongs to group }g=1\\
 (0,1,\dots,0)&\text{if data point }i\text{ belongs to group }g=2\\
@@ -614,20 +614,20 @@ $$
 $$
 :::
 
-The group labels $z_{ig}$ can take values $z_{ig}\in\{0,1\},$ for each $i=1,\dots,n$ and $g=1,\dots,G.$ However, it must hold true that each $i$ belongs to only **one** group, i.e.
+The group labels $Z_{ig}$ can take values $Z_{ig}\in\{0,1\},$ for each $i=1,\dots,n$ and $g=1,\dots,G.$ However, it must hold true that each $i$ belongs to only **one** group, i.e.
 $$
-\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
+\sum_{g=1}^G Z_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
 $$
 
 ::: {.callout-note}
 Requiring that
 $$
-\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n
+\sum_{g=1}^G Z_{ig}=1\quad\text{for each}\quad i=1,\dots,n
 $$
 means an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g. member of a gender group and member of a religious group).
 :::
 
-Unfortunately, the true group labels $z_{ig}$ are missing. However, we nevertheless know at least something about their group-assignments. The weights 
+Unfortunately, the true group labels $Z_{ig}$ are missing. However, we nevertheless know at least something about their group-assignments. The weights 
 $$
 \pi_{1,0},\dots,\pi_{G,0}
 $$ 
@@ -641,7 +641,7 @@ $$
 $$ 
 of the data points $i=1,\dots,n$ come from group $g.$ 
 
-Thus, we can consider the missing group label $z_{ig}$ as a **unobserved realization of a binary random variable** $Z_{ig}\in\{0,1\}$ with probabilities
+Thus, we can consider the missing group label $Z_{ig}$ as a **unobserved realization of a binary random variable** $Z_{ig}\in\{0,1\}$ with probabilities
 $$
 \begin{align*}
 P(Z_{ig}=1)&=\pi_{g,0}\\[2ex]
@@ -1264,7 +1264,7 @@ and
 $$
 P(Z_{ig}=1)=\pi_g,\quad g=1,\dots,G. 
 $$ 
-Thus, the realization $z_i=(0,1,0,\dots,0)$ means that the $i$th observation comes from the $2$nd Bernoulli distribution $\text{Bernoulli}(p_2)$.</br> 
+Thus, the realization $Z_i=(0,1,0,\dots,0)$ means that the $i$th observation comes from the $2$nd Bernoulli distribution $\text{Bernoulli}(p_2)$.</br> 
 Write the expressions of the (log) likelihood functions $\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})$ and $\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})$ that take into account the latend group indicator random variables.  
 
 

@@ -559,7 +559,7 @@ Maximization constraints
 <p>😒 <strong>Problems with singularities in numerical solutions:</strong> If one tries to solve the above maximization problem <a href="https://jaimemosg.github.io/EstimationTools/index.html">numerically with the help of the computer</a>, one will quickly notice that the results are highly unstable, implausible and not very trustworthy. The reason for these unstable estimates are problems with singularities.</p>
 <p>For real GMMs (i.e.&nbsp;GMMs with more than one group <span class="math inline">\(G&gt;1\)</span>), problems with singularities occur very easily during a numerical maximization. This happens, for instance, when one of the normal distribution components tries to describe only one single data point <span class="math inline">\(X_i.\)</span> This leads to a Gaussian density function centered around the <strong>single data point</strong> <span class="math inline">\(X_i\)</span> such that<br>
 <span class="math display">\[
-\varphi(X_i_;{\color{red}\mu_g=X_i},\sigma_g),
+\varphi(X_i;{\color{red}\mu_g=X_i},\sigma_g),
 \]</span> where <span class="math display">\[
 \sigma_g\to 0.
 \]</span> This degenerating situation leads to <strong>very large</strong> density function values, <span class="math display">\[
@@ -685,7 +685,7 @@ p_{ig}
 <p><span class="math inline">\(\hat\sigma_g^{(r)}=\sqrt{\sum_{i=1}^n\frac{\hat{p}_{ig}^{(r-1)}}{\left(\sum_{j=1}^n\hat{p}_{jg}^{(r-1)}\right)}\left(X_i-\hat\mu_g^{(r)}\right)^2}\)</span></p>
 </center></li>
 </ul></li>
-<li><p><strong>Check Convergence:</strong> <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})\)</span>, does not change any more substantially. Or, equivalently, of the parameter estimates do not change any more substantially.</p></li>
+<li><p><strong>Check Convergence:</strong> <br> Stop if the value of the maximized log-likelihood function, <span class="math inline">\(\ell(\boldsymbol{\hat{\pi}}^{(r)},\boldsymbol{\hat{\mu}}^{(r)},\boldsymbol{\hat{\sigma}}^{(r)};\mathbf{x})\)</span>, does not change any more substantially. Or, equivalently, if the parameter estimates do not change any more substantially.</p></li>
 </ol>
 <p>The above pseudocode is implemented in the following code chunk:</p>
 <div class="cell">
@@ -783,8 +783,8 @@ Remember:
 <section id="data-completion" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="data-completion"><span class="header-section-number">2.3.1</span> Data Completion</h3>
 <p>In our penguin data there are two groups <span class="math inline">\(g\in\{1,2\}.\)</span></p>
-<p>Thus, in principle (albeit unobserved) there are <span class="math inline">\(G=2\)</span> dimensional dummy variable vectors <span class="math inline">\((z_{i1},z_{i2}),\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> which encode the group-labels, <span class="math display">\[
-(z_{i1},z_{i2})=
+<p>Thus, in principle (albeit unobserved) there are <span class="math inline">\(G=2\)</span> dimensional dummy variable vectors <span class="math inline">\((Z_{i1},Z_{i2}),\)</span> <span class="math inline">\(i=1,\dots,n,\)</span> which encode the group-labels, <span class="math display">\[
+(Z_{i1},Z_{i2})=
 \left\{\begin{array}{ll}
 (1,0)&amp;\text{if penguin }i\text{ belongs to group }g=1\\
 (0,1)&amp;\text{if penguin }i\text{ belongs to group }g=2\\
@@ -802,7 +802,7 @@ Case of more than two <span class="math inline">\(G&gt;2\)</span> groups:
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[
 \begin{align*}
-&amp;(z_{i1},\dots,z_{ig},\dots,z_{iG})=\\[2ex]
+&amp;(Z_{i1},\dots,Z_{ig},\dots,Z_{iG})=\\[2ex]
 &amp;=\left\{\begin{array}{ll}
 (1,0,\dots,0)&amp;\text{if data point }i\text{ belongs to group }g=1\\
 (0,1,\dots,0)&amp;\text{if data point }i\text{ belongs to group }g=2\\
@@ -813,8 +813,8 @@ Case of more than two <span class="math inline">\(G&gt;2\)</span> groups:
 \]</span></p>
 </div>
 </div>
-<p>The group labels <span class="math inline">\(z_{ig}\)</span> can take values <span class="math inline">\(z_{ig}\in\{0,1\},\)</span> for each <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G.\)</span> However, it must hold true that each <span class="math inline">\(i\)</span> belongs to only <strong>one</strong> group, i.e. <span class="math display">\[
-\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
+<p>The group labels <span class="math inline">\(Z_{ig}\)</span> can take values <span class="math inline">\(Z_{ig}\in\{0,1\},\)</span> for each <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G.\)</span> However, it must hold true that each <span class="math inline">\(i\)</span> belongs to only <strong>one</strong> group, i.e. <span class="math display">\[
+\sum_{g=1}^G Z_{ig}=1\quad\text{for each}\quad i=1,\dots,n.
 \]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -827,18 +827,18 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>Requiring that <span class="math display">\[
-\sum_{g=1}^Gz_{ig}=1\quad\text{for each}\quad i=1,\dots,n
+\sum_{g=1}^G Z_{ig}=1\quad\text{for each}\quad i=1,\dots,n
 \]</span> means an important restriction of GMMs, which is not problematic for the penguin data. However, it may be problematic in applications with hierarchical grouping structures, where one can be a member of multiple groups (e.g.&nbsp;member of a gender group and member of a religious group).</p>
 </div>
 </div>
-<p>Unfortunately, the true group labels <span class="math inline">\(z_{ig}\)</span> are missing. However, we nevertheless know at least something about their group-assignments. The weights <span class="math display">\[
+<p>Unfortunately, the true group labels <span class="math inline">\(Z_{ig}\)</span> are missing. However, we nevertheless know at least something about their group-assignments. The weights <span class="math display">\[
 \pi_{1,0},\dots,\pi_{G,0}
 \]</span> of the Gaussian mixture distribution <span class="math display">\[
 f_{GMM}(x;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)=\sum_{g=1}^G\pi_{g,0}\varphi(x;\mu_{g,0},\sigma_{g,0}),
 \]</span> give us the proportions of the individual distributions <span class="math inline">\(\varphi(\cdot;\mu_{g,0},\sigma_{g,0})\)</span> in the total distribution <span class="math inline">\(f_{GMM}.\)</span> Therefore, we know that, on average, <span class="math display">\[
 \pi_{g,0}\cdot 100\%
 \]</span> of the data points <span class="math inline">\(i=1,\dots,n\)</span> come from group <span class="math inline">\(g.\)</span></p>
-<p>Thus, we can consider the missing group label <span class="math inline">\(z_{ig}\)</span> as a <strong>unobserved realization of a binary random variable</strong> <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probabilities <span class="math display">\[
+<p>Thus, we can consider the missing group label <span class="math inline">\(Z_{ig}\)</span> as a <strong>unobserved realization of a binary random variable</strong> <span class="math inline">\(Z_{ig}\in\{0,1\}\)</span> with probabilities <span class="math display">\[
 \begin{align*}
 P(Z_{ig}=1)&amp;=\pi_{g,0}\\[2ex]
 P(Z_{ig}=0)&amp;=(1-\pi_{g,0})\\[2ex]
@@ -1290,7 +1290,7 @@ X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
 Z_{i1}+\dots + Z_{iG}=1
 \]</span> and <span class="math display">\[
 P(Z_{ig}=1)=\pi_g,\quad g=1,\dots,G.
-\]</span> Thus, the realization <span class="math inline">\(z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>.<br> Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> that take into account the latend group indicator random variables.</p></li>
+\]</span> Thus, the realization <span class="math inline">\(Z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>.<br> Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> that take into account the latend group indicator random variables.</p></li>
 <li><p>Write down the expression for the posterior probability <span class="math display">\[
 \mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i).
 \]</span></p></li>
