@@ -2175,10 +2175,13 @@ The Fisher information is given by
 $$
 \mathcal{I}(\theta_0)=-\frac{1}{n}\mathbb{E}(\ell''(\theta_0)).
 $$ 
-The second derivative of $\ell_n(\theta)$ evaluated at $\theta_0$ is given by
+The second derivative of $\ell_n(\theta)$ evaluated at $\theta=\theta_0$ is given by
 $$
-\ell''_n(\theta)=-n\frac{1}{\theta^2_0}.
+\ell''_n(\theta_0)=-n\frac{1}{\theta^2_0}.
 $$
+
+> **Note:** In this example, the second derivative of $\ell_n(\theta)$ is so simple that it no longer depends on the random sample $X_1, \dots, X_n.$
+
 Thus,
 $$
 \begin{align*}
@@ -2337,10 +2340,10 @@ $$
 $$
 \begin{align}
 \ell''_n(\lambda) 
-&= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} < 0,  
+&= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} \leq 0,  
 \end{align}
 $$
-since by the properties of the Poisson distribution $X_1,\dots,X_n>0$ and $\lambda>0.$
+since by the properties of the Poisson distribution $X_1,\dots,X_n\geq 0$ and $\lambda>0.$
 
 Thus the maximum likelihood estimator of $\lambda_0$ is given by
 $$
@@ -2430,7 +2433,7 @@ $$
 In the following, we show that the Newton-Raphson algorithm converges under this setup. 
 
 
-By the second-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with the mean-value form of the remainder term, we have that 
+By the first-order Taylor expansion of $\ell'(\theta_{root})$ around $\theta_{(m)}$ with the mean-value form of the remainder term, we have that 
 $$
 \begin{align*}
 \overset{\theta_{(m)}+(\theta_{root}-\theta_{(m)})}{\ell'\big(\;\overbrace{\theta_{root}}\;\big)} 
@@ -2488,7 +2491,7 @@ Considering the worst case within $I,$ leads to the following inequality
 $$
 \begin{align*}
 |e_{(m+1)}|  
-&\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta_{(m)})|}\right)}^{=M}\;(e_{(m)})^2\\[2ex]
+&\leq  \overbrace{\frac{1}{2} \; \left(\sup_{\theta\in I}|\ell'''(\theta)|\right)\;\left(\sup_{\theta\in I}\frac{1}{|\ell''(\theta)|}\right)}^{=M}\;(e_{(m)})^2\\[2ex]
 \Leftrightarrow\quad |e_{(m+1)}|  
 &\leq  M\;(e_{(m)})^2\\[-2ex]
 \end{align*}
