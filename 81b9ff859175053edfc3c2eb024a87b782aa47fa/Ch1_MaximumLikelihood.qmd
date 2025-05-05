@@ -2020,17 +2020,15 @@ where
 $$
 R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 $$
-for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}$. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value Theorem @thm-MVT.   
+for a mean-value $\xi_{(m)}$ between $\theta_{(m)}$ and $\theta_{root}$. This is called the Lagrange form of the Taylor-Series reminder term and follows from the Mean-Value @thm-MVT.   
 
 
-
-
-<!-- 
+ 
 ## Solutions {-} 
 
 #### Solutions of Exercise 1. {-} 
 
-Below I use the same data (one H, four T) that was used to produce the results in @tbl-NR of our script. However, you can produce new data by setting another seed-value
+Below I use the same data (one H, four T) that was used to produce the results in @tbl-NR of our script. However, you can produce new data by setting another seed-value different to `set.seed(1)`.
 
 ```{r}
 theta_true <- 0.2    # unknown true theta value
@@ -2090,11 +2088,66 @@ results
 ```
 
 
+**Addendum:** @fig-RandomEx1 shows random realizations of the log-likelihood function based on different random realizations of the $n=5$ coin tosses (i.e. realizations of the random sample $X_1,\dots,X_n$). 
+
+
+```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.5, fig.align="center"}
+#| label: fig-RandomEx1
+#| echo: false
+#| fig-cap: Random realizations of the log-likelihood function $\ell_{n}$ of Exercise 1 for different realizations of the random sample $X_1,\dots,X_n$.
+
+theta_true   <- 0.2    # unknown true theta value
+n            <- 10     # sample size
+theta_values <- seq(0, 1, len = 51)
+B            <- 50
+yy_mat <- matrix(NA, nrow=length(theta_values), ncol=B)
+
+set.seed(1)
+
+for(r in 1:B){
+
+# simulate data: n = 5 many (unfair) coin tosses
+x <- sample(x       = c(0,1), 
+            size    = n, 
+            replace = TRUE, 
+            prob    = c(1-theta_true, theta_true)) 
+
+## number of heads (i.e., the number of "1"s in x)
+N_H <- sum(x)
+
+L_fct <- function(theta, N_H, n){
+    N_H * log(theta) + (n - N_H) * log(1 - theta)    
+}
+
+yy_mat[,r]  <- L_fct(theta = theta_values, N_H = N_H, n = n)
+
+plot(y = c(-20, 5), x = c(0,1), lwd=1.5, type = "n", 
+     ylab = "Log-Likelihood", xlab = expression(theta), axes = FALSE)
+  axis(2); axis(1, at=theta_true, labels = expression(theta[0])); box()
+
+# if(r > 1){
+# for(l in r-1){
+# lines(y = yy_mat[,l], x = theta_values, lwd=1.5, col="gray")
+# points(y = yy_mat[,l][which.max(yy_mat[,l])], 
+#        x = theta_values[which.max(yy_mat[,l])], 
+#        pch = 21, bg = "gray", col = "gray", cex = 1.5)
+# }
+# }
+
+lines(y = yy_mat[,r], x = theta_values, lwd=1.5)
+abline( v = theta_true, col="blue")
+points(y = yy_mat[,r][which.max(yy_mat[,r])], 
+       x = theta_values[which.max(yy_mat[,r])], 
+       pch = 21, bg = "red", col = "red", cex = 1.5)
+}
+```
+
+
 #### Solutions of Exercise 2. {-} 
 
 ##### (a) Log-Likelihood Function {-}
 
-The log-likelihood function is given by
+The (random) log-likelihood function is given by
 $$
 \begin{align*}
 \ell_n(\theta)
@@ -2106,11 +2159,11 @@ $$
 
 ##### (b) ML-Estimator  {-}
 
-The ML estimator is defined as $\hat{\theta}_{n}=\arg\max_{\theta}\ell(\theta)$. Deriving the ML estimator $\hat\theta_n$:
+The (random) ML estimator is defined as $\hat{\theta}_{n}=\arg\max_{\theta}\ell_{n}(\theta)$. Deriving the ML estimator $\hat\theta_n$:
 $$
 \begin{align*}
 \ell_n'(\theta)&=n\frac{1}{\theta} - \sum_{i=1}^n X_i\\
-\ell_n'(\hat\theta_n)=0\quad \Leftrightarrow &\quad 0=n\frac{1}{\hat\theta_n} - \sum_{i=1}^n X_i\\
+\ell_n'(\hat\theta_n)\overset{!}{=}0\quad \Leftrightarrow &\quad 0=n\frac{1}{\hat\theta_n} - \sum_{i=1}^n X_i\\
 \Leftrightarrow &\quad n\frac{1}{\hat\theta_n} = \sum_{i=1}^n X_i\\
 \Leftrightarrow &\quad \hat\theta_n = \frac{1}{\frac{1}{n}\sum_{i=1}^n X_i}= \frac{1}{\bar{X}_n}
 \end{align*}
@@ -2138,36 +2191,41 @@ $$
 Therefore, the asymptotic distribution of $\hat\theta_n$ is 
 $$
 \begin{align*}
-\sqrt{n}(\hat\theta_n-\theta)&\to_d \mathcal{N}\left(0,\theta^2_0\right),
+\sqrt{n}(\hat\theta_n-\theta_0)&\to_d \mathcal{N}\left(0,\theta^2_0\right),\;n\to\infty.
 \end{align*}
 $$
-$n\to\infty.$
 
-Since we do not know the asymptotic variance $\theta_0^2,$ we need to plug-in a consistent estimator; namely,
+
+Since we do not know the asymptotic variance 
+$$
+\lim_{n\to\infty}Var\big(\sqrt{n}(\hat{\theta}_n-\theta_0)\big)=\theta_0^2,
+$$ 
+we need to use a consistent estimator; namely,
 $$
 \hat{\theta}_n^2 = \left(\frac{1}{\bar{X}_n}\right)^2 \approx \theta^2_0.
 $$
-This allows us to use the following Normal approximation to construct statistical hypothesis tests and confidence intervals, etc:
+This yields to the following Normal approximation which can then be used for constructing statistical hypothesis tests and confidence intervals, etc:
 $$
 \begin{align*}
-\hat\theta_n&\overset{a}{\sim}\mathcal{N}\left(\theta,\frac{\hat{\theta}_n^2}{n}\right)
+\sqrt{n}\big(\hat\theta_n - \theta_0\big)&\overset{a}{\sim}\mathcal{N}\left(0,\hat{\theta}_n^2\right)\\[2ex]
+\Leftrightarrow\qquad\hat\theta_n&\overset{a}{\sim}\mathcal{N}\left(\theta_0,\frac{\hat{\theta}_n^2}{n}\right)
 \end{align*}
 $$
-This approximation is good for largish sample sizes (roughly $n\geq 30$). 
+This approximation can be expected to be good/useful for largish sample sizes (i.e. roughly $n\geq 30$). 
 
-Note: The above asymptotic normality result coincides with the result obtained by the delta-method.
+> **Remark:** The above asymptotic normality result coincides with the result obtained by the delta-method.
 
 #### Solutions of Exercise 3. {-}
 
 ##### (a) Likelihood Function {-}
 
-Recall that the density function of $\mathcal{Unif}(0,\theta)$ is
+Recall that the density function of $\mathcal{Unif}(0,\theta_0)$ is
 $$
 f(x;\theta_0)
 =\left\{
 \begin{array}{ll}
-\frac{1}{\theta} & 0\leq x\leq \theta_0\\
-0                & \text{otherwise}\\
+\frac{1}{\theta_0} & 0\leq x\leq \theta_0\\
+0                  & \text{otherwise}\\
 \end{array}
 \right.
 $$
@@ -2175,7 +2233,9 @@ Thus, the likelihood function is
 $$
 \mathcal{L}_n(\theta) = \prod_{i=1}^n f(X_i;\theta).
 $$
-**Note:** If any $\theta<X_i,$ we have that 
+for $\theta>0.$
+
+**Note:** If $\theta<X_i$ for any $i=1,\dots,n,$ we have that 
 $$
 \mathcal{L}_n(\theta)=0.
 $$ 
@@ -2188,11 +2248,11 @@ $$
 \mathcal{L}_n(\theta)=0\quad\text{for all}\quad \theta<X_{(n)}.
 $$ 
 
-However, for all values of $\theta$ with $\theta \geq X_{(n)}$ we have that 
+However, for all values of $\theta$ with $X_{(n)} \leq \theta,$ we have that 
 $$
 f(X_i;\theta)=\frac{1}{\theta}\quad\textbf{for all}\quad i=1,\dots,n.
 $$
-Thus, for all values of $\theta$ with $\theta \geq X_{(n)},$
+Thus, for all values of $\theta$ with $X_{(n)}\leq \theta,$
 $$
 \mathcal{L}_n(\theta)=\left(\frac{1}{\theta}\right)^n.
 $$ 
@@ -2244,7 +2304,7 @@ axis(1, at = X_max, labels = expression(X[(n)]))
 Thus, the maximum likelihood estimator of $\theta_0$ is 
 $$
 \begin{align}
-\hat{\theta}_{ML} 
+\hat{\theta}_{n} 
 & =\arg\max_{\theta>0}\mathcal{L}_n(\theta)\\
 & = X_{(n)}.
 \end{align}
@@ -2262,7 +2322,7 @@ $$
 & = \prod_{i=1}^n f(X_i;\lambda)\\[2ex]
 & = \prod_{i=1}^n \frac{\lambda^{X_i} \exp(-\lambda)}{X_i!} \\[2ex]
 & = \frac{\lambda^{\sum_{i=1}^n X_i}  \exp(-n \lambda)}{\prod_{i=1}^n (X_i!)} \\[4ex]
-\ell(\lambda) 
+\ell_n(\lambda) 
 &= \left(\sum_{i=1}^n X_i\right) \ln(\lambda) -n\lambda\cdot 1 - \sum_{i=1}^n \ln(X_i!)
 \end{align}
 $$
@@ -2277,7 +2337,7 @@ $$
 $$
 \begin{align}
 \ell''_n(\lambda) 
-&= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} < 0  
+&= -\frac{\left(\sum_{i=1}^n X_i\right)}{\lambda^2} < 0,  
 \end{align}
 $$
 since by the properties of the Poisson distribution $X_1,\dots,X_n>0$ and $\lambda>0.$
@@ -2286,28 +2346,30 @@ Thus the maximum likelihood estimator of $\lambda_0$ is given by
 $$
 \begin{align}
 &\frac{\left(\sum_{i=1}^n X_i\right)}{\hat\lambda_n}  - n \overset{!}{=} 0\\[2ex]
-\Rightarrow & \hat \lambda_n = \frac{1}{n}\sum_{i=1}^n X_i.
+\Rightarrow \qquad & \hat \lambda_n = \frac{1}{n}\sum_{i=1}^n X_i.
 \end{align}
 $$
 
 
 ##### (b) Finding the Maximum Likelihood Estimator of $P(X=4)$ {-}
 
+Observe that
 $$
 \begin{align}
-P(X=4) = \frac{\lambda_0^4 \exp(-\lambda_0)}{4!}
+P(X=4) = \frac{\lambda_0^4 \exp(-\lambda_0)}{4!}.
 \end{align}
 $$
-
-Thus $P(X=4)$ is a function of $\lambda$
+Thus $P(X=4)$ is a function of $\lambda$ (see @fig-ExPoisson)
 $$
 \begin{align}
-P(X=4)\equiv P(X=4|\lambda) = \frac{\lambda^4 \exp(-\lambda)}{4!} = \tau(\lambda)
+P(X=4)\equiv P_\lambda(X=4) = \frac{\lambda^4 \exp(-\lambda)}{4!} = \tau(\lambda)
 \end{align}
 $$
 
 
 ```{r}
+#| label: fig-ExPoisson
+#| fig-cap: For $0\leq \lambda \leq 4$ the function $\tau(\lambda)$ is a one-to-one function.
 lambda_vec <- seq(from = .0001, to = 15, len = 100)
 g_vec      <- (lambda_vec^4 * exp(-1*lambda_vec))/( factorial(4) )
 
@@ -2319,10 +2381,10 @@ axis(1, at = 4)
 
 (For $0<\lambda\leq 4,$ $g(\lambda)$ is even a one-to-one mapping.) 
 
-By the invariance property of the maximum likelihood estimator (which also applies to functions $\tau$ that are not one-to-one) we thus have
+Thus, by the invariance property of the maximum likelihood estimator (which also applies to functions $\tau$ that are not one-to-one) we have
 $$
 \begin{align}
-\hat{P}(X=4)\equiv \hat{P}(X=4|\hat{\lambda}_n) = \frac{\hat{\lambda}^4_n \exp(-\hat{\lambda}_n)}{4!}
+\hat{P}(X=4)\equiv \hat{P}_{\hat{\lambda}_n}(X=4) = \frac{\hat{\lambda}^4_n \exp(-\hat{\lambda}_n)}{4!}
 \end{align}
 $$
 with $\hat{\lambda}_n=\frac{1}{n}\sum_{i=1}^n X_i.$
@@ -2400,12 +2462,12 @@ Using the update steps of the alrorithm
 $$
 \theta_{(m+1)} = \theta_{(m)} - \frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}
 \quad\Leftrightarrow\quad 
-\theta_{(m)} - \theta_{(m+1)}  = {\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}}
+{\color{magenta}\theta_{(m)} - \theta_{(m+1)}}  = {\color{blue}\frac{\ell'(\theta_{(m)})}{\ell''(\theta_{(m)})}}
 $$
 yields
 $$
 \begin{align*}
-\theta_{(m)} - \theta_{(m+1)} + (\theta_{root}-\theta_{(m)}) 
+{\color{magenta}\theta_{(m)} - \theta_{(m+1)}} + (\theta_{root}-\theta_{(m)}) 
 &= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(\theta_{root}-\theta_{(m)})^2\\[2ex]
 \Leftrightarrow\quad
 \theta_{root} - \theta_{(m+1)}  
@@ -2415,7 +2477,7 @@ e_{(m+1)}
 &= \frac{-\ell'''(\xi_{(m)})}{2\ell''(\theta_{(m)})}(e_{(m)})^2
 \end{align*}
 $$
-Taking absolute values, since we are not interested in the sign of the approximation errors, yields
+Taking absolute values (we are not interested in the sign of the approximation errors) yields
 $$
 \begin{align*}
 |e_{(m+1)}|  
@@ -2436,7 +2498,7 @@ $$
 |e_{(m)}|\to 0 \quad\text{as}\quad m \to\infty. 
 $$
 
-For $0\leq M\,|e_{(0)}|<1$ the inequality in @eq-NRIneq becomes a sharp inequality
+For $0\leq M\,|e_{(0)}|<1$ the inequality in @eq-NRIneq becomes a strict inequality
 $$
 \begin{align*}
 &|e_{(1)}|\leq \overbrace{M\;|e_{(0)}|}^{<1}\,|e_{(0)}|
@@ -2470,8 +2532,6 @@ even when $|e_{(0)}|\gg 0.$
 
 This makes sense, since $\sup_{\theta\in I}|\ell'''(\theta)|=0$ implies that $\ell'(\theta)$ has no curvature; i.e. $\ell'(\theta)$ is a straight line for all $x\in I$ which implies that the Taylor approximation used in the update steps of the Newton-Raphson algorithm is just perfect (no approximation error).
 
-
--->
 
 ## References {-}
 
