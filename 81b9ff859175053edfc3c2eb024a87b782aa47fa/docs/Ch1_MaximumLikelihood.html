@@ -526,6 +526,21 @@ Log-likelihoods instead of the likelihoods
 &amp;=\sum_{i=1}^n\left( X_{i} \ln(\theta) + (1-X_{i})\ln(1-\theta)\right).
 \end{align*}
 \]</span></p>
+<p><a href="#fig-RandomEx1" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows some random realizations of the log-likelihood function based on different random realizations of the <span class="math inline">\(n=5\)</span> coin tosses, i.e.&nbsp;realizations of the random sample <span class="math inline">\(\{X_1,\dots,X_n\}\in\{0,1\}^n.\)</span></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-RandomEx1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-RandomEx1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch1_MaximumLikelihood_files/figure-html/fig-RandomEx1-.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-RandomEx1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Random realizations of the log-likelihood function <span class="math inline">\(\ell_{n}\)</span> of our coin flipping example based on different realizations of the random sample <span class="math inline">\(X_1,\dots,X_n\)</span> with <span class="math inline">\(n=5\)</span> and (usually unknown) <span class="math inline">\(\theta_0=0.2.\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <p>The coin flip example is actually so simple that we can maximize <span class="math inline">\(\ell_n(\theta)\)</span> analytically. Computing the first derivative yields <span class="math display">\[
 \begin{align*}
 \ell'_n(\theta)&amp;=\sum_{i=1}^n \left(X_{i}\dfrac{1}{\theta} - (1-X_{i})\dfrac{1}{1-\theta}\right)\\[2ex]
@@ -584,7 +599,7 @@ Note
 \text{First-order:}\quad &amp;f(\theta+h)\approx \overbrace{f(\theta)+f'(\theta)h}^{\text{Taylor Polynomial of order 1}} \\
 \text{Second-order:}\quad&amp; f(\theta+h)\approx \underbrace{f(\theta)+f'(\theta)h + \frac{1}{2} f''(\theta)h^2}_{\text{Taylor Polynomial of order 2}},
 \end{align*}
-\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(|h|\approx 0,\)</span> (e.g.&nbsp;<span class="math inline">\(h=\pm 0.04\)</span>) the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
+\]</span> Locally, i.e.&nbsp;for <span class="math inline">\(|h|\approx 0,\)</span> (e.g.&nbsp;<span class="math inline">\(h=\pm 0.04\)</span>) the Taylor polynomials are very good approximations of <span class="math inline">\(f(\theta + h);\)</span> see <a href="#fig-taylorApprox" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-taylorApprox" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -593,7 +608,7 @@ Note
 <img src="Ch1_MaximumLikelihood_files/figure-html/fig-taylorApprox-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-taylorApprox-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: First- and second-order Taylor approximations of a function <span class="math inline">\(f\)</span> around <span class="math inline">\(\theta=1.\)</span>
+Figure&nbsp;1.2: First- and second-order Taylor approximations of a function <span class="math inline">\(f\)</span> around <span class="math inline">\(\theta=1.\)</span>
 </figcaption>
 </figure>
 </div>
@@ -716,7 +731,7 @@ M_{k,x}(h)=o\big(|h|^k\big)
 &amp; = \theta_{(m-1)} + h_{(m-1)}\\[2ex]
 &amp; = \theta_{(m-1)} - \frac{\ell_{n,obs}'(\theta_{(m-1)})}{\ell_{n,obs}''(\theta_{(m-1)})};
 \end{align*}
-\]</span> see also <a href="#fig-NR" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>.</p>
+\]</span> see also <a href="#fig-NR" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-NR" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -725,7 +740,7 @@ M_{k,x}(h)=o\big(|h|^k\big)
 <img src="Ch1_MaximumLikelihood_files/figure-html/fig-NR-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-NR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: The <span class="math inline">\(m\)</span>th update step in the Newton-Raphson root-finding algorithm.
+Figure&nbsp;1.3: The <span class="math inline">\(m\)</span>th update step in the Newton-Raphson root-finding algorithm.
 </figcaption>
 </figure>
 </div>
@@ -2043,21 +2058,6 @@ R=\frac{1}{2}\ell'''(\xi_{(m)})(\theta_{root}-\theta_{(m)})^2
 [4,] 3 0.1998263  1.736356e-04  5.433195e-03
 [5,] 4 0.1999999  1.132731e-07  3.539786e-06
 [6,] 5 0.2000000  4.814638e-14  1.504574e-12</code></pre>
-</div>
-</div>
-<p><strong>Addendum:</strong> <a href="#fig-RandomEx1" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> shows random realizations of the log-likelihood function based on different random realizations of the <span class="math inline">\(n=5\)</span> coin tosses (i.e.&nbsp;realizations of the random sample <span class="math inline">\(X_1,\dots,X_n\)</span>).</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-RandomEx1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-RandomEx1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="Ch1_MaximumLikelihood_files/figure-html/fig-RandomEx1-.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-RandomEx1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: Random realizations of the log-likelihood function <span class="math inline">\(\ell_{n}\)</span> of Exercise 1 for different realizations of the random sample <span class="math inline">\(X_1,\dots,X_n\)</span>.
-</figcaption>
-</figure>
-</div>
 </div>
 </div>
 </section>

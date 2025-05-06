@@ -247,9 +247,6 @@ the Maximum Likelihood (ML) Estimator, where $\Theta$ denotes the **parameter sp
 
 
 
-
-
-
 Thus, to derive the estimator for the unknown $\theta_0$ in our coin flip example, we need to maximize the likelihood function,
 $$
 \begin{align*}
@@ -297,6 +294,60 @@ $$
 &=\sum_{i=1}^n\left( X_{i} \ln(\theta) + (1-X_{i})\ln(1-\theta)\right).
 \end{align*}
 $$
+
+
+@fig-RandomEx1 shows some random realizations of the log-likelihood function based on different random realizations of the $n=5$ coin tosses, i.e. realizations of the random sample $\{X_1,\dots,X_n\}\in\{0,1\}^n.$ 
+
+
+```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.5, fig.align="center"}
+#| label: fig-RandomEx1
+#| echo: false
+#| fig-cap: Random realizations of the log-likelihood function $\ell_{n}$ of our coin flipping example based on different realizations of the random sample $X_1,\dots,X_n$ with $n=5$ and (usually unknown) $\theta_0=0.2.$
+
+theta_true   <- 0.2    # unknown true theta value
+n            <- 5      # sample size
+theta_values <- seq(0, 1, len = 51)
+B            <- 25
+yy_mat <- matrix(NA, nrow=length(theta_values), ncol=B)
+
+set.seed(1009)
+
+for(r in 1:B){
+
+# simulate data: n = 5 many (unfair) coin tosses
+x <- sample(x       = c(0,1), 
+            size    = n, 
+            replace = TRUE, 
+            prob    = c(1-theta_true, theta_true)) 
+
+## number of heads (i.e., the number of "1"s in x)
+N_H <- sum(x)
+
+L_fct <- function(theta, N_H, n){
+    N_H * log(theta) + (n - N_H) * log(1 - theta)    
+}
+
+yy_mat[,r]  <- L_fct(theta = theta_values, N_H = N_H, n = n)
+
+plot(y = c(-20, 5), x = c(0,1), lwd=1.5, type = "n", 
+     ylab = "Log-Likelihood", xlab = expression(theta), axes = FALSE)
+axis(2); axis(1, at=c(0,theta_true,0.5,1), 
+labels = c(0,expression(theta[0]),0.5,1)); box()
+
+lines(y = yy_mat[,r], x = theta_values, lwd=1.5)
+abline( v = theta_true, col="blue")
+points(y = yy_mat[,r][which.max(yy_mat[,r])], 
+       x = theta_values[which.max(yy_mat[,r])], 
+       pch = 21, bg = "red", col = "red", cex = 1.5)
+legend("topright", legend=c("ML-Estimate", "Log-Likelihood Function"),
+pch=c(21,NA), pt.bg=c("red",NA), col=c("red","black"), lty=c(NA,1))
+}
+```
+
+
+
+
+
 
 The coin flip example is actually so simple that we can maximize $\ell_n(\theta)$ analytically. Computing the first derivative yields
 $$
@@ -2088,59 +2139,6 @@ results
 ```
 
 
-**Addendum:** @fig-RandomEx1 shows random realizations of the log-likelihood function based on different random realizations of the $n=5$ coin tosses (i.e. realizations of the random sample $X_1,\dots,X_n$). 
-
-
-```{r, include=knitr::is_html_output(), animation.hook="gifski", interval=0.5, fig.align="center"}
-#| label: fig-RandomEx1
-#| echo: false
-#| fig-cap: Random realizations of the log-likelihood function $\ell_{n}$ of Exercise 1 for different realizations of the random sample $X_1,\dots,X_n$.
-
-theta_true   <- 0.2    # unknown true theta value
-n            <- 10     # sample size
-theta_values <- seq(0, 1, len = 51)
-B            <- 50
-yy_mat <- matrix(NA, nrow=length(theta_values), ncol=B)
-
-set.seed(1)
-
-for(r in 1:B){
-
-# simulate data: n = 5 many (unfair) coin tosses
-x <- sample(x       = c(0,1), 
-            size    = n, 
-            replace = TRUE, 
-            prob    = c(1-theta_true, theta_true)) 
-
-## number of heads (i.e., the number of "1"s in x)
-N_H <- sum(x)
-
-L_fct <- function(theta, N_H, n){
-    N_H * log(theta) + (n - N_H) * log(1 - theta)    
-}
-
-yy_mat[,r]  <- L_fct(theta = theta_values, N_H = N_H, n = n)
-
-plot(y = c(-20, 5), x = c(0,1), lwd=1.5, type = "n", 
-     ylab = "Log-Likelihood", xlab = expression(theta), axes = FALSE)
-  axis(2); axis(1, at=theta_true, labels = expression(theta[0])); box()
-
-# if(r > 1){
-# for(l in r-1){
-# lines(y = yy_mat[,l], x = theta_values, lwd=1.5, col="gray")
-# points(y = yy_mat[,l][which.max(yy_mat[,l])], 
-#        x = theta_values[which.max(yy_mat[,l])], 
-#        pch = 21, bg = "gray", col = "gray", cex = 1.5)
-# }
-# }
-
-lines(y = yy_mat[,r], x = theta_values, lwd=1.5)
-abline( v = theta_true, col="blue")
-points(y = yy_mat[,r][which.max(yy_mat[,r])], 
-       x = theta_values[which.max(yy_mat[,r])], 
-       pch = 21, bg = "red", col = "red", cex = 1.5)
-}
-```
 
 
 #### Solutions of Exercise 2. {-} 
