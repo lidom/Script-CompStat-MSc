@@ -582,12 +582,12 @@ Figure&nbsp;2.3: Gaussian density with <span class="math inline">\(\mu_g=X_i\)</
 <p>Such <strong>undesirable, trivial maximization solutions</strong> typically lead to implausible, non-useful estimation results.</p>
 <p>🤓 <strong>Analytic solution:</strong> It is a bit tedious, but one can maximize the log-likelihood function of the GMM (see <a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>) analytically. If you do this, you will get the following expressions: <span id="eq-AnalyticSol1"><span class="math display">\[
 \begin{align*}
-\hat\pi_g&amp;=\frac{1}{n}\sum_{i=1}^np_{ig},\quad
-\hat\mu_g=\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}X_i\\[2ex]
-\hat\sigma_g&amp;=\sqrt{\sum_{i=1}^n\frac{p_{ig}}{\left(\sum_{j=1}^np_{jg}\right)}\left(X_i-\hat\mu_g\right)^2},
+\hat\pi_g&amp;=\frac{1}{n}\sum_{i=1}^np_{ig,0},\quad
+\hat\mu_g=\sum_{i=1}^n\frac{p_{ig,0}}{\left(\sum_{j=1}^np_{jg}\right)}X_i\\[2ex]
+\hat\sigma_g&amp;=\sqrt{\sum_{i=1}^n\frac{p_{ig,0}}{\left(\sum_{j=1}^np_{jg}\right)}\left(X_i-\hat\mu_g\right)^2},
 \end{align*}
 \tag{2.3}\]</span></span> where <span id="eq-AnalyticSol2"><span class="math display">\[
-p_{ig}=\frac{\pi_{g,0}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
+p_{ig,0}=\frac{\pi_{g,0}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
 \tag{2.4}\]</span></span> for <span class="math inline">\(i=1,\dots,n\)</span> and <span class="math inline">\(g=1,\dots,G\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -609,7 +609,7 @@ Note
 <li><span class="math inline">\(\boldsymbol{\mu}_0=(\mu_{1,0},\dots,\mu_{G,0})\)</span> and</li>
 <li><span class="math inline">\(\boldsymbol{\sigma}_0=(\sigma_{1,0},\dots,\sigma_{G,0})\)</span>,</li>
 </ul>
-<p>because the probabilities <span class="math inline">\(0\leq p_{ig}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>) depend on these unknown parameters.</p>
+<p>because the probabilities <span class="math inline">\(0\leq p_{ig,0}\leq 1\)</span> (defined in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>) depend on these unknown parameters.</p>
 <p>Thus, the expressions for <span class="math inline">\(\hat\pi_g\)</span>, <span class="math inline">\(\hat\mu_g\)</span>, and <span class="math inline">\(\hat\sigma_g\)</span> in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> do not allow a direct estimation of the unknown parameters <span class="math inline">\(\pi_{g,0}\)</span>, <span class="math inline">\(\mu_{g,0}\)</span>, and <span class="math inline">\(\sigma_{g,0}\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -623,12 +623,12 @@ Prior and Posterior Probabilities
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Prior Probability:</strong> The probability <span class="math display">\[
-\pi_g = P\left(\text{Penguine $i$ belongs to group}\;g\right)
+\pi_{g,0} = P\left(\text{Penguine $i$ belongs to group}\;g\right)
 \]</span><br>
 in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>prior probability</strong>. The prior probability <span class="math inline">\(\pi_g\)</span> is the probability that a penguine <span class="math inline">\(i\)</span>, from which we know nothing about its flipper length, belongs to group <span class="math inline">\(g\)</span>.</li>
 <li><strong>Posterior Probability:</strong> The conditional probability. <span class="math display">\[
-p_{ig} = P\left(\text{Penguine $i$ belongs to group}\;g|X_i\right)
-\]</span> in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig}\)</span> is the probability that penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(X_{i}\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
+p_{ig,0} = P\left(\text{Penguine $i$ belongs to group}\;g|X_i\right)
+\]</span> in <a href="#eq-AnalyticSol2" class="quarto-xref">Equation&nbsp;<span>2.4</span></a> is called the <strong>posterior probability</strong>. The posterior probability <span class="math inline">\(p_{ig,0}\)</span> is the probability that penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(X_{i}\)</span> belongs to group <span class="math inline">\(g.\)</span></li>
 </ul>
 <p>We’ll discuss the prior and the posterior probability in more detail in <a href="#sec-PriorPosterior" class="quarto-xref"><span>Section 2.3.2</span></a>.</p>
 </div>
@@ -642,7 +642,7 @@ p_{ig} = P\left(\text{Penguine $i$ belongs to group}\;g|X_i\right)
 <ul>
 <li>the posterior probabilities <span class="math display">\[
 \begin{align*}
-p_{ig}
+p_{ig,0}
 &amp;= P\left(\text{Penguine $i$ belongs to group}\;g|X_i\right)\\[2ex]
 &amp; = \frac{\pi_{g,0}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
 \end{align*}
@@ -652,7 +652,7 @@ p_{ig}
 <ul>
 <li>the model parameters <span class="math display">\[
 (\pi_{g,0},\mu_{g,0},\sigma_{g,0}) \quad\text{for}\quad g=1,\dots,G
-\]</span> using <span class="math inline">\(\hat{\pi}_g\)</span>, <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> defined in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> using estimates <span class="math inline">\(\hat{p}_{ig}\)</span> for the unknown <span class="math inline">\(p_{ig}.\)</span></li>
+\]</span> using <span class="math inline">\(\hat{\pi}_g\)</span>, <span class="math inline">\(\hat{\mu}_g\)</span>, <span class="math inline">\(\hat{\sigma}_g\)</span> defined in <a href="#eq-AnalyticSol1" class="quarto-xref">Equation&nbsp;<span>2.3</span></a> using estimates <span class="math inline">\(\hat{p}_{ig}\)</span> for the unknown <span class="math inline">\(p_{ig,0}.\)</span></li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -855,18 +855,20 @@ Z_{ij}=0\quad \text{for all }j\neq g.
 </section>
 <section id="sec-PriorPosterior" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="sec-PriorPosterior"><span class="header-section-number">2.3.2</span> Prior and Posterior Probabilities</h3>
-<strong>Prior Probability</strong> <span class="math display">\[
+<p><strong>Prior Probability</strong> <span class="math display">\[
 \pi_{g,0} = P(Z_{ig}=1)
-\]</span> If we know nothing about the flipper length of penguin <span class="math inline">\(i\)</span> then we are left with the prior probability: <br>
+\]</span> If we know nothing about the flipper length of penguin <span class="math inline">\(i\)</span> then we are left with the prior probability:</p>
+<p><br></p>
 <center>
-“With probability <span class="math inline">\(\pi_g=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
+“With probability <span class="math inline">\(\pi_{g,0}=P(Z_{ig}=1)\)</span> penguin <span class="math inline">\(i\)</span> belongs to group <span class="math inline">\(g\)</span>.”
 </center>
 <p><br></p>
-<strong>Posterior Probability</strong><br> <span class="math display">\[
-p_{ig}=P(Z_{ig}=1|X_i)
-\]</span> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) which leads to the posterior probability: <br>
+<p><strong>Posterior Probability</strong><br> <span class="math display">\[
+p_{ig,0}=P(Z_{ig}=1|X_i)
+\]</span> If we know the flipper length of penguin <span class="math inline">\(i\)</span> then we can update the prior probability using <strong>Bayes’ Theorem</strong> (see <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a>) which leads to the posterior probability:</p>
+<p><br></p>
 <center>
-“With probability <span class="math inline">\(p_{ig}=P(Z_{ig}=1|X_i)\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(X_i\)</span> belongs to group <span class="math inline">\(g.\)</span>”
+“With probability <span class="math inline">\(p_{ig,0}=P(Z_{ig}=1|X_i),\)</span> penguin <span class="math inline">\(i\)</span> with flipper length <span class="math inline">\(X_i\)</span> belongs to group <span class="math inline">\(g.\)</span>”
 </center>
 <p><br></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -881,10 +883,11 @@ Bayes’ Theorem applied to the Gaussian mixture distribution
 <div class="callout-body-container callout-body">
 <p><span id="eq-posteriorGMD"><span class="math display">\[
 \begin{align*}
-p_{ig}
-=\overbrace{P(Z_{ig}=1|X_i)}^{\text{Posterior-prob}}
-&amp;=\frac{\pi_g\varphi(X_i;\mu_g,\sigma_g)}{f_{GMM}(X_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}\\[2ex]
-&amp;=\frac{\overbrace{P(Z_{ig}=1)}^{\text{prior-prob}}\varphi(X_i;\mu_g,\sigma_g)}{f_{GMM}(X_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})}
+p_{ig,0}
+&amp;=\overbrace{P(Z_{ig}=1|X_i)}^{\text{Posterior Prob.}}\\[2ex]
+&amp;\equiv P_{\theta_0}(Z_{ig}=1|X_i)\\[2ex]
+&amp;=\frac{\pi_{g,0}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}\\[2ex]
+&amp;=\frac{\overbrace{P(Z_{ig}=1)}^{\text{Prior Prob.}}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}
 \end{align*}
 \tag{2.5}\]</span></span></p>
 </div>
@@ -899,14 +902,14 @@ Where’s the <span style="color:#FF5733"><strong>Expectation</strong> </span> i
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The posterior probabilities <span class="math inline">\(p_{ig}\)</span> are conditional means: <span id="eq-posteriorMean"><span class="math display">\[
+<p>The posterior probabilities <span class="math inline">\(p_{ig,0}\)</span> are conditional means: <span id="eq-posteriorMean"><span class="math display">\[
 \begin{align*}
-p_{ig}
-&amp;= P(Z_{ig}=1|X_i)\\[2ex]
-&amp;= 1\cdot P(Z_{ig}=1|X_i)+0\cdot P(Z_{ig}=0|X_i)\\[2ex]
-&amp;= \mathbb{E}(Z_{ig}|X_i)\\
+p_{ig,0}
+&amp;=P_{\theta_0}(Z_{ig}=1|X_i)\\[2ex]
+&amp;= 1 \cdot P_{\theta_0}(Z_{ig}=1|X_i)+0\cdot P_{\theta_0}(Z_{ig}=0|X_i)\\[2ex]
+&amp;= \mathbb{E}_{\theta_0}(Z_{ig}|X_i)\\
 \end{align*}
-\tag{2.6}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig}\)</span> is the <strong>Expectation</strong>-step of the EM algorithm (<a href="#sec-EM1" class="quarto-xref"><span>Section 2.2.3</span></a>).</p>
+\tag{2.6}\]</span></span> Thus, the computation of <span class="math inline">\(p_{ig,0}\)</span> is the <strong><span style="color:#FF5733"><strong>E</strong></span>xpectation</strong>-step of the EM algorithm (<a href="#sec-EM1" class="quarto-xref"><span>Section 2.2.3</span></a>).</p>
 </div>
 </div>
 </section>
@@ -925,48 +928,54 @@ p_{ig}
 &amp;=\sum_{g=1}^G\left(\sum_{i=1}^n Z_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}\right)
 \end{align*}
 \]</span></p>
-<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> is <strong>easy to maximize</strong>: We can effectively <strong>maximize separately for each group <span class="math inline">\(g,\)</span></strong> which then involves only a single normal density function and not a too flexible mixture of normal density functions. This simplifies and stabilizes the maximization problem. By contrast to the normal mixture distribution, the normal density belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) for which maximum likelihood is known to work very well.</p>
+<p>Unlike the original log-likelihood function (<a href="#eq-logLikGMM" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>), the new log-likelihood function <span class="math inline">\(\tilde\ell\)</span> is <strong>easy to maximize</strong>: We can effectively <strong>maximize separately for each group <span class="math inline">\(g,\)</span></strong> which then involves only a single normal density function and not a too flexible mixture of normal density functions. By contrast to the normal mixture distribution, the normal density belongs to the exponential family (see <a href="Ch1_MaximumLikelihood.html#sec-MLAsymp" class="quarto-xref"><span>Section 1.4</span></a>) for which maximum likelihood is known to work very well. This stabilizes the maximization problem.</p>
 <p>Unfortunately, we only observe realizations of <span class="math inline">\(X_{i}=X_{i,obs},\)</span> but we do not observe realizations of the group assignment variables <span class="math display">\[
 (Z_{11},\dots,Z_{nG}).
 \]</span></p>
-<p><strong>Idea:</strong> Substitute the unobservable <span class="math inline">\(Z_{ig},\)</span> by their best (in the mean square sense) prediction; namely, the conditional mean (using <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> and <a href="#eq-posteriorMean" class="quarto-xref">Equation&nbsp;<span>2.6</span></a>) <span class="math display">\[
+<p><strong>Idea:</strong> Substitute the unobservable <span class="math inline">\(Z_{ig},\)</span> by their best (in the mean square sense) prediction <span class="math inline">\(\hat{Z}_{ig,0}\)</span>; namely, the conditional mean (using <a href="#eq-posteriorGMD" class="quarto-xref">Equation&nbsp;<span>2.5</span></a> and <a href="#eq-posteriorMean" class="quarto-xref">Equation&nbsp;<span>2.6</span></a>) <span class="math display">\[
 \begin{align*}
-p_{ig}
-&amp;=\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|X_i\right)\\[2ex]
-&amp;=\overbrace{P_{\boldsymbol{\theta}}(Z_{ig}=1|X_i)}^{\text{Posterior-prob}}\\[2ex]
-&amp;=\frac{\pi_g\varphi(X_i;\mu_g,\sigma_g)}{f_{GMM}(X_i;\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})},
+\hat{Z}_{ig,0}=p_{ig,0}
+&amp;=\mathbb{E}_{\boldsymbol{\theta}_0}\left(Z_{ig}|X_i\right)\\[2ex]
+&amp;=\overbrace{P_{\boldsymbol{\theta}_0}(Z_{ig}=1|X_i)}^{\text{Posterior Prob.}}\\[2ex]
+&amp;=\frac{\pi_{g,0}\varphi(X_i;\mu_{g,0},\sigma_{g,0})}{f_{GMM}(X_i;\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)}.
 \end{align*}
-\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the vector of parameter values under which the mean is computed.</p>
-<p>Effectively, this means to compute the conditional mean of <span class="math inline">\(\tilde{\ell}\)</span> given <span class="math inline">\(X_1,\dots,X_n,\)</span> which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
+\]</span> To actually compute these predictions, we need to substitute the unknown parameters <span class="math inline">\(\boldsymbol{\theta}_0=(\boldsymbol{\pi}_0,\boldsymbol{\mu}_0,\boldsymbol{\sigma}_0)\)</span> by their estimates <span class="math inline">\(\boldsymbol{\hat{\theta}}=(\boldsymbol{\hat{\pi}},\boldsymbol{\hat{\mu}},\boldsymbol{\hat{\sigma}}),\)</span> <span class="math display">\[
 \begin{align*}
-&amp;\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})|X_1,\dots,X_n\right)\\[2ex]
-&amp;\quad =\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}}\left(Z_{ig}|X_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
-&amp;\quad =\sum_{i=1}^n\sum_{g=1}^G\;\;\;\;\;\;p_{ig}\;\;\;\;\;\;\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\},
-\end{align*}
-\]</span> where <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma})\)</span> is used to denote the parameter vector.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<!-- Given the estimates $\hat{p}_{ig},$ for all $i=1,\dots,n$ and $g=1,\dots,G,$ we can compute ML-estimates $(\hat\pi_g, \hat\mu_g,\hat\sigma_g)$ for all $g=1,\dots,G.$ -->
-<!-- by maximizing $\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})|\mathbf{X}=\mathbf{x}\right).$  -->
-<p>We do not know the posterior probabilities, <span class="math inline">\(p_{ig},\)</span> but given estimates <span class="math inline">\(\hat{\boldsymbol{\theta}}=(\hat{\boldsymbol{\pi}}, \hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}}),\)</span> we can estimate them using<br>
-<span class="math display">\[
-\begin{align*}
-\hat{p}_{ig}
-&amp;=\hat{\mathbb{E}}_{\hat{\boldsymbol{\theta}}}(Z_{ig}|X_{i})\\[2ex]
-&amp;=\hat{P}_{\hat{\boldsymbol{\theta}}}(Z_{ig}=1|X_{i})\\[2ex]
-&amp;=\frac{\hat{\pi}_g\varphi(X_i;\hat{\mu}_g,\hat{\sigma}_g)}{f_{GMM}(X_i;\boldsymbol{\hat\pi},\boldsymbol{\hat\mu},\boldsymbol{\hat\sigma})}.
+\hat{Z}_{ig}=\hat{p}_{ig}
+&amp;=\mathbb{E}_{\boldsymbol{\hat{\theta}}}\left(Z_{ig}|X_i\right)\\[2ex]
+&amp;=\frac{\hat{\pi}_{g}\varphi(X_i;\hat{\mu}_{g},\hat{\sigma}_{g})}{f_{GMM}(X_i;\boldsymbol{\hat{\pi}},\boldsymbol{\hat{\mu}},\boldsymbol{\hat{\sigma}})}
 \end{align*}
 \]</span></p>
-</div>
-</div>
+<p>Effectively, this means to compute the conditional mean of <span class="math inline">\(\tilde{\ell}\)</span> given <span class="math inline">\(X_1,\dots,X_n,\)</span> which motivates the “Expectation”-Step in the EM-algorithm: <span class="math display">\[
+\begin{align*}
+&amp;\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}})=\mathbb{E}_{\boldsymbol{\hat{\theta}}}\Big(\tilde{\ell}(\;\underbrace{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}_{\boldsymbol{\theta}}\;)|X_1,\dots,X_n\Big)\\[2ex]
+&amp;\qquad=\mathbb{E}_{\boldsymbol{\hat{\theta}}}\left(\sum_{i=1}^n\sum_{g=1}^G Z_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}\Big|X_1,\dots,X_n\right)\\[2ex]
+&amp;\qquad=\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\hat{\theta}}}\left(Z_{ig}|X_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
+&amp;\qquad=\sum_{i=1}^n\sum_{g=1}^G\;\;\;\;\;\;\hat{Z}_{ig}\;\;\;\;\;\;\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\},
+\end{align*}
+\]</span> where <span class="math inline">\(\boldsymbol{\hat{\theta}}=(\boldsymbol{\hat{\pi}},\boldsymbol{\hat{\mu}},\boldsymbol{\hat{\sigma}})\)</span> denotes the estimated parameter vector used for computing the prediction <span class="math inline">\(\hat{Z}_{ig}\)</span> of <span class="math inline">\(Z_{ig}\)</span>.</p>
+<p>Thus, the new log-likelihood function <span class="math display">\[
+\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}})
+=\sum_{i=1}^n\sum_{g=1}^G \hat{Z}_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}
+\]</span> is the best approximation of the ideal, but infeasible, log-likelihood function <span class="math display">\[
+\tilde{\ell}(\;\underbrace{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}_{\boldsymbol{\theta}}\;)
+=\sum_{i=1}^n\sum_{g=1}^G Z_{ig}\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\},
+\]</span> using an estimate <span class="math inline">\(\boldsymbol{\hat{\theta}}=(\boldsymbol{\hat{\pi}},\boldsymbol{\hat{\mu}},\boldsymbol{\hat{\sigma}})\)</span> for computing the prediction <span class="math inline">\(\hat{Z}_{ig}\)</span> of the unobserved <span class="math inline">\(Z_{ig}.\)</span></p>
+<!-- Given the estimates $\hat{p}_{ig},$ for all $i=1,\dots,n$ and $g=1,\dots,G,$ we can compute ML-estimates $(\hat\pi_g, \hat\mu_g,\hat\sigma_g)$ for all $g=1,\dots,G.$ -->
+<!-- by maximizing $\mathbb{E}_{\boldsymbol{\theta}}\left(\tilde{\ell}(\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma};\mathbf{x},\mathbf{Z})|\mathbf{X}=\mathbf{x}\right).$  -->
+<!-- 
+::: {.callout-tip}
+We do not know the posterior probabilities, $p_{ig},$ but given estimates $\hat{\boldsymbol{\theta}}=(\hat{\boldsymbol{\pi}}, \hat{\boldsymbol{\mu}},\hat{\boldsymbol{\sigma}}),$ we can estimate them using  
+$$
+\begin{align*}
+\hat{p}_{ig}
+&=\hat{\mathbb{E}}_{\hat{\boldsymbol{\theta}}}(Z_{ig}|X_{i})\\[2ex]
+&=\hat{P}_{\hat{\boldsymbol{\theta}}}(Z_{ig}=1|X_{i})\\[2ex]
+&=\frac{\hat{\pi}_g\varphi(X_i;\hat{\mu}_g,\hat{\sigma}_g)}{f_{GMM}(X_i;\boldsymbol{\hat\pi},\boldsymbol{\hat\mu},\boldsymbol{\hat\sigma})}.
+\end{align*}
+$$ 
+::: 
+-->
 <p>The following EM algorithm differs only in notation from the version already discussed in <a href="#sec-EM1" class="quarto-xref"><span>Section 2.2.3</span></a>. The notation chosen here clarifies that the <strong>Expectation</strong>-step <em>updates the log-likelihood function</em> to be maximized in the <strong>Maximization</strong>-step.</p>
 <p>The chosen notation is abstract enough to transfer the basic idea of the EM algorithm to other maximum likelihood problems. <br></p>
 <ol type="1">
@@ -984,10 +993,10 @@ Tip
 &amp;\mathcal{Q}(\boldsymbol{\theta},\boldsymbol{\hat{\theta}}^{(r-1)})
 =\mathbb{E}_{\boldsymbol{\hat{\theta}}^{(r-1)}}\Big(\tilde{\ell}(\underbrace{\boldsymbol{\pi},\boldsymbol{\mu},\boldsymbol{\sigma}}_{\boldsymbol{\theta}})\big|X_1,\dots,X_n\Big)\\[2ex]
 &amp;=\sum_{i=1}^n\sum_{g=1}^G\mathbb{E}_{\boldsymbol{\theta}^{(r-1)}}\left(Z_{ig}\big|X_i\right)\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}\\[2ex]
-&amp;=\sum_{i=1}^n\sum_{g=1}^G\;\;\;\;\;\;\hat{p}_{ig}^{(r-1)}\;\;\;\;\;\;\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}
+&amp;=\sum_{i=1}^n\sum_{g=1}^G\;\;\;\;\;\;\hat{Z}_{ig}^{(r-1)}\;\;\;\;\;\;\left\{\ln\left(\pi_g\right)+\ln\left(\varphi(X_i;\mu_g,\sigma_g)\right)\right\}
 \end{align*}
 \]</span> where <span class="math display">\[
-\hat{p}_{ig}^{(r-1)} = \frac{\hat{\pi}_g^{(r-1)} \varphi(X_i;\hat{\mu}_g^{(r-1)},\hat{\sigma}_g^{(r-1)})}{f_{GMM}(X_i;\boldsymbol{\hat{\pi}}^{(r-1)},\boldsymbol{\hat{\mu}}^{(r-1)},\boldsymbol{\hat{\sigma}}^{(r-1)})}
+\hat{Z}_{ig}^{(r-1)} =\hat{p}_{ig}^{(r-1)} = \frac{\hat{\pi}_g^{(r-1)} \varphi(X_i;\hat{\mu}_g^{(r-1)},\hat{\sigma}_g^{(r-1)})}{f_{GMM}(X_i;\boldsymbol{\hat{\pi}}^{(r-1)},\boldsymbol{\hat{\mu}}^{(r-1)},\boldsymbol{\hat{\sigma}}^{(r-1)})}
 \]</span></p></li>
 <li><p><span style="color:#2471A3"><strong>(Maximization)</strong></span> Compute: <span class="math display">\[
 \begin{align*}
@@ -1009,10 +1018,10 @@ Tip
 </ul></li>
 <li><p><strong>Check Convergence:</strong><br> Stop if the value of the maximized log-likelihood function <span class="math display">\[
 \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r)},\boldsymbol{\hat{\theta}}^{(r-1)})
-\]</span> does not change anymore substantially; i.e., if <span class="math display">\[
+\]</span> does not change any more substantially; i.e., if <span class="math display">\[
 \mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r)},\boldsymbol{\hat{\theta}}^{(r-1)})
 \approx
-\mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r+1)},\boldsymbol{\hat{\theta}}^{(r-1+1)}),
+\mathcal{Q}(\boldsymbol{\hat{\theta}}^{(r+1)},\boldsymbol{\hat{\theta}}^{(r)}),
 \]</span> or, equivalently, if <span class="math display">\[
 \left|\boldsymbol{\hat{\theta}}^{(r+1)} - \boldsymbol{\hat{\theta}}^{(r)}\right|\approx 0.
 \]</span></p></li>
@@ -1021,7 +1030,7 @@ Tip
 </section>
 <section id="sec-CA" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-CA"><span class="header-section-number">2.4</span> Cluster Analysis</h2>
-<p>The problem of predicting a discrete random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
+<p>The problem of predicting a discrete (categorial) random variable <span class="math inline">\(Y\)</span> (i.e.&nbsp;the group label) from a possibly multivariate predictor <span class="math inline">\(X\)</span> is called <strong>classification</strong>.</p>
 <p>Consider iid data <span class="math display">\[
 (Y_1,X_1),\dots,(Y_n,X_n)\overset{\text{i.i.d.}}{\sim}(Y,X)
 \]</span> where</p>
@@ -1030,7 +1039,7 @@ Tip
 <li><span class="math inline">\(Y_i\)</span> takes values in some finite set <span class="math inline">\(\mathcal{Y}.\)</span></li>
 </ul>
 <blockquote class="blockquote">
-<p><strong>Note:</strong> Above in <a href="#sec-TrueViewEM" class="quarto-xref"><span>Section 2.3</span></a>, we used <span class="math inline">\(Z,\)</span> here we use <span class="math inline">\(Y\)</span> to denote the (unknown) group labels.</p>
+<p><strong>Note:</strong> Above in <a href="#sec-TrueViewEM" class="quarto-xref"><span>Section 2.3</span></a>, we used the dummy variables <span class="math inline">\(Z_{ig},\)</span> to encode the discrete (categorial) <span class="math inline">\(Y\)</span> group labels.</p>
 </blockquote>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1108,9 +1117,9 @@ m(x)
 \begin{align*}
 m(x)
 &amp;=P(Y=1|X=x)\\[2ex]
-&amp;=\frac{P(Y=1) f_{X|Y}(x|Y=1)}{P(Y=0) f_{X|Y}(x|Y=0)+P(Y=1) f_{X|Y}(x|Y=1) },\\[2ex]
+&amp;=\frac{P(Y=1) f_{X|Y}(x|Y=1)}{P(Y=0) f_{X|Y}(x|Y=0)+P(Y=1) f_{X|Y}(x|Y=1) }\\[2ex]
 &amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{\pi_0\;f_{X|Y}(x|Y=0)+\pi_1\;f_{X|Y}(x|Y=1)}\\[2ex]
-&amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{f_{X}(x)},
+&amp;=\frac{\pi_1\; f_{X|Y}(x|Y=1)}{f_{X}(x)}
 \end{align*}
 \tag{2.8}\]</span></span> where</p>
 <ol type="1">

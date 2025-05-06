@@ -366,20 +366,17 @@ Conclusion: Why Bootstrap?
 <section id="recap-the-empirical-distribution-function" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="recap-the-empirical-distribution-function"><span class="header-section-number">3.2</span> Recap: The Empirical Distribution Function</h2>
 <p>The distribution of a real-valued random variable <span class="math inline">\(X\)</span> can be completely described by its (cumulative) distribution function</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-cdf" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.1 ((Cumulative) Distribution Function (CDF))</strong></span> <span class="math display">\[
 F(x)=P(X \leq x)\quad\text{for all}\quad x\in\mathbb{R}.
 \]</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -392,20 +389,17 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}\sim X
 1_{(\text{TRUE})} &amp;=1\quad\text{and}\quad 1_{(\text{FALSE})}=0.
 \end{align*}
 \]</span></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-ecdf" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.2 (Empirical (Cumulative) Distribution Function (ECDF))</strong></span> <span class="math display">\[
 F_n(x)=\frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\quad\text{for all}\quad x\in\mathbb{R}.
 \]</span> I.e <span class="math inline">\(F_n(x)\)</span> is the proportion of observations with <span class="math inline">\(X_i\le x,\)</span> <span class="math inline">\(i=1,\dots,n.\)</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -556,16 +550,12 @@ F_n(x) &amp; \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
 \]</span> for each <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
 <p>That is, <span class="math inline">\(F_n(x)\)</span> is <strong>point-wise</strong> for each <span class="math inline">\(x\in\mathbb{R}\)</span> a weakly consistent estimator of <span class="math inline">\(F(x).\)</span></p>
 <p>The Clivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a> states that <span class="math inline">\(F_n\)</span> is even <strong>uniformly</strong> over <span class="math inline">\(\mathbb{R}\)</span> a consistent estimator of <span class="math inline">\(F.\)</span></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="thm-Clivenko-Cantelli" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 3.1 (Theorem of Glivenko-Cantelli)</strong></span> <br></p>
 <p>Let <span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}\sim X\)</span> denote a real-valued random sample with <span class="math inline">\(X\sim F.\)</span> Then <span class="math display">\[
@@ -578,6 +568,7 @@ Note
 </div>
 </div>
 </div>
+</div>
 </section>
 <section id="basic-idea-of-the-bootstrap" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="basic-idea-of-the-bootstrap">Basic Idea of the Bootstrap</h3>
@@ -587,7 +578,7 @@ P(X\in [a,b])=F(b)-F(a).
 \]</span> Let <span class="math inline">\(\theta_0\)</span> denote a distribution parameter of <span class="math inline">\(F\)</span> which we want to estimate, and let <span class="math inline">\(\hat\theta_n\)</span> denote an estimator of <span class="math inline">\(\theta_0.\)</span><br> If we would know <span class="math inline">\(F,\)</span> we could generate arbitrarily many realizations of the estimator <span class="math inline">\(\hat{\theta}_n\)</span> <span class="math display">\[
 \hat{\theta}_{n,1}, \hat{\theta}_{n,2}, \dots, \hat{\theta}_{n,m}
 \]</span> with <span class="math inline">\(m\to\infty\)</span> and do inference about <span class="math inline">\(\theta_0\)</span> using these realizations. Unfortunately, we don’t know <span class="math inline">\(F,\)</span> thus Monte Carlo inference is infeasible.</p>
-<p><strong>The idea of the bootstrap is to make the infeasible Monte Carlo inference feasible:</strong> <br> Instead of random sampling from <span class="math inline">\(F,\)</span> which is infeasible, the bootstrap uses random sampling from the known empirical distribution function <span class="math inline">\(F_n\)</span> to generate arbitrarily many <strong>bootstrap realizations</strong> of the estimator <span class="math inline">\(\hat{\theta}_n\)</span> <span class="math display">\[
+<p><strong>The idea of the bootstrap is to make the infeasible Monte Carlo inference feasible:</strong> <br> Instead of random sampling from <span class="math inline">\(F,\)</span> which is infeasible (as we don’t know <span class="math inline">\(F\)</span>), the bootstrap uses random sampling from the known empirical distribution function <span class="math inline">\(F_n\)</span> to generate arbitrarily many <strong>bootstrap realizations</strong> of the estimator <span class="math inline">\(\hat{\theta}_n\)</span> <span class="math display">\[
 \hat{\theta}^*_{n,1}, \hat{\theta}^*_{n,2}, \dots, \hat{\theta}^*_{n,m}
 \]</span> with <span class="math inline">\(m\to\infty\)</span> and do inference about <span class="math inline">\(\theta_0\)</span> using these bootstrap realizations.<br> This is justified asymptotically since for large <span class="math inline">\(n,\)</span> the empirical distribution <span class="math inline">\(F_n\)</span> is “close” to the unknown distribution <span class="math inline">\(F\)</span> (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>). That is, for <span class="math inline">\(n\rightarrow\infty\)</span> the relative frequency of observations <span class="math inline">\(X_i\)</span> in <span class="math inline">\([a,b]\)</span> converges to <span class="math inline">\(P(X\in [a,b])\)</span><br>
 <span class="math display">\[
@@ -672,16 +663,12 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 \underbrace{\text{distribution}\left(\sqrt{n}\big(\hat{\theta}_n-\theta_0\big)\right)}_{H_n}.
 \]</span> for large <span class="math inline">\(n.\)</span></p>
 <p>The following definition states this more precisely.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-BootstrapConsistency" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.3 (Bootstrap Consistency)</strong></span> <br> Let the limit (as <span class="math inline">\(n\to\infty\)</span>) of <span class="math inline">\(H_n\)</span> be a non-degenerate distribution. Then the bootstrap is <strong>consistent</strong> if and only if <span class="math display">\[
 \sup_{x\in\mathbb{R}} \Big|\;
@@ -689,6 +676,7 @@ Note
   -\underbrace{P\Big(\sqrt{n}\big(\hat\theta_n -\theta_0\big)\le x\Big)}_{H_n(x)}
   \Big|\rightarrow_p 0
 \]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -1104,20 +1092,17 @@ Note
 <p>In this chapter we continue our theoretical consideration of the Bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right),
 \]</span> but consider now the total distribution—not only mean and variance.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-CharacFun" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.4 (Characteristic Function)</strong></span> Let <span class="math inline">\(X\in\mathbb{R}\)</span> be a random variable and let <span class="math inline">\(\mathcal{i}=\sqrt{-1}\)</span> be the imaginary unit. Then the function <span class="math inline">\(\psi_X:\mathbb{R}\to\mathbb{C}\)</span> defined by <span class="math display">\[
 \psi_X(t) = \mathbb{E}(\exp(\mathcal{i}tX))
 \]</span> is called <strong>the characteristic function</strong> of <span class="math inline">\(X.\)</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -1618,22 +1603,19 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 <p>The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e.&nbsp;parametric) assumption.</p>
 <p>In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-<span class="math inline">\(t\)</span> method (one also speaks of the “studentized bootstrap”), which is also a nonparametric bootstrap method. The construction relies on so-called <strong>(asymptotically) pivotal statistics</strong>.</p>
 <p>Let <span class="math inline">\(X_1,\dots,X_n\)</span> be an i.i.d. random sample and assume that the distribution of <span class="math inline">\(X\)</span> depends on an unknown parameter (or parameter vector) <span class="math inline">\(\theta\)</span>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-pivotal" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.5 ((Asymptotically) Pivotal Statistics)</strong></span> <br></p>
 <p>A statistic (i.e.&nbsp;a function of the random sample) <span class="math display">\[
 T_n\equiv T(X_1,\dots,X_n)
 \]</span> is called <strong>exact pivotal</strong>, if the distribution of <span class="math inline">\(T_n\)</span> does not depend on any unknown population parameter.</p>
 <p>A statistic <span class="math inline">\(T_n\)</span> is called <strong>asymptotically pivotal</strong>, if the asymptotic distribution of <span class="math inline">\(T_n\)</span> does not depend on any unknown population parameter.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1842,16 +1824,12 @@ Y_i=X_i^T\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 \]</span> where <span class="math inline">\(Y_i\in\mathbb{R}\)</span> denotes the response (or “dependent”) variable and <span class="math display">\[
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p
 \]</span> denotes the vector of predictor variables. In the following, we differentiate between a <strong>random design</strong> and a <strong>fixed design</strong>.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <div id="def-RandomFixedDesign" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 3.6 (Random and fixed design)</strong></span> <br></p>
 <p><strong>Random Design:</strong> <span class="math display">\[
@@ -1864,6 +1842,7 @@ Note
 <p><strong>Fixed Design:</strong> <span class="math display">\[
 X_1, X_2, \dots, X_n
 \]</span> are deterministic vectors in <span class="math inline">\(\mathbb{R}^p\)</span> and <span class="math inline">\(\varepsilon_1,\dots,\varepsilon_n\)</span> are i.i.d. random variables with zero mean, <span class="math inline">\(\mathbb{E}(\varepsilon_i)=0,\)</span> and <strong>homoskedastic errors</strong>, <span class="math inline">\(\mathbb{E}(\varepsilon_i^2)=\sigma^2_0,\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></p>
+</div>
 </div>
 </div>
 </div>
@@ -2621,6 +2600,7 @@ Let us consider the finite-$n$ (with $n=20$) performance of the classic confiden
 
 
 
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -2685,10 +2665,12 @@ abline(v=mean,col="blue", lwd=1.5)
 
 
 
+
 ##### (a) Part 2: Classic Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 Now, we consider the  finite-$n$ performance of the classic confidence interval under the same setup as above, but for the case where $F$ is a **non-normal distribution**, namely, a $\chi^2_1$-distribution with $1$ degree of freedom:
+
 
 
 
@@ -2755,10 +2737,12 @@ abline(v=mean,col="blue", lwd=1.5)
 
 
 
+
 ##### (b) Basic Bootstrap Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
 Let's generate an iid random sample $S_n$ with $X_i\sim\chi^2_1$ and the corresponding estimate $\bar X_n$:
+
 
 
 
@@ -2791,6 +2775,7 @@ S_n  <- rchisq(n, df=df)
 
 
 
+
 The **standard bootstrap confidence interval** is given by (see lecture script):
 $$
 \left[2\bar{X}_n - \hat{q}^\ast_{n,1-\alpha/2}, 2\bar{X}_n - \hat{q}^\ast_{n,\alpha/2}\right],
@@ -2802,6 +2787,7 @@ $$
 \bar{X}_{n,1}^\ast,\dots,\bar{X}_{n,m}^\ast,
 $$ 
 compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2},$ and plot all of this:
+
 
 
 
@@ -2839,7 +2825,9 @@ abline(v=c(q.1,q.2),col="red")
 
 
 
+
 Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:
+
 
 
 
@@ -2873,7 +2861,9 @@ c(CI.Basic.Bootstr.lo, CI.Basic.Bootstr.up)
 
 
 
+
 Now, we can investigate the finite-$n$ performance of the standard bootstrap confidence interval:
+
 
 
 
@@ -2948,6 +2938,7 @@ abline(v=mean,col="blue", lwd=1.5)
 
 
 
+
 ##### (c) Bootstrap-$t$ Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
 
 
@@ -2968,6 +2959,7 @@ $$
 \sqrt{n}\frac{\bar{X}_{n,j}^\ast-\bar{X}_n}{s_{n,j}^\ast}\quad j=1,\dots,m,
 $$
 compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2}$, and plot all of this:
+
 
 
 
@@ -3022,7 +3014,9 @@ abline(v=c(q.1,q.2),col="red")
 
 
 
+
 Using our preparatory work above, the bootstrap-$t$ confidence interval can be computed as following:
+
 
 
 
@@ -3056,7 +3050,9 @@ c(CI.Bstr.t.lo, CI.Bstr.t.up)
 
 
 
+
 Let us investigate the finite-$n$ performance of the bootstrap-t confidence interval:
+
 
 
 
@@ -3130,6 +3126,7 @@ abline(v=mean,col="blue", lwd=1.5)
 ![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-14-1.png){width=672}
 :::
 :::
+
 
 
 
