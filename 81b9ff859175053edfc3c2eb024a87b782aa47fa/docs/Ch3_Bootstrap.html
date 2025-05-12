@@ -334,20 +334,20 @@ Var\left(\alpha X + (1-\alpha)Y\right).
 \tag{3.1}\]</span></span> Using a data set that contains past measurements <span class="math display">\[
 ((X_1,Y_1),\dots,(X_n,Y_n))
 \]</span> for <span class="math inline">\(X\)</span> and <span class="math inline">\(Y,\)</span> we can estimate the unknown <span class="math inline">\(\alpha\)</span> by plugging in estimates of the variances and covariances <span id="eq-alphahat"><span class="math display">\[
-\hat\alpha = \frac{\hat\sigma^2_Y - \hat\sigma_{XY}}{\hat\sigma^2_X + \hat\sigma^2_Y - 2\hat\sigma_{XY}}
+\hat\alpha_n = \frac{\hat\sigma^2_{Y,n} - \hat\sigma_{XY,n}}{\hat\sigma^2_{X,n} + \hat\sigma^2_{Y,n} - 2\hat\sigma_{XY,n}}
 \tag{3.2}\]</span></span> with <span class="math display">\[
 \begin{align*}
-\hat{\sigma}^2_X&amp;=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2\\
-\hat{\sigma}^2_Y&amp;=\frac{1}{n}\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2\\
-\hat{\sigma}_{XY}&amp;=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right),
+\hat{\sigma}^2_{X,n}&amp;=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2\\
+\hat{\sigma}^2_{Y,n}&amp;=\frac{1}{n}\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2\\
+\hat{\sigma}_{XY,n}&amp;=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right),
 \end{align*}
 \]</span> where <span class="math inline">\(\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i\)</span> and <span class="math inline">\(\bar{Y}=\frac{1}{n}\sum_{i=1}^nY_i.\)</span></p>
 <p>It is natural to wish to quantify the accuracy of our estimator <span class="math display">\[
-\hat\alpha\approx \alpha.
+\hat\alpha_n\approx \alpha.
 \]</span></p>
 <p>For instance, to construct a confidence interval we need to know the standard error of the estimator <span class="math inline">\(\hat\alpha\)</span>, <span class="math display">\[
-\sqrt{Var(\hat\alpha)} = \operatorname{SE}(\hat\alpha)=?
-\]</span> However, computing <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> is here difficult due to the definition of <span class="math inline">\(\hat\alpha\)</span> in <a href="#eq-alphahat" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> which contains variance estimates also in the denominator.</p>
+\sqrt{Var(\hat\alpha_n)} = \operatorname{SE}(\hat\alpha_n)=?
+\]</span> However, deriving an explicit expression for <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> is difficult here due to the definition of <span class="math inline">\(\hat\alpha_n\)</span> in <a href="#eq-alphahat" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> which contains variance estimators also in the denominator.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -358,8 +358,8 @@ Conclusion: Why Bootstrap?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap" class="quarto-xref"><span>Section 3.3</span></a>) which allows us to approximate <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> simply by resampling from the data observed; i.e.&nbsp;without the need of an explicite formula of a consistent estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> to become useful.</p>
-<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(t\)</span> Method</strong> (<a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>). The Bootstrap-<span class="math inline">\(t\)</span> Method is found to be <strong>more accurate</strong> than the standard asymptotic Normality results.</p>
+<p>In cases as described above, we are happy to use the <strong>Basic Bootstrap Method</strong> (<a href="#sec-BasicBootstrap" class="quarto-xref"><span>Section 3.3</span></a>) which allows estimating <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> by resampling from the data observed; i.e.&nbsp;without the need of an explicit formula of a consistent estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha).\)</span> The <strong>Basic Bootstrap Method</strong> is found to be as accurate as the standard asymptotic normality results which, however, require an explicit formula of an estimator of <span class="math inline">\(\operatorname{SE}(\hat\alpha)\)</span> to become useful.</p>
+<p>If we have a consistent estimator for the <span class="math inline">\(\operatorname{SE}(\hat\alpha),\)</span> then we can make use of this estimator by applying the <strong>Bootstrap-<span class="math inline">\(\mathbf{t}\)</span> Method</strong> (<a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>). The Bootstrap-<span class="math inline">\(t\)</span> Method is found to be <strong>more accurate</strong> than the standard asymptotic normality results.</p>
 </div>
 </div>
 </section>

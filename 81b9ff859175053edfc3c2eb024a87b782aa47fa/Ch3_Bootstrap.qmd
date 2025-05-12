@@ -54,14 +54,14 @@ $$
 $$
 for $X$ and $Y,$ we can estimate the unknown $\alpha$ by plugging in estimates of the variances and covariances
 $$
-\hat\alpha = \frac{\hat\sigma^2_Y - \hat\sigma_{XY}}{\hat\sigma^2_X + \hat\sigma^2_Y - 2\hat\sigma_{XY}}
+\hat\alpha_n = \frac{\hat\sigma^2_{Y,n} - \hat\sigma_{XY,n}}{\hat\sigma^2_{X,n} + \hat\sigma^2_{Y,n} - 2\hat\sigma_{XY,n}}
 $${#eq-alphahat}
 with 
 $$
 \begin{align*}
-\hat{\sigma}^2_X&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2\\ 
-\hat{\sigma}^2_Y&=\frac{1}{n}\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2\\ 
-\hat{\sigma}_{XY}&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right),
+\hat{\sigma}^2_{X,n}&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2\\ 
+\hat{\sigma}^2_{Y,n}&=\frac{1}{n}\sum_{i=1}^n\left(Y_i-\bar{Y}\right)^2\\ 
+\hat{\sigma}_{XY,n}&=\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)\left(Y_i-\bar{Y}\right),
 \end{align*}
 $$
 where 
@@ -70,21 +70,21 @@ $\bar{Y}=\frac{1}{n}\sum_{i=1}^nY_i.$
 
 It is natural to wish to quantify the accuracy of our estimator 
 $$
-\hat\alpha\approx \alpha.
+\hat\alpha_n\approx \alpha.
 $$ 
 
 For instance, to construct a confidence interval we need to know the standard error of the estimator $\hat\alpha$, 
 $$
-\sqrt{Var(\hat\alpha)} = \operatorname{SE}(\hat\alpha)=?
+\sqrt{Var(\hat\alpha_n)} = \operatorname{SE}(\hat\alpha_n)=?
 $$
-However, computing $\operatorname{SE}(\hat\alpha)$ is here difficult due to the definition of $\hat\alpha$ in @eq-alphahat which contains variance estimates also in the denominator. 
+However, deriving an explicit expression for $\operatorname{SE}(\hat\alpha)$ is difficult here due to the definition of $\hat\alpha_n$ in @eq-alphahat which contains variance estimators also in the denominator. 
 
 ::: {.callout-note}
 # Conclusion: Why Bootstrap? 
-In cases as described above, we are happy to use the **Basic Bootstrap Method** (@sec-BasicBootstrap) which allows us to approximate $\operatorname{SE}(\hat\alpha)$ simply by resampling from the data observed; i.e. without the need of an explicite formula of a consistent estimator of $\operatorname{SE}(\hat\alpha).$ The Basic Bootstrap Method is found to be as accurate as the standard asymptotic Normality results which, however, require an explicite formula of an estimator of $\operatorname{SE}(\hat\alpha)$ to become useful.
+In cases as described above, we are happy to use the **Basic Bootstrap Method** (@sec-BasicBootstrap) which allows estimating $\operatorname{SE}(\hat\alpha)$ by resampling from the data observed; i.e. without the need of an explicit formula of a consistent estimator of $\operatorname{SE}(\hat\alpha).$ The **Basic Bootstrap Method** is found to be as accurate as the standard asymptotic normality results which, however, require an explicit formula of an estimator of $\operatorname{SE}(\hat\alpha)$ to become useful.
 
 
-If we have a consistent estimator for the $\operatorname{SE}(\hat\alpha),$ then we can make use of this estimator by applying the **Bootstrap-$t$ Method** (@sec-BootT). The Bootstrap-$t$ Method is found to be **more accurate** than the standard asymptotic Normality results. 
+If we have a consistent estimator for the $\operatorname{SE}(\hat\alpha),$ then we can make use of this estimator by applying the **Bootstrap-$\mathbf{t}$ Method** (@sec-BootT). The Bootstrap-$t$ Method is found to be **more accurate** than the standard asymptotic normality results. 
 :::
 
 
