@@ -174,20 +174,20 @@ $$
 
 
 
-::: {.callout-note icon=false} 
+::: {.callout-note appearance="minimal"} 
 ##
 ::: {#exm-ecdfexample}
 # Computing the empirical distribution function $F_n$ in `R` 
 
 <br>
 
-Some data (i.e. an observed realization of an random sample $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}F$):
+Some data, i.e. an observed realization of a random sample $X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}F:$
 
 | $i$  | $X_i$| 
 |------|------|
 | 1    | 5.20 |
 | 2    | 4.80 |
-| 3    | 5.40 |
+| 3    | 5.30 |
 | 4    | 4.60 |
 | 5    | 6.10 |
 | 6    | 5.40 |
@@ -212,10 +212,24 @@ The `R` function `ecdf()` returns a function that gives the values of $F_n(x):$
 ## Note: ecdf() returns a function that can be evaluated! 
 myecdf_fun(5.0)
 ```
+
+
+Sampling from the empirical distribution function $F_n$ is equivalent to resampling (with replacement and with equal probabilities) data points from the observed data `observedSample`. 
+
+```{r}
+n        <- length(observedSample)
+
+resample <- sample(observedSample, 
+                   size    = n, 
+                   replace = TRUE)
+resample
+```
+
+
 :::
 :::
 
-#### Statistical Properties of $F_n$ {-}
+#### **Statistical Properties of $F_n$** {-}
 
 $F_n(x)$ depends on the i.i.d. random sample $X_1,\dots,X_n$ and thus is itself a **random function**. 
 
@@ -229,9 +243,9 @@ I.e., $nF_n(x)$ has a binomial distribution with parameters:
 * $n$ ("number of trials") 
 * $p=F(x)$ ("probability of success on a single trial").
 
-> **Note:** The result in @eq-ecdfDistr holds for any $F.$ Therefore, $nF_n$ and thus also $F_n$ is called **distribution free** 
+> **Note:** The result in @eq-ecdfDistr holds for any $F.$ Therefore, $nF_n,$ and thus also $F_n,$ is called **distribution free** 
 
-Thus, 
+@eq-ecdfDistr implies that
 $$
 \begin{align*}
 \mathbb{E}(nF_n(x))& = np = nF(x)\\[2ex]
@@ -264,9 +278,9 @@ F_n(x) & \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
 $$
 for each $x\in\mathbb{R}.$
 
-That is, $F_n(x)$ is **point-wise** for each $x\in\mathbb{R}$ a weakly consistent estimator of $F(x).$  
+That is, $F_n(x)$ is a **pointwise consistent** estimator of $F(x)$ for each $x\in\mathbb{R}.$  
 
-The Clivenko-Cantelli @thm-Clivenko-Cantelli states that $F_n$ is even **uniformly** over $\mathbb{R}$ a consistent estimator of $F.$
+The Clivenko-Cantelli @thm-Clivenko-Cantelli states that $F_n$ is even an **uniformly consistent** estimator of $F.$
 
 ::: {.callout-note appearance="minimal"} 
 ## 

@@ -250,6 +250,7 @@ window.Quarto = {
   <li><a href="#choice-of-the-bandwidth-parameter" id="toc-choice-of-the-bandwidth-parameter" class="nav-link" data-scroll-target="#choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</a></li>
   </ul></li>
   <li><a href="#accuracy-of-the-kernel-density-estimator" id="toc-accuracy-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</a></li>
+  <li><a href="#globally-optimal-bandwidth-choice" id="toc-globally-optimal-bandwidth-choice" class="nav-link" data-scroll-target="#globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -627,7 +628,7 @@ Reminder: Definition of a Density Function
 <p>That is, if <span class="math inline">\(K\)</span> is a density function, then also <span class="math inline">\(f_{nh}\)</span> is a density function.</p>
 <p>This inheritance of the properties of <span class="math inline">\(K\)</span> to the properties of <span class="math inline">\(f_{nh}\)</span> also holds for the smoothness properties:</p>
 <ul>
-<li>Smoothness of <span class="math inline">\(K\)</span>: If <span class="math inline">\(K\)</span> is continuously differentiable <span class="math inline">\(\quad\Rightarrow\quad\)</span> <span class="math inline">\(\hat{f}_h\)</span> is continuously differentiable</li>
+<li>Smoothness of <span class="math inline">\(K\)</span>: If <span class="math inline">\(K\)</span> is continuously differentiable <span class="math inline">\(\quad\Rightarrow\quad\)</span> <span class="math inline">\(\hat{f}_{nh}\)</span> is continuously differentiable</li>
 </ul>
 <section id="theoretical-requirements-on-the-kernel-function" class="level3" data-number="4.3.1">
 <h3 data-number="4.3.1" class="anchored" data-anchor-id="theoretical-requirements-on-the-kernel-function"><span class="header-section-number">4.3.1</span> Theoretical Requirements on the Kernel Function</h3>
@@ -779,16 +780,16 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 <p>Commonly used loss-functions:</p>
 <ul>
 <li><strong>Integrated Squared Error (ISE)</strong> <span class="math display">\[
-\mathrm{ISE}(\hat{f}_h(x))=\int (\hat{f}_h(x)-f(x))^2\,dx
-\]</span> Caution: The <span class="math inline">\(\mathrm{ISE}(\hat{f}_h(x))\)</span> is a random quantity.</li>
+\mathrm{ISE}(\hat{f}_{nh}(x))=\int (\hat{f}_{nh}(x)-f(x))^2\,dx
+\]</span> Caution: The <span class="math inline">\(\mathrm{ISE}(\hat{f}_{nh}(x))\)</span> is a random quantity.</li>
 <li><strong>Mean Integrated Squared Error (MISE):</strong> <span class="math display">\[
-\mathrm{MISE}(\hat{f}_h)=\int\mathrm{MSE}(\hat{f}_h(x))\,dx=\int \mathbb{E}(\hat{f}_h(x)-f(x))^2\,dx
+\mathrm{MISE}(\hat{f}_{nh})=\int\mathrm{MSE}(\hat{f}_{nh}(x))\,dx=\int \mathbb{E}(\hat{f}_{nh}(x)-f(x))^2\,dx
 \]</span></li>
 <li><strong>Asymptotic Mean Integrated Squared Error (AMISE):</strong> <span class="math display">\[
-\mathrm{AMISE}(\hat{f}_h) = \mathrm{MISE}(\hat{f}_h) + o_P(1)
+\mathrm{AMISE}(\hat{f}_{nh}) = \mathrm{MISE}(\hat{f}_{nh}) + o_P(1)
 \]</span> I.e. the asymptotic approximation of the <span class="math inline">\(\mathrm{MISE}.\)</span></li>
 </ul>
-<p>The minimum requirement on <span class="math inline">\(\hat{f}_h\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_h\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows indefinitely (<span class="math inline">\(n \to \infty\)</span>),</p>
+<p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows indefinitely (<span class="math inline">\(n \to \infty\)</span>),</p>
 <p>Remember: We’ll call an estimator <span class="math inline">\(\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)\)</span> <strong>consistent,</strong> if <span class="math display">\[
 \hat\theta_n\to_p\theta.
 \]</span> Unless a different notion of convergence (such as MSE or “almost surely”) has been specified.</p>
@@ -802,16 +803,17 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 \]</span></li>
 </ul>
 <p>For <strong>pointwise consistency</strong> the following Assumptions are needed:</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Assumptions for Showing Pointwise Consistency and Asymptotic Normality
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>Under the following assumptions:</p>
 <ul>
 <li>Sequence of bandwidth parameters <span class="math inline">\(h = h_n:\)</span>
 <ul>
@@ -831,42 +833,123 @@ Assumptions for Showing Pointwise Consistency and Asymptotic Normality
 <li><span class="math inline">\(\int K(z)dz = 1\)</span></li>
 </ul></li>
 </ul>
+<p>one can show <strong>pointwise consistency</strong> for a given <span class="math inline">\(x,\)</span></p>
+<p><span class="math display">\[
+\hat{f}_{nh}(x)\to_P f(x),\quad \text{as}\quad n\to\infty
+\]</span></p>
 <!-- %(Erfüllt, falls $K$ eine um $0$ symmetrische Dichte auf einer kompakten Menge, z.B., $K:[-1,1]\to[0,\infty[$, ist.  
 -->
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Note:</strong> Under the additional, more restrictive bandwidth assumption that <span class="math display">\[
+h_n \to 0\quad\text{and}\quad n h_{n}^{\textcolor{red}{2}} \to \infty,\quad\text{as}\quad n\to\infty,
+\]</span> one can also show <strong>uniform consistency</strong> (see <span class="citation" data-cites="parzen1962estimation">Parzen (<a href="#ref-parzen1962estimation" role="doc-biblioref">1962</a>)</span>), <span class="math display">\[
+\sup_{x}\left|\hat{f}_{nh}(x) - f(x)\right|\to_P 0,\quad \text{as}\quad n\to\infty.
+\]</span></p>
 </div>
 </div>
-<p><strong>Proof-Strategy for showing pointwise consistency:</strong> Show that the pointwise Mean Squared Error (MSE) for a given <span class="math inline">\(x,\)</span> <span class="math display">\[
-\mathrm{MSE}(\hat{f}_h(x)),
-\]</span> converges to zero as <span class="math inline">\(n\to\infty\)</span> under the above assumptions. I.e., that <span class="math display">\[
+</div>
+</div>
+</div>
+<section id="proof-strategy-for-showing-pointwise-consistency" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="proof-strategy-for-showing-pointwise-consistency"><strong>Proof-Strategy for Showing Pointwise Consistency</strong></h4>
+<p>Under the above assumptions, show that the pointwise Mean Squared Error (MSE) converges to zero as <span class="math inline">\(n\to\infty\)</span> for a given <span class="math inline">\(x,\)</span> <span class="math display">\[
+\mathrm{MSE}(\hat{f}_{nh}(x))\to 0,\quad \text{as}\quad n\to\infty.
+\]</span> by showing that both, the variance <span class="math display">\[
+Var\left(\hat{f}_{h_n}(x)  \right)
+\]</span> and the squared bias <span class="math display">\[
+\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2
+\]</span> converge to zero as <span class="math inline">\(n\to\infty,\)</span> <span class="math display">\[
 \begin{align*}
 \mathrm{MSE}\left(\hat{f}_{h_n}(x) \right)
 &amp;=
 \mathbb{E}\left(\hat{f}_{h_n}(x) - f(x) \right)^2\\[2ex]
 &amp;=
-\mathbb{V}\left(\hat{f}_{h_n}(x)  \right)
+\underbrace{Var\left(\hat{f}_{h_n}(x)  \right)}_{\underset{n\to\infty}\longrightarrow 0}
 +
-\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2
-\underset{n\to\infty}\longrightarrow 0.
+\underbrace{\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2.}_{\underset{n\to\infty}\longrightarrow 0}
 \end{align*}
 \]</span></p>
 <p><strong>Remember:</strong> Convergence in quadratic mean implies convergence in probability.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pointwise Asymptotic Normality
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Under the above pointwise consistency assumptions one can also show pointwise asymptotic normality: <span class="math display">\[
 \begin{equation*}
 \frac{ \sqrt{n\,h_n}\left(\hat{f}_{nh}(x) - \mathbb{E} \left( \hat{f}_{nh}(x) \right)\right)}{
-     \sqrt{ \mathbb{V} \left( \hat{f}_{nh}(x) \right) }}
+     \sqrt{ Var\left( \hat{f}_{nh}(x) \right) }}
    \overset{a}{\sim}\mathcal{N}(0,1)
 \end{equation*}
 \]</span> for <span class="math inline">\(n\to\infty,\)</span> which implies that we can construct pointwise confidence intervals (etc.)</p>
 <p><strong>Caution:</strong> Generally, we have for finite <span class="math inline">\(n\)</span> that: <span class="math display">\[
-\mathbb{E} \left( \hat{f}_{h_n}(x) \right)\neq f(x);
+\mathbb{E}\left( \hat{f}_{nh}(x) \right)\neq f(x);
 \]</span> i.e.&nbsp;for finite <span class="math inline">\(n\)</span> there is generally a non-negligible estimation bias.</p>
-<p><strong>Note:</strong> Under the additional, more restrictive bandwidth assumption that <span class="math display">\[
-h_n \to 0\quad\text{and}\quad n h_{n}^{\textcolor{red}{2}} \to \infty,\quad\text{as}\quad n\to\infty,
-\]</span> one can also show <strong>uniform</strong> consistency (see <span class="citation" data-cites="parzen1962estimation">Parzen (<a href="#ref-parzen1962estimation" role="doc-biblioref">1962</a>)</span>) <span class="math display">\[
-\begin{equation*}
-\sup_{x} \left| \hat{f}_{nh}(x) - f(x) \right| \rightarrow_P 0.
-\end{equation*}
+</div>
+</div>
+</section>
+</section>
+<section id="globally-optimal-bandwidth-choice" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</h2>
+<p>One distinguishes <strong>locally optimal</strong> bandwidth choices for estimating <span class="math inline">\(f(x)\)</span> at a given <span class="math inline">\(x,\)</span> and <strong>globally optimal</strong> bandwidth choices that are optimal with respect to a <strong>global loss function</strong>.</p>
+<p>Typically, one determines a <strong>globally optimal</strong> bandwidth by minimizing the Mean Integrated Squared Error loss function <span class="math display">\[
+\begin{align*}
+\mathrm{MISE}(\hat{f}_{nh})
+&amp;=\int\mathrm{MSE}(\hat{f}_{nh}(x))\,dx\\[2ex]
+&amp;=\int \mathbb{E}\left[(\hat{f}_{nh}(x)-f(x))^2\right]\,dx\\[2ex]
+&amp;=\int Var\left(\hat{f}_{nh}(x)  \right) \,dx +
+  \int \left(\mathrm{Bias} \left( \hat{f}_{nh}(x) \right)\right)^2\,dx.
+\end{align*}
 \]</span></p>
+<p><strong>Problem:</strong> The exact computation of <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh})\)</span> is only possible under very restrictive, simplifying assumptions such as assuming that <span class="math inline">\(f\)</span> is a specific parametric density function—an assumption we do not want to make!</p>
+<p><strong>Solution:</strong> Therefore, we compute an asymptotic approximation to <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh}),\)</span> <span class="math display">\[
+\begin{align*}
+\mathrm{MISE}(\hat{f}_{nh})&amp;\approx \mathrm{AMISE}(\hat{f}_{nh})\\[2ex]
+&amp;=\int AVar\left(\hat{f}_{nh}(x)  \right) \,dx +
+  \int \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2\,dx\\[2ex]
+\end{align*}
+\]</span> which becomes good as <span class="math inline">\(n\to\infty,\)</span> and which can be done without making restrictive parametric assumptions on <span class="math inline">\(f.\)</span></p>
+<p>The asymptotic approximation <span class="math inline">\(\mathrm{AMISE}(\hat{f}_{nh})\)</span> for <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh})\)</span> is the most often used loss function for determining a global choice of the bandwidth <span class="math inline">\(h.\)</span></p>
+<section id="asymptotic-approximation-of-mathrmmisehatf_h" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="asymptotic-approximation-of-mathrmmisehatf_h"><strong>Asymptotic Approximation of <span class="math inline">\(\mathrm{MISE}(\hat{f}_h)\)</span></strong></h4>
+<p>Computing the pointwise mean: <span class="math display">\[
+\begin{align*}
+\mathbb{E}\left(\hat{f}_{nh}(x)\right)
+&amp;=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}K\left(\frac{x-X_i}{h}\right)\right)\\[2ex]
+&amp;=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\mathbb{E}\left(K\left(\frac{x-X_i}{h}\right)\right)\\[2ex]
+  &amp;=\mathbb{E}\left(\frac{1}{h} K\left(\frac{x - X_i}{h}\right)\right)\\[2ex]
+  &amp;=\int_{-\infty}^\infty \frac{1}{h} K\left(\frac{x - u}{h}\right)f(u)du\\[2ex]
+  &amp;\left[\text{Substitution: $u=x+yh\;\Rightarrow \frac{du}{dy}=h$}\right]\\[2ex]
+  &amp;=\int_{-\infty}^\infty \frac{h}{h} K(y) f(x + y h ) dy\\[2ex]
+  &amp;\left[\text{Taylor expansion of $f(x+yh)$ around $f(x)\colon$}\right]\\[2ex]
+  &amp;=\int_{-\infty}^\infty K(y) \left\{ f(x) + f'(x) y h + \frac{1}{2!} f''(x) y^2 h^2 + o(h^2) \right\} dy\\[2ex]
+  &amp;=f(x) \underbrace{\int_{-\infty}^\infty K(y)\,dy}_{=1} +
+  f(x) h \underbrace{\int_{-\infty}^\infty y K(y)\,dy}_{=0}\\[2ex]
+  &amp;\;\; + h^2 \frac{1}{2} f''(x) \underbrace{\int_{-\infty}^\infty K(y)y^2 dy}_{\nu_2(K)}+ o(h^2)  \underbrace{\int_{-\infty}^\infty K(y)\,dy}_{=1}\\[3ex]
+  &amp;=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)
+\end{align*}
+\]</span></p>
+<p>Thus, the pointwise squared bias is given by <span class="math display">\[
+\begin{align*}
+  &amp;\left(\mathrm{Bias}(\hat{f}_h(x))\right)^2 \\[2ex]
+  &amp;=\left(\mathbb{E}(\hat{f}_h(x))-f(x)\right)^2 \\[2ex]
+  &amp;=\left(h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)\right)^2\\[2ex]
+  &amp;=\left(h^2 \frac{1}{2} f''(x) \nu_2(K)\right)^2 + \underbrace{2\,\left({\color{red}h^2} \frac{1}{2} f''(x) \nu_2(K)\right)  o({\color{red}h^2})}_{o({\color{red}h^4})} + o(h^4)\\[2ex]
+  &amp;=\underbrace{h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2}_{=:\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2}  + o(h^4)\\[2ex]
+&amp;\Rightarrow\quad \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2=h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2
+\end{align*}  
+\]</span></p>
+</section>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
