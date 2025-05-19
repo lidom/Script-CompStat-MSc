@@ -257,6 +257,7 @@ window.Quarto = {
   <li><a href="#synopsis-penguin-example" id="toc-synopsis-penguin-example" class="nav-link" data-scroll-target="#synopsis-penguin-example"><span class="header-section-number">2.4.2</span> Synopsis: Penguin Example</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -1288,24 +1289,24 @@ Figure&nbsp;2.5: Penguin research on the limit.
 <ol type="a">
 <li><p>Consider <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
-\]</span> where <span class="math inline">\(X\sim\text{Bernoulli}(p).\)</span> Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
+\]</span> where <span class="math inline">\(X\sim\text{Bernoulli}(p_0).\)</span> Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
 <li><p>Now let <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d}}{\sim}X,
-\]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_g\)</span> and prior probabilities <span class="math inline">\(\pi_g\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
+\]</span> where <span class="math inline">\(X\)</span> is a Bernoulli mixture random variable with parameters <span class="math inline">\(p_{g,0}\)</span> and prior probabilities <span class="math inline">\(\pi_{g,0}\)</span>, <span class="math inline">\(g=1,\dots,G\)</span>. Write the expressions of the (log) likelihood functions <span class="math inline">\(\mathcal{L}\)</span> and <span class="math inline">\(\ell\)</span>.</p></li>
 <li><p>Let <span class="math display">\[
 (Z_{i1},\dots,Z_{iG})\in\{0,1\}^G
 \]</span> denote the vector of latent group indicator random variables with <span class="math display">\[
 Z_{i1}+\dots + Z_{iG}=1
 \]</span> and <span class="math display">\[
-P(Z_{ig}=1)=\pi_g,\quad g=1,\dots,G.
-\]</span> Thus, the realization <span class="math inline">\(Z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_2)\)</span>.<br> Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\)</span> that take into account the latend group indicator random variables.</p></li>
+P(Z_{ig}=1)=\pi_{g,0},\quad g=1,\dots,G.
+\]</span> Thus, the realization <span class="math inline">\(Z_i=(0,1,0,\dots,0)\)</span> means that the <span class="math inline">\(i\)</span>th observation comes from the <span class="math inline">\(2\)</span>nd Bernoulli distribution <span class="math inline">\(\text{Bernoulli}(p_{2,0})\)</span>.<br> Write the expressions of the (log) likelihood functions <span class="math inline">\(\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi})\)</span> and <span class="math inline">\(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi})\)</span> that take into account the latend group indicator random variables.</p></li>
 <li><p>Write down the expression for the posterior probability <span class="math display">\[
-\mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i).
+\mathfrak{p}_{ig,0} = \mathbb{E}_{\mathbf{p}_0,\boldsymbol{\pi}_0}(Z_{ig}| X_i)=P_{\mathbf{p}_0,\boldsymbol{\pi}_0}(Z_{ig}=1 | X_i).
 \]</span></p></li>
-<li><p>Derive the conditional expectation of <span class="math inline">\(\tilde\ell,\)</span> given <span class="math inline">\(\mathbf{X}=\mathbf{x},\)</span> <span class="math display">\[\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right).
+<li><p>Derive the conditional expectation of <span class="math inline">\(\tilde\ell,\)</span> given <span class="math inline">\(X_1,\dots,X_n,\)</span> <span class="math display">\[\mathbb{E}_{\mathbf{p}_0,\boldsymbol{\pi}_0}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi})\big|X_1,\dots,X_n\right).
 \]</span></p></li>
-<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
-<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p}_0,\boldsymbol{\pi}_0}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi})\big|X_1,\dots,X_n\right)\)</span> with respect to <span class="math inline">\(p_g\)</span> for <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
+<li><p>Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p}_0,\boldsymbol{\pi}_0}\left(\tilde{\ell}(\mathbf{p},\boldsymbol{\pi})\big|X_1,\dots,X_n\right)\)</span> with respect to <span class="math inline">\(\pi_g\)</span> for <span class="math inline">\(g=1,\dots,G\)</span> such that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p></li>
 <li><p>Sketch the EM-Algorithm</p></li>
 </ol>
 <!-- 
@@ -1351,199 +1352,176 @@ ggplot(aes(x, y, fill = value)) +  geom_tile() +  facet_wrap(~ instance + label)
 
 
  -->
-<!-- 
-## Solutions {-} 
-
-#### Solutions of Exercise 1. {-} 
-
-##### (a) Likelihood function {-}
-
-The probability mass function of $X\sim\text{Bernoulli}(p)$ is 
-$$
-f(x)=p^{x}(1-p)^{1-x},\quad\text{with}\quad x\in\{0,1\}.
-$$
-Thus the likelihood and the log-likelihood functions are
-$$
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solutions-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solutions-of-exercise-1.">Solutions of Exercise 1.</h4>
+<section id="a-likelihood-function" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-likelihood-function">(a) Likelihood function</h5>
+<p>The probability mass function of <span class="math inline">\(X\sim\text{Bernoulli}(p_0)\)</span> is <span class="math display">\[
+f(x)=p_0^{x}(1-p_0)^{1-x},\quad\text{with}\quad x\in\{0,1\}.
+\]</span> Thus the likelihood and the log-likelihood functions are <span class="math display">\[
 \begin{align*}
-\mathcal{L}(p;\mathbf{x})    & = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
-\mathcal{\ell}(p;\mathbf{x}) & = \sum_{i=1}^n \ln\left(p^{x_i}(1-p)^{1-x_i}\right),
+\mathcal{L}(p)    &amp; = \prod_{i=1}^n p^{X_i}(1-p)^{1-X_i}\\
+\mathcal{\ell}(p) &amp; = \sum_{i=1}^n \ln\left(p^{X_i}(1-p)^{1-X_i}\right),
 \end{align*}
-$$
-where $\mathbf{x}=(x_1,\dots,x_n)$ denotes the vector of observed data points. 
-
-
-##### (b) Likelihood function for a Bernoulli mixture distribution {-}
-The probability mass function of a Bernoulli mixture distribution is 
-$$
+\]</span> where <span class="math inline">\(p\in[0,1]\)</span> denotes a parameter candidate value.</p>
+</section>
+<section id="b-likelihood-function-for-a-bernoulli-mixture-distribution" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-likelihood-function-for-a-bernoulli-mixture-distribution">(b) Likelihood function for a Bernoulli mixture distribution</h5>
+<p>The probability mass function of a Bernoulli mixture distribution is <span class="math display">\[
 \begin{align*}
 f_G(x)
-& =\sum_{g=1}^G \pi_g\; f_g(x)\\[2ex]
-& =\sum_{g=1}^G \pi_g\; p_g^{x}(1-p_g)^{1-x}\quad\text{with}\quad x\in\{0,1\}.
+&amp; =\sum_{g=1}^G \pi_{g,0}\; f_g(x)\\[2ex]
+&amp; =\sum_{g=1}^G \pi_{g,0}\; p_{g,0}^{x}(1-p_{g,0})^{1-x}\quad\text{with}\quad x\in\{0,1\}.
 \end{align*}
-$$
-Thus the likelihood function is
-$$
+\]</span> Thus the likelihood function is <span class="math display">\[
 \begin{align*}
-\mathcal{L}(\mathbf{p},\boldsymbol{\pi};\mathbf{x})    & = \prod_{i=1}^n\left(\sum_{g=1}^G \pi_g\; p_g^{x_i}(1-p_g)^{1-x_i}\right)\\[2ex]
-\ell(\mathbf{p},\boldsymbol{\pi};\mathbf{x}) & = \sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\; p_g^{x_i}(1-p_g)^{1-x_i}\right)
+\mathcal{L}(\mathbf{p},\boldsymbol{\pi})    &amp; = \prod_{i=1}^n\left(\sum_{g=1}^G \pi_g\; p_g^{X_i}(1-p_g)^{1-X_i}\right)\\[2ex]
+\ell(\mathbf{p},\boldsymbol{\pi}) &amp; = \sum_{i=1}^n\ln\left(\sum_{g=1}^G\pi_g\; p_g^{X_i}(1-p_g)^{1-X_i}\right)
 \end{align*}
-$$
-where $\mathbf{p}=(p_1,\dots,p_G)$ and $\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)$.
-
-##### (c) Likelihood function with group indicator random variables {-}
-
-$$
+\]</span> where <span class="math inline">\(\mathbf{p}=(p_1,\dots,p_G)\)</span> and <span class="math inline">\(\boldsymbol{\pi}=(\pi_1,\dots,\pi_G)\)</span> are parameter candidate values with <span class="math inline">\(p_g\in[0,1]\)</span> and <span class="math inline">\(\pi_g\in[0,1]\)</span> for all <span class="math inline">\(g=1,\dots,G\)</span> and with <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span></p>
+</section>
+<section id="c-likelihood-function-with-group-indicator-random-variables" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-likelihood-function-with-group-indicator-random-variables">(c) Likelihood function with group indicator random variables</h5>
+<p><span class="math display">\[
 \begin{align*}
-\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi};\mathbf{x}, \mathbf{Z}) 
-& = \prod_{i=1}^n \prod_{g=1}^G\left(\pi_g p_g^{x_i}(1-p_g)^{1-x_i}\right)^{Z_{ig}}\\[2ex]
-\tilde{\ell}(\mathbf{p},\boldsymbol{\pi};\mathbf{x}, \mathbf{Z})    
-& = \sum_{i=1}^n \sum_{g=1}^G Z_{ig}\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
+\tilde{\mathcal{L}}(\mathbf{p},\boldsymbol{\pi})
+&amp; = \prod_{i=1}^n \prod_{g=1}^G\left(\pi_g p_g^{X_i}(1-p_g)^{1-X_i}\right)^{Z_{ig}}\\[2ex]
+\tilde{\ell}(\mathbf{p},\boldsymbol{\pi})    
+&amp; = \sum_{i=1}^n \sum_{g=1}^G Z_{ig}\left(\ln(\pi_g) + \ln\left(p_g^{X_i}(1-p_g)^{1-X_i}\right)\right)
 \end{align*}
-$$
-
-
-##### (d) Posterior probability {-}
-
-$$
+\]</span></p>
+</section>
+<section id="d-posterior-probability" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="d-posterior-probability">(d) Posterior probability</h5>
+<p>True (unknow) posterior probability <span class="math display">\[
 \begin{align*}
-\mathfrak{p}_{ig} = P(Z_{ig}=1 | X_i = x_i) 
-&=\frac{ P(Z_{ig}=1) f_{X|Z}(x_i|Z_{ig}=1)}{f_G(x_i)} \\[2ex]
-&=\frac{ P(Z_{ig}=1) f_g(x_i)}{f_G(x_i)} \\[2ex]
-&=\frac{\pi_g\; p_g^{x_i} (1-p_g)^{1-x_i}}{\sum_{g=1}^G \pi_g\; p_g^{x_i} (1-p_g)^{1-x_i}}
+\mathfrak{p}_{ig,0}
+&amp;= \mathbb{E}_{\mathbf{p}_0,\boldsymbol{\pi}_0}(Z_{ig} | X_i)\\[2ex]
+&amp;= P_{\mathbf{p}_0,\boldsymbol{\pi}_0}(Z_{ig}=1 | X_i = x_i) \\[2ex]
+%&amp;=\frac{ P(Z_{ig}=1) f_{X|Z}(x_i|Z_{ig}=1)}{f_G(x_i)} \\[2ex]
+%&amp;=\frac{ P(Z_{ig}=1) f_g(x_i)}{f_G(x_i)} \\[2ex]
+&amp;=\frac{\pi_{g,0}\;\; p_{g,0}^{X_i} (1-p_{g,0})^{1-X_i}}{\sum_{g=1}^G \pi_{g,0}\; p_g^{X_i} (1-p_g)^{1-X_i}}
 \end{align*}
-$$
-
-
-##### (e) Conditional Expectation of $\tilde\ell$ {-}
-
-
-$$
+\]</span></p>
+</section>
+<section id="e-conditional-expectation-of-tildeell" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="e-conditional-expectation-of-tildeell">(e) Conditional Expectation of <span class="math inline">\(\tilde\ell\)</span></h5>
+<p><span class="math display">\[
 \begin{align*}
-&\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi};\mathbf{x},\mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex] 
-& = \sum_{i=1}^n \sum_{g=1}^G \mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\big|X_i=x_i\right)\left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
-& = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right),
+&amp;\mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi})\mid X_1,\dots,X_n\right)\\[2ex]
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(Z_{ig}\big|X_i\right)\left(\ln(\pi_g) + \ln\left(p_g^{X_i}(1-p_g)^{1-X_i}\right)\right)\\[2ex]
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \left(\ln(\pi_g) + \ln\left(p_g^{X_i}(1-p_g)^{1-X_i}\right)\right),
 \end{align*}
-$$
-since 
-$$
+\]</span></p>
+</section>
+<section id="f-maximize-mathbbe_mathbfp_0boldsymbolpi_0lefttildeellmathbfpboldsymbolpimid-x_1dotsx_nright-with-respect-to-p_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="f-maximize-mathbbe_mathbfp_0boldsymbolpi_0lefttildeellmathbfpboldsymbolpimid-x_1dotsx_nright-with-respect-to-p_g">(f) Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi})\mid X_1,\dots,X_n\right)\)</span> with respect to <span class="math inline">\(p_g:\)</span></h5>
+<p><span class="math display">\[
 \begin{align*}
-&\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\big|\mathbf{X}=\mathbf{x}\right)\\[2ex] 
-&= \mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(Z_{ig}\big|X_i=x_i\right)\\[2ex] 
-&= P(Z_{ig}=1 | X_i = x_i) 
-= \mathfrak{p}_{ig}. 
+&amp;\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi})\mid X_1,\dots,X_n\right)\\[2ex]
+&amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \left(\ln(\pi_g) + \ln\left(p_g^{X_i}(1-p_g)^{1-X_i}\right)\right)\\[2ex]
+&amp; = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \left(\ln(\pi_g) + \left(X_i\ln(p_g) + (1-X_i)\ln(1-p_g)\right)\right)\\[2ex]
+%&amp; = \sum_{i=1}^n \mathfrak{p}_{ig} \frac{\partial}{\partial p_g} \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\\[2ex]
+&amp; = \sum_{i=1}^n \mathfrak{p}_{ig,0} \left(\frac{X_i}{p_g} - \frac{(1-X_i)}{(1-p_g)}\right)\\[2ex]
 \end{align*}
-$$
-
-
-##### (f) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)$ with respect to $p_g:$ {-}
-
-$$
+\]</span> First order condition <span class="math display">\[
 \begin{align*}
-&\frac{\partial}{\partial p_g}\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex] 
-& = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)\\[2ex]
-& = \frac{\partial}{\partial p_g}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\right)\\[2ex]
-%& = \sum_{i=1}^n \mathfrak{p}_{ig} \frac{\partial}{\partial p_g} \left(x_i\ln(p_g) + (1-x_i)\ln(1-p_g)\right)\\[2ex]
-& = \sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i}{p_g} - \frac{(1-x_i)}{(1-p_g)}\right)\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0} \left(\frac{X_i}{\hat{p}_g} - \frac{(1-X_i)}{(1-\hat{p}_g)}\right)&amp;\overset{!}{=}0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0} \left(\frac{X_i(1-\hat{p}_g)}{\hat{p}_g(1-\hat{p}_g)} - \frac{(1-X_i)\hat{p}_g}{\hat{p}_g(1-\hat{p}_g)}\right)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0} \left(X_i(1-\hat{p}_g) - (1-X_i)\hat{p}_g\right)&amp;=0\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0} \left(X_i - \hat{p}_g \right)&amp;=0\\[2ex]
+\hat{p}_g\sum_{i=1}^n \mathfrak{p}_{ig,0} &amp;= \sum_{i=1}^n \mathfrak{p}_{ig,0}X_i \\[2ex]
+\hat{p}_g &amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}X_i}{\sum_{i=1}^n \mathfrak{p}_{ig,0}}
 \end{align*}
-$$
-First order condition 
-$$
+\]</span></p>
+</section>
+<section id="g-maximize-mathbbe_mathbfp_0boldsymbolpi_0lefttildeellmathbfpboldsymbolpimid-x_1dotsx_nright-with-respect-to-pi_g" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="g-maximize-mathbbe_mathbfp_0boldsymbolpi_0lefttildeellmathbfpboldsymbolpimid-x_1dotsx_nright-with-respect-to-pi_g">(g) Maximize <span class="math inline">\(\mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi})\mid X_1,\dots,X_n\right)\)</span> with respect to <span class="math inline">\(\pi_g:\)</span></h5>
+<p>Note:</p>
+<ol type="1">
+<li><p>We only need to focus on the <span class="math inline">\(\pi_g\)</span> terms since the other terms in<br>
+<span class="math display">\[
 \begin{align*}
-\sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i}{\hat{p}_g} - \frac{(1-x_i)}{(1-\hat{p}_g)}\right)&\overset{!}{=}0\\[2ex]
-\sum_{i=1}^n \mathfrak{p}_{ig} \left(\frac{x_i(1-\hat{p}_g)}{\hat{p}_g(1-\hat{p}_g)} - \frac{(1-x_i)\hat{p}_g}{\hat{p}_g(1-\hat{p}_g)}\right)&=0\\[2ex]
-\sum_{i=1}^n \mathfrak{p}_{ig} \left(x_i(1-\hat{p}_g) - (1-x_i)\hat{p}_g\right)&=0\\[2ex]
-\sum_{i=1}^n \mathfrak{p}_{ig} \left(x_i - \hat{p}_g \right)&=0\\[2ex]
-\hat{p}_g\sum_{i=1}^n \mathfrak{p}_{ig} &= \sum_{i=1}^n \mathfrak{p}_{ig}x_i \\[2ex]
-\hat{p}_g & = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}x_i}{\sum_{i=1}^n \mathfrak{p}_{ig}}
+&amp;\mathbb{E}_{\mathbf{p}_{0},\boldsymbol{\pi}_{0}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi})\mid X_1,\dots,X_n\right)\\[2ex]
+&amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \left(\ln(\pi_g) + \ln\left(p_g^{X_i}(1-p_g)^{1-X_i}\right)\right)
 \end{align*}
-$$
-
-
-##### (g) Maximize $\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)$ with respect to $\pi_g:$ {-}
-
-Note: We only need to focus on the $\pi_g$ terms since the other terms in  
-$$
+\]</span> do not depend on <span class="math inline">\(\pi_g.\)</span></p></li>
+<li><p>However, we need to do maximization under the side constraint that <span class="math inline">\(\sum_{g=1}^G\pi_g=1.\)</span> So, we use the method of Lagrange multipliers.</p></li>
+</ol>
+<p>The Lagrange function is given by <span class="math display">\[
 \begin{align*}
-&\mathbb{E}_{\mathbf{p},\boldsymbol{\pi}}\left(\tilde\ell(\mathbf{p},\boldsymbol{\pi}|\mathbf{x}, \mathbf{Z})\big|\mathbf{X}=\mathbf{x}\right)\\[2ex] 
-& = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln(\pi_g) + \ln\left(p_g^{x_i}(1-p_g)^{1-x_i}\right)\right)
+L(\boldsymbol{\pi},\lambda)=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \ln(\pi_g) - \lambda \left(\sum_{g=1}^G\pi_g-1\right).
 \end{align*}
-$$
-are no functions of $\pi_g$.
-
-However, we need to do maximization under the side constraint that $\sum_{g=1}^G\pi_g=1.$ So, we use the method of Lagrange multipliers. 
-
-The Lagrange function is given by
-$$
-\begin{align*}
-L(\boldsymbol{\pi},\lambda)=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln(\pi_g) - \lambda \left(\sum_{g=1}^G\pi_g-1\right). 
-\end{align*}
-$$
-First order condition with respect to $\pi_g$:
-$$
+\]</span> First order condition with respect to <span class="math inline">\(\pi_g\)</span>: <span class="math display">\[
 \begin{align*}
 \frac{\partial}{\partial \pi_g}L(\boldsymbol{\pi},\lambda)=
-\sum_{i=1}^n \mathfrak{p}_{ig}\frac{1}{\pi_g}  - \lambda &\\[2ex] 
-\sum_{i=1}^n \mathfrak{p}_{ig}\frac{1}{\hat{\pi}_g}  - \lambda  &\overset{!}{=}0 \\[2ex]
-\sum_{i=1}^n \mathfrak{p}_{ig}   &=\lambda \hat{\pi}_g\\[2ex]
-\hat{\pi}_g & = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}  \\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0}\frac{1}{\pi_g}  - \lambda &amp;\\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0}\frac{1}{\hat{\pi}_g}  - \lambda  &amp;\overset{!}{=}0 \\[2ex]
+\sum_{i=1}^n \mathfrak{p}_{ig,0}   &amp;=\lambda \hat{\pi}_g\\[2ex]
+\hat{\pi}_g &amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}}{\lambda}  \\[2ex]
 \end{align*}
-$$
-Plugging $\hat{\pi}_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}$ into $L(\boldsymbol{\pi},\lambda)$:
-$$
+\]</span> Plugging <span class="math inline">\(\hat{\pi}_g = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\)</span> into <span class="math inline">\(L(\boldsymbol{\pi},\lambda)\)</span>: <span class="math display">\[
 \begin{align*}
-L(\lambda)&=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\lambda}-1\right) \\[2ex]
-&=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig}-\lambda \right) \\[2ex]
+L(\lambda)&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \ln\left(\frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}}{\lambda}\right) - \lambda \left(\sum_{g=1}^G\frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}}{\lambda}-1\right) \\[2ex]
+&amp;=\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \left(\ln\left(\sum_{i=1}^n \mathfrak{p}_{ig,0}\right) - \ln\left(\lambda\right)\right) -  \left(\sum_{g=1}^G\sum_{i=1}^n \mathfrak{p}_{ig,0}-\lambda \right) \\[2ex]
 \end{align*}
-$$
-First order condition with respect to $\lambda$:
-$$
+\]</span> First order condition with respect to <span class="math inline">\(\lambda\)</span>: <span class="math display">\[
 \begin{align*}
 \frac{\partial}{\partial \lambda} L(\lambda)=
-- \frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} +1 &\\[2ex] 
-- \frac{1}{\hat\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} +1 & \overset{!}{=}0\\[2ex]
-\hat\lambda & = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig} \\[2ex]
+- \frac{1}{\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} +1 &amp;\\[2ex]
+- \frac{1}{\hat\lambda}\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} +1 &amp; \overset{!}{=}0\\[2ex]
+\hat\lambda &amp; = \sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0} \\[2ex]
 \end{align*}
-$$
-So, we have that 
-$$
+\]</span> So, we have that <span class="math display">\[
 \begin{align*}
-\hat{\pi}_g 
-& = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\hat{\lambda}}\\[2ex]
-& = \frac{\sum_{i=1}^n \mathfrak{p}_{ig}}{\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig}} 
+\hat{\pi}_g
+&amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}}{\hat{\lambda}}\\[2ex]
+&amp; = \frac{\sum_{i=1}^n \mathfrak{p}_{ig,0}}{\sum_{i=1}^n \sum_{g=1}^G \mathfrak{p}_{ig,0}}
 \end{align*}
-$$
-
-
-##### (h) Sketch of the EM-Algorithm {-}
-
-1. Initialization 
-    $$
-    \hat{p}_1^{(0)},\dots,\hat{p}_G^{(0)}
-    $$ 
-    $$
-    \hat{\pi}_1^{(0)},\dots,\hat{\pi}_G^{(0)}
-    $$
-    For instance: $\hat{p}_g^{(0)}=0.5$ and $\hat{\pi}_g^{(0)}=\frac{1}{G}$ for all $g=1,\dots,G.$
-
-2. For $r=1,2,\dots$
-    * Expectation-Step: 
-    $$
-    \begin{align*}
-    \hat{\mathfrak{p}}_{ig}^{(r-1)} 
-    &=\frac{\hat{\pi}_g^{(r-1)}\; \left(\hat{p}_g^{(r-1)}\right)^{x_i} \left(1-\hat{p}_g^{(r-1)}\right)^{1-x_i}}{\sum_{g=1}^G \hat{\pi}_g^{(r-1)}\; \left(\hat{p}_g^{(r-1)}\right)^{x_i} \left(1-\hat{p}_g^{(r-1)}\right)^{1-x_i}}
-    \end{align*}
-    $$
-    * Maximization-Step: 
-    $$
-    \begin{align*}
-    \hat{p}_g^{(r)} & = \frac{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}x_i}{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}}\\[2ex]
-    \hat{\pi}_g^{(r)} & = \frac{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}}{\sum_{i=1}^n \sum_{g=1}^G \hat{\mathfrak{p}}_{ig}^{(r-1)}}  \\[2ex]
-    \end{align*}
-    $$
-
-3. Check convergence (no relevant change of the maximized log-likelihood function). 
-
--->
+\]</span></p>
+</section>
+<section id="h-sketch-of-the-em-algorithm" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="h-sketch-of-the-em-algorithm">(h) Sketch of the EM-Algorithm</h5>
+<p>As we do not know the true parameter vectors <span class="math display">\[
+\mathbf{p}_{0}=(p_{1,0},\dots,p_{G,0})\quad\text{and}\quad\boldsymbol{\pi}_{0}=(\pi_{1,0},\dots,\pi_{G,0}),
+\]</span> we do not know the true posterior probability <span class="math inline">\(\mathfrak{p}_{ig,0}.\)</span></p>
+<p>But given estimates <span class="math display">\[
+(\hat{p}_{1},\dots,\hat{p}_{G})\quad\text{and}\quad (\hat{\pi}_{1},\dots,\hat{\pi}_{G}),
+\]</span> we can estimate the unknown posterio propability by <span class="math display">\[
+\begin{align*}
+\hat{\mathfrak{p}}_{ig}
+&amp;=\frac{\hat{\pi}_g\; \left(\hat{p}_g\right)^{X_i} \left(1-\hat{p}_g\right)^{1-X_i}}{\sum_{g=1}^G \hat{\pi}_g\; \left(\hat{p}_g\right)^{X_i} \left(1-\hat{p}_g\right)^{1-X_i}}
+\end{align*}
+\]</span></p>
+<p>This motivates the following EM-Algorithm:</p>
+<ol type="1">
+<li><p>Initialization <span class="math display">\[
+\hat{p}_1^{(0)},\dots,\hat{p}_G^{(0)}
+\]</span> <span class="math display">\[
+\hat{\pi}_1^{(0)},\dots,\hat{\pi}_G^{(0)}
+\]</span> For instance: <span class="math inline">\(\hat{p}_g^{(0)}=0.5\)</span> and <span class="math inline">\(\hat{\pi}_g^{(0)}=\frac{1}{G}\)</span> for all <span class="math inline">\(g=1,\dots,G.\)</span></p></li>
+<li><p>For <span class="math inline">\(r=1,2,\dots\)</span></p>
+<ul>
+<li>Expectation-Step: <span class="math display">\[
+\begin{align*}
+\hat{\mathfrak{p}}_{ig}^{(r-1)}
+&amp;=\frac{\hat{\pi}_g^{(r-1)}\; \left(\hat{p}_g^{(r-1)}\right)^{X_i} \left(1-\hat{p}_g^{(r-1)}\right)^{1-X_i}}{\sum_{g=1}^G \hat{\pi}_g^{(r-1)}\; \left(\hat{p}_g^{(r-1)}\right)^{X_i} \left(1-\hat{p}_g^{(r-1)}\right)^{1-X_i}}
+\end{align*}
+\]</span></li>
+<li>Maximization-Step: <span class="math display">\[
+\begin{align*}
+\hat{p}_g^{(r)} &amp; = \frac{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}X_i}{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}}\\[2ex]
+\hat{\pi}_g^{(r)} &amp; = \frac{\sum_{i=1}^n \hat{\mathfrak{p}}_{ig}^{(r-1)}}{\sum_{i=1}^n \sum_{g=1}^G \hat{\mathfrak{p}}_{ig}^{(r-1)}}  \\[2ex]
+\end{align*}
+\]</span></li>
+</ul></li>
+<li><p>Check convergence (e.g., no relevant change of the maximized log-likelihood function).</p></li>
+</ol>
+</section>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
