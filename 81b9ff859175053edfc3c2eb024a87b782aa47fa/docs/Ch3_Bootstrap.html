@@ -503,16 +503,30 @@ F_n(x)
 <pre><code>[1] 0.25</code></pre>
 </div>
 </div>
-<p>Sampling (iid) from the empirical distribution function <span class="math inline">\(F_n\)</span> is equivalent to resampling (with replacement and with equal probabilities) data points from the observed data <code>observedSample</code>.</p>
+<p>Sampling (iid) from the empirical distribution function <span class="math inline">\(F_n\)</span> is equivalent to resampling (with replacement and with equal probabilities) data points from the observed data <code>observedSample</code>. The following code generates three “bootstrap” samples from <span class="math inline">\(F_n\colon\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n        <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n         <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>resample <span class="ot">&lt;-</span> <span class="fu">sample</span>(observedSample, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>resample1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(observedSample, </span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size    =</span> n, </span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>resample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>resample1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 5.3 5.3 4.6 6.1 5.5 4.8 5.4 5.2</code></pre>
+<pre><code>[1] 5.3 4.8 5.3 5.4 5.8 6.1 5.4 5.4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>resample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(observedSample, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size    =</span> n, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>resample2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.4 4.6 5.3 5.3 4.6 6.1 5.2 5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>resample3 <span class="ot">&lt;-</span> <span class="fu">sample</span>(observedSample, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size    =</span> n, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>resample3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.8 5.2 6.1 5.2 5.2 4.6 6.1 5.8</code></pre>
 </div>
 </div>
 </div>
@@ -548,9 +562,10 @@ Var(nF_n(x))&amp; = np(1-p) = nF(x)(1-F(x))\\[2ex]
 \begin{align*}
 \operatorname{MSE}(F_n(x))
 &amp; = (\operatorname{Bias}(F_n(x)))^2 + Var(F_n(x))\\[2ex]
-&amp; =\frac{F(x)(1-F(x))}{n}.
+&amp; =\frac{F(x)(1-F(x))}{n}\\[2ex]
+\Rightarrow\quad\operatorname{MSE}(F_n(x))&amp;\to 0\quad\text{as}\quad n\to\infty
 \end{align*}
-\]</span></p>
+\]</span> pointwise for each <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
 <p>This allows us to conclude that <span class="math display">\[
 \begin{align*}
 F_n(x) &amp; \to_{m.s.} F(x)\quad\text{as}\quad n\to\infty\\[2ex]
@@ -606,7 +621,7 @@ $$
 </section>
 <section id="sec-BasicBootstrap" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="sec-BasicBootstrap"><span class="header-section-number">3.3</span> The Basic Bootstrap Method</h2>
-<p>The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e.&nbsp;parametric) assumption. The basic bootstrap method is often also called:</p>
+<p>The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e.&nbsp;parametric) assumption on <span class="math inline">\(F.\)</span> The basic bootstrap method is often also called:</p>
 <ul>
 <li>(Standard) Nonparametric Bootstrap Method or</li>
 <li>Nonparametric Percentile Bootstrap Method</li>
@@ -625,13 +640,13 @@ $$
 <li><span class="math inline">\(\operatorname{SE}\left(\hat\theta_n\right)=\sqrt{Var\left(\hat\theta_n\right)}=\frac{1}{\sqrt{n}}\cdot\text{constant}\)</span></li>
 </ul></li>
 </ul>
-<p><strong>Inference:</strong> In order to provide (approximate for <span class="math inline">\(n\to\infty\)</span>) standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the <strong>distribution</strong> of <span class="math display">\[
+<p><strong>Inference (approximate for <span class="math inline">\(\boldsymbol{n\to\infty}\)</span>):</strong> In order to provide standard errors, construct confidence intervals, and perform tests of hypothesis, we need to know the <strong>distribution</strong> of <span class="math display">\[
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty.
 \]</span> I.e. we need to know the limit of the distribution function <span class="math display">\[
 H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty.
 \]</span></p>
-<p>We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of <span class="math inline">\(H_{n}(x)\)</span> is the distribution function of the Normal distribution with mean zero and asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).\)</span></p>
-<p>However, deriving a useful, explicit expression of the asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)\)</span> can be <em>very</em> hard (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result.</p>
+<p>We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of <span class="math inline">\(H_{n}(x)\)</span> is the distribution function of the normal distribution with mean zero and asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).\)</span></p>
+<p>However, deriving a useful, <em>explicit</em> expression of the asymptotic variance <span class="math inline">\(\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)\)</span> can be <em>very</em> hard (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific versions of the Bootstrap (<a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>) can be even more accurate then an asymptotic normality result.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -649,7 +664,7 @@ X_1^*,\dots,X_n^*
 <li><strong>Compute bootstrap estimate:</strong> Compute the estimate <span class="math display">\[
 \hat\theta^*_n\equiv \hat\theta(X_1^*,\dots,X_n^*)
 \]</span></li>
-<li><strong>Bootstrap replications:</strong> Repeat Steps 1 and 2 <span class="math inline">\(m\)</span> times (for a large value of <span class="math inline">\(m,\)</span> such as <span class="math inline">\(m=5000\)</span> or <span class="math inline">\(m=10000\)</span>) leading to <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
+<li><strong>Bootstrap replications:</strong> Repeat Steps 1 and 2 <span class="math inline">\(m\)</span> times (for a large value of <span class="math inline">\(m,\)</span> such as <span class="math inline">\(m=10000\)</span>) leading to <span class="math inline">\(m\)</span> bootstrap estimates <span class="math display">\[
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 \]</span></li>
 </ol>
@@ -664,7 +679,7 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\le
 \sup_{x\in\mathbb{R}}\left|H^{Boot}_{n,m}(x)-H^{Boot}_{n}(x)\right|\to_{a.s} 0\quad\text{as}\quad m\to\infty,
 \]</span> where <span class="math display">\[
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
-\]</span> denotes the <strong>empirical distribution function</strong> based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> centered by <span class="math inline">\(\hat{\theta}_n\)</span> and scaled by <span class="math inline">\(\sqrt{n}.\)</span></p>
+\]</span> denotes the <strong>empirical distribution function</strong> based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> <strong>centered</strong> by <span class="math inline">\(\hat{\theta}_n\)</span> and <strong>scaled</strong> by <span class="math inline">\(\sqrt{n}.\)</span></p>
 <p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math display">\[
 H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Boot}_{n}(x).
 \]</span> That is, we can (and will do so) treat the bootstrap distribution <span class="math inline">\(H^{Boot}_{n}(x)\)</span> <strong>as known.</strong> 🤓</p>
@@ -675,7 +690,8 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 \]</span> as <span class="math inline">\(n\to\infty.\)</span> This is a basic requirement called <strong>bootstrap consistency</strong>. If a bootstrap method is inconsistent, you shall not use it in practice.</p>
 <section id="bootstrap-consistency" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bootstrap-consistency">Bootstrap Consistency</h3>
-<p>The bootstrap does <strong>not always work</strong>. A necessary condition for the use of the bootstrap is the <strong>consistency of the bootstrap approximation</strong>.</p>
+<p>The bootstrap does <strong>not always work</strong>.</p>
+<p>A necessary condition for the use of the bootstrap is the <strong>consistency of the bootstrap approximation</strong>.</p>
 <p>The bootstrap is called <strong>consistent</strong> if, for large <span class="math inline">\(n\)</span>, the bootstrap distribution of <span class="math display">\[
 \sqrt{n}\big(\hat{\theta}^*_n -\hat{\theta}_n\big)|\mathcal{S}_n
 \]</span> is a good approximation of the distribution of <span class="math display">\[
@@ -704,22 +720,26 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 </div>
 <p>Luckily, the standard bootstrap is consistent in a large number of statistical problems. Typically, the bootstrap is consistent if the following two requirements hold:</p>
 <ol type="1">
-<li>Generation of the bootstrap sample must reflect appropriately the way in which the original sample has been generated. That is,
+<li>The bootstrap sampling process must reflect the original sampling process. For instance:
 <ul>
 <li>if the original sample was generated by i.i.d. sampling, then also the bootstrap samples need to be generated by i.i.d. sampling.</li>
 <li>if the original sample was generated by cluster sampling, then also the bootstrap samples need to be generated by cluster sampling.</li>
 </ul></li>
 <li>Typically, the distribution of <span class="math display">\[
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
-\]</span> needs to be asymptotically normal.</li>
+\]</span> needs to be asymptotically (n) normal.</li>
 </ol>
-<p>The standard bootstrap <strong>will usually fail</strong> if one of the above conditions is violated. For instance, …</p>
-<ul>
-<li>the bootstrap will not work if the i.i.d. re-sample <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> does not properly reflect the way how <span class="math inline">\(X_1,\dots,X_n\)</span> are generated in the first place. (For instance, when <span class="math inline">\(X_1,\dots,X_n\)</span> is generated by a time-series process with auto-correlated data, but the bootstrap samples are generated by i.i.d. sampling from <span class="math inline">\(\mathcal{S}_n\)</span>)</li>
-<li>the bootstrap will not work if the distribution of <span class="math display">\[
+<p>The standard bootstrap <strong>will usually fail</strong> if one of the above conditions is violated.</p>
+<!-- 
+For instance:
+
+* the  bootstrap will not work if the i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\}$ does not properly reflect the way how $X_1,\dots,X_n$ are generated in the first place. (For instance, when $X_1,\dots,X_n$ is generated by a time-series process with auto-correlated data, but the bootstrap samples are generated by i.i.d. sampling from $\mathcal{S}_n$) 
+* the  bootstrap will not work if the distribution of 
+$$
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
-\]</span> is not asymptotically normal. (For instance, in case of extreme value problems.)</li>
-</ul>
+$$ 
+is not asymptotically normal. (For instance, in case of extreme value problems.) 
+-->
 <p><strong>Note:</strong> In order to deal with more complex sampling schemes alternative bootstrap procedures have been proposed in the literature (e.g.&nbsp;the block-bootstrap in case of time-series data).</p>
 </section>
 <section id="example-inference-about-the-population-mean" class="level3" data-number="3.3.1">
@@ -742,7 +762,8 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 \end{align*}
 \]</span></li>
 </ul>
-<p><strong>Inference Problem:</strong> What is the (asymptotic) distribution of <span class="math display">\[
+<p><strong>Inference (approximate for <span class="math inline">\(\boldsymbol{n\to\infty}\)</span>):</strong></p>
+<p>What is the (asymptotic) distribution of <span class="math display">\[
 \sqrt{n}\left(\bar{X}_n -\mu_0\right)
 \]</span> as <span class="math inline">\(n\to\infty\)</span>?</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -751,7 +772,7 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Recall: Inference using Classic Asymptotic Statistics
+Recap: Inference using Classic Asymptotic Statistics
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -839,8 +860,8 @@ Table&nbsp;3.1: Observed realization of the random sample <span class="math inli
 </figure>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.36</span>, <span class="fl">3.39</span>, <span class="fl">3.24</span>, <span class="fl">4.90</span>, </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">1.76</span>, <span class="fl">5.33</span>, <span class="fl">7.77</span>, <span class="fl">1.93</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.36</span>, <span class="fl">3.39</span>, <span class="fl">3.24</span>, <span class="fl">4.90</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">1.76</span>, <span class="fl">5.33</span>, <span class="fl">7.77</span>, <span class="fl">1.93</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 So the observed sample mean is
 <center>
@@ -856,13 +877,13 @@ X_1^*,\dots,X_n^*
 <p>These i.i.d. samples <span class="math inline">\(X_1^*,\dots,X_n^*\)</span> are generated by drawing observations independently and with replacement from <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}.\)</span></p>
 <p>Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator <span class="math inline">\(\bar{X}^*_n\)</span> as demonstrated in the following <code>R</code> code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generating one realization of the bootstrap sample</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>bootSample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">size    =</span> <span class="fu">length</span>(observedSample), </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">## computing the realization of the bootstrap estimator</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bootSample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generating one realization of the bootstrap sample</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>bootSample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">size    =</span> <span class="fu">length</span>(observedSample), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="do">## computing the realization of the bootstrap estimator</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bootSample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.21375</code></pre>
 </div>
@@ -881,28 +902,28 @@ H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}
 </ol>
 <p>with a (very) large <span class="math inline">\(m.\)</span> The following <code>R</code> code demonstrates this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of bootstrap samples </span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>Xbar_boot        <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> m)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstrap algorithm</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a> Xbar_boot[k]        <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>( <span class="fu">sqrt</span>(n) <span class="sc">*</span> (Xbar_boot <span class="sc">-</span> Xbar) ), </span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, </span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Bootstrap Distribution vs Normal Limit Distribution"</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">pnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">4</span>)), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)     </span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, </span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Bootstrap Distribution"</span>, </span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Normal Limit Distribution with</span><span class="sc">\n</span><span class="st">Mean = 0 and Variance = 4"</span>), </span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of bootstrap samples </span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Xbar_boot        <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> m)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstrap algorithm</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a> Xbar_boot[k]        <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>( <span class="fu">sqrt</span>(n) <span class="sc">*</span> (Xbar_boot <span class="sc">-</span> Xbar) ), </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>, </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Bootstrap Distribution vs Normal Limit Distribution"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">pnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">4</span>)), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)     </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Bootstrap Distribution"</span>, </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Normal Limit Distribution with</span><span class="sc">\n</span><span class="st">Mean = 0 and Variance = 4"</span>), </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -923,7 +944,7 @@ n\;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\fra
 \]</span></p>
 <p>as done in the following <code>R</code>-code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(n <span class="sc">*</span> <span class="fu">var</span>(Xbar_boot), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(n <span class="sc">*</span> <span class="fu">var</span>(Xbar_boot), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.82</code></pre>
 </div>

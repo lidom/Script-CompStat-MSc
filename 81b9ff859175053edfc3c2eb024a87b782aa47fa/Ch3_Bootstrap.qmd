@@ -214,15 +214,23 @@ myecdf_fun(5.0)
 ```
 
 
-Sampling (iid) from the empirical distribution function $F_n$ is equivalent to resampling (with replacement and with equal probabilities) data points from the observed data `observedSample`. 
+Sampling (iid) from the empirical distribution function $F_n$ is equivalent to resampling (with replacement and with equal probabilities) data points from the observed data `observedSample`. The following code generates three "bootstrap" samples from $F_n\colon$
 
 ```{r}
-n        <- length(observedSample)
+n         <- length(observedSample)
 
-resample <- sample(observedSample, 
+resample1 <- sample(observedSample, 
                    size    = n, 
                    replace = TRUE)
-resample
+resample1
+resample2 <- sample(observedSample, 
+                   size    = n, 
+                   replace = TRUE)
+resample2
+resample3 <- sample(observedSample, 
+                   size    = n, 
+                   replace = TRUE)
+resample3
 ```
 
 
@@ -265,9 +273,11 @@ $$
 \begin{align*}
 \operatorname{MSE}(F_n(x))
 & = (\operatorname{Bias}(F_n(x)))^2 + Var(F_n(x))\\[2ex]
-& =\frac{F(x)(1-F(x))}{n}.
+& =\frac{F(x)(1-F(x))}{n}\\[2ex]
+\Rightarrow\quad\operatorname{MSE}(F_n(x))&\to 0\quad\text{as}\quad n\to\infty
 \end{align*}
 $$
+pointwise for each $x\in\mathbb{R}.$
 
 This allows us to conclude that 
 $$
@@ -344,7 +354,7 @@ $$
 ## The Basic Bootstrap Method {#sec-BasicBootstrap}
 
 
-The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e. parametric) assumption. The basic bootstrap method is  often also called:
+The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e. parametric) assumption on $F.$ The basic bootstrap method is  often also called:
 
 * (Standard) Nonparametric Bootstrap Method or
 * Nonparametric Percentile Bootstrap Method
@@ -366,7 +376,7 @@ $$
   * $\mathbb{E}\left(\hat\theta_n\right)=\theta_0$
   * $\operatorname{SE}\left(\hat\theta_n\right)=\sqrt{Var\left(\hat\theta_n\right)}=\frac{1}{\sqrt{n}}\cdot\text{constant}$
 
-**Inference:** In order to provide (approximate for $n\to\infty$) standard errors, construct confidence intervals, and to perform tests of hypothesis, we need to know the **distribution** of 
+**Inference (approximate for $\boldsymbol{n\to\infty}$):** In order to provide standard errors, construct confidence intervals, and perform tests of hypothesis, we need to know the **distribution** of 
 $$
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)\quad\text{as}\quad n\to\infty.
 $$
@@ -376,9 +386,9 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\tex
 $$
 
 
-We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of $H_{n}(x)$ is the distribution function of the Normal distribution with mean zero and asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).$ 
+We could use asymptotic statistics to derive this limit. For instance, using the Lindeberg-Lévy CLT, we may be able to show that the limit of $H_{n}(x)$ is the distribution function of the normal distribution with mean zero and asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big).$ 
 
-However, deriving a useful, explicit expression of the asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)$ can be *very* hard (see @sec-Illustration). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific version of the Bootstrap can be even more accurate then a standard asymptotic Normality result. 
+However, deriving a useful, *explicit* expression of the asymptotic variance $\lim_{n\to\infty}n\cdot Var\big(\hat\theta_n\big)$ can be *very* hard (see @sec-Illustration). Then, one is happy to use the bootstrap instead of doing painful math. Moreover, specific versions of the Bootstrap (@sec-BootT) can be even more accurate then an asymptotic normality result. 
 
 
 ::: {.callout-note}
@@ -392,7 +402,7 @@ by drawing observations **independently and with replacement** from the availabl
 $$
 \hat\theta^*_n\equiv \hat\theta(X_1^*,\dots,X_n^*)
 $$
-3. **Bootstrap replications:** Repeat Steps 1 and 2 $m$ times (for a large value of $m,$ such as $m=5000$ or $m=10000$) leading to $m$ bootstrap estimates 
+3. **Bootstrap replications:** Repeat Steps 1 and 2 $m$ times (for a large value of $m,$ such as $m=10000$) leading to $m$ bootstrap estimates 
 $$
 \hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*
 $$
@@ -414,7 +424,7 @@ where
 $$
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
 $$ 
-denotes the **empirical distribution function** based on the $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ centered by $\hat{\theta}_n$ and scaled by $\sqrt{n}.$
+denotes the **empirical distribution function** based on the $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ **centered** by $\hat{\theta}_n$ and **scaled** by $\sqrt{n}.$
 
 Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error between 
 $$
@@ -435,7 +445,9 @@ as $n\to\infty.$ This is a basic requirement called **bootstrap consistency**. I
 
 ### Bootstrap Consistency {-}
 
-The bootstrap does **not always work**. A necessary condition for the use of the bootstrap is the **consistency of the bootstrap approximation**.
+The bootstrap does **not always work**. 
+
+A necessary condition for the use of the bootstrap is the **consistency of the bootstrap approximation**.
 
 The bootstrap is called **consistent** if, for large $n$, the bootstrap distribution of 
 $$
@@ -472,23 +484,27 @@ as $n\to\infty.$
 
 Luckily, the standard bootstrap is consistent in a large number of statistical problems. Typically, the bootstrap is consistent if the following two requirements hold:
 
-1. Generation of the bootstrap sample must reflect appropriately the way in which the original sample has been generated. That is, 
+1. The bootstrap sampling process must reflect the original sampling process. For instance:  
    * if the original sample was generated by i.i.d. sampling, then also the bootstrap samples need to be generated by i.i.d. sampling. 
    * if the original sample was generated by cluster sampling, then also the bootstrap samples need to be generated by cluster sampling. 
 2. Typically, the distribution of 
 $$
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
 $$ 
-needs to be asymptotically normal. 
+needs to be asymptotically (n\to\infty) normal. 
 
-The standard bootstrap **will usually fail** if one of the above conditions is violated. For instance, ...
+The standard bootstrap **will usually fail** if one of the above conditions is violated. 
+
+<!-- 
+For instance:
 
 * the  bootstrap will not work if the i.i.d. re-sample $X_1^*,\dots,X_n^*$ from $\mathcal{S}_n=\{X_1,\dots,X_n\}$ does not properly reflect the way how $X_1,\dots,X_n$ are generated in the first place. (For instance, when $X_1,\dots,X_n$ is generated by a time-series process with auto-correlated data, but the bootstrap samples are generated by i.i.d. sampling from $\mathcal{S}_n$) 
 * the  bootstrap will not work if the distribution of 
 $$
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
 $$ 
-is not asymptotically normal. (For instance, in case of extreme value problems.)
+is not asymptotically normal. (For instance, in case of extreme value problems.) 
+-->
 
 **Note:** In order to deal with more complex sampling schemes alternative bootstrap procedures have been proposed in the literature (e.g. the block-bootstrap in case of time-series data).
 
@@ -514,7 +530,9 @@ $$
 \end{align*}
 $$
 
-**Inference Problem:** What is the (asymptotic) distribution of 
+**Inference (approximate for $\boldsymbol{n\to\infty}$):** 
+
+What is the (asymptotic) distribution of 
 $$
 \sqrt{n}\left(\bar{X}_n -\mu_0\right)
 $$
@@ -522,7 +540,7 @@ as $n\to\infty$?
 
 
 ::: {.callout-note}
-# Recall: Inference using Classic Asymptotic Statistics 
+# Recap: Inference using Classic Asymptotic Statistics 
 This example is so simple that we know (by the Lindeberg-Lévy CLT) that 
 $$
 \sqrt{n}\left(\bar{X}_n -\mu_0\right)\to_d\mathcal{N}\left(0,\sigma_0^2\right)\quad\text{as}\quad n\to\infty,
