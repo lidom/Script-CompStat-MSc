@@ -541,95 +541,117 @@ as $n\to\infty$?
 
 ::: {.callout-note appearance="minimal"}
 ::: {#exm-AsympNorm}
-# Recap: Inference using Classic Asymptotic Statistics 
-This example is so simple that we know (by the Lindeberg-Lévy CLT) that 
+# Recap: Inference about $\mu_0$ using Classic Asymptotic Statistics 
+By the Lindeberg-Lévy CLT we know that 
 $$
-\sqrt{n}\left(\bar{X}_n -\mu_0\right)\to_d\mathcal{N}\left(0,\sigma_0^2\right)\quad\text{as}\quad n\to\infty,
+\sqrt{n}\left(\bar{X}_n -\mu_0\right)\to_d\mathcal{N}\left(0,v^2\right)\quad\text{as}\quad n\to\infty,
 $$
-i.e., that
+which is equivalent to 
 $$
 %\bar{X}_n\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{1}{n}\sigma_0\right).
-H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0}(x)\quad\text{as}\quad n\to\infty,
+H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{v}(x)\quad\text{as}\quad n\to\infty,
 $$
-for all continuity points $x,$ where the asymptotic variance is here given by
+for all continuity points $x,$ where $\Phi_{v}$ denotes the distribution function of the normal distribution with mean zero and standard deviation $v,$ (variance $v^2$),
+$$
+\Phi_{v}(x)=\Phi\left(\frac{x}{v}\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x/v}\exp\left(-\frac{1}{2}z^2\right)\,dz
+$$ 
+with $\Phi$ denoting the distribution function of the standard normal distribution.
+
+Here, it is rather simple to derive an useful expression for the asymptotic variance $v^2\colon$
 $$
 \begin{align*}
-\sigma_0^2
-&=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\bar{X}_n -\mu_0\right)\right)\\[2ex]
-&=\lim_{n\to\infty}nVar(\bar{X}_n)\\[2ex]
+v^2
+&=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\bar{X}_n -\mu_0\right)\right)%\\[2ex]
+=\lim_{n\to\infty}nVar(\bar{X}_n)\\[2ex]
 &=\lim_{n\to\infty}nVar\left(\frac{1}{n}\sum_{i=1}^n X_i\right)\\[2ex]
 &\left[\text{Under our iid setup: }X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\right]\\[2ex]
-&=\lim_{n\to\infty}\frac{n}{n^2} nVar\left(X\right)\\[2ex]
-&=Var\left(X\right), 
+&=\lim_{n\to\infty}\frac{n}{n^2} nVar\left(X\right)%\\[2ex]
+=Var\left(X\right) = \sigma_0^2.
 \end{align*}
 $$
-and where
+
+That is, 
 $$
-\Phi_{\sigma_0}(x)=\Phi\left(\frac{x}{\sigma_0}\right)
-$$ 
-with $\Phi$ denoting the distribution function of the standard normal distribution, i.e.
+\Phi_{v}(x)=\Phi_{\sigma_0}(x)\quad\text{for all}\quad x.
 $$
-\Phi_{\sigma_0}(x)
-=\Phi\left(\frac{x}{\sigma_0}\right)
-=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x/\sigma_0}\exp\left(-\frac{1}{2}z^2\right)\,dz.
-$$ 
+
+The parameter $\sigma_0^2=Var\left(X\right)$ is usually unknown, but can be estimated consistently by
+$$
+\hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}_n\right)^2.
+$$
+Thus, for doing inference (computing the standard error, quantiles, etc.) about $\mu_0,$ we actually use  
+$$
+H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right),
+$$
+where 
+$$
+H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)\quad\text{as}\quad n\to\infty
+$$
+for all continuity points $x.$
+
+An estimator for the standard error $\operatorname{SE}\left(\bar{X}_n\right)$ is given by
+$$
+\widehat{\operatorname{SE}}^{Asymp}_{n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
+$$
+
 :::
 :::
 
-Can we, alternatively to the classic asymptotic statistics appraoch in @exm-AsympNorm, use the Bootstrap? I.e., is 
+Let us now check, whether the Bootstrap distribution
 $$
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 $$ 
-able to approximate the limit distribution $\Phi_{\sigma_0}(x)$ for all $x\in\mathbb{R}$? 
+is a legit alternative to $H^{Asymp}_n(x);$ i.e. whether we can use $H^{Boot}_{n}(x)$ to approximate the limit distribution $\Phi_{\sigma_0}(x).$ 
 
-Before we answer this question theoretically (see @sec-Theory1 and @sec-Theory2BootstrapConsist), we check it empirically using an **artifical** data example with 
+Before we answer this question theoretically (see @sec-Theory1 and @sec-Theory2BootstrapConsist), we check it empirically using an **artifical data example.** 
+
+#### **Practice: Empirical Consideration of the Bootstrap distribution $\boldsymbol{H^{Boot}_{n}}$** {#sec-PracticeXbar}
+
+Let 
 $$
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 $$ 
 where 
 
-* $X\sim \chi^2_{\operatorname{df}},$ 
-* $\operatorname{df}=2,$
-* $\mu_0=\operatorname{df}=2,$ and
-* $n=8.$   
+* $X\sim \chi^2_{\operatorname{df}}$ with $\operatorname{df}=2$ 
+* sample size $n=100$
 
+This setup implies (see @exm-AsympNorm) that
 
-#### **Practice: Empirical Consideration of the Bootstrap distribution $\boldsymbol{H^{Boot}_{n}}$** {#sec-PracticeXbar}
+* True (usually unknown) mean: $\mu_0=\mathbb{E}(X)=\operatorname{df}=2$ 
+* True (usually unknown) variance: $\sigma_0^2=Var(X)=2\cdot\operatorname{df}=4$ 
+* True (usually unknown) standard deviation: $\sigma_0=\sqrt{Var(X)}=2$ 
+* True (usually unknown) asymptotic limit distribution: 
+  $$
+  \begin{align*}
+  \sqrt{n}(\bar{X}_n-\mu_0)&\to_d\mathcal{N}(0,4)\\[2ex]
+  \Leftrightarrow\quad H_n(x)&\to_p \Phi_{2}(x)\quad\text{for all continuity points } x.
+  \end{align*}
+  $$ 
 
-In this chapter we investigate the distribution of 
+When doing classic asymptotic inference (see @exm-AsympNorm), we would use the feasible 
 $$
-\sqrt{n}\left.\left(\bar X^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n
+H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)
 $$
-i.e., the bootstrap distribution 
+to estimate the (usually unknown) asymptotic limit distribution $\Phi_{2}(x).$
+
+Let us now check (by simulation of artifical data) whether the bootstrap distribution 
 $$
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 $$ 
-using artificial data 
+can be a legit alternative for estimating the (usually unknown) $\Phi_{2}(x).$
+
+
+The following `R`-code generates artifical data 
 $$
-X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
-$$ 
-where $X\sim \chi^2_{\operatorname{df}}$ with $\operatorname{df}=2.$ 
-
-**Question to be checked:** Is $H^{Boot}_{n}(x)$ able to approximate the asymptotic distribution the limit distribution $\Phi_{\sigma_0}$ of $\sqrt{n}(\bar{X}_n-\mu_0)$? If yes, we can directly work with $H^{Boot}_{n}(x)$ instead of working with $\Phi_{\sigma_0}.$
-
-Since we know here that $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim \chi^2_{\operatorname{df}}$ and $\operatorname{df}=2,$ we know (see @exm-AsympNorm) that
+\mathcal{S}_n=\{X_1,\dots,X_n\}
 $$
-\begin{align*}
-\sqrt{n}(\bar{X}_n-\mu_0)&\to_d\mathcal{N}(0,\sigma_0^2)\\[2ex]
-\Leftrightarrow\quad H_n(x)&\to_p \Phi_{\sigma_0}(x)\quad\text{for all}\quad x,
-\end{align*}
-$$ 
-where $\sigma_0^2 = Var(X) = 2\cdot \operatorname{df}=4.$ 
-
-Let us consider the following **observed sample** $\mathcal{S}_n=\{X_1,\dots,X_n\}$ with a rather smallish sample size of $n=8$ shown in @tbl-ChiSqSample. The data was generated by drawing from a $\chi^2$-distribution with $\operatorname{df}=2.$  
-
-> Choosing a smallish data size of $n=8$ is done to maintain a clear presentation. The approximation of $\Phi_{\sigma_0}(x)$ by $H^{Boot}_{n}(x)$ will become better for larger sample sizes $n.$ 
+by sampling (i.i.d.) $n=100$ data points from a $\chi^2$-distribution with $\operatorname{df}=2.$ The first six data points are shown in @tbl-ChiSqSample. 
 
 
 ```{r, echo = TRUE}
 set.seed(123)
-observedSample <- rchisq(n = 8, df = 2)
-# round(observedSample, 2)
+observedSample <- rchisq(n = 100, df = 2)
 ```
 
 | $i$  | $X_i$| 
@@ -640,19 +662,14 @@ observedSample <- rchisq(n = 8, df = 2)
 | 4    | 4.90 |
 | 5    | 1.76 |
 | 6    | 5.33 |
-| 7    | 7.77 |
-| 8    | 1.93 |
+| ...  | ...  |
 
-: Observed realization of the random sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ with sample size $n=8$ drawn from a $\chi^2$-distribution with $\operatorname{df}=2.${#tbl-ChiSqSample}
 
-```{r}
-observedSample <- c(0.36, 3.39, 3.24, 4.90, 
-                    1.76, 5.33, 7.77, 1.93)
-```
+: First six data points of the observed realization of the random sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ with sample size $n=100$ drawn from a $\chi^2$-distribution with $\operatorname{df}=2.${#tbl-ChiSqSample}
 
 So the observed sample mean is 
 <center>
-$\bar X_{n,obs} =$ `mean(observedSample)` $=$ `r mean(observedSample)`
+$\bar X_{n} =$ `mean(observedSample)` $=$ `r mean(observedSample)`
 </center>
 
 <br>
@@ -667,8 +684,7 @@ is taken as underlying empirical "population" from which we generate i.i.d. **bo
 $$
 X_1^*,\dots,X_n^*.
 $$
-
-These i.i.d. samples $X_1^*,\dots,X_n^*$ are generated by drawing   observations independently and with replacement from ${\cal S}_n=\{X_1,\dots,X_n\}.$ 
+by drawing observations independently and with replacement from ${\cal S}_n=\{X_1,\dots,X_n\}.$ 
 
 Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator $\bar{X}^*_n.$ 
 
@@ -676,10 +692,10 @@ The following `R` code generates realizations of
 $$
 \bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.
 $$
-for $m=10000.$ 
+for $m=10000$ Bootstrap replications.  
 
 ```{r}
-m                <- 10000 # number of bootstrap samples 
+m                <- 10000 # number of bootstrap replications 
 Xbar_boot        <- vector(mode = "double", length = m)
 
 # Bootstrap algorithm
@@ -690,77 +706,128 @@ for(k in seq_len(m)){
  Xbar_boot[k]        <- mean(bootSample)
 }
 
-## Pinting the first six (head) elements of Xbar_boot:
-head(Xbar_boot)
+## Pinting the first three elements of Xbar_boot:
+Xbar_boot[1:3]
 ```
 
-The realizations of 
+Based on the realizations of 
 $$
-\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}
+\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m},
 $$
-allow us to approximate (arbirary well as $m\to\infty$) the bootstrap distribution
-$$
-H^{Boot}_n(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)
-$$
-using the empirical distribution function 
+we can compute the empirical Bootstrap distribution function 
 $$
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}-\bar{X}_n\right)\leq x\right)},
 $$
-arbitary well as $m\to\infty.$ Thus, by choosing a large $m$ (e.g. $m=10000$) we can proceed as if 
+which approximates (arbirary well as $m\to\infty$) the bootstrap distribution
+$$
+H^{Boot}_n(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)
+$$
+Thus, by choosing a large $m$ (e.g. $m=10000$) we can proceed as if 
 $$
 H^{Boot}_{n,m}(x)=H^{Boot}_{n}(x)\quad\text{for all}\quad x.
 $$
+ 
 
 
 If now
 $$
-H^{Boot}_{n}(x)\approx \Phi_{\sigma_0}(x)\quad\text{for all}\quad x,
+H^{Boot}_{n,m}(x)\approx \Phi_{2}(x)\quad\text{for all}\quad x,
 $$
-then we can directly use $H^{Boot}_{n}(x)$ (or $H^{Boot}_{n,m}(x)$) to do inference about $\mu_0,$ 
-because this is then effectively the same as doing inference about $\mu_0,$ using the asymptotic normality result. 
+then we can directly use $H^{Boot}_{n,m}(x)$ (instead of $H^{Asymp}_{n}(x)$) to do inference about $\mu_0.$ 
 
+The following `R`-code computes 
 
-The following `R` code demonstrates that:
-$$
-H^{Boot}_{n}(x)\approx \Phi_{\sigma_0}(x)\quad\text{for all}\quad x,
-$$ 
+<center>
+$H^{Boot}_{n,m}(x) =$ `ecdf( sqrt(n) * (Xbar_boot - Xbar) )` </br>
+</center>
+
+</br>
+
+and plots its graph against the graph of $\Phi_{2}(x)\colon$
 
 ```{r}
+#| echo: true
+#| eval: true
+#| label: fig-Compare
+#| fig-cap: Both $H^{Boot}_{n,m}(x)$ and $H^{Asymp}_{n}(x)$ provide here good approximations to the (usually unknown) asymptotic limit distribution $\Phi_{2}(x).$
+
 n                <- length(observedSample)
 Xbar             <- mean(observedSample)
 
 m                <- 10000 # number of bootstrap samples 
-Xbar_boot        <- vector(mode = "double", length = m)
+Xbar_boot_vec    <- vector(mode = "double", length = m)
 
 ## Bootstrap algorithm
 for(k in seq_len(m)){
  bootSample          <- sample(x       = observedSample, 
                                size    = n, 
                                replace = TRUE)
- Xbar_boot[k]        <- mean(bootSample)
+ Xbar_boot_vec[k]        <- mean(bootSample)
 }
 
-plot(ecdf( sqrt(n) * (Xbar_boot - Xbar) ), 
+plot(ecdf( sqrt(n) * (Xbar_boot_vec - Xbar) ), 
      xlab = "", ylab = "", 
      main = "Bootstrap Distribution vs Normal Limit Distribution")
-curve(pnorm(x, mean = 0, sd = sqrt(4)), col = "red", add = TRUE)     
+curve(pnorm(x, mean = 0, sd = sqrt(4)), col = "red", add = TRUE)
+curve(pnorm(x, mean = 0, sd = sqrt(var(observedSample))), col = "blue", lty = 2, add = TRUE)     
 legend("topleft", 
-       legend = c("Bootstrap Distribution", 
-                  "Normal Limit Distribution with\nMean = 0 and Variance = 4"), 
-      col = c("black", "red"), lty = c(1,1))
+       legend = c(expression(H['n,m']^{'Boot'}),
+                  expression(H['n']^{'Asymp'}), 
+                  "Normal Distr. (Mean = 0 and SD = 2)"), 
+      col = c("black", "blue", "red"), lty = c(1,2,1))
 ```
 
 
-
-**Note:** To plot the Normal limit distribution we need to make use of our knowledge that $X_i\overset{\text{i.i.d.}}{\sim}\chi^2_{(\operatorname{df}=2)}$ which implies that we know the **usually unknown** asymptotic variance of the estimator $\bar{X}_n:$ 
+@fig-Compare shows that both 
 $$
-nVar(\bar{X}_n)=Var(\sqrt{n}(\bar{X}_n-\mu_0))=\sigma_0^2=2\cdot\operatorname{df}=4, 
+H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Asymp}_{n}(x)
 $$ 
-for each $n=1,2,\dots,$ thus also $\lim_{n\to\infty}nVar(\bar{X}_n)=4.$
+provide good approximations to the (usually unknown) asymptotic limit distribution $\Phi_{2}(x)$. 
 
-Usually, however, we do not know the value of the asymptotic variance, but need an estimator for this quantity. (Which can be hard to derive.) 
 
-By contrast to the asymptotic normality result from applying the CLT, the bootstrap distribution gives us the <span style="color:#FF5733">**complete**</span> **distribution** without having to know the asymptotic variance. 
+The bootstrap distribution
+$$
+\begin{align*}
+H^{Boot}_{n,m}(x)&=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}-\bar{X}_n\right)\leq x\right)}\\[2ex]
+&\overset{m\to\infty}{=}P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)=H^{Boot}_n(x)
+\end{align*}
+$$
+can be computed *directly* from the bootstrap realizations of the estimator $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ All we need to know is how to compute the estimators. 
+
+From the Bootstrap distribution $H^{Boot}_n(x)$ we can derive an estimator for the asymptotic variance $v^2=\lim_{n\to\infty}\sqrt{n}\left(\bar{X}_n-\mu_0\right)\colon$  
+
+$$
+\begin{align*}
+\hat{v}^2_{Boot,n}
+&=Var\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
+&=n \; Var\left(\left.\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
+&\left[\text{Conditionally on $\mathcal{S}_n,$ $\bar{X}_n$ is constant}\right]\\[2ex]
+&=n \; Var\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)\\[2ex]
+&\overset{m\to\infty}{=} n \;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{=\widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)}\\[2ex]
+\end{align*}
+$$
+
+Thus, estimator $\hat{v}^2_{Boot,n}$ can be computed *directly* from the bootstrap realizations of the estimator $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$  
+
+<center>
+$\hat{v}^2_{Boot,n}=$ `n * var(Xbar_boot_vec)` $=$ `r round(n * var(Xbar_boot_vec), 2)`
+</center>
+
+</br>
+
+This yields an estimate of the standard error $\operatorname{SE}\left(\bar{X}_n\right)$
+
+<center>
+$\widehat{SE}_{Boot,n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2_{Boot,n}}{n}}\;=$ `sd(Xbar_boot_vec)` $=$ `r round(sd(Xbar_boot_vec), 2)`
+</center>
+
+</br>
+
+By constrast, when using the classic asymptotic statistics approach (see @exm-AsympNorm)
+
+
+ to compute $H^{Asymp}_{n}(x),$ we (i) need to know that the asymptotic variance $v^2=\sigma_0^2,$  and (ii) need an estimator $\hat{v}^2=\hat\sigma_n^2$ for the asymptotic variance. Deriving the asymptotic variance and estimating it can be very hard (see @sec-Illustration).
+
 
 That is, to estimate the usually unknown value of the asymptotic variance 
 $$
@@ -770,12 +837,6 @@ $$
 $$
 n\;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{\text{estimator of the usually unknown }Var(\bar{X}_n)}
 $$
-
-
-as done in the following `R`-code:
-```{r}
-round(n * var(Xbar_boot), 2)
-```
 
 
 
