@@ -568,7 +568,7 @@ v^2
 &=\lim_{n\to\infty}\frac{n}{n^2} nVar\left(X\right)%\\[2ex]
 =Var\left(X\right) = \sigma_0^2.
 \end{align*}
-$$
+$${#eq-AsympVarDeriv}
 
 That is, 
 $$
@@ -579,21 +579,24 @@ The parameter $\sigma_0^2=Var\left(X\right)$ is usually unknown, but can be esti
 $$
 \hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}_n\right)^2.
 $$
-Thus, for doing inference (computing the standard error, quantiles, etc.) about $\mu_0,$ we actually use  
+Thus, for doing inference (confidence intervals, statistical tests, etc.) about $\mu_0,$ we actually use the estimated distribution 
 $$
-H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right),
+H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right)\quad\text{for all}\quad x,
 $$
-where 
+where $H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)$ as $n\to\infty$ for all continuity points $x.$
+That is, we use the approximate distribution
 $$
-H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)\quad\text{as}\quad n\to\infty
+\begin{align*}
+\bar{X}_n&\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)\quad\Leftrightarrow\quad \bar{X}_n\overset{a}{\sim}H^{Asymp}_n
+\end{align*}
 $$
-for all continuity points $x.$
+for computing, for instance, an estimator for the standard error $\operatorname{SE}\big(\bar{X}_n\big),$ 
+$$
+\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
+$${#eq-SEAsymp}
+Using $\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)$ we can compute confidence intervals and statistical tests in the usual way. 
 
-An estimator for the standard error $\operatorname{SE}\left(\bar{X}_n\right)$ is given by
-$$
-\widehat{\operatorname{SE}}^{Asymp}_{n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
-$$
-
+**Note:** The estimator of the standard error in @eq-SEAsymp requires a formula for the asymptotic variance $v^2=\sigma_0^2$ as derived in @eq-AsympVarDeriv. Such derivations can be very challenging (see @sec-Illustration).
 :::
 :::
 
@@ -601,9 +604,9 @@ Let us now check, whether the Bootstrap distribution
 $$
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 $$ 
-is a legit alternative to $H^{Asymp}_n(x);$ i.e. whether we can use $H^{Boot}_{n}(x)$ to approximate the limit distribution $\Phi_{\sigma_0}(x).$ 
+is a legit alternative to $H^{Asymp}_n(x).$ I.e. we check whether we can use $H^{Boot}_{n}(x)$ as an alternative for estimating the limit distribution $\Phi_{\sigma_0}(x).$ 
 
-Before we answer this question theoretically (see @sec-Theory1 and @sec-Theory2BootstrapConsist), we check it empirically using an **artifical data example.** 
+Before we answer this question theoretically (see @sec-Theory1 and @sec-Theory2BootstrapConsist), we check it empirically using an **artifical data example.** This is then, of course, not a generally valid mathematical proof.
 
 #### **Practice: Empirical Consideration of the Bootstrap distribution $\boldsymbol{H^{Boot}_{n}}$** {#sec-PracticeXbar}
 
@@ -686,8 +689,10 @@ X_1^*,\dots,X_n^*.
 $$
 by drawing observations independently and with replacement from ${\cal S}_n=\{X_1,\dots,X_n\}.$ 
 
-Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator $\bar{X}^*_n.$ 
-
+Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator 
+$$
+\bar{X}^*_n=\bar{X}^*(X_1^*,\dots,X_n^*). 
+$$
 The following `R` code generates realizations of 
 $$
 \bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.
@@ -722,28 +727,27 @@ which approximates (arbirary well as $m\to\infty$) the bootstrap distribution
 $$
 H^{Boot}_n(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)
 $$
-Thus, by choosing a large $m$ (e.g. $m=10000$) we can proceed as if 
-$$
-H^{Boot}_{n,m}(x)=H^{Boot}_{n}(x)\quad\text{for all}\quad x.
-$$
+
+>  Thus, by choosing a large $m$ (e.g. $m=10000$) we proceed as if 
+>  $$
+>  H^{Boot}_{n,m}(x)=H^{Boot}_{n}(x)\quad\text{for all}\quad x.
+>  $$
  
 
 
-If now
+If
 $$
 H^{Boot}_{n,m}(x)\approx \Phi_{2}(x)\quad\text{for all}\quad x,
 $$
-then we can directly use $H^{Boot}_{n,m}(x)$ (instead of $H^{Asymp}_{n}(x)$) to do inference about $\mu_0.$ 
+then we can use $H^{Boot}_{n,m}(x)$ (instead of $H^{Asymp}_{n}(x)$) to do inference about $\mu_0.$ 
 
-The following `R`-code computes 
+The following `R`-code computes the following distribution functions
 
-<center>
-$H^{Boot}_{n,m}(x) =$ `ecdf( sqrt(n) * (Xbar_boot - Xbar) )` </br>
-</center>
+* $H^{Boot}_{n,m}(x) =$ `ecdf( sqrt(n) * (Xbar_boot - Xbar) )` </br>
+* $H^{Asymp}_{n}(x) = \Phi_{\hat{\sigma}_n}(x)=\Phi\left(\frac{x}{\hat{\sigma}_n}\right)$
+* $\Phi_{2}(x)=\Phi\left(\frac{x}{2}\right)$
 
-</br>
-
-and plots its graph against the graph of $\Phi_{2}(x)\colon$
+and plots their graphs.
 
 ```{r}
 #| echo: true
@@ -792,28 +796,43 @@ H^{Boot}_{n,m}(x)&=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j
 &\overset{m\to\infty}{=}P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)=H^{Boot}_n(x)
 \end{align*}
 $$
-can be computed *directly* from the bootstrap realizations of the estimator $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ All we need to know is how to compute the estimators. 
+can be computed **directly** from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as in @exm-AsympNorm for $H^{Asymp}_{n}(x).$  
 
-From the Bootstrap distribution $H^{Boot}_n(x)$ we can derive an estimator for the asymptotic variance $v^2=\lim_{n\to\infty}\sqrt{n}\left(\bar{X}_n-\mu_0\right)\colon$  
-
+In fact, we can derive an estimator for the asymptotic variance $v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)$ directly from the Bootstrap distribution $H^{Boot}_n(x)\colon$  
 $$
 \begin{align*}
 \hat{v}^2_{Boot,n}
 &=Var\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
 &=n \; Var\left(\left.\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
 &\left[\text{Conditionally on $\mathcal{S}_n,$ $\bar{X}_n$ is constant}\right]\\[2ex]
-&=n \; Var\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)\\[2ex]
-&\overset{m\to\infty}{=} n \;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{=\widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)}\\[2ex]
+&=n \; Var\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right),
+\end{align*}
+$$
+where the unknown $Var\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)$ can be consistently (for $m\to\infty$) estimated by
+$$
+\begin{align*}
+\widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right) = \frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2
 \end{align*}
 $$
 
-Thus, estimator $\hat{v}^2_{Boot,n}$ can be computed *directly* from the bootstrap realizations of the estimator $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$  
+>  By choosing a large $m$ (e.g. $m=10000$) we proceed as if 
+>  $$
+>  \widehat{Var}_m\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)=Var\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)
+>  $$
 
+The estimator 
+$$
+\hat{v}^2_{Boot,n}=n \; \widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)
+$$ 
+can be computed *directly* from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ For our artifical data example, we have that 
 <center>
 $\hat{v}^2_{Boot,n}=$ `n * var(Xbar_boot_vec)` $=$ `r round(n * var(Xbar_boot_vec), 2)`
 </center>
-
 </br>
+
+There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as in @exm-AsympNorm.  
+
+
 
 This yields an estimate of the standard error $\operatorname{SE}\left(\bar{X}_n\right)$
 
@@ -823,22 +842,9 @@ $\widehat{SE}_{Boot,n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2_{Boot,n}}{n}}
 
 </br>
 
-By constrast, when using the classic asymptotic statistics approach (see @exm-AsympNorm)
-
-
- to compute $H^{Asymp}_{n}(x),$ we (i) need to know that the asymptotic variance $v^2=\sigma_0^2,$  and (ii) need an estimator $\hat{v}^2=\hat\sigma_n^2$ for the asymptotic variance. Deriving the asymptotic variance and estimating it can be very hard (see @sec-Illustration).
-
-
-That is, to estimate the usually unknown value of the asymptotic variance 
-$$
-\lim_{n\to\infty}nVar(\bar{X}_n)=\sigma_0^2
-$$
-(here $\sigma_0^2=4$), we can simply use the **empirical variance** of the bootstrap estimators $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}$ multiplied by $n,$ i.e.
-$$
-n\;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{\text{estimator of the usually unknown }Var(\bar{X}_n)}
-$$
-
-
+::: {.callout-note}
+Computing an Bootstrap estimate of the standard error of an estimator is typically that simple: Compute the standard deviation of $\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}$ for a large $m.$ 
+:::
 
 <!-- 
 :::{.callout-note}

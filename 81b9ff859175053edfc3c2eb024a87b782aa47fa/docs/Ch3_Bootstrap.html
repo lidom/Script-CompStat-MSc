@@ -781,7 +781,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{v}(x)\qu
 \]</span> for all continuity points <span class="math inline">\(x,\)</span> where <span class="math inline">\(\Phi_{v}\)</span> denotes the distribution function of the normal distribution with mean zero and standard deviation <span class="math inline">\(v,\)</span> (variance <span class="math inline">\(v^2\)</span>), <span class="math display">\[
 \Phi_{v}(x)=\Phi\left(\frac{x}{v}\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x/v}\exp\left(-\frac{1}{2}z^2\right)\,dz
 \]</span> with <span class="math inline">\(\Phi\)</span> denoting the distribution function of the standard normal distribution.</p>
-<p>Here, it is rather simple to derive an useful expression for the asymptotic variance <span class="math inline">\(v^2\colon\)</span> <span class="math display">\[
+<p>Here, it is rather simple to derive an useful expression for the asymptotic variance <span class="math inline">\(v^2\colon\)</span> <span id="eq-AsympVarDeriv"><span class="math display">\[
 \begin{align*}
 v^2
 &amp;=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\bar{X}_n -\mu_0\right)\right)%\\[2ex]
@@ -791,29 +791,30 @@ v^2
 &amp;=\lim_{n\to\infty}\frac{n}{n^2} nVar\left(X\right)%\\[2ex]
 =Var\left(X\right) = \sigma_0^2.
 \end{align*}
-\]</span></p>
+\tag{3.4}\]</span></span></p>
 <p>That is, <span class="math display">\[
 \Phi_{v}(x)=\Phi_{\sigma_0}(x)\quad\text{for all}\quad x.
 \]</span></p>
 <p>The parameter <span class="math inline">\(\sigma_0^2=Var\left(X\right)\)</span> is usually unknown, but can be estimated consistently by <span class="math display">\[
 \hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}_n\right)^2.
-\]</span> Thus, for doing inference (computing the standard error, quantiles, etc.) about <span class="math inline">\(\mu_0,\)</span> we actually use<br>
-<span class="math display">\[
-H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right),
-\]</span> where <span class="math display">\[
-H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)\quad\text{as}\quad n\to\infty
-\]</span> for all continuity points <span class="math inline">\(x.\)</span></p>
-<p>An estimator for the standard error <span class="math inline">\(\operatorname{SE}\left(\bar{X}_n\right)\)</span> is given by <span class="math display">\[
-\widehat{\operatorname{SE}}^{Asymp}_{n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
-\]</span></p>
+\]</span> Thus, for doing inference (confidence intervals, statistical tests, etc.) about <span class="math inline">\(\mu_0,\)</span> we actually use the estimated distribution <span class="math display">\[
+H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right)\quad\text{for all}\quad x,
+\]</span> where <span class="math inline">\(H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)\)</span> as <span class="math inline">\(n\to\infty\)</span> for all continuity points <span class="math inline">\(x.\)</span> That is, we use the approximate distribution <span class="math display">\[
+\begin{align*}
+\bar{X}_n&amp;\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)\quad\Leftrightarrow\quad \bar{X}_n\overset{a}{\sim}H^{Asymp}_n
+\end{align*}
+\]</span> for computing, for instance, an estimator for the standard error <span class="math inline">\(\operatorname{SE}\big(\bar{X}_n\big),\)</span> <span id="eq-SEAsymp"><span class="math display">\[
+\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
+\tag{3.5}\]</span></span> Using <span class="math inline">\(\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)\)</span> we can compute confidence intervals and statistical tests in the usual way.</p>
+<p><strong>Note:</strong> The estimator of the standard error in <a href="#eq-SEAsymp" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> requires a formula for the asymptotic variance <span class="math inline">\(v^2=\sigma_0^2\)</span> as derived in <a href="#eq-AsympVarDeriv" class="quarto-xref">Equation&nbsp;<span>3.4</span></a>. Such derivations can be very challenging (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>).</p>
 </div>
 </div>
 </div>
 </div>
 <p>Let us now check, whether the Bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
-\]</span> is a legit alternative to <span class="math inline">\(H^{Asymp}_n(x);\)</span> i.e.&nbsp;whether we can use <span class="math inline">\(H^{Boot}_{n}(x)\)</span> to approximate the limit distribution <span class="math inline">\(\Phi_{\sigma_0}(x).\)</span></p>
-<p>Before we answer this question theoretically (see <a href="#sec-Theory1" class="quarto-xref"><span>Section 3.3.1.2</span></a> and <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span>Section 3.3.1.3</span></a>), we check it empirically using an <strong>artifical data example.</strong></p>
+\]</span> is a legit alternative to <span class="math inline">\(H^{Asymp}_n(x).\)</span> I.e. we check whether we can use <span class="math inline">\(H^{Boot}_{n}(x)\)</span> as an alternative for estimating the limit distribution <span class="math inline">\(\Phi_{\sigma_0}(x).\)</span></p>
+<p>Before we answer this question theoretically (see <a href="#sec-Theory1" class="quarto-xref"><span>Section 3.3.1.2</span></a> and <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span>Section 3.3.1.3</span></a>), we check it empirically using an <strong>artifical data example.</strong> This is then, of course, not a generally valid mathematical proof.</p>
 <section id="sec-PracticeXbar" class="level4" data-number="3.3.1.1">
 <h4 data-number="3.3.1.1" class="anchored" data-anchor-id="sec-PracticeXbar"><span class="header-section-number">3.3.1.1</span> <strong>Practice: Empirical Consideration of the Bootstrap distribution <span class="math inline">\(\boldsymbol{H^{Boot}_{n}}\)</span></strong></h4>
 <p>Let <span class="math display">\[
@@ -906,8 +907,9 @@ So the observed sample mean is
 \]</span> is taken as underlying empirical “population” from which we generate i.i.d. <strong>bootstrap samples</strong> <span class="math display">\[
 X_1^*,\dots,X_n^*.
 \]</span> by drawing observations independently and with replacement from <span class="math inline">\({\cal S}_n=\{X_1,\dots,X_n\}.\)</span></p>
-<p>Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator <span class="math inline">\(\bar{X}^*_n.\)</span></p>
-<p>The following <code>R</code> code generates realizations of <span class="math display">\[
+<p>Each realization of the bootstrap sample leads to a new realization of the bootstrap estimator <span class="math display">\[
+\bar{X}^*_n=\bar{X}^*(X_1^*,\dots,X_n^*).
+\]</span> The following <code>R</code> code generates realizations of <span class="math display">\[
 \bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.
 \]</span> for <span class="math inline">\(m=10000\)</span> Bootstrap replications.</p>
 <div class="cell">
@@ -934,18 +936,22 @@ X_1^*,\dots,X_n^*.
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}-\bar{X}_n\right)\leq x\right)},
 \]</span> which approximates (arbirary well as <span class="math inline">\(m\to\infty\)</span>) the bootstrap distribution <span class="math display">\[
 H^{Boot}_n(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)
-\]</span> Thus, by choosing a large <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10000\)</span>) we can proceed as if <span class="math display">\[
+\]</span></p>
+<blockquote class="blockquote">
+<p>Thus, by choosing a large <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10000\)</span>) we proceed as if <span class="math display">\[
 H^{Boot}_{n,m}(x)=H^{Boot}_{n}(x)\quad\text{for all}\quad x.
 \]</span></p>
-<p>If now <span class="math display">\[
+</blockquote>
+<p>If <span class="math display">\[
 H^{Boot}_{n,m}(x)\approx \Phi_{2}(x)\quad\text{for all}\quad x,
-\]</span> then we can directly use <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> (instead of <span class="math inline">\(H^{Asymp}_{n}(x)\)</span>) to do inference about <span class="math inline">\(\mu_0.\)</span></p>
-<p>The following <code>R</code>-code computes</p>
-<center>
-<span class="math inline">\(H^{Boot}_{n,m}(x) =\)</span> <code>ecdf( sqrt(n) * (Xbar_boot - Xbar) )</code> <br>
-</center>
-<p><br></p>
-<p>and plots its graph against the graph of <span class="math inline">\(\Phi_{2}(x)\colon\)</span></p>
+\]</span> then we can use <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> (instead of <span class="math inline">\(H^{Asymp}_{n}(x)\)</span>) to do inference about <span class="math inline">\(\mu_0.\)</span></p>
+<p>The following <code>R</code>-code computes the following distribution functions</p>
+<ul>
+<li><span class="math inline">\(H^{Boot}_{n,m}(x) =\)</span> <code>ecdf( sqrt(n) * (Xbar_boot - Xbar) )</code> <br></li>
+<li><span class="math inline">\(H^{Asymp}_{n}(x) = \Phi_{\hat{\sigma}_n}(x)=\Phi\left(\frac{x}{\hat{\sigma}_n}\right)\)</span></li>
+<li><span class="math inline">\(\Phi_{2}(x)=\Phi\left(\frac{x}{2}\right)\)</span></li>
+</ul>
+<p>and plots their graphs.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
@@ -992,35 +998,52 @@ H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Asymp}_{n}(x)
 H^{Boot}_{n,m}(x)&amp;=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}-\bar{X}_n\right)\leq x\right)}\\[2ex]
 &amp;\overset{m\to\infty}{=}P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)=H^{Boot}_n(x)
 \end{align*}
-\]</span> can be computed <em>directly</em> from the bootstrap realizations of the estimator <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> All we need to know is how to compute the estimators.</p>
-<p>From the Bootstrap distribution <span class="math inline">\(H^{Boot}_n(x)\)</span> we can derive an estimator for the asymptotic variance <span class="math inline">\(v^2=\lim_{n\to\infty}\sqrt{n}\left(\bar{X}_n-\mu_0\right)\colon\)</span></p>
-<p><span class="math display">\[
+\]</span> can be computed <strong>directly</strong> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as in <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a> for <span class="math inline">\(H^{Asymp}_{n}(x).\)</span></p>
+<p>In fact, we can derive an estimator for the asymptotic variance <span class="math inline">\(v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)\)</span> directly from the Bootstrap distribution <span class="math inline">\(H^{Boot}_n(x)\colon\)</span><br>
+<span class="math display">\[
 \begin{align*}
 \hat{v}^2_{Boot,n}
 &amp;=Var\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
 &amp;=n \; Var\left(\left.\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)\\[2ex]
 &amp;\left[\text{Conditionally on $\mathcal{S}_n,$ $\bar{X}_n$ is constant}\right]\\[2ex]
-&amp;=n \; Var\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)\\[2ex]
-&amp;\overset{m\to\infty}{=} n \;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{=\widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)}\\[2ex]
+&amp;=n \; Var\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right),
+\end{align*}
+\]</span> where the unknown <span class="math inline">\(Var\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)\)</span> can be consistently (for <span class="math inline">\(m\to\infty\)</span>) estimated by <span class="math display">\[
+\begin{align*}
+\widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right) = \frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2
 \end{align*}
 \]</span></p>
-<p>Thus, estimator <span class="math inline">\(\hat{v}^2_{Boot,n}\)</span> can be computed <em>directly</em> from the bootstrap realizations of the estimator <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span></p>
+<blockquote class="blockquote">
+<p>By choosing a large <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10000\)</span>) we proceed as if <span class="math display">\[
+\widehat{Var}_m\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)=Var\big(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\big)
+\]</span></p>
+</blockquote>
+The estimator <span class="math display">\[
+\hat{v}^2_{Boot,n}=n \; \widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)
+\]</span> can be computed <em>directly</em> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> For our artifical data example, we have that
 <center>
 <span class="math inline">\(\hat{v}^2_{Boot,n}=\)</span> <code>n * var(Xbar_boot_vec)</code> <span class="math inline">\(=\)</span> 3.41
 </center>
 <p><br></p>
+<p>There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as in <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>.</p>
 <p>This yields an estimate of the standard error <span class="math inline">\(\operatorname{SE}\left(\bar{X}_n\right)\)</span></p>
 <center>
 <span class="math inline">\(\widehat{SE}_{Boot,n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2_{Boot,n}}{n}}\;=\)</span> <code>sd(Xbar_boot_vec)</code> <span class="math inline">\(=\)</span> 0.18
 </center>
 <p><br></p>
-<p>By constrast, when using the classic asymptotic statistics approach (see <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>)</p>
-<p>to compute <span class="math inline">\(H^{Asymp}_{n}(x),\)</span> we (i) need to know that the asymptotic variance <span class="math inline">\(v^2=\sigma_0^2,\)</span> and (ii) need an estimator <span class="math inline">\(\hat{v}^2=\hat\sigma_n^2\)</span> for the asymptotic variance. Deriving the asymptotic variance and estimating it can be very hard (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>).</p>
-<p>That is, to estimate the usually unknown value of the asymptotic variance <span class="math display">\[
-\lim_{n\to\infty}nVar(\bar{X}_n)=\sigma_0^2
-\]</span> (here <span class="math inline">\(\sigma_0^2=4\)</span>), we can simply use the <strong>empirical variance</strong> of the bootstrap estimators <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}\)</span> multiplied by <span class="math inline">\(n,\)</span> i.e. <span class="math display">\[
-n\;\cdot\;\underbrace{\frac{1}{m}\sum_{j=1}^m \left(\bar{X}^*_{n,j} - \left(\frac{1}{m}\sum_{j=1}^m\bar{X}^*_{n,j}\right)\right)^2}_{\text{estimator of the usually unknown }Var(\bar{X}_n)}
-\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Computing an Bootstrap estimate of the standard error of an estimator is typically that simple: Compte the standard deviation of <span class="math inline">\(\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}\)</span> for a large <span class="math inline">\(m.\)</span></p>
+</div>
+</div>
 <!-- 
 :::{.callout-note}
 For the given data with $n=8$ observations, there are 
@@ -1244,13 +1267,13 @@ Characteristic Function: Some useful facts
 &amp;=\exp\left(-\frac{1}{2}\sigma_0^2\,t^2\right)\\[2ex]
 &amp;=\lim_{n\to\infty}\left(1-\frac{1}{n}\,\frac{1}{2}\,\sigma_0^2 \, t^2\right)^n
 \end{align*}
-\tag{3.4}\]</span></span></p></li>
+\tag{3.6}\]</span></span></p></li>
 <li><p>The characteristic function of <span class="math inline">\(\sum_{i=1}^nW_i,\)</span> where <span class="math inline">\(W_1,\dots,W_n\)</span> are i.i.d., is <span id="eq-CharacFctSum"><span class="math display">\[
 \psi_{\sum_{i=1}^nW_i}(t)=\left(\psi_{W_1}(t)\right)^n
-\tag{3.5}\]</span></span></p></li>
+\tag{3.7}\]</span></span></p></li>
 <li><p>Let <span class="math inline">\(W\)</span> be a random variable with <span class="math inline">\(\mathbb{E}(W)=0\)</span> and <span class="math inline">\(Var(W)=\sigma_W^2.\)</span> Then, we have that (see Equation (26.11) in <span class="citation" data-cites="Billingsley_1995">Billingsley (<a href="#ref-Billingsley_1995" role="doc-biblioref">1995</a>)</span>) <span id="eq-CharacFctBillingsley"><span class="math display">\[
 \psi_W(t)=1-\frac{1}{2}\sigma_W^2 \, t^2 + \lambda(t),
-\tag{3.6}\]</span></span> where <span class="math inline">\(|\lambda(t)|\leq |t^2|\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).\)</span></p></li>
+\tag{3.8}\]</span></span> where <span class="math inline">\(|\lambda(t)|\leq |t^2|\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).\)</span></p></li>
 </ul>
 </div>
 </div>
@@ -1272,7 +1295,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 <li><span class="math inline">\(\mathbb{E}(W_{i,n})=0\)</span> and</li>
 <li><span class="math inline">\(Var(W_{i,n})=\frac{1}{n}\sigma_0^2.\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.7</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.8</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1294,7 +1317,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 \frac{1}{2}\,\frac{1}{n}\sigma_0^2 &amp; = O(n^{-1})
 \end{align*}
 \]</span></p>
-<p>Thus, by <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.4</span></a> <span class="math display">\[
+<p>Thus, by <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
 \begin{align*}
 \lim_{n\to\infty}\psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;= \lim_{n\to\infty}\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex]
@@ -1318,7 +1341,7 @@ n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 <li><span class="math inline">\(\mathbb{E}(W^*_{1,n}|\mathcal{S}_n)=0\)</span> and</li>
 <li><span class="math inline">\(Var(W^*_{1,n}|\mathcal{S}_n)=\frac{1}{n}\hat{\sigma}_n^2=\frac{1}{n}\left(\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\right)\)</span></li>
 </ul>
-<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.6</span></a> <span class="math display">\[
+<p>Therefore, by <a href="#eq-CharacFctSum" class="quarto-xref">Equation&nbsp;<span>3.7</span></a> together with <a href="#eq-CharacFctBillingsley" class="quarto-xref">Equation&nbsp;<span>3.8</span></a> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 &amp;=\psi_{\sum_{i=1}^n W_{i,n}|\mathcal{S}_n}(t)\\[2ex]
@@ -1337,7 +1360,7 @@ n{\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0\quad\text{as}\quad n\to\infty,
 <p>Moreover, <span class="math display">\[
 {\color{darkgreen}\hat\sigma_n^2} = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\to_{a.s.}\sigma_0^2
 \]</span></p>
-<p>Thus, we have that (using <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.4</span></a>) <span class="math display">\[
+<p>Thus, we have that (using <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.6</span></a>) <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
 \to_{a.s.}&amp;
@@ -1601,12 +1624,12 @@ Assumption: Bootstrap is Consistent
   \hat\theta^*_{n,(\lfloor mp\rfloor+1)},         &amp; mp \text{ not a whole number}\\
   (\hat\theta^*_{n,(mp)}+\hat\theta^*_{n,(mp+1)})/2,&amp; mp \text{ a whole number}
 \end{array}\right.
-\tag{3.7}\]</span></span> for <span class="math inline">\(p=\frac{\alpha}{2}\)</span> or <span class="math inline">\(p=1-\frac{\alpha}{2},\)</span> where <span class="math inline">\(\hat\theta_{n,(j)}^*\)</span> denotes the <span class="math inline">\(j\)</span>th order statistic <span class="math display">\[
+\tag{3.9}\]</span></span> for <span class="math inline">\(p=\frac{\alpha}{2}\)</span> or <span class="math inline">\(p=1-\frac{\alpha}{2},\)</span> where <span class="math inline">\(\hat\theta_{n,(j)}^*\)</span> denotes the <span class="math inline">\(j\)</span>th order statistic <span class="math display">\[
 \hat\theta_{n,(1)}^* \leq \hat\theta_{n,(2)}^*\leq \dots\leq \hat\theta_{n,(m)}^*,
 \]</span> and <span class="math inline">\(\lfloor mp\rfloor\)</span> denotes the greatest whole number less than or equal to <span class="math inline">\(mp\)</span> (e.g.&nbsp;<span class="math inline">\(\lfloor 4.9\rfloor = 4\)</span>).</p></li>
 <li><p>The approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> <strong>basic bootstrap confidence interval</strong> is then given by <span id="eq-NPBootCI"><span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
-\tag{3.8}\]</span></span> where <span class="math inline">\(\hat{\theta}_n\)</span> is computed from the original sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*.\)</span></p></li>
+\tag{3.10}\]</span></span> where <span class="math inline">\(\hat{\theta}_n\)</span> is computed from the original sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*.\)</span></p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1625,7 +1648,7 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \]</span> since for large <span class="math inline">\(m\)</span> (<span class="math inline">\(m\to\infty\)</span>) the difference between <span class="math inline">\(G_{n,m}^{Boot}\)</span> and <span class="math inline">\(G_{n}^{Boot}\)</span> is negligible (Glivenko-Cantelli <a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>) and we can choose <span class="math inline">\(m\)</span> to be large.</p>
 </div>
 </div>
-<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
+<p><strong>Justifying the Basic Bootstrap CI (<a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.10</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
 <p>The following three approximate statements <span class="math inline">\((\approx (1-\alpha))\)</span> are exact for <span class="math inline">\(m\to\infty:\)</span> <span class="math display">\[
 \begin{align*}
 &amp;P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
@@ -1651,7 +1674,7 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \Rightarrow &amp;P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
 \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
 \end{align*}
-\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a> <span class="math display">\[
+\]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.10</span></a> <span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 \]</span> is indeed an asymptotically valid (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval.</p>
 </section>
@@ -1705,7 +1728,7 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 \bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.
 \]</span></p></li>
 <li><p>Compute the empirical quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math inline">\(\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.\)</span></p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> basic bootstrap confidence interval according to <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> basic bootstrap confidence interval according to <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.10</span></a>: <span class="math display">\[
 \left[2\bar X_n -\hat q^*_{n,1-\frac{\alpha}{2}},
    2\bar X_n -\hat q^*_{n,\frac{\alpha}{2}}\right],
 \]</span> where <span class="math inline">\(\bar{X}_n\)</span> is computed from the original sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.\)</span></p></li>
@@ -1822,14 +1845,14 @@ T_n^*&amp;=\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}.
 \]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) many bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
 \]</span></p></li>
-<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>).</p></li>
+<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>).</p></li>
 <li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval<br>
 <span id="eq-Boot_tCI"><span class="math display">\[
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
    \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
-\tag{3.9}\]</span></span> where <span class="math inline">\(\hat\theta_n\)</span> and <span class="math inline">\(\hat v_n\)</span> are the estimates of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(v_0\)</span> based on the original sample <span class="math inline">\(\mathcal{S}_n=\left\{X_1,\dots,X_n\right\},\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.\)</span></p></li>
+\tag{3.11}\]</span></span> where <span class="math inline">\(\hat\theta_n\)</span> and <span class="math inline">\(\hat v_n\)</span> are the estimates of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(v_0\)</span> based on the original sample <span class="math inline">\(\mathcal{S}_n=\left\{X_1,\dots,X_n\right\},\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> are computed from the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.\)</span></p></li>
 </ol>
-<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
+<p><strong>Justifying the Bootstrap-<span class="math inline">\(t\)</span> CI (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.11</span></a>) for <span class="math inline">\(\theta_0\)</span>:</strong></p>
 <p>The bootstrap estimates <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*
 \]</span> yield the empirical bootstrap distribution <span class="math display">\[
@@ -1855,7 +1878,7 @@ P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta
 \Rightarrow &amp; P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha
 \end{align*}
-\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>) <span class="math display">\[
+\]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.11</span></a>) <span class="math display">\[
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
       \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 \]</span> is indeed an asymptotic (i.e.&nbsp;approximate) <span class="math inline">\((1-\alpha)\times 100\%\)</span> CI.</p>
@@ -1872,8 +1895,8 @@ s_n^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2.
 \]</span></li>
 <li>Determine <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> from <span class="math display">\[
 \sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
-\]</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>.</li>
-<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>): <span class="math display">\[
+\]</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>.</li>
+<li>This yields the <span class="math inline">\((1-\alpha)\times 100 \%\)</span> confidence interval (using <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.11</span></a>): <span class="math display">\[
 \left[\bar X_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
     \bar X_n - \hat q^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
 \]</span> where <span class="math inline">\(\bar X_n\)</span> and <span class="math inline">\(s_n\)</span> are computed from the original sample, i.e., <span class="math display">\[
@@ -2206,8 +2229,8 @@ Tip
 <li><p>Use either bootstrapping pairs (<a href="#sec-bootPairs" class="quarto-xref"><span>Section 3.5.1</span></a>) or bootstrapping residuals (<a href="#sec-bootResid" class="quarto-xref"><span>Section 3.5.2</span></a>) or the wild bootstrap (<a href="#sec-bootWild" class="quarto-xref"><span>Section 3.5.3</span></a>) to generate <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) bootstrap realizations <span class="math display">\[
 \hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.
 \]</span></p></li>
-<li><p>Determine the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast\)</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>.</p></li>
-<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval as in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.8</span></a>: <span class="math display">\[
+<li><p>Determine the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> from the bootstrap realizations <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast\)</span> using <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>.</p></li>
+<li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval as in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.10</span></a>: <span class="math display">\[
 \left[2\hat\beta_{nj}-\hat q^\ast_{n,1-\frac{\alpha}{2},j},
    2\hat\beta_{nj}-\hat q^\ast_{n,\frac{\alpha}{2},j}\right],
 \]</span> where <span class="math inline">\(\hat\beta_{nj}\)</span> denotes the <span class="math inline">\(j\)</span>th component of <span class="math inline">\(\hat\beta_{n}\)</span> computed from the original sample <span class="math inline">\(\mathcal{S}_n,\)</span> and where the empirical quantiles <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> are computed from the bootstrap estimates <span class="math inline">\(\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.\)</span></p></li>
@@ -2299,8 +2322,8 @@ T^*_{n,k}=\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\widehat{\operatorname{SE}}(\
 </ul></li>
 </ul>
 <ol start="2" type="1">
-<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.7</span></a>) from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
-<li><p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>: <span class="math display">\[
+<li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^\ast_{n,\frac{\alpha}{2},j}\)</span> and <span class="math inline">\(\hat q^\ast_{n,1-\frac{\alpha}{2},j}\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>) from the bootstrap estimates <span class="math inline">\(T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.\)</span></p></li>
+<li><p>Compute the <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval as in <a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.11</span></a>: <span class="math display">\[
 \left[
   \hat\beta_{j,n}-\hat q^\ast_{1-\frac{\alpha}{2},n,j}\;\left(\widehat{\operatorname{SE}}(\hat\beta_{j,n})\right),\;
   \hat\beta_{j,n}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\widehat{\operatorname{SE}}(\hat\beta_{j,n})\right)
