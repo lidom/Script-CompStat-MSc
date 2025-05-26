@@ -680,17 +680,17 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\le
 \]</span> where <span class="math display">\[
 H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,j}-\hat\theta_n\right)\leq x\right)}
 \]</span> denotes the <strong>empirical distribution function</strong> based on the <span class="math inline">\(\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*\)</span> <strong>centered</strong> by <span class="math inline">\(\hat{\theta}_n\)</span> and <strong>scaled</strong> by <span class="math inline">\(\sqrt{n}.\)</span></p>
-<p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math display">\[
-H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Boot}_{n}(x).
-\]</span> That is, we can (and will do so) treat the bootstrap distribution <span class="math inline">\(H^{Boot}_{n}(x)\)</span> <strong>as known.</strong> 🤓</p>
+<p>Since we can choose <span class="math inline">\(m\)</span> arbitrarily large, we can effectively ignore the approximation error between <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> and <span class="math inline">\(H^{Boot}_{n}(x)\)</span> and proceed as if <span class="math display">\[
+H^{Boot}_{n,m}(x)\overset{(m\to\infty)}{=}H^{Boot}_{n}(x)\quad\text{for all}\quad x.
+\]</span></p>
 <p>The crucial question is, however, whether the (effectively known) bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
-\]</span> is able to approximate the unknown distribution <span class="math display">\[
-H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
-\]</span> as <span class="math inline">\(n\to\infty.\)</span> This is a basic requirement called <strong>bootstrap consistency</strong>. If a bootstrap method is inconsistent, you shall not use it in practice.</p>
+\]</span> can be used to estimate the limit distribution <span class="math display">\[
+H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty?
+\]</span> This is a basic requirement called <strong>bootstrap consistency</strong>. If a bootstrap method is inconsistent, you shall not use it in practice.</p>
 <section id="bootstrap-consistency" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="bootstrap-consistency">Bootstrap Consistency</h3>
-<p>The bootstrap does <strong>not always work</strong>.</p>
+<p>The bootstrap <strong>does not always work</strong>.</p>
 <p>A necessary condition for the use of the bootstrap is the <strong>consistency of the bootstrap approximation</strong>.</p>
 <p>The bootstrap is called <strong>consistent</strong> if, for large <span class="math inline">\(n\)</span>, the bootstrap distribution of <span class="math display">\[
 \sqrt{n}\big(\hat{\theta}^*_n -\hat{\theta}_n\big)|\mathcal{S}_n
@@ -727,7 +727,7 @@ H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
 </ul></li>
 <li>Typically, the distribution of <span class="math display">\[
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
-\]</span> needs to be asymptotically (n) normal.</li>
+\]</span> needs to be asymptotically (<span class="math inline">\(n\to\infty\)</span>) normal.</li>
 </ol>
 <p>The standard bootstrap <strong>will usually fail</strong> if one of the above conditions is violated.</p>
 <!-- 
@@ -747,7 +747,7 @@ is not asymptotically normal. (For instance, in case of extreme value problems.)
 <p><strong>Setup:</strong></p>
 <ul>
 <li><span class="math inline">\(X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\)</span> with <span class="math inline">\(X\sim F\)</span></li>
-<li>Continuous random variable <span class="math inline">\(X\sim F\)</span></li>
+<li>Continuous random variable <span class="math inline">\(X\)</span> (not necessary, but allows working with the density function <span class="math inline">\(f\)</span>)</li>
 <li>Non-zero, finite variance <span class="math inline">\(0&lt;Var(X)=\sigma_0^2&lt;\infty\)</span></li>
 <li>Unknown mean <span class="math inline">\(\mathbb{E}(X)=\mu_0,\)</span> where<br>
 <span class="math display">\[
@@ -762,10 +762,9 @@ is not asymptotically normal. (For instance, in case of extreme value problems.)
 \end{align*}
 \]</span></li>
 </ul>
-<p><strong>Inference (approximate for <span class="math inline">\(\boldsymbol{n\to\infty}\)</span>):</strong></p>
-<p>What is the (asymptotic) distribution of <span class="math display">\[
-\sqrt{n}\left(\bar{X}_n -\mu_0\right)
-\]</span> as <span class="math inline">\(n\to\infty\)</span>?</p>
+<p>For doing <strong>inference (approximate for <span class="math inline">\(\boldsymbol{n\to\infty}\)</span>) about <span class="math inline">\(\boldsymbol{\mu_0}\)</span></strong> we need to know the (asymptotic) distribution of <span class="math display">\[
+\sqrt{n}\left(\bar{X}_n -\mu_0\right)\quad\text{as}\quad n\to\infty.
+\]</span></p>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -781,7 +780,7 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{v}(x)\qu
 \]</span> for all continuity points <span class="math inline">\(x,\)</span> where <span class="math inline">\(\Phi_{v}\)</span> denotes the distribution function of the normal distribution with mean zero and standard deviation <span class="math inline">\(v,\)</span> (variance <span class="math inline">\(v^2\)</span>), <span class="math display">\[
 \Phi_{v}(x)=\Phi\left(\frac{x}{v}\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x/v}\exp\left(-\frac{1}{2}z^2\right)\,dz
 \]</span> with <span class="math inline">\(\Phi\)</span> denoting the distribution function of the standard normal distribution.</p>
-<p>Here, it is rather simple to derive an useful expression for the asymptotic variance <span class="math inline">\(v^2\colon\)</span> <span id="eq-AsympVarDeriv"><span class="math display">\[
+<p>However, without knowledge of <span class="math inline">\(v^2,\)</span> the above result is of limited use. Luckily, in this example, it is rather simple to derive an useful expression for the asymptotic variance <span class="math inline">\(v^2\colon\)</span> <span id="eq-AsympVarDeriv"><span class="math display">\[
 \begin{align*}
 v^2
 &amp;=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\bar{X}_n -\mu_0\right)\right)%\\[2ex]
@@ -797,15 +796,17 @@ v^2
 \]</span></p>
 <p>The parameter <span class="math inline">\(\sigma_0^2=Var\left(X\right)\)</span> is usually unknown, but can be estimated consistently by <span class="math display">\[
 \hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}_n\right)^2.
-\]</span> Thus, for doing inference (confidence intervals, statistical tests, etc.) about <span class="math inline">\(\mu_0,\)</span> we actually use the estimated distribution <span class="math display">\[
+\]</span> Thus, for doing inference (constructing confidence intervals, statistical tests, etc.) about <span class="math inline">\(\mu_0,\)</span> we actually use the estimated distribution <span class="math display">\[
 H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right)\quad\text{for all}\quad x,
 \]</span> where <span class="math inline">\(H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)\)</span> as <span class="math inline">\(n\to\infty\)</span> for all continuity points <span class="math inline">\(x.\)</span> That is, we use the approximate distribution <span class="math display">\[
 \begin{align*}
-\bar{X}_n&amp;\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)\quad\Leftrightarrow\quad \bar{X}_n\overset{a}{\sim}H^{Asymp}_n
+\bar{X}_n &amp; \overset{a}{\sim}H^{Asymp}_n
+\quad\Leftrightarrow\quad
+\bar{X}_n \overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)
 \end{align*}
 \]</span> for computing, for instance, an estimator for the standard error <span class="math inline">\(\operatorname{SE}\big(\bar{X}_n\big),\)</span> <span id="eq-SEAsymp"><span class="math display">\[
 \widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
-\tag{3.5}\]</span></span> Using <span class="math inline">\(\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)\)</span> we can compute confidence intervals and statistical tests in the usual way.</p>
+\tag{3.5}\]</span></span> Using <span class="math inline">\(\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big),\)</span> we can compute confidence intervals and statistical tests in the usual way.</p>
 <p><strong>Note:</strong> The estimator of the standard error in <a href="#eq-SEAsymp" class="quarto-xref">Equation&nbsp;<span>3.5</span></a> requires a formula for the asymptotic variance <span class="math inline">\(v^2=\sigma_0^2\)</span> as derived in <a href="#eq-AsympVarDeriv" class="quarto-xref">Equation&nbsp;<span>3.4</span></a>. Such derivations can be very challenging (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>).</p>
 </div>
 </div>
@@ -817,7 +818,7 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\
 <p>Before we answer this question theoretically (see <a href="#sec-Theory1" class="quarto-xref"><span>Section 3.3.1.2</span></a> and <a href="#sec-Theory2BootstrapConsist" class="quarto-xref"><span>Section 3.3.1.3</span></a>), we check it empirically using an <strong>artifical data example.</strong> This is then, of course, not a generally valid mathematical proof.</p>
 <section id="sec-PracticeXbar" class="level4" data-number="3.3.1.1">
 <h4 data-number="3.3.1.1" class="anchored" data-anchor-id="sec-PracticeXbar"><span class="header-section-number">3.3.1.1</span> <strong>Practice: Empirical Consideration of the Bootstrap distribution <span class="math inline">\(\boldsymbol{H^{Boot}_{n}}\)</span></strong></h4>
-<p>Let <span class="math display">\[
+<p>Let us consider the following (usually unknown) specific setup: <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 \]</span> where</p>
 <ul>
@@ -831,10 +832,10 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 <li>True (usually unknown) standard deviation: <span class="math inline">\(\sigma_0=\sqrt{Var(X)}=2\)</span></li>
 <li>True (usually unknown) asymptotic limit distribution: <span class="math display">\[
 \begin{align*}
-\sqrt{n}(\bar{X}_n-\mu_0)&amp;\to_d\mathcal{N}(0,4)\\[2ex]
-\Leftrightarrow\quad H_n(x)&amp;\to_p \Phi_{2}(x)\quad\text{for all continuity points } x.
+\sqrt{n}(\bar{X}_n-\mu_0)&amp;\to_d\mathcal{N}(0,4)\quad\text{as}\quad n\to\infty,\\[2ex]
+\Leftrightarrow\quad H_n(x)&amp;\to_p \Phi_{2}(x)\quad\text{as}\quad n\to\infty,
 \end{align*}
-\]</span></li>
+\]</span> for all continuity points <span class="math inline">\(x.\)</span></li>
 </ul>
 <p>When doing classic asymptotic inference (see <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>), we would use the feasible <span class="math display">\[
 H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)
@@ -844,7 +845,7 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\
 \]</span> can be a legit alternative for estimating the (usually unknown) <span class="math inline">\(\Phi_{2}(x).\)</span></p>
 <p>The following <code>R</code>-code generates artifical data <span class="math display">\[
 \mathcal{S}_n=\{X_1,\dots,X_n\}
-\]</span> by sampling (i.i.d.) <span class="math inline">\(n=100\)</span> data points from a <span class="math inline">\(\chi^2\)</span>-distribution with <span class="math inline">\(\operatorname{df}=2.\)</span> The first six data points are shown in <a href="#tbl-ChiSqSample" class="quarto-xref">Table&nbsp;<span>3.1</span></a>.</p>
+\]</span> by (i.i.d.) sampling <span class="math inline">\(n=100\)</span> data points from a <span class="math inline">\(\chi^2\)</span>-distribution with <span class="math inline">\(\operatorname{df}=2.\)</span> The first six data points are shown in <a href="#tbl-ChiSqSample" class="quarto-xref">Table&nbsp;<span>3.1</span></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>observedSample <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">df =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -898,10 +899,10 @@ Table&nbsp;3.1: First six data points of the observed realization of the random 
 </div>
 So the observed sample mean is
 <center>
-<span class="math inline">\(\bar X_{n} =\)</span> <code>mean(observedSample)</code> <span class="math inline">\(=\)</span> 1.8042497
+<span class="math inline">\(\bar X_{n} =\)</span> <code>mean(observedSample)</code> <span class="math inline">\(=\)</span> 1.8
 </center>
 <p><br></p>
-<p><strong>Bootstrap:</strong></p>
+<p><strong>Basic Bootstrap Method:</strong></p>
 <p>The observed sample <span class="math display">\[
 {\cal S}_n=\{X_1,\dots,X_n\}
 \]</span> is taken as underlying empirical “population” from which we generate i.i.d. <strong>bootstrap samples</strong> <span class="math display">\[
@@ -913,19 +914,21 @@ X_1^*,\dots,X_n^*.
 \bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.
 \]</span> for <span class="math inline">\(m=10000\)</span> Bootstrap replications.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of bootstrap replications </span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Xbar_boot        <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> m)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap algorithm</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a> Xbar_boot[k]        <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Pinting the first three elements of Xbar_boot:</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>Xbar_boot[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of bootstrap replications </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>m                <span class="ot">&lt;-</span> <span class="dv">10000</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Container to save the bootstrap estimates</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>Xbar_boot        <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"double"</span>, <span class="at">length =</span> m)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic Bootstrap algorithm</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq_len</span>(m)){</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a> bootSample          <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x       =</span> observedSample, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                               <span class="at">size    =</span> n, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                               <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a> Xbar_boot[k]        <span class="ot">&lt;-</span> <span class="fu">mean</span>(bootSample)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Pinting the first three elements of Xbar_boot:</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>Xbar_boot[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6649553 2.2564627 1.8510396</code></pre>
 </div>
@@ -944,14 +947,13 @@ H^{Boot}_{n,m}(x)=H^{Boot}_{n}(x)\quad\text{for all}\quad x.
 </blockquote>
 <p>If <span class="math display">\[
 H^{Boot}_{n,m}(x)\approx \Phi_{2}(x)\quad\text{for all}\quad x,
-\]</span> then we can use <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> (instead of <span class="math inline">\(H^{Asymp}_{n}(x)\)</span>) to do inference about <span class="math inline">\(\mu_0.\)</span></p>
-<p>The following <code>R</code>-code computes the following distribution functions</p>
+\]</span> then we can use <span class="math inline">\(H^{Boot}_{n,m}(x)\)</span> (as an alternative to <span class="math inline">\(H^{Asymp}_{n}(x)\)</span>) to do inference about <span class="math inline">\(\mu_0.\)</span></p>
+<p>The following <code>R</code>-code computes and compares graphically the following three distribution functions:</p>
 <ul>
 <li><span class="math inline">\(H^{Boot}_{n,m}(x) =\)</span> <code>ecdf( sqrt(n) * (Xbar_boot - Xbar) )</code> <br></li>
 <li><span class="math inline">\(H^{Asymp}_{n}(x) = \Phi_{\hat{\sigma}_n}(x)=\Phi\left(\frac{x}{\hat{\sigma}_n}\right)\)</span></li>
 <li><span class="math inline">\(\Phi_{2}(x)=\Phi\left(\frac{x}{2}\right)\)</span></li>
 </ul>
-<p>and plots their graphs.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n                <span class="ot">&lt;-</span> <span class="fu">length</span>(observedSample)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Xbar             <span class="ot">&lt;-</span> <span class="fu">mean</span>(observedSample)</span>
@@ -998,8 +1000,10 @@ H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Asymp}_{n}(x)
 H^{Boot}_{n,m}(x)&amp;=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j}-\bar{X}_n\right)\leq x\right)}\\[2ex]
 &amp;\overset{m\to\infty}{=}P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)=H^{Boot}_n(x)
 \end{align*}
-\]</span> can be computed <strong>directly</strong> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as in <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a> for <span class="math inline">\(H^{Asymp}_{n}(x).\)</span></p>
-<p>In fact, we can derive an estimator for the asymptotic variance <span class="math inline">\(v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)\)</span> directly from the Bootstrap distribution <span class="math inline">\(H^{Boot}_n(x)\colon\)</span><br>
+\]</span> can be computed <strong>directly</strong> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as it is necessary for <span class="math inline">\(H^{Asymp}_{n}(x)\)</span> (see <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>).</p>
+<p>In fact, using <span class="math display">\[
+H^{Boot}_n(x) = P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right),
+\]</span> we can derive an estimator for the asymptotic variance <span class="math inline">\(v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)\)</span> directly from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}\colon\)</span><br>
 <span class="math display">\[
 \begin{align*}
 \hat{v}^2_{Boot,n}
@@ -1020,12 +1024,11 @@ H^{Boot}_{n,m}(x)&amp;=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_
 </blockquote>
 The estimator <span class="math display">\[
 \hat{v}^2_{Boot,n}=n \; \widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)
-\]</span> can be computed <em>directly</em> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> For our artifical data example, we have that
+\]</span> can be computed <em>directly</em> from <span class="math inline">\(\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.\)</span> There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as in <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>. For our artifical data example, we have that
 <center>
 <span class="math inline">\(\hat{v}^2_{Boot,n}=\)</span> <code>n * var(Xbar_boot_vec)</code> <span class="math inline">\(=\)</span> 3.41
 </center>
 <p><br></p>
-<p>There’s no need for deriving a formula <span class="math inline">\(v^2=\sigma_0^2\)</span> for the asymptotic variance as in <a href="#exm-AsympNorm" class="quarto-xref">Example&nbsp;<span>3.2</span></a>.</p>
 <p>This yields an estimate of the standard error <span class="math inline">\(\operatorname{SE}\left(\bar{X}_n\right)\)</span></p>
 <center>
 <span class="math inline">\(\widehat{SE}_{Boot,n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2_{Boot,n}}{n}}\;=\)</span> <code>sd(Xbar_boot_vec)</code> <span class="math inline">\(=\)</span> 0.18
@@ -1041,7 +1044,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Computing an Bootstrap estimate of the standard error of an estimator is typically that simple: Compte the standard deviation of <span class="math inline">\(\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}\)</span> for a large <span class="math inline">\(m.\)</span></p>
+<p>Computing the Basic Bootstrap estimate of the standard error of an estimator is typically that simple: Compute the standard deviation of <span class="math inline">\(\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}\)</span> for a large <span class="math inline">\(m.\)</span></p>
 </div>
 </div>
 <!-- 
@@ -1065,18 +1068,18 @@ H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Notation <span class="math inline">\(\mathbb{E}^*(\cdot),\)</span> <span class="math inline">\(Var^*(\cdot),\)</span> and <span class="math inline">\(P^*(\cdot)\)</span>
+Notation <span class="math inline">\(\mathbb{E}^*(\,\cdot\,),\)</span> <span class="math inline">\(Var^*(\,\cdot\,),\)</span> and <span class="math inline">\(P^*(\,\cdot\,)\)</span>
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>In the bootstrap literature one frequently finds the notation <span class="math display">\[
-\mathbb{E}^*(\cdot),\;Var^*(\cdot),\;\text{and}\;P^*(\cdot)
+\mathbb{E}^*(\,\cdot\,),\;Var^*(\,\cdot\,),\;\text{and}\;P^*(\,\cdot\,)
 \]</span> to denote the <strong>conditional</strong> expectation <span class="math display">\[
-\mathbb{E}^*(\cdot)=\mathbb{E}(\cdot|\mathcal{S}_n),
+\mathbb{E}^*(\,\cdot\,)=\mathbb{E}(\,\cdot\,|\mathcal{S}_n),
 \]</span> the <strong>conditional</strong> variance <span class="math display">\[
-Var^*(\cdot)=Var(\cdot|\mathcal{S}_n),
+Var^*(\,\cdot\,)=Var(\,\cdot\,|\mathcal{S}_n),
 \]</span> and the <strong>conditional</strong> probability <span class="math display">\[
-P^*(\cdot)=P(\cdot|\mathcal{S}_n),
+P^*(\,\cdot\,)=P(\,\cdot\,|\mathcal{S}_n),
 \]</span> given the sample <span class="math inline">\({\cal S}_n.\)</span></p>
 </div>
 </div>
@@ -1114,7 +1117,7 @@ P^*(X_i^*=X_2)&amp;= P(X_i^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
 P^*(X_i^*=X_n)&amp;= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 \]</span></p>
-<p>Thus, <strong>we know the whole distribution</strong> of the discrete conditional random variable <span class="math inline">\(X_i^*|\mathcal{S}_n\)</span> and, therefore, can compute, for instance, easily its conditional mean and its variance.</p>
+<p>Thus, <strong>we know the whole distribution</strong> of <span class="math inline">\(X_i^*|\mathcal{S}_n\)</span> and, therefore, can compute, for instance, easily its conditional mean and its variance:</p>
 <ul>
 <li><p>The conditional mean of <span class="math inline">\(X_i^*\)</span> given <span class="math inline">\({\cal S}_n\)</span> is <span class="math display">\[
 \begin{align*}
@@ -1160,17 +1163,18 @@ Caution: Conditioning on <span class="math inline">\(\mathcal{S}_n\)</span> in i
 </div>
 <div class="callout-body-container callout-body">
 <p>Conditioning on the observed sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> is very important.</p>
-<p>The unconditional distribution of <span class="math inline">\(X_i^*\)</span> is equal to the <strong>unknown distribution</strong> <span class="math inline">\(F.\)</span> This can be seen from the following derivation: <span class="math display">\[
+<p>The <strong>unconditional distribution</strong> of <span class="math inline">\(X_i^*\)</span> is equal to the <strong>unknown distribution</strong> <span class="math inline">\(F.\)</span> This can be seen from the following derivation: <span class="math display">\[
 \begin{align*}
 P(X_i^*\leq x)
 &amp;= P(1_{(X_i^*\leq x)}=1) \\[2ex]
 &amp;= P(1_{(X_i^*\leq x)}=1) \cdot 1 + P(1_{(X_i^*\leq x)}=0) \cdot 0\\[2ex]
 &amp;= \mathbb{E}\left(1_{\left(X_i^*\leq x\right)}\right)\\[2ex]
-&amp;= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\\[2ex]
+&amp;= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
 &amp;= \mathbb{E}\left({\color{blue}\frac{1}{n}\sum_{i=1}^n 1_{\left(X_i\leq x\right)}}\right)\quad[\text{{\color{blue}from our derivations above}}]\\[2ex]
-&amp;= \frac{n}{n}\mathbb{E}\left(1_{\left(X_i\leq x\right)}\right)\\[2ex]
-&amp;= P(1_{(X_i\leq x)}=1) \cdot 1 + P(1_{(X_i\leq x)}=0) \cdot 0\\[2ex]
-&amp;= P\left(X_i\leq x\right)=F(x)
+&amp;\quad[\text{Using that $X_1\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F\colon$}]\\[2ex]
+&amp;= \frac{n}{n}\mathbb{E}\left(1_{\left(X\leq x\right)}\right)\\[2ex]
+&amp;= P(1_{(X\leq x)}=1) \cdot 1 + P(1_{(X\leq x)}=0) \cdot 0\\[2ex]
+&amp;= P\left(X\leq x\right)=F(x)
 \end{align*}
 \]</span></p>
 </div>
@@ -1182,13 +1186,14 @@ P(X_i^*\leq x)
 <li><p>The conditional mean of <span class="math inline">\(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\)</span> given <span class="math inline">\(\mathcal{S}_n\)</span> is <span class="math display">\[
 \begin{align*}
 \mathbb{E}^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
-&amp;=\mathbb{E}\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
-&amp;=\sqrt{n}\,\mathbb{E}\left(\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
+&amp;=\mathbb{E}\left(\left.\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right|{\cal S}_n\right)\\[2ex]
+&amp;=\sqrt{n}\,\mathbb{E}\left(\left.\bar X^*_n-\bar{X}_n\right|{\cal S}_n\right)\\[2ex]
 &amp;=\sqrt{n}\left(\mathbb{E}\left(\bar X^*_n|{\cal S}_n\right)- \mathbb{E}\left(\bar{X}_n|{\cal S}_n\right)\right)\\[2ex]
 &amp;=\sqrt{n}\left(\frac{1}{n}\sum_{i=1}^n{\color{red}\mathbb{E}\left(X^*_i|{\cal S}_n\right)}- \frac{1}{n}\sum_{i=1}^n{\color{blue}\mathbb{E}\left(X_i|{\cal S}_n\right)}\right)\\[2ex]
 &amp;=\sqrt{n}\left(\frac{n}{n}{\color{red}\bar{X}_n} - \frac{1}{n}\sum_{i=1}^n{\color{blue}X_i}\right)\\[2ex]
 &amp;=\sqrt{n}\left(\bar{X}_n - \bar{X}_n\right)\\[2ex]
-&amp;= 0.
+&amp;= 0%\\[2ex]
+%\Leftrightarrow\quad \mathbb{E}\left(\bar X^*_n|{\cal S}_n\right) &amp; =  \mathbb{E}\left(\bar{X}_n|{\cal S}_n\right).
 \end{align*}
 \]</span></p></li>
 <li><p>The conditional variance of <span class="math inline">\(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\)</span> given <span class="math inline">\(\mathcal{S}_n\)</span> is <span class="math display">\[
@@ -1196,7 +1201,8 @@ P(X_i^*\leq x)
 Var^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
 &amp;=Var\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
 &amp;=n\,Var\left(\big(\bar X^*_n-\bar{X}_n\big)|{\cal S}_n\right)\\[2ex]
-&amp;=n\,Var\big(\bar X^*_n|{\cal S}_n\big)\quad[\text{cond.~on $\mathcal{S}_n,$ $\bar{X}_n$ is a constant}]\\[2ex]
+&amp;[\text{Cond.~on $\mathcal{S}_n,$ $\bar{X}_n$ is a constant:}]\\[2ex]
+&amp;=n\,Var\big(\bar X^*_n|{\cal S}_n\big)\\[2ex]
 &amp;=n\,Var\Big(\frac{1}{n}\sum_{i=1}^n X_i^*\Big|{\cal S}_n\Big)\\
 &amp;=n\,\frac{1}{n^2}\sum_{i=1}^n Var\big(X_i^*|{\cal S}_n\big)\\
 &amp;=n\,\frac{n}{n^2} Var\big(X_i^*|{\cal S}_n\big)\\
@@ -1214,7 +1220,7 @@ Var^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Summary
 </div>
 </div>
 <div class="callout-body-container callout-body">

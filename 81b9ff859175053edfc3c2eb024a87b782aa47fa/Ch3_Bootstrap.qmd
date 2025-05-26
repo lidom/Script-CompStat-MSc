@@ -426,26 +426,25 @@ H^{Boot}_{n,m}(x)=\frac{1}{m}\sum_{j=1}^m1_{\left(\sqrt{n}\left(\hat\theta^*_{n,
 $$ 
 denotes the **empirical distribution function** based on the $\hat\theta_{n,1}^*,\hat\theta_{n,2}^*,\dots,\hat\theta_{n,m}^*$ **centered** by $\hat{\theta}_n$ and **scaled** by $\sqrt{n}.$
 
-Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error between 
+Since we can choose $m$ arbitrarily large, we can effectively ignore the approximation error between $H^{Boot}_{n,m}(x)$ and $H^{Boot}_{n}(x)$ and proceed as if 
 $$
-H^{Boot}_{n,m}(x)\quad\text{and}\quad H^{Boot}_{n}(x).
-$$ 
-That is, we can (and will do so) treat the bootstrap distribution $H^{Boot}_{n}(x)$ **as known.** 🤓  
+H^{Boot}_{n,m}(x)\overset{(m\to\infty)}{=}H^{Boot}_{n}(x)\quad\text{for all}\quad x.
+$$
 
 The crucial question is, however, whether the (effectively known) bootstrap distribution 
 $$
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\hat\theta^*_n-\hat\theta_n\right)\leq x\;\right|\;\mathcal{S}_n\right)
 $$ 
-is able to approximate the unknown distribution 
+can be used to estimate the limit distribution
 $$
-H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)
-$$
-as $n\to\infty.$ This is a basic requirement called **bootstrap consistency**. If a bootstrap method is inconsistent, you shall not use it in practice. 
+H_{n}(x)=P\left(\sqrt{n}\left(\hat\theta_n-\theta_0\right)\leq x\right)\quad\text{as}\quad n\to\infty?
+$$ 
+This is a basic requirement called **bootstrap consistency**. If a bootstrap method is inconsistent, you shall not use it in practice. 
 
 
 ### Bootstrap Consistency {-}
 
-The bootstrap does **not always work**. 
+The bootstrap **does not always work**. 
 
 A necessary condition for the use of the bootstrap is the **consistency of the bootstrap approximation**.
 
@@ -491,7 +490,7 @@ Luckily, the standard bootstrap is consistent in a large number of statistical p
 $$
 \sqrt{n}\left(\hat\theta_n-\theta_0\right)
 $$ 
-needs to be asymptotically (n\to\infty) normal. 
+needs to be asymptotically ($n\to\infty$) normal. 
 
 The standard bootstrap **will usually fail** if one of the above conditions is violated. 
 
@@ -513,7 +512,7 @@ is not asymptotically normal. (For instance, in case of extreme value problems.)
 **Setup:**
 
 * $X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F$ 
-* Continuous random variable $X\sim F$ 
+* Continuous random variable $X$ (not necessary, but allows working with the density function $f$) 
 * Non-zero, finite variance $0<Var(X)=\sigma_0^2<\infty$ 
 * Unknown mean $\mathbb{E}(X)=\mu_0,$ where  
 $$
@@ -530,13 +529,10 @@ $$
 \end{align*}
 $$
 
-**Inference (approximate for $\boldsymbol{n\to\infty}$):** 
-
-What is the (asymptotic) distribution of 
+For doing **inference (approximate for $\boldsymbol{n\to\infty}$) about $\boldsymbol{\mu_0}$** we need to know the (asymptotic) distribution of 
 $$
-\sqrt{n}\left(\bar{X}_n -\mu_0\right)
+\sqrt{n}\left(\bar{X}_n -\mu_0\right)\quad\text{as}\quad n\to\infty.
 $$
-as $n\to\infty$? 
 
 
 ::: {.callout-note appearance="minimal"}
@@ -555,9 +551,9 @@ for all continuity points $x,$ where $\Phi_{v}$ denotes the distribution functio
 $$
 \Phi_{v}(x)=\Phi\left(\frac{x}{v}\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x/v}\exp\left(-\frac{1}{2}z^2\right)\,dz
 $$ 
-with $\Phi$ denoting the distribution function of the standard normal distribution.
+with $\Phi$ denoting the distribution function of the standard normal distribution. 
 
-Here, it is rather simple to derive an useful expression for the asymptotic variance $v^2\colon$
+However, without knowledge of $v^2,$ the above result is of limited use. Luckily, in this example, it is rather simple to derive an useful expression for the asymptotic variance $v^2\colon$
 $$
 \begin{align*}
 v^2
@@ -579,7 +575,7 @@ The parameter $\sigma_0^2=Var\left(X\right)$ is usually unknown, but can be esti
 $$
 \hat{\sigma}^2_n=\frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}_n\right)^2.
 $$
-Thus, for doing inference (confidence intervals, statistical tests, etc.) about $\mu_0,$ we actually use the estimated distribution 
+Thus, for doing inference (constructing confidence intervals, statistical tests, etc.) about $\mu_0,$ we actually use the estimated distribution 
 $$
 H^{Asymp}_n(x)=\Phi_{\hat\sigma_n}(x)=\Phi\left(\frac{x}{\hat\sigma_n}\right)\quad\text{for all}\quad x,
 $$
@@ -587,14 +583,16 @@ where $H^{Asymp}_n(x)\to\Phi_{\sigma_0}(x)$ as $n\to\infty$ for all continuity p
 That is, we use the approximate distribution
 $$
 \begin{align*}
-\bar{X}_n&\overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)\quad\Leftrightarrow\quad \bar{X}_n\overset{a}{\sim}H^{Asymp}_n
+\bar{X}_n & \overset{a}{\sim}H^{Asymp}_n
+\quad\Leftrightarrow\quad 
+\bar{X}_n \overset{a}{\sim}\mathcal{N}\left(\mu_0,\frac{\hat{\sigma}_n^2}{n}\right)
 \end{align*}
 $$
 for computing, for instance, an estimator for the standard error $\operatorname{SE}\big(\bar{X}_n\big),$ 
 $$
 \widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)=\sqrt{\frac{\hat{v}^2}{n}}=\sqrt{\frac{\hat\sigma_n}{n}}.
 $${#eq-SEAsymp}
-Using $\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big)$ we can compute confidence intervals and statistical tests in the usual way. 
+Using $\widehat{\operatorname{SE}}^{Asymp}_{n}\big(\bar{X}_n\big),$ we can compute confidence intervals and statistical tests in the usual way. 
 
 **Note:** The estimator of the standard error in @eq-SEAsymp requires a formula for the asymptotic variance $v^2=\sigma_0^2$ as derived in @eq-AsympVarDeriv. Such derivations can be very challenging (see @sec-Illustration).
 :::
@@ -610,7 +608,7 @@ Before we answer this question theoretically (see @sec-Theory1 and @sec-Theory2B
 
 #### **Practice: Empirical Consideration of the Bootstrap distribution $\boldsymbol{H^{Boot}_{n}}$** {#sec-PracticeXbar}
 
-Let 
+Let us consider the following (usually unknown) specific setup:
 $$
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X,
 $$ 
@@ -627,10 +625,12 @@ This setup implies (see @exm-AsympNorm) that
 * True (usually unknown) asymptotic limit distribution: 
   $$
   \begin{align*}
-  \sqrt{n}(\bar{X}_n-\mu_0)&\to_d\mathcal{N}(0,4)\\[2ex]
-  \Leftrightarrow\quad H_n(x)&\to_p \Phi_{2}(x)\quad\text{for all continuity points } x.
+  \sqrt{n}(\bar{X}_n-\mu_0)&\to_d\mathcal{N}(0,4)\quad\text{as}\quad n\to\infty,\\[2ex]
+  \Leftrightarrow\quad H_n(x)&\to_p \Phi_{2}(x)\quad\text{as}\quad n\to\infty,
   \end{align*}
   $$ 
+  for all continuity points $x.$
+
 
 When doing classic asymptotic inference (see @exm-AsympNorm), we would use the feasible 
 $$
@@ -649,7 +649,7 @@ The following `R`-code generates artifical data
 $$
 \mathcal{S}_n=\{X_1,\dots,X_n\}
 $$
-by sampling (i.i.d.) $n=100$ data points from a $\chi^2$-distribution with $\operatorname{df}=2.$ The first six data points are shown in @tbl-ChiSqSample. 
+by (i.i.d.) sampling $n=100$ data points from a $\chi^2$-distribution with $\operatorname{df}=2.$ The first six data points are shown in @tbl-ChiSqSample. 
 
 
 ```{r, echo = TRUE}
@@ -672,12 +672,12 @@ observedSample <- rchisq(n = 100, df = 2)
 
 So the observed sample mean is 
 <center>
-$\bar X_{n} =$ `mean(observedSample)` $=$ `r mean(observedSample)`
+$\bar X_{n} =$ `mean(observedSample)` $=$ `r round(mean(observedSample),2)`
 </center>
 
 <br>
 
-**Bootstrap:**
+**Basic Bootstrap Method:**
 
 The observed sample 
 $$
@@ -700,10 +700,12 @@ $$
 for $m=10000$ Bootstrap replications.  
 
 ```{r}
-m                <- 10000 # number of bootstrap replications 
+# Number of bootstrap replications 
+m                <- 10000 
+# Container to save the bootstrap estimates
 Xbar_boot        <- vector(mode = "double", length = m)
 
-# Bootstrap algorithm
+# Basic Bootstrap algorithm
 for(k in seq_len(m)){
  bootSample          <- sample(x       = observedSample, 
                                size    = n, 
@@ -711,7 +713,7 @@ for(k in seq_len(m)){
  Xbar_boot[k]        <- mean(bootSample)
 }
 
-## Pinting the first three elements of Xbar_boot:
+# Pinting the first three elements of Xbar_boot:
 Xbar_boot[1:3]
 ```
 
@@ -739,15 +741,14 @@ If
 $$
 H^{Boot}_{n,m}(x)\approx \Phi_{2}(x)\quad\text{for all}\quad x,
 $$
-then we can use $H^{Boot}_{n,m}(x)$ (instead of $H^{Asymp}_{n}(x)$) to do inference about $\mu_0.$ 
+then we can use $H^{Boot}_{n,m}(x)$ (as an alternative to $H^{Asymp}_{n}(x)$) to do inference about $\mu_0.$ 
 
-The following `R`-code computes the following distribution functions
+The following `R`-code computes and compares graphically the following three distribution functions:
 
 * $H^{Boot}_{n,m}(x) =$ `ecdf( sqrt(n) * (Xbar_boot - Xbar) )` </br>
 * $H^{Asymp}_{n}(x) = \Phi_{\hat{\sigma}_n}(x)=\Phi\left(\frac{x}{\hat{\sigma}_n}\right)$
 * $\Phi_{2}(x)=\Phi\left(\frac{x}{2}\right)$
 
-and plots their graphs.
 
 ```{r}
 #| echo: true
@@ -796,9 +797,13 @@ H^{Boot}_{n,m}(x)&=\frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar{X}^*_{n,j
 &\overset{m\to\infty}{=}P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right)=H^{Boot}_n(x)
 \end{align*}
 $$
-can be computed **directly** from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as in @exm-AsympNorm for $H^{Asymp}_{n}(x).$  
+can be computed **directly** from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as it is necessary for $H^{Asymp}_{n}(x)$ (see @exm-AsympNorm).   
 
-In fact, we can derive an estimator for the asymptotic variance $v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)$ directly from the Bootstrap distribution $H^{Boot}_n(x)\colon$  
+In fact, using 
+$$
+H^{Boot}_n(x) = P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n\right),
+$$
+we can derive an estimator for the asymptotic variance $v^2=\lim_{n\to\infty}\sqrt{n}\big(\bar{X}_n-\mu_0\big)$ directly from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}\colon$  
 $$
 \begin{align*}
 \hat{v}^2_{Boot,n}
@@ -824,14 +829,11 @@ The estimator
 $$
 \hat{v}^2_{Boot,n}=n \; \widehat{Var}_m\left(\left.\bar{X}^*_n\;\right|\;\mathcal{S}_n\right)
 $$ 
-can be computed *directly* from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ For our artifical data example, we have that 
+can be computed *directly* from $\bar{X}^*_{n,1},\dots,\bar{X}^*_{n,m}.$ There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as in @exm-AsympNorm. For our artifical data example, we have that 
 <center>
 $\hat{v}^2_{Boot,n}=$ `n * var(Xbar_boot_vec)` $=$ `r round(n * var(Xbar_boot_vec), 2)`
 </center>
 </br>
-
-There's no need for deriving a formula $v^2=\sigma_0^2$ for the asymptotic variance as in @exm-AsympNorm.  
-
 
 
 This yields an estimate of the standard error $\operatorname{SE}\left(\bar{X}_n\right)$
@@ -843,7 +845,7 @@ $\widehat{SE}_{Boot,n}\left(\bar{X}_n\right)=\sqrt{\frac{\hat{v}^2_{Boot,n}}{n}}
 </br>
 
 ::: {.callout-note}
-Computing an Bootstrap estimate of the standard error of an estimator is typically that simple: Compute the standard deviation of $\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}$ for a large $m.$ 
+Computing the Basic Bootstrap estimate of the standard error of an estimator is typically that simple: Compute the standard deviation of $\hat\theta^*_{n,1},\dots,\hat\theta^*_{n,m}$ for a large $m.$ 
 :::
 
 <!-- 
@@ -866,22 +868,22 @@ We begin with focusing on the mean and the variance of $H^{Boot}_{n}.$
 
 
 ::: {.callout-tip}
-## Notation $\mathbb{E}^*(\cdot),$ $Var^*(\cdot),$ and $P^*(\cdot)$
+## Notation $\mathbb{E}^*(\,\cdot\,),$ $Var^*(\,\cdot\,),$ and $P^*(\,\cdot\,)$
 In the bootstrap literature one frequently finds the notation 
 $$
-\mathbb{E}^*(\cdot),\;Var^*(\cdot),\;\text{and}\;P^*(\cdot)
+\mathbb{E}^*(\,\cdot\,),\;Var^*(\,\cdot\,),\;\text{and}\;P^*(\,\cdot\,)
 $$ 
 to denote the **conditional** expectation
 $$
-\mathbb{E}^*(\cdot)=\mathbb{E}(\cdot|\mathcal{S}_n),
+\mathbb{E}^*(\,\cdot\,)=\mathbb{E}(\,\cdot\,|\mathcal{S}_n),
 $$
 the **conditional** variance 
 $$
-Var^*(\cdot)=Var(\cdot|\mathcal{S}_n),
+Var^*(\,\cdot\,)=Var(\,\cdot\,|\mathcal{S}_n),
 $$ 
 and the **conditional** probability 
 $$
-P^*(\cdot)=P(\cdot|\mathcal{S}_n),
+P^*(\,\cdot\,)=P(\,\cdot\,|\mathcal{S}_n),
 $$ 
 given the sample ${\cal S}_n.$
 :::
@@ -926,7 +928,7 @@ P^*(X_i^*=X_n)&= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 $$
 
-Thus, **we know the whole distribution** of the discrete conditional random variable $X_i^*|\mathcal{S}_n$ and, therefore, can compute, for instance, easily its conditional mean and its variance.
+Thus, **we know the whole distribution** of $X_i^*|\mathcal{S}_n$ and, therefore, can compute, for instance, easily its conditional mean and its variance:
 
 * The conditional mean of $X_i^*$ given ${\cal S}_n$ is
 $$
@@ -937,7 +939,7 @@ $$
 &=\bar X_n.
 \end{align*}
 $$
-I.e., the empirical mean $\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i$ of the original sample $X_1,\dots,X_n$ is the "population" mean of the bootstrap sample $X^*_1,\dots,X^*_n.$
+I.e., the empirical mean $\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i$ of the original sample $X_1,\dots,X_n$ is the "population" mean of the bootstrap sample $X^*_1,\dots,X^*_n.$ 
 
 * The conditional variance of $X_i^*$ given ${\cal S}_n$ is
 $$
@@ -968,18 +970,19 @@ For instance, $g(X_i)=1_{(X_i\leq x)}.$
 
 Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is very important. 
 
-The unconditional distribution of $X_i^*$ is equal to the **unknown distribution** $F.$ This can be seen from the following derivation: 
+The **unconditional distribution** of $X_i^*$ is equal to the **unknown distribution** $F.$ This can be seen from the following derivation: 
 $$
 \begin{align*}
 P(X_i^*\leq x) 
 &= P(1_{(X_i^*\leq x)}=1) \\[2ex]
 &= P(1_{(X_i^*\leq x)}=1) \cdot 1 + P(1_{(X_i^*\leq x)}=0) \cdot 0\\[2ex]
 &= \mathbb{E}\left(1_{\left(X_i^*\leq x\right)}\right)\\[2ex]
-&= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\\[2ex]
+&= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
 &= \mathbb{E}\left({\color{blue}\frac{1}{n}\sum_{i=1}^n 1_{\left(X_i\leq x\right)}}\right)\quad[\text{{\color{blue}from our derivations above}}]\\[2ex]
-&= \frac{n}{n}\mathbb{E}\left(1_{\left(X_i\leq x\right)}\right)\\[2ex]
-&= P(1_{(X_i\leq x)}=1) \cdot 1 + P(1_{(X_i\leq x)}=0) \cdot 0\\[2ex]
-&= P\left(X_i\leq x\right)=F(x)
+&\quad[\text{Using that $X_1\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F\colon$}]\\[2ex]
+&= \frac{n}{n}\mathbb{E}\left(1_{\left(X\leq x\right)}\right)\\[2ex]
+&= P(1_{(X\leq x)}=1) \cdot 1 + P(1_{(X\leq x)}=0) \cdot 0\\[2ex]
+&= P\left(X\leq x\right)=F(x)
 \end{align*}
 $$
 :::
@@ -995,13 +998,14 @@ $$
 $$
 \begin{align*}
 \mathbb{E}^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
-&=\mathbb{E}\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
-&=\sqrt{n}\,\mathbb{E}\left(\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
+&=\mathbb{E}\left(\left.\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right|{\cal S}_n\right)\\[2ex]
+&=\sqrt{n}\,\mathbb{E}\left(\left.\bar X^*_n-\bar{X}_n\right|{\cal S}_n\right)\\[2ex]
 &=\sqrt{n}\left(\mathbb{E}\left(\bar X^*_n|{\cal S}_n\right)- \mathbb{E}\left(\bar{X}_n|{\cal S}_n\right)\right)\\[2ex]
 &=\sqrt{n}\left(\frac{1}{n}\sum_{i=1}^n{\color{red}\mathbb{E}\left(X^*_i|{\cal S}_n\right)}- \frac{1}{n}\sum_{i=1}^n{\color{blue}\mathbb{E}\left(X_i|{\cal S}_n\right)}\right)\\[2ex]
 &=\sqrt{n}\left(\frac{n}{n}{\color{red}\bar{X}_n} - \frac{1}{n}\sum_{i=1}^n{\color{blue}X_i}\right)\\[2ex]
 &=\sqrt{n}\left(\bar{X}_n - \bar{X}_n\right)\\[2ex]
-&= 0.
+&= 0%\\[2ex]
+%\Leftrightarrow\quad \mathbb{E}\left(\bar X^*_n|{\cal S}_n\right) & =  \mathbb{E}\left(\bar{X}_n|{\cal S}_n\right).
 \end{align*}
 $$
 
@@ -1011,7 +1015,8 @@ $$
 Var^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
 &=Var\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
 &=n\,Var\left(\big(\bar X^*_n-\bar{X}_n\big)|{\cal S}_n\right)\\[2ex]
-&=n\,Var\big(\bar X^*_n|{\cal S}_n\big)\quad[\text{cond.~on $\mathcal{S}_n,$ $\bar{X}_n$ is a constant}]\\[2ex]
+&[\text{Cond.~on $\mathcal{S}_n,$ $\bar{X}_n$ is a constant:}]\\[2ex]
+&=n\,Var\big(\bar X^*_n|{\cal S}_n\big)\\[2ex]
 &=n\,Var\Big(\frac{1}{n}\sum_{i=1}^n X_i^*\Big|{\cal S}_n\Big)\\
 &=n\,\frac{1}{n^2}\sum_{i=1}^n Var\big(X_i^*|{\cal S}_n\big)\\
 &=n\,\frac{n}{n^2} Var\big(X_i^*|{\cal S}_n\big)\\
@@ -1026,6 +1031,7 @@ $$
 $$
 
 ::: {.callout-note}
+# Summary
 Thus, we know now that for large $n$ ($n\to\infty$)  **mean (zero) and the variance** ($\sigma_0^2$) of the bootstrap distribution of 
 $$
 \sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|\mathcal{S}_n
