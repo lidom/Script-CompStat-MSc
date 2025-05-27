@@ -492,6 +492,9 @@ $$
 $$ 
 needs to be asymptotically ($n\to\infty$) normal. 
 
+
+> Theorem 1 in @Mammen_1992_Book shows that the basic bootstrap is consistent if $\sqrt{n}(\hat{\theta}_n-\theta_0)\to_d\mathcal{N}(0,v_0^2),$ under the assumption that the bootstrap sampling process (e.g. i.i.d.) equals the original sampling process.  
+
 The standard bootstrap **will usually fail** if one of the above conditions is violated. 
 
 <!-- 
@@ -626,7 +629,7 @@ This setup implies (see @exm-AsympNorm) that
   $$
   \begin{align*}
   \sqrt{n}(\bar{X}_n-\mu_0)&\to_d\mathcal{N}(0,4)\quad\text{as}\quad n\to\infty,\\[2ex]
-  \Leftrightarrow\quad H_n(x)&\to_p \Phi_{2}(x)\quad\text{as}\quad n\to\infty,
+  \Leftrightarrow\quad H_n(x)&\to \Phi_{2}(x)\quad\text{as}\quad n\to\infty,
   \end{align*}
   $$ 
   for all continuity points $x.$
@@ -903,7 +906,7 @@ $$
 ::: {.callout-tip}
 ## We know the distribution of $X_i^*|\mathcal{S}_n$
 
-We can analyze the bootstrap distribution of $\sqrt{n}(\bar X^*_n -\bar X_n)|\mathcal{S}_n,$ since **we *know* 🤟 the discrete distribution** of the conditional random variables 
+We can analyze and simulate the bootstrap distribution of $\sqrt{n}(\bar X^*_n -\bar X_n)|\mathcal{S}_n,$ since **we *know* 🤟 the discrete distribution** of the conditional random variables 
 $$
 X_i^*|\mathcal{S}_n,\;i=1,\dots,n,
 $$ 
@@ -952,10 +955,10 @@ Var^*(X_i^*)
 &=Var(X_i^*|{\cal S}_n)\\[2ex] 
 &=\mathbb{E}\left((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n\right)\\[2ex] 
 &=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2\\[2ex] 
-&=\hat\sigma^2_0.
+&=\hat\sigma^2_n.
 \end{align*}
 $$
-I.e., the empirical variance $\hat\sigma^2_{0}=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2$ of the original sample $X_1,\dots,X_n$ is the "population" variance of the bootstrap sample $X^*_1,\dots,X^*_n.$
+I.e., the empirical variance $\hat\sigma^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X)^2$ of the original sample $X_1,\dots,X_n$ is the "population" variance of the bootstrap sample $X^*_1,\dots,X^*_n.$
 
 
 ::: {.callout-tip}
@@ -972,7 +975,7 @@ For instance, $g(X_i)=1_{(X_i\leq x)}.$
 
 ## Caution: Conditioning on $\mathcal{S}_n$ in important!
 
-Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is very important. 
+Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is crucial. 
 
 The **unconditional distribution** of $X_i^*$ is equal to the **unknown distribution** $F.$ This can be seen from the following derivation: 
 $$
@@ -992,11 +995,18 @@ $$
 :::
 
 
-**Now we can consider the mean and the variance of:** 
+Using our above results, 
 $$
-\sqrt{n}\left.\left(\bar X^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n.
+\begin{align*}
+\mathbb{E}(\bar{X}_n|\mathcal{S}_n)&=\bar{X}_n\\[2ex]
+Var(\bar{X}_n|\mathcal{S}_n) &=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2,
+\end{align*}
+$$ 
+we can consider the conditional mean and the conditional variance of 
 $$
-
+\sqrt{n}\left.\left(\bar X^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n,
+$$
+for a given realization of $\mathcal{S}_n.$
 
 * The conditional mean of $\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)$ given $\mathcal{S}_n$ is
 $$
@@ -1019,30 +1029,35 @@ $$
 Var^*\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)\right)
 &=Var\left(\sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|{\cal S}_n\right)\\[2ex]
 &=n\,Var\left(\big(\bar X^*_n-\bar{X}_n\big)|{\cal S}_n\right)\\[2ex]
-&[\text{Cond.~on $\mathcal{S}_n,$ $\bar{X}_n$ is a constant:}]\\[2ex]
+&[\text{Conditionally on a given}\\
+&\text{ realization of $\mathcal{S}_n,$ $\bar{X}_n$ is a constant:}]\\[2ex]
 &=n\,Var\big(\bar X^*_n|{\cal S}_n\big)\\[2ex]
 &=n\,Var\Big(\frac{1}{n}\sum_{i=1}^n X_i^*\Big|{\cal S}_n\Big)\\
 &=n\,\frac{1}{n^2}\sum_{i=1}^n Var\big(X_i^*|{\cal S}_n\big)\\
 &=n\,\frac{n}{n^2} Var\big(X_i^*|{\cal S}_n\big)\\
 &=Var\big(X_i^*|{\cal S}_n\big)\\[2ex]
 &=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2\quad[\text{derived above}]\\[2ex]
-&=\hat\sigma^2_0, 
+&=\hat\sigma^2_n, 
 \end{align*}
 $$
 where 
 $$
-\hat\sigma^2_0\to_p \sigma_0^2\quad\text{as}\quad n\to\infty.
+\hat\sigma^2_n\to_p \sigma_0^2\quad\text{as}\quad n\to\infty.
 $$
 
 ::: {.callout-note}
 # Summary
-Thus, we know now that for large $n$ ($n\to\infty$)  **mean (zero) and the variance** ($\sigma_0^2$) of the bootstrap distribution of 
+For large $n$ ($n\to\infty$) the bootstrap distribution, i.e. the distribution of 
 $$
 \sqrt{n}\left(\bar X^*_n-\bar{X}_n\right)|\mathcal{S}_n
 $$ 
-matches the **mean (zero) and the variance** ($\sigma_0^2$) of the limit distribution $\Phi_{\sigma_0}.$
+and the distrubtion of 
+$$
+\sqrt{n}\left(\bar{X}_n-\mu_0\right)
+$$
+have both mean zero and variance $\sigma^2_0.$
 
-Bootstrap consistency, however, addresses the total distribution---not only the first two moments. 
+That is, as $n\to\infty,$ both distributions become equal with respect to their means and variances. 
 ::: 
 
 
@@ -1063,7 +1078,7 @@ Let $X\in\mathbb{R}$ be a random variable and let $\mathcal{i}=\sqrt{-1}$ be the
 $$
 \psi_X(t) = \mathbb{E}(\exp(\mathcal{i}tX))
 $$
-is called **the characteristic function** of $X.$
+is called the **characteristic function** of $X.$
 :::
 :::
 
@@ -1072,10 +1087,10 @@ is called **the characteristic function** of $X.$
 # Characteristic Function: Some useful facts
 The characteristic function ... 
 
-* ... uniquely determines its associated probability distribution. 
+* ... uniquely determines its associated probability distribution $F$ of $X.$ 
 * ... can be used to easily derive (all) the moments of a random variable by
 $$
-\mathbb{E}(X^n) = \mathcal{i}^n \left[\frac{d^n}{d t^n}\psi_X(t)\right]_{t=0} 
+\mathbb{E}(X^n) = \mathcal{i}^n \left.\frac{d^n}{d t^n}\psi_X(t)\right|_{t=0} 
 $$
 * ... is often used to prove that two distributions are equal.
 
@@ -1090,47 +1105,59 @@ $$
 \end{align*}
 $${#eq-CharacNormal}
 
-* The characteristic function of $\sum_{i=1}^nW_i,$ where $W_1,\dots,W_n$ are i.i.d., is
+* The characteristic function of $\sum_{i=1}^nW_i,$ where $W_1,\dots,W_n\overset{\text{i.i.d.}}{\sim}W,$ is
 $$
-\psi_{\sum_{i=1}^nW_i}(t)=\left(\psi_{W_1}(t)\right)^n
+\psi_{\sum_{i=1}^nW_i}(t)=\big(\psi_{W}(t)\big)^n
 $${#eq-CharacFctSum}
 
 * Let $W$ be a random variable with $\mathbb{E}(W)=0$ and $Var(W)=\sigma_W^2.$ Then, we have that (see Equation (26.11) in @Billingsley_1995) 
 $$
 \psi_W(t)=1-\frac{1}{2}\sigma_W^2 \, t^2 + \lambda(t),
 $${#eq-CharacFctBillingsley}
-where $|\lambda(t)|\leq |t^2|\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).$
+where $|\lambda(t)|\leq t^2\,\mathbb{E}\left(\min(|t|\,|W|^3, W^2)\right).$
 :::
 
 
-> The following can be found in Example 3.1 in @Shao_Tu_1996
+> The following is taken from Example 3.1 in @Shao_Tu_1996. First, we sketch the proof for the Lindeberg-Lévy CLT. Second, we use this principle to sketch the proof for bootstrap consistency. 
 
-It follows from  the Lindeberg-Lévy CLT that 
+Let
+$$
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X
+$$
+where $X\sim F$ has 
+
+* mean $\mathbb{E}(X)=\mu_0$ and 
+* variance $Var(X)=\sigma^2_0.$ 
+
+It follows then from the Lindeberg-Lévy CLT that 
 $$
 H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0}(x)=\Phi\left(\frac{x}{\sigma_0}\right)\quad\text{as}\quad n\to\infty,
 $$
-for all $x\in\mathbb{R}.$ This result can be proven by showing that the characteristic function of $H_n$ tends to that of $\Phi_{\sigma_0}.$ 
+for all continuity points $x\in\mathbb{R}.$ This CLT-result can be proven by showing that the characteristic function of $H_n$ tends the characteristic function of $\Phi_{\sigma_0}.$ 
 
 To see this, rewrite
 $$
 \begin{align*}
 \sqrt{n}\left(\bar{X}_n-\mu_0\right)
-& = \sum_{i=1}^n\frac{X_i-\mu_0}{\sqrt{n}}\\[2ex]
+& = \sum_{i=1}^n\overbrace{\;\left(\frac{X_i-\mu_0}{\sqrt{n}}\right)\;}^{=W_{i,n}}\\[2ex]
 & = \sum_{i=1}^n W_{i,n}
 \end{align*}
 $$
 where 
-
-* $W_{1,n},\dots,W_{n,n}$ are i.i.d. with
-* $\mathbb{E}(W_{i,n})=0$ and 
-* $Var(W_{i,n})=\frac{1}{n}\sigma_0^2.$
+$$
+\begin{align*}
+&W_{1,n},\dots,W_{n,n}\overset{\text{i.i.d.}}{\sim}W_n,\\[2ex]
+&\mathbb{E}(W_{n})=\mathbb{E}\left(\frac{X_i-\mu_0}{\sqrt{n}}\right)=\frac{\mathbb{E}(X_i)-\mu_0}{\sqrt{n}}=0\quad\text{for all}\quad n,\quad\text{and}\\[2ex]
+&Var(W_{n})=Var\left(\frac{X_i-\mu_0}{\sqrt{n}}\right)=\frac{1}{n}Var(X_i-\mu_0)=\frac{1}{n}Var(X_i)=\frac{1}{n}\sigma_0^2.
+\end{align*}
+$$
 
 Therefore, by @eq-CharacFctSum together with @eq-CharacFctBillingsley
 $$
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &=\psi_{\sum_{i=1}^n W_{i,n}}(t)\\[2ex] 
-&=\left(\psi_{W_{1,n}}(t)\right)^n\\[2ex] 
+&=\left(\psi_{W_{n}}(t)\right)^n\\[2ex] 
 &=\left(1-\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2 + \lambda_n(t)\right)^n,
 \end{align*}
 $$
@@ -1138,11 +1165,28 @@ where
 $$
 \begin{align*}
 |\lambda_n(t)|
-&\leq |t^2|\,\mathbb{E}\left(\min\big(|t|\,\left|W_{1,n}\right|^3, \left|W_{1,n}\right|^2\big)\right)\\[2ex]
-&= |t^2|\,\mathbb{E}\left(\min\big(|t|\,n^{-3/2}\left|X_1-\mu_0\right|^3, n^{-1}\left|X_1-\mu_0\right|^2\big)\right).
+&\leq t^2\,\mathbb{E}\left(\min\left(|t|\,\left|W_{n}\right|^3, \left|W_{n}\right|^2\right)\right)\\[2ex]
+&= t^2\,\mathbb{E}\left(\min\left(|t|\,\left|\frac{X-\mu_0}{\sqrt{n}}\right|^3, \left|\frac{X-\mu_0}{\sqrt{n}}\right|^2\right)\right)\\[2ex]
+&= t^2\,\mathbb{E}\left(\min\big(|t|\,n^{-3/2}\left|X-\mu_0\right|^3, n^{-1}\left|X-\mu_0\right|^2\big)\right)\\[2ex]
+&[\text{for sufficiently large $n$ and any fixed, finite $t$}\\
+&\text{(Note: relevant $t$-values are values around zero):}]\\[2ex]
+&= t^2\,\mathbb{E}\left(|t|\,n^{-3/2}\left|X-\mu_0\right|^3\right)\\[2ex]
+&= n^{-3/2}\underbrace{\;t^2\,|t|\,\mathbb{E}\left(\left|X-\mu_0\right|^3\right)}_{\texttt{constant}}\\[2ex]
+%\Rightarrow\quad n |\lambda_n(t)|& \leq n \cdot n^{-3/2}\cdot \texttt{constant}\\[2ex]
+%\Rightarrow\quad n |\lambda_n(t)|& \leq n^{-1/2} \cdot \texttt{constant}.
+\Rightarrow\quad |\lambda_n(t)|& \leq n^{-3/2}\cdot \texttt{constant}\\[2ex]
+\Rightarrow\quad |\lambda_n(t)|& =O(n^{-3/2}) =o(n^{-1})\\[2ex]
 \end{align*}
 $$
-That is, 
+That is, for large $n$ ($n\to\infty$) and fixed, finite $t,$ 
+$$
+\begin{align*}
+\psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
+&=\Big(1-\;\underbrace{\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2}_{=O(n^{-1})}\; +\; \underbrace{\lambda_n(t)}_{=o(n^{-1})}\Big)^n\\[2ex]
+\end{align*}
+$$
+the $o(n^{-1})$ term becomes negligible in comparison to the $O(n^{-1})$ term and the constant term such that  
+<!-- 
 $$
 n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
 $$
@@ -1154,9 +1198,7 @@ $$
 \lambda_n(t) & = o(n^{-1})\quad (\Leftrightarrow n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty)\\[2ex] 
 \frac{1}{2}\,\frac{1}{n}\sigma_0^2 & = O(n^{-1})
 \end{align*}
-$$
-
-Thus, by @eq-CharacNormal
+$$ -->
 $$
 \begin{align*}
 \lim_{n\to\infty}\psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t) 
@@ -1164,35 +1206,50 @@ $$
 &= \lim_{n\to\infty}\left(1-\frac{1}{n}\,\frac{1}{2}\,\sigma_0^2 \, t^2 + \lambda_n(t)\right)^n\\[2ex]
 &= \lim_{n\to\infty}\left(1-\frac{1}{n}\,\frac{1}{2}\,\sigma_0^2 \, t^2\right)^n\\[2ex]
 &=\exp\left(-\frac{1}{2}\sigma_0^2\,t^2\right)\\[2ex]
-&=\psi_{\Phi_{\sigma_0}}(t)
+&=\psi_{\Phi_{\sigma_0}}(t),
 \end{align*}
 $$
-
+where the latter step follows from @eq-CharacNormal.
 
 OK, we have shown that $H_n$ tends to $\Phi_{\sigma_0}$ by showing that the characteristic function of $H_n$ tends to that of $\Phi_{\sigma_0};$ **i.e. we have shown the Lindeberg-Lévy CLT.**
 
 To show **bootstrap consistency** we need to show that $H_n^{Boot}$ also tends to $\Phi_{\sigma_0}.$ To do so, we can mimic the above proof, by showing that the characteristic function of $H_n^{Boot}$ tends to that of $\Phi_{\sigma_0}.$
 
+
+Let
+$$
+X_1^*,\dots,X_n^*\overset{\text{i.i.d.}}{\sim}X^*
+$$
+where $X^*\sim F_n$ has 
+
+* conditional mean $\mathbb{E}^*(X^*)=\mathbb{E}(X_i^*|\mathcal{S}_n)=\bar{X}_n$ and 
+* conditional variance $Var^*(X)=Var^*(X|\mathcal{S}_n)=\hat\sigma^2_n.$ 
+
+
 Rewrite
 $$
 \begin{align*}
-\sqrt{n}\left(\bar{X}^*_n- \bar{X}_n\right)|\mathcal{S}_n
-& = \sum_{i=1}^n\frac{X^*_i- \bar{X}_n}{\sqrt{n}}|\mathcal{S}_n\\[2ex]
+\sqrt{n}\left.\left(\bar{X}^*_n- \bar{X}_n\right)\right|\mathcal{S}_n
+& = \sum_{i=1}^n\left.\;\overbrace{\left(\frac{X^*_i- \bar{X}_n}{\sqrt{n}}\right)}^{W^*_n}\right.|\mathcal{S}_n\\[2ex]
 & = \sum_{i=1}^n W^*_{i,n}|\mathcal{S}_n
 \end{align*}
 $$
 where 
 
-* $W^*_{1,n}|\mathcal{S}_n,\dots,W^*_{n,n}|\mathcal{S}_n$ is i.i.d. with
-* $\mathbb{E}(W^*_{1,n}|\mathcal{S}_n)=0$ and 
-* $Var(W^*_{1,n}|\mathcal{S}_n)=\frac{1}{n}\hat{\sigma}_n^2=\frac{1}{n}\left(\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\right)$
+$$
+\begin{align*}
+&W^*_{1,n}|\mathcal{S}_n,\dots,W^*_{n,n}|\mathcal{S}_n\overset{\text{i.i.d.}}{\sim}W_n^*|\mathcal{S}_n,\\[2ex]
+&\mathbb{E}(W^*_{n}|\mathcal{S}_n)=\mathbb{E}\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)=\frac{\mathbb{E}(X_i^*|\mathcal{S}_n)-\bar{X}_n}{\sqrt{n}}=0\quad\text{for all}\quad n,\quad\text{and}\\[2ex]
+&Var(W^*_{n}|\mathcal{S}_n)=Var\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)=\frac{1}{n}Var(X_i^*-\bar{X}_n|\mathcal{S}_n)=\frac{1}{n}Var(X_i^*|\mathcal{S}_n)=\frac{1}{n}\hat\sigma_n^2.
+\end{align*}
+$$
 
 Therefore, by @eq-CharacFctSum together with @eq-CharacFctBillingsley
 $$
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)|\mathcal{S}_n}(t)
-&=\psi_{\sum_{i=1}^n W_{i,n}|\mathcal{S}_n}(t)\\[2ex] 
-&=\left(\psi_{W_{1,n}|\mathcal{S}_n}(t)\right)^n\\[2ex] 
+&=\psi_{\sum_{i=1}^n W_{i,n}^*|\mathcal{S}_n}(t)\\[2ex] 
+&=\left(\psi_{W_{n}^*|\mathcal{S}_n}(t)\right)^n\\[2ex] 
 &=\left(1-\frac{1}{2}\,\frac{1}{n}{\color{darkgreen}\hat{\sigma}_n^2} \, t^2 + {\color{red}\lambda_n^*(t)}\right)^n,
 \end{align*}
 $$
@@ -1206,14 +1263,15 @@ $$
 $$
 By the Marcinkiewicz strong law of large numbers, we obtain that 
 $$
-n{\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0\quad\text{as}\quad n\to\infty, 
+\begin{align*}
+n{\color{red}|\lambda^*_n(t)|}&\to_{a.s.} 0\quad\text{as}\quad n\to\infty\\[2ex]
+\Leftrightarrow\quad {\color{red}|\lambda^*_n(t)|}&=o_{a.s.}(0).
+\end{align*}
 $$
-i.e., ${\color{red}|\lambda^*_n(t)|}\to_{a.s.} 0$ faster than $n^{-1}.$ 
-
 
 Moreover, 
 $$
-{\color{darkgreen}\hat\sigma_n^2} = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\to_{a.s.}\sigma_0^2
+{\color{darkgreen}\hat\sigma_n^2} = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2\to_{a.s.}\sigma_0^2\quad\text{as}\quad n\to\infty.
 $$
 
 Thus, we have that (using @eq-CharacNormal)
@@ -1228,7 +1286,7 @@ $$
 $$
 This implies that the limit ($n\to\infty$) of $H_n^{Boot}$ is $\Phi_{\sigma_0}$ almost surely. 
 
-Hence we have shown that the basic bootstrap is consistent for doing inference about $\mu_0$ using $\bar{X}_n.$
+Hence, we have shown that the basic bootstrap is consistent for doing inference about $\mu_0$ using $\bar{X}_n.$
 
 
 <!-- 
@@ -1265,7 +1323,7 @@ $$
 $$ 
 -->
 
-
+<!-- 
 This bootstrap consistency result justifies using the bootstrap distribution 
 $$
 \begin{align*}
@@ -1275,10 +1333,12 @@ H_n^{Boot}(x)
 \frac{1}{m}\sum_{j=1}^m 1_{\left(\sqrt{n}\left(\bar X^*_{n,j}-\bar X_n\right)\leq x\right)}=H_{n,m}^{Boot}(x),  
 \end{align*}
 $$ 
-of $\bar{X}_n^\ast$ for doing inference about $\mu_0.$ 
+for doing inference about $\mu_0.$  
+
+-->
 
 
-In the following section, we show how to build a confidence interval using the bootstrap distribution of an estimator $\hat\theta_n.$ 
+In the following section, we show how to build a confidence interval using the bootstrap distribution of a general estimator $\hat\theta_n.$ 
 
 
 
@@ -1479,7 +1539,7 @@ if $n$ is sufficiently large.
 
 Caution: This is not always the case and in cases of doubt one needs to show this property. 
 
-**Good to know:** Theorem 1 in @Mammen_1992_Book shows that the basic bootstrap is consistent if $\sqrt{n}(\hat{\theta}_n-\theta_0)\to_d\mathcal{N}(0,v_0^2).$
+**Good to know:** Theorem 1 in @Mammen_1992_Book shows that the basic bootstrap is consistent if $\sqrt{n}(\hat{\theta}_n-\theta_0)\to_d\mathcal{N}(0,v_0^2),$ under the assumption that the bootstrap sampling process (e.g. i.i.d.) equals the original sampling process.
 :::
 
 **Algorithm (3 Steps):**
