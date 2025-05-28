@@ -1064,9 +1064,17 @@ possible bootstrap samples which are all equally probable.
 </section>
 <section id="sec-Theory1" class="level4" data-number="3.3.1.2">
 <h4 data-number="3.3.1.2" class="anchored" data-anchor-id="sec-Theory1"><span class="header-section-number">3.3.1.2</span> Theory (Part 1): Mean and Variance of the Bootstrap distribution</h4>
+<p>Let <span class="math display">\[
+\mathcal{S}_n=\{X_1,\dots,X_n\}
+\]</span> where <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim F,
+\]</span> and let <span class="math display">\[
+X_1^*,\dots,X_n^*\overset{\text{i.i.d.}}{\sim}X^*\quad\text{with}\quad X^*\sim F_n,
+\]</span> where <span class="math inline">\(F_n\)</span> denotes the ecdf computed from <span class="math inline">\(X_1,\dots,X_n.\)</span></p>
 <p>In this chapter we begin with the theoretical consideration of the Bootstrap distribution <span class="math display">\[
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right).
-\]</span> We begin with focusing on the mean and the variance of <span class="math inline">\(H^{Boot}_{n}.\)</span></p>
+\]</span></p>
+<p>We begin with focusing on the mean and the variance and check whether for large <span class="math inline">\(n\)</span> (<span class="math inline">\(b\to\infty\)</span>) the mean and the variance of <span class="math inline">\(H^{Boot}_{n}\)</span> equals the mean and the variance of <span class="math inline">\(H_n.\)</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1102,8 +1110,8 @@ We know the distribution of <span class="math inline">\(X_i^*|\mathcal{S}_n\)</s
 </div>
 <div class="callout-body-container callout-body">
 <p>We can analyze and simulate the bootstrap distribution of <span class="math inline">\(\sqrt{n}(\bar X^*_n -\bar X_n)|\mathcal{S}_n,\)</span> since <strong>we <em>know</em> 🤟 the discrete distribution</strong> of the conditional random variables <span class="math display">\[
-X_i^*|\mathcal{S}_n,\;i=1,\dots,n,
-\]</span> even though, we do <strong>not know</strong> the distribution of <span class="math inline">\(X_i\sim F,\)</span> <span class="math inline">\(i=1,\dots,n.\)</span></p>
+X^*|\mathcal{S}_n
+\]</span> even though, we do <strong>not know</strong> the distribution of <span class="math inline">\(X\sim F.\)</span></p>
 <!-- The discrete distribution of the conditional random variables 
 $X_i^*|\mathcal{S}_n,$ is 
 $$
@@ -1112,31 +1120,31 @@ $$
 with  -->
 </div>
 </div>
-<p>For each <span class="math inline">\(i=1,\dots,n\)</span>, the possible values of the discrete random variable <span class="math inline">\(X_i^*|\mathcal{S}_n\)</span> are <span class="math display">\[
-X_i^*|\mathcal{S}_n\in\{X_1,\dots,X_n\},
-\]</span> and each of these values is equally probable: <span class="math display">\[
+<p>The possible values of the discrete random variable <span class="math inline">\(X^*|\mathcal{S}_n\)</span> are <span class="math display">\[
+X^*|\mathcal{S}_n\in\{X_1,\dots,X_n\},
+\]</span> and each of these values are equally probable: <span class="math display">\[
 \begin{align*}
-P^*(X_i^*=X_1)&amp;= P(X_i^*=X_1|{\cal S}_n) = \frac{1}{n} \\[2ex]
-P^*(X_i^*=X_2)&amp;= P(X_i^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
+P^*(X^*=X_1)&amp;= P(X^*=X_1|{\cal S}_n) = \frac{1}{n} \\[2ex]
+P^*(X^*=X_2)&amp;= P(X^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
 &amp;\vdots\\[2ex]
-P^*(X_i^*=X_n)&amp;= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
+P^*(X^*=X_n)&amp;= P(X^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 \]</span></p>
 <p>Thus, <strong>we know the whole distribution</strong> of <span class="math inline">\(X_i^*|\mathcal{S}_n\)</span> and, therefore, can compute, for instance, easily its conditional mean and its variance:</p>
 <ul>
-<li><p>The conditional mean of <span class="math inline">\(X_i^*\)</span> given <span class="math inline">\({\cal S}_n\)</span> is <span class="math display">\[
+<li><p>The conditional mean of <span class="math inline">\(X^*\)</span> given <span class="math inline">\({\cal S}_n\)</span> is <span class="math display">\[
 \begin{align*}
-\mathbb{E}^*(X_i^*)
-&amp;=\mathbb{E}(X_i^*|{\cal S}_n)\\[2ex]
+\mathbb{E}^*(X^*)
+&amp;=\mathbb{E}(X^*|{\cal S}_n)\\[2ex]
 &amp;=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_n\\[2ex]
 &amp;=\bar X_n.
 \end{align*}
 \]</span> I.e., the empirical mean <span class="math inline">\(\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i\)</span> of the original sample <span class="math inline">\(X_1,\dots,X_n\)</span> is the “population” mean of the bootstrap sample <span class="math inline">\(X^*_1,\dots,X^*_n.\)</span></p></li>
-<li><p>The conditional variance of <span class="math inline">\(X_i^*\)</span> given <span class="math inline">\({\cal S}_n\)</span> is <span class="math display">\[
+<li><p>The conditional variance of <span class="math inline">\(X^*\)</span> given <span class="math inline">\({\cal S}_n\)</span> is <span class="math display">\[
 \begin{align*}
-Var^*(X_i^*)
-&amp;=Var(X_i^*|{\cal S}_n)\\[2ex]
-&amp;=\mathbb{E}\left((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n\right)\\[2ex]
+Var^*(X^*)
+&amp;=Var(X^*|{\cal S}_n)\\[2ex]
+&amp;=\mathbb{E}\left((X^* - \mathbb{E}(X^*|{\cal S}_n))^2|{\cal S}_n\right)\\[2ex]
 &amp;=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2\\[2ex]
 &amp;=\hat\sigma^2_n.
 \end{align*}
@@ -1153,7 +1161,7 @@ General case: Conditional moments of transformed <span class="math inline">\(g(X
 </div>
 <div class="callout-body-container callout-body">
 <p>For any (measurable) function <span class="math inline">\(g\)</span> we have <span class="math display">\[
-\mathbb{E}^*(g(X_i^*))=\mathbb{E}(g(X_i^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
+\mathbb{E}^*(g(X^*))=\mathbb{E}(g(X^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
 \]</span> For instance, <span class="math inline">\(g(X_i)=1_{(X_i\leq x)}.\)</span></p>
 </div>
 </div>
@@ -1167,14 +1175,14 @@ Caution: Conditioning on <span class="math inline">\(\mathcal{S}_n\)</span> in i
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Conditioning on the observed sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> is crucial.</p>
-<p>The <strong>unconditional distribution</strong> of <span class="math inline">\(X_i^*\)</span> is equal to the <strong>unknown distribution</strong> <span class="math inline">\(F.\)</span> This can be seen from the following derivation: <span class="math display">\[
+<p>Conditioning on the observed sample <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> is <strong>crucial</strong>.</p>
+<p>The <strong>unconditional distribution</strong> of <span class="math inline">\(X^*\)</span> is equal to the <strong>unknown distribution</strong> <span class="math inline">\(F.\)</span> This can be seen from the following derivation: <span class="math display">\[
 \begin{align*}
-P(X_i^*\leq x)
-&amp;= P(1_{(X_i^*\leq x)}=1) \\[2ex]
-&amp;= P(1_{(X_i^*\leq x)}=1) \cdot 1 + P(1_{(X_i^*\leq x)}=0) \cdot 0\\[2ex]
-&amp;= \mathbb{E}\left(1_{\left(X_i^*\leq x\right)}\right)\\[2ex]
-&amp;= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
+P(X^*\leq x)
+&amp;= P(1_{(X^*\leq x)}=1) \\[2ex]
+&amp;= P(1_{(X^*\leq x)}=1) \cdot 1 + P(1_{(X^*\leq x)}=0) \cdot 0\\[2ex]
+&amp;= \mathbb{E}\left(1_{\left(X^*\leq x\right)}\right)\\[2ex]
+&amp;= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
 &amp;= \mathbb{E}\left({\color{blue}\frac{1}{n}\sum_{i=1}^n 1_{\left(X_i\leq x\right)}}\right)\quad[\text{{\color{blue}from our derivations above}}]\\[2ex]
 &amp;\quad[\text{Using that $X_1\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F\colon$}]\\[2ex]
 &amp;= \frac{n}{n}\mathbb{E}\left(1_{\left(X\leq x\right)}\right)\\[2ex]
@@ -1186,8 +1194,8 @@ P(X_i^*\leq x)
 </div>
 <p>Using our above results, <span class="math display">\[
 \begin{align*}
-\mathbb{E}(\bar{X}_n|\mathcal{S}_n)&amp;=\bar{X}_n\\[2ex]
-Var(\bar{X}_n|\mathcal{S}_n) &amp;=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2,
+\mathbb{E}(X^*|\mathcal{S}_n)&amp;=\bar{X}_n\\[2ex]
+Var(X^*|\mathcal{S}_n) &amp;=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2,
 \end{align*}
 \]</span> we can consider the conditional mean and the conditional variance of <span class="math display">\[
 \sqrt{n}\left.\left(\bar X^*_n-\bar{X}_n\right)\;\right|\;\mathcal{S}_n,

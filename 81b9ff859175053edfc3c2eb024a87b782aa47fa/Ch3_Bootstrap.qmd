@@ -867,11 +867,28 @@ possible bootstrap samples which are all equally probable.
 
 #### Theory (Part 1): Mean and Variance of the Bootstrap distribution  {#sec-Theory1}
 
+Let 
+$$
+\mathcal{S}_n=\{X_1,\dots,X_n\}
+$$
+where
+$$
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim F,
+$$
+and let 
+$$
+X_1^*,\dots,X_n^*\overset{\text{i.i.d.}}{\sim}X^*\quad\text{with}\quad X^*\sim F_n,
+$$
+where $F_n$ denotes the ecdf computed from $X_1,\dots,X_n.$
+
+
+
 In this chapter we begin with the theoretical consideration of the Bootstrap distribution
 $$
 H^{Boot}_{n}(x)=P\left(\left.\sqrt{n}\left(\bar{X}^*_n-\bar{X}_n\right)\leq x\;\right|\;\mathcal{S}_n\right).
 $$ 
-We begin with focusing on the mean and the variance of $H^{Boot}_{n}.$ 
+
+We begin with focusing on the mean and the variance and check whether for large $n$ ($b\to\infty$) the mean and the variance of $H^{Boot}_{n}$ equals the mean and the variance of $H_n.$ 
 
 
 ::: {.callout-tip}
@@ -908,9 +925,9 @@ $$
 
 We can analyze and simulate the bootstrap distribution of $\sqrt{n}(\bar X^*_n -\bar X_n)|\mathcal{S}_n,$ since **we *know* 🤟 the discrete distribution** of the conditional random variables 
 $$
-X_i^*|\mathcal{S}_n,\;i=1,\dots,n,
+X^*|\mathcal{S}_n
 $$ 
-even though, we do **not know** the distribution of $X_i\sim F,$ $i=1,\dots,n.$
+even though, we do **not know** the distribution of $X\sim F.$
 
 <!-- The discrete distribution of the conditional random variables 
 $X_i^*|\mathcal{S}_n,$ is 
@@ -921,39 +938,39 @@ with  -->
 :::
 
 
-For each $i=1,\dots,n$, the possible values of the discrete random variable $X_i^*|\mathcal{S}_n$ are 
+The possible values of the discrete random variable $X^*|\mathcal{S}_n$ are 
 $$
-X_i^*|\mathcal{S}_n\in\{X_1,\dots,X_n\},
+X^*|\mathcal{S}_n\in\{X_1,\dots,X_n\},
 $$ 
-and each of these values is equally probable: 
+and each of these values are equally probable: 
 $$
 \begin{align*}
-P^*(X_i^*=X_1)&= P(X_i^*=X_1|{\cal S}_n) = \frac{1}{n} \\[2ex]
-P^*(X_i^*=X_2)&= P(X_i^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
+P^*(X^*=X_1)&= P(X^*=X_1|{\cal S}_n) = \frac{1}{n} \\[2ex]
+P^*(X^*=X_2)&= P(X^*=X_2|{\cal S}_n) = \frac{1}{n} \\[2ex]
 &\vdots\\[2ex] 
-P^*(X_i^*=X_n)&= P(X_i^*=X_n|{\cal S}_n) = \frac{1}{n}.
+P^*(X^*=X_n)&= P(X^*=X_n|{\cal S}_n) = \frac{1}{n}.
 \end{align*}
 $$
 
 Thus, **we know the whole distribution** of $X_i^*|\mathcal{S}_n$ and, therefore, can compute, for instance, easily its conditional mean and its variance:
 
-* The conditional mean of $X_i^*$ given ${\cal S}_n$ is
+* The conditional mean of $X^*$ given ${\cal S}_n$ is
 $$
 \begin{align*}
-\mathbb{E}^*(X_i^*)
-&=\mathbb{E}(X_i^*|{\cal S}_n)\\[2ex]
+\mathbb{E}^*(X^*)
+&=\mathbb{E}(X^*|{\cal S}_n)\\[2ex]
 &=\frac{1}{n}X_1+\frac{1}{n}X_2+\dots+\frac{1}{n}X_n\\[2ex]
 &=\bar X_n.
 \end{align*}
 $$
 I.e., the empirical mean $\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i$ of the original sample $X_1,\dots,X_n$ is the "population" mean of the bootstrap sample $X^*_1,\dots,X^*_n.$ 
 
-* The conditional variance of $X_i^*$ given ${\cal S}_n$ is
+* The conditional variance of $X^*$ given ${\cal S}_n$ is
 $$
 \begin{align*}
-Var^*(X_i^*)
-&=Var(X_i^*|{\cal S}_n)\\[2ex] 
-&=\mathbb{E}\left((X_i^* - \mathbb{E}(X_i^*|{\cal S}_n))^2|{\cal S}_n\right)\\[2ex] 
+Var^*(X^*)
+&=Var(X^*|{\cal S}_n)\\[2ex] 
+&=\mathbb{E}\left((X^* - \mathbb{E}(X^*|{\cal S}_n))^2|{\cal S}_n\right)\\[2ex] 
 &=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X_n)^2\\[2ex] 
 &=\hat\sigma^2_n.
 \end{align*}
@@ -966,7 +983,7 @@ I.e., the empirical variance $\hat\sigma^2_n=\frac{1}{n}\sum_{i=1}^n (X_i-\bar X
 
 For any (measurable) function $g$ we have 
 $$
-\mathbb{E}^*(g(X_i^*))=\mathbb{E}(g(X_i^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
+\mathbb{E}^*(g(X^*))=\mathbb{E}(g(X^*)|\mathcal{S}_n)=\frac{1}{n}\sum_{i=1}^n g(X_i).
 $$
 For instance, $g(X_i)=1_{(X_i\leq x)}.$
 :::
@@ -975,16 +992,16 @@ For instance, $g(X_i)=1_{(X_i\leq x)}.$
 
 ## Caution: Conditioning on $\mathcal{S}_n$ in important!
 
-Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is crucial. 
+Conditioning on the observed sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ is **crucial**. 
 
-The **unconditional distribution** of $X_i^*$ is equal to the **unknown distribution** $F.$ This can be seen from the following derivation: 
+The **unconditional distribution** of $X^*$ is equal to the **unknown distribution** $F.$ This can be seen from the following derivation: 
 $$
 \begin{align*}
-P(X_i^*\leq x) 
-&= P(1_{(X_i^*\leq x)}=1) \\[2ex]
-&= P(1_{(X_i^*\leq x)}=1) \cdot 1 + P(1_{(X_i^*\leq x)}=0) \cdot 0\\[2ex]
-&= \mathbb{E}\left(1_{\left(X_i^*\leq x\right)}\right)\\[2ex]
-&= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X_i^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
+P(X^*\leq x) 
+&= P(1_{(X^*\leq x)}=1) \\[2ex]
+&= P(1_{(X^*\leq x)}=1) \cdot 1 + P(1_{(X^*\leq x)}=0) \cdot 0\\[2ex]
+&= \mathbb{E}\left(1_{\left(X^*\leq x\right)}\right)\\[2ex]
+&= \mathbb{E}\left({\color{blue}\mathbb{E}\left(1_{\left(X^*\leq x\right)}|\mathcal{S}_n\right)}\right)\quad[\text{{\color{blue}law of iterated expectations}}]\\[2ex]
 &= \mathbb{E}\left({\color{blue}\frac{1}{n}\sum_{i=1}^n 1_{\left(X_i\leq x\right)}}\right)\quad[\text{{\color{blue}from our derivations above}}]\\[2ex]
 &\quad[\text{Using that $X_1\dots,X_n\overset{\text{i.i.d.}}{\sim}X$ with $X\sim F\colon$}]\\[2ex]
 &= \frac{n}{n}\mathbb{E}\left(1_{\left(X\leq x\right)}\right)\\[2ex]
@@ -998,8 +1015,8 @@ $$
 Using our above results, 
 $$
 \begin{align*}
-\mathbb{E}(\bar{X}_n|\mathcal{S}_n)&=\bar{X}_n\\[2ex]
-Var(\bar{X}_n|\mathcal{S}_n) &=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2,
+\mathbb{E}(X^*|\mathcal{S}_n)&=\bar{X}_n\\[2ex]
+Var(X^*|\mathcal{S}_n) &=\frac{1}{n}\sum_{i=1}^n(X_i-\bar{X}_n)^2,
 \end{align*}
 $$ 
 we can consider the conditional mean and the conditional variance of 
