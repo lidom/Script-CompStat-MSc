@@ -1169,23 +1169,29 @@ $$
 &= t^2\,\mathbb{E}\left(\min\left(|t|\,\left|\frac{X-\mu_0}{\sqrt{n}}\right|^3, \left|\frac{X-\mu_0}{\sqrt{n}}\right|^2\right)\right)\\[2ex]
 &= t^2\,\mathbb{E}\left(\min\big(|t|\,n^{-3/2}\left|X-\mu_0\right|^3, n^{-1}\left|X-\mu_0\right|^2\big)\right)\\[2ex]
 &[\text{for sufficiently large $n$ and any fixed, finite $t$}\\
-&\text{(Note: relevant $t$-values are values around zero):}]\\[2ex]
+&\text{(Note: relevant $t$-values to get all moments are}\\
+&\text{values around zero.):}]\\[2ex]
 &= t^2\,\mathbb{E}\left(|t|\,n^{-3/2}\left|X-\mu_0\right|^3\right)\\[2ex]
 &= n^{-3/2}\underbrace{\;t^2\,|t|\,\mathbb{E}\left(\left|X-\mu_0\right|^3\right)}_{\texttt{constant}}\\[2ex]
 %\Rightarrow\quad n |\lambda_n(t)|& \leq n \cdot n^{-3/2}\cdot \texttt{constant}\\[2ex]
 %\Rightarrow\quad n |\lambda_n(t)|& \leq n^{-1/2} \cdot \texttt{constant}.
 \Rightarrow\quad |\lambda_n(t)|& \leq n^{-3/2}\cdot \texttt{constant}\\[2ex]
-\Rightarrow\quad |\lambda_n(t)|& =O(n^{-3/2}) =o(n^{-1})\\[2ex]
+\Rightarrow\quad |\lambda_n(t)|& =O(n^{-3/2}) \\[2ex]
+&=o(n^{-1})\\[2ex]
 \end{align*}
 $$
-That is, for large $n$ ($n\to\infty$) and fixed, finite $t,$ 
+The latter step follows since sequences of the order of magnitude $n^{-3/2}$ are of a smaller order of magnitude than sequences of the order of magnitude $n^{-1}.$
+
+
+
+That is, for large $n$ ($n\to\infty$) and fixed finite $t,$ 
 $$
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &=\Big(1-\;\underbrace{\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2}_{=O(n^{-1})}\; +\; \underbrace{\lambda_n(t)}_{=o(n^{-1})}\Big)^n\\[2ex]
 \end{align*}
 $$
-the $o(n^{-1})$ term becomes negligible in comparison to the $O(n^{-1})$ term and the constant term such that  
+the $\lambda_n(t)=o(n^{-1})$ term becomes negligible in comparison to the $\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2=O(n^{-1})$ term and the constant term ($1$) such that  
 <!-- 
 $$
 n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
@@ -1211,9 +1217,9 @@ $$
 $$
 where the latter step follows from @eq-CharacNormal.
 
-OK, we have shown that $H_n$ tends to $\Phi_{\sigma_0}$ by showing that the characteristic function of $H_n$ tends to that of $\Phi_{\sigma_0};$ **i.e. we have shown the Lindeberg-Lévy CLT.**
+OK, we have shown that $H_n$ tends to $\Phi_{\sigma_0}$ by showing that the characteristic function of $H_n$ tends to that of $\Phi_{\sigma_0}.$ That is, we just sketched the proof for the Lindeberg-Lévy CLT.**
 
-To show **bootstrap consistency** we need to show that $H_n^{Boot}$ also tends to $\Phi_{\sigma_0}.$ To do so, we can mimic the above proof, by showing that the characteristic function of $H_n^{Boot}$ tends to that of $\Phi_{\sigma_0}.$
+To show **bootstrap consistency** we need to show that $H_n^{Boot}$ also tends to $\Phi_{\sigma_0}.$ To do so, we can mimic the above proof sketch and show that the characteristic function of $H_n^{Boot}$ tends to that of $\Phi_{\sigma_0}.$
 
 
 Let
@@ -1489,9 +1495,9 @@ $$
 
 **Setup:**
 
-* $\theta_0\in\mathbb{R}$ and 
-* $\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)$ as $n\to\infty,$ 
-* $\hat{v}_n\to_{p} v_0$ as $n\to\infty$
+* $\theta_0\in\mathbb{R}\quad$ and 
+* $\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad$ as $\quad n\to\infty,$ 
+* $\hat{v}_n\to_{p} v_0\quad$ as $\quad n\to\infty$
 
 An approximate $(1-\alpha)\times 100\%$ confidence interval is then given by
 $$
@@ -1501,11 +1507,11 @@ $$
 \right],
 $$
 where $z_{1-\frac{\alpha}{2}}$ denotes the $(1-\alpha)/2$ quantile of the standard Normal distribution $(z_{0.975}=1.96).$ This confidence interval is approximate, since it is only asymptotically justified, and, thus, is generally not exact in finite samples. 
+
+**Note:** Often, however, very difficult to obtain a consistent estimator $\hat v_n$ of $v_0$ (see @sec-Illustration). Statistical inference is then usually based on the **bootstrap confidence intervals**. 
 ::: 
 
-In some cases it is, however, very difficult to obtain approximations $\hat v_n$ of $v_0$ (see @sec-Illustration). Statistical inference is then usually based on the **bootstrap confidence intervals**.
 
-In many situations it can be shown that bootstrap confidence intervals (or tests) are even **more precise** than asymptotic normality based confidence intervals. (This applies to the bootstrap-$t$ method discussed in @sec-BootT.)
 
 
 #### Algorithm of the Basic Bootstrap Confidence Interval for $\theta_0:$ {-}

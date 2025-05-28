@@ -1336,20 +1336,23 @@ H_n(x)=P\left(\sqrt{n}\left(\bar{X}_n-\mu_0\right)\leq x\right)\to\Phi_{\sigma_0
 &amp;= t^2\,\mathbb{E}\left(\min\left(|t|\,\left|\frac{X-\mu_0}{\sqrt{n}}\right|^3, \left|\frac{X-\mu_0}{\sqrt{n}}\right|^2\right)\right)\\[2ex]
 &amp;= t^2\,\mathbb{E}\left(\min\big(|t|\,n^{-3/2}\left|X-\mu_0\right|^3, n^{-1}\left|X-\mu_0\right|^2\big)\right)\\[2ex]
 &amp;[\text{for sufficiently large $n$ and any fixed, finite $t$}\\
-&amp;\text{(Note: relevant $t$-values are values around zero):}]\\[2ex]
+&amp;\text{(Note: relevant $t$-values to get all moments are}\\
+&amp;\text{values around zero.):}]\\[2ex]
 &amp;= t^2\,\mathbb{E}\left(|t|\,n^{-3/2}\left|X-\mu_0\right|^3\right)\\[2ex]
 &amp;= n^{-3/2}\underbrace{\;t^2\,|t|\,\mathbb{E}\left(\left|X-\mu_0\right|^3\right)}_{\texttt{constant}}\\[2ex]
 %\Rightarrow\quad n |\lambda_n(t)|&amp; \leq n \cdot n^{-3/2}\cdot \texttt{constant}\\[2ex]
 %\Rightarrow\quad n |\lambda_n(t)|&amp; \leq n^{-1/2} \cdot \texttt{constant}.
 \Rightarrow\quad |\lambda_n(t)|&amp; \leq n^{-3/2}\cdot \texttt{constant}\\[2ex]
-\Rightarrow\quad |\lambda_n(t)|&amp; =O(n^{-3/2}) =o(n^{-1})\\[2ex]
+\Rightarrow\quad |\lambda_n(t)|&amp; =O(n^{-3/2}) \\[2ex]
+&amp;=o(n^{-1})\\[2ex]
 \end{align*}
-\]</span> That is, for large <span class="math inline">\(n\)</span> (<span class="math inline">\(n\to\infty\)</span>) and fixed, finite <span class="math inline">\(t,\)</span> <span class="math display">\[
+\]</span> The latter step follows since sequences of the order of magnitude <span class="math inline">\(n^{-3/2}\)</span> are of a smaller order of magnitude than sequences of the order of magnitude <span class="math inline">\(n^{-1}.\)</span></p>
+<p>That is, for large <span class="math inline">\(n\)</span> (<span class="math inline">\(n\to\infty\)</span>) and fixed finite <span class="math inline">\(t,\)</span> <span class="math display">\[
 \begin{align*}
 \psi_{\sqrt{n}\left(\bar{X}_n-\mu_0\right)}(t)
 &amp;=\Big(1-\;\underbrace{\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2}_{=O(n^{-1})}\; +\; \underbrace{\lambda_n(t)}_{=o(n^{-1})}\Big)^n\\[2ex]
 \end{align*}
-\]</span> the <span class="math inline">\(o(n^{-1})\)</span> term becomes negligible in comparison to the <span class="math inline">\(O(n^{-1})\)</span> term and the constant term such that<br>
+\]</span> the <span class="math inline">\(\lambda_n(t)=o(n^{-1})\)</span> term becomes negligible in comparison to the <span class="math inline">\(\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2=O(n^{-1})\)</span> term and the constant term (<span class="math inline">\(1\)</span>) such that<br>
 <!-- 
 $$
 n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
@@ -1372,8 +1375,8 @@ $$ --> <span class="math display">\[
 &amp;=\psi_{\Phi_{\sigma_0}}(t),
 \end{align*}
 \]</span> where the latter step follows from <a href="#eq-CharacNormal" class="quarto-xref">Equation&nbsp;<span>3.6</span></a>.</p>
-<p>OK, we have shown that <span class="math inline">\(H_n\)</span> tends to <span class="math inline">\(\Phi_{\sigma_0}\)</span> by showing that the characteristic function of <span class="math inline">\(H_n\)</span> tends to that of <span class="math inline">\(\Phi_{\sigma_0};\)</span> <strong>i.e.&nbsp;we have shown the Lindeberg-Lévy CLT.</strong></p>
-<p>To show <strong>bootstrap consistency</strong> we need to show that <span class="math inline">\(H_n^{Boot}\)</span> also tends to <span class="math inline">\(\Phi_{\sigma_0}.\)</span> To do so, we can mimic the above proof, by showing that the characteristic function of <span class="math inline">\(H_n^{Boot}\)</span> tends to that of <span class="math inline">\(\Phi_{\sigma_0}.\)</span></p>
+<p>OK, we have shown that <span class="math inline">\(H_n\)</span> tends to <span class="math inline">\(\Phi_{\sigma_0}\)</span> by showing that the characteristic function of <span class="math inline">\(H_n\)</span> tends to that of <span class="math inline">\(\Phi_{\sigma_0}.\)</span> That is, we just sketched the proof for the Lindeberg-Lévy CLT.**</p>
+<p>To show <strong>bootstrap consistency</strong> we need to show that <span class="math inline">\(H_n^{Boot}\)</span> also tends to <span class="math inline">\(\Phi_{\sigma_0}.\)</span> To do so, we can mimic the above proof sketch and show that the characteristic function of <span class="math inline">\(H_n^{Boot}\)</span> tends to that of <span class="math inline">\(\Phi_{\sigma_0}.\)</span></p>
 <p>Let <span class="math display">\[
 X_1^*,\dots,X_n^*\overset{\text{i.i.d.}}{\sim}X^*
 \]</span> where <span class="math inline">\(X^*\sim F_n\)</span> has</p>
@@ -1626,9 +1629,9 @@ Recall: Confidence Interval for <span class="math inline">\(\theta_0\)</span> us
 <div class="callout-body-container callout-body">
 <p><strong>Setup:</strong></p>
 <ul>
-<li><span class="math inline">\(\theta_0\in\mathbb{R}\)</span> and</li>
-<li><span class="math inline">\(\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\)</span> as <span class="math inline">\(n\to\infty,\)</span></li>
-<li><span class="math inline">\(\hat{v}_n\to_{p} v_0\)</span> as <span class="math inline">\(n\to\infty\)</span></li>
+<li><span class="math inline">\(\theta_0\in\mathbb{R}\quad\)</span> and</li>
+<li><span class="math inline">\(\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad\)</span> as <span class="math inline">\(\quad n\to\infty,\)</span></li>
+<li><span class="math inline">\(\hat{v}_n\to_{p} v_0\quad\)</span> as <span class="math inline">\(\quad n\to\infty\)</span></li>
 </ul>
 <p>An approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval is then given by <span class="math display">\[
 \left[
@@ -1636,10 +1639,9 @@ Recall: Confidence Interval for <span class="math inline">\(\theta_0\)</span> us
 \hat{\theta}_n + z_{1-\frac{\alpha}{2}}\frac{\hat v_n}{\sqrt{n}}
 \right],
 \]</span> where <span class="math inline">\(z_{1-\frac{\alpha}{2}}\)</span> denotes the <span class="math inline">\((1-\alpha)/2\)</span> quantile of the standard Normal distribution <span class="math inline">\((z_{0.975}=1.96).\)</span> This confidence interval is approximate, since it is only asymptotically justified, and, thus, is generally not exact in finite samples.</p>
+<p><strong>Note:</strong> Often, however, very difficult to obtain a consistent estimator <span class="math inline">\(\hat v_n\)</span> of <span class="math inline">\(v_0\)</span> (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Statistical inference is then usually based on the <strong>bootstrap confidence intervals</strong>.</p>
 </div>
 </div>
-<p>In some cases it is, however, very difficult to obtain approximations <span class="math inline">\(\hat v_n\)</span> of <span class="math inline">\(v_0\)</span> (see <a href="#sec-Illustration" class="quarto-xref"><span>Section 3.1</span></a>). Statistical inference is then usually based on the <strong>bootstrap confidence intervals</strong>.</p>
-<p>In many situations it can be shown that bootstrap confidence intervals (or tests) are even <strong>more precise</strong> than asymptotic normality based confidence intervals. (This applies to the bootstrap-<span class="math inline">\(t\)</span> method discussed in <a href="#sec-BootT" class="quarto-xref"><span>Section 3.4</span></a>.)</p>
 <section id="algorithm-of-the-basic-bootstrap-confidence-interval-for-theta_0" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="algorithm-of-the-basic-bootstrap-confidence-interval-for-theta_0">Algorithm of the Basic Bootstrap Confidence Interval for <span class="math inline">\(\theta_0:\)</span></h4>
 <p><strong>Setup:</strong></p>
