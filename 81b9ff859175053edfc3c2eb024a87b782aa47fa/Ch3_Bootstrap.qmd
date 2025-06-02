@@ -1208,7 +1208,7 @@ $$
 &=\Big(1-\;\underbrace{\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2}_{=O(n^{-1})}\; +\; \underbrace{\lambda_n(t)}_{=o(n^{-1})}\Big)^n\\[2ex]
 \end{align*}
 $$
-the $\lambda_n(t)=o(n^{-1})$ term becomes negligible in comparison to the $\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2=O(n^{-1})$ term and the constant term ($1$) such that  
+the $\lambda_n(t)=o(n^{-1})$ term becomes negligible in comparison to the $\frac{1}{2}\,\frac{1}{n}\sigma_0^2 \, t^2=O(n^{-1})$ term and the constant term (i.e. the $1$) such that  
 <!-- 
 $$
 n|\lambda_n(t)|\to 0\quad\text{as}\quad n\to\infty,
@@ -1262,8 +1262,10 @@ where
 $$
 \begin{align*}
 &W^*_{1,n}|\mathcal{S}_n,\dots,W^*_{n,n}|\mathcal{S}_n\overset{\text{i.i.d.}}{\sim}W_n^*|\mathcal{S}_n,\\[2ex]
-&\mathbb{E}(W^*_{n}|\mathcal{S}_n)=\mathbb{E}\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)=\frac{\mathbb{E}(X_i^*|\mathcal{S}_n)-\bar{X}_n}{\sqrt{n}}=0\quad\text{for all}\quad n,\quad\text{and}\\[2ex]
-&Var(W^*_{n}|\mathcal{S}_n)=Var\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)=\frac{1}{n}Var(X_i^*-\bar{X}_n|\mathcal{S}_n)=\frac{1}{n}Var(X_i^*|\mathcal{S}_n)=\frac{1}{n}\hat\sigma_n^2.
+&\mathbb{E}(W^*_{n}|\mathcal{S}_n)=\mathbb{E}\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)\\[2ex]
+&\phantom{\mathbb{E}(W^*_{n}|\mathcal{S}_n)}=\frac{\mathbb{E}(X_i^*|\mathcal{S}_n)-\bar{X}_n}{\sqrt{n}}=0\quad\text{for all}\quad n,\quad\text{and}\\[2ex]
+&Var(W^*_{n}|\mathcal{S}_n)=Var\left(\left.\frac{X_i^*-\bar{X}_n}{\sqrt{n}}\right|\mathcal{S}_n\right)\\[2ex]
+&\phantom{Var(W^*_{n}|\mathcal{S}_n)}=\frac{1}{n}Var(X_i^*-\bar{X}_n|\mathcal{S}_n)=\frac{1}{n}Var(X_i^*|\mathcal{S}_n)=\frac{1}{n}\hat\sigma_n^2
 \end{align*}
 $$
 
@@ -1510,7 +1512,7 @@ $$
 
 ## Recall: Confidence Interval for $\theta_0$ using Classic Asymptotic Statistics
 
-**Setup:**
+**Setup (Classic Asymptotic Statistics):**
 
 * $\theta_0\in\mathbb{R}\quad$ and 
 * $\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad$ as $\quad n\to\infty,$ 
@@ -1562,7 +1564,9 @@ if $n$ is sufficiently large.
 
 Caution: This is not always the case and in cases of doubt one needs to show this property. 
 
+::: {.callout-tip appearance="minimal"}
 **Good to know:** Theorem 1 in @Mammen_1992_Book shows that the basic bootstrap is consistent if $\sqrt{n}(\hat{\theta}_n-\theta_0)\to_d\mathcal{N}(0,v_0^2),$ under the assumption that the bootstrap sampling process (e.g. i.i.d.) equals the original sampling process.
+:::
 :::
 
 **Algorithm (3 Steps):**
@@ -1578,8 +1582,8 @@ by repeatedly ($m$ times) drawing bootstrap samples $X_{1}^*,\dots,X_{n}^*$ inde
 $$
 \hat q^*_{n,p}=\left\{
   \begin{array}{ll}
-  \hat\theta^*_{n,(\lfloor mp\rfloor+1)},         & mp \text{ not a whole number}\\
-  (\hat\theta^*_{n,(mp)}+\hat\theta^*_{n,(mp+1)})/2,& mp \text{ a whole number}
+  \hat\theta^*_{n,(\lfloor mp\rfloor+1)},           &\text{if $mp$ is not an integer}\\
+  (\hat\theta^*_{n,(mp)}+\hat\theta^*_{n,(mp+1)})/2,&\text{if $mp$ is an integer}
 \end{array}\right.
 $${#eq-empiricalQuantile}
 for $p=\frac{\alpha}{2}$ or $p=1-\frac{\alpha}{2},$ where $\hat\theta_{n,(j)}^*$ denotes the $j$th order statistic 
@@ -1588,11 +1592,13 @@ $$
 $$
 and $\lfloor mp\rfloor$ denotes the greatest whole number less than or equal to $mp$ (e.g. $\lfloor 4.9\rfloor = 4$).
 
-3. The approximate $(1-\alpha)\times 100\%$  **basic bootstrap confidence interval** is then given by 
+3. The $(1-\alpha)\times 100\%$  **basic bootstrap confidence interval** is then given by 
 $$
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 $${#eq-NPBootCI}
-where $\hat{\theta}_n$ is computed from the original sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*.$
+where 
+   * $\hat{\theta}_n$ is computed from the original sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and 
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*.$
 
 
 ::: {.callout-note}
@@ -1614,9 +1620,9 @@ $$
 \begin{align*}
 &P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Rightarrow\; & P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P^*\left(
+\Rightarrow\; & P^*\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{red}\sqrt{n}(\hat{\theta}_n^*-\hat{\theta}_n)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)
 \approx 1-\alpha
 \end{align*}
@@ -1631,20 +1637,20 @@ $$
 \begin{align*}
 &P\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{blue}\sqrt{n}(\hat{\theta}_n-\theta_0)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow &P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Rightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow &P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
+\Rightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
 %\Rightarrow &P\left(\hat{\theta}_n-(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\le \theta_0\le \hat{\theta}_n-(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow &P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
+\Rightarrow\; &P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
  \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
 \end{align*}
 $$
 This demonstrates that the **basic bootstrap confidence interval** in @eq-NPBootCI
 $$
-\left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
+\left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, \; 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
 $$
-is indeed an asymptotically valid $(1-\alpha)\times 100\%$ confidence interval.
+is indeed an asymptotically ($n\to\infty$ and $m\to\infty$) valid $(1-\alpha)\times 100\%$ confidence interval.
 
 
 #### Example: Basic Bootstrap Confidence Interval for the Population Mean {-}
@@ -1697,24 +1703,34 @@ $$
 \bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.
 $$
 
-2. Compute the empirical quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ from $\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}.$ 
+2. Compute the empirical quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ from $\bar X^*_{n,1},\bar X^*_{n,2},\dots,\bar X^*_{n,m}$ using @eq-empiricalQuantile. 
 
 3. Compute the approximate $(1-\alpha)\times 100\%$ basic bootstrap confidence interval according to @eq-NPBootCI:
 $$
 \left[2\bar X_n -\hat q^*_{n,1-\frac{\alpha}{2}}, 
       2\bar X_n -\hat q^*_{n,\frac{\alpha}{2}}\right],
 $$
-where $\bar{X}_n$ is computed from the original sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.$
+where 
+
+   * $\bar{X}_n$ is computed from the original sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and 
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.$
 
 
 ## The Bootstrap-$t$ Method {#sec-BootT}
 
-The basic bootstrap method is a nonparametric bootstrap method since the method does not require a specific distributional (i.e. parametric) assumption.
+In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-$t$ method (one also speaks of the "studentized bootstrap"). As the basic bootstrap method, the bootstrap-$t$ method is a nonparametric bootstrap method. The construction relies on so-called **(asymptotically) pivotal statistics**.
 
+**Setup (as in classic asymptotic statistics):**
 
-In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-$t$ method (one also speaks of the "studentized bootstrap"), which is also a nonparametric bootstrap method. The construction relies on so-called **(asymptotically) pivotal statistics**.
-
-Let $X_1,\dots,X_n$ be an i.i.d. random sample and assume that the distribution of $X$ depends on an unknown parameter (or parameter vector) $\theta$.
+* **Data:** i.i.d. random sample 
+$$
+{\cal S}_n:=\{X_1,\dots,X_n\}
+$$ 
+with $X_i\overset{\text{i.i.d.}}{\sim} F$ for all $i=1,\dots,n.$
+* The parameter of interest $\theta_0\in\mathbb{R}$ is an parameter of $F$. 
+* $\hat{\theta}_n$ denotes the estimator of $\theta_0\in\mathbb{R}.$ 
+* $\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad$ as $\quad n\to\infty,$ 
+* $\hat{v}_n\to_{p} v_0\quad$ as $\quad n\to\infty$
 
 ::: {.callout-note appearance="minimal"} 
 ## 
@@ -1742,7 +1758,7 @@ It is, however, often possible to construct an ***asymptotically pivotal*** stat
 $$
 \sqrt{n}(\hat{\theta}_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2),
 $$
-where $v^2$ denotes the asymptotic variance. Additionally assume that it is possible to use the data in order to construct a **consistent** estimator of $v_0^2$
+where $v^2=\lim_{n\to\infty}Var(\sqrt{n}(\hat{\theta}_n-\theta_0))$ denotes the asymptotic variance. Additionally assume that it is possible to use the data in order to construct a **consistent** estimator of $v_0^2$
 $$
 \hat v_n^2 \rightarrow_p v_0^2\quad\text{as}\quad n\to\infty,
 $$
@@ -1752,7 +1768,7 @@ $$
 $$
 Then, 
 $$
-T_n= \sqrt{n}\frac{(\hat{\theta}-\theta)}{\hat v_n}
+T_n= \sqrt{n}\frac{(\hat{\theta}_n-\theta_0)}{\hat v_n}
 $$ 
 is **asymptotically pivotal**, since
 $$
@@ -1760,9 +1776,9 @@ T_n = \sqrt{n}\frac{(\hat{\theta}_n-\theta_0)}{\hat v_n}\rightarrow_d \mathcal{N
 $$
 
 
-#### Example: $\bar{X}_n$ {-}
+#### **Example: $\boldsymbol{\bar{X}_n}$ is Asymptotically Pivotal** {-}
 
-Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu_0$, variance $0<Var(X)=\sigma_0^2<\infty$, and $\mathbb{E}(|X|^4)=\beta<\infty$. 
+Let $\mathcal{S}_n=\{X_1,\dots,X_n\}$ be a i.i.d. random sample with $X_i\sim X$ for all $i=1,\dots,n,$ with mean $\mathbb{E}(X)=\mu_0$, variance $0<Var(X)=\sigma_0^2<\infty$, and finite fourth moment $\mathbb{E}(|X|^4)=\beta<\infty$ for estimating $\sigma_0^2.$ 
  
 * If $X$ is **normally distributed**, we obtain
 $$
@@ -1777,7 +1793,7 @@ $$
 In this case $T_n$ is an **asymptotically pivotal statistic**.
 
 
-#### Bootstrap-$t$ Consistency {-}
+#### **Bootstrap-$\boldsymbol{t}$ Consistency** {-}
 
 The general idea of the bootstrap-$t$ method relies on approximating the unknown distribution of 
 $$
