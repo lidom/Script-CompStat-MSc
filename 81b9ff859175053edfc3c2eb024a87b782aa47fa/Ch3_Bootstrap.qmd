@@ -1290,7 +1290,7 @@ By the Marcinkiewicz strong law of large numbers, we obtain that
 $$
 \begin{align*}
 n{\color{red}|\lambda^*_n(t)|}&\to_{a.s.} 0\quad\text{as}\quad n\to\infty\\[2ex]
-\Leftrightarrow\quad {\color{red}|\lambda^*_n(t)|}&=o_{a.s.}(0).
+\Leftrightarrow\quad {\color{red}|\lambda^*_n(t)|}&=o_{a.s.}(1).
 \end{align*}
 $$
 
@@ -1694,7 +1694,7 @@ $$
 
 
 
-**Algorithm of the basic bootstrap confidence interval for $\mu_0$:**
+#### **Algorithm of the basic bootstrap confidence interval for $\boldsymbol{\mu_0}$:** {-}
 
 The bootstrap offers an alternative method for constructing approximate $(1-\alpha)\times 100\%$ confidence intervals. We already know that the bootstrap is consistent in this situation (see @sec-Theory2BootstrapConsist). 
 
@@ -1716,7 +1716,7 @@ where
    * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.$
 
 
-## The Bootstrap-$t$ Method {#sec-BootT}
+## The Bootstrap-$\boldsymbol{t}$ Method {#sec-BootT}
 
 In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-$t$ method (one also speaks of the "studentized bootstrap"). As the basic bootstrap method, the bootstrap-$t$ method is a nonparametric bootstrap method. The construction relies on so-called **(asymptotically) pivotal statistics**.
 
@@ -1790,7 +1790,11 @@ with $s_n^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2$, where $t_{n-1}$ denote
 $$
 T_n=\frac{\sqrt{n}(\bar X_n-\mu_0)}{s_n}\rightarrow_d\mathcal{N}(0,1),\quad\text{as}\quad n\to\infty.
 $$
-In this case $T_n$ is an **asymptotically pivotal statistic**.
+In this case $T_n$ is an **asymptotically pivotal statistic**.</br> 
+**Note:** One can replace $s_n = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2}$ by  $\hat\sigma_n = \sqrt{\frac{1}{n} \sum_{i=1}^n (X_i-\bar X_n)^2},$ since both are asymptotically equivalent, i.e.
+$$
+\frac{s_n}{\hat\sigma_n}\to_p 1\quad\text{as}\quad n\to\infty.
+$$
 
 
 #### **Bootstrap-$\boldsymbol{t}$ Consistency** {-}
@@ -1811,7 +1815,7 @@ $$
 
 
 ::: {.callout-tip}
-## Good news: Bootstrap-$t$ consistency follows if the basic bootstrap is consistent 
+## Good news: Bootstrap-$\boldsymbol{t}$ consistency follows if the basic bootstrap is consistent 
 
 If the basic bootstrap is consistent and if the variance estimator $\hat{v}_n^2$ is consistent, then also the bootstrap-$t$ method is consistent. 
 
@@ -1823,9 +1827,9 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 :::
 
 
-### The Bootstrap-$t$ Confidence Interval 
+### The Bootstrap-$\boldsymbol{t}$ Confidence Interval 
 
-**Setup:**
+**Setup (as in classic asymptotic statistics):**
 
 * Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter of interest $\theta_0\in\mathbb{R}.$ 
 * Let $\hat{\theta}_n$ be a $\sqrt{n}$-consistent, asymptotically normal estimator of $\theta_0,$ i.e.
@@ -1851,7 +1855,7 @@ $$
 $$  
 
 
-#### Algorithm of the Bootstrap-$t$ Confidence Interval for $\theta_0$: {-}
+#### **Algorithm of the Bootstrap-$\boldsymbol{t}$ Confidence Interval for $\boldsymbol{\theta_0}$:** {-}
 
 **Algorithm (3 Steps):**
 
@@ -1885,7 +1889,7 @@ where $\hat\theta_n$ and $\hat v_n$ are the estimates of $\theta_0$ and $v_0$ ba
 
 
 
-**Justifying the Bootstrap-$t$ CI (@eq-Boot_tCI) for $\theta_0$:**
+**Justifying the Bootstrap-$\boldsymbol{t}$ CI (@eq-Boot_tCI) for $\boldsymbol{\theta_0}$:**
 
 The bootstrap estimates 
 $$
@@ -1936,23 +1940,27 @@ is indeed an asymptotic (i.e. approximate) $(1-\alpha)\times 100\%$ CI.
 
 
 
-#### Example: Bootstrap-$t$ Confidence Interval for the Mean {-}
+#### **Example: Bootstrap-$\boldsymbol{t}$ Confidence Interval for $\boldsymbol{\mu_0}$** {-}
 
-Here $\hat\theta_n = \bar{X}_n$ and the estimator of the asymptotic variance of $\bar{X}_n$ is $s^2\approx \lim_{n\to\infty}n Var(\bar{X}_n)=\sigma_0^2$, where $s^2$ denotes the sample variance 
+Here $\hat\theta_n = \bar{X}_n$ and the estimator of the asymptotic variance $\sigma_0^2=\lim_{n\to\infty}n Var(\bar{X}_n)$ is
 $$
-s_n^2=\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2.
+\hat\sigma_n^2 = \frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}_n\right)^2.
 $$
 
 **Algorithm:**
 
-* Draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
-$\bar X^*$ as well as $s_n^*=\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i^*-\bar X^*_n)^2}$ to generate $m$ (e.g. $m=100,000$) bootstrap realizations
+* Repeatedly draw i.i.d. random samples $X_1^*,\dots,X_n^*$ from ${\cal S}_n$ and calculate
 $$
-\sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
+\bar X^*_n=\bar X^*(X_1^*,\dots,X_n^*)\quad\text{and}\quad 
+\hat\sigma^*_n=\hat\sigma^*(X_1^*,\dots,X_n^*)
+$$ 
+to generate $m$ (e.g. $m=10,000$) bootstrap realizations
+$$
+T^*_{n,1}=\sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{\hat\sigma^*_{n,1}},\dots,T^*_{n,m}=\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{\hat\sigma^*_{n,m}}
 $$ 
 * Determine $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ from 
 $$
-\sqrt{n}\frac{\bar X^*_{n,1}-\bar X_n}{s^*_{n,1}},\dots,\sqrt{n}\frac{\bar X^*_{n,m}-\bar X_n}{s^*_{n,m}}
+T^*_{n,1},\dots,T^*_{n,m}
 $$
 using @eq-empiricalQuantile.
 * This yields the $(1-\alpha)\times 100 \%$ confidence interval (using @eq-Boot_tCI):
@@ -1960,14 +1968,12 @@ $$
 \left[\bar X_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right),
       \bar X_n - \hat q^*_{n,  \frac{\alpha}{2}} \left(\frac{s_n}{\sqrt{n}}\right)\right],
 $$
-where $\bar X_n$ and $s_n$ are computed from the original sample, i.e., 
-$$
-s_n=\sqrt{\frac{1}{n-1}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2},  
-$$
-and where the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\sqrt{n}\frac{\bar X^*_{n,j}-\bar X_n}{s^*_{n,j}},$ $j=1,\dots,m.$
+where 
+   * $\bar X_n=\frac{1}{n}\sum_{i=1}^n X_i$ and $\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\left(X_i-\bar{X}\right)^2}$ are computed from the original sample $X_1,\dots,X_n$ and  
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $T^*_{n,1},\dots,T^*_{n,m}.$
 
 
-### Accuracy of the Bootstrap-$t$ method 
+### Accuracy of the Bootstrap-$\boldsymbol{t}$ method 
 
 Usually, the bootstrap-$t$ provides a **gain in accuracy** over the basic bootstrap. The reason is that the approximation of the law of $T_n$ by the bootstrap law of 
 $$
@@ -1998,20 +2004,20 @@ and their accuracy depends on the particular procedure applied (e.g. basic boots
 * Two-sided $(1-\alpha)\cdot 100\%$ confidence intervals $[L_n,U_n]$ are said to be **first-order accurate** if there exist some constant $c<\infty$ such that for sufficiently large $n$
 $$
 \begin{align*}
-\left|P(\theta_0\not\in [L_n,U_n])-\alpha\right|\le \frac{c}{\sqrt{n}}
+\left|P(\theta_0\in [L_n,U_n])-(1-\alpha)\right|\le \frac{c}{\sqrt{n}}
 \end{align*}
 $$
 * Two-sided $(1-\alpha)\cdot 100\%$ confidence intervals $[L_n,U_n]$ are said to be **second-order accurate** if there exist some constant $c<\infty$ such that for sufficiently large $n$
 $$
 \begin{align*}
-\left|P(\theta_0\not\in[L_n,U_n])-\alpha\right|\le \frac{c}{n}
+\left|P(\theta_0\in[L_n,U_n])-(1-\alpha)\right|\le \frac{c}{n}
 \end{align*}
 $$
 
 
 If the distribution of $\hat\theta_n$ is asymptotically normal and the bootstrap is consistent, then under some additional regularity conditions it can usually be shown that
 
-* Standard confidence intervals based on asymptotic normality approximations are **first-order** accurate. 
+* Standard confidence intervals based on classic asymptotic normality approximations are **first-order** accurate. 
 * Basic bootstrap confidence intervals are **first-order** accurate.
 * Bootstrap-$t$ confidence intervals are **second-order** accurate.
 
@@ -2025,10 +2031,13 @@ Proofs required for this type of results is technically difficult since Edgewort
 
 ## Bootstrap and Linear Regression Analysis
 
-In this chapter we consider two different bootstrap resampling procedures that can be applied in linear regression analysis. @sec-bootPairs considers the **Bootstrapping Pairs** algorithm and @sec-bootResid considers the **Residual Bootstrap** algorithm. We begin with outlining the general setup. 
+In this chapter we consider two different bootstrap resampling procedures that can be applied in linear regression analysis: 
+
+* @sec-bootPairs considers the **Bootstrapping Pairs** algorithm  
+* @sec-bootResid considers the **Residual Bootstrap** algorithm. 
 
 
-Consider the linear regression model 
+**Setup:** Linear regression model 
 $$
 Y_i=X_i^T\beta_0 + \varepsilon_i,\quad  i=1,\dots,n,
 $$
@@ -2134,11 +2143,11 @@ $$
  \hat\beta^*_n=\left(\sum_{i=1}^n X_i^*X_i^{*T}\right)^{-1}\sum_{i=1}^n X_i^*Y_i^*
 $$
 
-Repeating Steps 1-2 $m$-many times yields $m$ (e.g. $m=10,000$) bootstrap estimates
+Repeating Steps 1-2 $m$-many times yields $m$ (e.g. $m=10,000$) bootstrap estimators
 $$
 \hat\beta^*_{n,1},\dots,\hat\beta^*_{n,m}
 $$
-which allow us to approximate the bootstrap distribution $\hat\beta^*_n-\hat\beta_n|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
+which allow us to approximate the bootstrap distribution of $\hat\beta^*_n-\hat\beta_n|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
  
 
 It can be shown that bootstrapping pairs is **consistent**; i.e. that for large $n$
@@ -2164,17 +2173,17 @@ with
 $$
 X_i:=(\underbrace{X_{i1}}_{=1},X_{i2},\ldots,X_{ip})^T\in\mathbb{R}^p,
 $$
-under **fixed design** (@def-RandomFixedDesign), where 
+under the **fixed design** (@def-RandomFixedDesign), where 
 $$
-\varepsilon_1,\dots,\varepsilon_n
+\varepsilon_1,\dots,\varepsilon_n\overset{\text{i.i.d.}}{\sim}\varepsilon
 $$ 
 are i.i.d. with zero mean 
 $$
-\mathbb{E}(\varepsilon_i)=0
+\mathbb{E}(\varepsilon)=0
 $$ 
-and **homoskedastic** errors
+and **homoskedastic** variance
 $$
-\mathbb{E}(\varepsilon_i^2)=\sigma^2_0.
+\mathbb{E}(\varepsilon^2)=\sigma^2_0.
 $$ 
 
 
@@ -2268,18 +2277,12 @@ Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i
 $$
 where $\hat\sigma^2_n\to\sigma^2_0$ as $n\to\infty.$ 
 
-An appropriate central limit theorem argument implies that 
-$$
-\left.\sqrt{n}(\hat\beta^*_n-\hat\beta_n)\right|\mathcal{S}_n\to_d\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right),
-$$
-as $n\to\infty,$ assuming that $\frac{1}{n}\sum_{i=1}^n X_iX_i^T\to M$ as $n\to\infty$ with $M$ being invertible. 
-
-That is, for large $n$, we have that
+It can be shown that the residual bootstrap is consistent; i.e. that  
 $$
 \text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)
 \approx\underbrace{\text{distribution}(\sqrt{n}(\hat\beta_n-\beta_0))}_{\mathcal{N}_p\left(0,\sigma^2_0\, M^{-1}\right)}
 $$
-
+for large $n.$
 
 
 ### Bootstrap under Fixed Design: The Wild Bootstrap {#sec-bootWild} 
