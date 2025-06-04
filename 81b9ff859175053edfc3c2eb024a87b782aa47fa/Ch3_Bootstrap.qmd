@@ -1575,7 +1575,10 @@ Caution: This is not always the case and in cases of doubt one needs to show thi
 $$
 \hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*
 $$
-by repeatedly ($m$ times) drawing bootstrap samples $X_{1}^*,\dots,X_{n}^*$ independently and with replacement from $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and computing $\hat{\theta}^\ast_{n,j}\equiv \hat{\theta}^\ast_{j}(X_{1}^*,\dots,X_{n}^*),$ $j=1,\dots,m.$
+by repeatedly ($m$ times) drawing bootstrap samples $X_{1}^*,\dots,X_{n}^*$ independently and with replacement from $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and computing 
+$$
+\hat{\theta}^\ast_{n,j}=\hat{\theta}^\ast_{j}(X_{1}^*,\dots,X_{n}^*),\quad j=1,\dots,m.
+$$
 
 
 2. Use the $m$ bootstrap estimates $\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*$ to approximate the $\frac{\alpha}{2}$ and the $1-\frac{\alpha}{2}$ quantiles of the conditional distribution of $\hat{\theta}^*$ given ${\cal S}_n.$ This can be done with negligible approximation error (for $m$ large) using the empirical quantiles 
@@ -1620,9 +1623,9 @@ $$
 \begin{align*}
 &P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; & P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Leftrightarrow\; & P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; & P^*\left(
+\Leftrightarrow\; & P^*\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{red}\sqrt{n}(\hat{\theta}_n^*-\hat{\theta}_n)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)
 \approx 1-\alpha
 \end{align*}
@@ -1637,13 +1640,14 @@ $$
 \begin{align*}
 &P\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{blue}\sqrt{n}(\hat{\theta}_n-\theta_0)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Leftrightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
+\Leftrightarrow\; &P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
 %\Rightarrow &P\left(\hat{\theta}_n-(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\le \theta_0\le \hat{\theta}_n-(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow\; &P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
- \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
+\Leftrightarrow\; &P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
+ \hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha\\[2ex]
+\Leftrightarrow\; &P\left(\theta_0\in\left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, \; 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right]\right)\approx 1-\alpha. 
 \end{align*}
 $$
 This demonstrates that the **basic bootstrap confidence interval** in @eq-NPBootCI
@@ -1722,15 +1726,23 @@ In many situations it is possible to get more accurate bootstrap confidence inte
 
 **Setup (as in classic asymptotic statistics):**
 
-* **Data:** i.i.d. random sample 
+* Let ${\cal S}_n:=\{X_1,\dots,X_n\}$ be an i.i.d. random sample from $X\sim F$ with unknown parameter of interest $\theta_0\in\mathbb{R}.$ 
+* Let $\hat{\theta}_n$ be a $\sqrt{n}$-consistent, asymptotically normal estimator of $\theta_0,$ i.e.
 $$
-{\cal S}_n:=\{X_1,\dots,X_n\}
+\sqrt{n}\left(\hat{\theta}_n - \theta_0\right)\to_d\mathcal{N}(0,v_0^2)\quad\text{as}\quad n\to\infty
+$$
+* Assume that the **bootstrap is consistent**.
+* Let $\hat{v}_n^2$ denote a **consistent** estimator of the asymptotic variance $v_0^2=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\right)$ i.e. 
+$$
+\hat v^2_n\equiv \hat v^2(X_1,\dots,X_n)
 $$ 
-with $X_i\overset{\text{i.i.d.}}{\sim} F$ for all $i=1,\dots,n.$
-* The parameter of interest $\theta_0\in\mathbb{R}$ is an parameter of $F$. 
-* $\hat{\theta}_n$ denotes the estimator of $\theta_0\in\mathbb{R}.$ 
-* $\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad$ as $\quad n\to\infty,$ 
-* $\hat{v}_n\to_{p} v_0\quad$ as $\quad n\to\infty$
+such that 
+$$
+\begin{align*}
+\hat v^2_n &\to_p v_0^2\quad\text{as}\quad n\to\infty\\[2ex]
+\hat v_n   &\to_p v_0\quad\text{as}\quad n\to\infty.
+\end{align*}
+$$
 
 ::: {.callout-note appearance="minimal"} 
 ## 
@@ -1790,10 +1802,10 @@ with $s_n^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2$, where $t_{n-1}$ denote
 $$
 T_n=\frac{\sqrt{n}(\bar X_n-\mu_0)}{s_n}\rightarrow_d\mathcal{N}(0,1),\quad\text{as}\quad n\to\infty.
 $$
-In this case $T_n$ is an **asymptotically pivotal statistic**.</br> 
+In this case $T_n$ is an **asymptotically pivotal statistic**.</br></br> 
 **Note:** One can replace $s_n = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2}$ by  $\hat\sigma_n = \sqrt{\frac{1}{n} \sum_{i=1}^n (X_i-\bar X_n)^2},$ since both are asymptotically equivalent, i.e.
 $$
-\frac{s_n}{\hat\sigma_n}\to_p 1\quad\text{as}\quad n\to\infty.
+\frac{s_n}{\hat\sigma_n}=\sqrt{\frac{n}{n-1}}\to_p 1\quad\text{as}\quad n\to\infty.
 $$
 
 
@@ -1844,16 +1856,10 @@ $$
 such that 
 $$
 \begin{align*}
-\hat v^2_n &\to_p v_0^2\quad\text{as}\quad n\to\infty
-\end{align*}
-$$
-and
-$$
-\begin{align*}
+\hat v^2_n &\to_p v_0^2\quad\text{as}\quad n\to\infty\\[2ex]
 \hat v_n   &\to_p v_0\quad\text{as}\quad n\to\infty.
 \end{align*}
-$$  
-
+$$
 
 #### **Algorithm of the Bootstrap-$\boldsymbol{t}$ Confidence Interval for $\boldsymbol{\theta_0}$:** {-}
 
@@ -1873,10 +1879,11 @@ $$
 T_n^*&=\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}.
 \end{align*}
 $$ 
-Repeating this yields $m$ (e.g. $m=100,000$) many bootstrap estimates 
+Repeating this yields $m$ (e.g. $m=10,000$) many bootstrap estimators 
 $$
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
 $$
+conditionally on $\mathcal{S}_n.$
 
 2. Compute the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^*_{n,\frac{\alpha}{2}}$ and $\hat q^*_{n,1-\frac{\alpha}{2}}$ of the bootstrap estimates $T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*$ (see @eq-empiricalQuantile). 
 
@@ -1922,12 +1929,15 @@ $$
 \begin{align*}
 & P\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{blue}\sqrt{n}\frac{\hat{\theta}_n-\theta_0}{v_0}} \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(\hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\Leftrightarrow & P\left(\hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(- \hat{\theta}_n + \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
+\Leftrightarrow & P\left(- \hat{\theta}_n + \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow & P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
-\approx 1-\alpha
+\Leftrightarrow & P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\approx 1-\alpha\\[2ex]
+\Leftrightarrow & P\left(\theta_0\in\left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
+      \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right]\right)
+\approx 1-\alpha.
 \end{align*}
 $$
 Thus, the approximate $(1-\alpha)\times 100\%$ bootstrap-$t$ confidence interval (@eq-Boot_tCI) 
@@ -2152,7 +2162,7 @@ which allow us to approximate the bootstrap distribution of $\hat\beta^*_n-\hat\
 
 It can be shown that bootstrapping pairs is **consistent**; i.e. that for large $n$
 $$
-\text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)\approx\mathcal{N}_p(0,M^{-1}QM^{-1})
+\text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)\approx\mathcal{N}_p(0,M^{-1}QM^{-1}).
 $$
 
 

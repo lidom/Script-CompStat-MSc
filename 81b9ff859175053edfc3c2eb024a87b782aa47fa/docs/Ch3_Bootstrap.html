@@ -1700,7 +1700,9 @@ Assumption: Bootstrap is Consistent
 <li><p>Generate <span class="math inline">\(m\)</span> bootstrap estimates<br>
 <span class="math display">\[
 \hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*
-\]</span> by repeatedly (<span class="math inline">\(m\)</span> times) drawing bootstrap samples <span class="math inline">\(X_{1}^*,\dots,X_{n}^*\)</span> independently and with replacement from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and computing <span class="math inline">\(\hat{\theta}^\ast_{n,j}\equiv \hat{\theta}^\ast_{j}(X_{1}^*,\dots,X_{n}^*),\)</span> <span class="math inline">\(j=1,\dots,m.\)</span></p></li>
+\]</span> by repeatedly (<span class="math inline">\(m\)</span> times) drawing bootstrap samples <span class="math inline">\(X_{1}^*,\dots,X_{n}^*\)</span> independently and with replacement from <span class="math inline">\(\mathcal{S}_n=\{X_1,\dots,X_n\}\)</span> and computing <span class="math display">\[
+\hat{\theta}^\ast_{n,j}=\hat{\theta}^\ast_{j}(X_{1}^*,\dots,X_{n}^*),\quad j=1,\dots,m.
+\]</span></p></li>
 <li><p>Use the <span class="math inline">\(m\)</span> bootstrap estimates <span class="math inline">\(\hat\theta_{n,1}^*,\dots,\hat\theta_{n,m}^*\)</span> to approximate the <span class="math inline">\(\frac{\alpha}{2}\)</span> and the <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles of the conditional distribution of <span class="math inline">\(\hat{\theta}^*\)</span> given <span class="math inline">\({\cal S}_n.\)</span> This can be done with negligible approximation error (for <span class="math inline">\(m\)</span> large) using the empirical quantiles <span id="eq-empiricalQuantile"><span class="math display">\[
 \hat q^*_{n,p}=\left\{
   \begin{array}{ll}
@@ -1740,9 +1742,9 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \begin{align*}
 &amp;P^*\left(\hat q^*_{n,\frac{\alpha}{2}} \leq \hat{\theta}^*_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; &amp; P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Leftrightarrow\; &amp; P^*\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n \leq\hat{\theta}^*_n -\hat{\theta}_n \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; &amp; P^*\left(
+\Leftrightarrow\; &amp; P^*\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{red}\sqrt{n}(\hat{\theta}_n^*-\hat{\theta}_n)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)
 \approx 1-\alpha
 \end{align*}
@@ -1753,13 +1755,14 @@ G_{n}^{Boot}(x)=P\left(\hat{\theta}^*_{n}\leq x\,\big|\,\mathcal{S}_n\right),
 \begin{align*}
 &amp;P\left(
 \sqrt{n}(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\leq{\color{blue}\sqrt{n}(\hat{\theta}_n-\theta_0)}\leq \sqrt{n}(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow\; &amp;P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
+\Leftrightarrow\; &amp;P\left(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n\leq\hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow\; &amp;P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
+\Leftrightarrow\; &amp;P\left(\hat q^*_{n,\frac{\alpha}{2}}-2\hat{\theta}_n\leq-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}}-2\hat{\theta}_n\right)
 \approx 1-\alpha\\[2ex]
 %\Rightarrow &amp;P\left(\hat{\theta}_n-(\hat q^*_{n,1-\frac{\alpha}{2}}-\hat{\theta}_n)\le \theta_0\le \hat{\theta}_n-(\hat q^*_{n,\frac{\alpha}{2}}-\hat{\theta}_n)\right)\approx 1-\alpha\\[2ex]
-\Rightarrow\; &amp;P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
-\hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha.
+\Leftrightarrow\; &amp;P\left(2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}\le \theta_0\le 2\hat{\theta}_n-
+\hat q^*_{n,\frac{\alpha}{2}}\right)\approx 1-\alpha\\[2ex]
+\Leftrightarrow\; &amp;P\left(\theta_0\in\left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, \; 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right]\right)\approx 1-\alpha.
 \end{align*}
 \]</span> This demonstrates that the <strong>basic bootstrap confidence interval</strong> in <a href="#eq-NPBootCI" class="quarto-xref">Equation&nbsp;<span>3.10</span></a> <span class="math display">\[
 \left[2\hat{\theta}_n-\hat q^*_{n,1-\frac{\alpha}{2}}, \; 2\hat{\theta}_n-\hat q^*_{n,\frac{\alpha}{2}}\right],
@@ -1834,13 +1837,19 @@ Recall: Confidence Interval for <span class="math inline">\(\mu_0\)</span> using
 <p>In many situations it is possible to get more accurate bootstrap confidence intervals by using the bootstrap-<span class="math inline">\(t\)</span> method (one also speaks of the “studentized bootstrap”). As the basic bootstrap method, the bootstrap-<span class="math inline">\(t\)</span> method is a nonparametric bootstrap method. The construction relies on so-called <strong>(asymptotically) pivotal statistics</strong>.</p>
 <p><strong>Setup (as in classic asymptotic statistics):</strong></p>
 <ul>
-<li><strong>Data:</strong> i.i.d. random sample <span class="math display">\[
-{\cal S}_n:=\{X_1,\dots,X_n\}
-\]</span> with <span class="math inline">\(X_i\overset{\text{i.i.d.}}{\sim} F\)</span> for all <span class="math inline">\(i=1,\dots,n.\)</span></li>
-<li>The parameter of interest <span class="math inline">\(\theta_0\in\mathbb{R}\)</span> is an parameter of <span class="math inline">\(F\)</span>.</li>
-<li><span class="math inline">\(\hat{\theta}_n\)</span> denotes the estimator of <span class="math inline">\(\theta_0\in\mathbb{R}.\)</span></li>
-<li><span class="math inline">\(\sqrt{n}(\hat\theta_n-\theta_0)\rightarrow_d\mathcal{N}(0,v_0^2)\quad\)</span> as <span class="math inline">\(\quad n\to\infty,\)</span></li>
-<li><span class="math inline">\(\hat{v}_n\to_{p} v_0\quad\)</span> as <span class="math inline">\(\quad n\to\infty\)</span></li>
+<li>Let <span class="math inline">\({\cal S}_n:=\{X_1,\dots,X_n\}\)</span> be an i.i.d. random sample from <span class="math inline">\(X\sim F\)</span> with unknown parameter of interest <span class="math inline">\(\theta_0\in\mathbb{R}.\)</span></li>
+<li>Let <span class="math inline">\(\hat{\theta}_n\)</span> be a <span class="math inline">\(\sqrt{n}\)</span>-consistent, asymptotically normal estimator of <span class="math inline">\(\theta_0,\)</span> i.e. <span class="math display">\[
+\sqrt{n}\left(\hat{\theta}_n - \theta_0\right)\to_d\mathcal{N}(0,v_0^2)\quad\text{as}\quad n\to\infty
+\]</span></li>
+<li>Assume that the <strong>bootstrap is consistent</strong>.</li>
+<li>Let <span class="math inline">\(\hat{v}_n^2\)</span> denote a <strong>consistent</strong> estimator of the asymptotic variance <span class="math inline">\(v_0^2=\lim_{n\to\infty}Var\left(\sqrt{n}\left(\hat{\theta}_n-\theta_0\right)\right)\)</span> i.e.&nbsp; <span class="math display">\[
+\hat v^2_n\equiv \hat v^2(X_1,\dots,X_n)
+\]</span> such that <span class="math display">\[
+\begin{align*}
+\hat v^2_n &amp;\to_p v_0^2\quad\text{as}\quad n\to\infty\\[2ex]
+\hat v_n   &amp;\to_p v_0\quad\text{as}\quad n\to\infty.
+\end{align*}
+\]</span></li>
 </ul>
 <div class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
@@ -1879,8 +1888,8 @@ T_n=\frac{\sqrt{n}(\bar X_n-\mu_0)}{s_n}\sim t_{n-1}\quad\text{for any}\quad n=2
 \]</span> with <span class="math inline">\(s_n^2=\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2\)</span>, where <span class="math inline">\(t_{n-1}\)</span> denotes the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. We can conclude that <span class="math inline">\(T_n\)</span> is <strong>exact pivotal</strong>.</p></li>
 <li><p>If <span class="math inline">\(X\)</span> is <strong><em>not</em> normally distributed</strong>, the central limit theorem implies that <span class="math display">\[
 T_n=\frac{\sqrt{n}(\bar X_n-\mu_0)}{s_n}\rightarrow_d\mathcal{N}(0,1),\quad\text{as}\quad n\to\infty.
-\]</span> In this case <span class="math inline">\(T_n\)</span> is an <strong>asymptotically pivotal statistic</strong>.<br> <strong>Note:</strong> One can replace <span class="math inline">\(s_n = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2}\)</span> by <span class="math inline">\(\hat\sigma_n = \sqrt{\frac{1}{n} \sum_{i=1}^n (X_i-\bar X_n)^2},\)</span> since both are asymptotically equivalent, i.e. <span class="math display">\[
-\frac{s_n}{\hat\sigma_n}\to_p 1\quad\text{as}\quad n\to\infty.
+\]</span> In this case <span class="math inline">\(T_n\)</span> is an <strong>asymptotically pivotal statistic</strong>.<br><br> <strong>Note:</strong> One can replace <span class="math inline">\(s_n = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (X_i-\bar X_n)^2}\)</span> by <span class="math inline">\(\hat\sigma_n = \sqrt{\frac{1}{n} \sum_{i=1}^n (X_i-\bar X_n)^2},\)</span> since both are asymptotically equivalent, i.e. <span class="math display">\[
+\frac{s_n}{\hat\sigma_n}=\sqrt{\frac{n}{n-1}}\to_p 1\quad\text{as}\quad n\to\infty.
 \]</span></p></li>
 </ul>
 </section>
@@ -1925,10 +1934,7 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 \hat v^2_n\equiv \hat v^2(X_1,\dots,X_n)
 \]</span> such that <span class="math display">\[
 \begin{align*}
-\hat v^2_n &amp;\to_p v_0^2\quad\text{as}\quad n\to\infty
-\end{align*}
-\]</span> and <span class="math display">\[
-\begin{align*}
+\hat v^2_n &amp;\to_p v_0^2\quad\text{as}\quad n\to\infty\\[2ex]
 \hat v_n   &amp;\to_p v_0\quad\text{as}\quad n\to\infty.
 \end{align*}
 \]</span></li>
@@ -1945,9 +1951,9 @@ where $\Phi$ denotes the distribution function of the standard normal distributi
 \begin{align*}
 T_n^*&amp;=\sqrt{n}\frac{\hat{\theta}^*_n-\hat{\theta}_n}{\hat v^*_n}.
 \end{align*}
-\]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=100,000\)</span>) many bootstrap estimates <span class="math display">\[
+\]</span> Repeating this yields <span class="math inline">\(m\)</span> (e.g.&nbsp;<span class="math inline">\(m=10,000\)</span>) many bootstrap estimators <span class="math display">\[
 T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.
-\]</span></p></li>
+\]</span> conditionally on <span class="math inline">\(\mathcal{S}_n.\)</span></p></li>
 <li><p>Compute the empirical <span class="math inline">\(\frac{\alpha}{2}\)</span> and <span class="math inline">\(1-\frac{\alpha}{2}\)</span> quantiles <span class="math inline">\(\hat q^*_{n,\frac{\alpha}{2}}\)</span> and <span class="math inline">\(\hat q^*_{n,1-\frac{\alpha}{2}}\)</span> of the bootstrap estimates <span class="math inline">\(T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*\)</span> (see <a href="#eq-empiricalQuantile" class="quarto-xref">Equation&nbsp;<span>3.9</span></a>).</p></li>
 <li><p>Compute the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval<br>
 <span id="eq-Boot_tCI"><span class="math display">\[
@@ -1974,12 +1980,15 @@ P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta
 \begin{align*}
 &amp; P\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{blue}\sqrt{n}\frac{\hat{\theta}_n-\theta_0}{v_0}} \leq \hat q^*_{n,1-\frac{\alpha}{2}}\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow &amp; P\left(\hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\Leftrightarrow &amp; P\left(\hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\leq  \hat{\theta}_n-\theta_0 \leq \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow &amp; P\left(- \hat{\theta}_n + \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
+\Leftrightarrow &amp; P\left(- \hat{\theta}_n + \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \leq -\theta_0 \leq - \hat{\theta}_n + \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right)\right)
 \approx 1-\alpha\\[2ex]
-\Rightarrow &amp; P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
-\approx 1-\alpha
+\Leftrightarrow &amp; P\left(\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}}\left(\frac{v_0}{\sqrt{n}}\right)\leq \theta_0 \leq \hat{\theta}_n - \hat q^*_{n,\frac{\alpha}{2}} \left(\frac{v_0}{\sqrt{n}}\right) \right)
+\approx 1-\alpha\\[2ex]
+\Leftrightarrow &amp; P\left(\theta_0\in\left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
+      \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right]\right)
+\approx 1-\alpha.
 \end{align*}
 \]</span> Thus, the approximate <span class="math inline">\((1-\alpha)\times 100\%\)</span> bootstrap-<span class="math inline">\(t\)</span> confidence interval (<a href="#eq-Boot_tCI" class="quarto-xref">Equation&nbsp;<span>3.11</span></a>) <span class="math display">\[
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
@@ -2162,7 +2171,7 @@ Q
 \hat\beta^*_{n,1},\dots,\hat\beta^*_{n,m}
 \]</span> which allow us to approximate the bootstrap distribution of <span class="math inline">\(\hat\beta^*_n-\hat\beta_n|\mathcal{S}_n\)</span> arbitrarily well as <span class="math inline">\(m\to\infty.\)</span></p>
 <p>It can be shown that bootstrapping pairs is <strong>consistent</strong>; i.e.&nbsp;that for large <span class="math inline">\(n\)</span> <span class="math display">\[
-\text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)\approx\mathcal{N}_p(0,M^{-1}QM^{-1})
+\text{distribution}(\sqrt{n}(\hat\beta^*_n-\hat\beta_n) |{\cal S}_n)\approx\mathcal{N}_p(0,M^{-1}QM^{-1}).
 \]</span></p>
 </section>
 <section id="sec-bootResid" class="level3" data-number="3.5.2">
