@@ -1717,7 +1717,7 @@ $$
 where 
 
    * $\bar{X}_n$ is computed from the original sample $\mathcal{S}_n=\{X_1,\dots,X_n\}$ and 
-   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.$
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimators $\bar{X}_{n,1}^*,\dots,\bar{X}_{n,m}^*.$
 
 
 ## The Bootstrap-$\boldsymbol{t}$ Method {#sec-BootT}
@@ -1892,7 +1892,10 @@ $$
 \left[\hat{\theta}_n - \hat q^*_{n,1-\frac{\alpha}{2}} \left(\frac{\hat v_n}{\sqrt{n}}\right),\;
       \hat{\theta}_n - \hat q^*_{n,  \frac{\alpha}{2}}   \left(\frac{\hat v_n}{\sqrt{n}}\right)\right],
 $${#eq-Boot_tCI}
-where $\hat\theta_n$ and $\hat v_n$ are the estimates of $\theta_0$ and $v_0$ based on the original sample $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\},$ and where the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimates $T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.$
+where 
+
+   * $\hat\theta_n$ and $\hat v_n$ are the estimates of $\theta_0$ and $v_0$ computed from the original sample $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\},$ and 
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap estimators $T_{n,1}^*,T_{n,2}^*, \dots, T_{n,m}^*.$
 
 
 
@@ -1919,7 +1922,7 @@ P^*\left(\hat q^*_{n,\frac{\alpha}{2}}\leq {\color{red}\sqrt{n}\frac{\hat{\theta
 $$
 
 
-Moreover, due to the assumed consistencies of the bootstrap and of the estimator $\hat v_n,$ we have that for large $n$ that 
+By the (assumed) bootstrap consistency, we have for large $n$ that 
 $$
 \left.{\color{red}\sqrt{n}\frac{\hat{\theta}^*-\hat{\theta}}{\hat v_n^*}}\right|\mathcal{S}_n\overset{d}{\approx}
 {\color{blue}\sqrt{n}\frac{\hat{\theta}_n-\theta_0}{v_0}}.
@@ -2061,7 +2064,7 @@ denotes the vector of predictor variables. In the following, we differentiate be
 ## 
 ::: {#def-RandomFixedDesign}
 
-## Random and fixed design 
+## Random and Fixed Design 
 <br>
 
 **Random Design:**
@@ -2210,11 +2213,11 @@ The above assumptions on the error terms then, of course, also have to be satisf
 
 The idea of the residual bootstrap is very simple: The procedure builds upon the assumption that the error terms 
 $$
-\varepsilon_1,\dots,\varepsilon_n
+\varepsilon_1,\dots,\varepsilon_n\overset{\text{i.i.d.}}{\sim}\varepsilon
 $$ 
-are i.i.d which suggests a bootstrap based on **resampling the error terms**. 
+are i.i.d which suggests a bootstrap based on **resampling the (homoskedastic) error terms**. 
 
-These errors are, of course, unobserved, but they can be approximated by the corresponding residuals
+These errors are, of course, unobserved, but they can be approximated by their corresponding residuals
 $$
 \hat \varepsilon_i=Y_i-X_i^T\hat\beta_n, \quad i=1,\dots,n,
 $$
@@ -2260,6 +2263,7 @@ $$
 which allow us to approximate the bootstrap distribution $\hat\beta^*_n-\hat\beta_n|\mathcal{S}_n$ arbitrarily well as $m\to\infty.$
 
 
+<!-- 
 #### Motivating the Residual Bootstrap {-}
 
 It is not difficult to understand why the residual bootstrap generally works for *homoskedastic* (!) errors. We have
@@ -2285,7 +2289,8 @@ and
 $$
 Var(\hat\varepsilon_i^*| {\cal S}_n)=\frac{1}{n} \sum_{i=1}^n \hat \varepsilon_i^2 = \hat\sigma^2_n,
 $$
-where $\hat\sigma^2_n\to\sigma^2_0$ as $n\to\infty.$ 
+where $\hat\sigma^2_n\to\sigma^2_0$ as $n\to\infty.$  
+-->
 
 It can be shown that the residual bootstrap is consistent; i.e. that  
 $$
@@ -2300,7 +2305,8 @@ for large $n.$
 
 The wild bootstrap is a method for generating bootstrap samples that do not consist of resampling the original data (bootstrapping pairs in @sec-bootPairs) or residuals (bootstrapping residuals in @sec-bootResid). Rather, the wild bootstrap combines the data with random variables drawn from a known distribution to form a bootstrap sample. 
 
-The wild bootstrap provides a way to deal with issues such as **heteroskedasticity of unknown form in fixed-design** regression models or random-design models in which one conditions on the predictors. 
+The wild bootstrap provides a way to deal with issues such as **heteroskedasticity of unknown form in fixed-design** regression models or random-design models in which one conditions on the predictors $X_1,\dots,X_n.$
+
 
 In the following we will formally assume a regression model
 $$
@@ -2318,7 +2324,7 @@ are independent across $i=1,\dots,n,$ with
 $$
 \mathbb{E}(\varepsilon_i)=0\quad\text{for all}\quad i=1,\dots,n,
 $$ 
-and possibly **heteroskedastic** variances ($\sigma^2_{0,i}\neq \sigma^2_{0,j}$ for $i\neq j=1,\dots,n$)
+and with possibly **heteroskedastic** variances 
 $$
 0<\mathbb{E}(\varepsilon_i^2)=\sigma^2_{0,i}<\infty\quad\text{for all}\quad i=1,\dots,n.
 $$ 
@@ -2331,7 +2337,7 @@ That is, the data generating process is here independent across $i=1,\dots,n,$ b
 
 ## Applicability of the Wild Bootstrap under Random Designs
 
-Though we will formally rely on a fixed design assumption, the wild bootstrap (as the residual bootstrap) is also applicable for random designs. 
+Though we will formally rely on a fixed design assumption. However, as in the case of the residual bootstrap, the wild bootstrap is also applicable for random designs. 
 
 In random designs, the following arguments are meant *conditionally* on the observed predictors $X_1,\dots,X_n$. 
 
@@ -2339,26 +2345,35 @@ The above assumptions on the error terms then, of course, also have to be satisf
 :::
 
 
-
 As the residual bootstrap (@sec-bootResid), the wild bootstrap uses the $X_i$'s from the original data. I.e., the $X_i$'s are not resampled. The wild bootstrap generates bootstrap samples 
 $$
-\{(Y_1^\ast,X_1),\dots,(Y_n^\ast,X_n)\}
+\{(\underbrace{X_1^\top\hat\beta_n + \varepsilon^\ast_1}_{=Y_1^\ast},X_1),\dots,(\underbrace{X_n^\top\hat\beta_n + \varepsilon^\ast_n}_{=Y_n^\ast},X_n)\},
 $$
-from 
+where $\hat\beta_n$ is computed from the original sample.
+Repeatedly ($m$ times) generating such bootstrap samples allows generating $m$ realizations of the bootstrap estimator
 $$
-Y_i^\ast=X_i^\top\hat\beta_n + \varepsilon^\ast_i,\quad i=1,\dots,n,
+\hat\beta^\ast_{n,j} = \left(X^\top X\right)^{-1}X^\top Y^\ast,\quad j=1,\dots,m. 
 $$
-where the $\varepsilon_i^\ast$'s are generated by either of the following two methods:
 
-1. Let 
+The bootstrap errors $\varepsilon_i^\ast$'s are generated by either of the following two methods:
+
+1. The wild bootstrap (@Mammen_1993) uses 
 $$
-\hat\varepsilon_i=Y_i - X_i^\top\hat\beta_n,\quad i=1,\dots,n,
-$$  
-be the OLS residuals. For each $i=1,\dots,n,$ let $F_i$ be the $i$-specific distribution of a discrete two-point random variable 
+\varepsilon_i^\ast = W_i\quad\text{for each}\quad i=1,\dots,n
+$$
+to generate the bootstrap samples
+$$
+\{(\underbrace{X_1^\top\hat\beta_n + \varepsilon^\ast_1}_{=Y_1^\ast},X_1),\dots,(\underbrace{X_n^\top\hat\beta_n + \varepsilon^\ast_n}_{=Y_n^\ast},X_n)\},
+$$
+where $W_i$ is a discrete random variable taking values
 $$
 W_i\in\left\{\left(1-\sqrt{5}\right)\hat\varepsilon_i,\;\left(1+\sqrt{5}\right)\frac{\hat\varepsilon_i}{2}\right\}
 $$ 
-with 
+with
+$$
+\hat\varepsilon_i=Y_i - X_i^\top\hat\beta_n,\quad i=1,\dots,n,
+$$  
+denoting the original OLS residuals computed, and with
 $$
 \begin{align*}
 P\left(W_i = \left(1-\sqrt{5}\right)\hat\varepsilon_i\right) &= \frac{1+\sqrt{5}}{2\sqrt{5}}\\[2ex]
@@ -2373,34 +2388,27 @@ $$
 \mathbb{E}(W_i^3)&=\hat\varepsilon_i^3.
 \end{align*}
 $$
-The wild bootstrap uses 
-$$
-\varepsilon_i^\ast = W_i\quad\text{for each}\quad i=1,\dots,n
-$$
-to generate the bootstrap samples. @Mammen_1993 provides a detailed discussion of the properties of this method.
-2. The second method is an example of the **multiplier bootstrap**, meaning that the $\varepsilon_i^\ast$'s are multiples of transformations of the residuals $\hat{\varepsilon}_i$ and independent random variables. Specifically, let $U_i,$ $i=1,\dots,n,$ be real valued random variables that are independent from each other and independent of the residuals $\hat{\varepsilon}_i.$ Let $\mathbb{E}(U_i)=0$ and $\mathbb{E}(U_i^2)=1$ for all $i=1,\dots,n.$ One possibility would be $U_i\sim\mathcal{N}(0,1).$ Let $f(\hat{\varepsilon}_i)$ be a transformation of the residuals, where $f(\hat{\varepsilon}_i)=\hat{\varepsilon}_i$ is one possibility. The multiplier bootstrap uses 
+See @Mammen_1993 for a detailed discussion of the properties of this method.
+2. The second method is an example of the **multiplier bootstrap**, which uses 
 $$
 \varepsilon_i^\ast = U_i\,f(\hat{\varepsilon}_i)\quad\text{for each}\quad i=1,\dots,n
 $$
-to generate the bootstrap samples. @Davidson_and_Flachaire_2008 discuss properties of this method. 
-
-
-Repeatedly generating new bootstrap errors 
-$$
-\varepsilon^\ast_1,\dots,\varepsilon^\ast_n,
-$$ 
-allows us to repeatedly generate new bootstrap samples 
+to generate the bootstrap samples
 $$
 \{(\underbrace{X_1^\top\hat\beta_n + \varepsilon^\ast_1}_{=Y_1^\ast},X_1),\dots,(\underbrace{X_n^\top\hat\beta_n + \varepsilon^\ast_n}_{=Y_n^\ast},X_n)\},
 $$
-which allows us to repeatedly generate new bootstrap realizations 
-$$
-\hat\beta_n^\ast = \left(X^\top X\right)^{-1}X^\top Y^\ast. 
-$$
+where 
+
+   * $f(\hat{\varepsilon}_i)$ is a transformation of the residuals with $f(\hat{\varepsilon}_i)=\hat{\varepsilon}_i$ being one possibility
+   * $U_1,\dots,U_n\overset{\text{i.i.d.}}{\sim}U$ are real valued i.i.d. random variables, independent of the residuals $\hat{\varepsilon}_i,$ and with $\mathbb{E}(U)=0$ and $\mathbb{E}(U^2)=1.$ One possibility would be $U\sim\mathcal{N}(0,1).$ Another often used possibility is to use a [Rademacher distributed](https://en.wikipedia.org/wiki/Rademacher_distribution) random variable $U.$
+   
+See @Davidson_and_Flachaire_2008 for a detailed discuss of the properties of this method. 
 
 
 
-### Bootstrap Confidence Intervals for the $j$th Component of the Regression Coefficient $\beta_{0,j}$
+
+
+### Bootstrap Confidence Intervals for the $\boldsymbol{j}$th Component of the Regression Coefficient $\boldsymbol{\beta_{0}}$
 
 This chapter introduces two confidence intervals. The first uses the basic bootstrap method (@sec-BasicBootstrap); the second uses the bootstrap-$t$ method (@sec-BootT). 
 
@@ -2410,9 +2418,17 @@ Both confidence intervals can be constructed either via bootstrapping pairs (@se
 While the bootstrap confidence intervals based on bootstrapping pairs (@sec-bootPairs) are heteroskedasticity robust, the bootstrap confidence intervals based on bootstrapping residuals are only valid for homoskedastic errors.    
 :::
 
-#### Basic Bootstrap Confidence Intervals for $\beta_{0,j}$ 
+#### **Basic Bootstrap Confidence Intervals for $\boldsymbol{\beta_{0,j}}$** 
 
-Let $\beta_{0,j}\in\mathbb{R}$, $j=1,\dots,p$, denote the $j$th component of $\beta_0\in\mathbb{R}^p,$ and let $\hat{\beta}_{j,n}\in\mathbb{R}$ denote the $j$th component of the estimator $\hat\beta_n\in\mathbb{R}^p.$
+Let 
+$$
+\beta_{0,j}\in\mathbb{R},
+$$ 
+$j=1,\dots,p$, denote the $j$th component of $\beta_0\in\mathbb{R}^p,$ and let 
+$$
+\hat{\beta}_{j,n}\in\mathbb{R}
+$$ 
+denote the $j$th component of the estimator $\hat\beta_n\in\mathbb{R}^p.$
 
 The basic bootstrap confidence interval for $\beta_{0,j}\in\mathbb{R}$ can be constructed as following:
 
@@ -2429,7 +2445,11 @@ $$
 \left[2\hat\beta_{nj}-\hat q^\ast_{n,1-\frac{\alpha}{2},j}, 
       2\hat\beta_{nj}-\hat q^\ast_{n,\frac{\alpha}{2},j}\right],
 $$
-where $\hat\beta_{nj}$ denotes the $j$th component of $\hat\beta_{n}$ computed from the original sample $\mathcal{S}_n,$ and where the empirical quantiles $\hat q^\ast_{n,1-\frac{\alpha}{2},j}$ and $\hat q^\ast_{n,\frac{\alpha}{2},j}$ are computed from the bootstrap estimates $\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.$
+where 
+   * $\hat\beta_{nj}$ denotes the $j$th component of $\hat\beta_{n}$ computed from the original sample $\mathcal{S}_n,$ and 
+
+   * $\hat q^\ast_{n,1-\frac{\alpha}{2},j}$ and $\hat q^\ast_{n,\frac{\alpha}{2},j}$ are the empirical quantiles computed from the bootstrap estimators $\hat{\beta}_{j,n,1}^\ast,\dots,\hat\beta_{j,n,m}^\ast.$
+
 
 ::: {.callout-note}
 
@@ -2462,7 +2482,7 @@ where $\hat\beta_{n,j}$ denotes the $j$th component of the estimate $\hat\beta_n
 -->
 
 
-#### Bootstrap-$t$ Confidence Intervals for $\beta_{0,j}$ 
+#### **Bootstrap-$\boldsymbol{t}$ Confidence Intervals for $\boldsymbol{\beta_{0,j}}$**
 
 Bootstrap-$t$ confidence intervals for the regression coefficients $\beta_{0,j}$, $j=1,\dots,p,$ can be constructed as following: 
 
@@ -2478,15 +2498,11 @@ where
 
 In the case of homoskedastic error terms
 $$
-\begin{align*}
 \widehat{\operatorname{SE}}(\hat\beta_{j,n})
-&=\frac{\hat{\sigma}_n\sqrt{\hat{\gamma}_{jj,n}}}{\sqrt{n}},
-\end{align*}
-$$
+=\frac{\hat{\sigma}_n\sqrt{\hat{\gamma}_{jj,n}}}{\sqrt{n}},
+$${#eq-homoskedSE}
 where 
-$$
-\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}
-$$
+$\hat{\sigma}_n=\sqrt{\frac{1}{n}\sum_{i=1}^n\hat{\varepsilon}_i^2}$
 and where 
 $$
 \hat{\gamma}_{jj,n}
@@ -2499,7 +2515,7 @@ In the case of heteroskedastic errors, one can use
 $$
 \widehat{\operatorname{SE}}(\hat\beta_{j,n})
 =\frac{\sqrt{\left[\widehat{M}_n^{-1}\widehat{Q}_n\widehat{M}_n^{-1}\right]_{jj}}}{\sqrt{n}}
-$$
+$${#eq-heterokedSE}
 where 
 
 * $\widehat{M}_n^{-1}=(\frac{1}{n}\sum_{i=1}^n X_iX_i^T)^{-1}$
@@ -2512,11 +2528,7 @@ $$
 
 A bootstrap-$t$ interval for $\beta_{0,j}$, $j=1,\dots,p$, can thus be constructed as follows:
 
-1. Use
-* bootstrapping pairs (@sec-bootPairs) for random designs,
-* bootstrapping residuals (@sec-bootResid) for fixed designs and homoskedastic errors, or 
-* wild bootstrap (@sec-bootWild) for fixed desgins and heteroskedastic errors,
-to generate $m$ (e.g. $m=10,000$) bootstrap realizations
+1. Use either **bootstrapping pairs** (@sec-bootPairs) for random designs, or **bootstrapping residuals** (@sec-bootResid) for fixed designs and homoskedastic errors, or the **wild bootstrap** (@sec-bootWild) for fixed desgins and heteroskedastic errors, to generate $m$ (e.g. $m=10,000$) bootstrap realizations
 $$
 T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*,
 $$
@@ -2525,11 +2537,10 @@ $$
 T^*_{n,k}=\frac{\hat\beta_{n,j}^*-\hat\beta_{0,j}}{\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})},\quad k=1,\dots,m,
 $$
 where 
-
    * $\hat\beta_{0,j}$ is computed from the original sample
-   * $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ is an appropriate estimate of the standard error (see above)
-   * the residual components in $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ are resampled
-   * the $X$-components in $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ are resampled only in random designs, but kept fix in fixed desgins. 
+   * $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ is an appropriate estimate of the standard error (e.g. @eq-homoskedSE or @eq-heterokedSE)
+      * the residual components in $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ are resampled
+      * the $X$-components in $\widehat{\operatorname{SE}}(\hat\beta^*_{j,n})$ are resampled only in random designs, but kept fix in fixed desgins. 
 
 2. Compute the empirical $\frac{\alpha}{2}$ and $1-\frac{\alpha}{2}$ quantiles $\hat q^\ast_{n,\frac{\alpha}{2},j}$ and $\hat q^\ast_{n,1-\frac{\alpha}{2},j}$ (see @eq-empiricalQuantile) from the bootstrap estimates $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
 
@@ -2541,14 +2552,12 @@ $$
   \hat\beta_{j,n}-\hat q^\ast_{\frac{\alpha}{2},n,j}\;\left(\widehat{\operatorname{SE}}(\hat\beta_{j,n})\right)
 \right],
 $$
-where $\hat\beta_{n,j}$ and $\widehat{\operatorname{SE}}(\hat\beta_{j,n})$ are computed from the original sample $\mathcal{S}_n=((Y_1,X_1),\dots,(Y_n,X_n)),$ and where the empirical quantiles $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap realizations $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
+where 
+
+   * $\hat\beta_{n,j}$ and $\widehat{\operatorname{SE}}(\hat\beta_{j,n})$ are computed from the original sample $\mathcal{S}_n=((Y_1,X_1),\dots,(Y_n,X_n)),$ and 
+   * $\hat q^*_{n,1-\frac{\alpha}{2}}$ and $\hat q^*_{n,\frac{\alpha}{2}}$ are computed from the bootstrap realizations $T^*_{n,1},T_{n,2}^*,\dots, T_{n,m}^*.$
 
 
-::: {.callout-note}
-
-## Remark 
-In case of **heteroskedastic errors,** one needs to use an appropriate bootstrap version (e.g. bootstrapping pairs (random desgin) or wild bootstrap (fixed desgin)) and an appropriate (heteroskedasticity robust) version of $\widehat{\operatorname{SE}}(\hat{\beta}_{j,n}^\ast).$
-::: 
 
 ### Statistical Hypothesis Testing 
 
@@ -2570,9 +2579,9 @@ where
 
 * $\beta_{0,j}$ denotes the $j$th element of $\beta_0\in\mathbb{R}^p,$ 
 * $\hat\beta_{j,n}$ denotes the $j$th element of the OLS estimator $\hat\beta_n\in\mathbb{R}^p.$ 
-* $\widehat{\operatorname{SE}}(\hat\beta_{j,n})$ is an appropriate estimate of the standard error (see above)
+* $\widehat{\operatorname{SE}}(\hat\beta_{j,n})$ is an appropriate estimator of the standard error (e.g. @eq-homoskedSE or @eq-heterokedSE)
 
-The $p$-value is given by 
+The $p$-value is defined as 
 $$
 \begin{align*}
 &p_{obs} = \\[2ex]
@@ -2584,7 +2593,7 @@ $$
 \mathcal{S}_n=\left\{(Y_1,X_1),\dots,(Y_n,X_n)\right\}.
 $$
 
-To conduct the test using the bootstrap, we have to estimate $p_{obs}$ by the bootstrap algorithm. 
+To conduct the test using the bootstrap, we have to estimate $p_{obs}$ using the bootstrap. 
 
 Central question: **How to generate bootstrap samples under $H_0$?**
 
@@ -2606,14 +2615,14 @@ $$
 $$
 where the $(n\times (p-1))$-matrix $\tilde{X}$ is the matrix $X$ with the $j$th column removed. 
 
-Using $\hat{\beta}^{H_0}_{n},$ we can compute the $(n\times 1)$-vector of residuals under $H_0$ as
+Using $\hat{\beta}^{H_0}_{n},$ we can compute the $(n\times 1)$-vector of residuals **under $\boldsymbol{H_0}$** as
 $$
 \left(\begin{matrix}\hat{\varepsilon}^{H_0}_1\\ \vdots\\\hat{\varepsilon}^{H_0}_n\end{matrix}\right)=\hat{\varepsilon}^{H_0}=Y-\tilde{X}\hat{\beta}^{H_0}_{n}.
 $$
 
 **Bootstrap algorithm:** 
 
-1.1 **Residual Bootstrap:** Draw independently and with replacement $n$ values from 
+**Step 1 Residual Bootstrap Option:** Draw independently and with replacement $n$ values from 
 $$
 \{\hat{\varepsilon}^{H_0}_1, \dots, \hat{\varepsilon}^{H_0}_n\}
 $$ 
@@ -2630,7 +2639,7 @@ $$
 Y_i^{H_0\ast} = \tilde{X}_i^\top \hat{\beta}^{H_0}_{n} + \hat{\varepsilon}^{H_0\ast}_i,\quad i=1,\dots,n.
 $$
 
-1.2 **Wild Bootstrap:** Use  
+**Step 1 Wild Bootstrap Option:** Use  
 $$
 \{\hat{\varepsilon}^{H_0}_1, \dots, \hat{\varepsilon}^{H_0}_n\}
 $$ 
@@ -2651,7 +2660,9 @@ where
 $$
 Y_i^{H_0\ast} = \tilde{X}_i^\top \hat{\beta}^{H_0}_{n} + \varepsilon^{H_0\ast}_i,\quad i=1,\dots,n.
 $$
-2. Based on the bootstrap sample 
+
+
+**Step 2.** Based on the bootstrap sample 
 $$
 \left\{(Y_1^{H_0\ast},X_1),\dots,(Y_n^{H_0\ast},X_n)\right\}
 $$ 
@@ -2663,13 +2674,13 @@ which allows us to generate the corresponding realization of the test statistic
 $$
 T_n^{\ast}
 $$ 
-under $H_0.$
+**under $\boldsymbol{H_0}$.**
 
-3. Repeating Steps 1-2 leads to $m$-many (e.g. $m=10,000$) bootstrap realizations of the test statistic  
+**Step 3.** Repeating Steps 1-2 leads to $m$-many (e.g. $m=10,000$) bootstrap realizations of the test statistic  
 $$
 T_{n,1}^{\ast},\dots,T_{n,m}^{\ast}
 $$ 
-under $H_0.$
+**under $\boldsymbol{H_0}$.**
 
 
 To estimate the unknown $p_{obs},$ we can use now the following estimator
