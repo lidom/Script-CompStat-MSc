@@ -35,7 +35,7 @@ $$
 $$
 with 
 $$
-X_i\overset{\text{i.i.d.}}{\sim} f
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{and}\quad X\sim f.
 $$
 
 
@@ -66,15 +66,15 @@ hist(inc76$income,
 
 Disadvantages of the histogram: 
 
-* Choice of the bin width (and of the start point)
-* Discontinuous, locally constant $\Rightarrow$ A histogram cannot be a very efficient estimator for a (continuous) density function $f(x).$
+* Choice of the bin-width (and of the start point)
+* Discontinuous, locally constant. Thus, a histogram generally cannot be a very efficient estimator for a (continuous) density function $f(x).$
 
 
-The choice of the bin width is crucial. @fig-HistBinWidths shows examples for a too small and a too large bin width choice.
+The choice of the bin-width is crucial. @fig-HistBinWidths shows examples for a too small and a too large bin-width choice.
 
 ```{r}
 #| echo: false
-#| fig-cap: Histrograms of income data for different choices of the bin width. 
+#| fig-cap: Histrograms of income data for different choices of the bin-width. 
 #| label: fig-HistBinWidths
 par(mfrow = c(1,2))
 hist(inc76$income, 
@@ -107,7 +107,7 @@ lines(density(inc76$income), col = "darkgreen")
 
 Advantages of the kernel density estimator: 
 
-* Choice of the bandwidth (similar to bin width) can be done using statistical theory
+* Choice of the bandwidth (similar to bin-width) can be done using statistical theory
 * Continuous estimate for a (continuous) density function $f.$
 
 
@@ -146,7 +146,10 @@ $$
 \end{align*}
 $$
 where $1_{(\cdot)}$ denotes the indicator function, i.e., 
-$1_{(\text{TRUE})}=1$ and $1_{(\text{FALSE})}=0.$ Thus, the scaling guarantees that the bin areas of the histogram sum up to one
+$1_{(\text{TRUE})}=1$ and $1_{(\text{FALSE})}=0.$ 
+
+
+Thus, the scaling guarantees that the areas of the single bins of the histogram sum up to one:
 $$
 \begin{align*}
 \sum_{j=1}^J\text{Area of $j$th Bin}
@@ -162,8 +165,8 @@ $$
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)
 & =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h < X_i\leq x+h\right)}\\[2ex]
-&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1<\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(\bar{x}_j-h < X_i\leq \bar{x}_j+h\right)}\\[2ex]
+&=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1<\left(\frac{X_i-\bar{x}_j}{h}\right)\leq 1\right)}\\[2ex]
 & =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right),
 \end{align*}
 $$
@@ -177,7 +180,7 @@ K(z)=\left\{
 $$
 
 
-A kernel density estimator generalizes the histogram $\hat f_{hist}(\bar{x}_j)$ by estimating the unknown density $f$ not only at the mid-points $\bar{x}_j,$ but at *every* $x,$ which yields the **moving histogram**
+A kernel density estimator generalizes the histogram by estimating the unknown density $f$ not only at the mid-points $\bar{x}_j,$ but at *every* $x,$ which yields the **moving histogram**
 $$
 \begin{align*}
 {\hat{f}}_{nh}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
@@ -199,7 +202,7 @@ $$
 $$
 denote a random sample with 
 $$
-X_i\overset{\text{i.i.d.}}{\sim} f\quad\text{for}\quad i=1,\dots,n.
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{and}\quad X\sim f.
 $$
 
 
@@ -207,7 +210,7 @@ $$
 $$
 \hat{f}
 $$ 
-for the true, unknown density $f$ **without** making a parametric assumption on $f$ such as assuming that $f$ is the density of a normal distribution with unknown mean and unknown variance. 
+for the true, unknown density $f$ **without** making a **parametric assumption** on $f$ such as assuming that $f$ is the density of a normal distribution with unknown mean and unknown variance. 
 
 
 The only assumption on $f$ is the following **qualitative smoothness assumption:** The density function $f(x)$ is assumed to be sufficiently smooth---i.e., to be sufficiently often differentiable for all $x.$  

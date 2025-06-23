@@ -291,7 +291,7 @@ window.Quarto = {
 <p>Typical aim: Characterizing the income distribution (density function) <span class="math inline">\(f\)</span> given a random sample <span class="math display">\[
 \{X_1,\dots,X_n\}
 \]</span> with <span class="math display">\[
-X_i\overset{\text{i.i.d.}}{\sim} f
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{and}\quad X\sim f.
 \]</span></p>
 <p>Traditional statistical key figures:</p>
 <ul>
@@ -323,10 +323,10 @@ Figure&nbsp;4.1: Histrogram of the income data.
 </div>
 <p>Disadvantages of the histogram:</p>
 <ul>
-<li>Choice of the bin width (and of the start point)</li>
-<li>Discontinuous, locally constant <span class="math inline">\(\Rightarrow\)</span> A histogram cannot be a very efficient estimator for a (continuous) density function <span class="math inline">\(f(x).\)</span></li>
+<li>Choice of the bin-width (and of the start point)</li>
+<li>Discontinuous, locally constant. Thus, a histogram generally cannot be a very efficient estimator for a (continuous) density function <span class="math inline">\(f(x).\)</span></li>
 </ul>
-<p>The choice of the bin width is crucial. <a href="#fig-HistBinWidths" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows examples for a too small and a too large bin width choice.</p>
+<p>The choice of the bin-width is crucial. <a href="#fig-HistBinWidths" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows examples for a too small and a too large bin-width choice.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-HistBinWidths" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -335,7 +335,7 @@ Figure&nbsp;4.1: Histrogram of the income data.
 <img src="Ch4_NP_Density_Estimation_files/figure-html/fig-HistBinWidths-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-HistBinWidths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: Histrograms of income data for different choices of the bin width.
+Figure&nbsp;4.2: Histrograms of income data for different choices of the bin-width.
 </figcaption>
 </figure>
 </div>
@@ -358,7 +358,7 @@ Figure&nbsp;4.3: Histogram versus a nonparametric kernel density estimation (gre
 </div>
 <p>Advantages of the kernel density estimator:</p>
 <ul>
-<li>Choice of the bandwidth (similar to bin width) can be done using statistical theory</li>
+<li>Choice of the bandwidth (similar to bin-width) can be done using statistical theory</li>
 <li>Continuous estimate for a (continuous) density function <span class="math inline">\(f.\)</span></li>
 </ul>
 </section>
@@ -384,7 +384,8 @@ x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
 &amp; = \frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{n}\\[2ex]
 &amp; = \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])},
 \end{align*}
-\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function, i.e., <span class="math inline">\(1_{(\text{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\text{FALSE})}=0.\)</span> Thus, the scaling guarantees that the bin areas of the histogram sum up to one <span class="math display">\[
+\]</span> where <span class="math inline">\(1_{(\cdot)}\)</span> denotes the indicator function, i.e., <span class="math inline">\(1_{(\text{TRUE})}=1\)</span> and <span class="math inline">\(1_{(\text{FALSE})}=0.\)</span></p>
+<p>Thus, the scaling guarantees that the areas of the single bins of the histogram sum up to one: <span class="math display">\[
 \begin{align*}
 \sum_{j=1}^J\text{Area of $j$th Bin}
 &amp;=\sum_{j=1}^J \frac{1}{n}\sum_{i=1}^n \; 1_{(X_i\in(x_{j-1},x_j])}\\[2ex]
@@ -397,8 +398,8 @@ x_j-x_{j-1}=2h\quad \text{for all} \quad j=1,\dots,J.
 \begin{align*}
 \hat f_{hist}(\bar{x}_j)
 &amp; =\frac{\hbox{Number of } X_{i}\hbox{ in } (x_{j-1},x_j]}{2hn}\\[2ex]
-&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(x-h &lt; X_i\leq x+h\right)}\\[2ex]
-&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1&lt;\left(\frac{X_i-x}{h}\right)\leq 1\right)}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(\bar{x}_j-h &lt; X_i\leq \bar{x}_j+h\right)}\\[2ex]
+&amp;=\frac{1}{nh}\sum_{i=1}^n\frac{1}{2}1_{\left(-1&lt;\left(\frac{X_i-\bar{x}_j}{h}\right)\leq 1\right)}\\[2ex]
 &amp; =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{X_{i}-\bar{x}_j}{h}\right),
 \end{align*}
 \]</span> where <span class="math inline">\(K(z)\)</span> denotes the symmetric <span class="math inline">\((K(z)=K(-z))\)</span> kernel function <span class="math display">\[
@@ -408,7 +409,7 @@ K(z)=\left\{
 0   &amp; \hbox{ else}.
 \end{array}\right.
 \]</span></p>
-<p>A kernel density estimator generalizes the histogram <span class="math inline">\(\hat f_{hist}(\bar{x}_j)\)</span> by estimating the unknown density <span class="math inline">\(f\)</span> not only at the mid-points <span class="math inline">\(\bar{x}_j,\)</span> but at <em>every</em> <span class="math inline">\(x,\)</span> which yields the <strong>moving histogram</strong> <span id="eq-MovHist"><span class="math display">\[
+<p>A kernel density estimator generalizes the histogram by estimating the unknown density <span class="math inline">\(f\)</span> not only at the mid-points <span class="math inline">\(\bar{x}_j,\)</span> but at <em>every</em> <span class="math inline">\(x,\)</span> which yields the <strong>moving histogram</strong> <span id="eq-MovHist"><span class="math display">\[
 \begin{align*}
 {\hat{f}}_{nh}(x)=\frac{1}{nh}\sum_{i=1}^nK\left(
 \frac{x-X_{i}}{h}\right)
@@ -426,11 +427,11 @@ K(z)=\left\{
 <p>Let <span class="math display">\[
 \{X_1, \ldots, X_n\}
 \]</span> denote a random sample with <span class="math display">\[
-X_i\overset{\text{i.i.d.}}{\sim} f\quad\text{for}\quad i=1,\dots,n.
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{and}\quad X\sim f.
 \]</span></p>
 <p><strong>Aim:</strong> Find a density estimator <span class="math display">\[
 \hat{f}
-\]</span> for the true, unknown density <span class="math inline">\(f\)</span> <strong>without</strong> making a parametric assumption on <span class="math inline">\(f\)</span> such as assuming that <span class="math inline">\(f\)</span> is the density of a normal distribution with unknown mean and unknown variance.</p>
+\]</span> for the true, unknown density <span class="math inline">\(f\)</span> <strong>without</strong> making a <strong>parametric assumption</strong> on <span class="math inline">\(f\)</span> such as assuming that <span class="math inline">\(f\)</span> is the density of a normal distribution with unknown mean and unknown variance.</p>
 <p>The only assumption on <span class="math inline">\(f\)</span> is the following <strong>qualitative smoothness assumption:</strong> The density function <span class="math inline">\(f(x)\)</span> is assumed to be sufficiently smooth—i.e., to be sufficiently often differentiable for all <span class="math inline">\(x.\)</span></p>
 <p><strong>Starting point:</strong> We use the connection between density functions <span class="math inline">\(f\)</span> and distribution functions <span class="math inline">\(F(x) = P(X \leq x);\)</span> namely,<br>
 <span class="math display">\[
