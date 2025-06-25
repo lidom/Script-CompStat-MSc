@@ -250,7 +250,7 @@ window.Quarto = {
   <li><a href="#choice-of-the-bandwidth-parameter" id="toc-choice-of-the-bandwidth-parameter" class="nav-link" data-scroll-target="#choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</a></li>
   </ul></li>
   <li><a href="#accuracy-of-the-kernel-density-estimator" id="toc-accuracy-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</a></li>
-  <li><a href="#globally-optimal-bandwidth-choice" id="toc-globally-optimal-bandwidth-choice" class="nav-link" data-scroll-target="#globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</a></li>
+  <li><a href="#theory-globally-optimal-bandwidth-choice" id="toc-theory-globally-optimal-bandwidth-choice" class="nav-link" data-scroll-target="#theory-globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Theory: Globally Optimal Bandwidth Choice</a></li>
   <li><a href="#bandwidth-selection" id="toc-bandwidth-selection" class="nav-link" data-scroll-target="#bandwidth-selection"><span class="header-section-number">4.6</span> Bandwidth Selection</a>
   <ul class="collapse">
   <li><a href="#normal-reference-bandwidth" id="toc-normal-reference-bandwidth" class="nav-link" data-scroll-target="#normal-reference-bandwidth"><span class="header-section-number">4.6.1</span> Normal Reference Bandwidth</a></li>
@@ -650,7 +650,7 @@ Reminder: Definition of a Density Function
 K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 \]</span></li>
 </ul>
-<p>Typically, one uses smooth density functions that are symmetric around zero.</p>
+<p>Typical kernel functions are smooth density functions that are symmetric around zero.</p>
 <p><strong>Examples:</strong></p>
 <ul>
 <li>The family of the <strong>symmetric beta density</strong> functions; for <span class="math inline">\(p = 0,1,2,\ldots\)</span> <span class="math display">\[
@@ -921,8 +921,8 @@ Pointwise Asymptotic Normality
 </div>
 </section>
 </section>
-<section id="globally-optimal-bandwidth-choice" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</h2>
+<section id="theory-globally-optimal-bandwidth-choice" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="theory-globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Theory: Globally Optimal Bandwidth Choice</h2>
 <p>One distinguishes <strong>locally optimal</strong> bandwidth choices for estimating <span class="math inline">\(f(x)\)</span> at a given <span class="math inline">\(x,\)</span> and <strong>globally optimal</strong> bandwidth choices that are optimal with respect to a <strong>global loss function</strong>.</p>
 <p>Typically, one determines a <strong>globally optimal</strong> bandwidth by minimizing the <strong>Mean Integrated Squared Error</strong> loss function <span class="math display">\[
 \begin{align*}
@@ -948,8 +948,25 @@ Pointwise Asymptotic Normality
 <p>Let <span class="math display">\[
 X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 \]</span></p>
-<p>Computing the pointwise mean: <span class="math display">\[
+<p>Generally, the mean <span class="math inline">\(\mathbb{E}\left(\hat{f}_{nh}(x)\right)\)</span> cannot be computed.</p>
+<p>However, using that <span class="math inline">\(n\to\infty\)</span> and <span class="math inline">\(h\equiv h_n\to 0,\)</span> we can approximate the mean <span class="math inline">\(\mathbb{E}\left(\hat{f}_{nh}(x)\right)\)</span> by <span id="eq-AsympMeanKDE"><span class="math display">\[
 \begin{align*}
+\mathbb{E}\left(\hat{f}_{nh}(x)\right) = &amp;=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)
+\end{align*}
+\tag{4.6}\]</span></span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Deriving <a href="#eq-AsympMeanKDE" class="quarto-xref">Equation&nbsp;<span>4.6</span></a>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[\begin{align*}
 \mathbb{E}\left(\hat{f}_{nh}(x)\right)
 &amp;=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}K\left(\frac{x-X_i}{h}\right)\right)\\[2ex]
 &amp;=\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}\mathbb{E}\left(K\left(\frac{x-X_i}{h}\right)\right)\\[2ex]
@@ -964,8 +981,10 @@ X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
   f(x) h \underbrace{\int_{-\infty}^\infty y K(y)\,dy}_{=0}\\[2ex]
 &amp;\;\; + h^2 \frac{1}{2} f''(x) \underbrace{\int_{-\infty}^\infty K(y)y^2 dy}_{\nu_2(K)}+ o(h^2)  \underbrace{\int_{-\infty}^\infty K(y)\,dy}_{=1}\\[3ex]
 &amp;=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)
-\end{align*}
-\]</span></p>
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
 <p>Thus, the pointwise squared bias is given by <span class="math display">\[
 \begin{align*}
   &amp;\left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2 \\[2ex]

@@ -436,7 +436,7 @@ K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 $$ 
 
 
-Typically, one uses smooth density functions that are symmetric around zero.  
+Typical kernel functions are smooth density functions that are symmetric around zero.  
 
 **Examples:**
 
@@ -699,7 +699,7 @@ i.e. for finite $n$ there is generally a non-negligible estimation bias.
 :::
 
 
-## Globally Optimal Bandwidth Choice 
+## Theory: Globally Optimal Bandwidth Choice 
 
 
 One distinguishes **locally optimal** bandwidth choices for estimating $f(x)$ at a given $x,$ and **globally optimal** bandwidth choices that are optimal with respect to a **global loss function**.  
@@ -741,8 +741,19 @@ X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 $$
 
 
-Computing the pointwise mean:
+Generally, the mean $\mathbb{E}\left(\hat{f}_{nh}(x)\right)$ cannot be computed. 
+
+However, using that $n\to\infty$ and $h\equiv h_n\to 0,$ we can approximate the mean $\mathbb{E}\left(\hat{f}_{nh}(x)\right)$ by
 $$
+\begin{align*}
+\mathbb{E}\left(\hat{f}_{nh}(x)\right) = &=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2) 
+\end{align*}
+$${#eq-AsympMeanKDE}
+
+
+
+::: {.callout-note collapse="true"}
+## Deriving @eq-AsympMeanKDE
 \begin{align*}
 \mathbb{E}\left(\hat{f}_{nh}(x)\right)
 &=\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^{n}\frac{1}{h}K\left(\frac{x-X_i}{h}\right)\right)\\[2ex]
@@ -759,8 +770,7 @@ $$
 &\;\; + h^2 \frac{1}{2} f''(x) \underbrace{\int_{-\infty}^\infty K(y)y^2 dy}_{\nu_2(K)}+ o(h^2)  \underbrace{\int_{-\infty}^\infty K(y)\,dy}_{=1}\\[3ex]
 &=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2) 
 \end{align*}
-$$
-
+:::
 
 Thus, the pointwise squared bias is given by
 $$
