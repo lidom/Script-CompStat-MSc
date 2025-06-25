@@ -251,6 +251,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#accuracy-of-the-kernel-density-estimator" id="toc-accuracy-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</a></li>
   <li><a href="#globally-optimal-bandwidth-choice" id="toc-globally-optimal-bandwidth-choice" class="nav-link" data-scroll-target="#globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</a></li>
+  <li><a href="#bandwidth-selection" id="toc-bandwidth-selection" class="nav-link" data-scroll-target="#bandwidth-selection"><span class="header-section-number">4.6</span> Bandwidth Selection</a>
+  <ul class="collapse">
+  <li><a href="#normal-reference-bandwidth" id="toc-normal-reference-bandwidth" class="nav-link" data-scroll-target="#normal-reference-bandwidth"><span class="header-section-number">4.6.1</span> Normal Reference Bandwidth</a></li>
+  <li><a href="#bandwidth-selection-by-cross-validation" id="toc-bandwidth-selection-by-cross-validation" class="nav-link" data-scroll-target="#bandwidth-selection-by-cross-validation"><span class="header-section-number">4.6.2</span> Bandwidth Selection by Cross Validation</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -461,7 +467,7 @@ $$
 $$
 where $0\leq c < \infty.$
  -->
-<p>In his seminal work on the kernel density estimator, <span class="citation" data-cites="Rosenblatt_1956">Rosenblatt (<a href="#ref-Rosenblatt_1956" role="doc-biblioref">1956</a>)</span> uses an even better derivative approximation based on the symmetric difference quotient <span id="eq-DiffQ3"><span class="math display">\[
+<p>In his seminal work on the kernel density estimator, <span class="citation" data-cites="Rosenblatt_1956">Rosenblatt (<a href="#ref-Rosenblatt_1956" role="doc-biblioref">1956</a>)</span> uses an even better derivative approximation based on the <strong>symmetric difference quotient</strong> <span id="eq-DiffQ3"><span class="math display">\[
 \begin{equation*}
     f(x) = F'(x) = \frac{F(x+h) - F(x-h)}{2h} + O(h^2),
 \end{equation*}
@@ -562,29 +568,32 @@ Figure&nbsp;4.4: Income density estimate based on the moving histogram density e
 </div>
 <p>Density estimates of the moving histrogram estimator are discontinuous—even though, we aim to estimate a smooth (e.g.&nbsp;three times continuously differentiable) denstiy function <span class="math inline">\(f.\)</span></p>
 <p><strong>Kernel Density Estimator:</strong></p>
-<p>Replacing the symmetric, discontinuous rectengular kernel function of the naive moving histogram by a symmetric, continuous and differentiable function, such as</p>
-<ul>
-<li><span class="math inline">\(K(z) = \frac{3}{4}(1-z^2)\)</span> for <span class="math inline">\(z \in [-1,1]\)</span> and <span class="math inline">\(0\)</span> else</li>
-<li>or the density function of the standard normal distribution: <span class="math display">\[
+<p>Replacing the symmetric, discontinuous rectengular kernel function of the naive moving histogram by a symmetric, continuous and differentiable function, such as the <strong>Epanechnikov kernel:</strong> <span class="math display">\[
+K(z) =\left\{
+\begin{array}{ll}
+\frac{3}{4}(1-z^2)&amp;\text{ for } z \in [-1,1]\\
+0&amp;\text{ else}
+\end{array}
+\right.
+\]</span> or the density function of the <strong>standard normal distribution:</strong> <span class="math display">\[
 K(z) = \phi(z) = \frac{1}{\sqrt{2\pi}} \exp( -z^2 / 2 )
 \]</span> yields to the <strong>kernel density estimator</strong> with kernel <span class="math inline">\(K\)</span> and bandwidth <span class="math inline">\(h\colon\)</span> <span class="math display">\[
 \begin{equation*}
-\hat{f}_{nh}(x)=\frac{1}{n} \sum_{i=1}^{n} \frac{1}{h} K\left(\frac{x - X_i}{h} \right),
-\quad\text{for}\quad x \in \mathbb{R}.
+  \hat{f}_{nh}(x)=\frac{1}{n} \sum_{i=1}^{n} \frac{1}{h} K\left(\frac{x - X_i}{h} \right),
+  \quad\text{for}\quad x \in \mathbb{R}.
 \end{equation*}
-\]</span></li>
-</ul>
+\]</span></p>
 <p>The kernel density estimator yields a smooth density estimate. It is more efficient than the (moving) histrogram and provides a flexible adjustment to the data.</p>
-<ul>
-<li>Bandwidth <span class="math inline">\(h\)</span> is also called <strong>smoothing parameter</strong>. The bandwidth (and the kernel <span class="math inline">\(k\)</span>) need to be selected by the user (or autmatically by the computer).</li>
-<li>New, compact notation for the scaled kernel function: <span class="math inline">\(K_h(u) := K(u / h) / h\)</span>. <span class="math display">\[
+<p>Bandwidth <span class="math inline">\(h\)</span> is also called <strong>smoothing parameter</strong>. The bandwidth (and the kernel <span class="math inline">\(k\)</span>) need to be selected by the user (or autmatically by the computer).</p>
+<p>Often, we use a more compact notation for the scaled kernel function: <span class="math display">\[
+K_h(u) := K(u / h) / h
+\]</span> such that <span class="math display">\[
 \begin{align*}
 \hat{f}_{nh}(x)
 &amp;=  n^{-1} \sum_{i=1}^{n} \frac{1}{h}  K\left(\frac{x - X_i}{h}\right)\\[2ex]
 &amp;=  n^{-1} \sum_{i=1}^{n} K_h(x - X_i)
 \end{align*}
-\]</span></li>
-</ul>
+\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -671,7 +680,7 @@ K(u) = 1-|u|
 </section>
 <section id="choice-of-the-bandwidth-parameter" class="level3" data-number="4.3.2">
 <h3 data-number="4.3.2" class="anchored" data-anchor-id="choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</h3>
-<p>Using a too small bandwidth (here <span class="math inline">\(h=\)</span> 2.14):</p>
+<p>Using a too small bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 2.14):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="sc">*</span> .<span class="dv">25</span>  <span class="co"># too small bandwidth</span></span>
@@ -693,7 +702,7 @@ Figure&nbsp;4.5: Kernel density estimate with a too small bandwidth.
 </div>
 </div>
 </div>
-<p>Too a too large bandwidth (here <span class="math inline">\(h=\)</span> 47):</p>
+<p>Too a too large bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 47):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="sc">*</span> <span class="fl">2.5</span>  <span class="co"># too large bandwidth</span></span>
@@ -743,7 +752,7 @@ plot(x = KDE$x, y = KDE$y,
 
 
 -->
-<p>Using an estimated bandwidth (here <span class="math inline">\(h=\)</span> 8.55) based on the method proposed by <span class="citation" data-cites="sheather1991reliable">Sheather and Jones (<a href="#ref-sheather1991reliable" role="doc-biblioref">1991</a>)</span>:</p>
+<p>Using a well estimated bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 8.55) based on the method proposed by <span class="citation" data-cites="sheather1991reliable">Sheather and Jones (<a href="#ref-sheather1991reliable" role="doc-biblioref">1991</a>)</span>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="co"># good bandwidth</span></span>
@@ -769,13 +778,25 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 </section>
 <section id="accuracy-of-the-kernel-density-estimator" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</h2>
-<p>The accuracy of kernel desnity estimator depends on</p>
+<p>The accuracy of kernel density estimator depends on</p>
 <ol type="1">
 <li>the choice of the kernel function <span class="math inline">\(K,\)</span></li>
 <li>the choice of the bandwidth <span class="math inline">\(h,\)</span> and</li>
 <li>the complexity of the unknown density <span class="math inline">\(f\)</span> to be estimated.</li>
 </ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>The choice of the kernel function <span class="math inline">\(K\)</span> is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth <span class="math inline">\(h.\)</span></p>
+</div>
+</div>
 <p><strong>Most common goal:</strong> Automatic data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for all relevant <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
 <p>We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors.</p>
 <p>Commonly used loss-functions:</p>
@@ -792,13 +813,13 @@ Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
 </ul>
 <p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows indefinitely (<span class="math inline">\(n \to \infty\)</span>),</p>
 <p>Remember: We’ll call an estimator <span class="math inline">\(\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)\)</span> <strong>consistent,</strong> if <span class="math display">\[
-\hat\theta_n\to_p\theta.
+\hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span> Unless a different notion of convergence (such as MSE or “almost surely”) has been specified.</p>
 <p>When estimating functions, such as density functions <span class="math inline">\(f(x),\)</span> a distinction is made between the following concepts of consistency:</p>
 <ul>
 <li><strong>Pointwise consistency:</strong> <span class="math display">\[
 \hat{f}_{nh}(x)\to_P f(x),\quad \text{as}\quad n\to\infty
-\]</span> for an arbitrary, given <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
+\]</span> for any given <span class="math inline">\(x\in\mathbb{R}.\)</span></li>
 <li><strong>Uniform consistency:</strong> <span class="math display">\[
 \sup_{x}\left|\hat{f}_{nh}(x) - f(x)\right|\to_P 0,\quad \text{as}\quad n\to\infty.
 \]</span></li>
@@ -816,7 +837,7 @@ Assumptions for Showing Pointwise Consistency and Asymptotic Normality
 <div class="callout-body-container callout-body">
 <p>Under the following assumptions:</p>
 <ul>
-<li>Sequence of bandwidth parameters <span class="math inline">\(h = h_n:\)</span>
+<li>Sequence of bandwidth parameters <span class="math inline">\(h\equiv h_n:\)</span>
 <ul>
 <li><span class="math inline">\(h_n \to 0\)</span> as <span class="math inline">\(n\to\infty\)</span>,</li>
 <li><span class="math inline">\(n h_n \to \infty\)</span> as <span class="math inline">\(n \to \infty\)</span></li>
@@ -861,18 +882,18 @@ h_n \to 0\quad\text{and}\quad n h_{n}^{\textcolor{red}{2}} \to \infty,\quad\text
 <p>Under the above assumptions, show that the pointwise Mean Squared Error (MSE) converges to zero as <span class="math inline">\(n\to\infty\)</span> for a given <span class="math inline">\(x,\)</span> <span class="math display">\[
 \mathrm{MSE}(\hat{f}_{nh}(x))\to 0,\quad \text{as}\quad n\to\infty.
 \]</span> by showing that both, the variance <span class="math display">\[
-Var\left(\hat{f}_{h_n}(x)  \right)
+Var\left(\hat{f}_{nh}(x)  \right)
 \]</span> and the squared bias <span class="math display">\[
-\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2
+\left(\mathrm{Bias} \left( \hat{f}_{nh}(x) \right)\right)^2
 \]</span> converge to zero as <span class="math inline">\(n\to\infty,\)</span> <span class="math display">\[
 \begin{align*}
-\mathrm{MSE}\left(\hat{f}_{h_n}(x) \right)
+\mathrm{MSE}\left(\hat{f}_{nh}(x) \right)
 &amp;=
-\mathbb{E}\left(\hat{f}_{h_n}(x) - f(x) \right)^2\\[2ex]
+\mathbb{E}\left(\hat{f}_{nh}(x) - f(x) \right)^2\\[2ex]
 &amp;=
-\underbrace{Var\left(\hat{f}_{h_n}(x)  \right)}_{\underset{n\to\infty}\longrightarrow 0}
+\underbrace{Var\left(\hat{f}_{nh}(x)  \right)}_{\underset{n\to\infty}\longrightarrow 0}
 +
-\underbrace{\left(\mathrm{Bias} \left( \hat{f}_{h_n}(x) \right)\right)^2.}_{\underset{n\to\infty}\longrightarrow 0}
+\underbrace{\left(\mathrm{Bias} \left( \hat{f}_{nh}(x) \right)\right)^2.}_{\underset{n\to\infty}\longrightarrow 0}
 \end{align*}
 \]</span></p>
 <p><strong>Remember:</strong> Convergence in quadratic mean implies convergence in probability.</p>
@@ -903,7 +924,7 @@ Pointwise Asymptotic Normality
 <section id="globally-optimal-bandwidth-choice" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Globally Optimal Bandwidth Choice</h2>
 <p>One distinguishes <strong>locally optimal</strong> bandwidth choices for estimating <span class="math inline">\(f(x)\)</span> at a given <span class="math inline">\(x,\)</span> and <strong>globally optimal</strong> bandwidth choices that are optimal with respect to a <strong>global loss function</strong>.</p>
-<p>Typically, one determines a <strong>globally optimal</strong> bandwidth by minimizing the Mean Integrated Squared Error loss function <span class="math display">\[
+<p>Typically, one determines a <strong>globally optimal</strong> bandwidth by minimizing the <strong>Mean Integrated Squared Error</strong> loss function <span class="math display">\[
 \begin{align*}
 \mathrm{MISE}(\hat{f}_{nh})
 &amp;=\int\mathrm{MSE}(\hat{f}_{nh}(x))\,dx\\[2ex]
@@ -913,7 +934,7 @@ Pointwise Asymptotic Normality
 \end{align*}
 \]</span></p>
 <p><strong>Problem:</strong> The exact computation of <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh})\)</span> is only possible under very restrictive, simplifying assumptions such as assuming that <span class="math inline">\(f\)</span> is a specific parametric density function—an assumption we do not want to make!</p>
-<p><strong>Solution:</strong> Therefore, we compute an asymptotic approximation to <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh}),\)</span> <span class="math display">\[
+<p><strong>Solution:</strong> Therefore, we compute an <strong>asymptotic approximation</strong> to <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh}),\)</span> <span class="math display">\[
 \begin{align*}
 \mathrm{MISE}(\hat{f}_{nh})&amp;\approx \mathrm{AMISE}(\hat{f}_{nh})\\[2ex]
 &amp;=\int AVar\left(\hat{f}_{nh}(x)  \right) \,dx +
@@ -921,8 +942,9 @@ Pointwise Asymptotic Normality
 \end{align*}
 \]</span> which becomes good as <span class="math inline">\(n\to\infty,\)</span> and which can be done without making restrictive parametric assumptions on <span class="math inline">\(f.\)</span></p>
 <p>The asymptotic approximation <span class="math inline">\(\mathrm{AMISE}(\hat{f}_{nh})\)</span> for <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh})\)</span> is the most often used loss function for determining a global choice of the bandwidth <span class="math inline">\(h.\)</span></p>
-<section id="asymptotic-approximation-of-mathrmmisehatf_h" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="asymptotic-approximation-of-mathrmmisehatf_h"><strong>Asymptotic Approximation of <span class="math inline">\(\mathrm{MISE}(\hat{f}_h)\)</span></strong></h4>
+<section id="asymptotic-approximation-of-mathrmmisehatf_nh" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="asymptotic-approximation-of-mathrmmisehatf_nh"><strong>Asymptotic Approximation of <span class="math inline">\(\mathrm{MISE}(\hat{f}_{nh})\)</span></strong></h4>
+<p><strong>Computing</strong> <span class="math inline">\(\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2\colon\)</span></p>
 <p>Let <span class="math display">\[
 X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 \]</span></p>
@@ -946,14 +968,512 @@ X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 \]</span></p>
 <p>Thus, the pointwise squared bias is given by <span class="math display">\[
 \begin{align*}
-  &amp;\left(\mathrm{Bias}(\hat{f}_h(x))\right)^2 \\[2ex]
-  &amp;=\left(\mathbb{E}(\hat{f}_h(x))-f(x)\right)^2 \\[2ex]
+  &amp;\left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2 \\[2ex]
+  &amp;=\left(\mathbb{E}(\hat{f}_{nh}(x))-f(x)\right)^2 \\[2ex]
   &amp;=\left(h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)\right)^2\\[2ex]
   &amp;=\left(h^2 \frac{1}{2} f''(x) \nu_2(K)\right)^2 + \underbrace{2\,\left({\color{red}h^2} \frac{1}{2} f''(x) \nu_2(K)\right)  o({\color{red}h^2})}_{o({\color{red}h^4})} + o(h^4)\\[2ex]
-  &amp;=\underbrace{h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2}_{=:\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2}  + o(h^4)\\[2ex]
-&amp;\Rightarrow\quad \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2=h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2
+  &amp;=\underbrace{h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2}_{=:\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2}  + o(h^4)
 \end{align*}  
 \]</span></p>
+<p>This shows that the kernel estimator <span class="math inline">\(\hat{f}_{nh}(x)\)</span> is <strong>asymptotically unbiased</strong>, since <span class="math display">\[
+\begin{align*}
+  \mathrm{Bias}(\hat{f}_{nh}(x))&amp;=\left(h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2 + o(h^4)\right)^{1/2} \to 0\quad\text{as}\quad n\to\infty.
+\end{align*}  
+\]</span></p>
+<p>The <strong>squared asymptotic bias</strong> is given by neglecting the smaller order <span class="math inline">\(o(h^4)\)</span> terms: <span class="math display">\[
+\begin{align*}
+\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2=h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2
+\end{align*}  
+\]</span></p>
+<p>Note that <span class="math display">\[
+\left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2\quad\text{and}\quad
+\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2
+\]</span> are <strong>asymptotically equivalent</strong>, since for <span class="math inline">\(n\to\infty\)</span> <span class="math display">\[\begin{align*}
+\frac{\left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2}{\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2}
+&amp; =1+\frac{o(h^4)}{\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2} \\[2ex]
+&amp;=1+o(h^4) \cdot O(h^{-4})\\[2ex]
+&amp;=1+o(1)\\
+\Rightarrow\quad
+\lim_{n\to\infty}\frac{\left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2}{\left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2} &amp; =1
+\end{align*}\]</span></p>
+<p><strong>Computing</strong> <span class="math inline">\(AVar\left( \hat{f}_{nh}(x) \right)\colon\)</span> <code>eWhiteboard</code></p>
+<p><strong>Computing</strong> <span class="math inline">\(\operatorname{AMISE}\left( \hat{f}_{nh}(x) \right)\colon\)</span> <code>eWhiteboard</code></p>
+<p><span class="math display">\[\begin{align*}
+\mathrm{AMISE}(\hat{f}_{nh}) &amp;=
+\frac{1}{nh} R(K) +
+\frac{1}{4} h^4 \nu_2(K)^2 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx\\[2ex]  
+\end{align*}\]</span></p>
+<p>Minimizing <span class="math inline">\(\mathrm{AMISE}(\hat{f}_h)\)</span> with respect to <span class="math inline">\(h\)</span> yields the (asymptotically) optimal bandwidth: <span class="math display">\[\begin{align*}
+  h_{\mathrm{opt}}&amp;=
+  \left\{
+    \frac{R(K)}{{n\,\nu_2(K)}^2 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx}
+  \right\}^{1 / 5}\\
+  &amp;=\texttt{Constant} \cdot n^{-1/5}
+\end{align*}\]</span></p>
+<p><strong>Unknown quantities:</strong> Kernel constants <span class="math display">\[\begin{align*}
+R(K)
+&amp;=\int\left(K(y)\right)^2\,dy\\
+&amp;(=\frac{3}{5}\text{, in case of the Epanechnikov kernel})\\[2ex]
+\nu_2(K)&amp;=\int y^2\,K(y)\,dy\\
+&amp;(=\frac{1}{5}\text{, in case of the Epanechnikov kernel})
+\end{align*}\]</span></p>
+<ul>
+<li><span class="math inline">\(\nu_2(K)\colon\)</span> second moment of the kernel</li>
+<li><span class="math inline">\(R(K)\colon\)</span> roughness of the kernel</li>
+</ul>
+<p><strong>Unknown quantity:</strong> The global roughness of <span class="math inline">\(\boldsymbol{f}\)</span></p>
+<p><span class="math display">\[
+\int \left(f''(x)\right)^2 dx
+\]</span></p>
+<p>The minimal value of the AMISE when using the optimal bandwidth is therefore given by:</p>
+<p><span class="math display">\[\begin{align*}
+\mathrm{AMISE}(\hat{f}_{nh_{\mathrm{opt}}})
+  &amp;=\min_{h &gt; 0} \mathrm{AMISE}(\hat{f}_{nh} )\\[2ex]
+  &amp;=\frac{1}{nh_{\mathrm{opt}}} R(K) +
+\frac{1}{4} h_{\mathrm{opt}}^4 \nu_2(K)^2 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx\\[2ex]
+  &amp;=\frac{5}{4} \left\{\nu_2(K)^2 R(K)^4 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx \right\}^{1/5} n^{-4/5}\\[2ex]
+  &amp;=\texttt{Constant} \cdot n^{-4/5}
+\end{align*}\]</span></p>
+<p>That is, <span class="math inline">\(\hat{f}_{nh_{\mathrm{opt}}}\)</span> is AMISE (i.e.&nbsp;MSE) consistent with rate <span class="math inline">\(n^{-4/5}.\)</span></p>
+<p>This is a <strong>non-parametric</strong> convergence rate.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Parametric MSE rate of <span class="math inline">\(\bar{X}_n\)</span> for <span class="math inline">\(\mu_0\)</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[\begin{align*}
+\mathrm{MSE}(\bar{X}_n)
+  &amp;=(\mathrm{Bias}(\bar{X}_n))^2 + Var(\bar{X}_n)\\[2ex]
+  &amp;=Var(\bar{X}_n)\\[2ex]
+  &amp;=\frac{Var(X)}{n}\\[2ex]
+  &amp;=\texttt{Constant} \cdot n^{-1}
+\end{align*}\]</span></p>
+</div>
+</div>
+<p>One immediately recognizes some key properties of <span class="math inline">\(\mathrm{AMISE}(\hat{f}_{nh_{\mathrm{opt}}})\)</span>:</p>
+<ul>
+<li>It decreases as the sample size <span class="math inline">\(n\)</span> increases, with a rate <span class="math inline">\(n^{-4/5}\)</span>.</li>
+<li>The influence of the kernel <span class="math inline">\(K\)</span> appears through <span class="math inline">\(\nu_2(K)^2\)</span> and <span class="math inline">\(R(K)\)</span>.</li>
+<li>The influence of the density <span class="math inline">\(f\)</span> appears through <span class="math inline">\(\int \left(f''(x)\right)^2 dx\)</span>.</li>
+</ul>
+<p>A density <span class="math inline">\(f\)</span> with a high roughness, as measured by <span class="math inline">\(\int \left(f''(x)\right)^2 dx,\)</span> is more difficult to estimate than one with low roughness.</p>
+</section>
+</section>
+<section id="bandwidth-selection" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="bandwidth-selection"><span class="header-section-number">4.6</span> Bandwidth Selection</h2>
+<section id="normal-reference-bandwidth" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="normal-reference-bandwidth"><span class="header-section-number">4.6.1</span> Normal Reference Bandwidth</h3>
+<p>In the asymptotic formula for the AMISE optimal bandwidth <span class="math inline">\(h_{\mathrm{opt}},\)</span> the unknown density <span class="math inline">\(f\)</span> enters “only” through the functional <span class="math inline">\(\int \left(f''(x)\right)^2 dx.\)</span></p>
+<p>If, for example, one can assume that the underlying density <span class="math inline">\(f\)</span> does not deviate significantly from a normal density, then a reasonable approximation of the optimal bandwidth for the true density <span class="math inline">\(f\)</span> can be obtained via the optimal bandwidth for the normal density.</p>
+<p>Reference bandwidths are often very good <strong>quick-and-dirty approaches</strong>.</p>
+<p>Normal density: <span class="math display">\[
+\phi_{\mu,\sigma}(x)=\frac{1}{\sigma} \phi (\frac{x-\mu}{\sigma}),
+\]</span> where <span class="math inline">\(\phi\)</span> denotes the density of the standard normal distribution, <span class="math inline">\(\mu\)</span> the mean and <span class="math inline">\(\sigma^2\)</span> the variance of <span class="math inline">\(X.\)</span></p>
+<p>Some simple derivations yields that <span class="math display">\[
+\int_{-\infty}^\infty \phi_{\mu,\sigma}''(x)^2 dx=\frac{3}{\sqrt{\pi} 8 \sigma^5}.
+\]</span> which motivates the <strong>Normal-Reference Bandwidth:</strong> <span class="math display">\[\begin{align*}
+  h_{\mathrm{NR}}=
+  \left\{
+    \frac{8 \sqrt{\pi} R(K)}{3 \nu_2(K)^2\; n}
+    \right\}^{1/5} \hat{\sigma},
+\end{align*}\]</span> where <span class="math inline">\(\hat\sigma\)</span> denotes an estimator of the standard deviation, such as, for instance, the empirical standard deviation <span class="math display">\[
+\hat{\sigma}_n = \sqrt{\frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X}_n)^2},
+\]</span> or the robust estimator for the standard deviation of normal distributed data <span class="math display">\[
+\hat{\sigma}_n = \mathrm{IQR}_n / (\Phi^{-1}(0.75) - \Phi^{-1}(0.25)),
+\]</span> or the minimum of these two estimators.</p>
+</section>
+<section id="bandwidth-selection-by-cross-validation" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="bandwidth-selection-by-cross-validation"><span class="header-section-number">4.6.2</span> Bandwidth Selection by Cross Validation</h3>
+<p><strong>Aim:</strong> Choose <span class="math inline">\(h,\)</span> such that <span class="math inline">\(\textrm{ISE}(\hat{f}_h)\)</span> is minimized.</p>
+<p><span class="math display">\[\begin{align*}
+\mathrm{ISE}(\hat{f}_{nh})
+&amp;=\int_{-\infty}^{\infty}\left( \hat{f}_{nh}(x) - f(x)\right)^2 \, dx \\[2ex]
+&amp;= \int_{-\infty}^{\infty} \left(\hat{f}_{nh}(x)\right)^2dx
+-2\int_{-\infty}^{\infty} \hat{f}_{nh}(x)f(x)dx
++\int_{-\infty}^{\infty} \left(f(x)\right)^2dx.
+\end{align*}\]</span></p>
+<p>Since <span class="math inline">\(\int \left(f(x)\right)^2dx\)</span> does not depend on <span class="math inline">\(h,\)</span>, minimizing <span class="math inline">\(\textrm{ISE}(\hat{f}_{nh})\)</span> with respect to <span class="math inline">\(h\)</span> is equivalent to minimizing <span class="math display">\[\begin{align*}
+h_{\mathrm{ISE}}
+&amp;=\arg\min_{h&gt;0}\mathrm{ISE}(\hat{f}_{nh})\\[2ex]
+&amp;=\arg\min_{h&gt;0} \left(\int_{-\infty}^{\infty} \left(\hat{f}_{nh}(x)\right)^2dx
+-2\int_{-\infty}^{\infty} \hat{f}_h(x)f(x)dx\right).
+\end{align*}\]</span></p>
+<p><strong>Problem:</strong> The second term contains the unknown quantity <span class="math inline">\(f(x)\)</span>.</p>
+<p><strong>Idee:</strong> Estimate <span class="math inline">\(\int \hat{f}_{nh}(x)f(x)dx\)</span> by <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n \hat{f}_{nh,-i}(X_i),
+\]</span> where <span class="math inline">\(\hat f_{nh,-i},\)</span> for <span class="math inline">\(i=1,\dots,n,\)</span> denotes a kernel density estimator computed by leaving out the <span class="math inline">\(i\)</span>th observation–i.e., using the reduced sample <span class="math inline">\(X_1,\dots, X_{i-1},X_{i+1},\dots,X_n.\)</span></p>
+<p>It can be shown that <span class="math display">\[
+\mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n \hat{f}_{h,-i}(X_i)\right)=\mathbb{E}\left(\int \hat{f}_h(x)f(x)dx\right).
+\]</span> I.e. <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n \hat{f}_{h,-i}(X_i)\)</span> is an unbiased estimator of <span class="math inline">\(\mathbb{E}\left(\int \hat{f}_h(x)f(x)dx\right).\)</span></p>
+<p>This and further positive properties justifies the so-called <strong>Least Squares Cross-Validation (LSCV)</strong> criterion. <span class="math display">\[
+\mathrm{LSCV}(h)=\int_{-\infty}^{\infty} \left(\hat{f}_{h}(x)\right)^2dx
+-2\frac{1}{n}\sum_{i=1}^n \hat{f}_{h,-i}(X_i).
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(\textrm{ISE}(\hat{f}_h)\)</span> and therefore also the (unknown) ISE-optimal bandwidth <span class="math inline">\(h_{\textrm{ISE}}\)</span> are random variables. That is, the target to be estimated is itself a random variable.</p>
+<p>This makes the estimation of <span class="math inline">\(h_{ISE}\)</span> are very hard problem. In fact, one has that<br>
+<span class="math display">\[
+\frac{\hat{h}_{\mathrm{ISE}}}{h_{\mathrm{ISE}}}-1 = \mathcal{O}_p(n^{-1/10}),
+\]</span> where <span class="math inline">\(\hat{h}_{ISE}\)</span> denotes the best possible estimator of <span class="math inline">\(h_{ISE}\)</span> (see <span class="citation" data-cites="hall1987extent">Hall and Marron (<a href="#ref-hall1987extent" role="doc-biblioref">1987</a>)</span>)</p>
+</div>
+</div>
+<p>Minimizing <span class="math inline">\(\mathrm{LSCV}(h)\)</span> with respect to <span class="math inline">\(h\)</span>, formally <span class="math display">\[
+\hat{h}_{\mathrm{LSCV}}=\arg\min_{h&gt;0}\mathrm{LSCV}(h),
+\]</span> yields the best possible estimator for the random (stochastic) bandwidth <span class="math inline">\(h_{\textrm{ISE}}\)</span>.</p>
+<p>That is, <span class="math display">\[
+\frac{\hat{h}_{\mathrm{LSCV}}}{h_{\textrm{ISE}}}-1=\mathcal{O}_p(n^{-1/10})
+\]</span></p>
+<p><strong>Least Squares Cross Validation</strong> is often also referred to as <strong>Unbiased Cross-Validation</strong>, because <span class="math display">\[\begin{align*}
+\mathbb{E}\left(\mathrm{LSCV}(h)\right)
+&amp;=\mathbb{E}\left(\int_{-\infty}^{\infty}\left( \hat{f}_{nh}(x) - f(x)\right)^2 \, dx\right) - \int_{-\infty}^{\infty} \left(f(x)\right)^2dx \\
+&amp;=\mathrm{MISE} - \int_{-\infty}^{\infty} \left(f(x)\right)^2dx
+\end{align*}\]</span></p>
+<p>That is, on average, minimizing <span class="math inline">\(\mathrm{LSCV}(h)\)</span> yields the same result as minimizing the MISE criterion.</p>
+</section>
+</section>
+<section id="exercises" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-1.">Exercise 1.</h4>
+<p>Let <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim f
+\]</span> The unknown density <span class="math inline">\(f\)</span> shall be estimated using a kernel density estimator. Choose the Epanechnikov kernel as the kernel function <span class="math inline">\(K.\)</span></p>
+<ol type="a">
+<li>Define the kernel density estimator <span class="math inline">\(\hat f_{nh}(x)\)</span> of <span class="math inline">\(f(x)\)</span> and sketch (qualitatively) the behavior of <span class="math inline">\(\mathrm{MISE}(\hat f_h)\)</span> as a function of the bandwidth <span class="math inline">\(h\)</span>.</li>
+<li>Show that the estimator <span class="math inline">\(\hat f_h\)</span> is a density function.</li>
+<li>Explain (qualitatively) the concept of the Normal-Reference bandwidth <span class="math inline">\(h_{NR}.\)</span></li>
+<li>Now assume that the (unknown) true density <span class="math inline">\(f\)</span> has a normal mixture structure as shown in <a href="#fig-norMix" class="quarto-xref">Figure&nbsp;<span>4.8</span></a>. What statement can be made in this case about a Normal-Reference bandwidth? Will it typically hold that <span class="math inline">\(h_{NR}&lt;h_{opt}\)</span>, <span class="math inline">\(h_{NR}\approx h_{opt}\)</span> or <span class="math inline">\(h_{NR}&gt;h_{opt}\)</span>? Justify your answer.</li>
+<li>What is the convergence rate of <span class="math inline">\(\mathrm{MISE}(\hat f_{h_{NR}})\)</span>? Justify your answer.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-norMix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-norMix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NP_Density_Estimation_files/figure-html/fig-norMix-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-norMix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.8: A normal mixture density function.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-2.">Exercise 2.</h4>
+<p>Assume that <span class="math inline">\(X_1,\dots,X_n\overset{\text{iid}}{\sim}X\)</span> is an iid random sample from a continuous uniform distribution on <span class="math inline">\([0,1]\)</span> (i.e.~<span class="math inline">\(X\sim U(0,1)\)</span>). Consider the asymptotic behavior of a kernel estimator <span class="math inline">\(\hat f_{nh}\)</span> of <span class="math inline">\(f\)</span> using an Epanechnikov kernel and under an asymptotic setup, where <span class="math inline">\(n\rightarrow\infty\)</span>, <span class="math inline">\(h\equiv h_n\rightarrow 0\)</span>, and <span class="math inline">\(\frac{1}{nh_n}\rightarrow 0.\)</span></p>
+<ol type="a">
+<li>What is the bias of the kernel density estimator <span class="math inline">\(\hat f_{nh}(x)\)</span> at the point <span class="math inline">\(x=0.5\)</span>?</li>
+<li>Show that <span class="math inline">\(\hat f_{nh}(x)\)</span> is <strong>not</strong> a MSE-consistent estimator of <span class="math inline">\(f(x)\)</span> at the point <span class="math inline">\(x=0.\)</span></li>
+</ol>
+</section>
+<section id="exercise-3-lengthy-exercise" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="exercise-3-lengthy-exercise">Exercise 3 (lengthy exercise)</h4>
+<p>Let <span class="math display">\[
+X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim f
+\]</span> We are now interested in estimating the derivative <span class="math inline">\(f'(x)\)</span> at a point <span class="math inline">\(x.\)</span> When using a continuously differentiable kernel function (use the Biweight kernel), the derivative <span class="math inline">\(\hat f_h'(x)\)</span> of a kernel estimator <span class="math inline">\(\hat f_{nh}(x)\)</span> provides an estimator of <span class="math inline">\(f'(x).\)</span> Now consider the asymptotic behavior of <span class="math inline">\(\hat f_{nh}'(x)\)</span> for <span class="math inline">\(n\rightarrow\infty\)</span>, <span class="math inline">\(h_n\rightarrow 0\)</span>, <span class="math inline">\(\frac{1}{nh_n^2}\rightarrow 0,\)</span> assuming that <span class="math inline">\(f\)</span> is three times continuously differentiable.</p>
+<ol type="a">
+<li>Show that <span class="math display">\[
+\mathbb{E}\left( \hat f_h'(x)\right) = f'(x)+c(K)h^2f^{'''}(x)+o\left(h^2\right),
+\]</span> where <span class="math inline">\(c(K)\)</span> is a constant depending on the kernel function.</li>
+<li>Moreover, show that <span class="math display">\[
+Var\left( \hat f_h'(x)\right) = \frac{f(x)d(K)}{nh^2}+o\left(\frac{1}{nh^2}\right),
+\]</span> where <span class="math inline">\(d(K)\)</span> is a constant depending on the kernel function. Can it be concluded from these results that <span class="math inline">\(\hat f_h'(x)\)</span> is a (weakly) consistent estimator of <span class="math inline">\(f'(x)\)</span>? Justify your answer.</li>
+</ol>
+<!-- 
+## Solutions {-} 
+
+#### Solution of Exercise 1. {-} 
+
+(a) See solution of b. for the definition of $\hat{f}_{nh}(x).$ A sketch of the graph of $\mathrm{MISE}(h)$ results from the sum of the graphs of $\int \operatorname{Var}(\hat{f}_{nh}(x))dx$ and $\int \operatorname{Bias}(\hat{f}_{nh}(x))^2dx$. (See eWhiteboard for the sketch.)
+(b) $\hat{f}_{nh}(x)$ is a density function, if (i) $\hat{f}_{nh}(x)\geq 0,$ for all $x\in\mathbb{R}$ and (ii) $\int\hat{f}_{nh}(x)dx=1.$ Part (i) is fulfilled, since:
+\begin{align*}
+\hat{f}_{h}(x)
+=\frac{1}{nh}\sum_{i=1}^n K\left(\frac{x-X_i}{h}\right)
+\geq \frac{1}{nh}\sum_{i=1}^n 0
+=0,
+\end{align*}
+where we use that $K(z)\geq 0$ for all $z\in\mathbb{R}.$ See, for instance, the Epanechnikov kernel function:
+$$
+K(z)=\frac{3}{4}(1-z^2)\mathbf{1}_{z\in[-1,1]}\quad\Rightarrow\quad 0\leq K(z)\leq\frac{3}{4}\quad\text{for all }z\in\mathbb{R}. 
+$$    
+Part (ii) is also fulfilled, since:
+\begin{align*}
+\int\hat{f}_{h}(x)\,dx
+&=\frac{1}{nh}\sum_{i=1}^n \int K\left(\frac{x-X_i}{h}\right)\,dx\\
+&[\text{Subst:}\frac{x-X_i}{h}=y,\quad \frac{dy}{dx}=\frac{1}{h}\Leftrightarrow dx=h dy]\\
+&=\frac{h}{nh}\sum_{i=1}^n \int K\left(y\right)\,dy\\
+&=\frac{1}{n}\sum_{i=1}^n 1
+=1,
+\end{align*}
+where we use that $\int K(y)\,dy=1.$ 
+
+(c) Starting point: AMISE-optimal bandwidth choice:
+\begin{align*}
+h_{\textrm{opt}}&=\left\{\frac{R(K)}{n\,\nu_2(K)^2\,\int f''(x)^2\,dx}\right\}^{1/5}
+\end{align*}
+where $\int f''(x)^2\,dx$ is the only unknown quantity. The Normal-Referenz bandwidth $h_{NR}$ approximates this unknown quantity using a normal distribution.
+**Idea:** If $f\approx\phi_{\mu,\sigma},$ then $\int f''(x)^2\,dx\approx \int \phi_{\mu,\sigma}''(x)^2\,dx,$ where $\sigma$ can be estimated from the data. (The parameter $\mu$ has no influence on the value of the integral.)
+  
+(d)
+The density shown in @fig-norMix is a multi-modal denisty with four peaks. It is to be expected that:
+$$
+\int f''(x)^2\,dx > \int \phi_{\mu,\sigma}''(x)^2\,dx \quad\Rightarrow\quad h_{\mathrm{opt}} < h_{NR}.
+$$
+Regardless of whether
+$$
+\int \phi_{\mu,\sigma}''(x)^2\,dx\approx\int f''(x)^2\,dx
+$$
+or  
+$$
+\int \phi_{\mu,\sigma}''(x)^2\,dx\not\approx\int f''(x)^2\,dx
+$$ 
+the convergence rate is 
+\begin{align*}
+\mathrm{MISE}(\hat{f}_{NR})
+  &=\frac{5}{4}\left\{\nu_2(K)^2\,R(K)^4\,\int \phi_{\mu,\sigma}''(x)^2\,dx\right\}^{1/5}\,n^{-4/5}+o(n^{-4/5})\\[1ex]
+  &=\mathrm{Const}\cdot n^{-4/5}+o(n^{-4/5})\\[1ex]
+  &=\mathcal{O}\left(n^{-4/5}\right)
+\end{align*}
+Of course, this result is only of limited use for finite sample sizes $n,$ where the estimation result strongly depends on a good choice of the bandwidth $h.$
+
+
+#### Solution of Exercise 2. {-} 
+
+(a) The bias is defined as $\mathrm{Bias}(\hat{f}_{nh}(x))=\mathbb{E}\left[\hat{f}_{nh}(x)\right]-f_{\mathrm{uni}}(x).$ Thus,
+\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(x)\right]
+  &=\frac{1}{h}\mathbb{E}\left[K\left(\frac{x-X}{h}\right)\right]\\
+  &=\frac{1}{h}\int K\left(\frac{x-u}{h}\right)f_{\mathrm{uni}}(u)\,du\\[2ex]
+  &=\frac{1}{h}\int K\left(\frac{u-x}{h}\right)f_{\mathrm{uni}}(u)\,du\quad \text{($K$ symmetric)}\\[2ex]
+  &[\text{Subst:}\; y=\frac{u-x}{h}\Leftrightarrow u=x+yh\quad\Rightarrow du=h\,dy]\\[2ex]
+  &=\frac{h}{h}\int K(y)f_{\mathrm{uni}}(x+yh)\,dy\\
+  &=           \int_{-1}^1 K(y)f_{\mathrm{uni}}(x+yh)\,dy\quad \text{($K$ Epanechnikov)}
+\end{align*}  
+For $x=0.5$ and sufficiently small bandwidth $h\equiv h_n < 0.5,$ we have that 
+$f_{\mathrm{uni}}(0.5+yh)=1$ for all $y\in[-1,1],$ such that
+\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(0.5)\right]
+  &=\int_{-1}^1 K(y)\,1\,dy = 1 = f_{\mathrm{uni}}(0.5)
+\end{align*}
+$\Rightarrow \mathrm{Bias}(\hat{f}_{nh}(0.5))=\mathbb{E}\left[\hat{f}_{nh}(0.5)\right]-f_{\mathrm{uni}}(0.5)=1-1=0$ for all $h\equiv h_n < 0.5.$ 
+(b) To be shown: $\hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0),$ where $f_{\textrm{uni}}(0)=1$.
+From a. we have that
+\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(0)\right] 
+  &=\int_{-1}^1 K(y)f_{\mathrm{uni}}(0+yh)\,dy\\
+  &=\int_{-1}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Definition of }f_{\mathrm{uni}}]\\
+  &=\int_{{\color{red}0}}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Integrand is zero for all }y<0]\\
+  &=\int_{0}^1 K(y)\mathbf{1}_{{\color{red}yh\leq 1}}\,dy\quad [\text{Indicator function is here zero only for }yh>1.]\\
+\end{align*} 
+Thus, for all sufficiently large sample sizes $n$ and corresponding sufficiently small bandwidth values $h=h_n$ such that $yh_n\leq 1$ for all $0\leq y\leq 1,$ we have that
+\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(0)\right]=\int_{0}^1 K(y)\,{\color{red}1}\,dy = 0.5 
+\end{align*}  
+Thus, at the boundary point $x=0.5,$ we have for $n\to\infty,$ $h_n\to 0$ that
+\begin{align*}
+&\quad \mathbb{E}\left[\hat{f}_{nh}(0)\right]\to 0.5 \neq  f_{\textrm{uni}}(0)=1\\
+\Rightarrow&\quad (\operatorname{Bias}(\hat{f}_{nh}(0)))^2\not\to 0\\
+\Rightarrow&\quad \hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0)
+\end{align*} 
+
+
+
+
+#### Solution of Exercise 3. {-} 
+
+Part a. 
+
+The mean:
+\begin{align*}
+  &\mathbb{E}\left(\frac{d}{dx}\hat{f}_{nh}(x)\right)\\
+  &=\mathbb{E}\left(\frac{1}{nh}\sum_{i=1}^n \frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
+  &=\frac{1}{nh}\sum_{i=1}^n \mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
+  &=\frac{1}{h}\mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\[2ex]
+  &\quad [\text{see AC-0 for computing $\frac{d}{dx}K\big(\frac{X_i-x}{h}\big)$}]\\[2ex]
+  &=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{($\tilde K$ is defined in AC-0)}}\\
+  % &=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{(see AC1)}}\\
+  &=\frac{1}{h^2}\int \tilde K\left(\frac{u-x}{h}\right)f(u)\,du\\
+  &\quad [\text{(Subst: $y=(u-x)/h$, $du=h\,dy$, $u=x+hy$)}]\\
+  &=\frac{1}{h}\int \tilde K(y)f(x+hy)\,dy\\
+  & \quad\text{[Taylorexpansion]}\\
+  &=\frac{1}{h}\int \tilde K(y)\left\{f(x)+f'(x)hy+\frac{1}{2}f^{''}(x)(hy)^2+\frac{1}{6}f^{'''}(x)(hy)^3+o(h^3)\right\}\,dy \\
+  &=\frac{1}{h}f(x)\underbrace{\int \tilde K(y)dy}_{=0\,\text{(see AC-1)}}
+  +\frac{h}{h}f'(x)\underbrace{\int \tilde K(y)ydy}_{=1\,\text{(see AC-3)}}
+  +\frac{h^2}{h}\frac{1}{2}f''(x)\underbrace{\int \tilde K(y)y^2\,dy}_{=0\,\text{(see AC-2)}}\\
+  &+\frac{h^3}{h}f'''(x)\underbrace{\left(\frac{1}{6}\right) \int \tilde K(y)y^3\,dy}_{=c(K)}+o(h^2)\\
+  &=f'(x)+h^2\,f'''(x)\,c(K)+o(h^2)
+\end{align*}
+
+Auxiliary calculation **AC-0:**
+
+Defintion of the Biweight kernel:
+$$
+K\left(\frac{X_i-x}{h}\right)=\left\{ 
+  \begin{array}{ll}
+  \frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)^2&\text{for } |(x-X_i)/h|<1\\
+  0& \text{else}
+  \end{array}
+  \right.
+$$
+Derivative of $K((X_i-x)/h)$ with respect to $x$ (using chain rule twice):
+\begin{align*}
+\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)=&2\frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(-2\left(\frac{X_i-x}{h}\right)\right)\left(-\frac{1}{h}\right)\\
+&=\left(\frac{1}{h}\right)\underbrace{\frac{60}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(\frac{X_i-x}{h}\right)}_{=:\tilde{K}\left(\frac{X_i-x}{h}\right)}\\ &=\left(\frac{1}{h}\right)\tilde{K}\left(\frac{X_i-x}{h}\right),
+\end{align*}
+for $|(x-X_i)/h|<1$, zero else.
+
+Alternatively, this tedious computation can be carried out using `R`.
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+K_exp          <- expression( (15/16)*(1- ((X-x)/h)^2 )^2 ) 
+(K_Dx_exp      <- D(K_exp, "x"))# derivatives
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+(15/16) * (2 * (2 * (1/h * ((X - x)/h)) * (1 - ((X - x)/h)^2)))
+```
+
+
+:::
+
+```{.r .cell-code}
+K_Dx_fun       <- function(x){}
+body(K_Dx_fun) <- K_Dx_exp
+```
+:::
+
+
+
+
+
+
+Auxiliary calculation **AC-1:**
+
+The result that $\int \tilde K(y)dy=0$ follows directly from the fact that $\tilde K$ is **point-symmetric** about the origin. Here is an illustration:
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+K_tilde <- function(y){(60/16)*(1-y^2)*y}
+
+# integrate(f=function(x){K_tilde(x)*x^3},lower = -1,upper = 1)
+
+plot(y=K_tilde(seq(-1,1,len=30)), 
+     x=seq(-1,1,len=30), type="l", xlab="",ylab="")
+abline(v=0,h=0,lty=2)
+```
+
+::: {.cell-output-display}
+![](Ch4_NP_Density_Estimation_files/figure-html/unnamed-chunk-15-1.png){width=672}
+:::
+:::
+
+
+
+
+
+**Formally:** Point-symmetry implies that 
+$$
+-\tilde K(y)=\tilde K(-y) 
+$$
+and thus that
+$$
+\tilde K(y)=-\tilde K(-y). 
+$$
+Thus
+\begin{align*}
+\int_{-1}^{0}\tilde K(y)dy 
+& = - \int_{-1}^{0}\tilde K(-y)dy\\
+&[\text{Subst: } u = -y,\quad \frac{du}{dy}=-1, \text{from }-(-1) \text{ to }-0]\\
+& = \int_{1}^{0}\tilde K(u)du\\
+& = - \int_{0}^{1}\tilde K(u)du
+\end{align*}
+Consequently
+\begin{align*}
+\underbrace{\int_{-1}^{0}\tilde K(y)dy + \int_{0}^{1}\tilde K(y)dy}_{=\int_{-1}^1\tilde{K}(y)dy} &=0\\
+\end{align*}
+
+
+Auxiliary calculation **AC-2:**
+
+As in **AC-1** it follows also here by the point-symmetriy $\tilde K(-y) (-y)^2=-(\tilde K(y) y^2)$ that 
+\begin{align*} 
+%\int_{-1}^0 \tilde K(y) y^2 \,dy=-\int_{0}^{1} \tilde K(y) y^2 \,dy\;\Rightarrow\;
+\int_{-1}^1 \tilde K(y) y^2 \,dy=0.
+\end{align*}
+
+::: {.callout-note}
+One can show that all **even moments** of the kernel function $\tilde{K}$ are zero: $\int \tilde K(y) y^p \,dy=0$ for all $p=0,2,4,\dots$, since we have point-symmetry  
+$\tilde K(-y) (-y)^p=-(\tilde K(y) y^p)$ for all $p=0,2,4,\dots$. 
+
+In the case of the usual kernel function $K$ all **odd moments** are zero.
+:::
+
+Auxiliary calculation **AC-3:**
+
+Partial integration:
+$$
+\int_a^b f'(y)\,g(y)\,dy=[f(y)\,g(y)]_a^b-\int_a^b f(y)\,g'(y)\,dy
+$$
+
+**Note:** The antiderivative of $\tilde K(y)=\frac{60}{16}(1-y^2)\,y$ is the  Biweight kernel multiplied by $(-1)$. That is: $-K(y)=-\frac{15}{16}(1-y^2)^2$. 
+
+Using this, we have
+\begin{align*}  
+\int \tilde K(y) y \, dy=\int_{-1}^1 \tilde K(y) y \, dy=\underbrace{\left[-K(y)\,y\right]_{-1}^1}_{=0-0}\;-\;\int_{-1}^1 -K(y)\,1\,dy=1.
+\end{align*}
+
+
+Part b.
+
+Yes, $\hat f_h'(x)$ is a (weakly) consistent estimator of $f'(x)$. 
+
+Justification:
+
+From the given information, it follows that
+\begin{align*} 
+\mathrm{AMSE}\left(\hat{f}'_h(x)\right)=\underbrace{h^4\,f^{'''}(x)^2\,c(K)^2}_{\mathrm{ABias}\left(\hat{f}'_h(x)\right)^2}+\underbrace{\frac{f(x)d(K)}{nh^2}}_{\mathrm{\mathrm{AVar}\left(\hat{f}'_h(x)\right)}}.
+\end{align*}
+Under the assumptions that $n\rightarrow\infty$, $h\equiv h_n\rightarrow 0$, $\frac{1}{nh_n^2}\rightarrow 0$, it follows that
+$$
+\mathrm{MSE}\left(\hat{f}'_h(x)\right)\xrightarrow[]{}0\quad\text{as}\quad n\to\infty.
+$$ 
+An equivalent notation:
+$$
+\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x)\quad\text{as}\quad n\to\infty. 
+$$
+Convergence in mean square implies convergence in probability (by Chebyshev’s inequality): 
+\begin{align*}
+&\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x) \quad\text{as}\quad n\to\infty\\
+\Rightarrow\quad & \hat{f}'_{nh}(x)\xrightarrow[p]{}f'(x)\quad\text{as}\quad n\to\infty.
+\end{align*}
+-->
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
@@ -961,6 +1481,9 @@ X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-hall1987extent" class="csl-entry" role="listitem">
+Hall, Peter, and James Stephen Marron. 1987. <span>“Extent to Which Least-Squares Cross-Validation Minimises Integrated Square Error in Nonparametric Density Estimation.”</span> <em>Probability Theory and Related Fields</em> 74 (4): 567–81.
+</div>
 <div id="ref-parzen1962estimation" class="csl-entry" role="listitem">
 Parzen, Emanuel. 1962. <span>“On Estimation of a Probability Density Function and Mode.”</span> <em>The Annals of Mathematical Statistics</em> 33 (3): 1065–76.
 </div>
