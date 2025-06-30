@@ -492,40 +492,47 @@ par(mfrow = c(1,1), mar = c(5, 4, 4, 2) + 0.1)
 
 ## Properties of the Kernel Density Estimator
 
+
+### Choice of the Kernel
+
 ::: {.callout-tip}
 ## Reminder: Definition of a Density Function
 We call a function $f$ a density function if it fulfilles the following properties: 
 
-* Non-negative: $f(x)\geq 0$ for all $x\in\mathbb{R}$
-* Normed: $\int f(x)dx = 1$
+* **Non-negative:** $f(x)\geq 0$ for all $x\in\mathbb{R}$
+* **Normed to 1:** $\int f(x)dx = 1$
 :::
 
 
-It can be shown that $f_{nh}$ is a density function if the kernel function $K$ is 
+It can be shown that if $K$ is a density function, then also $\hat{f}_{nh}$ is a density function: 
 
-* Non-negative: $K(x) \geq 0$ for all $x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}_{nh}(x) \geq 0$  for all $x\in\mathbb{R}$
-* Normed: $\int K(x)dx = 1\quad \Rightarrow\quad \int \hat{f}_{nh}(x)dx = 1$
+* **Non-negative:** 
+$$
+K(x) \geq 0\quad\text{for all}\quad x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}_{nh}(x) \geq 0\quad\text{for all}\quad x\in\mathbb{R}
+$$
 
-That is, if $K$ is a density function, then also $f_{nh}$ is a density function. 
+* **Normed to 1:** 
+$$
+\int K(x)dx = 1\quad \Rightarrow\quad \int \hat{f}_{nh}(x)dx = 1
+$$
+
+(See Exercises.)
+
 
 This inheritance of the properties of $K$ to the properties of $f_{nh}$ also holds for the smoothness properties: 
 
-* Smoothness of $K$: If $K$ is continuously differentiable $\quad\Rightarrow\quad$ $\hat{f}_{nh}$ is continuously differentiable
+* **Smoothness of $\boldsymbol{K}$:** If $K$ is continuously differentiable, then also $\hat{f}_{nh}$ is continuously differentiable.
 
 
-### Theoretical Requirements on the Kernel Function
+Typical kernel functions are smooth (continuous) density functions that are symmetric around zero.  
 
-* **Normed:** 
-$$
-\int K(x)dx=1
-$$
+
 * **Symmetric around zero:** 
 $$
 K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 $$ 
 
 
-Typical kernel functions are smooth density functions that are symmetric around zero.  
 
 **Examples:**
 
@@ -568,7 +575,7 @@ Typical kernel functions are smooth density functions that are symmetric around 
 
 
 
-### Choice of the Bandwidth Parameter
+### Choice of the Bandwidth
 
 
 Using a too small bandwidth (e.g. here $h=$ `r round(bw.SJ(inc76$income) * .25,  2)`):
@@ -673,7 +680,7 @@ Commonly used loss-functions:
 
 
 
-The minimum requirement on $\hat{f}_{nh}$ is **consistency**. That is, the estimated density function $\hat{f}_{nh}$ should approach the true (unknown!) density $f$, under the hypothetical assumption that the sample size grows indefinitely ($n \to \infty$),
+The minimum requirement on $\hat{f}_{nh}$ is **consistency**. That is, the estimated density function $\hat{f}_{nh}$ should approach the true (unknown!) density $f$, under the hypothetical assumption that the sample size grows $(n \to \infty).$
 
 
 Remember: We'll call an estimator $\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)$ **consistent,** if 
@@ -839,7 +846,7 @@ Generally, the mean $\mathbb{E}\left(\hat{f}_{nh}(x)\right)$ cannot be computed.
 However, using that $n\to\infty$ and $h\equiv h_n\to 0,$ we can approximate the mean $\mathbb{E}\left(\hat{f}_{nh}(x)\right)$ by
 $$
 \begin{align*}
-\mathbb{E}\left(\hat{f}_{nh}(x)\right) = &=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2) 
+\mathbb{E}\left(\hat{f}_{nh}(x)\right) &=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2) 
 \end{align*}
 $${#eq-AsympMeanKDE}
 
@@ -890,7 +897,7 @@ $$
 \end{align*}  
 $$
 
-Note that 
+Note that the squared bias and the squared asymptotic bias 
 $$
 \left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2\quad\text{and}\quad
 \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2
@@ -931,11 +938,11 @@ Minimizing $\mathrm{AMISE}(\hat{f}_h)$ with respect to $h$ yields the  (asymptot
   h_{\mathrm{opt}}&=
   \left\{
     \frac{R(K)}{{n\,\nu_2(K)}^2 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx}
-  \right\}^{1 / 5}\\
+  \right\}^{1 / 5}\\[2ex]
   &=\texttt{Constant} \cdot n^{-1/5}
 \end{align*}
 
-**Unknown quantities:** Kernel constants 
+**Known quantities:** Kernel constants 
 \begin{align*}
 R(K)
 &=\int\left(K(y)\right)^2\,dy\\

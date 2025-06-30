@@ -246,8 +246,8 @@ window.Quarto = {
   <li><a href="#a-more-formal-motivation-of-the-kernel-density-estimator" id="toc-a-more-formal-motivation-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#a-more-formal-motivation-of-the-kernel-density-estimator"><span class="header-section-number">4.2</span> A More Formal Motivation of the Kernel Density Estimator</a></li>
   <li><a href="#properties-of-the-kernel-density-estimator" id="toc-properties-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#properties-of-the-kernel-density-estimator"><span class="header-section-number">4.3</span> Properties of the Kernel Density Estimator</a>
   <ul class="collapse">
-  <li><a href="#theoretical-requirements-on-the-kernel-function" id="toc-theoretical-requirements-on-the-kernel-function" class="nav-link" data-scroll-target="#theoretical-requirements-on-the-kernel-function"><span class="header-section-number">4.3.1</span> Theoretical Requirements on the Kernel Function</a></li>
-  <li><a href="#choice-of-the-bandwidth-parameter" id="toc-choice-of-the-bandwidth-parameter" class="nav-link" data-scroll-target="#choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</a></li>
+  <li><a href="#choice-of-the-kernel" id="toc-choice-of-the-kernel" class="nav-link" data-scroll-target="#choice-of-the-kernel"><span class="header-section-number">4.3.1</span> Choice of the Kernel</a></li>
+  <li><a href="#choice-of-the-bandwidth" id="toc-choice-of-the-bandwidth" class="nav-link" data-scroll-target="#choice-of-the-bandwidth"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth</a></li>
   </ul></li>
   <li><a href="#accuracy-of-the-kernel-density-estimator" id="toc-accuracy-of-the-kernel-density-estimator" class="nav-link" data-scroll-target="#accuracy-of-the-kernel-density-estimator"><span class="header-section-number">4.4</span> Accuracy of the Kernel Density Estimator</a></li>
   <li><a href="#theory-globally-optimal-bandwidth-choice" id="toc-theory-globally-optimal-bandwidth-choice" class="nav-link" data-scroll-target="#theory-globally-optimal-bandwidth-choice"><span class="header-section-number">4.5</span> Theory: Globally Optimal Bandwidth Choice</a></li>
@@ -628,6 +628,8 @@ Figure&nbsp;4.5: The kernel density estimator uses a mixture of kernel functions
 </section>
 <section id="properties-of-the-kernel-density-estimator" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="properties-of-the-kernel-density-estimator"><span class="header-section-number">4.3</span> Properties of the Kernel Density Estimator</h2>
+<section id="choice-of-the-kernel" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="choice-of-the-kernel"><span class="header-section-number">4.3.1</span> Choice of the Kernel</h3>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -640,32 +642,31 @@ Reminder: Definition of a Density Function
 <div class="callout-body-container callout-body">
 <p>We call a function <span class="math inline">\(f\)</span> a density function if it fulfilles the following properties:</p>
 <ul>
-<li>Non-negative: <span class="math inline">\(f(x)\geq 0\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span></li>
-<li>Normed: <span class="math inline">\(\int f(x)dx = 1\)</span></li>
+<li><strong>Non-negative:</strong> <span class="math inline">\(f(x)\geq 0\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span></li>
+<li><strong>Normed to 1:</strong> <span class="math inline">\(\int f(x)dx = 1\)</span></li>
 </ul>
 </div>
 </div>
-<p>It can be shown that <span class="math inline">\(f_{nh}\)</span> is a density function if the kernel function <span class="math inline">\(K\)</span> is</p>
+<p>It can be shown that if <span class="math inline">\(K\)</span> is a density function, then also <span class="math inline">\(\hat{f}_{nh}\)</span> is a density function:</p>
 <ul>
-<li>Non-negative: <span class="math inline">\(K(x) \geq 0\)</span> for all <span class="math inline">\(x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}_{nh}(x) \geq 0\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span></li>
-<li>Normed: <span class="math inline">\(\int K(x)dx = 1\quad \Rightarrow\quad \int \hat{f}_{nh}(x)dx = 1\)</span></li>
+<li><p><strong>Non-negative:</strong> <span class="math display">\[
+K(x) \geq 0\quad\text{for all}\quad x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}_{nh}(x) \geq 0\quad\text{for all}\quad x\in\mathbb{R}
+\]</span></p></li>
+<li><p><strong>Normed to 1:</strong> <span class="math display">\[
+\int K(x)dx = 1\quad \Rightarrow\quad \int \hat{f}_{nh}(x)dx = 1
+\]</span></p></li>
 </ul>
-<p>That is, if <span class="math inline">\(K\)</span> is a density function, then also <span class="math inline">\(f_{nh}\)</span> is a density function.</p>
+<p>(See Exercises.)</p>
 <p>This inheritance of the properties of <span class="math inline">\(K\)</span> to the properties of <span class="math inline">\(f_{nh}\)</span> also holds for the smoothness properties:</p>
 <ul>
-<li>Smoothness of <span class="math inline">\(K\)</span>: If <span class="math inline">\(K\)</span> is continuously differentiable <span class="math inline">\(\quad\Rightarrow\quad\)</span> <span class="math inline">\(\hat{f}_{nh}\)</span> is continuously differentiable</li>
+<li><strong>Smoothness of <span class="math inline">\(\boldsymbol{K}\)</span>:</strong> If <span class="math inline">\(K\)</span> is continuously differentiable, then also <span class="math inline">\(\hat{f}_{nh}\)</span> is continuously differentiable.</li>
 </ul>
-<section id="theoretical-requirements-on-the-kernel-function" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="theoretical-requirements-on-the-kernel-function"><span class="header-section-number">4.3.1</span> Theoretical Requirements on the Kernel Function</h3>
+<p>Typical kernel functions are smooth (continuous) density functions that are symmetric around zero.</p>
 <ul>
-<li><strong>Normed:</strong> <span class="math display">\[
-\int K(x)dx=1
-\]</span></li>
 <li><strong>Symmetric around zero:</strong> <span class="math display">\[
 K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 \]</span></li>
 </ul>
-<p>Typical kernel functions are smooth density functions that are symmetric around zero.</p>
 <p><strong>Examples:</strong></p>
 <ul>
 <li>The family of the <strong>symmetric beta density</strong> functions; for <span class="math inline">\(p = 0,1,2,\ldots\)</span> <span class="math display">\[
@@ -697,8 +698,8 @@ K(u) = 1-|u|
 \]</span> for <span class="math inline">\(u\in[-1,1]\)</span> and <span class="math inline">\(0\)</span> else.</li>
 </ul>
 </section>
-<section id="choice-of-the-bandwidth-parameter" class="level3" data-number="4.3.2">
-<h3 data-number="4.3.2" class="anchored" data-anchor-id="choice-of-the-bandwidth-parameter"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth Parameter</h3>
+<section id="choice-of-the-bandwidth" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="choice-of-the-bandwidth"><span class="header-section-number">4.3.2</span> Choice of the Bandwidth</h3>
 <p>Using a too small bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 2.14):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
@@ -830,7 +831,7 @@ Important
 \mathrm{AMISE}(\hat{f}_{nh}) = \mathrm{MISE}(\hat{f}_{nh}) + o_P(1)
 \]</span> I.e. the asymptotic approximation of the <span class="math inline">\(\mathrm{MISE}.\)</span></li>
 </ul>
-<p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows indefinitely (<span class="math inline">\(n \to \infty\)</span>),</p>
+<p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows <span class="math inline">\((n \to \infty).\)</span></p>
 <p>Remember: We’ll call an estimator <span class="math inline">\(\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)\)</span> <strong>consistent,</strong> if <span class="math display">\[
 \hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span> Unless a different notion of convergence (such as MSE or “almost surely”) has been specified.</p>
@@ -970,7 +971,7 @@ X_1,\dots,X_n\overset{\text{iid}}{\sim}X,\quad\text{where}\quad X\sim f.
 <p>Generally, the mean <span class="math inline">\(\mathbb{E}\left(\hat{f}_{nh}(x)\right)\)</span> cannot be computed.</p>
 <p>However, using that <span class="math inline">\(n\to\infty\)</span> and <span class="math inline">\(h\equiv h_n\to 0,\)</span> we can approximate the mean <span class="math inline">\(\mathbb{E}\left(\hat{f}_{nh}(x)\right)\)</span> by <span id="eq-AsympMeanKDE"><span class="math display">\[
 \begin{align*}
-\mathbb{E}\left(\hat{f}_{nh}(x)\right) = &amp;=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)
+\mathbb{E}\left(\hat{f}_{nh}(x)\right) &amp;=f(x) + h^2 \frac{1}{2} f''(x) \nu_2(K) + o(h^2)
 \end{align*}
 \tag{4.6}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -1023,7 +1024,7 @@ Deriving <a href="#eq-AsympMeanKDE" class="quarto-xref">Equation&nbsp;<span>4.6<
 \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2=h^4 \frac{1}{4} \nu_2(K)^2 f''(x)^2
 \end{align*}  
 \]</span></p>
-<p>Note that <span class="math display">\[
+<p>Note that the squared bias and the squared asymptotic bias <span class="math display">\[
 \left(\mathrm{Bias}(\hat{f}_{nh}(x))\right)^2\quad\text{and}\quad
 \left(\mathrm{ABias} \left( \hat{f}_{nh}(x) \right)\right)^2
 \]</span> are <strong>asymptotically equivalent</strong>, since for <span class="math inline">\(n\to\infty\)</span> <span class="math display">\[\begin{align*}
@@ -1048,10 +1049,10 @@ Deriving <a href="#eq-AsympMeanKDE" class="quarto-xref">Equation&nbsp;<span>4.6<
   h_{\mathrm{opt}}&amp;=
   \left\{
     \frac{R(K)}{{n\,\nu_2(K)}^2 \int_{-\infty}^\infty \left(f''(x)\right)^2 dx}
-  \right\}^{1 / 5}\\
+  \right\}^{1 / 5}\\[2ex]
   &amp;=\texttt{Constant} \cdot n^{-1/5}
 \end{align*}\]</span></p>
-<p><strong>Unknown quantities:</strong> Kernel constants <span class="math display">\[\begin{align*}
+<p><strong>Known quantities:</strong> Kernel constants <span class="math display">\[\begin{align*}
 R(K)
 &amp;=\int\left(K(y)\right)^2\,dy\\
 &amp;(=\frac{3}{5}\text{, in case of the Epanechnikov kernel})\\[2ex]
