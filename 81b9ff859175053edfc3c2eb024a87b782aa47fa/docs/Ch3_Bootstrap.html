@@ -2643,7 +2643,14 @@ http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf
 <section id="exercise-4." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
 <!-- Computational Statistics, James E. Gentle,  Exercise 13.1. -->
-<p>Let <span class="math inline">\(\mathcal{S}_n = \{Y_1 , \dots, Y_n\}\)</span> be a random sample from a population with mean <span class="math inline">\(\mu,\)</span> variance <span class="math inline">\(\sigma^2,\)</span> and distribution function <span class="math inline">\(F.\)</span> Let <span class="math inline">\(F_n\)</span> be the empirical distribution function. Let <span class="math inline">\(\bar{Y}\)</span> be the sample mean of <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}\)</span> be a random sample taken independently and with replacement from <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\bar{Y}^*\)</span> be the sample mean of <span class="math inline">\(\mathcal{S}^*_n.\)</span></p>
+<p>Let <span class="math display">\[
+\mathcal{S}_n = \{Y_1 , \dots, Y_n\}
+\]</span> be an i.i.d. random sample <span class="math display">\[
+Y_1 , \dots, Y_n\overset{\text{i.i.d.}}{\sim} Y
+\]</span> with mean <span class="math inline">\(\mathbb{E}(Y)=\mu.\)</span> Let <span class="math inline">\(\bar{Y}\)</span> be the sample mean computed from <span class="math inline">\(\mathcal{S}_n.\)</span></p>
+<p>Let <span class="math display">\[
+\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}
+\]</span> be an i.i.d. random sample taken independently and with replacement from <span class="math inline">\(\mathcal{S}_n= \{Y_1 , \dots, Y_n\}.\)</span> Let <span class="math inline">\(\bar{Y}^*\)</span> be the sample mean computed from <span class="math inline">\(\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}.\)</span></p>
 <ol type="a">
 <li><p>Show that <span class="math display">\[
 \mathbb{E}^*(\bar{Y}^*) = \bar{Y}
@@ -3251,20 +3258,11 @@ P(Y^*=Y_n|\mathcal{S}_n)&amp;=\frac{1}{n}.
 <p><span class="math display">\[
 \begin{align*}
 \mathbb{E}(\bar{Y}^*)
-&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
-&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
-&amp; = \mathbb{E}\left(Y^*\right),
-\end{align*}
-\]</span> where we used that <span class="math display">\[
-Y_1^*,\dots,Y_n^* \overset{\text{i.i.d.}}{\sim}Y^*.
-\]</span> Since we do not condition on the observed sample <span class="math inline">\(\mathcal{S}_n,\)</span> we have that <span class="math display">\[
-Y^* \sim F,
-\]</span> because the unconditional <span class="math inline">\(Y^*\)</span> has the <strong>same distribution as</strong> <span class="math inline">\(Y\sim F.\)</span> Thus, we can proceed by computing the mean of <span class="math inline">\(Y^*\sim F\)</span> such that <span class="math display">\[
-\begin{align*}
-\mathbb{E}(\bar{Y}^*)
-&amp; = \mathbb{E}\left(Y^*\right)\\[2ex]
-&amp; = \mathbb{E}\left(Y  \right)\\[2ex]
-&amp; = \mu.
+&amp; = \mathbb{E}\left(\mathbb{E}(\bar{Y}^*|\mathcal{S}_n)\right)\quad[\text{Iterated Law of Expectations}]\\[2ex]
+&amp; = \mathbb{E}(\bar{Y})\quad[\text{Result from (a)}]\\[2ex]
+&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i\right)\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}(Y)\\[2ex]
+&amp; = \mathbb{E}(Y)=\mu
 \end{align*}
 \]</span></p>
 </section>

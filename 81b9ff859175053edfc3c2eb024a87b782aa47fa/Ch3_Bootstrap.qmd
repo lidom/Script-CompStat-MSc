@@ -2768,7 +2768,21 @@ Consider the following setup:
 
 <!-- Computational Statistics, James E. Gentle,  Exercise 13.1. -->
 
-Let $\mathcal{S}_n = \{Y_1 , \dots, Y_n\}$ be a random sample from a population with mean $\mu,$ variance $\sigma^2,$ and distribution function $F.$ Let $F_n$ be the empirical distribution function. Let $\bar{Y}$ be the sample mean of $\mathcal{S}_n.$ Let $\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}$ be a random sample taken independently and with replacement from $\mathcal{S}_n.$ Let $\bar{Y}^*$ be the sample mean of $\mathcal{S}^*_n.$
+Let 
+$$
+\mathcal{S}_n = \{Y_1 , \dots, Y_n\}
+$$ 
+be an i.i.d. random sample 
+$$
+Y_1 , \dots, Y_n\overset{\text{i.i.d.}}{\sim} Y
+$$
+with mean $\mathbb{E}(Y)=\mu.$ Let $\bar{Y}$ be the sample mean computed from $\mathcal{S}_n.$ 
+
+Let 
+$$
+\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}
+$$ 
+be an i.i.d. random sample taken independently and with replacement from $\mathcal{S}_n= \{Y_1 , \dots, Y_n\}.$ Let $\bar{Y}^*$ be the sample mean computed from $\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}.$
 
 
 (a) Show that 
@@ -3442,26 +3456,11 @@ Thus, we can proceed by computing the mean of a discrete random variable such th
 $$
 \begin{align*}
 \mathbb{E}(\bar{Y}^*) 
-& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mathbb{E}\left(Y^*\right),
-\end{align*}
-$$
-where we used that 
-$$
-Y_1^*,\dots,Y_n^* \overset{\text{i.i.d.}}{\sim}Y^*.
-$$
-Since we do not condition on the observed sample $\mathcal{S}_n,$ we have that 
-$$
-Y^* \sim F,
-$$
-because the unconditional $Y^*$ has the **same distribution as** $Y\sim F.$ Thus, we can proceed by computing the mean of $Y^*\sim F$ such that
-$$
-\begin{align*}
-\mathbb{E}(\bar{Y}^*) 
-& = \mathbb{E}\left(Y^*\right)\\[2ex]
-& = \mathbb{E}\left(Y  \right)\\[2ex]
-& = \mu.
+& = \mathbb{E}\left(\mathbb{E}(\bar{Y}^*|\mathcal{S}_n)\right)\quad[\text{Iterated Law of Expectations}]\\[2ex] 
+& = \mathbb{E}(\bar{Y})\quad[\text{Result from (a)}]\\[2ex]
+& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i\right)\\[2ex]
+& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}(Y)\\[2ex]
+& = \mathbb{E}(Y)=\mu
 \end{align*}
 $$
 
