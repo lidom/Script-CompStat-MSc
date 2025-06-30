@@ -610,6 +610,21 @@ Notation
 </ul>
 </div>
 </div>
+<p><a href="#fig-KDEvisual" class="quarto-xref">Figure&nbsp;<span>4.5</span></a> shows the construction of the kernel density estimator which uses a mixture of the chosen kernel function <span class="math inline">\(K\)</span> (here the Biweight kernel) centered at the observed data <span class="math inline">\(X_1,\dots,X_n\)</span> for estimating the unknown density <span class="math inline">\(f.\)</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-KDEvisual" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-KDEvisual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEvisual-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEvisual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.5: The kernel density estimator uses a mixture of kernel functions for estimating the unknown density <span class="math inline">\(f.\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="properties-of-the-kernel-density-estimator" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="properties-of-the-kernel-density-estimator"><span class="header-section-number">4.3</span> Properties of the Kernel Density Estimator</h2>
@@ -654,8 +669,12 @@ K(x)=K(-x)\quad\text{such that}\quad \int xK(x)dx=0
 <p><strong>Examples:</strong></p>
 <ul>
 <li>The family of the <strong>symmetric beta density</strong> functions; for <span class="math inline">\(p = 0,1,2,\ldots\)</span> <span class="math display">\[
-K(u; p) = \mathrm{Const}_p \left(1 - u^2 \right)^p
-\]</span> for <span class="math inline">\(u \in [-1,1]\)</span> and <span class="math inline">\(0\)</span> else, where the <span class="math inline">\(p\)</span>-specific constant is chosen such that the kernel integrates to one.
+K(u; p) =\left\{
+  \begin{array}{ll}
+  \mathrm{Const}_p \left(1 - u^2 \right)^p&amp;\text{for }u \in [-1,1]\\
+  0 &amp;\text{else}
+  \end{array}\right.,
+\]</span> where the <span class="math inline">\(p\)</span>-specific constant is chosen such that the kernel integrates to one.
 <ul>
 <li><span class="math inline">\(p=0\)</span> yields the <strong>uniform kernel:</strong> <span class="math display">\[
 K(u) = \frac{1}{2}
@@ -696,7 +715,7 @@ K(u) = 1-|u|
 <img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhsmall-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhsmall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.5: Kernel density estimate with a too small bandwidth.
+Figure&nbsp;4.6: Kernel density estimate with a too small bandwidth.
 </figcaption>
 </figure>
 </div>
@@ -718,7 +737,7 @@ Figure&nbsp;4.5: Kernel density estimate with a too small bandwidth.
 <img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhlarge-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhlarge-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.6: Kernel density estimate with a too large bandwidth.
+Figure&nbsp;4.7: Kernel density estimate with a too large bandwidth.
 </figcaption>
 </figure>
 </div>
@@ -768,7 +787,7 @@ plot(x = KDE$x, y = KDE$y,
 <img src="Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhgood-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-KDEhgood-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.7: Kernel density estimate with a good bandwidth choice.
+Figure&nbsp;4.8: Kernel density estimate with a good bandwidth choice.
 </figcaption>
 </figure>
 </div>
@@ -1178,7 +1197,7 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim f
 <li>Define the kernel density estimator <span class="math inline">\(\hat f_{nh}(x)\)</span> of <span class="math inline">\(f(x)\)</span> and sketch (qualitatively) the behavior of <span class="math inline">\(\mathrm{MISE}(\hat f_h)\)</span> as a function of the bandwidth <span class="math inline">\(h\)</span>.</li>
 <li>Show that the estimator <span class="math inline">\(\hat f_h\)</span> is a density function.</li>
 <li>Explain (qualitatively) the concept of the Normal-Reference bandwidth <span class="math inline">\(h_{NR}.\)</span></li>
-<li>Now assume that the (unknown) true density <span class="math inline">\(f\)</span> has a normal mixture structure as shown in <a href="#fig-norMix" class="quarto-xref">Figure&nbsp;<span>4.8</span></a>. What statement can be made in this case about a Normal-Reference bandwidth? Will it typically hold that <span class="math inline">\(h_{NR}&lt;h_{opt}\)</span>, <span class="math inline">\(h_{NR}\approx h_{opt}\)</span> or <span class="math inline">\(h_{NR}&gt;h_{opt}\)</span>? Justify your answer.</li>
+<li>Now assume that the (unknown) true density <span class="math inline">\(f\)</span> has a normal mixture structure as shown in <a href="#fig-norMix" class="quarto-xref">Figure&nbsp;<span>4.9</span></a>. What statement can be made in this case about a Normal-Reference bandwidth? Will it typically hold that <span class="math inline">\(h_{NR}&lt;h_{opt}\)</span>, <span class="math inline">\(h_{NR}\approx h_{opt}\)</span> or <span class="math inline">\(h_{NR}&gt;h_{opt}\)</span>? Justify your answer.</li>
 <li>What is the convergence rate of <span class="math inline">\(\mathrm{MISE}(\hat f_{h_{NR}})\)</span>? Justify your answer.</li>
 </ol>
 <div class="cell">
@@ -1189,7 +1208,7 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim f
 <img src="Ch4_NP_Density_Estimation_files/figure-html/fig-norMix-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-norMix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.8: A normal mixture density function.
+Figure&nbsp;4.9: A normal mixture density function.
 </figcaption>
 </figure>
 </div>
@@ -1412,7 +1431,7 @@ abline(v=0,h=0,lty=2)
 ```
 
 ::: {.cell-output-display}
-![](Ch4_NP_Density_Estimation_files/figure-html/unnamed-chunk-15-1.png){width=672}
+![](Ch4_NP_Density_Estimation_files/figure-html/unnamed-chunk-16-1.png){width=672}
 :::
 :::
 
