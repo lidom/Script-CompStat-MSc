@@ -2723,7 +2723,7 @@ $$
 #### Exercise 2. {-} 
 
 ::: {.callout-tip}
-Exercise 1 shows that the empirical distribution function is a **point-wise** consistent estimator for each given $x\in\mathbb{R}.$ However, point-wise consistency generally does not imply **uniformly** consistency for all $x\in\mathbb{R},$ and therefore the Clivenko-Cantelli (@thm-Clivenko-Cantelli) is so famous.  
+Exercise 1 shows that the empirical distribution function is a **point-wise** consistent estimator for each given $x\in\mathbb{R}.$ However, point-wise consistency generally does not imply **uniformly** consistency for all $x\in\mathbb{R},$ and therefore the Clivenko-Cantelli (@thm-Clivenko-Cantelli), which shows **uniform** consistency of the empirical distribution function, is so important.  
 
 This exercise is intended to show that that point-wise convergence does generally not imply uniform convergence.
 :::  
@@ -2768,7 +2768,7 @@ Consider the following setup:
 
 <!-- Computational Statistics, James E. Gentle,  Exercise 13.1. -->
 
-Let $\mathcal{S}_n = \{Y_1 , \dots, Y_n\}$ be a random sample from a population with mean $\mu$, variance $\sigma^2,$ and distribution function $F.$ Let $F_n$ be the empirical distribution function. Let $\bar{Y}$ be the sample mean for $\mathcal{S}_n.$ Let $\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}$ be a random sample taken independently and with replacement from $\mathcal{S}_n.$ Let $\bar{Y}^*$ be the sample mean for $\mathcal{S}^*_n.$
+Let $\mathcal{S}_n = \{Y_1 , \dots, Y_n\}$ be a random sample from a population with mean $\mu,$ variance $\sigma^2,$ and distribution function $F.$ Let $F_n$ be the empirical distribution function. Let $\bar{Y}$ be the sample mean of $\mathcal{S}_n.$ Let $\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}$ be a random sample taken independently and with replacement from $\mathcal{S}_n.$ Let $\bar{Y}^*$ be the sample mean of $\mathcal{S}^*_n.$
 
 
 (a) Show that 
@@ -2789,7 +2789,12 @@ Computational Statistics, James E. Gentle,  Exercise 13.6.
 <!-- {{< include Ch3_Solutions.qmd >}} -->
 
 
-<!--
+
+
+
+
+
+
 ## Solutions {-}
 
 #### Solution of Exercise 1. {-} 
@@ -2814,30 +2819,42 @@ p
 & = F(x).
 \end{align*}
 $$
-Note that this holds for any distribution of $X_i.$ Therefore, one says that $nF_n(x)$ is **distribution free.**
+Note that this holds **for any distribution** of $X_i.$ Therefore, one says that $nF_n(x)$ is **distribution free.**
 
 ##### (b) {-}
 
 From (a), we have that (using the standard mean and variance expressions for Binomial distributed random variables):
 $$
 \begin{align*}
-\mathbb{E}(nF_n(x)) &= nF(x)\\[2ex] 
-\Leftrightarrow\quad  \mathbb{E}(F_n(x)) &= F(x)
+\mathbb{E}(nF_n(x)) 
+&= n p\\[2ex] 
+&= nF(x)\\[2ex] 
+\Leftrightarrow\quad  \mathbb{E}(F_n(x)) 
+&= p \\[2ex]
+&= F(x)
 \end{align*}
 $$
 and that 
 $$
 \begin{align*}
-Var(nF_n(x)) &= nF(x)(1-F(x))\\[2ex]
-\Leftrightarrow \quad Var(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
+Var(nF_n(x)) 
+&= n p (1-p)\\[2ex]
+&= nF(x)(1-F(x))\\[2ex]
+\Leftrightarrow \quad Var(F_n(x)) 
+&= \frac{p (1- p)}{n}\\[2ex]
+&= \frac{F(x)(1-F(x))}{n}.
 \end{align*}
 $$
 
-Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT (Lindeberg-Lévy) implies that 
+Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables 
+$$
+1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},
+$$ 
+the standard CLT (Lindeberg-Lévy) implies that 
 $$
 \frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1)
 $$
-as $n\to\infty.$ Or with a slight abuse of notation: 
+as $n\to\infty.$ Or equivalently, with a slight abuse of notation: 
 $$
 F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
 $$
@@ -2878,7 +2895,7 @@ Since convergence in the mean square sense implies convergence in probability, w
 $$
 F_n(x)\to_{p} F(x)
 $$
-as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
+as $n\to\infty,$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
 
 
 
@@ -2887,14 +2904,15 @@ as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for ea
 ::: {.callout-tip}
 Another, equivalent way to define uniform convergence: 
 
-$g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$ there exists an $N$ such that 
-$$
-|g_n(x) - g(x)| < \varepsilon 
-$$ 
-for all $n\geq N$ and **for all** $x\in\mathcal{X},$ where $\mathcal{X}$ denotes the domain of the functions $g_n$ and $g.$ 
+$g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$ there exists an $N_\varepsilon$ such that 
+\begin{align*}
+&\sup_{x\in\mathcal{X}}|g_n(x) - g(x)| < \varepsilon\quad \text{for all}\quad n\geq N_\varepsilon\\[2ex]
+\Leftrightarrow\qquad & g_n(x)\in[g(x)-\varepsilon,g(x)+\varepsilon]\quad\text{for all}\quad x\in\mathcal{X}\quad\text{and all}\quad n\geq N_\varepsilon. 
+\end{align*} 
 
 
-I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n\geq N.$
+
+I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n\geq N_\varepsilon.$
 ::: 
 
 **Example 1:** $\mathcal{X}=\mathbb{R}$<br>
@@ -2918,8 +2936,6 @@ $$
 $$
 for each $n.$ 
 
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n)$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x(1+1/n^\ast)\to\infty$ as $x\to\infty.$ 
-
 
 **Example 2:** $\mathcal{X}=(0,1)$<br>
 The function 
@@ -2941,9 +2957,6 @@ $$
 \sup_{x\in(0,1)}|g_n(x)-g(x)|=\sup_{x\in(0,1)}x^n=1\neq 0
 $$
 for each $n.$ 
-
-Note that for a small $0<\varepsilon<1,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n,$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x^{n^\ast}\to 1$ as $x\to 1.$ 
-
 
 
 #### Solution of Exercise 3. {-}
@@ -3021,6 +3034,7 @@ for(b in 1:B){
   CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
   CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
 
+  ## Possible alternative version: 
   #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
   #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
 }
@@ -3078,6 +3092,7 @@ for(b in 1:B){
   CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
   CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
   
+  ## Possible alternative version: 
   #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
   #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
 }
@@ -3391,13 +3406,34 @@ $$
 \mathbb{E}^*(\bar{Y}^*) 
 & = \mathbb{E}\left(\left.\bar{Y}^*\right|\mathcal{S}_n\right)\\[2ex]
 & = \mathbb{E}\left(\left.\frac{1}{n}\sum_{i=1}^n Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \sum_{i=1}^n \frac{1}{n} Y_i
- = \bar{Y}
+& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y^*_i\right|\mathcal{S}_n\right)\\[2ex]
+& = \mathbb{E}\left(\left.Y^*\right|\mathcal{S}_n\right)
 \end{align*}
 $$
-since $(Y_i^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}$ and $P(Y_j^*=Y_i|\mathcal{S}_n)=\frac{1}{n}$ for each $i,j\in 1,\dots,n.$
+where we used that 
+$$
+\left(\left.Y^*_1\right|\mathcal{S}_n\right),\dots,\left(\left.Y^*_n\right|\mathcal{S}_n\right)\overset{\text{i.i.d.}}{\sim}\left(\left.Y^*\right|\mathcal{S}_n\right)
+$$
+with
+$$
+(Y^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}
+$$ 
+and
+\begin{align*}
+P(Y^*=Y_1|\mathcal{S}_n)&=\frac{1}{n}\\[2ex]
+P(Y^*=Y_2|\mathcal{S}_n)&=\frac{1}{n}\\[2ex]
+\qquad \vdots & \\[2ex]
+P(Y^*=Y_n|\mathcal{S}_n)&=\frac{1}{n}.
+\end{align*} 
+Thus, we can proceed by computing the mean of a discrete random variable such that 
+\begin{align*}
+\mathbb{E}^*(\bar{Y}^*) 
+& = \mathbb{E}\left(\left.Y^*\right|\mathcal{S}_n\right)\\[2ex]
+& = \sum_{i=1}^n Y_i P(Y^*=Y_1|\mathcal{S}_n)\\[2ex]
+& = \sum_{i=1}^n Y_i \frac{1}{n} \\[2ex]
+& = \bar{Y}.
+\end{align*}
+
 
 
 ##### (b)  {-}
@@ -3408,12 +3444,26 @@ $$
 \mathbb{E}(\bar{Y}^*) 
 & = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
 & = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mu
+& = \mathbb{E}\left(Y^*\right),
 \end{align*}
 $$
-since $Y_i^*\sim Y_i\sim F.$ 
+where we used that 
+$$
+Y_1^*,\dots,Y_n^* \overset{\text{i.i.d.}}{\sim}Y^*.
+$$
+Since we do not condition on the observed sample $\mathcal{S}_n,$ we have that 
+$$
+Y^* \sim F,
+$$
+because the unconditional $Y^*$ has the **same distribution as** $Y\sim F.$ Thus, we can proceed by computing the mean of $Y^*\sim F$ such that
+$$
+\begin{align*}
+\mathbb{E}(\bar{Y}^*) 
+& = \mathbb{E}\left(Y^*\right)\\[2ex]
+& = \mathbb{E}\left(Y  \right)\\[2ex]
+& = \mu.
+\end{align*}
+$$
 
--->
 
 ## References {-} 

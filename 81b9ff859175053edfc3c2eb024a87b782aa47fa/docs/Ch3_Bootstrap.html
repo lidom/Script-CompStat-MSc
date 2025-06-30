@@ -263,6 +263,7 @@ window.Quarto = {
   <li><a href="#statistical-hypothesis-testing" id="toc-statistical-hypothesis-testing" class="nav-link" data-scroll-target="#statistical-hypothesis-testing"><span class="header-section-number">3.5.5</span> Statistical Hypothesis Testing</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -2604,7 +2605,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Exercise 1 shows that the empirical distribution function is a <strong>point-wise</strong> consistent estimator for each given <span class="math inline">\(x\in\mathbb{R}.\)</span> However, point-wise consistency generally does not imply <strong>uniformly</strong> consistency for all <span class="math inline">\(x\in\mathbb{R},\)</span> and therefore the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>) is so famous.</p>
+<p>Exercise 1 shows that the empirical distribution function is a <strong>point-wise</strong> consistent estimator for each given <span class="math inline">\(x\in\mathbb{R}.\)</span> However, point-wise consistency generally does not imply <strong>uniformly</strong> consistency for all <span class="math inline">\(x\in\mathbb{R},\)</span> and therefore the Clivenko-Cantelli (<a href="#thm-Clivenko-Cantelli" class="quarto-xref">Theorem&nbsp;<span>3.1</span></a>), which shows <strong>uniform</strong> consistency of the empirical distribution function, is so important.</p>
 <p>This exercise is intended to show that that point-wise convergence does generally not imply uniform convergence.</p>
 </div>
 </div>
@@ -2642,7 +2643,7 @@ http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf
 <section id="exercise-4." class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="exercise-4.">Exercise 4.</h4>
 <!-- Computational Statistics, James E. Gentle,  Exercise 13.1. -->
-<p>Let <span class="math inline">\(\mathcal{S}_n = \{Y_1 , \dots, Y_n\}\)</span> be a random sample from a population with mean <span class="math inline">\(\mu\)</span>, variance <span class="math inline">\(\sigma^2,\)</span> and distribution function <span class="math inline">\(F.\)</span> Let <span class="math inline">\(F_n\)</span> be the empirical distribution function. Let <span class="math inline">\(\bar{Y}\)</span> be the sample mean for <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}\)</span> be a random sample taken independently and with replacement from <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\bar{Y}^*\)</span> be the sample mean for <span class="math inline">\(\mathcal{S}^*_n.\)</span></p>
+<p>Let <span class="math inline">\(\mathcal{S}_n = \{Y_1 , \dots, Y_n\}\)</span> be a random sample from a population with mean <span class="math inline">\(\mu,\)</span> variance <span class="math inline">\(\sigma^2,\)</span> and distribution function <span class="math inline">\(F.\)</span> Let <span class="math inline">\(F_n\)</span> be the empirical distribution function. Let <span class="math inline">\(\bar{Y}\)</span> be the sample mean of <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\mathcal{S}^*_n = \{Y_1^∗,\dots, Y_n^∗\}\)</span> be a random sample taken independently and with replacement from <span class="math inline">\(\mathcal{S}_n.\)</span> Let <span class="math inline">\(\bar{Y}^*\)</span> be the sample mean of <span class="math inline">\(\mathcal{S}^*_n.\)</span></p>
 <ol type="a">
 <li><p>Show that <span class="math display">\[
 \mathbb{E}^*(\bar{Y}^*) = \bar{Y}
@@ -2656,766 +2657,617 @@ http://personal.psu.edu/drh20/asymp/fall2002/lectures/ln03.pdf
 Computational Statistics, James E. Gentle,  Exercise 13.6. 
 -->
 <!-- {{< include Ch3_Solutions.qmd >}} -->
-<!--
-## Solutions {-}
-
-#### Solution of Exercise 1. {-} 
-
-##### (a) {-}
-
-The exact point-wise distribution of $nF_n(x)$ for a given $x\in\mathbb{R}.$  
-$$
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solution-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-1.">Solution of Exercise 1.</h4>
+<section id="a" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a">(a)</h5>
+<p>The exact point-wise distribution of <span class="math inline">\(nF_n(x)\)</span> for a given <span class="math inline">\(x\in\mathbb{R}.\)</span><br>
+<span class="math display">\[
 \begin{align*}
-F_n(x) 
-& = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
-\Rightarrow nF_n(x) 
-& = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
+F_n(x)
+&amp; = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\\
+\Rightarrow nF_n(x)
+&amp; = \sum_{i=1}^n 1_{(X_i\leq x)} \sim \mathcal{Binom}\left(n,p=F(x)\right),
 \end{align*}
-$$
-since $1_{(X_i\leq x)}$ is a Bernoulli random variable with parameter 
-$$
+\]</span> since <span class="math inline">\(1_{(X_i\leq x)}\)</span> is a Bernoulli random variable with parameter <span class="math display">\[
 \begin{align*}
-p 
-& = P(1_{(X_i\leq x)} = 1)\\[2ex]
-& = P(X_i \leq x)\\[2ex] 
-& = F(x).
+p
+&amp; = P(1_{(X_i\leq x)} = 1)\\[2ex]
+&amp; = P(X_i \leq x)\\[2ex]
+&amp; = F(x).
 \end{align*}
-$$
-Note that this holds for any distribution of $X_i.$ Therefore, one says that $nF_n(x)$ is **distribution free.**
-
-##### (b) {-}
-
-From (a), we have that (using the standard mean and variance expressions for Binomial distributed random variables):
-$$
+\]</span> Note that this holds <strong>for any distribution</strong> of <span class="math inline">\(X_i.\)</span> Therefore, one says that <span class="math inline">\(nF_n(x)\)</span> is <strong>distribution free.</strong></p>
+</section>
+<section id="b" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b">(b)</h5>
+<p>From (a), we have that (using the standard mean and variance expressions for Binomial distributed random variables): <span class="math display">\[
 \begin{align*}
-\mathbb{E}(nF_n(x)) &= nF(x)\\[2ex] 
-\Leftrightarrow\quad  \mathbb{E}(F_n(x)) &= F(x)
+\mathbb{E}(nF_n(x))
+&amp;= n p\\[2ex]
+&amp;= nF(x)\\[2ex]
+\Leftrightarrow\quad  \mathbb{E}(F_n(x))
+&amp;= p \\[2ex]
+&amp;= F(x)
 \end{align*}
-$$
-and that 
-$$
+\]</span> and that <span class="math display">\[
 \begin{align*}
-Var(nF_n(x)) &= nF(x)(1-F(x))\\[2ex]
-\Leftrightarrow \quad Var(F_n(x)) &= \frac{F(x)(1-F(x))}{n}.
+Var(nF_n(x))
+&amp;= n p (1-p)\\[2ex]
+&amp;= nF(x)(1-F(x))\\[2ex]
+\Leftrightarrow \quad Var(F_n(x))
+&amp;= \frac{p (1- p)}{n}\\[2ex]
+&amp;= \frac{F(x)(1-F(x))}{n}.
 \end{align*}
-$$
-
-Moreover, since $F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}$ is an average over i.i.d. random variables $1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},$ the standard CLT (Lindeberg-Lévy) implies that 
-$$
+\]</span></p>
+<p>Moreover, since <span class="math inline">\(F_n(x)  = \frac{1}{n} \sum_{i=1}^n 1_{(X_i\leq x)}\)</span> is an average over i.i.d. random variables <span class="math display">\[
+1_{(X_1\leq x)},\dots,1_{(X_n\leq x)},
+\]</span> the standard CLT (Lindeberg-Lévy) implies that <span class="math display">\[
 \frac{F_n(x)-F(x)}{\sqrt{\frac{F(x)(1-F(x))}{n}}}\to_d\mathcal{N}(0,1)
-$$
-as $n\to\infty.$ Or with a slight abuse of notation: 
-$$
+\]</span> as <span class="math inline">\(n\to\infty.\)</span> Or equivalently, with a slight abuse of notation: <span class="math display">\[
 F_n(x)\overset{a}{\sim}\mathcal{N}\left(F(x),\frac{F(x)(1-F(x))}{n}\right).
-$$
-
-
-##### (c) {-}
-
-
-The mean squared error between $F_n(x)$ and $F(x)$ is given by
-$$
+\]</span></p>
+</section>
+<section id="c" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c">(c)</h5>
+<p>The mean squared error between <span class="math inline">\(F_n(x)\)</span> and <span class="math inline">\(F(x)\)</span> is given by <span class="math display">\[
 \begin{align*}
-\operatorname{MSE}(F_n(x)) 
-&= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
-&= Var(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
+\operatorname{MSE}(F_n(x))
+&amp;= \mathbb{E}\left((F_n(x)-F(x))^2\right)\\[2ex]
+&amp;= Var(F_n(x)) + \left(\mathbb{E}(F_n(x))-F(x)\right)^2.
 \end{align*}
-$$
-It follows from our previous results that for each $x\in\mathbb{R}$
-$$
-Var(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0 
-$$
-as $n\to\infty,$ and that 
-$$
-\mathbb{E}(F_n(x)) -F(x) = 0 
-$$
-for all $n.$ Therefore, 
-$$
+\]</span> It follows from our previous results that for each <span class="math inline">\(x\in\mathbb{R}\)</span> <span class="math display">\[
+Var(F_n(x)) = \frac{F(x)(1-F(x))}{n} \to 0
+\]</span> as <span class="math inline">\(n\to\infty,\)</span> and that <span class="math display">\[
+\mathbb{E}(F_n(x)) -F(x) = 0
+\]</span> for all <span class="math inline">\(n.\)</span> Therefore, <span class="math display">\[
 \operatorname{MSE}(F_n(x)) = Var(F_n(x)) \to 0
-$$
-as $n\to\infty.$ 
-
-Thus we can conclude that $F_n(x)$ converges in the mean-square sense to $F(x)$ for each $x\in\mathbb{R},$ 
-$$
+\]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+<p>Thus we can conclude that <span class="math inline">\(F_n(x)\)</span> converges in the mean-square sense to <span class="math inline">\(F(x)\)</span> for each <span class="math inline">\(x\in\mathbb{R},\)</span> <span class="math display">\[
 F_n(x)\to_{ms} F(x)
-$$
-as $n\to\infty.$ 
-
-Since convergence in the mean square sense implies convergence in probability, we also have that for each $x\in\mathbb{R}$
-$$
+\]</span> as <span class="math inline">\(n\to\infty.\)</span></p>
+<p>Since convergence in the mean square sense implies convergence in probability, we also have that for each <span class="math inline">\(x\in\mathbb{R}\)</span> <span class="math display">\[
 F_n(x)\to_{p} F(x)
-$$
-as $n\to\infty$ which shows that $F_n(x)$ is weakly consistent for $F(x)$ for each $x\in\mathbb{R}.$
-
-
-
-#### Solution of Exercise 2. {-} 
-
-::: {.callout-tip}
-Another, equivalent way to define uniform convergence: 
-
-$g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if for every $\varepsilon>0,$ there exists an $N$ such that 
-$$
-|g_n(x) - g(x)| < \varepsilon 
-$$ 
-for all $n\geq N$ and **for all** $x\in\mathcal{X},$ where $\mathcal{X}$ denotes the domain of the functions $g_n$ and $g.$ 
-
-
-I.e., $g_n(\cdot)$ converges **uniformly** to $g(\cdot)$ if it is possible to draw an $\varepsilon$-band around the graph of $g(x)$ that contains **all of the graphs** of $g_n(x)$ for large enough $n\geq N.$
-::: 
-
-**Example 1:** $\mathcal{X}=\mathbb{R}$<br>
-The function 
-$$
+\]</span> as <span class="math inline">\(n\to\infty,\)</span> which shows that <span class="math inline">\(F_n(x)\)</span> is weakly consistent for <span class="math inline">\(F(x)\)</span> for each <span class="math inline">\(x\in\mathbb{R}.\)</span></p>
+</section>
+</section>
+<section id="solution-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-2.">Solution of Exercise 2.</h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Another, equivalent way to define uniform convergence:</p>
+<p><span class="math inline">\(g_n(\cdot)\)</span> converges <strong>uniformly</strong> to <span class="math inline">\(g(\cdot)\)</span> if for every <span class="math inline">\(\varepsilon&gt;0,\)</span> there exists an <span class="math inline">\(N_\varepsilon\)</span> such that <span class="math display">\[\begin{align*}
+&amp;\sup_{x\in\mathcal{X}}|g_n(x) - g(x)| &lt; \varepsilon\quad \text{for all}\quad n\geq N_\varepsilon\\[2ex]
+\Leftrightarrow\qquad &amp; g_n(x)\in[g(x)-\varepsilon,g(x)+\varepsilon]\quad\text{for all}\quad x\in\mathcal{X}\quad\text{and all}\quad n\geq N_\varepsilon.
+\end{align*}\]</span></p>
+<p>I.e., <span class="math inline">\(g_n(\cdot)\)</span> converges <strong>uniformly</strong> to <span class="math inline">\(g(\cdot)\)</span> if it is possible to draw an <span class="math inline">\(\varepsilon\)</span>-band around the graph of <span class="math inline">\(g(x)\)</span> that contains <strong>all of the graphs</strong> of <span class="math inline">\(g_n(x)\)</span> for large enough <span class="math inline">\(n\geq N_\varepsilon.\)</span></p>
+</div>
+</div>
+<p><strong>Example 1:</strong> <span class="math inline">\(\mathcal{X}=\mathbb{R}\)</span><br> The function <span class="math display">\[
 g_n(x) = x\left(1+\frac{1}{n}\right)
-$$ 
-converges point-wise (for each given $x\in\mathbb{R}$) to 
-$$
+\]</span> converges point-wise (for each given <span class="math inline">\(x\in\mathbb{R}\)</span>) to <span class="math display">\[
 g(x)=x,
-$$ 
-since 
-$$
+\]</span> since <span class="math display">\[
 |g_n(x)-g(x)|=\frac{|x|}{n}\to 0\quad \text{as}\quad n\to\infty.
-$$
-for each given $x\in\mathcal{X}.$
-
-However, $g_n$ does not converge uniformly to $g$ since
-$$
+\]</span> for each given <span class="math inline">\(x\in\mathcal{X}.\)</span></p>
+<p>However, <span class="math inline">\(g_n\)</span> does not converge uniformly to <span class="math inline">\(g\)</span> since <span class="math display">\[
 \sup_{x\in\mathbb{R}}|g_n(x)-g(x)|=\sup_{x\in\mathbb{R}}\frac{|x|}{n}=\infty\neq 0
-$$
-for each $n.$ 
-
-Note that for a small $\varepsilon> 0,$ an $\varepsilon$-band around $g(x) = x$ fails to capture the graphs of $g_n(x)=x(1+1/n)$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x(1+1/n^\ast)\to\infty$ as $x\to\infty.$ 
-
-
-**Example 2:** $\mathcal{X}=(0,1)$<br>
-The function 
-$$
+\]</span> for each <span class="math inline">\(n.\)</span></p>
+<p><strong>Example 2:</strong> <span class="math inline">\(\mathcal{X}=(0,1)\)</span><br> The function <span class="math display">\[
 g_n(x) = x^n
-$$ 
-converges point-wise (for each given $x\in(0,1)$) to 
-$$
+\]</span> converges point-wise (for each given <span class="math inline">\(x\in(0,1)\)</span>) to <span class="math display">\[
 g(x)=0,
-$$ 
-since 
-$$
-|g_n(x)-g(x)|=x^n\to 0\quad\text{as}\quad n\to\infty 
-$$
-for each given $x\in(0,1).$
-
-However, $g_n$ does not converge uniformly to $g$ since
-$$
+\]</span> since <span class="math display">\[
+|g_n(x)-g(x)|=x^n\to 0\quad\text{as}\quad n\to\infty
+\]</span> for each given <span class="math inline">\(x\in(0,1).\)</span></p>
+<p>However, <span class="math inline">\(g_n\)</span> does not converge uniformly to <span class="math inline">\(g\)</span> since <span class="math display">\[
 \sup_{x\in(0,1)}|g_n(x)-g(x)|=\sup_{x\in(0,1)}x^n=1\neq 0
-$$
-for each $n.$ 
-
-Note that for a small $0<\varepsilon<1,$ an $\varepsilon$-band around $g(x) = 0$ fails to capture the graphs of $g_n(x)=x^n,$ with $n\geq N,$ since for any $N$ and $n^\ast\geq N$ we have that $g_{n^\ast}(x)=x^{n^\ast}\to 1$ as $x\to 1.$ 
-
-
-
-#### Solution of Exercise 3. {-}
-
-##### (a) Part 1: {-}
-
-Setup:
-
-*  iid data $X_1,\dots,X_n$ with $X_i\sim F$
-*  $\mathbb{E}(X_i)=\mu$
-*  $Var(X_i)=\sigma^2<\infty$
-*  Estimator: $\bar{X}_n=n^{-1}\sum_{i=1}^nX_i$
-
-If $F$ is a normal distribution:
-
-
-$$
+\]</span> for each <span class="math inline">\(n.\)</span></p>
+</section>
+<section id="solution-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-3.">Solution of Exercise 3.</h4>
+<section id="a-part-1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-part-1">(a) Part 1:</h5>
+<p>Setup:</p>
+<ul>
+<li>iid data <span class="math inline">\(X_1,\dots,X_n\)</span> with <span class="math inline">\(X_i\sim F\)</span></li>
+<li><span class="math inline">\(\mathbb{E}(X_i)=\mu\)</span></li>
+<li><span class="math inline">\(Var(X_i)=\sigma^2&lt;\infty\)</span></li>
+<li>Estimator: <span class="math inline">\(\bar{X}_n=n^{-1}\sum_{i=1}^nX_i\)</span></li>
+</ul>
+<p>If <span class="math inline">\(F\)</span> is a normal distribution:</p>
+<p><span class="math display">\[
 \begin{array}{rlc}
 \sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\sim \mathcal{N}(0,1)\quad\text{exactly for all}\;n.
 \end{array}
-$$
-
-For non-normal distributions $F$ we have by the classic CLT:
-$$
+\]</span></p>
+<p>For non-normal distributions <span class="math inline">\(F\)</span> we have by the classic CLT: <span class="math display">\[
 \begin{array}{rlc}
 \sqrt{n}\left(\frac{\bar{X}_n-\mu}{\sigma}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
 \end{array}
-$$
-
-Usually, we do not know $\sigma$ and have to estimate this parameter using a consistent estimator such as $s^2=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$, where $s\to_p\sigma$ as $n\to\infty$.
-
-
-Then by Slusky's Theorem (allows to combine $\to_d$ and $\to_p$-statements) we have that: 
-$$
+\]</span></p>
+<p>Usually, we do not know <span class="math inline">\(\sigma\)</span> and have to estimate this parameter using a consistent estimator such as <span class="math inline">\(s^2=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2\)</span>, where <span class="math inline">\(s\to_p\sigma\)</span> as <span class="math inline">\(n\to\infty\)</span>.</p>
+<p>Then by Slusky’s Theorem (allows to combine <span class="math inline">\(\to_d\)</span> and <span class="math inline">\(\to_p\)</span>-statements) we have that: <span class="math display">\[
 \begin{array}{rlc}
 \sqrt{n}\left(\frac{\bar{X}_n-\mu}{s}\right)\to_d \mathcal{N}(0,1)\quad\text{as}\;n\to\infty.
 \end{array}
-$$
-
-
-The **classic confidence interval** is then based on the above (asymptotic) normality result:
-$$
+\]</span></p>
+<p>The <strong>classic confidence interval</strong> is then based on the above (asymptotic) normality result: <span class="math display">\[
 \operatorname{CI}_{\operatorname{classic},n}=\left[\bar{X}_n\,-\,z_{1-\alpha/2}\frac{s}{\sqrt{n}},\bar{X}_n\,+\,z_{1-\alpha/2}\frac{s}{\sqrt{n}}\right],
-$$
-where $z_{1-\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard normal distribution. Alternatively, one can apply a "small-sample correction" by using the $(1-\alpha/2)$-quantile $t_{n-1, 1-\alpha/2}$ of the $t$-distribution with $n-1$ degrees of freedom.  
-
-
-From the above arguments it follows that:
-$$
+\]</span> where <span class="math inline">\(z_{1-\alpha/2}\)</span> is the <span class="math inline">\((1-\alpha/2)\)</span>-quantile of the standard normal distribution. Alternatively, one can apply a “small-sample correction” by using the <span class="math inline">\((1-\alpha/2)\)</span>-quantile <span class="math inline">\(t_{n-1, 1-\alpha/2}\)</span> of the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
+<p>From the above arguments it follows that: <span class="math display">\[
 P\left(\mu\in \operatorname{CI}_{\operatorname{classic},n}\right)\to 1-\alpha\quad\text{as}\quad n\to\infty.
-$$
-
-Let us consider the finite-$n$ (with $n=20$) performance of the classic confidence interval for the case where $F$ is a **normal distribution** with mean $\mu=1$ and standard deviation $\sigma=2$:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-##  Setup:
-n     <-   20 # Sample Size
-mean  <-    1 # Mean
-sdev  <-    2 # Standard Deviation
-alpha <- 0.05 # Level
-
-set.seed(123)
-B          <- 1500 # MC repetitions
-CI.lo.vec  <- rep(NA, B)
-CI.up.vec  <- rep(NA, B)
-  
-## MC-Simulation:
-for(b in 1:B){
-  ## Data Generating Process:
-  X.sample     <- rnorm(n=n, mean = mean, sd = sdev) 
-  ## Estimates:
-  X.bar.MC     <- mean(X.sample)
-  sd.hat.MC    <- sd(X.sample)
-  ## Classic CIs:
-  
-  CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
-  CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
-
-  #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
-  #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
-}
-
-## How often does the classic CI cover the true mean?
-CI.checks      <- CI.lo.vec <= mean  &  mean <= CI.up.vec
-freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
-
-## Plot
-plot(x=0,y=0,xlim=range(CI.lo.vec, CI.up.vec), ylim=c(1,B), type="n", 
-     ylab="MC Repetitions", xlab="", axes = FALSE, 
-     main="Classic 95% Confidence Intervals\n(Normal DGP)")
-axis(1, at=c(1), labels ="True Mean = 1")
-axis(2); box()
-mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
-      round(freq.non.cover,digits = 2),")"), line = 2.5)
-## Covering CIs:
-arrows(x0=CI.lo.vec[CI.checks==TRUE], 
-       x1=CI.up.vec[CI.checks==TRUE], 
-       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
-       angle=90, code = 3, length = .1, col="black")
-## Non-Covering CIs:
-arrows(x0=CI.lo.vec[CI.checks==FALSE], 
-       x1=CI.up.vec[CI.checks==FALSE], 
-       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
-       angle=90, code = 3, length = .05, col="red")
-abline(v=mean,col="blue", lwd=1.5)
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-5-1.png){width=672}
-:::
-:::
-
-
-
-
-
-##### (a) Part 2: Classic Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
-
-
-Now, we consider the  finite-$n$ performance of the classic confidence interval under the same setup as above, but for the case where $F$ is a **non-normal distribution**, namely, a $\chi^2_1$-distribution with $1$ degree of freedom:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Setup:
-n     <-   20  # Sample Size
-df    <-    1  # (=> mean==1)
-alpha <- 0.05 # Level
-
-set.seed(123)
-B          <- 1500 # MC repetitions
-CI.lo.vec  <- rep(NA, B)
-CI.up.vec  <- rep(NA, B)
-  
-## MC-Simulation:
-for(b in 1:B){
-  ## Data Generating Process:
-  X.sample     <- rchisq(n, df=df)
-  ## Estimates:
-  X.bar.MC     <- mean(X.sample)
-  sd.hat.MC    <- sd(X.sample)
-  ## Classic CIs:
-  
-  CI.lo.vec[b] <- X.bar.MC - qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
-  CI.up.vec[b] <- X.bar.MC + qnorm(p = 1-alpha/2)*(sd.hat.MC/sqrt(n))
-  
-  #CI.lo.vec[b] <- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
-  #CI.up.vec[b] <- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))
-}
-
-## How often does the classic CI cover the true mean?
-CI.checks      <- CI.lo.vec <= mean  &  mean <= CI.up.vec
-freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
-
-## Plot
-plot(x=0,y=0,xlim=range(CI.lo.vec, CI.up.vec), ylim=c(1,B), type="n", 
-     ylab="MC Repetitions", xlab="", axes = FALSE, 
-     main="Classic 95% Confidence Intervals\n(Non-Normal DGP)")
-axis(1, at=c(1), labels ="True Mean = 1")
-axis(2); box()
-mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
-      round(freq.non.cover,digits = 2),")"), line = 2.5)
-## Covering CIs:
-arrows(x0=CI.lo.vec[CI.checks==TRUE], 
-       x1=CI.up.vec[CI.checks==TRUE], 
-       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
-       angle=90, code = 3, length = .1, col="black")
-## Non-Covering CIs:
-arrows(x0=CI.lo.vec[CI.checks==FALSE], 
-       x1=CI.up.vec[CI.checks==FALSE], 
-       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
-       angle=90, code = 3, length = .05, col="red")
-abline(v=mean,col="blue", lwd=1.5)
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-6-1.png){width=672}
-:::
-:::
-
-
-
-
-
-##### (b) Basic Bootstrap Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
-
-
-Let's generate an iid random sample $S_n$ with $X_i\sim\chi^2_1$ and the corresponding estimate $\bar X_n$:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Setup:
-n     <-   20  # Sample Size
-df    <-    1  # (=> mean==1)
-
-## IID random sample:
-set.seed(123)
-S_n  <- rchisq(n, df=df)
-
-## Empirical mean:
-(X.bar <- mean(S_n))
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-[1] 0.6737282
-```
-
-
-:::
-:::
-
-
-
-
-
-The **standard bootstrap confidence interval** is given by (see lecture script):
-$$
+\]</span></p>
+<p>Let us consider the finite-<span class="math inline">\(n\)</span> (with <span class="math inline">\(n=20\)</span>) performance of the classic confidence interval for the case where <span class="math inline">\(F\)</span> is a <strong>normal distribution</strong> with mean <span class="math inline">\(\mu=1\)</span> and standard deviation <span class="math inline">\(\sigma=2\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">##  Setup:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span> <span class="co"># Sample Size</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>mean  <span class="ot">&lt;-</span>    <span class="dv">1</span> <span class="co"># Mean</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sdev  <span class="ot">&lt;-</span>    <span class="dv">2</span> <span class="co"># Standard Deviation</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Level</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>B          <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="co"># MC repetitions</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>CI.lo.vec  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>CI.up.vec  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Simulation:</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Data Generating Process:</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  X.sample     <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span>n, <span class="at">mean =</span> mean, <span class="at">sd =</span> sdev) </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Estimates:</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  X.bar.MC     <span class="ot">&lt;-</span> <span class="fu">mean</span>(X.sample)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  sd.hat.MC    <span class="ot">&lt;-</span> <span class="fu">sd</span>(X.sample)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Classic CIs:</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  CI.lo.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(sd.hat.MC<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  CI.up.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(sd.hat.MC<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Possible alternative version: </span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#CI.lo.vec[b] &lt;- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#CI.up.vec[b] &lt;- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="do">## How often does the classic CI cover the true mean?</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>CI.checks      <span class="ot">&lt;-</span> CI.lo.vec <span class="sc">&lt;=</span> mean  <span class="sc">&amp;</span>  mean <span class="sc">&lt;=</span> CI.up.vec</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>freq.non.cover <span class="ot">&lt;-</span> <span class="fu">length</span>(CI.checks[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>])<span class="sc">/</span>B</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">xlim=</span><span class="fu">range</span>(CI.lo.vec, CI.up.vec), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">1</span>,B), <span class="at">type=</span><span class="st">"n"</span>, </span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"MC Repetitions"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Classic 95% Confidence Intervals</span><span class="sc">\n</span><span class="st">(Normal DGP)"</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">labels =</span><span class="st">"True Mean = 1"</span>)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>); <span class="fu">box</span>()</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">text=</span><span class="fu">paste0</span>(<span class="st">"(Freq. of Non-Covering CIs: "</span>,</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(freq.non.cover,<span class="at">digits =</span> <span class="dv">2</span>),<span class="st">")"</span>), <span class="at">line =</span> <span class="fl">2.5</span>)</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="do">## Covering CIs:</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.lo.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.up.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">1</span>, <span class="at">col=</span><span class="st">"black"</span>)</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="do">## Non-Covering CIs:</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.lo.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.up.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">05</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>mean,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="a-part-2-classic-confidence-interval-n20-and-x_isim-chi2_1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-part-2-classic-confidence-interval-n20-and-x_isim-chi2_1">(a) Part 2: Classic Confidence Interval (<span class="math inline">\(n=20\)</span> and <span class="math inline">\(X_i\sim \chi^2_1\)</span>)</h5>
+<p>Now, we consider the finite-<span class="math inline">\(n\)</span> performance of the classic confidence interval under the same setup as above, but for the case where <span class="math inline">\(F\)</span> is a <strong>non-normal distribution</strong>, namely, a <span class="math inline">\(\chi^2_1\)</span>-distribution with <span class="math inline">\(1\)</span> degree of freedom:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setup:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span>  <span class="co"># Sample Size</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>df    <span class="ot">&lt;-</span>    <span class="dv">1</span>  <span class="co"># (=&gt; mean==1)</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Level</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>B          <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="co"># MC repetitions</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>CI.lo.vec  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>CI.up.vec  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Simulation:</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Data Generating Process:</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  X.sample     <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(n, <span class="at">df=</span>df)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Estimates:</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  X.bar.MC     <span class="ot">&lt;-</span> <span class="fu">mean</span>(X.sample)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  sd.hat.MC    <span class="ot">&lt;-</span> <span class="fu">sd</span>(X.sample)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Classic CIs:</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  CI.lo.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(sd.hat.MC<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  CI.up.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>(sd.hat.MC<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Possible alternative version: </span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#CI.lo.vec[b] &lt;- X.bar.MC - qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#CI.up.vec[b] &lt;- X.bar.MC + qt(p = 1-alpha/2, df=n-1)*(sd.hat.MC/sqrt(n))</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="do">## How often does the classic CI cover the true mean?</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>CI.checks      <span class="ot">&lt;-</span> CI.lo.vec <span class="sc">&lt;=</span> mean  <span class="sc">&amp;</span>  mean <span class="sc">&lt;=</span> CI.up.vec</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>freq.non.cover <span class="ot">&lt;-</span> <span class="fu">length</span>(CI.checks[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>])<span class="sc">/</span>B</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">xlim=</span><span class="fu">range</span>(CI.lo.vec, CI.up.vec), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">1</span>,B), <span class="at">type=</span><span class="st">"n"</span>, </span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"MC Repetitions"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Classic 95% Confidence Intervals</span><span class="sc">\n</span><span class="st">(Non-Normal DGP)"</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">labels =</span><span class="st">"True Mean = 1"</span>)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>); <span class="fu">box</span>()</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">text=</span><span class="fu">paste0</span>(<span class="st">"(Freq. of Non-Covering CIs: "</span>,</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(freq.non.cover,<span class="at">digits =</span> <span class="dv">2</span>),<span class="st">")"</span>), <span class="at">line =</span> <span class="fl">2.5</span>)</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="do">## Covering CIs:</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.lo.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.up.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">1</span>, <span class="at">col=</span><span class="st">"black"</span>)</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="do">## Non-Covering CIs:</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.lo.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.up.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">05</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>mean,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="b-basic-bootstrap-confidence-interval-n20-and-x_isim-chi2_1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-basic-bootstrap-confidence-interval-n20-and-x_isim-chi2_1">(b) Basic Bootstrap Confidence Interval (<span class="math inline">\(n=20\)</span> and <span class="math inline">\(X_i\sim \chi^2_1\)</span>)</h5>
+<p>Let’s generate an iid random sample <span class="math inline">\(S_n\)</span> with <span class="math inline">\(X_i\sim\chi^2_1\)</span> and the corresponding estimate <span class="math inline">\(\bar X_n\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setup:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span>  <span class="co"># Sample Size</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>df    <span class="ot">&lt;-</span>    <span class="dv">1</span>  <span class="co"># (=&gt; mean==1)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## IID random sample:</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>S_n  <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(n, <span class="at">df=</span>df)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Empirical mean:</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>(X.bar <span class="ot">&lt;-</span> <span class="fu">mean</span>(S_n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6737282</code></pre>
+</div>
+</div>
+<p>The <strong>standard bootstrap confidence interval</strong> is given by (see lecture script): <span class="math display">\[
 \left[2\bar{X}_n - \hat{q}^\ast_{n,1-\alpha/2}, 2\bar{X}_n - \hat{q}^\ast_{n,\alpha/2}\right],
-$$
-where $\bar{X}_n$ denotes the estimate computed from the original sample, and $\hat{q}^\ast_{\alpha/2}$ and $\hat{q}^\ast_{1-\alpha/2}$ denote the $(\alpha/2)$ and $(1-\alpha/2)$-quantiles of the conditional distribution of $\bar{X}_n^\ast$ given $\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}.$ 
-
-In the following we first generate the $m$ bootstrap realizations 
-$$
+\]</span> where <span class="math inline">\(\bar{X}_n\)</span> denotes the estimate computed from the original sample, and <span class="math inline">\(\hat{q}^\ast_{\alpha/2}\)</span> and <span class="math inline">\(\hat{q}^\ast_{1-\alpha/2}\)</span> denote the <span class="math inline">\((\alpha/2)\)</span> and <span class="math inline">\((1-\alpha/2)\)</span>-quantiles of the conditional distribution of <span class="math inline">\(\bar{X}_n^\ast\)</span> given <span class="math inline">\(\mathcal{S}_n=\left\{X_1,\dots,X_n\right\}.\)</span></p>
+<p>In the following we first generate the <span class="math inline">\(m\)</span> bootstrap realizations <span class="math display">\[
 \bar{X}_{n,1}^\ast,\dots,\bar{X}_{n,m}^\ast,
-$$ 
-compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2},$ and plot all of this:
-
-
-
-
-::: {.cell fig.margin='true'}
-
-```{.r .cell-code}
-## Bootstr-Setup:
-alpha            <- 0.05
-n.Bootsrap.draws <- 1500
-
-## Generate bootstap samples:
-Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
-
-for(j in 1:n.Bootsrap.draws){
-  Bootstr.Samples[,j] <- sample(x=S_n, size=n, replace = TRUE)
-}
-## Boostrap draws of \bar{X}_n^*:
-X.bar.bootstr.vec <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
-
-## Quantile of the bootstr.-distribution of \bar{X}_n^*:
-q.1 <- quantile(X.bar.bootstr.vec, probs = 1-alpha/2)
-q.2 <- quantile(X.bar.bootstr.vec, probs = alpha/2)
-## plot
-plot(ecdf(X.bar.bootstr.vec), xlab="", ylab="",
-     main=expression(paste("Bootstr.-Distr. of ",bar(X)[n]^{" *"})))
-abline(v=c(q.1,q.2),col="red")
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-8-1.png){width=432}
-:::
-:::
-
-
-
-
-Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:
-
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Basic Bootstrap Confidence Interval:
-CI.Basic.Bootstr.lo <- 2*X.bar - q.1
-CI.Basic.Bootstr.up <- 2*X.bar - q.2
-
-## Re-labeling of otherwise false names:
-attr(CI.Basic.Bootstr.lo, "names") <- c("2.5%")
-attr(CI.Basic.Bootstr.up, "names") <- c("97.5%")
-##
-c(CI.Basic.Bootstr.lo, CI.Basic.Bootstr.up)
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-     2.5%     97.5% 
-0.1545224 1.0425228 
-```
-
-
-:::
-:::
-
-
-
-
-
-Now, we can investigate the finite-$n$ performance of the standard bootstrap confidence interval:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Setup:
-n     <-   20  # Sample Size
-df    <-    1  # (=> mean==1)
-mean  <-   df
-alpha <- 0.05 # Level
-n.Bootsrap.draws <- 1500
-
-## MC-Setup:
-set.seed(123)
-B          <- 1500 # MC repetitions
-CI.Basic.Bstr.lo.vec <- rep(NA, B)
-CI.Basic.Bstr.up.vec <- rep(NA, B)
-
-## MC-Simulation:
-for(b in 1:B){
-  ## Data Generating Process:
-  S_n.MC        <- rchisq(n, df=df)
-  ## Estimate:
-  X.bar.MC      <- mean(S_n.MC)
-  ## 
-  Bootstr.Samples.MC  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
-  for(j in 1:n.Bootsrap.draws){
-    Bootstr.Samples.MC[,j] <- sample(x=S_n.MC, size=n, replace = TRUE)
-  }
-  X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
-  ## (1-alpha/2)-quantile:
-  q.1.MC <- quantile(X.bar.bootstr.MC.vec, probs = 1-alpha/2)
-  q.2.MC <- quantile(X.bar.bootstr.MC.vec, probs = alpha/2)
-  ## Basic Bootstrap CIs:
-  CI.Basic.Bstr.lo.vec[b] <- 2*X.bar.MC - q.1.MC
-  CI.Basic.Bstr.up.vec[b] <- 2*X.bar.MC - q.2.MC
-}
-
-## How often does the classic CI cover the true mean?
-CI.checks      <- CI.Basic.Bstr.lo.vec<=mean & mean<=CI.Basic.Bstr.up.vec
-freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
-
-## Plot
-plot(x=0,y=0,xlim=range(CI.Basic.Bstr.lo.vec, CI.Basic.Bstr.up.vec), 
-     ylim=c(1,B), type="n", 
-     ylab="MC Repetitions", xlab="", axes = FALSE, 
-     main="Basic Bootrap 95% Confidence Intervals\n(Non-Normal DGP)")
-axis(1, at=c(1), labels ="True Mean = 1")
-axis(2); box()
-mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
-      round(freq.non.cover,digits = 2),")"), line = 2.5)
-## Covering CIs:
-arrows(x0=CI.Basic.Bstr.lo.vec[CI.checks==TRUE], 
-       x1=CI.Basic.Bstr.up.vec[CI.checks==TRUE], 
-       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
-       angle=90, code = 3, length = .1, col="black")
-## Non-Covering CIs:
-arrows(x0=CI.Basic.Bstr.lo.vec[CI.checks==FALSE], 
-       x1=CI.Basic.Bstr.up.vec[CI.checks==FALSE], 
-       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
-       angle=90, code = 3, length = .05, col="red")
-abline(v=mean,col="blue", lwd=1.5)
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-10-1.png){width=672}
-:::
-:::
-
-
-
-
-
-##### (c) Bootstrap-$t$ Confidence Interval ($n=20$ and $X_i\sim \chi^2_1$) {-}
-
-
-The bootstrap-$t$ confidence interval is given by (see lecture script):
-$$
+\]</span> compute their quantiles <span class="math inline">\(\hat{q}^\ast_{n,\alpha/2}\)</span> and <span class="math inline">\(\hat{q}^\ast_{n,1-\alpha/2},\)</span> and plot all of this:</p>
+<div class="cell" data-fig.margin="true">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstr-Setup:</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>alpha            <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n.Bootsrap.draws <span class="ot">&lt;-</span> <span class="dv">1500</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate bootstap samples:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>Bootstr.Samples  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>n, <span class="at">ncol=</span>n.Bootsrap.draws)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.Bootsrap.draws){</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  Bootstr.Samples[,j] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x=</span>S_n, <span class="at">size=</span>n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Boostrap draws of \bar{X}_n^*:</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>X.bar.bootstr.vec <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Quantile of the bootstr.-distribution of \bar{X}_n^*:</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>q<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">quantile</span>(X.bar.bootstr.vec, <span class="at">probs =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>q<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">quantile</span>(X.bar.bootstr.vec, <span class="at">probs =</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(X.bar.bootstr.vec), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"Bootstr.-Distr. of "</span>,<span class="fu">bar</span>(X)[n]<span class="sc">^</span>{<span class="st">" *"</span>})))</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(q<span class="fl">.1</span>,q<span class="fl">.2</span>),<span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using our preparatory work above, the basic bootstrap confidence interval can be computed as following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Basic Bootstrap Confidence Interval:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>CI.Basic.Bootstr.lo <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>X.bar <span class="sc">-</span> q<span class="fl">.1</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>CI.Basic.Bootstr.up <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>X.bar <span class="sc">-</span> q<span class="fl">.2</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Re-labeling of otherwise false names:</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(CI.Basic.Bootstr.lo, <span class="st">"names"</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2.5%"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(CI.Basic.Bootstr.up, <span class="st">"names"</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"97.5%"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(CI.Basic.Bootstr.lo, CI.Basic.Bootstr.up)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.1545224 1.0425228 </code></pre>
+</div>
+</div>
+<p>Now, we can investigate the finite-<span class="math inline">\(n\)</span> performance of the standard bootstrap confidence interval:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setup:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span>  <span class="co"># Sample Size</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>df    <span class="ot">&lt;-</span>    <span class="dv">1</span>  <span class="co"># (=&gt; mean==1)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>mean  <span class="ot">&lt;-</span>   df</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Level</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>n.Bootsrap.draws <span class="ot">&lt;-</span> <span class="dv">1500</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Setup:</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>B          <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="co"># MC repetitions</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>CI.Basic.Bstr.lo.vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>CI.Basic.Bstr.up.vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Simulation:</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Data Generating Process:</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  S_n.MC        <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(n, <span class="at">df=</span>df)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Estimate:</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  X.bar.MC      <span class="ot">&lt;-</span> <span class="fu">mean</span>(S_n.MC)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">## </span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  Bootstr.Samples.MC  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>n, <span class="at">ncol=</span>n.Bootsrap.draws)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.Bootsrap.draws){</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    Bootstr.Samples.MC[,j] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x=</span>S_n.MC, <span class="at">size=</span>n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  X.bar.bootstr.MC.vec <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples.MC, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="do">## (1-alpha/2)-quantile:</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  q.<span class="fl">1.</span>MC <span class="ot">&lt;-</span> <span class="fu">quantile</span>(X.bar.bootstr.MC.vec, <span class="at">probs =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>  q.<span class="fl">2.</span>MC <span class="ot">&lt;-</span> <span class="fu">quantile</span>(X.bar.bootstr.MC.vec, <span class="at">probs =</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Basic Bootstrap CIs:</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>  CI.Basic.Bstr.lo.vec[b] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>X.bar.MC <span class="sc">-</span> q.<span class="fl">1.</span>MC</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>  CI.Basic.Bstr.up.vec[b] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>X.bar.MC <span class="sc">-</span> q.<span class="fl">2.</span>MC</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="do">## How often does the classic CI cover the true mean?</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>CI.checks      <span class="ot">&lt;-</span> CI.Basic.Bstr.lo.vec<span class="sc">&lt;=</span>mean <span class="sc">&amp;</span> mean<span class="sc">&lt;=</span>CI.Basic.Bstr.up.vec</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>freq.non.cover <span class="ot">&lt;-</span> <span class="fu">length</span>(CI.checks[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>])<span class="sc">/</span>B</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">xlim=</span><span class="fu">range</span>(CI.Basic.Bstr.lo.vec, CI.Basic.Bstr.up.vec), </span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">1</span>,B), <span class="at">type=</span><span class="st">"n"</span>, </span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"MC Repetitions"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Basic Bootrap 95% Confidence Intervals</span><span class="sc">\n</span><span class="st">(Non-Normal DGP)"</span>)</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">labels =</span><span class="st">"True Mean = 1"</span>)</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>); <span class="fu">box</span>()</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">text=</span><span class="fu">paste0</span>(<span class="st">"(Freq. of Non-Covering CIs: "</span>,</span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(freq.non.cover,<span class="at">digits =</span> <span class="dv">2</span>),<span class="st">")"</span>), <span class="at">line =</span> <span class="fl">2.5</span>)</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a><span class="do">## Covering CIs:</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.Basic.Bstr.lo.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.Basic.Bstr.up.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">1</span>, <span class="at">col=</span><span class="st">"black"</span>)</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Non-Covering CIs:</span></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.Basic.Bstr.lo.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.Basic.Bstr.up.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">05</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>mean,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="c-bootstrap-t-confidence-interval-n20-and-x_isim-chi2_1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="c-bootstrap-t-confidence-interval-n20-and-x_isim-chi2_1">(c) Bootstrap-<span class="math inline">\(t\)</span> Confidence Interval (<span class="math inline">\(n=20\)</span> and <span class="math inline">\(X_i\sim \chi^2_1\)</span>)</h5>
+<p>The bootstrap-<span class="math inline">\(t\)</span> confidence interval is given by (see lecture script): <span class="math display">\[
 \left[
   \bar{X}_n-\hat{q}^\ast_{n,1-\alpha/2}\left(\frac{s_n}{\sqrt{n}}\right),  
   \bar{X}_n-\hat{q}^\ast_{n,\alpha/2}  \left(\frac{s_n}{\sqrt{n}}\right)
 \right],
-$$
-where $\bar{X}_n$ and $s_n=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2$ are computed from the original sample, and where $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2}$ denote the empirical $(\alpha/2)$ and the $(1-\alpha/2)$-quantiles compute from the bootstrap estimates: 
-$$
+\]</span> where <span class="math inline">\(\bar{X}_n\)</span> and <span class="math inline">\(s_n=(n-1)^{-1}\sum_{i=1}^n(X_i-\bar{X}_n)^2\)</span> are computed from the original sample, and where <span class="math inline">\(\hat{q}^\ast_{n,\alpha/2}\)</span> and <span class="math inline">\(\hat{q}^\ast_{n,1-\alpha/2}\)</span> denote the empirical <span class="math inline">\((\alpha/2)\)</span> and the <span class="math inline">\((1-\alpha/2)\)</span>-quantiles compute from the bootstrap estimates: <span class="math display">\[
 \sqrt{n}\frac{\bar{X}_{n,j}^\ast-\bar{X}_n}{s_{n,j}^\ast}\quad j=1,\dots,m.
-$$
-
-In the following we first generate the $m$ bootstrap realizations 
-$$
+\]</span></p>
+<p>In the following we first generate the <span class="math inline">\(m\)</span> bootstrap realizations <span class="math display">\[
 \sqrt{n}\frac{\bar{X}_{n,j}^\ast-\bar{X}_n}{s_{n,j}^\ast}\quad j=1,\dots,m,
-$$
-compute their quantiles $\hat{q}^\ast_{n,\alpha/2}$ and $\hat{q}^\ast_{n,1-\alpha/2}$, and plot all of this:
-
-
-
-
-::: {.cell fig.margin='true'}
-
-```{.r .cell-code}
-## Setup:
-n     <-   20  # Sample Size
-df    <-    1  # (=> mean==1)
-
-## IID random sample:
-set.seed(123)
-S_n  <- rchisq(n, df=df)
-
-## Empirical mean and sd:
-X.bar   <- mean(S_n)
-sd.hat  <- sd(S_n)
-
-## Bootstr-Setup:
-alpha            <- 0.05
-n.Bootsrap.draws <- 1500
-
-## Generate bootstap samples:
-Bootstr.Samples  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
-
-for(j in 1:n.Bootsrap.draws){
-  Bootstr.Samples[,j] <- sample(x=S_n, size=n, replace = TRUE)
-}
-## Compute boostrap draws of (\bar{X}_n^*-\bar{X}_n)/\hat{\sigma}^\ast:
-X.bar.bootstr.vec    <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = mean)
-sd.bootstr.vec       <- apply(X = Bootstr.Samples, MARGIN = 2, FUN = sd)
-##
-Bootstr.t.sample.vec <- sqrt(n)*(X.bar.bootstr.vec - X.bar)/sd.bootstr.vec
-## Quantile of the bootstr.-distribution of \bar{X}_n^*:
-q.1 <- quantile(Bootstr.t.sample.vec, probs = 1-alpha/2)
-q.2 <- quantile(Bootstr.t.sample.vec, probs = alpha/2)
-## plot
-plot(ecdf(Bootstr.t.sample.vec), xlab="", ylab="",
-     main=expression(paste("Bootstr.-t-Distr. of ",
-          sqrt(n)(bar(X)[n]^{" *"}-bar(X)[n])/s[n]^{"*"})))
-abline(v=c(q.1,q.2),col="red")
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-11-1.png){width=432}
-:::
-:::
-
-
-
-
-
-
-Using our preparatory work above, the bootstrap-$t$ confidence interval can be computed as following:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Basic Bootstrap Confidence Interval:
-CI.Bstr.t.lo <- X.bar - q.1 * sd.hat/sqrt(n)
-CI.Bstr.t.up <- X.bar - q.2 * sd.hat/sqrt(n)
-
-## Re-labeling of otherwise false names:
-attr(CI.Bstr.t.lo, "names") <- c("2.5%")
-attr(CI.Bstr.t.up, "names") <- c("97.5%")
-##
-c(CI.Bstr.t.lo, CI.Bstr.t.up)
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-     2.5%     97.5% 
-0.3052027 2.0241321 
-```
-
-
-:::
-:::
-
-
-
-
-
-
-Let us investigate the finite-$n$ performance of the bootstrap-t confidence interval:
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-## Setup:
-n     <-   20  # Sample Size
-df    <-    1  # (=> mean==1)
-mean  <-   df
-alpha <- 0.05 # Level
-n.Bootsrap.draws <- 1500
-
-## MC-Setup:
-set.seed(123)
-B          <- 1500 # MC repetitions
-CI.Bstr.t.lo.vec <- rep(NA, B)
-CI.Bstr.t.up.vec <- rep(NA, B)
-
-## MC-Simulation:
-for(b in 1:B){
-  ## Data Generating Process:
-  S_n.MC        <- rchisq(n, df=df)
-  ## Estimates:
-  X.bar.MC      <- mean(S_n.MC)
-  sd.MC         <- sd(S_n.MC)
-  ## 
-  Bootstr.Samples.MC  <- matrix(NA, nrow=n, ncol=n.Bootsrap.draws)
-  for(j in 1:n.Bootsrap.draws){
-    Bootstr.Samples.MC[,j] <- sample(x=S_n.MC, size=n, replace = TRUE)
-  }
-  X.bar.bootstr.MC.vec <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = mean)
-  sd.bootstr.MC.vec    <- apply(X = Bootstr.Samples.MC, MARGIN = 2, FUN = sd)
-  ## Make it a "Bootstrap-t" sample:
-  Bootstr.t.MC.vec     <- sqrt(n)*(X.bar.bootstr.MC.vec - X.bar.MC)/sd.bootstr.MC.vec
-  ## (1-alpha/2)-quantile:
-  q.1.MC <- quantile(Bootstr.t.MC.vec, probs = 1-alpha/2)
-  q.2.MC <- quantile(Bootstr.t.MC.vec, probs = alpha/2)
-  ## Basic Bootstrap CIs:
-  CI.Bstr.t.lo.vec[b] <- X.bar.MC - q.1.MC * sd.MC/sqrt(n)
-  CI.Bstr.t.up.vec[b] <- X.bar.MC - q.2.MC * sd.MC/sqrt(n)
-}
-
-## How often does the classic CI cover the true mean?
-CI.checks      <- CI.Bstr.t.lo.vec<=mean & mean<=CI.Bstr.t.up.vec
-freq.non.cover <- length(CI.checks[CI.checks==FALSE])/B
-
-## Plot
-plot(x=0,y=0,xlim=range(CI.Bstr.t.lo.vec, CI.Bstr.t.up.vec), 
-     ylim=c(1,B), type="n", 
-     ylab="MC Repetitions", xlab="", axes = FALSE, 
-     main="Bootrap-t 95% Confidence Intervals\n(Non-Normal DGP)")
-axis(1, at=c(1), labels ="True Mean = 1")
-axis(2); box()
-mtext(side = 1, text=paste0("(Freq. of Non-Covering CIs: ",
-      round(freq.non.cover,digits = 2),")"), line = 2.5)
-## Covering CIs:
-arrows(x0=CI.Bstr.t.lo.vec[CI.checks==TRUE], 
-       x1=CI.Bstr.t.up.vec[CI.checks==TRUE], 
-       y0=c(1:B)[CI.checks==TRUE], y1=c(1:B)[CI.checks==TRUE], 
-       angle=90, code = 3, length = .1, col="black")
-## Non-Covering CIs:
-arrows(x0=CI.Bstr.t.lo.vec[CI.checks==FALSE], 
-       x1=CI.Bstr.t.up.vec[CI.checks==FALSE], 
-       y0=c(1:B)[CI.checks==FALSE], y1=c(1:B)[CI.checks==FALSE], 
-       angle=90, code = 3, length = .05, col="red")
-abline(v=mean,col="blue", lwd=1.5)
-```
-
-::: {.cell-output-display}
-![](Ch3_Bootstrap_files/figure-html/unnamed-chunk-13-1.png){width=672}
-:::
-:::
-
-
-
-
-
-#### Solution of Exercise 4. {-}
-
-
-
-##### (a)  {-}
-
-$$
+\]</span> compute their quantiles <span class="math inline">\(\hat{q}^\ast_{n,\alpha/2}\)</span> and <span class="math inline">\(\hat{q}^\ast_{n,1-\alpha/2}\)</span>, and plot all of this:</p>
+<div class="cell" data-fig.margin="true">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setup:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span>  <span class="co"># Sample Size</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>df    <span class="ot">&lt;-</span>    <span class="dv">1</span>  <span class="co"># (=&gt; mean==1)</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="do">## IID random sample:</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>S_n  <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(n, <span class="at">df=</span>df)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Empirical mean and sd:</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>X.bar   <span class="ot">&lt;-</span> <span class="fu">mean</span>(S_n)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>sd.hat  <span class="ot">&lt;-</span> <span class="fu">sd</span>(S_n)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstr-Setup:</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>alpha            <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>n.Bootsrap.draws <span class="ot">&lt;-</span> <span class="dv">1500</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate bootstap samples:</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>Bootstr.Samples  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>n, <span class="at">ncol=</span>n.Bootsrap.draws)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.Bootsrap.draws){</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  Bootstr.Samples[,j] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x=</span>S_n, <span class="at">size=</span>n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Compute boostrap draws of (\bar{X}_n^*-\bar{X}_n)/\hat{\sigma}^\ast:</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>X.bar.bootstr.vec    <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>sd.bootstr.vec       <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>Bootstr.t.sample.vec <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(n)<span class="sc">*</span>(X.bar.bootstr.vec <span class="sc">-</span> X.bar)<span class="sc">/</span>sd.bootstr.vec</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Quantile of the bootstr.-distribution of \bar{X}_n^*:</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>q<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">quantile</span>(Bootstr.t.sample.vec, <span class="at">probs =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>q<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">quantile</span>(Bootstr.t.sample.vec, <span class="at">probs =</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(Bootstr.t.sample.vec), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>,</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"Bootstr.-t-Distr. of "</span>,</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sqrt</span>(n)(<span class="fu">bar</span>(X)[n]<span class="sc">^</span>{<span class="st">" *"</span>}<span class="sc">-</span><span class="fu">bar</span>(X)[n])<span class="sc">/</span>s[n]<span class="sc">^</span>{<span class="st">"*"</span>})))</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="fu">c</span>(q<span class="fl">.1</span>,q<span class="fl">.2</span>),<span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="432"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using our preparatory work above, the bootstrap-<span class="math inline">\(t\)</span> confidence interval can be computed as following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Basic Bootstrap Confidence Interval:</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>CI.Bstr.t.lo <span class="ot">&lt;-</span> X.bar <span class="sc">-</span> q<span class="fl">.1</span> <span class="sc">*</span> sd.hat<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>CI.Bstr.t.up <span class="ot">&lt;-</span> X.bar <span class="sc">-</span> q<span class="fl">.2</span> <span class="sc">*</span> sd.hat<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Re-labeling of otherwise false names:</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(CI.Bstr.t.lo, <span class="st">"names"</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"2.5%"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(CI.Bstr.t.up, <span class="st">"names"</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"97.5%"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(CI.Bstr.t.lo, CI.Bstr.t.up)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.3052027 2.0241321 </code></pre>
+</div>
+</div>
+<p>Let us investigate the finite-<span class="math inline">\(n\)</span> performance of the bootstrap-t confidence interval:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setup:</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n     <span class="ot">&lt;-</span>   <span class="dv">20</span>  <span class="co"># Sample Size</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df    <span class="ot">&lt;-</span>    <span class="dv">1</span>  <span class="co"># (=&gt; mean==1)</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>mean  <span class="ot">&lt;-</span>   df</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Level</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>n.Bootsrap.draws <span class="ot">&lt;-</span> <span class="dv">1500</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Setup:</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>B          <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="co"># MC repetitions</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>CI.Bstr.t.lo.vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>CI.Bstr.t.up.vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, B)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="do">## MC-Simulation:</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B){</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Data Generating Process:</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  S_n.MC        <span class="ot">&lt;-</span> <span class="fu">rchisq</span>(n, <span class="at">df=</span>df)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Estimates:</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  X.bar.MC      <span class="ot">&lt;-</span> <span class="fu">mean</span>(S_n.MC)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  sd.MC         <span class="ot">&lt;-</span> <span class="fu">sd</span>(S_n.MC)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## </span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  Bootstr.Samples.MC  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>n, <span class="at">ncol=</span>n.Bootsrap.draws)</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.Bootsrap.draws){</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    Bootstr.Samples.MC[,j] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x=</span>S_n.MC, <span class="at">size=</span>n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  X.bar.bootstr.MC.vec <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples.MC, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>  sd.bootstr.MC.vec    <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> Bootstr.Samples.MC, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd)</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Make it a "Bootstrap-t" sample:</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>  Bootstr.t.MC.vec     <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(n)<span class="sc">*</span>(X.bar.bootstr.MC.vec <span class="sc">-</span> X.bar.MC)<span class="sc">/</span>sd.bootstr.MC.vec</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  <span class="do">## (1-alpha/2)-quantile:</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  q.<span class="fl">1.</span>MC <span class="ot">&lt;-</span> <span class="fu">quantile</span>(Bootstr.t.MC.vec, <span class="at">probs =</span> <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  q.<span class="fl">2.</span>MC <span class="ot">&lt;-</span> <span class="fu">quantile</span>(Bootstr.t.MC.vec, <span class="at">probs =</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Basic Bootstrap CIs:</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  CI.Bstr.t.lo.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">-</span> q.<span class="fl">1.</span>MC <span class="sc">*</span> sd.MC<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  CI.Bstr.t.up.vec[b] <span class="ot">&lt;-</span> X.bar.MC <span class="sc">-</span> q.<span class="fl">2.</span>MC <span class="sc">*</span> sd.MC<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="do">## How often does the classic CI cover the true mean?</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>CI.checks      <span class="ot">&lt;-</span> CI.Bstr.t.lo.vec<span class="sc">&lt;=</span>mean <span class="sc">&amp;</span> mean<span class="sc">&lt;=</span>CI.Bstr.t.up.vec</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>freq.non.cover <span class="ot">&lt;-</span> <span class="fu">length</span>(CI.checks[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>])<span class="sc">/</span>B</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot</span></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">xlim=</span><span class="fu">range</span>(CI.Bstr.t.lo.vec, CI.Bstr.t.up.vec), </span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">1</span>,B), <span class="at">type=</span><span class="st">"n"</span>, </span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">"MC Repetitions"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">"Bootrap-t 95% Confidence Intervals</span><span class="sc">\n</span><span class="st">(Non-Normal DGP)"</span>)</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at=</span><span class="fu">c</span>(<span class="dv">1</span>), <span class="at">labels =</span><span class="st">"True Mean = 1"</span>)</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>); <span class="fu">box</span>()</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">text=</span><span class="fu">paste0</span>(<span class="st">"(Freq. of Non-Covering CIs: "</span>,</span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(freq.non.cover,<span class="at">digits =</span> <span class="dv">2</span>),<span class="st">")"</span>), <span class="at">line =</span> <span class="fl">2.5</span>)</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="do">## Covering CIs:</span></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.Bstr.t.lo.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.Bstr.t.up.vec[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">TRUE</span>], </span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">1</span>, <span class="at">col=</span><span class="st">"black"</span>)</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="do">## Non-Covering CIs:</span></span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(<span class="at">x0=</span>CI.Bstr.t.lo.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>       <span class="at">x1=</span>CI.Bstr.t.up.vec[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">y0=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], <span class="at">y1=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>B)[CI.checks<span class="sc">==</span><span class="cn">FALSE</span>], </span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>       <span class="at">angle=</span><span class="dv">90</span>, <span class="at">code =</span> <span class="dv">3</span>, <span class="at">length =</span> .<span class="dv">05</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>mean,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch3_Bootstrap_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="solution-of-exercise-4." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-4.">Solution of Exercise 4.</h4>
+<section id="a-1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="a-1">(a)</h5>
+<p><span class="math display">\[
 \begin{align*}
-\mathbb{E}^*(\bar{Y}^*) 
-& = \mathbb{E}\left(\left.\bar{Y}^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \mathbb{E}\left(\left.\frac{1}{n}\sum_{i=1}^n Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \mathbb{E}\left(\left.Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
-& = \sum_{i=1}^n \frac{1}{n} Y_i
- = \bar{Y}
+\mathbb{E}^*(\bar{Y}^*)
+&amp; = \mathbb{E}\left(\left.\bar{Y}^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \mathbb{E}\left(\left.\frac{1}{n}\sum_{i=1}^n Y_i^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(\left.Y^*_i\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \mathbb{E}\left(\left.Y^*\right|\mathcal{S}_n\right)
 \end{align*}
-$$
-since $(Y_i^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}$ and $P(Y_j^*=Y_i|\mathcal{S}_n)=\frac{1}{n}$ for each $i,j\in 1,\dots,n.$
-
-
-##### (b)  {-}
-
-
-$$
+\]</span> where we used that <span class="math display">\[
+\left(\left.Y^*_1\right|\mathcal{S}_n\right),\dots,\left(\left.Y^*_n\right|\mathcal{S}_n\right)\overset{\text{i.i.d.}}{\sim}\left(\left.Y^*\right|\mathcal{S}_n\right)
+\]</span> with <span class="math display">\[
+(Y^*|\mathcal{S}_n)\in\{Y_1,\dots,Y_n\}
+\]</span> and <span class="math display">\[\begin{align*}
+P(Y^*=Y_1|\mathcal{S}_n)&amp;=\frac{1}{n}\\[2ex]
+P(Y^*=Y_2|\mathcal{S}_n)&amp;=\frac{1}{n}\\[2ex]
+\qquad \vdots &amp; \\[2ex]
+P(Y^*=Y_n|\mathcal{S}_n)&amp;=\frac{1}{n}.
+\end{align*}\]</span> Thus, we can proceed by computing the mean of a discrete random variable such that <span class="math display">\[\begin{align*}
+\mathbb{E}^*(\bar{Y}^*)
+&amp; = \mathbb{E}\left(\left.Y^*\right|\mathcal{S}_n\right)\\[2ex]
+&amp; = \sum_{i=1}^n Y_i P(Y^*=Y_1|\mathcal{S}_n)\\[2ex]
+&amp; = \sum_{i=1}^n Y_i \frac{1}{n} \\[2ex]
+&amp; = \bar{Y}.
+\end{align*}\]</span></p>
+</section>
+<section id="b-1" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="b-1">(b)</h5>
+<p><span class="math display">\[
 \begin{align*}
-\mathbb{E}(\bar{Y}^*) 
-& = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
-& = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mathbb{E}\left(Y_i^*\right)\\[2ex]
-& = \mu
+\mathbb{E}(\bar{Y}^*)
+&amp; = \mathbb{E}\left(\frac{1}{n}\sum_{i=1}^n Y_i^*\right)\\[2ex]
+&amp; = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left(Y_i^*\right)\\[2ex]
+&amp; = \mathbb{E}\left(Y^*\right),
 \end{align*}
-$$
-since $Y_i^*\sim Y_i\sim F.$ 
-
--->
+\]</span> where we used that <span class="math display">\[
+Y_1^*,\dots,Y_n^* \overset{\text{i.i.d.}}{\sim}Y^*.
+\]</span> Since we do not condition on the observed sample <span class="math inline">\(\mathcal{S}_n,\)</span> we have that <span class="math display">\[
+Y^* \sim F,
+\]</span> because the unconditional <span class="math inline">\(Y^*\)</span> has the <strong>same distribution as</strong> <span class="math inline">\(Y\sim F.\)</span> Thus, we can proceed by computing the mean of <span class="math inline">\(Y^*\sim F\)</span> such that <span class="math display">\[
+\begin{align*}
+\mathbb{E}(\bar{Y}^*)
+&amp; = \mathbb{E}\left(Y^*\right)\\[2ex]
+&amp; = \mathbb{E}\left(Y  \right)\\[2ex]
+&amp; = \mu.
+\end{align*}
+\]</span></p>
+</section>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
