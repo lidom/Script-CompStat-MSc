@@ -299,15 +299,15 @@ window.Quarto = {
 \]</span> with <span class="math display">\[
 X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{and}\quad X\sim f.
 \]</span></p>
-<p>Traditional statistical key figures:</p>
+<p>Traditional statistical key figures, such as</p>
 <ul>
-<li>Empirical mean</li>
-<li>Empirical median</li>
-<li>Empirical variance</li>
-<li>Empirical interquartile distance, etc.</li>
+<li>empirical mean,</li>
+<li>empirical median,</li>
+<li>empirical variance,</li>
+<li>empirical interquartile distance, etc.,</li>
 </ul>
-<p>Only summarize single aspects of a distribution.</p>
-<p>Estimating the total density function <span class="math inline">\(f\)</span> can provide more detailed, more wholistic information.</p>
+<p>only summarize single aspects of a distribution.</p>
+<p>Estimating the <em>total</em> density function <span class="math inline">\(f\)</span> can provide more detailed, more wholistic information.</p>
 <p><a href="#fig-HistOrdinary" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows a histogram (i.e., a very simple density estimator) of the income data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(inc76<span class="sc">$</span>income, </span>
@@ -657,7 +657,7 @@ K(x) \geq 0\quad\text{for all}\quad x\in\mathbb{R}\quad \Rightarrow\quad \hat{f}
 \]</span></p></li>
 </ul>
 <p>(See Exercises.)</p>
-<p>This inheritance of the properties of <span class="math inline">\(K\)</span> to the properties of <span class="math inline">\(f_{nh}\)</span> also holds for the smoothness properties:</p>
+<p>This inheritance of the properties of <span class="math inline">\(K\)</span> to the properties of <span class="math inline">\(\hat{f}_{nh}\)</span> also holds for the smoothness properties:</p>
 <ul>
 <li><strong>Smoothness of <span class="math inline">\(\boldsymbol{K}\)</span>:</strong> If <span class="math inline">\(K\)</span> is continuously differentiable, then also <span class="math inline">\(\hat{f}_{nh}\)</span> is continuously differentiable.</li>
 </ul>
@@ -693,7 +693,7 @@ K(u; p) =\left\{
 <li><strong>Normal (Gaussian) kernel:</strong> <span class="math display">\[
 K(u) = \phi(u) = \frac{1}{\sqrt{2\pi}} \exp(-u^2 / 2)
 \]</span> for <span class="math inline">\(u \in\mathbb{R}.\)</span></li>
-<li>Triangular kernel: <span class="math display">\[
+<li><strong>Triangular kernel:</strong> <span class="math display">\[
 K(u) = 1-|u|
 \]</span> for <span class="math inline">\(u\in[-1,1]\)</span> and <span class="math inline">\(0\)</span> else.</li>
 </ul>
@@ -722,7 +722,7 @@ Figure&nbsp;4.6: Kernel density estimate with a too small bandwidth.
 </div>
 </div>
 </div>
-<p>Too a too large bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 47):</p>
+<p>Using a too large bandwidth (e.g.&nbsp;here <span class="math inline">\(h=\)</span> 47):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> inc76<span class="sc">$</span>income</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>h     <span class="ot">&lt;-</span> <span class="fu">bw.SJ</span>(inc76<span class="sc">$</span>income) <span class="sc">*</span> <span class="fl">2.5</span>  <span class="co"># too large bandwidth</span></span>
@@ -817,13 +817,13 @@ Important
 <p>The choice of the kernel function <span class="math inline">\(K\)</span> is (by far) less important/critical for the accuracy of the kernel density estimator than than the choice of the bandwidth <span class="math inline">\(h.\)</span></p>
 </div>
 </div>
-<p><strong>Most common goal:</strong> Automatic data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for all relevant <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
-<p>We call a bandwidth choice method optimal, if it minimizes a loss-function, which quantifies the estimation errors.</p>
-<p>Commonly used loss-functions:</p>
+<p><strong>Most common goal:</strong> Automatic, data-dependent bandwidth selection that is <strong>“globally optimal”</strong> ; i.e.&nbsp;optimal for all relevant <span class="math inline">\(x\)</span> in <span class="math inline">\(f(x).\)</span></p>
+<p>We call a bandwidth choice method globally optimal, if it minimizes a global loss-function, which quantifies the estimation errors.</p>
+<p>Commonly used global loss-functions:</p>
 <ul>
 <li><strong>Integrated Squared Error (ISE)</strong> <span class="math display">\[
-\mathrm{ISE}(\hat{f}_{nh}(x))=\int (\hat{f}_{nh}(x)-f(x))^2\,dx
-\]</span> Caution: The <span class="math inline">\(\mathrm{ISE}(\hat{f}_{nh}(x))\)</span> is a random quantity.</li>
+\mathrm{ISE}(\hat{f}_{nh})=\int (\hat{f}_{nh}(x)-f(x))^2\,dx
+\]</span> Caution: The <span class="math inline">\(\mathrm{ISE}(\hat{f}_{nh})\)</span> is a <em>random</em> (stochastic) quantity.</li>
 <li><strong>Mean Integrated Squared Error (MISE):</strong> <span class="math display">\[
 \mathrm{MISE}(\hat{f}_{nh})=\int\mathrm{MSE}(\hat{f}_{nh}(x))\,dx=\int \mathbb{E}(\hat{f}_{nh}(x)-f(x))^2\,dx
 \]</span></li>
@@ -831,7 +831,7 @@ Important
 \mathrm{AMISE}(\hat{f}_{nh}) = \mathrm{MISE}(\hat{f}_{nh}) + o_P(1)
 \]</span> I.e. the asymptotic approximation of the <span class="math inline">\(\mathrm{MISE}.\)</span></li>
 </ul>
-<p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size grows <span class="math inline">\((n \to \infty).\)</span></p>
+<p>The minimum requirement on <span class="math inline">\(\hat{f}_{nh}\)</span> is <strong>consistency</strong>. That is, the estimated density function <span class="math inline">\(\hat{f}_{nh}\)</span> should approach the true (unknown!) density <span class="math inline">\(f\)</span>, under the hypothetical assumption that the sample size <span class="math inline">\(n\)</span> grows <span class="math inline">\((n \to \infty).\)</span></p>
 <p>Remember: We’ll call an estimator <span class="math inline">\(\hat\theta_n\equiv\hat\theta(X_1,\dots,X_n)\)</span> <strong>consistent,</strong> if <span class="math display">\[
 \hat\theta_n\to_p\theta\quad\text{as}\quad n\to\infty.
 \]</span> Unless a different notion of convergence (such as MSE or “almost surely”) has been specified.</p>
