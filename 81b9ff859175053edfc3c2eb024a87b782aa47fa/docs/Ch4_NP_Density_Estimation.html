@@ -752,7 +752,6 @@ Figure&nbsp;4.7: Kernel density estimate with a too large bandwidth.
 
 
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -769,7 +768,6 @@ plot(x = KDE$x, y = KDE$y,
 ![Kernel density estimate with a way too large bandwidth.](Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhLARGE-1.png){#fig-KDEhLARGE width=672}
 :::
 :::
-
 
 
 
@@ -1084,7 +1082,7 @@ R(K)
 <li><span class="math inline">\(\nu_2(K)\colon\)</span> second moment of the kernel</li>
 <li><span class="math inline">\(R(K)\colon\)</span> roughness of the kernel</li>
 </ul>
-<p><strong>Unknown quantity:</strong> The global roughness of <span class="math inline">\(\boldsymbol{f}\)</span></p>
+<p><strong>Unknown quantity:</strong> The global roughness of <span class="math inline">\(f\)</span></p>
 <p><span class="math display">\[
 \int \left(f''(x)\right)^2 dx
 \]</span></p>
@@ -1105,7 +1103,7 @@ R(K)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Parametric MSE rate of <span class="math inline">\(\bar{X}_n\)</span> for <span class="math inline">\(\mu_0\)</span>
+Comparision: Parametric MSE rate of <span class="math inline">\(\bar{X}_n\)</span> for <span class="math inline">\(\mu_0\)</span>
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1132,23 +1130,23 @@ Parametric MSE rate of <span class="math inline">\(\bar{X}_n\)</span> for <span 
 <section id="normal-reference-bandwidth" class="level3" data-number="4.6.1">
 <h3 data-number="4.6.1" class="anchored" data-anchor-id="normal-reference-bandwidth"><span class="header-section-number">4.6.1</span> Normal Reference Bandwidth</h3>
 <p>In the asymptotic formula for the AMISE optimal bandwidth <span class="math inline">\(h_{\mathrm{opt}},\)</span> the unknown density <span class="math inline">\(f\)</span> enters “only” through the functional <span class="math inline">\(\int \left(f''(x)\right)^2 dx.\)</span></p>
-<p>If, for example, one can assume that the underlying density <span class="math inline">\(f\)</span> does not deviate significantly from a normal density, then a reasonable approximation of the optimal bandwidth for the true density <span class="math inline">\(f\)</span> can be obtained via the optimal bandwidth for the normal density.</p>
+<p>If one can assume that the underlying density <span class="math inline">\(f\)</span> does not deviate significantly, for instance, from a normal density, then a reasonable approximation of the optimal bandwidth for the true density <span class="math inline">\(f\)</span> can be obtained via the optimal bandwidth for the normal density.</p>
 <p>Reference bandwidths are often very good <strong>quick-and-dirty approaches</strong>.</p>
 <p>Normal density: <span class="math display">\[
-\phi_{\mu,\sigma}(x)=\frac{1}{\sigma} \phi (\frac{x-\mu}{\sigma}),
+\phi_{\mu,\sigma}(x)=\frac{1}{\sigma} \phi \left(\frac{x-\mu}{\sigma}\right),
 \]</span> where <span class="math inline">\(\phi\)</span> denotes the density of the standard normal distribution, <span class="math inline">\(\mu\)</span> the mean and <span class="math inline">\(\sigma^2\)</span> the variance of <span class="math inline">\(X.\)</span></p>
-<p>Some simple derivations yields that <span class="math display">\[
+<p>Some simple derivations yield that <span class="math display">\[
 \int_{-\infty}^\infty \phi_{\mu,\sigma}''(x)^2 dx=\frac{3}{\sqrt{\pi} 8 \sigma^5}.
 \]</span> which motivates the <strong>Normal-Reference Bandwidth:</strong> <span class="math display">\[\begin{align*}
   h_{\mathrm{NR}}=
   \left\{
     \frac{8 \sqrt{\pi} R(K)}{3 \nu_2(K)^2\; n}
     \right\}^{1/5} \hat{\sigma},
-\end{align*}\]</span> where <span class="math inline">\(\hat\sigma\)</span> denotes an estimator of the standard deviation, such as, for instance, the empirical standard deviation <span class="math display">\[
+\end{align*}\]</span> where <span class="math inline">\(\hat\sigma\)</span> denotes an estimator of the standard deviation, such as, for instance, the empirical standard deviation <span id="eq-sigma2estim1"><span class="math display">\[
 \hat{\sigma}_n = \sqrt{\frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X}_n)^2},
-\]</span> or the robust estimator for the standard deviation of normal distributed data <span class="math display">\[
+\tag{4.7}\]</span></span> or the robust estimator for the standard deviation of normal distributed data <span id="eq-sigma2estim2"><span class="math display">\[
 \hat{\sigma}_n = \mathrm{IQR}_n / (\Phi^{-1}(0.75) - \Phi^{-1}(0.25)),
-\]</span> or the minimum of these two estimators.</p>
+\tag{4.8}\]</span></span> or the minimum of these two (<a href="#eq-sigma2estim1" class="quarto-xref">Equation&nbsp;<span>4.7</span></a> and <a href="#eq-sigma2estim2" class="quarto-xref">Equation&nbsp;<span>4.8</span></a>) estimators.</p>
 </section>
 <section id="bandwidth-selection-by-cross-validation" class="level3" data-number="4.6.2">
 <h3 data-number="4.6.2" class="anchored" data-anchor-id="bandwidth-selection-by-cross-validation"><span class="header-section-number">4.6.2</span> Bandwidth Selection by Cross Validation</h3>
