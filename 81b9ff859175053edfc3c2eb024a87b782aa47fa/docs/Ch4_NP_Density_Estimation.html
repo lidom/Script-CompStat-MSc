@@ -257,6 +257,7 @@ window.Quarto = {
   <li><a href="#bandwidth-selection-by-cross-validation" id="toc-bandwidth-selection-by-cross-validation" class="nav-link" data-scroll-target="#bandwidth-selection-by-cross-validation"><span class="header-section-number">4.6.2</span> Bandwidth Selection by Cross Validation</a></li>
   </ul></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -751,6 +752,7 @@ Figure&nbsp;4.7: Kernel density estimate with a too large bandwidth.
 
 
 
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -767,6 +769,7 @@ plot(x = KDE$x, y = KDE$y,
 ![Kernel density estimate with a way too large bandwidth.](Ch4_NP_Density_Estimation_files/figure-html/fig-KDEhLARGE-1.png){#fig-KDEhLARGE width=672}
 :::
 :::
+
 
 
 
@@ -1255,285 +1258,196 @@ X_1,\dots,X_n\overset{\text{i.i.d.}}{\sim}X\quad\text{with}\quad X\sim f
 Var\left( \hat f_h'(x)\right) = \frac{f(x)d(K)}{nh^2}+o\left(\frac{1}{nh^2}\right),
 \]</span> where <span class="math inline">\(d(K)\)</span> is a constant depending on the kernel function. Can it be concluded from these results that <span class="math inline">\(\hat f_h'(x)\)</span> is a (weakly) consistent estimator of <span class="math inline">\(f'(x)\)</span>? Justify your answer.</li>
 </ol>
-<!-- 
-## Solutions {-} 
-
-#### Solution of Exercise 1. {-} 
-
-(a) See solution of b. for the definition of $\hat{f}_{nh}(x).$ A sketch of the graph of $\mathrm{MISE}(h)$ results from the sum of the graphs of $\int \operatorname{Var}(\hat{f}_{nh}(x))dx$ and $\int \operatorname{Bias}(\hat{f}_{nh}(x))^2dx$. (See eWhiteboard for the sketch.)
-(b) $\hat{f}_{nh}(x)$ is a density function, if (i) $\hat{f}_{nh}(x)\geq 0,$ for all $x\in\mathbb{R}$ and (ii) $\int\hat{f}_{nh}(x)dx=1.$ Part (i) is fulfilled, since:
-\begin{align*}
+</section>
+</section>
+<section id="solutions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="solutions">Solutions</h2>
+<section id="solution-of-exercise-1." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-1.">Solution of Exercise 1.</h4>
+<ol type="a">
+<li><p>See solution of b. for the definition of <span class="math inline">\(\hat{f}_{nh}(x).\)</span> A sketch of the graph of <span class="math inline">\(\mathrm{MISE}(h)\)</span> results from the sum of the graphs of <span class="math inline">\(\int \operatorname{Var}(\hat{f}_{nh}(x))dx\)</span> and <span class="math inline">\(\int \operatorname{Bias}(\hat{f}_{nh}(x))^2dx\)</span>. (See eWhiteboard for the sketch.)</p></li>
+<li><p><span class="math inline">\(\hat{f}_{nh}(x)\)</span> is a density function, if (i) <span class="math inline">\(\hat{f}_{nh}(x)\geq 0,\)</span> for all <span class="math inline">\(x\in\mathbb{R}\)</span> and (ii) <span class="math inline">\(\int\hat{f}_{nh}(x)dx=1.\)</span> Part (i) is fulfilled, since: <span class="math display">\[\begin{align*}
 \hat{f}_{h}(x)
 =\frac{1}{nh}\sum_{i=1}^n K\left(\frac{x-X_i}{h}\right)
 \geq \frac{1}{nh}\sum_{i=1}^n 0
 =0,
-\end{align*}
-where we use that $K(z)\geq 0$ for all $z\in\mathbb{R}.$ See, for instance, the Epanechnikov kernel function:
-$$
-K(z)=\frac{3}{4}(1-z^2)\mathbf{1}_{z\in[-1,1]}\quad\Rightarrow\quad 0\leq K(z)\leq\frac{3}{4}\quad\text{for all }z\in\mathbb{R}. 
-$$    
-Part (ii) is also fulfilled, since:
-\begin{align*}
+\end{align*}\]</span> where we use that <span class="math inline">\(K(z)\geq 0\)</span> for all <span class="math inline">\(z\in\mathbb{R}.\)</span> See, for instance, the Epanechnikov kernel function: <span class="math display">\[
+K(z)=\frac{3}{4}(1-z^2)\mathbf{1}_{z\in[-1,1]}\quad\Rightarrow\quad 0\leq K(z)\leq\frac{3}{4}\quad\text{for all }z\in\mathbb{R}.
+\]</span><br>
+Part (ii) is also fulfilled, since: <span class="math display">\[\begin{align*}
 \int\hat{f}_{h}(x)\,dx
-&=\frac{1}{nh}\sum_{i=1}^n \int K\left(\frac{x-X_i}{h}\right)\,dx\\
-&[\text{Subst:}\frac{x-X_i}{h}=y,\quad \frac{dy}{dx}=\frac{1}{h}\Leftrightarrow dx=h dy]\\
-&=\frac{h}{nh}\sum_{i=1}^n \int K\left(y\right)\,dy\\
-&=\frac{1}{n}\sum_{i=1}^n 1
+&amp;=\frac{1}{nh}\sum_{i=1}^n \int K\left(\frac{x-X_i}{h}\right)\,dx\\
+&amp;[\text{Subst:}\frac{x-X_i}{h}=y,\quad \frac{dy}{dx}=\frac{1}{h}\Leftrightarrow dx=h dy]\\
+&amp;=\frac{h}{nh}\sum_{i=1}^n \int K\left(y\right)\,dy\\
+&amp;=\frac{1}{n}\sum_{i=1}^n 1
 =1,
-\end{align*}
-where we use that $\int K(y)\,dy=1.$ 
-
-(c) Starting point: AMISE-optimal bandwidth choice:
-\begin{align*}
-h_{\textrm{opt}}&=\left\{\frac{R(K)}{n\,\nu_2(K)^2\,\int f''(x)^2\,dx}\right\}^{1/5}
-\end{align*}
-where $\int f''(x)^2\,dx$ is the only unknown quantity. The Normal-Referenz bandwidth $h_{NR}$ approximates this unknown quantity using a normal distribution.
-**Idea:** If $f\approx\phi_{\mu,\sigma},$ then $\int f''(x)^2\,dx\approx \int \phi_{\mu,\sigma}''(x)^2\,dx,$ where $\sigma$ can be estimated from the data. (The parameter $\mu$ has no influence on the value of the integral.)
-  
-(d)
-The density shown in @fig-norMix is a multi-modal denisty with four peaks. It is to be expected that:
-$$
-\int f''(x)^2\,dx > \int \phi_{\mu,\sigma}''(x)^2\,dx \quad\Rightarrow\quad h_{\mathrm{opt}} < h_{NR}.
-$$
-Regardless of whether
-$$
+\end{align*}\]</span> where we use that <span class="math inline">\(\int K(y)\,dy=1.\)</span></p></li>
+<li><p>Starting point: AMISE-optimal bandwidth choice: <span class="math display">\[\begin{align*}
+h_{\textrm{opt}}&amp;=\left\{\frac{R(K)}{n\,\nu_2(K)^2\,\int f''(x)^2\,dx}\right\}^{1/5}
+\end{align*}\]</span> where <span class="math inline">\(\int f''(x)^2\,dx\)</span> is the only unknown quantity. The Normal-Referenz bandwidth <span class="math inline">\(h_{NR}\)</span> approximates this unknown quantity using a normal distribution. <strong>Idea:</strong> If <span class="math inline">\(f\approx\phi_{\mu,\sigma},\)</span> then <span class="math inline">\(\int f''(x)^2\,dx\approx \int \phi_{\mu,\sigma}''(x)^2\,dx,\)</span> where <span class="math inline">\(\sigma\)</span> can be estimated from the data. (The parameter <span class="math inline">\(\mu\)</span> has no influence on the value of the integral.)</p></li>
+<li><p>The density shown in <a href="#fig-norMix" class="quarto-xref">Figure&nbsp;<span>4.9</span></a> is a multi-modal denisty with four peaks. It is to be expected that: <span class="math display">\[
+\int f''(x)^2\,dx &gt; \int \phi_{\mu,\sigma}''(x)^2\,dx \quad\Rightarrow\quad h_{\mathrm{opt}} &lt; h_{NR}.
+\]</span> Regardless of whether <span class="math display">\[
 \int \phi_{\mu,\sigma}''(x)^2\,dx\approx\int f''(x)^2\,dx
-$$
-or  
-$$
+\]</span> or<br>
+<span class="math display">\[
 \int \phi_{\mu,\sigma}''(x)^2\,dx\not\approx\int f''(x)^2\,dx
-$$ 
-the convergence rate is 
-\begin{align*}
+\]</span> the convergence rate is <span class="math display">\[\begin{align*}
 \mathrm{MISE}(\hat{f}_{NR})
-  &=\frac{5}{4}\left\{\nu_2(K)^2\,R(K)^4\,\int \phi_{\mu,\sigma}''(x)^2\,dx\right\}^{1/5}\,n^{-4/5}+o(n^{-4/5})\\[1ex]
-  &=\mathrm{Const}\cdot n^{-4/5}+o(n^{-4/5})\\[1ex]
-  &=\mathcal{O}\left(n^{-4/5}\right)
-\end{align*}
-Of course, this result is only of limited use for finite sample sizes $n,$ where the estimation result strongly depends on a good choice of the bandwidth $h.$
-
-
-#### Solution of Exercise 2. {-} 
-
-(a) The bias is defined as $\mathrm{Bias}(\hat{f}_{nh}(x))=\mathbb{E}\left[\hat{f}_{nh}(x)\right]-f_{\mathrm{uni}}(x).$ Thus,
-\begin{align*}
+  &amp;=\frac{5}{4}\left\{\nu_2(K)^2\,R(K)^4\,\int \phi_{\mu,\sigma}''(x)^2\,dx\right\}^{1/5}\,n^{-4/5}+o(n^{-4/5})\\[1ex]
+  &amp;=\mathrm{Const}\cdot n^{-4/5}+o(n^{-4/5})\\[1ex]
+  &amp;=\mathcal{O}\left(n^{-4/5}\right)
+\end{align*}\]</span> Of course, this result is only of limited use for finite sample sizes <span class="math inline">\(n,\)</span> where the estimation result strongly depends on a good choice of the bandwidth <span class="math inline">\(h.\)</span></p></li>
+</ol>
+</section>
+<section id="solution-of-exercise-2." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-2.">Solution of Exercise 2.</h4>
+<ol type="a">
+<li>The bias is defined as <span class="math inline">\(\mathrm{Bias}(\hat{f}_{nh}(x))=\mathbb{E}\left[\hat{f}_{nh}(x)\right]-f_{\mathrm{uni}}(x).\)</span> Thus, <span class="math display">\[\begin{align*}
   \mathbb{E}\left[\hat{f}_{nh}(x)\right]
-  &=\frac{1}{h}\mathbb{E}\left[K\left(\frac{x-X}{h}\right)\right]\\
-  &=\frac{1}{h}\int K\left(\frac{x-u}{h}\right)f_{\mathrm{uni}}(u)\,du\\[2ex]
-  &=\frac{1}{h}\int K\left(\frac{u-x}{h}\right)f_{\mathrm{uni}}(u)\,du\quad \text{($K$ symmetric)}\\[2ex]
-  &[\text{Subst:}\; y=\frac{u-x}{h}\Leftrightarrow u=x+yh\quad\Rightarrow du=h\,dy]\\[2ex]
-  &=\frac{h}{h}\int K(y)f_{\mathrm{uni}}(x+yh)\,dy\\
-  &=           \int_{-1}^1 K(y)f_{\mathrm{uni}}(x+yh)\,dy\quad \text{($K$ Epanechnikov)}
-\end{align*}  
-For $x=0.5$ and sufficiently small bandwidth $h\equiv h_n < 0.5,$ we have that 
-$f_{\mathrm{uni}}(0.5+yh)=1$ for all $y\in[-1,1],$ such that
-\begin{align*}
+  &amp;=\frac{1}{h}\mathbb{E}\left[K\left(\frac{x-X}{h}\right)\right]\\
+  &amp;=\frac{1}{h}\int K\left(\frac{x-u}{h}\right)f_{\mathrm{uni}}(u)\,du\\[2ex]
+  &amp;=\frac{1}{h}\int K\left(\frac{u-x}{h}\right)f_{\mathrm{uni}}(u)\,du\quad \text{($K$ symmetric)}\\[2ex]
+  &amp;[\text{Subst:}\; y=\frac{u-x}{h}\Leftrightarrow u=x+yh\quad\Rightarrow du=h\,dy]\\[2ex]
+  &amp;=\frac{h}{h}\int K(y)f_{\mathrm{uni}}(x+yh)\,dy\\
+  &amp;=           \int_{-1}^1 K(y)f_{\mathrm{uni}}(x+yh)\,dy\quad \text{($K$ Epanechnikov)}
+\end{align*}\]</span><br>
+For <span class="math inline">\(x=0.5\)</span> and sufficiently small bandwidth <span class="math inline">\(h\equiv h_n &lt; 0.5,\)</span> we have that <span class="math inline">\(f_{\mathrm{uni}}(0.5+yh)=1\)</span> for all <span class="math inline">\(y\in[-1,1],\)</span> such that <span class="math display">\[\begin{align*}
   \mathbb{E}\left[\hat{f}_{nh}(0.5)\right]
-  &=\int_{-1}^1 K(y)\,1\,dy = 1 = f_{\mathrm{uni}}(0.5)
-\end{align*}
-$\Rightarrow \mathrm{Bias}(\hat{f}_{nh}(0.5))=\mathbb{E}\left[\hat{f}_{nh}(0.5)\right]-f_{\mathrm{uni}}(0.5)=1-1=0$ for all $h\equiv h_n < 0.5.$ 
-(b) To be shown: $\hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0),$ where $f_{\textrm{uni}}(0)=1$.
-From a. we have that
-\begin{align*}
-  \mathbb{E}\left[\hat{f}_{nh}(0)\right] 
-  &=\int_{-1}^1 K(y)f_{\mathrm{uni}}(0+yh)\,dy\\
-  &=\int_{-1}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Definition of }f_{\mathrm{uni}}]\\
-  &=\int_{{\color{red}0}}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Integrand is zero for all }y<0]\\
-  &=\int_{0}^1 K(y)\mathbf{1}_{{\color{red}yh\leq 1}}\,dy\quad [\text{Indicator function is here zero only for }yh>1.]\\
-\end{align*} 
-Thus, for all sufficiently large sample sizes $n$ and corresponding sufficiently small bandwidth values $h=h_n$ such that $yh_n\leq 1$ for all $0\leq y\leq 1,$ we have that
-\begin{align*}
-  \mathbb{E}\left[\hat{f}_{nh}(0)\right]=\int_{0}^1 K(y)\,{\color{red}1}\,dy = 0.5 
-\end{align*}  
-Thus, at the boundary point $x=0.5,$ we have for $n\to\infty,$ $h_n\to 0$ that
-\begin{align*}
-&\quad \mathbb{E}\left[\hat{f}_{nh}(0)\right]\to 0.5 \neq  f_{\textrm{uni}}(0)=1\\
-\Rightarrow&\quad (\operatorname{Bias}(\hat{f}_{nh}(0)))^2\not\to 0\\
-\Rightarrow&\quad \hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0)
-\end{align*} 
-
-
-
-
-#### Solution of Exercise 3. {-} 
-
-Part a. 
-
-The mean:
-\begin{align*}
-  &\mathbb{E}\left(\frac{d}{dx}\hat{f}_{nh}(x)\right)\\
-  &=\mathbb{E}\left(\frac{1}{nh}\sum_{i=1}^n \frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
-  &=\frac{1}{nh}\sum_{i=1}^n \mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
-  &=\frac{1}{h}\mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\[2ex]
-  &\quad [\text{see AC-0 for computing $\frac{d}{dx}K\big(\frac{X_i-x}{h}\big)$}]\\[2ex]
-  &=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{($\tilde K$ is defined in AC-0)}}\\
-  % &=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{(see AC1)}}\\
-  &=\frac{1}{h^2}\int \tilde K\left(\frac{u-x}{h}\right)f(u)\,du\\
-  &\quad [\text{(Subst: $y=(u-x)/h$, $du=h\,dy$, $u=x+hy$)}]\\
-  &=\frac{1}{h}\int \tilde K(y)f(x+hy)\,dy\\
-  & \quad\text{[Taylorexpansion]}\\
-  &=\frac{1}{h}\int \tilde K(y)\left\{f(x)+f'(x)hy+\frac{1}{2}f^{''}(x)(hy)^2+\frac{1}{6}f^{'''}(x)(hy)^3+o(h^3)\right\}\,dy \\
-  &=\frac{1}{h}f(x)\underbrace{\int \tilde K(y)dy}_{=0\,\text{(see AC-1)}}
+  &amp;=\int_{-1}^1 K(y)\,1\,dy = 1 = f_{\mathrm{uni}}(0.5)
+\end{align*}\]</span> <span class="math inline">\(\Rightarrow \mathrm{Bias}(\hat{f}_{nh}(0.5))=\mathbb{E}\left[\hat{f}_{nh}(0.5)\right]-f_{\mathrm{uni}}(0.5)=1-1=0\)</span> for all <span class="math inline">\(h\equiv h_n &lt; 0.5.\)</span></li>
+<li>To be shown: <span class="math inline">\(\hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0),\)</span> where <span class="math inline">\(f_{\textrm{uni}}(0)=1\)</span>. From a. we have that <span class="math display">\[\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(0)\right]
+  &amp;=\int_{-1}^1 K(y)f_{\mathrm{uni}}(0+yh)\,dy\\
+  &amp;=\int_{-1}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Definition of }f_{\mathrm{uni}}]\\
+  &amp;=\int_{{\color{red}0}}^1 K(y)\mathbf{1}_{0\leq yh\leq 1}\,dy\quad [\text{Integrand is zero for all }y&lt;0]\\
+  &amp;=\int_{0}^1 K(y)\mathbf{1}_{{\color{red}yh\leq 1}}\,dy\quad [\text{Indicator function is here zero only for }yh&gt;1.]\\
+\end{align*}\]</span> Thus, for all sufficiently large sample sizes <span class="math inline">\(n\)</span> and corresponding sufficiently small bandwidth values <span class="math inline">\(h=h_n\)</span> such that <span class="math inline">\(yh_n\leq 1\)</span> for all <span class="math inline">\(0\leq y\leq 1,\)</span> we have that <span class="math display">\[\begin{align*}
+  \mathbb{E}\left[\hat{f}_{nh}(0)\right]=\int_{0}^1 K(y)\,{\color{red}1}\,dy = 0.5
+\end{align*}\]</span><br>
+Thus, at the boundary point <span class="math inline">\(x=0.5,\)</span> we have for <span class="math inline">\(n\to\infty,\)</span> <span class="math inline">\(h_n\to 0\)</span> that <span class="math display">\[\begin{align*}
+&amp;\quad \mathbb{E}\left[\hat{f}_{nh}(0)\right]\to 0.5 \neq  f_{\textrm{uni}}(0)=1\\
+\Rightarrow&amp;\quad (\operatorname{Bias}(\hat{f}_{nh}(0)))^2\not\to 0\\
+\Rightarrow&amp;\quad \hat{f}_{nh}(0)\not\to_{\mathrm{MSE}} f_{\textrm{uni}}(0)
+\end{align*}\]</span></li>
+</ol>
+</section>
+<section id="solution-of-exercise-3." class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="solution-of-exercise-3.">Solution of Exercise 3.</h4>
+<p>Part a.</p>
+<p>The mean: <span class="math display">\[\begin{align*}
+  &amp;\mathbb{E}\left(\frac{d}{dx}\hat{f}_{nh}(x)\right)\\
+  &amp;=\mathbb{E}\left(\frac{1}{nh}\sum_{i=1}^n \frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
+  &amp;=\frac{1}{nh}\sum_{i=1}^n \mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\
+  &amp;=\frac{1}{h}\mathbb{E}\left(\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)\right)\\[2ex]
+  &amp;\quad [\text{see AC-0 for computing $\frac{d}{dx}K\big(\frac{X_i-x}{h}\big)$}]\\[2ex]
+  &amp;=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{($\tilde K$ is defined in AC-0)}}\\
+  % &amp;=\frac{1}{h}\mathbb{E}\left(\frac{1}{h}\tilde K\left(\frac{X_i-x}{h}\right)\right)\quad{\small\text{(see AC1)}}\\
+  &amp;=\frac{1}{h^2}\int \tilde K\left(\frac{u-x}{h}\right)f(u)\,du\\
+  &amp;\quad [\text{(Subst: $y=(u-x)/h$, $du=h\,dy$, $u=x+hy$)}]\\
+  &amp;=\frac{1}{h}\int \tilde K(y)f(x+hy)\,dy\\
+  &amp; \quad\text{[Taylorexpansion]}\\
+  &amp;=\frac{1}{h}\int \tilde K(y)\left\{f(x)+f'(x)hy+\frac{1}{2}f^{''}(x)(hy)^2+\frac{1}{6}f^{'''}(x)(hy)^3+o(h^3)\right\}\,dy \\
+  &amp;=\frac{1}{h}f(x)\underbrace{\int \tilde K(y)dy}_{=0\,\text{(see AC-1)}}
   +\frac{h}{h}f'(x)\underbrace{\int \tilde K(y)ydy}_{=1\,\text{(see AC-3)}}
   +\frac{h^2}{h}\frac{1}{2}f''(x)\underbrace{\int \tilde K(y)y^2\,dy}_{=0\,\text{(see AC-2)}}\\
-  &+\frac{h^3}{h}f'''(x)\underbrace{\left(\frac{1}{6}\right) \int \tilde K(y)y^3\,dy}_{=c(K)}+o(h^2)\\
-  &=f'(x)+h^2\,f'''(x)\,c(K)+o(h^2)
-\end{align*}
-
-Auxiliary calculation **AC-0:**
-
-Defintion of the Biweight kernel:
-$$
-K\left(\frac{X_i-x}{h}\right)=\left\{ 
+  &amp;+\frac{h^3}{h}f'''(x)\underbrace{\left(\frac{1}{6}\right) \int \tilde K(y)y^3\,dy}_{=c(K)}+o(h^2)\\
+  &amp;=f'(x)+h^2\,f'''(x)\,c(K)+o(h^2)
+\end{align*}\]</span></p>
+<p>Auxiliary calculation <strong>AC-0:</strong></p>
+<p>Defintion of the Biweight kernel: <span class="math display">\[
+K\left(\frac{X_i-x}{h}\right)=\left\{
   \begin{array}{ll}
-  \frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)^2&\text{for } |(x-X_i)/h|<1\\
-  0& \text{else}
+  \frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)^2&amp;\text{for } |(x-X_i)/h|&lt;1\\
+  0&amp; \text{else}
   \end{array}
   \right.
-$$
-Derivative of $K((X_i-x)/h)$ with respect to $x$ (using chain rule twice):
-\begin{align*}
-\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)=&2\frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(-2\left(\frac{X_i-x}{h}\right)\right)\left(-\frac{1}{h}\right)\\
-&=\left(\frac{1}{h}\right)\underbrace{\frac{60}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(\frac{X_i-x}{h}\right)}_{=:\tilde{K}\left(\frac{X_i-x}{h}\right)}\\ &=\left(\frac{1}{h}\right)\tilde{K}\left(\frac{X_i-x}{h}\right),
-\end{align*}
-for $|(x-X_i)/h|<1$, zero else.
-
-Alternatively, this tedious computation can be carried out using `R`.
-
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-K_exp          <- expression( (15/16)*(1- ((X-x)/h)^2 )^2 ) 
-(K_Dx_exp      <- D(K_exp, "x"))# derivatives
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-(15/16) * (2 * (2 * (1/h * ((X - x)/h)) * (1 - ((X - x)/h)^2)))
-```
-
-
-:::
-
-```{.r .cell-code}
-K_Dx_fun       <- function(x){}
-body(K_Dx_fun) <- K_Dx_exp
-```
-:::
-
-
-
-
-
-
-Auxiliary calculation **AC-1:**
-
-The result that $\int \tilde K(y)dy=0$ follows directly from the fact that $\tilde K$ is **point-symmetric** about the origin. Here is an illustration:
-
-
-
-
-::: {.cell}
-
-```{.r .cell-code}
-K_tilde <- function(y){(60/16)*(1-y^2)*y}
-
-# integrate(f=function(x){K_tilde(x)*x^3},lower = -1,upper = 1)
-
-plot(y=K_tilde(seq(-1,1,len=30)), 
-     x=seq(-1,1,len=30), type="l", xlab="",ylab="")
-abline(v=0,h=0,lty=2)
-```
-
-::: {.cell-output-display}
-![](Ch4_NP_Density_Estimation_files/figure-html/unnamed-chunk-16-1.png){width=672}
-:::
-:::
-
-
-
-
-
-**Formally:** Point-symmetry implies that 
-$$
--\tilde K(y)=\tilde K(-y) 
-$$
-and thus that
-$$
-\tilde K(y)=-\tilde K(-y). 
-$$
-Thus
-\begin{align*}
-\int_{-1}^{0}\tilde K(y)dy 
-& = - \int_{-1}^{0}\tilde K(-y)dy\\
-&[\text{Subst: } u = -y,\quad \frac{du}{dy}=-1, \text{from }-(-1) \text{ to }-0]\\
-& = \int_{1}^{0}\tilde K(u)du\\
-& = - \int_{0}^{1}\tilde K(u)du
-\end{align*}
-Consequently
-\begin{align*}
-\underbrace{\int_{-1}^{0}\tilde K(y)dy + \int_{0}^{1}\tilde K(y)dy}_{=\int_{-1}^1\tilde{K}(y)dy} &=0\\
-\end{align*}
-
-
-Auxiliary calculation **AC-2:**
-
-As in **AC-1** it follows also here by the point-symmetriy $\tilde K(-y) (-y)^2=-(\tilde K(y) y^2)$ that 
-\begin{align*} 
+\]</span> Derivative of <span class="math inline">\(K((X_i-x)/h)\)</span> with respect to <span class="math inline">\(x\)</span> (using chain rule twice): <span class="math display">\[\begin{align*}
+\frac{d}{dx}K\left(\frac{X_i-x}{h}\right)=&amp;2\frac{15}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(-2\left(\frac{X_i-x}{h}\right)\right)\left(-\frac{1}{h}\right)\\
+&amp;=\left(\frac{1}{h}\right)\underbrace{\frac{60}{16}\left(1-\left(\frac{X_i-x}{h}\right)^2\right)\left(\frac{X_i-x}{h}\right)}_{=:\tilde{K}\left(\frac{X_i-x}{h}\right)}\\ &amp;=\left(\frac{1}{h}\right)\tilde{K}\left(\frac{X_i-x}{h}\right),
+\end{align*}\]</span> for <span class="math inline">\(|(x-X_i)/h|&lt;1\)</span>, zero else.</p>
+<p>Alternatively, this tedious computation can be carried out using <code>R</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>K_exp          <span class="ot">&lt;-</span> <span class="fu">expression</span>( (<span class="dv">15</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span> ((X<span class="sc">-</span>x)<span class="sc">/</span>h)<span class="sc">^</span><span class="dv">2</span> )<span class="sc">^</span><span class="dv">2</span> ) </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>(K_Dx_exp      <span class="ot">&lt;-</span> <span class="fu">D</span>(K_exp, <span class="st">"x"</span>))<span class="co"># derivatives</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(15/16) * (2 * (2 * (1/h * ((X - x)/h)) * (1 - ((X - x)/h)^2)))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>K_Dx_fun       <span class="ot">&lt;-</span> <span class="cf">function</span>(x){}</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">body</span>(K_Dx_fun) <span class="ot">&lt;-</span> K_Dx_exp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Auxiliary calculation <strong>AC-1:</strong></p>
+<p>The result that <span class="math inline">\(\int \tilde K(y)dy=0\)</span> follows directly from the fact that <span class="math inline">\(\tilde K\)</span> is <strong>point-symmetric</strong> about the origin. Here is an illustration:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>K_tilde <span class="ot">&lt;-</span> <span class="cf">function</span>(y){(<span class="dv">60</span><span class="sc">/</span><span class="dv">16</span>)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>y<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>y}</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># integrate(f=function(x){K_tilde(x)*x^3},lower = -1,upper = 1)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">y=</span><span class="fu">K_tilde</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="at">len=</span><span class="dv">30</span>)), </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">x=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="at">len=</span><span class="dv">30</span>), <span class="at">type=</span><span class="st">"l"</span>, <span class="at">xlab=</span><span class="st">""</span>,<span class="at">ylab=</span><span class="st">""</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">0</span>,<span class="at">h=</span><span class="dv">0</span>,<span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Ch4_NP_Density_Estimation_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Formally:</strong> Point-symmetry implies that <span class="math display">\[
+-\tilde K(y)=\tilde K(-y)
+\]</span> and thus that <span class="math display">\[
+\tilde K(y)=-\tilde K(-y).
+\]</span> Thus <span class="math display">\[\begin{align*}
+\int_{-1}^{0}\tilde K(y)dy
+&amp; = - \int_{-1}^{0}\tilde K(-y)dy\\
+&amp;[\text{Subst: } u = -y,\quad \frac{du}{dy}=-1, \text{from }-(-1) \text{ to }-0]\\
+&amp; = \int_{1}^{0}\tilde K(u)du\\
+&amp; = - \int_{0}^{1}\tilde K(u)du
+\end{align*}\]</span> Consequently <span class="math display">\[\begin{align*}
+\underbrace{\int_{-1}^{0}\tilde K(y)dy + \int_{0}^{1}\tilde K(y)dy}_{=\int_{-1}^1\tilde{K}(y)dy} &amp;=0\\
+\end{align*}\]</span></p>
+<p>Auxiliary calculation <strong>AC-2:</strong></p>
+<p>As in <strong>AC-1</strong> it follows also here by the point-symmetriy <span class="math inline">\(\tilde K(-y) (-y)^2=-(\tilde K(y) y^2)\)</span> that <span class="math display">\[\begin{align*}
 %\int_{-1}^0 \tilde K(y) y^2 \,dy=-\int_{0}^{1} \tilde K(y) y^2 \,dy\;\Rightarrow\;
 \int_{-1}^1 \tilde K(y) y^2 \,dy=0.
-\end{align*}
-
-::: {.callout-note}
-One can show that all **even moments** of the kernel function $\tilde{K}$ are zero: $\int \tilde K(y) y^p \,dy=0$ for all $p=0,2,4,\dots$, since we have point-symmetry  
-$\tilde K(-y) (-y)^p=-(\tilde K(y) y^p)$ for all $p=0,2,4,\dots$. 
-
-In the case of the usual kernel function $K$ all **odd moments** are zero.
-:::
-
-Auxiliary calculation **AC-3:**
-
-Partial integration:
-$$
+\end{align*}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One can show that all <strong>even moments</strong> of the kernel function <span class="math inline">\(\tilde{K}\)</span> are zero: <span class="math inline">\(\int \tilde K(y) y^p \,dy=0\)</span> for all <span class="math inline">\(p=0,2,4,\dots\)</span>, since we have point-symmetry<br>
+<span class="math inline">\(\tilde K(-y) (-y)^p=-(\tilde K(y) y^p)\)</span> for all <span class="math inline">\(p=0,2,4,\dots\)</span>.</p>
+<p>In the case of the usual kernel function <span class="math inline">\(K\)</span> all <strong>odd moments</strong> are zero.</p>
+</div>
+</div>
+<p>Auxiliary calculation <strong>AC-3:</strong></p>
+<p>Partial integration: <span class="math display">\[
 \int_a^b f'(y)\,g(y)\,dy=[f(y)\,g(y)]_a^b-\int_a^b f(y)\,g'(y)\,dy
-$$
-
-**Note:** The antiderivative of $\tilde K(y)=\frac{60}{16}(1-y^2)\,y$ is the  Biweight kernel multiplied by $(-1)$. That is: $-K(y)=-\frac{15}{16}(1-y^2)^2$. 
-
-Using this, we have
-\begin{align*}  
+\]</span></p>
+<p><strong>Note:</strong> The antiderivative of <span class="math inline">\(\tilde K(y)=\frac{60}{16}(1-y^2)\,y\)</span> is the Biweight kernel multiplied by <span class="math inline">\((-1)\)</span>. That is: <span class="math inline">\(-K(y)=-\frac{15}{16}(1-y^2)^2\)</span>.</p>
+<p>Using this, we have <span class="math display">\[\begin{align*}  
 \int \tilde K(y) y \, dy=\int_{-1}^1 \tilde K(y) y \, dy=\underbrace{\left[-K(y)\,y\right]_{-1}^1}_{=0-0}\;-\;\int_{-1}^1 -K(y)\,1\,dy=1.
-\end{align*}
-
-
-Part b.
-
-Yes, $\hat f_h'(x)$ is a (weakly) consistent estimator of $f'(x)$. 
-
-Justification:
-
-From the given information, it follows that
-\begin{align*} 
+\end{align*}\]</span></p>
+<p>Part b.</p>
+<p>Yes, <span class="math inline">\(\hat f_h'(x)\)</span> is a (weakly) consistent estimator of <span class="math inline">\(f'(x)\)</span>.</p>
+<p>Justification:</p>
+<p>From the given information, it follows that <span class="math display">\[\begin{align*}
 \mathrm{AMSE}\left(\hat{f}'_h(x)\right)=\underbrace{h^4\,f^{'''}(x)^2\,c(K)^2}_{\mathrm{ABias}\left(\hat{f}'_h(x)\right)^2}+\underbrace{\frac{f(x)d(K)}{nh^2}}_{\mathrm{\mathrm{AVar}\left(\hat{f}'_h(x)\right)}}.
-\end{align*}
-Under the assumptions that $n\rightarrow\infty$, $h\equiv h_n\rightarrow 0$, $\frac{1}{nh_n^2}\rightarrow 0$, it follows that
-$$
+\end{align*}\]</span> Under the assumptions that <span class="math inline">\(n\rightarrow\infty\)</span>, <span class="math inline">\(h\equiv h_n\rightarrow 0\)</span>, <span class="math inline">\(\frac{1}{nh_n^2}\rightarrow 0\)</span>, it follows that <span class="math display">\[
 \mathrm{MSE}\left(\hat{f}'_h(x)\right)\xrightarrow[]{}0\quad\text{as}\quad n\to\infty.
-$$ 
-An equivalent notation:
-$$
-\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x)\quad\text{as}\quad n\to\infty. 
-$$
-Convergence in mean square implies convergence in probability (by Chebyshev’s inequality): 
-\begin{align*}
-&\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x) \quad\text{as}\quad n\to\infty\\
-\Rightarrow\quad & \hat{f}'_{nh}(x)\xrightarrow[p]{}f'(x)\quad\text{as}\quad n\to\infty.
-\end{align*}
--->
+\]</span> An equivalent notation: <span class="math display">\[
+\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x)\quad\text{as}\quad n\to\infty.
+\]</span> Convergence in mean square implies convergence in probability (by Chebyshev’s inequality): <span class="math display">\[\begin{align*}
+&amp;\hat{f}'_{nh}(x)\xrightarrow[MSE]{}f'(x) \quad\text{as}\quad n\to\infty\\
+\Rightarrow\quad &amp; \hat{f}'_{nh}(x)\xrightarrow[p]{}f'(x)\quad\text{as}\quad n\to\infty.
+\end{align*}\]</span></p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
